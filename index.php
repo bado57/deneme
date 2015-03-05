@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php 
 function GetIP(){
     if(getenv("HTTP_CLIENT_IP")) {
@@ -26,4 +27,8 @@ $_SESSION['mesaj'] = $ip_adresi;
 //session_destroy();
 }
 
+=======
+<?php
+  echo "selman";
+>>>>>>> origin/master
 ?>
