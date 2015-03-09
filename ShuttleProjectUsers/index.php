@@ -1,5 +1,5 @@
 <?php 
-//git
+//githup
 //oturum başlatma
 ob_start();
 Session::init();
