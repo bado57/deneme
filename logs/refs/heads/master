@@ -1,0 +1,15 @@
+0000000000000000000000000000000000000000 c81464cb3f168468ddbac152ee531236b8ed7916 Bayram Altınışık <bayram_20_03@hotmail.com> 1425567614 +0200	clone: from https://github.com/bado57/SProject.git
+c81464cb3f168468ddbac152ee531236b8ed7916 853632b079ef144bb69aa1a86c4a5a976751d707 Bayram Altınışık <bayram_20_03@hotmail.com> 1425568091 +0200	revert: Revert "Initial commit"
+853632b079ef144bb69aa1a86c4a5a976751d707 80ec20cb88a606b927a2b77408e89d476c55c38b Bayram Altınışık <bayram_20_03@hotmail.com> 1425568101 +0200	revert: Revert "Revert "Initial commit""
+80ec20cb88a606b927a2b77408e89d476c55c38b 135258d02199e4f0ece78a09b844bd683332d716 Bayram Altınışık <bayram_20_03@hotmail.com> 1425568129 +0200	rebase finished: refs/heads/master onto 57212ff9dcd8e58b753fbfea50e55b1c955042bd
+135258d02199e4f0ece78a09b844bd683332d716 7bf4d47b508e4aeb8dda8c4e013b1fb75b7eb1c6 Bayram Altınışık <bayram_20_03@hotmail.com> 1425568240 +0200	revert: Revert "Revert "Revert "Initial commit"""
+7bf4d47b508e4aeb8dda8c4e013b1fb75b7eb1c6 7102db22a988d9b64afeac4cae18197ace52b426 Bayram Altınışık <bayram_20_03@hotmail.com> 1425569027 +0200	commit: Commit
+7102db22a988d9b64afeac4cae18197ace52b426 bac53addb5a87f22617c8a2f333a96857da02cc8 Bayram Altınışık <bayram_20_03@hotmail.com> 1425569133 +0200	commit (merge): Merge remote-tracking branch 'origin/master'
+bac53addb5a87f22617c8a2f333a96857da02cc8 b386d6e8600c2c9107608f186a6687838851c5ec Bayram Altınışık <bayram_20_03@hotmail.com> 1425571237 +0200	rebase finished: refs/heads/master onto b386d6e8600c2c9107608f186a6687838851c5ec
+b386d6e8600c2c9107608f186a6687838851c5ec 3c35e5db6eb24a09d59bd84850c3d677980a4254 Bayram Altınışık <bayram_20_03@hotmail.com> 1425572887 +0200	commit: deneme
+3c35e5db6eb24a09d59bd84850c3d677980a4254 3d89261ca4623b073b728fdd3f9a362123821610 Bayram Altınışık <bayram_20_03@hotmail.com> 1425572919 +0200	commit: ikinci
+3d89261ca4623b073b728fdd3f9a362123821610 7968c4355a32b56044b5ffe250dd455e45ea2a40 Bayram Altınışık <bayram_20_03@hotmail.com> 1425572959 +0200	commit: deneme2
+7968c4355a32b56044b5ffe250dd455e45ea2a40 19b30dd995b8c47b80bca7b49d1703160b9fc69e Bayram Altınışık <bayram_20_03@hotmail.com> 1425573136 +0200	revert: Revert "deneme2"
+19b30dd995b8c47b80bca7b49d1703160b9fc69e 194500225353bb7c90c946903de90a78ce608a25 Bayram Altınışık <bayram_20_03@hotmail.com> 1425573293 +0200	revert: Revert "Revert "deneme2""
+194500225353bb7c90c946903de90a78ce608a25 219c6fad517fc5ab33df22a693b38627c54fceea Bayram Altınışık <bayram_20_03@hotmail.com> 1425573367 +0200	rebase finished: refs/heads/master onto 219c6fad517fc5ab33df22a693b38627c54fceea
+219c6fad517fc5ab33df22a693b38627c54fceea 313275fb7b6898587dbf4e53b42d7127f004d1af Bayram Altınışık <bayram_20_03@hotmail.com> 1425776462 +0200	commit: ShutleProjectUsers
