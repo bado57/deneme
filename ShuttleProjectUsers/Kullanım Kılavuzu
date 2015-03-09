@@ -1,6 +1,0 @@
-Projeyi netbeans te açtığınızda alacağınız ilk hatalardan bir tanesi Less ve Sass hatalarıdır.Bunların çözümü içinde proje üzerinde
-sağ tıklayıp properties e girip, Css Preprocessors e girip Sass ve Less oaln yerlerde deki en üstteki Compile Sass Files on Save yada 
-Compile LESS Files on Save kutucuklarında işaretli olan tickleri kaldırmak olacaktır.Eğer bunlarla birlikte çalıştırmak isterseniz bu 
-kütüphanelere ait dosyaları ilgili sitelerden indirip kurmanız lazım yada manuel kurmak istemiyorsanız netbeans eklenti çağırım yerinden 
-ilgili kütüphanleri otomatik olarak kurabilirsiniz.Bu sizin projenizi daha hızlı çalıştırmada yardımcı olacaktır.
-
