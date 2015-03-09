@@ -27,7 +27,7 @@
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
                 <li class="active">
-                    <a href="index.html">
+                    <a href="<?php echo SITE_URL; ?>/panel">
                         <i class="fa fa-dashboard"></i> <span><?php echo $data["AdminKategoriAnasayfa"];?></span>
                     </a>
                 </li>
@@ -38,7 +38,7 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/charts/morris.html"><i class="fa fa-angle-double-right"></i> Firma Bilgileri</a></li>
+                        <li><a href="<?php echo SITE_URL; ?>/adminweb/firmislem"><i class="fa fa-angle-double-right"></i> Firma Bilgileri</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
