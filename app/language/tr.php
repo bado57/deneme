@@ -55,6 +55,7 @@ class tr {
             "AdminFirmaIletisim" => "İletişim Bilgileri",
             "AdminFirmaAdres" => "Adres",
             "AdminFirmaIl" => "İl",
+            "AdminFirmaUlke" => "Ülke",
             "AdminFirmaIlce" => "İlçe",
             "AdminFirmaTelefon" => "Telefon",
             "AdminFirmaEmail" => "Email",

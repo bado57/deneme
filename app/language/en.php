@@ -54,6 +54,7 @@ class en {
             "AdminFirmaIletisim" => "Contact Information",
             "AdminFirmaAdres" => "Adress",
             "AdminFirmaIl" => "City",
+            "AdminFirmaUlke" => "Country",
             "AdminFirmaIlce" => "State",
             "AdminFirmaTelefon" => "Phone",
             "AdminFirmaEmail" => "Email",
