@@ -59,7 +59,9 @@
                                 </div>
                                 <div class="form-group col-md-6 col-xs-6">
                                     <div class="row">
-                                        <label for="PersonelServis" class="control-label col-md-12 dsb"><input id="PersonelServis" name="PersonelServis" type="checkbox" class="dsb" checked disabled /><?php echo $data["AdminFirmaPersonelServisi"]; ?></label>
+                                        <label for="PersonelServis" class="control-label col-md-12 dsb">
+                                            <input id="PersonelServis" name="PersonelServis" type="checkbox" class="dsb" checked disabled /><?php echo $data["AdminFirmaPersonelServisi"]; ?>
+                                        </label>
                                     </div>
                                 </div>
                             </div>

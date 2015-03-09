@@ -133,6 +133,10 @@ $(function() {
         checkboxClass: 'icheckbox_minimal',
         radioClass: 'iradio_minimal'
     });
+    
+    /**
+     * Comment
+     */
 
     /* For demo purposes */
     var demo = $("<div />").css({
