@@ -32,6 +32,7 @@ define("SITE_PLUGINADMIN_CSS", "http://localhost/SProject/app/views/assets/css")
 define("SITE_PLUGINADMIN_FONTS", "http://localhost/SProject/app/views/assets/fonts");
 define("SITE_PLUGINADMIN_IMG", "http://localhost/SProject/app/views/assets/img");
 define("SITE_PLUGINADMIN_JS", "http://localhost/SProject/app/views/assets/js");
+define("SITE_PLUGINADMIN_AjaxJs", "http://localhost/SProject/app/views/Template_AdminBackEnd/js");
 
 //admin mobil 
 define("SITE_PLUGINMADMIN_CSS", "http://192.168.1.22/SProject/app/views/Template_AdminBackEnd/MobileAdmin/css");

@@ -3,8 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/SProject/index.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/MobileAdmin/font-awesome/less/larger.less</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/config/config.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/firmaislem_view.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/models/Panel_Model.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/controllers/AdminAjaxSorgu.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/footer_view.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/adminajaxquery.js</file>
         </group>
     </open-files>
 </project-private>

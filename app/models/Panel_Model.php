@@ -10,10 +10,22 @@ class Panel_Model extends Model {
         $sql = "SELECT ".$Kadi.",".$KullaniciID." FROM " . $tableName . " WHERE " . $Kadi . " = :loginKadi && " . $Sifre . " = :loginSifre";
         return ($count = $this->db->select($sql, $array));
     }
-
-    public function projeListeleSon() {
-        $sql = "SELECT * FROM insaat_projeler ORDER BY insaat_proje_id DESC LIMIT 1";
-        return $this->db->select($sql);
+    
+    //adminin firma idsini döndürür
+    public function adminFirmaID($AdminId) {
+        $sql = "SELECT FirmaID FROM admin Where AdminID=".$AdminId;
+        return ($this->db->select($sql));
+    }
+    
+    //admin firma özellikleri getirme
+    public function firmaOzellikler($firmaID) {
+        $sql = "SELECT * FROM firma Where FirmaID=".$firmaID;
+        return ($this->db->select($sql));
+    }
+    
+    //admin firma özellikleri düzenleme
+    public function firmaOzelliklerDuzenle($data, $FirmaID) {
+        return ($this->db->update("firma", $data, "FirmaID=$FirmaID"));
     }
 
     public function projeListele_Count() {

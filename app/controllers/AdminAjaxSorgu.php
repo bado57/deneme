@@ -1,12 +1,16 @@
 <?php
 
-class AdminAjaxQuery extends Controller {
+class AdminAjaxSorgu extends Controller {
 
     function __construct() {
         parent::__construct();
     }
 
-    public function adminAjaxResponse() {
+    public function index() {
+        $this->adminAjaxSorgu();
+    }
+
+    public function adminAjaxSorgu() {
 
 
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest") {
@@ -31,10 +35,56 @@ class AdminAjaxQuery extends Controller {
                     $sonuc["usersLogin"] = $data["UsersLogin"];
                     break;
 
-                case "proje_kayit_table":
+                case "adminFirmaIslemler":
+                    $AdminId = Session::get("userId");
                     $Pkayit_model = $this->load->model("panel_model");
-                    $data["ProjeListele"] = $Pkayit_model->projeListeleSon();
-                    $sonuc[] = $data["ProjeListele"];
+                    $data["AdminFirmaID"] = $Pkayit_model->adminFirmaID($AdminId);
+                    //error_log("Firma Id".$data["FirmaListele"][0]["FirmaID"]);
+                    $data["FirmaOzellikler"] = $Pkayit_model->firmaOzellikler($data["AdminFirmaID"][0]["FirmaID"]);
+                    $sonuc["FirmaOzellikler"] = $data["FirmaOzellikler"];
+                    break;
+
+                case "adminFirmaIslemlerKaydet":
+                    $AdminId = Session::get("userId");
+                    $Pkayit_model = $this->load->model("panel_model");
+                    $dataID["AdminFirmaID"] = $Pkayit_model->adminFirmaID($AdminId);
+                    
+                    $form->post('firma_kod', true);
+                    $form->post('firma_adi', true);
+                    $form->post('firma_aciklama', true);
+                    $form->post('ogrenci_chechkbox', true);
+                    $form->post('personel_chechkbox', true);
+                    $form->post('firma_adres', true);
+                    $form->post('firma_telefon', true);
+                    $form->post('firma_email', true);
+                    $form->post('firma_website', true);
+                    $form->post('firma_lokasyon', true);
+                    error_log("datakod".$form->values['firma_kod']);
+
+                    if ($form->submit()) {
+                        $data = array(
+                            'FirmaKodu' => $form->values['firma_kod'],
+                            'FirmaAdi' => $form->values['firma_adi'],
+                            'FirmaAdres' => $form->values['firma_adres'],
+                            'FirmaTelefon' => $form->values['firma_telefon'],
+                            'FirmaWebsite' => $form->values['firma_website'],
+                            'FirmaLokasyon' => $form->values['firma_lokasyon'],
+                            'FirmaAciklama' => $form->values['firma_aciklama'],
+                            'FirmaDurum' => 1,
+                            'ogrenci_chechkbox' => $form->values['ogrenci_chechkbox'],
+                            'personel_chechkbox' => $form->values['personel_chechkbox'],
+                            'hesap_aktif' => $form->values['hesap_aktif']
+                        );
+                    }
+                    
+                    //error_log("Firma Id".$data["FirmaListele"][0]["FirmaID"]);
+                    $resultupdate = $Pkayit_model->firmaOzelliklerDuzenle($data, $dataID["AdminFirmaID"][0]["FirmaID"]);
+                    if ($resultupdate) {
+                        $sonuc["firmaozellik_update"] = "Başarıyla güncellenmiştir";
+                    } else {
+                        $sonuc["hata"] = "Bi Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                    }
+
                     break;
 
                 case "gayri_benzersiz_deger_kodu":
