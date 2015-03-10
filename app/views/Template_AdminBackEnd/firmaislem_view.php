@@ -3,6 +3,7 @@
     
     var activeMenu = "menu_firma";
     var activeLink = "link_firmislem";
+    alert("hello");
     
     $(window).on('load', function () {
         $.adminFirmaIslem();
