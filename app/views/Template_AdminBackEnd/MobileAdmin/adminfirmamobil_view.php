@@ -37,17 +37,18 @@
                         <hr />
                         <input id="FirmaID" name="FirmaID" type="hidden" value="" />
                         <input id="FirmaKodu" name="FirmaKodu" type="hidden" value="" />
+                        <input id="FirmaDurum" name="FirmaDurum" type="hidden" value="" />
                         <div class="form-group">
                             <label for="FrmKod"><?php echo $data["AdminFirmaGenelBilgi"];?></label>
-                            <input type="text" class="form-control" id="FrmKod" name="FrmKod" value="FRM-4850" disabled>
+                            <input type="text" class="form-control" id="FrmKod" name="FrmKod" value="" disabled>
                         </div>
                         <div class="form-group">
                             <label for="FirmaAdi"><?php echo $data["AdminFirmaGenelBilgi"];?></label>
-                            <input type="text" class="form-control dsb" id="FirmaAdi" name="FirmaAdi" value="Sevis Amca" disabled>
+                            <input type="text" class="form-control dsb" id="FirmaAdi" name="FirmaAdi" value="" disabled>
                         </div>
                         <div class="form-group">
                             <label for="Aciklama"><?php echo $data["AdminFirmaGenelBilgi"];?></label>
-                            <textarea name="Aciklama" class="form-control dsb" rows="3" disabled>Servis Firması</textarea>
+                            <textarea name="Aciklama" class="form-control dsb" rows="3" disabled></textarea>
                         </div>
                         <div class="form-group">
                             <label for="FirmaDurum"><?php echo $data["AdminFirmaDurum"];?></label>
@@ -75,7 +76,7 @@
                         <hr />
                         <div class="form-group">
                             <label for="FirmaAdres"><?php echo $data["AdminFirmaAdres"];?></label>
-                            <textarea name="Aciklama" class="form-control dsb" rows="3" disabled>Mevlana Mah. Turgut Özal Bulv. Talas Beğendik Karşısı.</textarea>
+                            <textarea name="Aciklama" class="form-control dsb" rows="3" disabled></textarea>
                         </div>
                         <div class="form-group">
                             <label for="FirmaIl"><?php echo $data["AdminFirmaIl"];?></label>
@@ -93,25 +94,25 @@
                         </div>
                         <div class="form-group">
                             <label for="FirmaTelefon"><?php echo $data["AdminFirmaTelefon"];?></label>
-                            <input type="text" class="form-control dsb" id="FirmaTelefon" name="FirmaTelefon" value="+90 352 226 85 76" disabled>
+                            <input type="text" class="form-control dsb" id="FirmaTelefon" name="FirmaTelefon" value="" disabled>
                         </div>
                         <div class="form-group">
                             <label for="FirmaEmail"><?php echo $data["AdminFirmaEmail"];?></label>
-                            <input type="email" class="form-control dsb" id="FirmaEmail" name="FirmaEmail" value="info@servisamca.com" disabled>
+                            <input type="email" class="form-control dsb" id="FirmaEmail" name="FirmaEmail" value="" disabled>
                         </div>
                         <div class="form-group">
                             <label for="FirmaWebAdresi"><?php echo $data["AdminFirmaWebSite"];?></label>
-                            <input type="text" class="form-control dsb" id="FirmaWebAdresi" name="FirmaWebAdresi" value="www.servisamca.com" disabled>
+                            <input type="text" class="form-control dsb" id="FirmaWebAdresi" name="FirmaWebAdresi" value="" disabled>
                         </div>
                         <div class="form-group">
                             <label for="FirmaLokasyon"><?php echo $data["AdminFirmaLokasyon"];?></label>
-                            <input type="text" class="form-control dsb" id="FirmaLokasyon" name="FirmaLokasyon" value="38.693693, 35.549510" disabled>
+                            <input type="text" class="form-control dsb" id="FirmaLokasyon" name="FirmaLokasyon" value="" disabled>
                         </div>
                         
                         <div class="form-group submit-group">
                             <hr />
-                            <button type="button" class="btn btn-default vzg"><?php echo $data["AdminFirmaBtnVazgec"];?></button>
-                            <button type="submit" class="btn btn-success"><?php echo $data["AdminFirmaBtnKaydet"];?></button>
+                            <button type="button" class="btn btn-default vzg"  onclick="$.adminFirmaIslem()"><?php echo $data["AdminFirmaBtnVazgec"];?></button>
+                            <button type="submit" class="btn btn-success" onclick="$.AdminIslemler.adminFirmaOzellik()"><?php echo $data["AdminFirmaBtnKaydet"];?></button>
                         </div>
                     </form>
                 </div>
@@ -121,5 +122,6 @@
     <script src="<?php echo SITE_PLUGINMADMIN_JS;?>/jquery-1.11.2.min.js"></script>
     <script src="<?php echo SITE_PLUGINMADMIN_JS;?>/bootstrap.min.js"></script>
     <script src="<?php echo SITE_PLUGINMADMIN_JS;?>/shuttle.app.js"></script>
+    <script src="<?php echo SITE_PLUGINMADMIN_AjaxJs;?>/adminajaxquery.js" type="text/javascript"></script>
 </body>
 </html>
