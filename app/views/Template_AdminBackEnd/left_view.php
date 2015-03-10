@@ -41,14 +41,14 @@
                         <li id="link_firmislem"><a href="<?php echo SITE_URL; ?>/adminweb/firmislem"><i class="fa fa-angle-right"></i> Firma Bilgileri</a></li>
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview" id="menu_arac">
                     <a href="#">
                         <i class="fa fa-laptop"></i>
                         <span><?php echo $data["AdminKategoriAracIslem"];?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/UI/general.html"><i class="fa fa-angle-right"></i> General</a></li>
+                        <li id="link_aracliste"><a href="<?php echo SITE_URL; ?>/adminweb/aracliste"><i class="fa fa-angle-right"></i> Araç Listesi</a></li>
                         <li><a href="pages/UI/icons.html"><i class="fa fa-angle-right"></i> Icons</a></li>
                         <li><a href="pages/UI/buttons.html"><i class="fa fa-angle-right"></i> Buttons</a></li>
                         <li><a href="pages/UI/sliders.html"><i class="fa fa-angle-right"></i> Sliders</a></li>
