@@ -1,5 +1,9 @@
 <script type="text/javascript">
     //$.adminFirmaIslem = function(args) {alert("hi");};
+    
+    var activeMenu = "menu_firma";
+    var activeLink = "link_firmislem";
+    
     $(window).on('load', function () {
         $.adminFirmaIslem();
     });
