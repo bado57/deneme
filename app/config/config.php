@@ -38,6 +38,7 @@ define("SITE_PLUGINADMIN_AjaxJs", "http://localhost/SProject/app/views/Template_
 define("SITE_PLUGINMADMIN_CSS", "http://192.168.1.22/SProject/app/views/Template_AdminBackEnd/MobileAdmin/css");
 define("SITE_PLUGINMADMIN_FONTS", "http://192.168.1.22/SProject/app/views/Template_AdminBackEnd/MobileAdmin/font-awesome");
 define("SITE_PLUGINMADMIN_JS", "http://192.168.1.22/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js");
+define("SITE_PLUGINMADMIN_AjaxJs", "http://localhost/SProject/app/views/Template_AdminBackEnd/js");
 //veli back end
 
 //öğrenci back end
