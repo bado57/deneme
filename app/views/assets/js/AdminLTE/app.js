@@ -634,7 +634,7 @@ $(window).load(function() {
  * This is a custom plugin for the sidebar menu. It provides a tree view.
  * 
  * Usage:
- * $(".sidebar).tree();
+ * $(".sidebar").tree();
  * 
  * Note: This plugin does not accept any options. Instead, it only requires a class
  *       added to the element that contains a sub-menu.
@@ -667,6 +667,7 @@ $(window).load(function() {
                 menu.show();
                 btn.children(".fa-angle-left").first().removeClass("fa-angle-left").addClass("fa-angle-down");
             }
+
             //Slide open or close the menu on link click
             btn.click(function(e) {
                 e.preventDefault();
@@ -677,6 +678,7 @@ $(window).load(function() {
                     btn.children(".fa-angle-down").first().removeClass("fa-angle-down").addClass("fa-angle-left");
                     btn.parent("li").removeClass("active");
                 } else {
+                    //menuHide();
                     //Slide down to open menu
                     menu.slideDown();
                     isActive = true;
@@ -694,6 +696,14 @@ $(window).load(function() {
 
         });
 
+    };
+    
+    function menuHide(){
+        var menu2 = $(".active");
+        menu2.children(".treeview-menu").slideUp();
+        menu2.removeClass("active");
+        menu2.children("a").first().children(".fa-angle-down").first().removeClass("fa-angle-down").addClass("fa-angle-left");
+        menu2.children("a").first().parent("li").removeClass("active");
     };
 
 

@@ -31,14 +31,14 @@
                         <i class="fa fa-dashboard"></i> <span><?php echo $data["AdminKategoriAnasayfa"];?></span>
                     </a>
                 </li>
-                <li class="treeview">
+                <li class="treeview" id="menu_firma">
                     <a href="#">
                         <i class="fa fa-bar-chart-o"></i>
                         <span><?php echo $data["AdminKategoriFirmaIslem"];?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="<?php echo SITE_URL; ?>/adminweb/firmislem"><i class="fa fa-angle-double-right"></i> Firma Bilgileri</a></li>
+                        <li id="link_firmislem"><a href="<?php echo SITE_URL; ?>/adminweb/firmislem"><i class="fa fa-angle-right"></i> Firma Bilgileri</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -48,11 +48,11 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/UI/general.html"><i class="fa fa-angle-double-right"></i> General</a></li>
-                        <li><a href="pages/UI/icons.html"><i class="fa fa-angle-double-right"></i> Icons</a></li>
-                        <li><a href="pages/UI/buttons.html"><i class="fa fa-angle-double-right"></i> Buttons</a></li>
-                        <li><a href="pages/UI/sliders.html"><i class="fa fa-angle-double-right"></i> Sliders</a></li>
-                        <li><a href="pages/UI/timeline.html"><i class="fa fa-angle-double-right"></i> Timeline</a></li>
+                        <li><a href="pages/UI/general.html"><i class="fa fa-angle-right"></i> General</a></li>
+                        <li><a href="pages/UI/icons.html"><i class="fa fa-angle-right"></i> Icons</a></li>
+                        <li><a href="pages/UI/buttons.html"><i class="fa fa-angle-right"></i> Buttons</a></li>
+                        <li><a href="pages/UI/sliders.html"><i class="fa fa-angle-right"></i> Sliders</a></li>
+                        <li><a href="pages/UI/timeline.html"><i class="fa fa-angle-right"></i> Timeline</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -61,9 +61,9 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-double-right"></i> General Elements</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-double-right"></i> Advanced Elements</a></li>
-                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-double-right"></i> Editors</a></li>
+                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-right"></i> General Elements</a></li>
+                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-right"></i> Advanced Elements</a></li>
+                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -72,9 +72,9 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-double-right"></i> General Elements</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-double-right"></i> Advanced Elements</a></li>
-                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-double-right"></i> Editors</a></li>
+                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-right"></i> General Elements</a></li>
+                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-right"></i> Advanced Elements</a></li>
+                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -83,9 +83,9 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-double-right"></i> General Elements</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-double-right"></i> Advanced Elements</a></li>
-                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-double-right"></i> Editors</a></li>
+                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-right"></i> General Elements</a></li>
+                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-right"></i> Advanced Elements</a></li>
+                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -94,9 +94,9 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-double-right"></i> General Elements</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-double-right"></i> Advanced Elements</a></li>
-                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-double-right"></i> Editors</a></li>
+                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-right"></i> General Elements</a></li>
+                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-right"></i> Advanced Elements</a></li>
+                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
                     </ul>
                 </li>
                  <li class="treeview">
@@ -105,9 +105,9 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-double-right"></i> General Elements</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-double-right"></i> Advanced Elements</a></li>
-                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-double-right"></i> Editors</a></li>
+                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-right"></i> General Elements</a></li>
+                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-right"></i> Advanced Elements</a></li>
+                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
                     </ul>
                 </li>
                 <li>
@@ -122,9 +122,9 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-double-right"></i> General Elements</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-double-right"></i> Advanced Elements</a></li>
-                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-double-right"></i> Editors</a></li>
+                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-right"></i> General Elements</a></li>
+                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-right"></i> Advanced Elements</a></li>
+                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
                     </ul>
                 </li>
             </ul>
