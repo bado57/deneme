@@ -23,17 +23,28 @@ $.adminFirmaIslem = function (args) {
         data: {"tip": "adminFirmaIslemler"},
         success: function (cevap) {
             if (cevap.hata) {
-                alert("hata");
+                alert("Üzgünüz tekrar deneyiniz.");
             } else {
                 //$("#satis_ilk_kayit_sag_proje_kayit").slideUp(2000);
                 $("input[name=FrmKod]").val(cevap.FirmaOzellikler[0]["FirmaKodu"]);
                 $("input[name=FirmaAdi]").val(cevap.FirmaOzellikler[0]["FirmaAdi"]);
                 $("textarea[name=Aciklama]").val(cevap.FirmaOzellikler[0]["FirmaAciklama"]);
+                //hidden input
+                $("input[name=FirmaDurum]").val(cevap.FirmaOzellikler[0]["FirmaDurum"]);
                 $("select[name=FirmaDurum]").val(cevap.FirmaOzellikler[0]["FirmaDurum"]);
-                if (cevap.FirmaOzellikler[0]["OrenciServis"] != 1) {
+                if (cevap.FirmaOzellikler[0]["OgrenciServis"] != 1) {
                     $('#OgrenciServis').prop('checked', '');
+                    checkIt();
                 } else {
                     $('#OgrenciServis').prop('checked', 'true');
+                    checkIt();
+                }
+                if (cevap.FirmaOzellikler[0]["PersonelServis"] != 1) {
+                    $('#PersonelServis').prop('checked', '');
+                    checkIt();
+                } else {
+                    $('#PersonelServis').prop('checked', 'true');
+                    checkIt();
                 }
                 $("textarea[name=FirmaAdres]").val(cevap.FirmaOzellikler[0]["FirmaAdres"]);
                 $("input[name=FirmaTelefon]").val(cevap.FirmaOzellikler[0]["FirmaTelefon"]);
@@ -65,7 +76,7 @@ $.AdminIslemler = {
         } else {
             personel_chechkbox = 1;
         }
-        var firma_adres = $("textarea[name=FirmaDurum]").val();
+        var firma_durum = $("input[name=FirmaDurum]").val();
         var firma_adres = $("textarea[name=FirmaAdres]").val();
         var firma_telefon = $("input[name=FirmaTelefon]").val();
         var firma_email = $("input[name=FirmaEmail]").val();
@@ -75,7 +86,7 @@ $.AdminIslemler = {
 
         $.ajax({
             data: {"firma_kod": firma_kodu, "firma_adi": firma_adi, "firma_aciklama": firma_aciklama, "ogrenci_chechkbox": ogrenci_chechkbox,
-                "personel_chechkbox": personel_chechkbox, "firma_adres": firma_adres, "firma_telefon": firma_telefon,
+                "personel_chechkbox": personel_chechkbox, "firma_adres": firma_adres, "firma_telefon": firma_telefon,"firma_durum":firma_durum,
                 "firma_email": firma_email, "firma_website": firma_website, "firma_lokasyon": firma_lokasyon, "tip": "adminFirmaIslemlerKaydet"},
             success: function (cevap) {
                 if (cevap.hata) {

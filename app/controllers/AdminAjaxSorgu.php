@@ -52,6 +52,7 @@ class AdminAjaxSorgu extends Controller {
                     $form->post('firma_kod', true);
                     $form->post('firma_adi', true);
                     $form->post('firma_aciklama', true);
+                    $form->post('firma_durum', true);
                     $form->post('ogrenci_chechkbox', true);
                     $form->post('personel_chechkbox', true);
                     $form->post('firma_adres', true);
@@ -70,10 +71,10 @@ class AdminAjaxSorgu extends Controller {
                             'FirmaWebsite' => $form->values['firma_website'],
                             'FirmaLokasyon' => $form->values['firma_lokasyon'],
                             'FirmaAciklama' => $form->values['firma_aciklama'],
-                            'FirmaDurum' => 1,
-                            'ogrenci_chechkbox' => $form->values['ogrenci_chechkbox'],
-                            'personel_chechkbox' => $form->values['personel_chechkbox'],
-                            'hesap_aktif' => $form->values['hesap_aktif']
+                            'FirmaDurum' => $form->values['firma_durum'],
+                            'OgrenciServis' => $form->values['ogrenci_chechkbox'],
+                            'PersonelServis' => $form->values['personel_chechkbox'],
+                            'HesapAktif' => $form->values['hesap_aktif']
                         );
                     }
                     

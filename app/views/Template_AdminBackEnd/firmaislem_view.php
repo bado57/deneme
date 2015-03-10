@@ -20,7 +20,7 @@
                     </div>
                     <div class="col-md-6" style="text-align:right; padding-right:15px; padding-top:15px;">
                         <div class="form-group submit-group">
-                            <button type="button" class="btn btn-default vzg"><?php echo $data["AdminFirmaBtnVazgec"]; ?></button>
+                            <button type="button" class="btn btn-default vzg" onclick="$.adminFirmaIslem()"><?php echo $data["AdminFirmaBtnVazgec"]; ?></button>
                             <button type="submit" class="btn btn-success" onclick="$.AdminIslemler.adminFirmaOzellik()"><?php echo $data["AdminFirmaBtnKaydet"]; ?></button>
                         </div>
                         <div class="form-group edit-group">
@@ -62,13 +62,13 @@
                 <div class="row">
                     <div class="form-group col-md-6 col-xs-6">
                         <div class="row">
-                            <label for="OgrenciServis" class="control-label col-md-12 dsb"><input id="OgrenciServis" name="OgrenciServis" type="checkbox" class="dsb" checked disabled /><?php echo $data["AdminFirmaOgrenciServisi"]; ?></label>
+                            <label for="OgrenciServis" class="control-label col-md-12 dsb"><input id="OgrenciServis" name="OgrenciServis" type="checkbox" class="dsb" disabled /><?php echo $data["AdminFirmaOgrenciServisi"]; ?></label>
                         </div>
                     </div>
                     <div class="form-group col-md-6 col-xs-6">
                         <div class="row">
                             <label for="PersonelServis" class="control-label col-md-12 dsb">
-                                <input id="PersonelServis" name="PersonelServis" type="checkbox" class="dsb" checked disabled /><?php echo $data["AdminFirmaPersonelServisi"]; ?>
+                                <input id="PersonelServis" name="PersonelServis" type="checkbox" class="dsb" disabled /><?php echo $data["AdminFirmaPersonelServisi"]; ?>
                             </label>
                         </div>
                     </div>
