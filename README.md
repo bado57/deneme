@@ -1,3 +1,3 @@
 # SProject
-Experiance Project
-Yakın zamanda Düzenelenecektir.
+S Project
+Yakın zamanda kullanıma Sunulacaktır sabırla bekleyiniz..
