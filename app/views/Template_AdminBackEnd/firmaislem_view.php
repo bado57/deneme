@@ -1,9 +1,9 @@
 <script type="text/javascript">
     //$.adminFirmaIslem = function(args) {alert("hi");};
-    
+
     var activeMenu = "menu_firma";
     var activeLink = "link_firmislem";
-    
+
     $(window).on('load', function () {
         $.adminFirmaIslem();
     });
@@ -22,15 +22,17 @@
                             <small><?php echo $data["AdminKategoriKontrolPanel"]; ?></small>
                         </h1>
                     </div>
-                    <div class="col-md-6" style="text-align:right; padding-right:15px; padding-top:15px;">
-                        <div class="form-group submit-group">
-                            <button type="button" class="btn btn-default vzg" onclick="$.adminFirmaIslem()"><?php echo $data["AdminFirmaBtnVazgec"]; ?></button>
-                            <button type="submit" class="btn btn-success" onclick="$.AdminIslemler.adminFirmaOzellik()"><?php echo $data["AdminFirmaBtnKaydet"]; ?></button>
+                    <?php if (Session::get("userRutbe")!=0) { ?>
+                        <div class="col-md-6" style="text-align:right; padding-right:15px; padding-top:15px;">
+                            <div class="form-group submit-group">
+                                <button type="button" class="btn btn-default vzg" onclick="$.adminFirmaIslem()"><?php echo $data["AdminFirmaBtnVazgec"]; ?></button>
+                                <button type="submit" class="btn btn-success" onclick="$.AdminIslemler.adminFirmaOzellik()"><?php echo $data["AdminFirmaBtnKaydet"]; ?></button>
+                            </div>
+                            <div class="form-group edit-group">
+                                <button type="button" id="editForm" class="btn btn-primary"><?php echo $data["AdminFirmaDuzenle"]; ?></button>
+                            </div>
                         </div>
-                        <div class="form-group edit-group">
-                            <button type="button" id="editForm" class="btn btn-primary"><?php echo $data["AdminFirmaDuzenle"]; ?></button>
-                        </div>
-                    </div>
+                    <?php } ?>
                 </div>
             </div>
         </section>

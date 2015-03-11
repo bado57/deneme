@@ -38,7 +38,7 @@ class en {
             "AdminKategoriRapor" => "Reports",
             "AdminLeftMenuSearch" => "Search",
             "AdminCikisYap" => "Sign Out",
-            "AdminFirmaİslem" => "Firma Operations",
+            "AdminFirmaİslem" => "Firm Operations",
             "AdminFirmaİslemler" => "Operations",
             "AdminFirmaAnaMenuDon" => "Go Home",
             "AdminFirmaDuzenle" => "Edit",
@@ -68,7 +68,13 @@ class en {
             "Okunmamis"  => "Unread",
             "YeniDuyuru" => "New Announcement",
             "YeniRapor" => "New Report",
-            "GuvenliCikis" => "Secure Checkout"
+            "GuvenliCikis" => "Secure Checkout",
+            "Profil" => "Profile",
+            "Bolgeler" => "Regions",
+            "BolgeListe" => "Regions List",
+            "Kurumlar" => "Institutions",
+            "KurumListe" => "Institutions List",
+            "AracListe" => "Vehicle List"
         );
         return $endil;
     }

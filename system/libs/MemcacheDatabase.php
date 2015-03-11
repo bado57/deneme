@@ -26,10 +26,8 @@ class MemcacheDatabase {
 
     //get fonksiyonu yani memecache getirme
     public function get($key) {
-        error_log("Resulttt-->".$Mresult);
         $Mresult=  $this->bellek->get($key);
-        error_log("Resultttt-->".$Mresult);
-        $this->bellek->close();
+        //$this->bellek->close();
         return $Mresult;
     }
     
@@ -41,8 +39,7 @@ class MemcacheDatabase {
         * “true” olarak ayarlanırsa veriyi sıkıştırılmış olarak saklıyor
         */
         $Mresult=$this->bellek->set($key,$data,$statu,$time);
-        //error_log("Mresult-->".$Mresult);
-        $this->bellek->close();
+        //$this->bellek->close();
         return $Mresult;
     }
     

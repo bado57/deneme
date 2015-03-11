@@ -13,11 +13,11 @@ $.ajaxSetup({
         }
     }
 });
-
+    
 
 $.adminFirmaIslem = function (args) {
     //alert(ogrenci_chechkbox);
-
+    
     //Firma İşlemleri Mysql-Return ve inputlara değerleri basma
     $.ajax({
         data: {"tip": "adminFirmaIslemler"},

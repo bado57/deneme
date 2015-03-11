@@ -36,19 +36,32 @@ class AdminAjaxSorgu extends Controller {
                     break;
 
                 case "adminFirmaIslemler":
-                    $AdminId = Session::get("userId");
-                    $Pkayit_model = $this->load->model("panel_model");
-                    $data["AdminFirmaID"] = $Pkayit_model->adminFirmaID($AdminId);
-                    //error_log("Firma Id".$data["FirmaListele"][0]["FirmaID"]);
-                    $data["FirmaOzellikler"] = $Pkayit_model->firmaOzellikler($data["AdminFirmaID"][0]["FirmaID"]);
-                    $sonuc["FirmaOzellikler"] = $data["FirmaOzellikler"];
+                    $firmaKod = Session::get("firmaKodu");
+                    //memcache kontrolü yaptırma
+                    $model = $this->load->model("adminmemcache_model"); 
+                    $resultMemcache = $model->get($firmaKod);
+                    if ($resultMemcache) {
+                        error_log("girmedi");
+                        $sonuc["FirmaOzellikler"] = $resultMemcache;
+                    } else {
+                        error_log("girdi");
+                        $AdminId = Session::get("userId");
+                        $Pkayit_model = $this->load->model("panel_model");
+                        $data["AdminFirmaID"] = $Pkayit_model->adminFirmaID($AdminId);
+                        
+                        $data["FirmaOzellikler"] = $Pkayit_model->firmaOzellikler($data["AdminFirmaID"][0]["FirmaID"]);
+                        //memcache e firma bilgileri atma
+                        $result = $model->set($firmaKod, $data["FirmaOzellikler"], false, 60);
+                        $sonuc["FirmaOzellikler"] = $data["FirmaOzellikler"];
+                    }
+
                     break;
 
                 case "adminFirmaIslemlerKaydet":
                     $AdminId = Session::get("userId");
                     $Pkayit_model = $this->load->model("panel_model");
                     $dataID["AdminFirmaID"] = $Pkayit_model->adminFirmaID($AdminId);
-                    
+
                     $form->post('firma_kod', true);
                     $form->post('firma_adi', true);
                     $form->post('firma_aciklama', true);
@@ -60,7 +73,7 @@ class AdminAjaxSorgu extends Controller {
                     $form->post('firma_email', true);
                     $form->post('firma_website', true);
                     $form->post('firma_lokasyon', true);
-                    error_log("datakod".$form->values['firma_kod']);
+                    error_log("datakod" . $form->values['firma_kod']);
 
                     if ($form->submit()) {
                         $data = array(
@@ -77,7 +90,7 @@ class AdminAjaxSorgu extends Controller {
                             'HesapAktif' => $form->values['hesap_aktif']
                         );
                     }
-                    
+
                     //error_log("Firma Id".$data["FirmaListele"][0]["FirmaID"]);
                     $resultupdate = $Pkayit_model->firmaOzelliklerDuzenle($data, $dataID["AdminFirmaID"][0]["FirmaID"]);
                     if ($resultupdate) {

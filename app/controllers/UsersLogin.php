@@ -84,7 +84,9 @@ class UsersLogin extends Controller {
 
             $admin_model = $this->load->model("admin_model");
             $result = $admin_model->userControl($data, $Kadi, $Sifre, $kullaniciID, $tableName);
-
+            $firmaID=$result[0]["FirmaID"];
+            //Kişinin bağlı olduğu firma kodu 
+            $firmaKodu=$admin_model->firmaOzellikler($firmaID);
 
             if ($result == false) {
                 //yanlış bilgi
@@ -105,7 +107,9 @@ class UsersLogin extends Controller {
                 Session::set("username", $result[0][$Kadi]);
                 Session::set("userId", $result[0][$adminID]);
                 Session::set("userTip", $loginTip);
-
+                Session::set("userRutbe", $result[0]["SuperAdmin"]);
+                Session::set("firmaKodu", $firmaKodu[0]["FirmaKodu"]);
+                
                 header("Location:" . SITE_URL_HOME . "/panel");
             }
         } else {

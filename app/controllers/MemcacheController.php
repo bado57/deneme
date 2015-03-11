@@ -6,7 +6,7 @@
     }
 
     public function index() {
-        $this->serverStatus();
+        $this->get();
     }
     
     //insert example

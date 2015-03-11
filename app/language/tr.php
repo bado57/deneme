@@ -69,7 +69,13 @@ class tr {
             "Okunmamis"  => "Okunmamış",
             "YeniDuyuru" => "Yeni Duyuru",
             "YeniRapor" => "Yeni Rapor",
-            "GuvenliCikis" => "Güvenli Çıkış"
+            "GuvenliCikis" => "Güvenli Çıkış",
+            "Profil" => "Profil",
+            "Bolgeler" => "Bolgeler",
+            "BolgeListe" => "Bölge Listesi",
+            "Kurumlar" => "Kurumlar",
+            "KurumListe" => "Kurum Listesi",
+            "AracListe" => "Araç Listesi"
             
         );
         return $trdil;
