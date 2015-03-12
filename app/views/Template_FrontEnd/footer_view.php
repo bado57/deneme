@@ -10,7 +10,6 @@
                 </div>
                 <div class="rights">
                     <p>Copyright &copy; 2014</p>
-                    <p>Template by <a href="http://www.scoopthemes.com" target="_blank">ScoopThemes</a></p>
                 </div>
             </div>
         </footer>

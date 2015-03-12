@@ -22,7 +22,7 @@
                             <small><?php echo $data["AdminKategoriKontrolPanel"]; ?></small>
                         </h1>
                     </div>
-                    <?php if (Session::get("userRutbe")!=0) { ?>
+                    <?php if (Session::get("userRutbe") != 0) { ?>
                         <div class="col-md-6" style="text-align:right; padding-right:15px; padding-top:15px;">
                             <div class="form-group submit-group">
                                 <button type="button" class="btn btn-default vzg" onclick="$.adminFirmaIslem()"><?php echo $data["AdminFirmaBtnVazgec"]; ?></button>

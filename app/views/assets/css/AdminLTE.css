@@ -64,6 +64,10 @@ body > .header {
 .right-side {
     background-color: #f9f9f9;
     margin-left: 220px;
+    position:relative;
+    display:block;
+    height:100% !important;
+    min-height:100% !important;
 }
 /*left side - contains sidebar*/
 .left-side {
