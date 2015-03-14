@@ -9,10 +9,10 @@ class Admin_Model extends Model {
 
     //kullanıcı giriş kontrolü
     public function userControl($array = array(), $Kadi, $Sifre, $KullaniciID, $tableName) {
-        $sql = "SELECT AdminID , AdminKadi, SuperAdmin, FirmaID  FROM " . $tableName . " WHERE " . $Kadi . " = :loginKadi AND " . $Sifre . " = :loginSifre";
+        $sql = "SELECT BSAdminID , BSAdminKadi, BSSuperAdmin, BSFirmaID  FROM " . $tableName . " WHERE " . $Kadi . " = :loginKadi AND " . $Sifre . " = :loginSifre LIMIT 1";
         $count = $this->db->affectedRows($sql, $array);
         if ($count > 0) {
-            $sql = "SELECT AdminID , AdminKadi, SuperAdmin, FirmaID FROM " . $tableName . " WHERE " . $Kadi . " = :loginKadi AND " . $Sifre . " = :loginSifre";
+            $sql = "SELECT BSAdminID , BSAdminKadi, BSSuperAdmin, BSFirmaID FROM " . $tableName . " WHERE " . $Kadi . " = :loginKadi AND " . $Sifre . " = :loginSifre LIMIT 1";
             return $this->db->select($sql, $array);
         } else {
             return false;
@@ -21,7 +21,7 @@ class Admin_Model extends Model {
 
     //admin firma özellikleri getirme
     public function firmaOzellikler($firmaID) {
-        $sql = "SELECT * FROM firma Where FirmaID=" . $firmaID;
+        $sql = "SELECT * FROM firma Where BSFirmaID=" . $firmaID;
         return ($this->db->select($sql));
     }
 

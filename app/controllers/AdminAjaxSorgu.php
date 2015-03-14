@@ -15,9 +15,16 @@ class AdminAjaxSorgu extends Controller {
 
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest") {
             $sonuc = array();
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+            //form class bağlanısı
             $form = $this->load->otherClasses('Form');
+            //memcache model bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
+
             $form->post("tip", true);
             $tip = $form->values['tip'];
+
             Switch ($tip) {
                 case "adminfirmaislem":
                     $data = $form->post('usersloginadi', true);
@@ -30,37 +37,47 @@ class AdminAjaxSorgu extends Controller {
                             ':usersloginselect' => $form->values['usersloginselect']
                         );
                     }
-                    $Suserslogin = $this->load->model("panel_model");
-                    $data["UsersLogin"] = $Suserslogin->susersLogin();
+                    $data["UsersLogin"] = $Panel_Model->susersLogin();
                     $sonuc["usersLogin"] = $data["UsersLogin"];
                     break;
 
                 case "adminFirmaIslemler":
-                    $firmaKod = Session::get("firmaKodu");
-                    //memcache kontrolü yaptırma
-                    $model = $this->load->model("adminmemcache_model"); 
-                    $resultMemcache = $model->get($firmaKod);
+
+                    $firmaKod = Session::get("BSfirmaKodu");
+                    $firmaKod = $firmaKod . '_AFirma';
+
+                    $resultMemcache = $MemcacheModel->get($firmaKod);
                     if ($resultMemcache) {
-                        error_log("girmedi");
                         $sonuc["FirmaOzellikler"] = $resultMemcache;
                     } else {
-                        error_log("girdi");
                         $AdminId = Session::get("userId");
-                        $Pkayit_model = $this->load->model("panel_model");
-                        $data["AdminFirmaID"] = $Pkayit_model->adminFirmaID($AdminId);
-                        
-                        $data["FirmaOzellikler"] = $Pkayit_model->firmaOzellikler($data["AdminFirmaID"][0]["FirmaID"]);
-                        //memcache e firma bilgileri atma
-                        $result = $model->set($firmaKod, $data["FirmaOzellikler"], false, 60);
-                        $sonuc["FirmaOzellikler"] = $data["FirmaOzellikler"];
+
+                        $data["AdminFirmaID"] = $Panel_Model->adminFirmaID($AdminId);
+
+                        $data["FirmaOzellikler"] = $Panel_Model->firmaOzellikler($data["AdminFirmaID"][0]["BSFirmaID"]);
+
+                        $returnModelData = $data['FirmaOzellikler'][0];
+
+                        $a = 0;
+                        foreach ($returnModelData as $key => $value) {
+                            $new_array['Firmasshkey'][$a] = md5(sha1(md5($key)));
+                            $a++;
+                        }
+                        $returnFormdata['FirmaOzellikler'] = $form->newKeys($data['FirmaOzellikler'][0], $new_array['Firmasshkey']);
+
+                        $result = $MemcacheModel->set($firmaKod, $returnFormdata['FirmaOzellikler'], false, 120);
+
+                        $sonuc["FirmaOzellikler"] = $returnFormdata['FirmaOzellikler'];
                     }
 
                     break;
 
                 case "adminFirmaIslemlerKaydet":
+                    $firmaKod = Session::get("BSfirmaKodu");
+                    $firmaKod = $firmaKod . '_AFirma';
+
                     $AdminId = Session::get("userId");
-                    $Pkayit_model = $this->load->model("panel_model");
-                    $dataID["AdminFirmaID"] = $Pkayit_model->adminFirmaID($AdminId);
+                    $dataID["BSAdminFirmaID"] = $Panel_Model->adminFirmaID($AdminId);
 
                     $form->post('firma_kod', true);
                     $form->post('firma_adi', true);
@@ -73,30 +90,49 @@ class AdminAjaxSorgu extends Controller {
                     $form->post('firma_email', true);
                     $form->post('firma_website', true);
                     $form->post('firma_lokasyon', true);
-                    error_log("datakod" . $form->values['firma_kod']);
+                    //error_log("datakod" . $form->values['firma_kod']);
 
                     if ($form->submit()) {
                         $data = array(
-                            'FirmaKodu' => $form->values['firma_kod'],
-                            'FirmaAdi' => $form->values['firma_adi'],
-                            'FirmaAdres' => $form->values['firma_adres'],
-                            'FirmaTelefon' => $form->values['firma_telefon'],
-                            'FirmaWebsite' => $form->values['firma_website'],
-                            'FirmaLokasyon' => $form->values['firma_lokasyon'],
-                            'FirmaAciklama' => $form->values['firma_aciklama'],
-                            'FirmaDurum' => $form->values['firma_durum'],
-                            'OgrenciServis' => $form->values['ogrenci_chechkbox'],
-                            'PersonelServis' => $form->values['personel_chechkbox'],
-                            'HesapAktif' => $form->values['hesap_aktif']
+                            'BSFirmaAdi' => $form->values['firma_adi'],
+                            'BSFirmaAdres' => $form->values['firma_adres'],
+                            'BSFirmaTelefon' => $form->values['firma_telefon'],
+                            'BSFirmaWebsite' => $form->values['firma_website'],
+                            'BSFirmaEmail' => $form->values['firma_email'],
+                            'BSFirmaLokasyon' => $form->values['firma_lokasyon'],
+                            'BSFirmaAciklama' => $form->values['firma_aciklama'],
+                            'BSOgrenciServis' => $form->values['ogrenci_chechkbox'],
+                            'BSPersonelServis' => $form->values['personel_chechkbox'],
+                            'BSHesapAktif' => $form->values['hesap_aktif']
                         );
                     }
 
                     //error_log("Firma Id".$data["FirmaListele"][0]["FirmaID"]);
-                    $resultupdate = $Pkayit_model->firmaOzelliklerDuzenle($data, $dataID["AdminFirmaID"][0]["FirmaID"]);
+                    $resultupdate = $Panel_Model->firmaOzelliklerDuzenle($data, $dataID["BSAdminFirmaID"][0]["BSFirmaID"]);
+
+                    //memcache kadetmek için verileri üncellemeden sonra tekrar çekiyoruz.
+                    $data["FirmaOzellikler"] = $Panel_Model->firmaOzellikler($data["BSAdminFirmaID"][0]["BSFirmaID"]);
+
+
+                    $returnModelData = $data['FirmaOzellikler'][0];
+
+                    $a = 0;
+                    foreach ($returnModelData as $key => $value) {
+                        $new_array['Firmasshkey'][$a] = md5(sha1(md5($key)));
+                        $a++;
+                    }
+                    $returnFormdata['FirmaOzellikler'] = $form->newKeys($data['FirmaOzellikler'][0], $new_array['Firmasshkey']);
+
                     if ($resultupdate) {
-                        $sonuc["firmaozellik_update"] = "Başarıyla güncellenmiştir";
+                        $resultMemcache = $MemcacheModel->get($firmaKod);
+                        if ($resultMemcache) {
+                            $MemcacheModel->replace($firmaKod, $returnFormdata['FirmaOzellikler'], false, 120);
+                        } else {
+                            $result = $MemcacheModel->set($firmaKod, $returnFormdata['FirmaOzellikler'], false, 120);
+                        }
+                        $sonuc["update"] = "Başarıyla güncellenmiştir";
                     } else {
-                        $sonuc["hata"] = "Bi Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
                     }
 
                     break;

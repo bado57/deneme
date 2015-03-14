@@ -7,25 +7,25 @@ class Panel_Model extends Model {
     }
 
     public function susersLogin($array = array(), $Kadi, $Sifre,$KullaniciID, $tableName) {
-        $sql = "SELECT ".$Kadi.",".$KullaniciID." FROM " . $tableName . " WHERE " . $Kadi . " = :loginKadi && " . $Sifre . " = :loginSifre";
+        $sql = "SELECT ".$Kadi.",".$KullaniciID." FROM " . $tableName . " WHERE " . $Kadi . " = :loginKadi && " . $Sifre . " = :loginSifre LIMIT 1";
         return ($count = $this->db->select($sql, $array));
     }
     
     //adminin firma idsini döndürür
     public function adminFirmaID($AdminId) {
-        $sql = "SELECT FirmaID FROM admin Where AdminID=".$AdminId;
+        $sql = "SELECT BSFirmaID FROM bsadmin Where BSAdminID=".$AdminId." LIMIT 1";
         return ($this->db->select($sql));
     }
     
     //admin firma özellikleri getirme
     public function firmaOzellikler($firmaID) {
-        $sql = "SELECT * FROM firma Where FirmaID=".$firmaID;
+        $sql = "SELECT * FROM bsfirma Where BSFirmaID=".$firmaID." LIMIT 1";
         return ($this->db->select($sql));
     }
     
     //admin firma özellikleri düzenleme
     public function firmaOzelliklerDuzenle($data, $FirmaID) {
-        return ($this->db->update("firma", $data, "FirmaID=$FirmaID"));
+        return ($this->db->update("bsfirma", $data, "BSFirmaID=$FirmaID"));
     }
 
     public function projeListele_Count() {

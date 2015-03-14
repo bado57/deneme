@@ -1,7 +1,7 @@
 <?php
 
 class UsersLogin extends Controller {
-
+    
     public function __construct() {
         parent::__construct();
     }
@@ -12,19 +12,21 @@ class UsersLogin extends Controller {
 
     //daha önce login oldu ise
     function login() {
-        if (Session::get("login") == true) {
+        //session güvenlik kontrolü
+        $form = $this->load->otherClasses('Form');
+        $sessionKey = $form->sessionKontrol();
+
+        if (Session::get("login") == true && Session::get("sessionkey") == $sessionKey) {
             header("Location:" . SITE_URL_HOME . "/panel");
         } else {
-            $this->runLogin();
+            $this->runLogin($form);
         }
     }
 
-    public function runLogin() {
+    public function runLogin($form) {
 
         if ($_POST) {
-
-            $form = $this->load->otherClasses('Form');
-
+            
             $form->post('usersloginkadi', true);
             $form->post('usersloginsifre', true);
             $form->post('loginselected', true);
@@ -41,40 +43,40 @@ class UsersLogin extends Controller {
 
 
             if ($loginTip == 1) {
-                $Kadi = 'AdminKadi';
-                $Sifre = 'AdminSifre';
-                $kullaniciID = 'AdminID';
-                $tableName = 'admin';
-                $adminID = 'AdminID';
+                $Kadi = 'BSAdminKadi';
+                $Sifre = 'BSAdminSifre';
+                $kullaniciID = 'BSAdminID';
+                $tableName = 'bsadmin';
+                $adminID = 'BSAdminID';
             } elseif ($loginTip == 2) {
-                $Kadi = 'SoforKadi';
-                $Sifre = 'SoforSifre';
-                $kullaniciID = 'SoforID';
-                $tableName = 'sofor';
-                $adminID = 'SoforID';
+                $Kadi = 'BSSoforKadi';
+                $Sifre = 'BSSoforSifre';
+                $kullaniciID = 'BSSoforID';
+                $tableName = 'bssofor';
+                $adminID = 'BSSoforID';
             } elseif ($loginTip == 3) {
-                $Kadi = 'VeliKadi';
-                $Sifre = 'VeliSifre';
-                $kullaniciID = 'VeliID';
-                $tableName = 'veli';
-                $adminID = 'VeliID';
+                $Kadi = 'SBVeliKadi';
+                $Sifre = 'SBVeliSifre';
+                $kullaniciID = 'SBVeliID';
+                $tableName = 'sbveli';
+                $adminID = 'SBVeliID';
             } elseif ($loginTip == 4) {
-                $Kadi = 'OgrenciKadi';
-                $Sifre = 'OgrenciSifre';
-                $kullaniciID = 'OgrenciID';
-                $tableName = 'ogrenci';
-                $adminID = 'OgrenciID';
+                $Kadi = 'BSOgrenciKadi';
+                $Sifre = 'BSOgrenciSifre';
+                $kullaniciID = 'BSOgrenciID';
+                $tableName = 'bsogrenci';
+                $adminID = 'BSOgrenciID';
             } else if ($loginTip == 5) {
-                $Kadi = 'IsciKadi';
-                $Sifre = 'IsciSifre';
-                $kullaniciID = 'IsciID';
-                $tableName = 'isci';
-                $adminID = 'IsciID';
+                $Kadi = 'SBIsciKadi';
+                $Sifre = 'SBIsciSifre';
+                $kullaniciID = 'SBIsciID';
+                $tableName = 'sbsisci';
+                $adminID = 'SBIsciID';
             } else {
                 //$this->load->view("Entry/loginForm");
             }
 
-
+            
             if ($form->submit()) {
                 $data = array(
                     ':loginKadi' => $form->values['usersloginkadi'],
@@ -84,10 +86,9 @@ class UsersLogin extends Controller {
 
             $admin_model = $this->load->model("admin_model");
             $result = $admin_model->userControl($data, $Kadi, $Sifre, $kullaniciID, $tableName);
-            $firmaID=$result[0]["FirmaID"];
+            $firmaID = $result[0]["BSFirmaID"];
             //Kişinin bağlı olduğu firma kodu 
-            $firmaKodu=$admin_model->firmaOzellikler($firmaID);
-
+            $firmaKodu = $admin_model->firmaOzellikler($firmaID);
             if ($result == false) {
                 //yanlış bilgi
                 $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
@@ -101,15 +102,19 @@ class UsersLogin extends Controller {
                 }
                 $this->load->view("Entry/loginForm", $deger);
             } else {
+                $sessionKey =  $form->sessionKontrol();
                 //kullanıcı işlemleri başarılı
                 //login olarak session tanımlıyoruz admin panelini girerken login true ise diye
                 Session::set("login", "true");
+                
+                //session güvenlik anahtarı
+                Session::set("sessionkey", $sessionKey);
                 Session::set("username", $result[0][$Kadi]);
                 Session::set("userId", $result[0][$adminID]);
                 Session::set("userTip", $loginTip);
-                Session::set("userRutbe", $result[0]["SuperAdmin"]);
-                Session::set("firmaKodu", $firmaKodu[0]["FirmaKodu"]);
-                
+                Session::set("userRutbe", $result[0]["BSSuperAdmin"]);
+                Session::set("BSfirmaKodu", $firmaKodu[0]["BSFirmaKodu"]);
+
                 header("Location:" . SITE_URL_HOME . "/panel");
             }
         } else {

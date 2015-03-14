@@ -39,6 +39,12 @@ class Load {
         return new $fileName;
     }
     
+    //form sayfaları kullanımlar için
+    public function form($fileName) {
+        include "app/form/" . $fileName . ".php";
+        return new $fileName;
+    }
+    
     //language
     public function multilanguage($fileName) {
         include "app/language/" . $fileName . ".php";

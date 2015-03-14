@@ -16,15 +16,15 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="col-md-6">
-                    <h1>
+                    <h3>
                         <i class="fa fa-th"></i> Bölgeler
                         <small>Bölge İşlemleri</small>
-                    </h1>
+                    </h3>
                 </div>
                 <?php if (Session::get("userRutbe") != 0) { ?>
                     <div class="col-md-6" style="text-align:right; padding-right:15px; padding-top:15px;">
                         <div class="form-group">
-                            <button type="button" class="svToggle btn btn-primary"><i class="fa fa-plus-square"></i> Yeni Bölge</button>
+                            <button type="button" class="svToggle btn btn-primary btn-sm"><i class="fa fa-plus-square"></i> Yeni Bölge</button>
                         </div>
                     </div>
                 <?php } ?>
@@ -40,18 +40,18 @@
                     <thead>
                         <tr>
                             <th>Bölge Adı</th>
-                            <th>Kurum Sayısı</th>
-                            <th>Tur Sayısı</th>
-                            <th>Müşteri / Yolcu Sayısı</th>
+                            <th class="hidden-xs">Kurum Sayısı</th>
+                            <th class="hidden-xs">Tur Sayısı</th>
+                            <th class="hidden-xs">Müşteri / Yolcu Sayısı</th>
                             <th>İşlemler</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>Kayseri</td>
-                            <td>35</td>
-                            <td>72</td>
-                            <td>324</td>
+                            <td class="hidden-xs">35</td>
+                            <td class="hidden-xs">72</td>
+                            <td class="hidden-xs">324</td>
                             <td>
                                 <a href="#" data-toggle="tooltip" data-placement="top" title="Detaylar"> <i class="fa fa-search"></i> </a>
                                 <a href="#" data-toggle="tooltip" data-placement="top" title="Düzenle"> <i class="fa fa-edit"></i> </a>
@@ -90,9 +90,10 @@
                                 <a href="#" data-toggle="tooltip" data-placement="top" title="Düzenle"> <i class="fa fa-edit"></i> </a>
                                 <a href="#" data-toggle="tooltip" data-placement="top" title="Sil"> <i class="fa fa-trash"></i> </a>
                             </td>
-                        </tr>
                     </tbody>
                 </table>
+                
+                
             </div>
         </div>
     </section><!-- /.content -->

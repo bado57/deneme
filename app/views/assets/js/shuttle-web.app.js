@@ -59,7 +59,7 @@ function checkIt() {
  */
 function addSubView(headerText, partialView, type, table, id) {
 
-    var outer = $(document).find("aside.right-side").parent();
+    var wrapper = $(document).find("aside.right-side").parent();
 
     var temp = '<div class="svAdd col-lg-12 col-md-12 col-sm-12 col-xs-12">'
             + '<div class="row">'
@@ -67,23 +67,13 @@ function addSubView(headerText, partialView, type, table, id) {
             + '<h3>' + headerText + ' <span class="pull-right"><button class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>'
             + '<hr/>'
             + '<div class="row" id="getPartialView">'
-                // Buraya ajaxla partialView gelecek
+                // Ajax sayfası geledek
             + '</div>'
             + '</div>'
             + '</div>'
             + '</div>';
 
-    outer.append(temp);
-
-
-    $.ajax({
-        url: 'http://localhost/SProject/adminweb/' + partialView,
-        type: 'ajax',
-        success: function (data) {
-            $('#getPartialView').html(data.content);
-
-        }
-    });
+    wrapper.append(temp);
 
 }
 // End SubView Generator

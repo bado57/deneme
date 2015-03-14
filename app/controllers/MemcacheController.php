@@ -25,7 +25,7 @@
     public function set() {
 
         $model = $this->load->model("memcachedeneme_model");
-        $result = $model->set('deneme','memcachecontroller',false,60);
+        $result = $model->set('deneme','memcachecontroller',false,120);
         if($result){
             echo "kayıt işlemi tamam";
         }else{
@@ -37,7 +37,7 @@
     public function replace() {
 
         $model = $this->load->model("memcachedeneme_model");
-        $result = $model->replace('deneme','yeni deneme değer',false,60);
+        $result = $model->replace('deneme','yeni deneme değer',false,120);
         if($result){
             echo "değiştirme işlemi tamam";
         }else{

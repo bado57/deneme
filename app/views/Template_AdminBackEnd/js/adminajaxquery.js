@@ -13,11 +13,11 @@ $.ajaxSetup({
         }
     }
 });
-    
+
 
 $.adminFirmaIslem = function (args) {
     //alert(ogrenci_chechkbox);
-    
+
     //Firma İşlemleri Mysql-Return ve inputlara değerleri basma
     $.ajax({
         data: {"tip": "adminFirmaIslemler"},
@@ -25,32 +25,37 @@ $.adminFirmaIslem = function (args) {
             if (cevap.hata) {
                 alert("Üzgünüz tekrar deneyiniz.");
             } else {
+               /*
+                $.each(cevap.FirmaOzellikler, function (key, value) {
+                    alert(key + ": " + value);
+                });*/
+                
                 //$("#satis_ilk_kayit_sag_proje_kayit").slideUp(2000);
-                $("input[name=FrmKod]").val(cevap.FirmaOzellikler[0]["FirmaKodu"]);
-                $("input[name=FirmaAdi]").val(cevap.FirmaOzellikler[0]["FirmaAdi"]);
-                $("textarea[name=Aciklama]").val(cevap.FirmaOzellikler[0]["FirmaAciklama"]);
+                $("input[name=FrmKod]").val(cevap.FirmaOzellikler['00fe1774a569ef59e554731bbee4ea63']);
+                $("input[name=FirmaAdi]").val(cevap.FirmaOzellikler['b396451b1996fa04924f7ba0b8316573']);
+                $("textarea[name=Aciklama]").val(cevap.FirmaOzellikler['1759cc8d99e1bac25f37202ee2a41060']);
                 //hidden input
-                $("input[name=FirmaDurum]").val(cevap.FirmaOzellikler[0]["FirmaDurum"]);
-                $("select[name=FirmaDurum]").val(cevap.FirmaOzellikler[0]["FirmaDurum"]);
-                if (cevap.FirmaOzellikler[0]["OgrenciServis"] != 1) {
+                $("input[name=FirmaDurum]").val(cevap.FirmaOzellikler['60298ee45f6a299875562fff9846cbd0']);
+                $("select[name=FirmaDurum]").val(cevap.FirmaOzellikler['60298ee45f6a299875562fff9846cbd0']);
+                if (cevap.FirmaOzellikler['0540649c021082d7d1b9038d1964fad8'] != 1) {
                     $('#OgrenciServis').prop('checked', '');
                     checkIt();
                 } else {
                     $('#OgrenciServis').prop('checked', 'true');
                     checkIt();
                 }
-                if (cevap.FirmaOzellikler[0]["PersonelServis"] != 1) {
+                if (cevap.FirmaOzellikler['a2cc74afcae8ebd81a31e060ea4a7627'] != 1) {
                     $('#PersonelServis').prop('checked', '');
                     checkIt();
                 } else {
                     $('#PersonelServis').prop('checked', 'true');
                     checkIt();
                 }
-                $("textarea[name=FirmaAdres]").val(cevap.FirmaOzellikler[0]["FirmaAdres"]);
-                $("input[name=FirmaTelefon]").val(cevap.FirmaOzellikler[0]["FirmaTelefon"]);
-                $("input[name=FirmaEmail]").val(cevap.FirmaOzellikler[0]["FirmaEmail"]);
-                $("input[name=FirmaWebAdresi]").val(cevap.FirmaOzellikler[0]["FirmaWebsite"]);
-                $("input[name=FirmaLokasyon]").val(cevap.FirmaOzellikler[0]["FirmaLokasyon"]);
+                $("textarea[name=FirmaAdres]").val(cevap.FirmaOzellikler['8840e644fb753306a040eff6eb9de195']);
+                $("input[name=FirmaTelefon]").val(cevap.FirmaOzellikler['2ab5b2e998b599e343f7fbaf18227b4d']);
+                $("input[name=FirmaEmail]").val(cevap.FirmaOzellikler['685bf8d64f11d160c35529a9554900ed']);
+                $("input[name=FirmaWebAdresi]").val(cevap.FirmaOzellikler['4a821589992e93f9a001222cb1709efb']);
+                $("input[name=FirmaLokasyon]").val(cevap.FirmaOzellikler['07bc35c9581aca8a9c4924697a02ed36']);
             }
         }
     });
@@ -86,13 +91,13 @@ $.AdminIslemler = {
 
         $.ajax({
             data: {"firma_kod": firma_kodu, "firma_adi": firma_adi, "firma_aciklama": firma_aciklama, "ogrenci_chechkbox": ogrenci_chechkbox,
-                "personel_chechkbox": personel_chechkbox, "firma_adres": firma_adres, "firma_telefon": firma_telefon,"firma_durum":firma_durum,
+                "personel_chechkbox": personel_chechkbox, "firma_adres": firma_adres, "firma_telefon": firma_telefon, "firma_durum": firma_durum,
                 "firma_email": firma_email, "firma_website": firma_website, "firma_lokasyon": firma_lokasyon, "tip": "adminFirmaIslemlerKaydet"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert("hata");
+                    alert(cevap.hata);
                 } else {
-                    alert(cevap.firmaozellik_update);
+                    alert(cevap.update);
                 }
             }
         });

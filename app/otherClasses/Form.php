@@ -114,6 +114,41 @@ class Form {
         }
     }
 
+    //session kontrol değeri, real sunucuya kurunca yorumlar kaldırılacak
+    function sessionKontrol() {
+        /*
+          if (getenv("HTTP_CLIENT_IP")) {
+          $ip = getenv("HTTP_CLIENT_IP");
+          } elseif (getenv("HTTP_X_FORWARDED_FOR")) {
+          $ip = getenv("HTTP_X_FORWARDED_FOR");
+          if (strstr($ip, ',')) {
+          $tmp = explode(',', $ip);
+          $ip = trim($tmp[0]);
+          }
+          } else {
+          $ip = getenv("REMOTE_ADDR");
+          } */
+
+        $SecretKey = 'BSShuttle38';
+        //error_log("function icerisi" . md5(sha1(md5($SecretKey))));
+        //return md5(sha1(md5($ip . $SecretKey . $_SERVER['HTTP_USER_AGENT'])));
+        return md5(sha1(md5($SecretKey)));
+    }
+
+    //array key değiştirme js güvenliği için
+    function newKeys($oldkeys, $newkeys) {
+        if (count($oldkeys) !== count($newkeys))
+            return false;
+
+        $data = array();
+        $i = 0;
+        foreach ($oldkeys as $k => $v) {
+            $data[$newkeys[$i]] = $v;  // yeni array oluştur
+            $i++;
+        }
+        return $data;
+    }
+
 }
 
 ?>
