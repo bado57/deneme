@@ -1,5 +1,5 @@
 ﻿// Document Ready
-$(document).ready(function () {
+        $(document).ready(function () {
 
     // Form Enable / Disable Kontrolleri
     $(document).on("click", "#editForm", function () {
@@ -37,6 +37,7 @@ $(document).ready(function () {
     });
     // End Subview Kontrolü
     
+
 });
 // End Document Ready
 
@@ -67,7 +68,7 @@ function addSubView(headerText, partialView, type, table, id) {
             + '<h3>' + headerText + ' <span class="pull-right"><button class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>'
             + '<hr/>'
             + '<div class="row" id="getPartialView">'
-                // Ajax sayfası geledek
+            // Ajax sayfası geledek
             + '</div>'
             + '</div>'
             + '</div>'
@@ -77,3 +78,11 @@ function addSubView(headerText, partialView, type, table, id) {
 
 }
 // End SubView Generator
+
+
+function disabledForm() {
+    $(document).find(".dsb").prop("disabled", true);
+    $(document).find(".submit-group").css("display", "none");
+    $(document).find(".edit-group").fadeIn();
+    checkIt();
+}

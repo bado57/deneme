@@ -114,6 +114,7 @@ class UsersLogin extends Controller {
                 Session::set("userTip", $loginTip);
                 Session::set("userRutbe", $result[0]["BSSuperAdmin"]);
                 Session::set("BSfirmaKodu", $firmaKodu[0]["BSFirmaKodu"]);
+                Session::set("BSfirmaID", $firmaID);
 
                 header("Location:" . SITE_URL_HOME . "/panel");
             }

@@ -17,8 +17,8 @@
             <div class="col-md-12">
                 <div class="col-md-6">
                     <h3>
-                        <i class="fa fa-th"></i> Bölgeler
-                        <small>Bölge İşlemleri</small>
+                        <i class="fa fa-th"></i> <?php echo $data["Bolgeler"];?>
+                        <small><?php echo $data["AdminKategoriBolgeIslem"];?></small>
                     </h3>
                 </div>
                 <?php if (Session::get("userRutbe") != 0) { ?>
@@ -39,61 +39,32 @@
                 <table class="table table-responsive table-bordered table-hover">
                     <thead>
                         <tr>
-                            <th>Bölge Adı</th>
-                            <th class="hidden-xs">Kurum Sayısı</th>
-                            <th class="hidden-xs">Tur Sayısı</th>
-                            <th class="hidden-xs">Müşteri / Yolcu Sayısı</th>
-                            <th>İşlemler</th>
+                            <th><?php echo $data["BolgeAd"];?></th>
+                            <th class="hidden-xs"><?php echo $data["BolgeKurumSayi"];?></th>
+                            <th class="hidden-xs"><?php echo $data["BolgeTurSayi"];?></th>
+                            <th class="hidden-xs"><?php echo $data["TitleOgrenci"];?></th>
+                            <th class="hidden-xs"><?php echo $data["TitleIsci"];?></th>
+                            <th><?php echo $data["AdminFirmaİslemler"];?></th>
                         </tr>
                     </thead>
                     <tbody>
+                       <?php for($v=0; $v<count($model); $v++){ ?>
                         <tr>
-                            <td>Kayseri</td>
-                            <td class="hidden-xs">35</td>
-                            <td class="hidden-xs">72</td>
-                            <td class="hidden-xs">324</td>
+                            <input id="adminBolgeRow" name="adminBolgeRow" type="hidden" value="<?php echo $model[$v]['AdminBolgeID'];?>" />
+                            <td><?php echo $model[$v]['AdminBolge'];?></td>
+                            <td class="hidden-xs"><?php echo $model[$v]['AdminKurum'];?></td>
+                            <td class="hidden-xs"><?php echo $model[$v]['AdminArac'];?></td>
+                            <td class="hidden-xs"><?php echo $model[$v]['AdminOgrenci'];?></td>
+                            <td class="hidden-xs"><?php echo $model[$v]['AdminIsci'];?></td>
                             <td>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Detaylar"> <i class="fa fa-search"></i> </a>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Düzenle"> <i class="fa fa-edit"></i> </a>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Sil"> <i class="fa fa-trash"></i> </a>
+                                <a href="#" data-toggle="tooltip" data-placement="top" title="<?php echo $data["Detay"];?>"> <i class="fa fa-search"></i> </a>
+                                <a href="#" data-toggle="tooltip" data-placement="top" title="<?php echo $data["AdminFirmaDuzenle"];?>"> <i class="fa fa-edit"></i> </a>
+                                <a href="#" data-toggle="tooltip" data-placement="top" title="<?php echo $data["BolgeKurumSayi"];?>"> <i class="fa fa-trash"></i> </a>
                             </td>
                         </tr>
-                        <tr>
-                            <td>Kayseri</td>
-                            <td>35</td>
-                            <td>72</td>
-                            <td>324</td>
-                            <td>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Detaylar"> <i class="fa fa-search"></i> </a>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Düzenle"> <i class="fa fa-edit"></i> </a>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Sil"> <i class="fa fa-trash"></i> </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Kayseri</td>
-                            <td>35</td>
-                            <td>72</td>
-                            <td>324</td>
-                            <td>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Detaylar"> <i class="fa fa-search"></i> </a>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Düzenle"> <i class="fa fa-edit"></i> </a>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Sil"> <i class="fa fa-trash"></i> </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Kayseri</td>
-                            <td>35</td>
-                            <td>72</td>
-                            <td>324</td>
-                            <td>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Detaylar"> <i class="fa fa-search"></i> </a>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Düzenle"> <i class="fa fa-edit"></i> </a>
-                                <a href="#" data-toggle="tooltip" data-placement="top" title="Sil"> <i class="fa fa-trash"></i> </a>
-                            </td>
+                        <?php } ?>
                     </tbody>
                 </table>
-                
-                
             </div>
         </div>
     </section><!-- /.content -->

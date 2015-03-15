@@ -33,6 +33,8 @@ class tr {
             "AdminKategoriKullaniciIslem" => "Kullanıcı İşlemleri",
             "AdminKategoriTurIslem" => "Tur İşlemleri",
             "AdminKategoriBakiyeIslem" => "Bakiye İşlemleri",
+            "AdminKategoriBolgeIslem" => "Bölge İşlemleri",
+            "AdminKategoriKurumIslem" => "Kurum İşlemleri",
             "AdminKategoriLokasyonSorgu" => "Lokasyon Sorgusu",
             "AdminKategoriDuyuru" => "Duyurular",
             "AdminKategoriMesaj" => "Mesajlar",
@@ -71,11 +73,18 @@ class tr {
             "YeniRapor" => "Yeni Rapor",
             "GuvenliCikis" => "Güvenli Çıkış",
             "Profil" => "Profil",
-            "Bolgeler" => "Bolgeler",
+            "Bolgeler" => "Bölgeler",
             "BolgeListe" => "Bölge Listesi",
             "Kurumlar" => "Kurumlar",
             "KurumListe" => "Kurum Listesi",
-            "AracListe" => "Araç Listesi"
+            "AracListe" => "Araç Listesi",
+            "BolgeAd" => "Bölge Adı",
+            "BolgeKurumSayi" => "Kurum Sayısı",
+            "BolgeTurSayi" => "Araç Listesi",
+            "BolgeMusteriSayi" => "Müşteri / Yolcu Sayısı",
+            "BolgeYeni" => "Yeni Bölge",
+            "Detay" => "Detaylar",
+            "Sil" => "Sil"
             
         );
         return $trdil;

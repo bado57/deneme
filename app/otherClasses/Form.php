@@ -149,6 +149,20 @@ class Form {
         return $data;
     }
 
+    //array değer bulma fonksiyonu(count)
+    function array_deger_filtreleme($array, $index, $value) {
+        if (is_array($array) && count($array) > 0) {
+            foreach (array_keys($array) as $key) {
+                $temp[$key] = $array[$key][$index];
+
+                if ($temp[$key] == $value) {
+                    $newarray[$key] = $array[$key];
+                }
+            }
+        }
+        return $newarray;
+    }
+
 }
 
 ?>

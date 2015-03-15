@@ -32,6 +32,40 @@
                                 </div>
                             </a>
                         </div>
+                        
+                        <div class="col-lg-3 col-xs-12">
+                            <!-- Kullanıcı İşlemleri -->
+                            <a href="<?php echo SITE_URL; ?>/adminweb/bolgeliste" class="small-box bg-green">
+                                <div class="inner">
+                                    <h3>
+                                        <?php echo $data["AdminKategoriBolgeIslem"];?>
+                                    </h3>
+                                    <p>
+                                        10 <?php echo $data["Toplam"];?>
+                                    </p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-users"></i>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <div class="col-lg-3 col-xs-12">
+                            <!-- Kullanıcı İşlemleri -->
+                            <a href="#" class="small-box bg-green">
+                                <div class="inner">
+                                    <h3>
+                                        <?php echo $data["AdminKategoriKurumIslem"];?>
+                                    </h3>
+                                    <p>
+                                        15 <?php echo $data["Toplam"];?>
+                                    </p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-users"></i>
+                                </div>
+                            </a>
+                        </div>
 
                         <div class="col-lg-3 col-xs-12">
                             <!-- Kullanıcı İşlemleri -->

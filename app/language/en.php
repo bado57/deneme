@@ -31,6 +31,8 @@ class en {
             "AdminKategoriAracIslem" => "Vehicle Operations",
             "AdminKategoriKullaniciIslem" => "User Operations",
             "AdminKategoriTurIslem" => "Tour Operations",
+            "AdminKategoriBolgeIslem" => "Bölge İşlemleri",
+            "AdminKategoriKurumIslem" => "Kurum İşlemleri",
             "AdminKategoriBakiyeIslem" => "Balance Operations",
             "AdminKategoriLokasyonSorgu" => "Location Query",
             "AdminKategoriDuyuru" => "Announcements",
@@ -71,10 +73,17 @@ class en {
             "GuvenliCikis" => "Secure Checkout",
             "Profil" => "Profile",
             "Bolgeler" => "Regions",
-            "BolgeListe" => "Regions List",
+            "BolgeListe" => "Region List",
             "Kurumlar" => "Institutions",
-            "KurumListe" => "Institutions List",
-            "AracListe" => "Vehicle List"
+            "KurumListe" => "Institution List",
+            "AracListe" => "Vehicle List",
+            "BolgeAd" => "Region Name",
+            "BolgeKurumSayi" => "Institution Number",
+            "BolgeTurSayi" => "Vehicle List",
+            "BolgeMusteriSayi" => "Customer / passenger Number",
+            "BolgeYeni" => "New Region",
+            "Detay" => "Details",
+            "Sil" => "Delete"
         );
         return $endil;
     }

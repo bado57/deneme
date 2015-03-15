@@ -11,21 +11,22 @@ class AdminAjaxSorgu extends Controller {
     }
 
     public function adminAjaxSorgu() {
-
-
-        if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest") {
+        //session güvenlik kontrolü
+        $form = $this->load->otherClasses('Form');
+        $sessionKey = $form->sessionKontrol();
+        
+        if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("login") == true && Session::get("sessionkey") == $sessionKey) {
             $sonuc = array();
             //model bağlantısı
             $Panel_Model = $this->load->model("panel_model");
             //form class bağlanısı
-            $form = $this->load->otherClasses('Form');
-            //memcache model bağlanısı
             $MemcacheModel = $this->load->model("adminmemcache_model");
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
 
             Switch ($tip) {
+                
                 case "adminfirmaislem":
                     $data = $form->post('usersloginadi', true);
                     $data = $form->post('usersloginsifre', true);
@@ -41,48 +42,16 @@ class AdminAjaxSorgu extends Controller {
                     $sonuc["usersLogin"] = $data["UsersLogin"];
                     break;
 
-                case "adminFirmaIslemler":
-
-                    $firmaKod = Session::get("BSfirmaKodu");
-                    $firmaKod = $firmaKod . '_AFirma';
-
-                    $resultMemcache = $MemcacheModel->get($firmaKod);
-                    if ($resultMemcache) {
-                        $sonuc["FirmaOzellikler"] = $resultMemcache;
-                    } else {
-                        $AdminId = Session::get("userId");
-
-                        $data["AdminFirmaID"] = $Panel_Model->adminFirmaID($AdminId);
-
-                        $data["FirmaOzellikler"] = $Panel_Model->firmaOzellikler($data["AdminFirmaID"][0]["BSFirmaID"]);
-
-                        $returnModelData = $data['FirmaOzellikler'][0];
-
-                        $a = 0;
-                        foreach ($returnModelData as $key => $value) {
-                            $new_array['Firmasshkey'][$a] = md5(sha1(md5($key)));
-                            $a++;
-                        }
-                        $returnFormdata['FirmaOzellikler'] = $form->newKeys($data['FirmaOzellikler'][0], $new_array['Firmasshkey']);
-
-                        $result = $MemcacheModel->set($firmaKod, $returnFormdata['FirmaOzellikler'], false, 120);
-
-                        $sonuc["FirmaOzellikler"] = $returnFormdata['FirmaOzellikler'];
-                    }
-
-                    break;
-
                 case "adminFirmaIslemlerKaydet":
+                    error_log("yeni gorev");
                     $firmaKod = Session::get("BSfirmaKodu");
                     $firmaKod = $firmaKod . '_AFirma';
 
                     $AdminId = Session::get("userId");
                     $dataID["BSAdminFirmaID"] = $Panel_Model->adminFirmaID($AdminId);
 
-                    $form->post('firma_kod', true);
                     $form->post('firma_adi', true);
                     $form->post('firma_aciklama', true);
-                    $form->post('firma_durum', true);
                     $form->post('ogrenci_chechkbox', true);
                     $form->post('personel_chechkbox', true);
                     $form->post('firma_adres', true);
@@ -106,6 +75,7 @@ class AdminAjaxSorgu extends Controller {
                             'BSHesapAktif' => $form->values['hesap_aktif']
                         );
                     }
+                    
 
                     //error_log("Firma Id".$data["FirmaListele"][0]["FirmaID"]);
                     $resultupdate = $Panel_Model->firmaOzelliklerDuzenle($data, $dataID["BSAdminFirmaID"][0]["BSFirmaID"]);
@@ -122,13 +92,15 @@ class AdminAjaxSorgu extends Controller {
                         $a++;
                     }
                     $returnFormdata['FirmaOzellikler'] = $form->newKeys($data['FirmaOzellikler'][0], $new_array['Firmasshkey']);
-
+                    
+                       
                     if ($resultupdate) {
                         $resultMemcache = $MemcacheModel->get($firmaKod);
-                        if ($resultMemcache) {
-                            $MemcacheModel->replace($firmaKod, $returnFormdata['FirmaOzellikler'], false, 120);
+                       
+                        if ($resultMemcache) {  
+                            $MemcacheModel->replace($firmaKod, $returnFormdata['FirmaOzellikler'], false, 10);
                         } else {
-                            $result = $MemcacheModel->set($firmaKod, $returnFormdata['FirmaOzellikler'], false, 120);
+                            $result = $MemcacheModel->set($firmaKod, $returnFormdata['FirmaOzellikler'], false, 10);
                         }
                         $sonuc["update"] = "Başarıyla güncellenmiştir";
                     } else {

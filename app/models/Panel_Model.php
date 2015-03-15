@@ -6,26 +6,68 @@ class Panel_Model extends Model {
         parent::__construct();
     }
 
-    public function susersLogin($array = array(), $Kadi, $Sifre,$KullaniciID, $tableName) {
-        $sql = "SELECT ".$Kadi.",".$KullaniciID." FROM " . $tableName . " WHERE " . $Kadi . " = :loginKadi && " . $Sifre . " = :loginSifre LIMIT 1";
+    public function susersLogin($array = array(), $Kadi, $Sifre, $KullaniciID, $tableName) {
+        $sql = "SELECT " . $Kadi . "," . $KullaniciID . " FROM " . $tableName . " WHERE " . $Kadi . " = :loginKadi && " . $Sifre . " = :loginSifre LIMIT 1";
         return ($count = $this->db->select($sql, $array));
     }
-    
+
     //adminin firma idsini döndürür
     public function adminFirmaID($AdminId) {
-        $sql = "SELECT BSFirmaID FROM bsadmin Where BSAdminID=".$AdminId." LIMIT 1";
+        $sql = "SELECT BSFirmaID FROM bsadmin Where BSAdminID=" . $AdminId . " LIMIT 1";
         return ($this->db->select($sql));
     }
-    
+
     //admin firma özellikleri getirme
     public function firmaOzellikler($firmaID) {
-        $sql = "SELECT * FROM bsfirma Where BSFirmaID=".$firmaID." LIMIT 1";
+        $sql = "SELECT * FROM bsfirma Where BSFirmaID=" . $firmaID . " LIMIT 1";
         return ($this->db->select($sql));
     }
-    
+
     //admin firma özellikleri düzenleme
     public function firmaOzelliklerDuzenle($data, $FirmaID) {
         return ($this->db->update("bsfirma", $data, "BSFirmaID=$FirmaID"));
+    }
+
+    //admin bölgeler listele
+    public function bolgeListele($firmaID) {
+        $sql = "SELECT SBBolgeAdi,SBBolgeID FROM sbbolgeler Where SBFirmaID=" . $firmaID;
+        return($this->db->select($sql));
+    }
+
+    //admine göre bölge getirme
+    public function AdminbolgeListele($adminID) {
+        $sql = "SELECT BSBolgeID FROM bsadminbolge Where BSAdminID=" . $adminID;
+        return($this->db->select($sql));
+    }
+
+    //admin bölgeler listele
+    public function rutbeBolgeListele($array = array(),$firmaID) {
+        $sql = 'SELECT SBBolgeAdi,SBBolgeID FROM sbbolgeler Where SBBolgeID IN ('.$array.') And SBFirmaID=' . $firmaID;
+        return($this->db->select($sql));
+    }
+
+    //admin bölgeler kurum count
+    public function bolgeKurum_Count($array = array(), $firmaID) {
+        $sql = 'SELECT SBBolgeID FROM sbkurum WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And SBFirmaID=' . $firmaID;
+        return($this->db->select($sql));
+    }
+
+    //admin bölgeler arac count
+    public function bolgeArac_Count($array = array(), $firmaID) {
+        $sql = 'SELECT DISTINCT(SBTurAracID), SBBolgeID FROM sbtur WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And SBTurFirmaID=' . $firmaID;
+        return($this->db->select($sql));
+    }
+    
+    //admin bölgeler öğrenci count
+    public function bolgeOgrenci_Count($array = array(), $firmaID) {
+        $sql = 'SELECT BSBolgeID FROM bsogrenci WHERE BSBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And BSFirmaID=' . $firmaID;
+        return($this->db->select($sql));
+    }
+    
+    //admin bölgeler İŞÇİ count
+    public function bolgeIsci_Count($array = array(), $firmaID) {
+        $sql = 'SELECT SBBolgeID FROM sbisci WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And SBFirmaID=' . $firmaID;
+        return($this->db->select($sql));
     }
 
     public function projeListele_Count() {

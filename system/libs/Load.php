@@ -16,13 +16,14 @@ class Load {
     }
     
     //view classları için
-    public function view($fileName, $data = false , $rutbe=false) {
+    public function view($fileName, $data = false , $model=false) {
         if ($data == true) {
             extract($data);
         }
-        if ($rutbe == true) {
-            extract($rutbe);
+        if ($model == true) {
+            extract($model);
         }
+        
         include "app/views/" . $fileName . "_view.php";
     }
     
