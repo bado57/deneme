@@ -14,6 +14,8 @@ class AdminMobilServis extends Controller {
         if ($_POST) {
 
             $form = $this->load->otherClasses('Form');
+            //memcache model bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -37,9 +39,6 @@ class AdminMobilServis extends Controller {
 
                         $formDbConfig = $this->load->otherClasses('DatabaseConfig');
                         $usersselect_model = $this->load->model("adminselectdb_model");
-                        //memcache model bağlanısı
-                        $MemcacheModel = $this->load->model("adminmemcache_model");
-
 
                         $loginfirmaID = $form->substrEnd($loginKadi, 6);
                         //return database results
@@ -79,6 +78,69 @@ class AdminMobilServis extends Controller {
 
 
                         $this->load->view("Template_AdminBackEnd/MobileAdmin/adminfirmamobil", $deger, $sonuc["FirmaOzellikler"], $rutbe);
+                        break;
+
+                    case "bolgeislem":
+
+                        //model bağlantısı
+                        $Panel_Model = $this->load->model("panel_model");
+
+                        $form->post("rutbe", true);
+                        $rutbe = $form->values['rutbe'];
+
+                        $adminRutbe = Session::get("userRutbe");
+                        $adminID = Session::get("userId");
+                        $uniqueKey = Session::get("userFirmaKod");
+                        $uniqueKey = $uniqueKey . '_ABolge' . $adminID;
+
+
+
+                        $resultMemcache = $MemcacheModel->get($uniqueKey);
+                        if ($resultMemcache) {
+                            $adminBolge = $resultMemcache;
+                        } else {
+                            //super adminse tüm bölgeleri görür
+                            if ($adminRutbe != 0) {
+
+                                $bolgeListe = $Panel_Model->bolgeListele();
+
+                                for ($a = 0; $a < count($bolgeListe); $a++) {
+                                    $adminBolge[$a]['AdminBolge'] = $bolgeListe[$a]['SBBolgeAdi'];
+                                    $adminBolge[$a]['AdminBolgeID'] = $bolgeListe[$a]['SBBolgeID'];
+                                    $adminBolge[$a]['AdminBolgeAciklama'] = $bolgeListe[$a]['SBBolgeAciklama'];
+                                    $bolgeId[] = $bolgeListe[$a]['SBBolgeID'];
+                                }
+                            } else {//değilse admin ıd ye göre bölge görür
+                                $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
+                                //echo count($bolgeListeRutbe);
+
+                                for ($r = 0; $r < count($bolgeListeRutbe); $r++) {
+                                    $bolgerutbeId[] = $bolgeListeRutbe[$r]['BSBolgeID'];
+                                }
+                                $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+
+                                $bolgeListe = $Panel_Model->rutbeBolgeListele($rutbebolgedizi);
+
+                                for ($a = 0; $a < count($bolgeListe); $a++) {
+                                    $adminBolge[$a]['AdminBolge'] = $bolgeListe[$a]['SBBolgeAdi'];
+                                    $adminBolge[$a]['AdminBolgeID'] = $bolgeListe[$a]['SBBolgeID'];
+                                    $bolgeId[] = $bolgeListe[$a]['SBBolgeID'];
+                                }
+                            }
+
+                            $bolgekurumSayi[] = $Panel_Model->bolgeKurum_Count($bolgeId);
+
+                            for ($b = 0; $b < count($bolgeListe); $b++) {
+                                $sonuc = $formSession->array_deger_filtreleme($bolgekurumSayi[0], 'SBBolgeID', $bolgeListe[$b]['SBBolgeID']);
+                                $adminBolge[$b]['AdminKurum'] = count($sonuc);
+                            }
+                            //memcache kayıt
+                            $result = $MemcacheModel->set($uniqueKey, $adminBolge, false, 60);
+                        }
+
+                        $this->load->view("Template_AdminBackEnd/MobileAdmin/adminbolgemobil", $deger, $adminBolge);
+
                         break;
                 }
             } else {
