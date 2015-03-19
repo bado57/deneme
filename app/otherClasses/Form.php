@@ -95,6 +95,18 @@ class Form {
         return $son;
     }
 
+    //substr.İstenilen yerden sonrasını kelimede alma
+    function substrEnd($statement, $value) {
+        $result = substr($statement, $value);
+        return $result;
+    }
+
+    //substr.İstenilen karekterler arasını alır
+    function substrInterval($statement, $start, $end) {
+        $result = substr($statement, $start, $end);
+        return $result;
+    }
+
     //uzunluğu kısaltma fonksiyonu
     function kisalt($paremetre, $uzunluk = 50) {
 
@@ -112,6 +124,11 @@ class Form {
         } else {
             header("Refresh: {$time}; url={$paremetre}");
         }
+    }
+    
+    //gelen değeri  şifreleme
+    function md5($value) {
+        return md5($value);
     }
 
     //session kontrol değeri, real sunucuya kurunca yorumlar kaldırılacak

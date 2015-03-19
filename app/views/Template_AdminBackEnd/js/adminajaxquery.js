@@ -87,7 +87,6 @@ $.AdminIslemler = {
     adminFirmaDuzenle: function () {
         
     //Firma İşlemleri Değerleri
-    //var firma_kod = $("input[name=FrmKod]").val();
     var firma_adi = $("input[name=FirmaAdi]").val();
     var firma_aciklama = $("textarea[name=Aciklama]").val();
     var ogrenci_chechkbox = $('#OgrenciServis').is(':checked');
@@ -109,8 +108,8 @@ $.AdminIslemler = {
     var firma_website = $("input[name=FirmaWebAdresi]").val();
     var firma_lokasyon = $("input[name=FirmaLokasyon]").val();
     //vazgeç için değerler
-    var firma_durum = $("input[name=FirmaDurum]").val();
     var firma_kodu = $("input[name=FrmKod]").val();
+    AdminVazgec=[];
     AdminVazgec.push(firma_kodu, firma_adi, firma_aciklama, firma_durum, ogrenci_chechkbox, personel_chechkbox, firma_adres, firma_telefon, firma_email, firma_website, firma_lokasyon);
     }
 }

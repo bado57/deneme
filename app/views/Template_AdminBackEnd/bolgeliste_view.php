@@ -1,6 +1,5 @@
 <script type="text/javascript">
-    //$.adminFirmaIslem = function(args) {alert("hi");};
-
+    
     var activeMenu = "menu_bolge";
     var activeLink = "link_bolgeliste";
 
@@ -40,10 +39,8 @@
                     <thead>
                         <tr>
                             <th><?php echo $data["BolgeAd"];?></th>
-                            <th class="hidden-xs"><?php echo $data["BolgeKurumSayi"];?></th>
-                            <th class="hidden-xs"><?php echo $data["BolgeTurSayi"];?></th>
-                            <th class="hidden-xs"><?php echo $data["TitleOgrenci"];?></th>
-                            <th class="hidden-xs"><?php echo $data["TitleIsci"];?></th>
+                            <th><?php echo $data["BolgeKurumSayi"];?></th>
+                            <th class="hidden-xs"><?php echo $data["BolgeAciklama"];?></th>
                             <th><?php echo $data["AdminFirmaİslemler"];?></th>
                         </tr>
                     </thead>
@@ -52,10 +49,8 @@
                         <tr>
                             <input id="adminBolgeRow" name="adminBolgeRow" type="hidden" value="<?php echo $model[$v]['AdminBolgeID'];?>" />
                             <td><?php echo $model[$v]['AdminBolge'];?></td>
-                            <td class="hidden-xs"><?php echo $model[$v]['AdminKurum'];?></td>
-                            <td class="hidden-xs"><?php echo $model[$v]['AdminArac'];?></td>
-                            <td class="hidden-xs"><?php echo $model[$v]['AdminOgrenci'];?></td>
-                            <td class="hidden-xs"><?php echo $model[$v]['AdminIsci'];?></td>
+                            <td><?php echo $model[$v]['AdminKurum'];?></td>
+                            <td class="hidden-xs"><?php echo $model[$v]['AdminBolgeAciklama'];?></td>
                             <td>
                                 <a href="#" data-toggle="tooltip" data-placement="top" title="<?php echo $data["Detay"];?>"> <i class="fa fa-search"></i> </a>
                                 <a href="#" data-toggle="tooltip" data-placement="top" title="<?php echo $data["AdminFirmaDuzenle"];?>"> <i class="fa fa-edit"></i> </a>

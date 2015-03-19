@@ -1,5 +1,3 @@
-<!-- add new calendar event modal -->
-
 <!-- Bootstrap WYSIHTML5 -->
 <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>
 <!-- iCheck -->
@@ -10,8 +8,6 @@
 
 <!-- AdminLTE App -->
 <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/shuttle-web.app.js" type="text/javascript"></script> 
-
-
 
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?php
 
 class UsersLogin extends Controller {
-    
+
     public function __construct() {
         parent::__construct();
     }
@@ -16,7 +16,7 @@ class UsersLogin extends Controller {
         $form = $this->load->otherClasses('Form');
         $sessionKey = $form->sessionKontrol();
 
-        if (Session::get("login") == true && Session::get("sessionkey") == $sessionKey) {
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey) {
             header("Location:" . SITE_URL_HOME . "/panel");
         } else {
             $this->runLogin($form);
@@ -26,21 +26,32 @@ class UsersLogin extends Controller {
     public function runLogin($form) {
 
         if ($_POST) {
-            
+            $usersselect_model = $this->load->model("adminselectdb_model");
+
             $form->post('usersloginkadi', true);
             $form->post('usersloginsifre', true);
             $form->post('loginselected', true);
 
-            $loginTip = $form->values['loginselected'];
             $loginKadi = $form->values['usersloginkadi'];
+
+            $loginfirmaID = $form->substrEnd($loginKadi, 6);
+            //return database results
+            $UserSelectDb = $usersselect_model->kullaniciSelectDb($loginfirmaID);
+
+            $SelectdbName = $UserSelectDb[0]['rootFirmaDbName'];
+            $SelectdbIp = $UserSelectDb[0]['rootFirmaDbIp'];
+            $SelectdbUser = $UserSelectDb[0]['rootFirmaDbUser'];
+            $SelectdbPassword = $UserSelectDb[0]['rootFirmaDbSifre'];
+            $SelectdbFirmaKod = $UserSelectDb[0]['rootfirmaKodu'];
+
+            $loginTip = $form->values['loginselected'];
             $loginSifre = $form->values['usersloginsifre'];
             $loginDeger = "bs";
 
             $sifreilkeleman = $loginDeger . $loginKadi . $loginTip;
-            $sifreilkeleman1 = md5($sifreilkeleman);
-            $sifreikincieleman = md5($loginSifre);
+            $sifreilkeleman1 = $form->md5($sifreilkeleman);
+            $sifreikincieleman = $form->md5($loginSifre);
             $sifresonuc = $sifreilkeleman1 . $sifreikincieleman;
-
 
             if ($loginTip == 1) {
                 $Kadi = 'BSAdminKadi';
@@ -48,47 +59,28 @@ class UsersLogin extends Controller {
                 $kullaniciID = 'BSAdminID';
                 $tableName = 'bsadmin';
                 $adminID = 'BSAdminID';
-            } elseif ($loginTip == 2) {
-                $Kadi = 'BSSoforKadi';
-                $Sifre = 'BSSoforSifre';
-                $kullaniciID = 'BSSoforID';
-                $tableName = 'bssofor';
-                $adminID = 'BSSoforID';
-            } elseif ($loginTip == 3) {
-                $Kadi = 'SBVeliKadi';
-                $Sifre = 'SBVeliSifre';
-                $kullaniciID = 'SBVeliID';
-                $tableName = 'sbveli';
-                $adminID = 'SBVeliID';
-            } elseif ($loginTip == 4) {
-                $Kadi = 'BSOgrenciKadi';
-                $Sifre = 'BSOgrenciSifre';
-                $kullaniciID = 'BSOgrenciID';
-                $tableName = 'bsogrenci';
-                $adminID = 'BSOgrenciID';
-            } else if ($loginTip == 5) {
-                $Kadi = 'SBIsciKadi';
-                $Sifre = 'SBIsciSifre';
-                $kullaniciID = 'SBIsciID';
-                $tableName = 'sbsisci';
-                $adminID = 'SBIsciID';
             } else {
                 //$this->load->view("Entry/loginForm");
             }
 
-            
             if ($form->submit()) {
                 $data = array(
-                    ':loginKadi' => $form->values['usersloginkadi'],
+                    ':loginKadi' => $loginKadi,
                     ':loginSifre' => $sifresonuc
                 );
             }
 
+
+            //yeni db create
+            Session::set("selectDbName", $SelectdbName);
+            Session::set("selectDbIp", $SelectdbIp);
+            Session::set("selectDbUser", $SelectdbUser);
+            Session::set("selectDbPassword", $SelectdbPassword);
+            Session::set("selectDbEncryption", 'ShutteBSDb');
+
             $admin_model = $this->load->model("admin_model");
+
             $result = $admin_model->userControl($data, $Kadi, $Sifre, $kullaniciID, $tableName);
-            $firmaID = $result[0]["BSFirmaID"];
-            //Kişinin bağlı olduğu firma kodu 
-            $firmaKodu = $admin_model->firmaOzellikler($firmaID);
             if ($result == false) {
                 //yanlış bilgi
                 $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
@@ -102,19 +94,20 @@ class UsersLogin extends Controller {
                 }
                 $this->load->view("Entry/loginForm", $deger);
             } else {
-                $sessionKey =  $form->sessionKontrol();
+                $sessionKey = $form->sessionKontrol();
+
                 //kullanıcı işlemleri başarılı
                 //login olarak session tanımlıyoruz admin panelini girerken login true ise diye
-                Session::set("login", "true");
-                
+                Session::set("BSShuttlelogin", "true");
+
                 //session güvenlik anahtarı
                 Session::set("sessionkey", $sessionKey);
                 Session::set("username", $result[0][$Kadi]);
                 Session::set("userId", $result[0][$adminID]);
                 Session::set("userTip", $loginTip);
                 Session::set("userRutbe", $result[0]["BSSuperAdmin"]);
-                Session::set("BSfirmaKodu", $firmaKodu[0]["BSFirmaKodu"]);
-                Session::set("BSfirmaID", $firmaID);
+                Session::set("userFirmaKod", $SelectdbFirmaKod);
+                   
 
                 header("Location:" . SITE_URL_HOME . "/panel");
             }

@@ -22,7 +22,6 @@ function __autoload($className) {
 //config dosyasını include ediyorum
 include_once 'app/config/config.php';
 
-
 //bootstarp classı bunu bölüp controller a yönlendirecek.
 $boot = new Bootstrap();
 ?>

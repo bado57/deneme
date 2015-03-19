@@ -1,6 +1,5 @@
 ﻿// Document Ready
         $(document).ready(function () {
-
     // Form Enable / Disable Kontrolleri
     $(document).on("click", "#editForm", function () {
         $(document).find(".dsb").prop("disabled", false);

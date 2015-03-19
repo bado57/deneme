@@ -50,19 +50,6 @@
 
             </head>
             <body>
-                <!--
-                <div class="pre-loader">
-                    <div class="load-con">
-                        <img src="<?php echo SITE_USERFRONT_IMG; ?>/eco/logo.png" class="animated fadeInDown" alt="">
-                            <div class="spinner">
-                                <div class="bounce1"></div>
-                                <div class="bounce2"></div>
-                                <div class="bounce3"></div>
-                            </div>
-                    </div>
-                </div>
-                -->
-
                 <header>
 
 
@@ -81,23 +68,11 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="row">
-                                                <!--
-                                                <div class="col-md-4 col-sm-3 col-xs-2">
-                                                    <a role="button" class="" data-toggle="modal" data-target="#myModal">
-                                                        <i class="fa fa-download"></i>
-                                                    </a>
-                                                </div>
-                                                -->
                                                 <div class="col-md-4 col-sm-6 col-xs-8">
                                                     <form role="form" method="POST" action="<?php echo SITE_URL; ?>/userslogin" id="loginForm"> 
                                                         <div class="form-group">
                                                             <select id="kullanici" class="form-control" name="loginselected" required>
-                                                                <option selected value="0"><?php echo $data["LoginSelectBox"]; ?></option>
                                                                 <option value="1"><?php echo $data["LoginSelectAdmin"]; ?></option>
-                                                                <option value="2"><?php echo $data["LoginSelectSofor"]; ?></option>
-                                                                <option value="3"><?php echo $data["LoginSelectVeli"]; ?></option>
-                                                                <option value="4"><?php echo $data["LoginSelectOgrenci"]; ?></option>
-                                                                <option value="5"><?php echo $data["LoginSelectPersonel"]; ?></option>
                                                             </select>
                                                         </div>
                                                         <div class="form-group">

@@ -1,7 +1,6 @@
 <?php
 
 class Panel_Model extends Model {
-
     public function __construct() {
         parent::__construct();
     }
@@ -11,26 +10,20 @@ class Panel_Model extends Model {
         return ($count = $this->db->select($sql, $array));
     }
 
-    //adminin firma idsini döndürür
-    public function adminFirmaID($AdminId) {
-        $sql = "SELECT BSFirmaID FROM bsadmin Where BSAdminID=" . $AdminId . " LIMIT 1";
-        return ($this->db->select($sql));
-    }
-
     //admin firma özellikleri getirme
-    public function firmaOzellikler($firmaID) {
-        $sql = "SELECT * FROM bsfirma Where BSFirmaID=" . $firmaID . " LIMIT 1";
+    public function firmaOzellikler() {
+        $sql = "SELECT * FROM bsfirma Where BSFirmaID=1 LIMIT 1";
         return ($this->db->select($sql));
     }
 
     //admin firma özellikleri düzenleme
     public function firmaOzelliklerDuzenle($data, $FirmaID) {
-        return ($this->db->update("bsfirma", $data, "BSFirmaID=$FirmaID"));
+        return ($this->db->update("bsfirma", $data, "BSFirmaID=1"));
     }
 
     //admin bölgeler listele
     public function bolgeListele($firmaID) {
-        $sql = "SELECT SBBolgeAdi,SBBolgeID FROM sbbolgeler Where SBFirmaID=" . $firmaID;
+        $sql = "SELECT * FROM sbbolgeler";
         return($this->db->select($sql));
     }
 
@@ -41,14 +34,14 @@ class Panel_Model extends Model {
     }
 
     //admin bölgeler listele
-    public function rutbeBolgeListele($array = array(),$firmaID) {
-        $sql = 'SELECT SBBolgeAdi,SBBolgeID FROM sbbolgeler Where SBBolgeID IN ('.$array.') And SBFirmaID=' . $firmaID;
+    public function rutbeBolgeListele($array = array()) {
+        $sql = 'SELECT SBBolgeAdi,SBBolgeID FROM sbbolgeler Where SBBolgeID IN ('.$array.')';
         return($this->db->select($sql));
     }
 
     //admin bölgeler kurum count
     public function bolgeKurum_Count($array = array(), $firmaID) {
-        $sql = 'SELECT SBBolgeID FROM sbkurum WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And SBFirmaID=' . $firmaID;
+        $sql = 'SELECT SBBolgeID FROM sbkurum WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ')';
         return($this->db->select($sql));
     }
 

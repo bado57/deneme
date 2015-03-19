@@ -10,11 +10,23 @@ class Panel extends Controller {
     }
 
     public function index() {
-        $this->home();
+        $this->login();
+    }
+
+    //daha önce login oldu ise
+    function login() {
+        //session güvenlik kontrolü
+        $form = $this->load->otherClasses('Form');
+        $sessionKey = $form->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey) {
+            $this->home();
+        } else {
+            header("Location:" . SITE_URL_HOME);
+        }
     }
 
     public function home() {
-
 
         $loginTip = Session::get("userTip");
         $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
@@ -32,26 +44,6 @@ class Panel extends Controller {
             $this->load->view("Template_AdminBackEnd/left", $deger);
             $this->load->view("Template_AdminBackEnd/home", $deger);
             $this->load->view("Template_AdminBackEnd/footer", $deger);
-        } elseif ($loginTip == 2) {
-            $this->load->view("Template_SoforBackEnd/header", $deger);
-            $this->load->view("Template_SoforBackEnd/left", $deger);
-            $this->load->view("Template_SoforBackEnd/home", $deger);
-            $this->load->view("Template_SoforBackEnd/footer", $deger);
-        } elseif ($loginTip == 3) {
-            $this->load->view("Template_VeliBackEnd/header", $deger);
-            $this->load->view("Template_VeliBackEnd/left", $deger);
-            $this->load->view("Template_VeliBackEnd/home", $deger);
-            $this->load->view("Template_VeliBackEnd/footer", $deger);
-        } elseif ($loginTip == 4) {
-            $this->load->view("Template_OgrenciBackEnd/header", $deger);
-            $this->load->view("Template_OgrenciBackEnd/left", $deger);
-            $this->load->view("Template_OgrenciBackEnd/home", $deger);
-            $this->load->view("Template_OgrenciBackEnd/footer", $deger);
-        } else if ($loginTip == 5) {
-            $this->load->view("Template_IsciBackEnd/header", $deger);
-            $this->load->view("Template_IsciBackEnd/left", $deger);
-            $this->load->view("Template_IsciBackEnd/home", $deger);
-            $this->load->view("Template_IsciBackEnd/footer", $deger);
         } else {
             //$this->load->view("Entry/loginForm");
         }

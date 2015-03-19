@@ -24,7 +24,7 @@ class Session{
   //kendi uygulamamız için framework oldu
   public static function checkSession() {
             self::init();
-            if(self::get("login")==false){
+            if(self::get("BSShuttlelogin")==false){
                 self::destroy();
                 header("Location:".SITE_URL);
                 return false;

@@ -14,8 +14,8 @@ class AdminAjaxSorgu extends Controller {
         //session güvenlik kontrolü
         $form = $this->load->otherClasses('Form');
         $sessionKey = $form->sessionKontrol();
-        
-        if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("login") == true && Session::get("sessionkey") == $sessionKey) {
+
+        if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey) {
             $sonuc = array();
             //model bağlantısı
             $Panel_Model = $this->load->model("panel_model");
@@ -26,7 +26,7 @@ class AdminAjaxSorgu extends Controller {
             $tip = $form->values['tip'];
 
             Switch ($tip) {
-                
+
                 case "adminfirmaislem":
                     $data = $form->post('usersloginadi', true);
                     $data = $form->post('usersloginsifre', true);
@@ -43,12 +43,9 @@ class AdminAjaxSorgu extends Controller {
                     break;
 
                 case "adminFirmaIslemlerKaydet":
-                    error_log("yeni gorev");
-                    $firmaKod = Session::get("BSfirmaKodu");
-                    $firmaKod = $firmaKod . '_AFirma';
-
-                    $AdminId = Session::get("userId");
-                    $dataID["BSAdminFirmaID"] = $Panel_Model->adminFirmaID($AdminId);
+                    
+                    $uniqueKey = Session::get("userFirmaKod");
+                    $uniqueKey = $uniqueKey . '_AFirma';
 
                     $form->post('firma_adi', true);
                     $form->post('firma_aciklama', true);
@@ -59,7 +56,7 @@ class AdminAjaxSorgu extends Controller {
                     $form->post('firma_email', true);
                     $form->post('firma_website', true);
                     $form->post('firma_lokasyon', true);
-                    //error_log("datakod" . $form->values['firma_kod']);
+                    error_log("datakod" . $form->values['firma_kod']);
 
                     if ($form->submit()) {
                         $data = array(
@@ -75,15 +72,15 @@ class AdminAjaxSorgu extends Controller {
                             'BSHesapAktif' => $form->values['hesap_aktif']
                         );
                     }
-                    
+
 
                     //error_log("Firma Id".$data["FirmaListele"][0]["FirmaID"]);
-                    $resultupdate = $Panel_Model->firmaOzelliklerDuzenle($data, $dataID["BSAdminFirmaID"][0]["BSFirmaID"]);
+                    $resultupdate = $Panel_Model->firmaOzelliklerDuzenle($data);
 
                     //memcache kadetmek için verileri üncellemeden sonra tekrar çekiyoruz.
-                    $data["FirmaOzellikler"] = $Panel_Model->firmaOzellikler($data["BSAdminFirmaID"][0]["BSFirmaID"]);
+                    $data["FirmaOzellikler"] = $Panel_Model->firmaOzellikler();
 
-
+                    
                     $returnModelData = $data['FirmaOzellikler'][0];
 
                     $a = 0;
@@ -92,15 +89,15 @@ class AdminAjaxSorgu extends Controller {
                         $a++;
                     }
                     $returnFormdata['FirmaOzellikler'] = $form->newKeys($data['FirmaOzellikler'][0], $new_array['Firmasshkey']);
-                    
-                       
+
+
                     if ($resultupdate) {
-                        $resultMemcache = $MemcacheModel->get($firmaKod);
-                       
-                        if ($resultMemcache) {  
-                            $MemcacheModel->replace($firmaKod, $returnFormdata['FirmaOzellikler'], false, 10);
+                        $resultMemcache = $MemcacheModel->get($uniqueKey);
+
+                        if ($resultMemcache) {
+                            $MemcacheModel->replace($uniqueKey, $returnFormdata['FirmaOzellikler'], false, 10);
                         } else {
-                            $result = $MemcacheModel->set($firmaKod, $returnFormdata['FirmaOzellikler'], false, 10);
+                            $result = $MemcacheModel->set($uniqueKey, $returnFormdata['FirmaOzellikler'], false, 10);
                         }
                         $sonuc["update"] = "Başarıyla güncellenmiştir";
                     } else {
@@ -360,7 +357,6 @@ class AdminAjaxSorgu extends Controller {
                             'insaat_proje_yapi_id' => $form->values['projeAdres_proje_id']
                         );
                         $projekayitAdres_label = $form->values['projekayitAdres_label'];
-                        error_log("1" . $projekayitAdres_label);
                         if ($projekayitAdres_label == "") {
                             $model = $this->load->model("panel_model");
                             $result = $model->addNewProjectAdressInsert($data);

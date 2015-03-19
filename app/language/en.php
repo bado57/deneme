@@ -11,7 +11,6 @@ class en {
             "LoginTitle" => "Login",
             "Loginkadi" => "Username",
             "Loginsifre" => "Password",
-            "LoginSelectBox" => "Choose...",
             "LoginSelectAdmin" => "Admin",
             "LoginSelectSofor" => "Driver",
             "LoginSelectVeli" => "Guardian",
@@ -83,7 +82,8 @@ class en {
             "BolgeMusteriSayi" => "Customer / passenger Number",
             "BolgeYeni" => "New Region",
             "Detay" => "Details",
-            "Sil" => "Delete"
+            "Sil" => "Delete",
+            "BolgeAciklama" => "Region Details"
         );
         return $endil;
     }

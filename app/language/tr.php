@@ -11,7 +11,6 @@ class tr {
             "LoginTitle" => "Giriş",
             "Loginkadi" => "Kullanıcı Adı",
             "Loginsifre" => "Şifre",
-            "LoginSelectBox" => "Seçiniz...",
             "LoginSelectAdmin" => "Admin",
             "LoginSelectSofor" => "Şoför",
             "LoginSelectVeli" => "Veli",
@@ -84,7 +83,8 @@ class tr {
             "BolgeMusteriSayi" => "Müşteri / Yolcu Sayısı",
             "BolgeYeni" => "Yeni Bölge",
             "Detay" => "Detaylar",
-            "Sil" => "Sil"
+            "Sil" => "Sil",
+            "BolgeAciklama" => "Bölge Açıklama"
             
         );
         return $trdil;
