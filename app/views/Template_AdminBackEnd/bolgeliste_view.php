@@ -72,7 +72,7 @@
                         <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <button data-type="svAdd" type="button" class="svToggle btn btn-default">Vazgeç</button>
+                        <button data-type="svAdd"  data-class="bolge" type="button" class="svToggle btn btn-default">Vazgeç</button>
                         <button type="submit" class="btn btn-success">Kaydet</button>
                     </div>
 
@@ -98,7 +98,7 @@
                         <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <button data-type="svAdd" type="button" class="svToggle btn btn-default">Vazgeç</button>
+                        <button data-type="svAdd" data-class="kurum" type="button" class="svToggle btn btn-default">Vazgeç</button>
                         <button type="submit" class="btn btn-success">Kaydet</button>
                     </div>
 
