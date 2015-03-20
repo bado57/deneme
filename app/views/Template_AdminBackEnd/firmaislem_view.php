@@ -8,31 +8,27 @@
 <!-- Right side column. Contains the navbar and content of the page -->
 <aside class="right-side">
     <!-- Content Header (Page header) -->
-    <form class="form-vertical">
         <section class="content-header">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="col-md-6">
-                        <h1>
+                    <div class="col-md-6 top-left">
+                        <h3>
                             <i class="fa fa-building"></i> <?php echo $data["AdminFirmaİslem"]; ?>
                             <small><?php echo $data["AdminKategoriKontrolPanel"]; ?></small>
-                        </h1>
+                        </h3>
                     </div>
                     <?php if (Session::get("userRutbe") != 0) { ?>
-                        <div class="col-md-6" style="text-align:right; padding-right:15px; padding-top:15px;">
+                        <div class="col-md-6 top-right">
                             <div class="form-group submit-group">
-                                <button type="button" class="btn btn-default vzg" onclick="$.AdminIslemler.adminFirmaVazgec()"><?php echo $data["AdminFirmaBtnVazgec"]; ?></button>
-                                <button type="button" class="btn btn-success" onclick="$.AdminIslemler.adminFirmaOzellik()"><?php echo $data["AdminFirmaBtnKaydet"]; ?></button>
+                                <button type="button" class="btn btn-default vzg btn-sm" onclick="$.AdminIslemler.adminFirmaVazgec()"><?php echo $data["AdminFirmaBtnVazgec"]; ?></button>
+                                <button type="button" class="btn btn-success  btn-sm" onclick="$.AdminIslemler.adminFirmaOzellik()"><?php echo $data["AdminFirmaBtnKaydet"]; ?></button>
                             </div>
                             <div class="form-group edit-group">
-                                <button type="button" id="editForm" class="btn btn-primary" onclick="$.AdminIslemler.adminFirmaDuzenle()"><?php echo $data["AdminFirmaDuzenle"]; ?></button>
+                                <button type="button" id="editForm" class="btn btn-primary btn-sm" onclick="$.AdminIslemler.adminFirmaDuzenle()"><?php echo $data["AdminFirmaDuzenle"]; ?></button>
                             </div>
                         </div>
                     <?php } ?>
-                </div>
             </div>
         </section>
-        <hr />
         <!-- Main content -->
         <section class="content">
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -129,6 +125,5 @@
                 </div>
             </div>
         </section><!-- /.content -->
-    </form>
 </aside><!-- /.right-side -->
 </div><!-- ./wrapper -->

@@ -1,4 +1,5 @@
 ﻿// Document Ready
+var z = 1;
         $(document).ready(function () {
     // Form Enable / Disable Kontrolleri
     $(document).on("click", "#editForm", function () {
@@ -25,14 +26,37 @@
 
     // End Sol Menu Navigasyon Kontrolü
 
+    
+
     // Subview Kontrolü
     $(document).on("click", ".svToggle", function (event) {
         var effect = 'slide';
         var options = {direction: 'right'};
         var duration = 500;
-        var h = $(".svAdd").parent().height();
-        $(".svAdd").height(h);
-        $('.svAdd').toggle(effect, options, duration);
+        var sv = $(this).attr("data-type");
+        var sc = $(this).attr("data-class");
+        var h = $("."+sv).parent().height();
+        var hh = $(document).find("header").height();
+        switch(sv) {
+    case "svAdd":
+        $("#"+sc).height(h);
+        $("#"+sc).css("top", hh);
+        z++;
+        $("#"+sc).css("z-index", z);
+        $('#'+sc).toggle(effect, options, duration);
+        break;
+    case "svDetail":
+        $("."+sv).height(h);
+        $("."+sv).css("top", hh);
+        z++;
+        $("."+sv).css("z-index", z);
+        $("."+sv).toggle(effect, options, duration);
+        break;
+    default:
+        break;
+}
+        
+        
     });
     // End Subview Kontrolü
     
@@ -48,35 +72,6 @@ function checkIt() {
     });
 }
 // End CheckBox Kontrolü    
-
-// SubView Generator
-/*
- * @param {type} headerText --> SubView Başlık Metni
- * @param {type} partialView --> Getirilecek PartialView
- * @param {type} type --> İçerik Türü (Yeni Kayıt, Düzenleme vs.) / Create, Edit, Delete şeklinde gönderilebilir.
- * @param {type} table --> Sorgu Çekilecek Tablo
- * @param {type} id --> Düzenlenecek Kayıt ID
- */
-function addSubView(headerText, partialView, type, table, id) {
-
-    var wrapper = $(document).find("aside.right-side").parent();
-
-    var temp = '<div class="svAdd col-lg-12 col-md-12 col-sm-12 col-xs-12">'
-            + '<div class="row">'
-            + '<div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">'
-            + '<h3>' + headerText + ' <span class="pull-right"><button class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>'
-            + '<hr/>'
-            + '<div class="row" id="getPartialView">'
-            // Ajax sayfası geledek
-            + '</div>'
-            + '</div>'
-            + '</div>'
-            + '</div>';
-
-    wrapper.append(temp);
-
-}
-// End SubView Generator
 
 
 function disabledForm() {

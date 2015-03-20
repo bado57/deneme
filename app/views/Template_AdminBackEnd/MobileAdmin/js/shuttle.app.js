@@ -1,5 +1,5 @@
 ﻿// Document Ready
-        $(document).ready(function () {
+    $(document).ready(function () {
     // Form Enable / Disable Kontrolleri
     $(document).on("click", "#editForm", function () {
         $(document).find(".dsb").prop("disabled", false);
@@ -30,9 +30,11 @@
         var effect = 'slide';
         var options = {direction: 'right'};
         var duration = 500;
-        var h = $(".svAdd").parent().height();
-        $(".svAdd").height(h);
-        $('.svAdd').toggle(effect, options, duration);
+        var sv = $(this).attr("data-type");
+        console.log($("."+sv));
+        var h = $("."+sv).parent().height();
+        $("."+sv).height(h);
+        $('.'+sv).toggle(effect, options, duration);
     });
 });
 // End Document Ready

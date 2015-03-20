@@ -8,10 +8,14 @@ form textarea{resize:vertical !important;}
 
 .activeli a{color:green !important;}
 
-.svAdd{
+.svAdd, .svDetail, .svEdit{
     position:absolute;
     top:50px;
     background-color: white;
     z-index: 1000;
     display:none;
 }
+
+.addNewButton{margin-left: 8px;}
+
+.generalInfo{margin-bottom: 30px;}

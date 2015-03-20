@@ -455,7 +455,6 @@ body > .header {
     body > .header .logo {
         float: left;
         font-size: 20px;
-        line-height: 50px;
         text-align: center;
         padding: 0 10px;
         width: 220px;
@@ -471,12 +470,21 @@ body > .header {
 
 .right-side > .content-header {
     position: relative;
-    padding: 15px 15px 10px 20px;
+    padding: 10px 15px 10px 20px;
 }
 
     .right-side > .content-header > h1 {
         margin: 0;
         font-size: 24px;
+    }
+    
+    .top-left h3{
+        margin:0;
+        margin-top: 2px;
+    }
+    .top-right{text-align: right;}
+    .top-right .form-group{
+        margin-bottom:0;
     }
 
         .right-side > .content-header > h1 > small {
