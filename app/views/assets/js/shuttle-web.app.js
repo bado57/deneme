@@ -29,10 +29,9 @@ $(document).ready(function () {
         var dclass = $(this).attr("data-class");
         svControl(dtype, dclass);
     });
-
 });
 // End Document Ready
-//data-type="svAdd" data-class="bolge"
+
 // Subview Kontrolü
 function svControl(dtype, dclass) {
     var effect = 'slide';
@@ -81,11 +80,26 @@ function disabledForm() {
 var map;
 var markers = [];
 var ttl = "";
+var lastLocation;
+var lastAdress = "";
 $(document).ready(function () {
     $(document).on("click", "#openMap", function () {
-        $("#map_div").fadeIn();
+        $(".addKurumForm").css("display", "none");
+        $(".KurumAdresForm").fadeIn();
+        $(".mapDiv").fadeIn();
         initialize();
         google.maps.event.addDomListener(window, 'load', initialize);
+    });
+    $(document).on("click", "#setLocation", function () {
+        $(".addKurumForm").fadeIn();
+        $(".KurumAdresForm").fadeIn();
+        $(".mapDiv").css("display", "none");
+    });
+    
+    $(document).on("click", "#ignoreLocation", function () {
+        $(".addKurumForm").fadeIn();
+        $(".KurumAdresForm").fadeIn();
+        $(".mapDiv").css("display", "none");
     });
 });
 function initialize() {
@@ -115,19 +129,25 @@ function initialize() {
         });
 
         var marker = new google.maps.Marker({
-            position: map.getCenter(),
+            position: lastLocation,
             map: map
         });
         markers.push(marker);
 
         google.maps.event.addListener(marker, 'click', function () {
-            map.setZoom(8);
-            map.setCenter(marker.getPosition());
+            var infowindow = new google.maps.InfoWindow({
+                map: map,
+                position: pos,
+                content: lastAdress
+            });
         });
 
         google.maps.event.addListener(map, 'click', function (event) {
-
-            setAllMap(null);
+            console.log(lastLocation);
+            if (lastLocation != null) {
+                setAllMap(null);
+            }
+            
             $.ajax({
                 type: "get",
                 url: "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + event.latLng.k + "," + event.latLng.D + "&sensor=true",
@@ -137,13 +157,16 @@ function initialize() {
                     ttl = cevap.results[0].formatted_address;
                     placeMarker(event.latLng);
                     console.log(cevap.results[0].address_components);
-                    var cadde = cevap.results[0].address_components[0].long_name;
-                    var cadde = cevap.results[0].address_components[1].long_name;
-                    var semt = cevap.results[0].address_components[2].long_name;
-                    var ilce = cevap.results[0].address_components[3].long_name;
-                    var il = cevap.results[0].address_components[4].long_name;
-                    var ulke = cevap.results[0].address_components[5].long_name;
-                    var posta_kodu = cevap.results[0].address_components[6].long_name;
+                    var say = cevap.results[0].address_components.length;
+                    for (var i = 0, max = say; i < max; i++) {
+                        console.log(cevap.results[0].address_components[i].types[0]);
+                        var key = cevap.results[0].address_components[i].types[0];
+                        var value = cevap.results[0].address_components[i].long_name;
+                        $('input[name="'+ key +'"]').val(value);
+                    }
+                    $('input[name="KurumLokasyon"]').val(event.latLng.k + "," + event.latLng.D);
+                    lastLocation = new google.maps.LatLng(event.latLng.k,event.latLng.D);
+                    lastAdress = ttl;
                 }
             });
             console.log(event.latLng);
@@ -170,11 +193,12 @@ function initialize() {
             });
 
             infowindow.open(map, marker);
-
+            
             console.log(ttl);
             markers.push(marker);
 
         }
+
     } else {
         document.getElementById('google_canvas').innerHTML = 'No Geolocation Support.';
     }

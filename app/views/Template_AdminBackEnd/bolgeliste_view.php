@@ -89,7 +89,7 @@
             <h3><?php echo $data["KurumTanımlama"]; ?> <span class="pull-right"><button data-type="svAdd" data-class="kurum" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
-                <div class="form-vertical col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                <div class="form-vertical addKurumForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <div class="form-group">
                         <label for="KurumAdi"><?php echo $data["KurumAdı"]; ?></label>
                         <input type="text" class="form-control" id="KurumAdi" name="KurumAdi" value="">
@@ -102,7 +102,7 @@
                                     <i class="fa fa-map-marker"></i>
                                 </button>
                             </span>
-                            <input type="text" class="form-control" id="KurumLokasyon" name="KurumLokasyon" value="">
+                            <input type="text" class="form-control" id="KurumLokasyon" name="KurumLokasyon" value="" disabled>
                         </div>
                     </div>
                     <div class="form-group">
@@ -129,10 +129,47 @@
                         <button data-type="svAdd" data-class="kurum" type="button" class="svToggle btn btn-default"><?php echo $data["AdminFirmaBtnVazgec"]; ?></button>
                         <button type="button" class="btn btn-success" ><?php echo $data["AdminFirmaBtnKaydet"]; ?></button>
                     </div>
-
                 </div>
-                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                    <div id="map_div" style="width: 100%; height: 400px; display:none;"></div>
+                <div class="form-vertical KurumAdresForm col-lg-4 col-md-4 col-sm-12 col-xs-12" style="display:none;">
+                    <div class="form-group">
+                        <label for="KurumUlke">Ülke</label>
+                        <input type="text" class="form-control" id="KurumUlke" name="country" value="" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="KurumSehir">İl</label>
+                        <input type="text" class="form-control" id="KurumSehir" name="administrative_area_level_1" value="" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="KurumIlce">İlçe</label>
+                        <input type="text" class="form-control" id="KurumIlce" name="administrative_area_level_2" value="" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="KurumSemt">Semt</label>
+                        <input type="text" class="form-control" id="KurumSemt" name="locality" value="" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="KurumMahalle">Mahalle</label>
+                        <input type="text" class="form-control" id="KurumMahalle" name="neighborhood" value="" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="KurumSokak">Cadde / Sokak</label>
+                        <input type="text" class="form-control" id="KurumSokak" name="route" value="" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="KurumPostaKodu">Posta Kodu</label>
+                        <input type="text" class="form-control" id="KurumPostaKodu" name="postal_code" value="" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="street_number">Cadde No</label>
+                        <input type="text" class="form-control" id="street_number" name="street_number" value="" disabled>
+                    </div>
+                </div>
+                <div class="mapDiv col-lg-8 col-md-8 col-sm-12 col-xs-12" style="display:none;">
+                    <div class="form-group">
+                            <button id="setLocation" type="button" class="btn btn-success">Konumu Kaydet</button>
+                            <button id="ignoreLocation" type="button" class="btn btn-default">Vazgeç</button>
+                        </div>
+                    <div id="map_div" style="width: 100%; height: 400px;"></div>
                 </div>
             </div>
         </div>
