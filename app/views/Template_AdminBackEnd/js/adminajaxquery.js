@@ -16,7 +16,9 @@ $.ajaxSetup({
 
 
 var AdminVazgec = [];
-  
+var AdminBolgeDetailVazgec = [];
+var AdminBolgeKaydet = [];
+
 $.AdminIslemler = {
     adminFirmaOzellik: function () {
         //Firma İşlemleri Değerleri
@@ -85,35 +87,167 @@ $.AdminIslemler = {
         $("input[name=FirmaLokasyon]").val(AdminVazgec[10]);
     },
     adminFirmaDuzenle: function () {
-        
-    //Firma İşlemleri Değerleri
-    var firma_adi = $("input[name=FirmaAdi]").val();
-    var firma_aciklama = $("textarea[name=Aciklama]").val();
-    var ogrenci_chechkbox = $('#OgrenciServis').is(':checked');
-    if (ogrenci_chechkbox != true) {
-        ogrenci_chechkbox = 0;
-    } else {
-        ogrenci_chechkbox = 1;
-    }
-    var personel_chechkbox = $('#PersonelServis').is(':checked');
-    if (personel_chechkbox != true) {
-        personel_chechkbox = 0;
-    } else {
-        personel_chechkbox = 1;
-    }
-    var firma_durum = $("input[name=FirmaDurum]").val();
-    var firma_adres = $("textarea[name=FirmaAdres]").val();
-    var firma_telefon = $("input[name=FirmaTelefon]").val();
-    var firma_email = $("input[name=FirmaEmail]").val();
-    var firma_website = $("input[name=FirmaWebAdresi]").val();
-    var firma_lokasyon = $("input[name=FirmaLokasyon]").val();
-    //vazgeç için değerler
-    var firma_kodu = $("input[name=FrmKod]").val();
-    AdminVazgec=[];
-    AdminVazgec.push(firma_kodu, firma_adi, firma_aciklama, firma_durum, ogrenci_chechkbox, personel_chechkbox, firma_adres, firma_telefon, firma_email, firma_website, firma_lokasyon);
+
+        //Firma İşlemleri Değerleri
+        var firma_adi = $("input[name=FirmaAdi]").val();
+        var firma_aciklama = $("textarea[name=Aciklama]").val();
+        var ogrenci_chechkbox = $('#OgrenciServis').is(':checked');
+        if (ogrenci_chechkbox != true) {
+            ogrenci_chechkbox = 0;
+        } else {
+            ogrenci_chechkbox = 1;
+        }
+        var personel_chechkbox = $('#PersonelServis').is(':checked');
+        if (personel_chechkbox != true) {
+            personel_chechkbox = 0;
+        } else {
+            personel_chechkbox = 1;
+        }
+        var firma_durum = $("input[name=FirmaDurum]").val();
+        var firma_adres = $("textarea[name=FirmaAdres]").val();
+        var firma_telefon = $("input[name=FirmaTelefon]").val();
+        var firma_email = $("input[name=FirmaEmail]").val();
+        var firma_website = $("input[name=FirmaWebAdresi]").val();
+        var firma_lokasyon = $("input[name=FirmaLokasyon]").val();
+        //vazgeç için değerler
+        var firma_kodu = $("input[name=FrmKod]").val();
+        AdminVazgec = [];
+        AdminVazgec.push(firma_kodu, firma_adi, firma_aciklama, firma_durum, ogrenci_chechkbox, personel_chechkbox, firma_adres, firma_telefon, firma_email, firma_website, firma_lokasyon);
+    },
+    adminBolgeKaydet: function () {
+        AdminBolgeKaydet = [];
+        var bolge_adi = $("input[name=BolgeAdi]").val();
+        var bolge_aciklama = $("textarea[name=BolgeAciklama]").val();
+
+        AdminBolgeKaydet.push(bolge_adi);
+        AdminBolgeKaydet.push(bolge_aciklama);
+
+        if (bolge_adi != '') {
+            $.ajax({
+                data: {"bolge_adi": bolge_adi, "bolge_aciklama": bolge_aciklama, "tip": "adminBolgeYeniKaydet"},
+                success: function (cevap) {
+                    if (cevap.hata) {
+                        AdminBolgeKaydet = [];
+                        alert(cevap.hata);
+                    } else {
+                        var bolgeCount = $('#smallBolge').text();
+                        bolgeCount++;
+                        $('#smallBolge').text(bolgeCount);
+                        $("tbody#adminBolgeRow").prepend("<tr style='background-color:green'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
+                                + "<i class='fa fa-search'></i> " + AdminBolgeKaydet[0] + "</a>"
+                                + "</td><td class='hidden-xs'>0</td><td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td></tr>");
+                        svControl('svAdd', 'bolge');
+                    }
+                }
+            });
+        } else {
+            alert("Lütfen Bölge Adını Giriniz");
+        }
+    },
+    adminAddBolgeVazgec: function () {
+        $("input[name=BolgeAdi]").val('');
+        $("textarea[name=BolgeAciklama]").val('');
+    },
+    adminBolgeDetailDuzenle: function () {
+        //Firma İşlemleri Değerleri
+        var bolgedetail_adi = $("input[name=BolgeDetailAdi]").val();
+        var bolgedetail_aciklama = $("textarea[name=BolgeDetailAciklama]").val();
+        AdminBolgeDetailVazgec = [];
+        AdminBolgeDetailVazgec.push(bolgedetail_adi, bolgedetail_aciklama);
+    },
+    adminBolgeDetailVazgec: function () {
+        $("input[name=BolgeDetailAdi]").val(AdminBolgeDetailVazgec[0]);
+        $("textarea[name=BolgeDetailAciklama]").val(AdminBolgeDetailVazgec[1]);
+    },
+    adminBolgeDetailSil: function () {
+        var bolgedetail_id = $("input[name=adminBolgeDetailID]").val();
+        $.ajax({
+            data: {"bolgedetail_id": bolgedetail_id, "tip": "adminBolgeDetailDelete"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    alert(cevap.hata);
+                } else {
+                    disabledForm();
+                    $("input[name=BolgeDetailAdi]").val('');
+                    $("textarea[name=BolgeDetailAciklama]").val('');
+
+                    svControl('svDetail', 'kurum');
+                    
+                    var bolgeCount = $('#smallBolge').text();
+                    bolgeCount--;
+                    $('#smallBolge').text(bolgeCount);
+
+                    for (var t = 0; t < $('tbody#adminBolgeRow tr').length; t++) {
+                        var attrValueId = $("tbody#adminBolgeRow > tr > td > a").eq(t).attr('value');
+                        if (attrValueId == bolgedetail_id) {
+                            $('tbody#adminBolgeRow > tr:eq(' + t + ')').remove();
+                        }
+                    }
+                }
+            }
+        });
+
+    },
+    adminBolgeDetailKaydet: function () {
+        var bolgedetail_adi = $("input[name=BolgeDetailAdi]").val();
+        var bolgedetail_aciklama = $("textarea[name=BolgeDetailAciklama]").val();
+        var bolgedetail_id = $("input[name=adminBolgeDetailID]").val();
+        if (AdminBolgeDetailVazgec[0] == bolgedetail_adi && AdminBolgeDetailVazgec[1] == bolgedetail_aciklama) {
+            alert("Lütfen Değişiklik yaptığınıza emin olun.");
+        } else {
+            $.ajax({
+                data: {"bolgedetail_id": bolgedetail_id, "bolgedetail_adi": bolgedetail_adi, "bolgedetail_aciklama": bolgedetail_aciklama, "tip": "adminBolgeDetailDuzenle"},
+                success: function (cevap) {
+                    if (cevap.hata) {
+                        alert(cevap.hata);
+                    } else {
+                        disabledForm();
+                        alert(cevap.update);
+                        for (var t = 0; t < $('tbody#adminBolgeRow tr').length; t++) {
+                            var attrValueId = $("tbody#adminBolgeRow > tr > td > a").eq(t).attr('value');
+                            if (attrValueId == bolgedetail_id) {
+                                $("tbody#adminBolgeRow > tr > td > a").eq(t).html('<i class="fa fa-search"></i> ' + bolgedetail_adi);
+                                $('tbody#adminBolgeRow > tr:eq(' + t + ') > td:eq(0)').css({"background-color": "green"});
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
 }
 
+$(document).on('click', 'tbody#adminBolgeRow > tr > td > a', function (e) {
+    var adminbolgeRowid = $(this).attr('value');
+    $.ajax({
+        data: {"adminbolgeRowid": adminbolgeRowid, "tip": "adminBolgeDetail"},
+        success: function (cevap) {
+            if (cevap.hata) {
+                alert(cevap.hata);
+            } else {
+                $("input[name=BolgeDetailAdi]").val(cevap.adminBolgeDetail['5d7991851fff325b2e913c1093f8c7bb']);
+                $("textarea[name=BolgeDetailAciklama]").val(cevap.adminBolgeDetail['5dff8e4f44d1afe5716832b74770e3fe']);
+                $("input[name=adminBolgeDetailID]").val(cevap.adminBolgeDetail['95d1cff7e918f5edec2758321aeca910']);
+
+                if (cevap.adminBolgeKurumDetail == null) {
+                        $("#BolgeDetailDeleteBtn").show();
+                } else {
+                    var bolgeKurumSayi = cevap.adminBolgeKurumDetail[0].length;
+                    if (bolgeKurumSayi != 0) {
+                        $("#BolgeDetailDeleteBtn").hide();
+                    } else {
+                        $("#BolgeDetailDeleteBtn").show();
+                    }
+                    for (var kurum = 0; kurum < bolgeKurumSayi; kurum++) {
+                        $("ul#adminBolgeKurumDetail").append("<li class='list-group-item'>" + cevap.adminBolgeKurumDetail[kurum][0] + "</li>");
+                    }
+                }
+
+
+            }
+        }
+    });
+});
 
 
 /*

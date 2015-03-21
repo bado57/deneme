@@ -123,19 +123,20 @@ class AdminWeb extends Controller {
 
             $adminRutbe = Session::get("userRutbe");
             $adminID = Session::get("userId");
-            $uniqueKey = Session::get("userFirmaKod");
-            $uniqueKey = $uniqueKey . '_ABolge' . $adminID;
-
-
+            $uniqueKey = Session::get("username");
+            $uniqueKey = $uniqueKey . '_ABolge';
 
             $resultMemcache = $MemcacheModel->get($uniqueKey);
             if ($resultMemcache) {
+                error_log("son" . $uniqueKey);
                 $adminBolge = $resultMemcache;
             } else {
                 //super adminse tüm bölgeleri görür
                 if ($adminRutbe != 0) {
 
                     $bolgeListe = $Panel_Model->bolgeListele();
+                    //bölge count için
+                    $adminBolge[0]['AdminBolgeCount'] = count($bolgeListe);
 
                     for ($a = 0; $a < count($bolgeListe); $a++) {
                         $adminBolge[$a]['AdminBolge'] = $bolgeListe[$a]['SBBolgeAdi'];
@@ -154,6 +155,8 @@ class AdminWeb extends Controller {
 
 
                     $bolgeListe = $Panel_Model->rutbeBolgeListele($rutbebolgedizi);
+                    //bölge count için
+                    $adminBolge[0]['AdminBolgeCount'] = count($bolgeListe);
 
                     for ($a = 0; $a < count($bolgeListe); $a++) {
                         $adminBolge[$a]['AdminBolge'] = $bolgeListe[$a]['SBBolgeAdi'];
@@ -168,6 +171,7 @@ class AdminWeb extends Controller {
                     $sonuc = $formSession->array_deger_filtreleme($bolgekurumSayi[0], 'SBBolgeID', $bolgeListe[$b]['SBBolgeID']);
                     $adminBolge[$b]['AdminKurum'] = count($sonuc);
                 }
+                error_log("Web" . $uniqueKey);
                 //memcache kayıt
                 $result = $MemcacheModel->set($uniqueKey, $adminBolge, false, 60);
             }

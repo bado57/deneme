@@ -43,7 +43,7 @@ class AdminAjaxSorgu extends Controller {
                     break;
 
                 case "adminFirmaIslemlerKaydet":
-                    
+
                     $uniqueKey = Session::get("userFirmaKod");
                     $uniqueKey = $uniqueKey . '_AFirma';
 
@@ -80,7 +80,7 @@ class AdminAjaxSorgu extends Controller {
                     //memcache kadetmek için verileri üncellemeden sonra tekrar çekiyoruz.
                     $data["FirmaOzellikler"] = $Panel_Model->firmaOzellikler();
 
-                    
+
                     $returnModelData = $data['FirmaOzellikler'][0];
 
                     $a = 0;
@@ -106,40 +106,160 @@ class AdminAjaxSorgu extends Controller {
 
                     break;
 
-                case "gayri_benzersiz_deger_kodu":
-                    $data = $form->post('InputPkodu', true);
-                    if ($form->submit()) {
-                        $data = array(
-                            ':InputPkodu' => $form->values['InputPkodu']
-                        );
-                    }
-                    $PkayitKod = $this->load->model("panel_model");
-                    $result = $PkayitKod->gayri_benzersiz_deger_kodu($data);
-                    if ($result) {
-                        $sonuc["var"] = "Bu Kodda Proje Bulunmaktadır";
+                case "adminBolgeYeniKaydet":
+
+                    $adminID = Session::get("userId");
+                    $adminRutbe = Session::get("userRutbe");
+                    $uniqueKey = Session::get("username");
+                    $uniqueKey = $uniqueKey . '_ABolge';
+
+                    if ($adminRutbe != 1) {
+                        Session::destroy();
+                        header("Location:" . SITE_URL);
                     } else {
-                        $sonuc["yok"] = "yok";
+
+                        $form->post('bolge_adi', true);
+                        $form->post('bolge_aciklama', true);
+
+                        if ($form->submit()) {
+                            $data = array(
+                                'SBBolgeAdi' => $form->values['bolge_adi'],
+                                'SBBolgeAciklama' => $form->values['bolge_aciklama']
+                            );
+                        }
+
+                        $resultuID = $Panel_Model->addNewAdminBolge($data);
+
+                        if ($resultuID) {
+                            $dataID = array(
+                                'BSAdminID' => $adminID,
+                                'BSBolgeID' => $resultuID
+                            );
+                            $resultIDD = $Panel_Model->addAdminBolge($dataID);
+                            if ($resultIDD) {
+                                $resultMemcache = $MemcacheModel->get($uniqueKey);
+                                if ($resultMemcache) {
+                                    $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                }
+                                $sonuc["newBolgeID"] = $resultIDD;
+                                $sonuc["insert"] = "Başarıyla Yeni bölge Eklenmiştir.";
+                            } else {
+                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            }
+                        } else {
+                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                        }
+                    }
+
+                    //$data["FirmaOzellikler"] = $Panel_Model->firmaOzellikler();
+
+                    break;
+
+                case "adminBolgeDetail":
+
+                    $adminRutbe = Session::get("userRutbe");
+
+                    if ($adminRutbe != 1) {
+                        Session::destroy();
+                        header("Location:" . SITE_URL);
+                    } else {
+
+                        $form->post('adminbolgeRowid', true);
+                        $adminBolgeDetailID = $form->values['adminbolgeRowid'];
+
+                        $data["adminBolgeDetail"] = $Panel_Model->adminBolgeDetail($adminBolgeDetailID);
+
+                        $returnModelData = $data["adminBolgeDetail"][0];
+
+                        $a = 0;
+                        foreach ($returnModelData as $key => $value) {
+                            $new_array['AdminBolgesshkey'][$a] = md5(sha1(md5($key)));
+                            $a++;
+                        }
+
+                        $returnFormdata['adminBolgeDetail'] = $form->newKeys($data["adminBolgeDetail"][0], $new_array['AdminBolgesshkey']);
+
+
+                        $data["adminBolgeKurumDetail"] = $Panel_Model->adminBolgeKurumDetail($adminBolgeDetailID);
+
+                        for ($kurum = 0; $kurum < count($data["adminBolgeKurumDetail"]); $kurum++) {
+                            $data["adminBolgeKurum"][$kurum] = array_values($data["adminBolgeKurumDetail"][$kurum]);
+                        }
+
+                        $sonuc["adminBolgeDetail"] = $returnFormdata['adminBolgeDetail'];
+                        $sonuc["adminBolgeKurumDetail"] = $data["adminBolgeKurum"];
                     }
 
                     break;
 
-                case "gayri_benzersiz_deger_adi":
-                    $data = $form->post('InputPadi', true);
-                    if ($form->submit()) {
-                        $data = array(
-                            ':InputPadi' => $form->values['InputPadi']
-                        );
-                    }
+                case "adminBolgeDetailDuzenle":
 
-                    $PkayitAdi = $this->load->model("panel_model");
-                    $result = $PkayitAdi->gayri_benzersiz_deger_adi($data);
-                    if ($result) {
-                        $sonuc["var"] = "Bu İsimde Proje Bulunmaktadır";
+                    $adminRutbe = Session::get("userRutbe");
+
+                    if ($adminRutbe != 1) {
+                        Session::destroy();
+                        header("Location:" . SITE_URL);
                     } else {
-                        $sonuc["yok"] = "yok";
+
+                        $uniqueKey = Session::get("username");
+                        $uniqueKey = $uniqueKey . '_ABolge';
+
+                        $form->post('bolgedetail_adi', true);
+                        $form->post('bolgedetail_aciklama', true);
+                        $form->post('bolgedetail_id', true);
+                        $adminBolgeDetailID = $form->values['bolgedetail_id'];
+
+                        if ($form->submit()) {
+                            $data = array(
+                                'SBBolgeAdi' => $form->values['bolgedetail_adi'],
+                                'SBBolgeAciklama' => $form->values['bolgedetail_aciklama']
+                            );
+                        }
+
+                        $resultupdate = $Panel_Model->adminBolgeOzelliklerDuzenle($data, $adminBolgeDetailID);
+                        if ($resultupdate) {
+                            $resultMemcache = $MemcacheModel->get($uniqueKey);
+                            if ($resultMemcache) {
+                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                            }
+                            $sonuc["update"] = "Başarıyla Bölgeniz Güncellenmiştir.";
+                        } else {
+                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                        }
                     }
 
                     break;
+
+                case "adminBolgeDetailDelete":
+
+                    $adminRutbe = Session::get("userRutbe");
+
+                    if ($adminRutbe != 1) {
+                        Session::destroy();
+                        header("Location:" . SITE_URL);
+                    } else {
+
+                        $form->post('bolgedetail_id', true);
+                        $adminBolgeDetailID = $form->values['bolgedetail_id'];
+
+                        $deleteresult = $Panel_Model->adminBolgeDelete($adminBolgeDetailID);
+                        if ($deleteresult) {
+                            $resultdelete = $Panel_Model->adminBolgeIDDelete($adminBolgeDetailID);
+                            if ($resultdelete) {
+                                $sonuc["delete"] = "Bölge kaydı başarıyla silinmiştir.";
+                            } else {
+                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            }
+                        } else {
+                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                        }
+
+
+                        $sonuc["adminBolgeDetail"] = $data["adminBolgeDetail"];
+                    }
+
+                    break;
+
                 case "gayri_proje_ekle":
                     $form->post('projeekle_kodu', true)
                             ->isEmpty();

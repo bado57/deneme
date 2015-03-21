@@ -83,7 +83,13 @@ class en {
             "BolgeYeni" => "New Region",
             "Detay" => "Details",
             "Sil" => "Delete",
-            "BolgeAciklama" => "Region Details"
+            "BolgeAciklama" => "Region Details",
+            "BolgeTanımlama" => "Region Description",
+            "KurumTanımlama" => "Institution Description",
+            "KurumAdı" => "Institution Name",
+            "BolgeDetay" => "Region Details",
+            "YeniEkle" => "Add New",
+            "TumunuGor" => "View All"
         );
         return $endil;
     }

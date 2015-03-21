@@ -12,6 +12,7 @@ class UsersLogin extends Controller {
 
     //daha önce login oldu ise
     function login() {
+        
         //session güvenlik kontrolü
         $form = $this->load->otherClasses('Form');
         $sessionKey = $form->sessionKontrol();
@@ -70,7 +71,6 @@ class UsersLogin extends Controller {
                 );
             }
 
-
             //yeni db create
             Session::set("selectDbName", $SelectdbName);
             Session::set("selectDbIp", $SelectdbIp);
@@ -107,7 +107,6 @@ class UsersLogin extends Controller {
                 Session::set("userTip", $loginTip);
                 Session::set("userRutbe", $result[0]["BSSuperAdmin"]);
                 Session::set("userFirmaKod", $SelectdbFirmaKod);
-                   
 
                 header("Location:" . SITE_URL_HOME . "/panel");
             }

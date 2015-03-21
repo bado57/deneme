@@ -84,7 +84,13 @@ class tr {
             "BolgeYeni" => "Yeni Bölge",
             "Detay" => "Detaylar",
             "Sil" => "Sil",
-            "BolgeAciklama" => "Bölge Açıklama"
+            "BolgeAciklama" => "Bölge Açıklama",
+            "BolgeTanımlama" => "Bölge Tanımlama",
+            "KurumTanımlama" => "Kurum Tanımlama",
+            "KurumAdı" => "Kurum Adı",
+            "BolgeDetay" => "Bölge Detayları",
+            "YeniEkle" => "Yeni Ekle",
+            "TumunuGor" => "Tümünü Gör"
             
         );
         return $trdil;

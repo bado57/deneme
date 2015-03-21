@@ -40,65 +40,54 @@ class Panel extends Controller {
         }
 
         if ($loginTip == 1) {
+             //memcache model bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+            
+            $adminRutbe = Session::get("userRutbe");
+            $adminID = Session::get("userId");
+            $uniqueKey = Session::get("userFirmaKod");
+            $uniqueKey = $uniqueKey . '_APanel' . $adminID;
+
+            $resultMemcache = $MemcacheModel->get($uniqueKey);
+            if ($resultMemcache) {
+                $adminBolge = $resultMemcache;
+            } else {
+                //super adminse tüm bölgeleri görür
+                if ($adminRutbe != 0) {
+
+                    $bolgeListe = $Panel_Model->bolgeListele();
+                    
+                    $adminBolge['AdminBolge']=count($bolgeListe);
+                    
+                } else {//değilse admin ıd ye göre bölge görür
+                    $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
+                    //echo count($bolgeListeRutbe);
+
+                    for ($r = 0; $r < count($bolgeListeRutbe); $r++) {
+                        $bolgerutbeId[] = $bolgeListeRutbe[$r]['BSBolgeID'];
+                    }
+                    $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+
+                    $bolgeListe = $Panel_Model->rutbeBolgeListele($rutbebolgedizi);
+                    
+                    $adminBolge['AdminBolge']=count($bolgeListe);
+                }
+                
+                //memcache kayıt
+                $result = $MemcacheModel->set($uniqueKey, $adminBolge, false, 60);
+            }
+            
             $this->load->view("Template_AdminBackEnd/header", $deger);
             $this->load->view("Template_AdminBackEnd/left", $deger);
-            $this->load->view("Template_AdminBackEnd/home", $deger);
+            $this->load->view("Template_AdminBackEnd/home", $deger,$adminBolge);
             $this->load->view("Template_AdminBackEnd/footer", $deger);
         } else {
             //$this->load->view("Entry/loginForm");
         }
     }
-
-    public function addNewContent() {
-        $this->load->view("Template_BackEnd/header");
-        $this->load->view("Template_BackEnd/left");
-        $this->load->view("Template_BackEnd/home");
-        $this->load->view("Template_BackEnd/right");
-        $this->load->view("Template_BackEnd/footer");
-    }
-
-    public function addNewContentRun() {
-        $form = $this->load->otherClasses('Form');
-        $form->post("title")
-                ->isEmpty()
-                ->length(0, 100);
-
-        $form->post("content")
-                ->isEmpty()
-                ->length(0, 50);
-
-        if ($form->submit()) {
-            $data = array(
-                'title' => $form->values['title'],
-                'content' => $form->values['content']
-            );
-
-            $model = $this->load->model("panel_model");
-            $result = $model->addNewContentRun($data);
-            if ($result) {
-                echo 'Sorun yok';
-            } else {
-                echo 'Sorun var';
-            }
-        } else {
-            //HATA VARSA
-            $data["formErrors"] = $form->errors;
-
-            //addnewCotent e gidip hatları yazdıyacak
-            $this->load->view("Template_BackEnd/header");
-            $this->load->view("Template_BackEnd/left");
-            $this->load->view("Template_BackEnd/addNewContent", $data);
-            $this->load->view("Template_BackEnd/footer");
-        }
-    }
-
-    public function addNewProduct() {
-        $this->load->view("Template_BackEnd/header");
-        $this->load->view("Template_BackEnd/left");
-        $this->load->view("Template_BackEnd/addNewProduct");
-        $this->load->view("Template_BackEnd/footer");
-    }
-
 }
 ?>
 

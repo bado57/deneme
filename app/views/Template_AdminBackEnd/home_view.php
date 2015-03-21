@@ -41,7 +41,7 @@
                                         <?php echo $data["AdminKategoriBolgeIslem"];?>
                                     </h3>
                                     <p>
-                                        10 <?php echo $data["Toplam"];?>
+                                        <?php echo $model['AdminBolge'];?> <?php echo $data["Toplam"];?>
                                     </p>
                                 </div>
                                 <div class="icon">

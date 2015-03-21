@@ -23,7 +23,7 @@ class Panel_Model extends Model {
 
     //admin bölgeler listele
     public function bolgeListele($firmaID) {
-        $sql = "SELECT * FROM sbbolgeler";
+        $sql = "SELECT * FROM sbbolgeler ORDER BY SBBolgeAdi ASC";
         return($this->db->select($sql));
     }
 
@@ -35,7 +35,7 @@ class Panel_Model extends Model {
 
     //admin bölgeler listele
     public function rutbeBolgeListele($array = array()) {
-        $sql = 'SELECT SBBolgeAdi,SBBolgeID FROM sbbolgeler Where SBBolgeID IN ('.$array.')';
+        $sql = 'SELECT SBBolgeAdi,SBBolgeID FROM sbbolgeler Where SBBolgeID IN ('.$array.') ORDER BY SBBolgeAdi ASC' ;
         return($this->db->select($sql));
     }
 
@@ -62,14 +62,42 @@ class Panel_Model extends Model {
         $sql = 'SELECT SBBolgeID FROM sbisci WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And SBFirmaID=' . $firmaID;
         return($this->db->select($sql));
     }
-
-    public function projeListele_Count() {
-        $sql = "SELECT * FROM insaat_projeler WHERE insaat_proje_id=:1";
-        return($this->db->affectedRows($sql, $array));
+    
+    //admin yeni bölge kaydet
+    public function addNewAdminBolge($data) {
+        return ($this->db->insert("sbbolgeler", $data));
+    }
+    
+    //admin-bölge kaydet
+    public function addAdminBolge($data) {
+        return ($this->db->insert("bsadminbolge", $data));
     }
 
-    public function addNewProjectInsert($data) {
-        return ($this->db->insert("insaat_projeler", $data));
+    //admin bölge detail
+    public function adminBolgeDetail($adminBolgeDetailID) {
+        $sql = 'SELECT * FROM sbbolgeler WHERE SBBolgeID=' . $adminBolgeDetailID;
+        return($this->db->select($sql));
+    }
+    
+    //admin bölge kurum detail
+    public function adminBolgeKurumDetail($adminBolgeDetailID) {
+        $sql = 'SELECT SBKurumAdi,SBKurumIl FROM sbkurum WHERE SBBolgeID=' . $adminBolgeDetailID;
+        return($this->db->select($sql));
+    }
+    
+    //admin bölge detail bölge delete
+    public function adminBolgeDelete($adminBolgeDetailID) {
+        return ($this->db->delete("sbbolgeler", "SBBolgeID=$adminBolgeDetailID"));
+    }
+    
+    //admin bölge detail bölge delete--idlerin tutulduğu tablo
+    public function adminBolgeIDDelete($adminBolgeDetailID) {
+        return ($this->db->delete("bsadminbolge", "BSBolgeID=$adminBolgeDetailID"));
+    }
+    
+    //admin bölge özellikleri düzenleme
+    public function adminBolgeOzelliklerDuzenle($data, $adminBolgeDetailID) {
+        return ($this->db->update("sbbolgeler", $data, "SBBolgeID=".$adminBolgeDetailID));
     }
 
     public function updateNewProject($data, $gelenlabel) {
