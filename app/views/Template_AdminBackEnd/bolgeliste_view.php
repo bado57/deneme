@@ -10,7 +10,7 @@
             <div class="col-md-6 top-left">
                 <h3>
                     <i class="fa fa-th"></i> <?php echo $data["Bolgeler"]; ?>
-                    <small id="smallBolge"><?php echo $model[0]['AdminBolgeCount']; ?></small><small> Toplam </small>
+                    <small id="smallBolge"><?php echo $model[0]['AdminBolgeCount']; ?></small><small> Toplammmmm </small>
                 </h3>
             </div>
             <?php if (Session::get("userRutbe") != 0) { ?>
