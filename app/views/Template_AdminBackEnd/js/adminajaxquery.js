@@ -172,7 +172,7 @@ $.AdminIslemler = {
                     $("textarea[name=BolgeDetailAciklama]").val('');
 
                     svControl('svDetail', 'kurum');
-                    
+
                     var bolgeCount = $('#smallBolge').text();
                     bolgeCount--;
                     $('#smallBolge').text(bolgeCount);
@@ -218,6 +218,9 @@ $.AdminIslemler = {
 }
 
 $(document).on('click', 'tbody#adminBolgeRow > tr > td > a', function (e) {
+    var i = $(this).find("i")
+    i.removeClass("fa-search");
+    i.addClass("fa-spinner fa-spin");
     var adminbolgeRowid = $(this).attr('value');
     $.ajax({
         data: {"adminbolgeRowid": adminbolgeRowid, "tip": "adminBolgeDetail"},
@@ -230,7 +233,7 @@ $(document).on('click', 'tbody#adminBolgeRow > tr > td > a', function (e) {
                 $("input[name=adminBolgeDetailID]").val(cevap.adminBolgeDetail['95d1cff7e918f5edec2758321aeca910']);
 
                 if (cevap.adminBolgeKurumDetail == null) {
-                        $("#BolgeDetailDeleteBtn").show();
+                    $("#BolgeDetailDeleteBtn").show();
                 } else {
                     var bolgeKurumSayi = cevap.adminBolgeKurumDetail[0].length;
                     if (bolgeKurumSayi != 0) {
@@ -238,11 +241,14 @@ $(document).on('click', 'tbody#adminBolgeRow > tr > td > a', function (e) {
                     } else {
                         $("#BolgeDetailDeleteBtn").show();
                     }
+                    $("ul#adminBolgeKurumDetail").find("li").remove();
                     for (var kurum = 0; kurum < bolgeKurumSayi; kurum++) {
                         $("ul#adminBolgeKurumDetail").append("<li class='list-group-item'>" + cevap.adminBolgeKurumDetail[kurum][0] + "</li>");
                     }
                 }
-
+                svControl('svDetail');
+                i.removeClass("fa-spinner fa-spin");
+                i.addClass("fa-search");
 
             }
         }

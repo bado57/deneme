@@ -60,7 +60,7 @@ class tr {
             "AdminFirmaIlce" => "İlçe",
             "AdminFirmaTelefon" => "Telefon",
             "AdminFirmaEmail" => "Email",
-            "AdminFirmaWebSite" => "Web Sitesi",
+            "Ad" => "Web Sitesi",
             "AdminFirmaLokasyon" => "Lokasyon",
             "AdminFirmaBtnVazgec" => "Vazgeç",
             "AdminFirmaBtnKaydet" => "Kaydet",
@@ -90,7 +90,8 @@ class tr {
             "KurumAdı" => "Kurum Adı",
             "BolgeDetay" => "Bölge Detayları",
             "YeniEkle" => "Yeni Ekle",
-            "TumunuGor" => "Tümünü Gör"
+            "TumunuGor" => "Tümünü Gör",
+            "AdresDetay" => "Adres Detayları",
             
         );
         return $trdil;

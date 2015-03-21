@@ -78,7 +78,7 @@
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-edit"></i> <span><?php echo $data["AdminKategoriKullaniciIslem"]; ?></span>
+                        <i class="fa fa-users"></i> <span><?php echo $data["AdminKategoriKullaniciIslem"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -89,7 +89,7 @@
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-edit"></i> <span><?php echo $data["AdminKategoriTurIslem"]; ?></span>
+                        <i class="fa fa-refresh"></i> <span><?php echo $data["AdminKategoriTurIslem"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -100,7 +100,7 @@
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-edit"></i> <span><?php echo $data["AdminKategoriBakiyeIslem"]; ?></span>
+                        <i class="fa fa-money"></i> <span><?php echo $data["AdminKategoriBakiyeIslem"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -111,7 +111,7 @@
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-edit"></i> <span><?php echo $data["AdminKategoriLokasyonSorgu"]; ?></span>
+                        <i class="fa fa-map-marker"></i> <span><?php echo $data["AdminKategoriLokasyonSorgu"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -122,7 +122,7 @@
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-edit"></i> <span><?php echo $data["AdminKategoriDuyuru"]; ?></span>
+                        <i class="fa fa-bullhorn"></i> <span><?php echo $data["AdminKategoriDuyuru"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -139,7 +139,7 @@
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-edit"></i> <span><?php echo $data["AdminKategoriRapor"]; ?></span>
+                        <i class="fa fa-file-text"></i> <span><?php echo $data["AdminKategoriRapor"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">

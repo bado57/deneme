@@ -36,7 +36,7 @@
             </head>
             <body class="skin-blue">
                 <!-- header logo: style can be found in header.less -->
-                <header class="header">
+                <header class="header hidden-xs hidden-sm">
                     <a href="<?php echo SITE_URL_LOGINN; ?>" class="logo" >
                         <!-- Add the class icon to your logo image or logo icon to add the margining -->
                         <img src="<?php echo SITE_PLUGINADMIN_IMG; ?>/logo.png" class="img" alt="User Image"/>
