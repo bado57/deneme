@@ -9,7 +9,7 @@
                     <img src="<?php echo SITE_PLUGINADMIN_IMG; ?>/avatar3.png" class="img-circle" alt="User Image" />
                 </div>
                 <div class="pull-left info">
-                    <p><?php echo $data["AdminHello"]; ?>, <?php echo Session::get("username"); ?></p>
+                    <p><?php echo $data["Merhaba"]; ?>, <?php echo Session::get("username"); ?></p>
 
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
@@ -17,7 +17,7 @@
             <!-- search form -->
             <form action="#" method="get" class="sidebar-form">
                 <div class="input-group">
-                    <input type="text" name="q" class="form-control" placeholder="<?php echo $data["AdminLeftMenuSearch"]; ?>"/>
+                    <input type="text" name="q" class="form-control" placeholder="<?php echo $data["Search"]; ?>"/>
                     <span class="input-group-btn">
                         <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
                     </span>
@@ -28,24 +28,24 @@
             <ul class="sidebar-menu">
                 <li class="active">
                     <a href="<?php echo SITE_URL; ?>/panel">
-                        <i class="fa fa-home"></i> <span><?php echo $data["AdminKategoriAnasayfa"]; ?></span>
+                        <i class="fa fa-home"></i> <span><?php echo $data["Anasayfa"]; ?></span>
                     </a>
                 </li>
                 <li class="treeview" id="menu_firma">
                     <a href="#">
                         <i class="fa fa-building"></i>
-                        <span><?php echo $data["AdminKategoriFirmaIslem"]; ?></span>
+                        <span><?php echo $data["FirmaIslem"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li id="link_firmislem"><a href="<?php echo SITE_URL; ?>/adminweb/firmislem"><i class="fa fa-angle-right"></i> Firma Bilgileri</a></li>
+                        <li id="link_firmislem"><a href="<?php echo SITE_URL; ?>/adminweb/firmislem"><i class="fa fa-angle-right"></i><?php echo $data["FirmaBilgi"]; ?></a></li>
                     </ul>
                 </li>
 
                 <li class="treeview" id="menu_bolge">
                     <a href="#">
                         <i class="fa fa-th"></i>
-                        <span><?php echo $data["Bolgeler"]; ?></span>
+                        <span><?php echo $data["BolgeIslem"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -65,7 +65,7 @@
                 <li class="treeview" id="menu_arac">
                     <a href="#">
                         <i class="fa fa-bus"></i>
-                        <span><?php echo $data["AdminKategoriAracIslem"]; ?></span>
+                        <span><?php echo $data["AracIslem"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -78,7 +78,7 @@
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-users"></i> <span><?php echo $data["AdminKategoriKullaniciIslem"]; ?></span>
+                        <i class="fa fa-users"></i> <span><?php echo $data["KullaniciIslem"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -89,7 +89,7 @@
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-refresh"></i> <span><?php echo $data["AdminKategoriTurIslem"]; ?></span>
+                        <i class="fa fa-refresh"></i> <span><?php echo $data["TurIslem"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -100,7 +100,7 @@
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-money"></i> <span><?php echo $data["AdminKategoriBakiyeIslem"]; ?></span>
+                        <i class="fa fa-money"></i> <span><?php echo $data["BakiyeIslem"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -111,7 +111,7 @@
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-map-marker"></i> <span><?php echo $data["AdminKategoriLokasyonSorgu"]; ?></span>
+                        <i class="fa fa-map-marker"></i> <span><?php echo $data["LokasyonSorgu"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -122,7 +122,7 @@
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-bullhorn"></i> <span><?php echo $data["AdminKategoriDuyuru"]; ?></span>
+                        <i class="fa fa-bullhorn"></i> <span><?php echo $data["Duyuru"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
@@ -133,13 +133,13 @@
                 </li>
                 <li>
                     <a href="#">
-                        <i class="fa fa-envelope"></i> <span><?php echo $data["AdminKategoriMesaj"]; ?></span>
+                        <i class="fa fa-envelope"></i> <span><?php echo $data["Mesaj"]; ?></span>
                         <small class="badge pull-right bg-yellow">12</small>
                     </a>
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-file-text"></i> <span><?php echo $data["AdminKategoriRapor"]; ?></span>
+                        <i class="fa fa-file-text"></i> <span><?php echo $data["Rapor"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">

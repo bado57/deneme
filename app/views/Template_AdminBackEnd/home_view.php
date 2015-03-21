@@ -3,11 +3,11 @@
                 <section class="content-header">
                     <h1>
                         SHUTTLE
-                        <small><?php echo $data["AdminKategoriKontrolPanel"];?></small>
+                        <small><?php echo $data["KontrolPanel"];?></small>
                     </h1>
                     <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i><?php echo $data["AdminKategoriAnasayfa"];?></a></li>
-                        <li class="active"><?php echo $data["AdminKategoriYonetimPanel"];?></li>
+                        <li><a href="#"><i class="fa fa-dashboard"></i><?php echo $data["Anasayfa"];?></a></li>
+                        <li class="active"><?php echo $data["Panel"];?></li>
                     </ol>
                 </section>
 
@@ -21,7 +21,7 @@
                             <a href="<?php echo SITE_URL; ?>/adminweb/firmislem" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
-                                        <?php echo $data["AdminKategoriFirmaIslem"];?>
+                                        <?php echo $data["FirmaIslem"];?>
                                     </h3>
                                     <p>
                                         1  <?php echo $data["Toplam"];?>
@@ -38,7 +38,7 @@
                             <a href="<?php echo SITE_URL; ?>/adminweb/bolgeliste" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
-                                        <?php echo $data["AdminKategoriBolgeIslem"];?>
+                                        <?php echo $data["BolgeIslem"];?>
                                     </h3>
                                     <p>
                                         <?php echo $model['AdminBolge'];?> <?php echo $data["Toplam"];?>
@@ -55,7 +55,7 @@
                             <a href="#" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
-                                        <?php echo $data["AdminKategoriKurumIslem"];?>
+                                        <?php echo $data["KurumIslem"];?>
                                     </h3>
                                     <p>
                                         15 <?php echo $data["Toplam"];?>
@@ -72,7 +72,7 @@
                             <a href="#" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
-                                        <?php echo $data["AdminKategoriKullaniciIslem"];?>
+                                        <?php echo $data["KullaniciIslem"];?>
                                     </h3>
                                     <p>
                                         650 <?php echo $data["Toplam"];?>
@@ -89,7 +89,7 @@
                             <a href="#" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
-                                       <?php echo $data["AdminKategoriAracIslem"];?>
+                                       <?php echo $data["AracIslem"];?>
                                     </h3>
                                     <p>
                                         35 <?php echo $data["Toplam"];?>
@@ -106,7 +106,7 @@
                             <a href="#" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
-                                      <?php echo $data["AdminKategoriTurIslem"];?>
+                                      <?php echo $data["TurIslem"];?>
                                     </h3>
                                     <p>
                                         48 <?php echo $data["Toplam"];?>
@@ -123,7 +123,7 @@
                             <a href="#" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
-                                        <?php echo $data["AdminKategoriBakiyeIslem"];?>
+                                        <?php echo $data["BakiyeIslem"];?>
                                     </h3>
                                     <p>
                                         365 TL  <?php echo $data["Odenmemis"];?>
@@ -140,7 +140,7 @@
                             <a href="#" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
-                                       <?php echo $data["AdminKategoriLokasyonSorgu"];?>
+                                       <?php echo $data["LokasyonSorgu"];?>
                                     </h3>
                                     <p>
                                         2  <?php echo $data["AktifServis"];?>
@@ -157,7 +157,7 @@
                             <a href="#" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
-                                        <?php echo $data["AdminKategoriMesaj"];?>
+                                        <?php echo $data["Mesaj"];?>
                                     </h3>
                                     <p>
                                         4 <?php echo $data["Okunmamis"];?>
@@ -174,7 +174,7 @@
                             <a href="#" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
-                                        <?php echo $data["AdminKategoriDuyuru"];?>
+                                        <?php echo $data["Duyuru"];?>
                                     </h3>
                                     <p>
                                         5 <?php echo $data["YeniDuyuru"];?>
@@ -191,7 +191,7 @@
                             <a href="#" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
-                                        <?php echo $data["AdminKategoriRapor"];?>
+                                        <?php echo $data["Rapor"];?>
                                     </h3>
                                     <p>
                                         5 <?php echo $data["YeniRapor"];?>
@@ -208,7 +208,7 @@
                             <a href="<?php echo SITE_URL_LOGINN; ?>/logout" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
-                                         <?php echo $data["AdminCikisYap"];?>
+                                         <?php echo $data["CikisYap"];?>
                                     </h3>
                                     <p>
                                          <?php echo $data["GuvenliCikis"];?>

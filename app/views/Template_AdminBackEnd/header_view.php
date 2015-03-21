@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-    <title><?php echo $data["TitleAdmin"]; ?>/Shuttle</title>
+    <title><?php echo $data["Baslik"]; ?>/Shuttle</title>
     <link rel="shortcut icon" href="<?php echo SITE_PLUGINADMIN_IMG; ?>/favicon.png">
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- bootstrap 3.0.2 -->
@@ -191,7 +191,7 @@
                                                 <a href="#" class="btn btn-default btn-flat"><?php echo $data["Profil"]; ?></a>
                                             </div>
                                             <div class="pull-right">
-                                                <a href="<?php echo SITE_URL_LOGINN; ?>/logout" class="btn btn-default btn-flat"><?php echo $data["AdminCikisYap"]; ?></a>
+                                                <a href="<?php echo SITE_URL_LOGINN; ?>/logout" class="btn btn-default btn-flat"><?php echo $data["CikisYap"]; ?></a>
                                             </div>
                                         </li>
                                     </ul>
