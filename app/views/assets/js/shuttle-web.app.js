@@ -85,15 +85,34 @@ $(document).ready(function () {
     $(document).on("click", "#openMap", function () {
         $("#map_div").fadeIn();
         initialize();
+        google.maps.event.addDomListener(window, 'load', initialize);
     });
-    function initialize() {
+});
+function initialize() {
+    if (navigator.geolocation) {
+
         var mapOptions = {
-            zoom: 16,
-            center: new google.maps.LatLng(38.70026046022295, 35.5398890376091)
+            zoom: 16
         };
 
         var map = new google.maps.Map(document.getElementById('map_div'),
                 mapOptions);
+
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var pos = new google.maps.LatLng(position.coords.latitude,
+                    position.coords.longitude);
+
+            var infowindow = new google.maps.InfoWindow({
+                map: map,
+                position: pos,
+                content: 'Sizin Konumunuz'
+            });
+
+            map.setCenter(pos);
+
+        }, function () {
+            handleNoGeolocation(true);
+        });
 
         var marker = new google.maps.Marker({
             position: map.getCenter(),
@@ -117,6 +136,14 @@ $(document).ready(function () {
                 success: function (cevap) {
                     ttl = cevap.results[0].formatted_address;
                     placeMarker(event.latLng);
+                    console.log(cevap.results[0].address_components);
+                    var cadde = cevap.results[0].address_components[0].long_name;
+                    var cadde = cevap.results[0].address_components[1].long_name;
+                    var semt = cevap.results[0].address_components[2].long_name;
+                    var ilce = cevap.results[0].address_components[3].long_name;
+                    var il = cevap.results[0].address_components[4].long_name;
+                    var ulke = cevap.results[0].address_components[5].long_name;
+                    var posta_kodu = cevap.results[0].address_components[6].long_name;
                 }
             });
             console.log(event.latLng);
@@ -148,8 +175,8 @@ $(document).ready(function () {
             markers.push(marker);
 
         }
-
+    } else {
+        document.getElementById('google_canvas').innerHTML = 'No Geolocation Support.';
     }
-});
-google.maps.event.addDomListener(window, 'load', initialize);
+}
 // End Lokasyon Seçme İşlemleri
