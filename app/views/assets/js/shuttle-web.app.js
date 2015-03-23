@@ -1,23 +1,38 @@
 // Document Ready
 var z = 1;
-//var AdminBolgeKurumMap = new Array();
-//var index;
+var MultipleMapArray = new Array();
+var MultipleMapindex;
 
 $(document).ready(function () {
     // Form Enable / Disable Kontrolleri
-    $(document).on("click", "#editForm", function () {
+    $(document).on("click", "#editForm", function (e) {
+        e.preventDefault();
         $(document).find(".dsb").prop("disabled", false);
         $(document).find(".edit-group").css("display", "none");
         $(document).find(".submit-group").fadeIn();
         checkIt();
+        var edtislemler = $(this).attr("data-Editislem");
+        editControl(edtislemler);
+
     });
 
-    $(document).on("click", ".vzg", function () {
+    $(document).on("click", ".vzg", function (e) {
+        e.preventDefault();
         $(document).find(".dsb").prop("disabled", true);
         $(document).find(".submit-group").css("display", "none");
         $(document).find(".edit-group").fadeIn();
         checkIt();
+        var vzgislemler = $(this).attr("data-Vzgislem");
+        vzgControl(vzgislemler);
     });
+
+    $(document).on("click", ".save", function (e) {
+        e.preventDefault();
+
+        var saveislemler = $(this).attr("data-Saveislem");
+        saveControl(saveislemler);
+    });
+
     // End Form Enable / Dissable Kontrolleri
 
     // Sol Menu Navigasyon Kontrolü   
@@ -29,41 +44,140 @@ $(document).ready(function () {
 
 
     //subview kontrolü.Class Göre
-    $(document).on("click", ".svToggle", function () {
+    $(document).on("click", ".svToggle", function (e) {
+        e.preventDefault();
+        if ($(this).attr("data-index") == 'index') {
+            MultipleMapindex = $(this).parent().index();
+        }
         var dtype = $(this).attr("data-type");
         var dclass = $(this).attr("data-class");
-        svControl(dtype, dclass);
+        var dislemler = $(this).attr("data-islemler");
+        svControl(dtype, dclass, dislemler);
     });
 });
 // End Document Ready
 
 // Subview Kontrolü
-function svControl(dtype, dclass) {
+function svControl(dtype, dclass, dislemler) {
     var effect = 'slide';
     var options = {direction: 'right'};
     var duration = 500;
     var h = $("." + dtype).parent().height();
     var hh = $(document).find("header").height();
-    switch (dtype) {
-        case "svAdd":
+
+//svadd
+    if (dtype != 'svDetail') {
+        switch (dislemler) {
+            case 'adminBolgeKurumEkle' :
+                var returnCevap = $.AdminIslemler.adminBolgeDetailYeniEkle();
+                break;
+            case 'adminBolgeMultiMap' :
+                var returnCevap = $.AdminIslemler.adminBolgeMultiMapping();
+                $("#multiMapBaslik").show();
+                multipleMapping(MultipleMapArray, MultipleMapindex);
+                google.maps.event.addDomListener(window, 'load', multipleMapping);
+                break;
+            case 'adminBolgeSingleMap' :
+                //var returnCevap = $.AdminIslemler.adminBolgeKurumOpenMap();
+                var returnCevap=true;
+                $("#multiMapBaslik").hide();
+                initialize();
+                google.maps.event.addDomListener(window, 'load', initialize);
+                break;
+
+            default :
+                $("#" + dclass).height(h);
+                $("#" + dclass).css("top", hh);
+                z++;
+                $("#" + dclass).css("z-index", z);
+                $('#' + dclass).toggle(effect, options, duration);
+                break;
+        }
+        if (returnCevap == true) {
             $("#" + dclass).height(h);
             $("#" + dclass).css("top", hh);
             z++;
             $("#" + dclass).css("z-index", z);
             $('#' + dclass).toggle(effect, options, duration);
-            break;
-        case "svDetail":
-            $("." + dtype).height(h);
-            $("." + dtype).css("top", hh);
+        }
+    }//svDetail
+    else if (dtype != 'svAdd') {
+        switch (dislemler) {
+            case 'adminBolgeKayit' :
+                var returnCevap = $.AdminIslemler.adminBolgeKaydet();
+                break;
+            case 'adminBolgeCancel' :
+                var returnCevap = $.AdminIslemler.adminAddBolgeVazgec();
+                break;
+            case 'adminBolgeKurumVazgec' :
+                var returnCevap = $.AdminIslemler.adminBolgeKurumVazgec();
+                break;
+            case 'adminBolgeDetailSil' :
+                var returnCevap = $.AdminIslemler.adminBolgeDetailSil();
+                break;
+            case 'adminBolgeKurumKaydet' :
+                var returnCevap = $.AdminIslemler.adminBolgeKurumKaydet();
+                break;
+
+            default :
+                $("#" + dclass).height(h);
+                $("#" + dclass).css("top", hh);
+                z++;
+                $("#" + dclass).css("z-index", z);
+                $('#' + dclass).toggle(effect, options, duration);
+                break;
+        }
+        if (returnCevap == true) {
+            $("#" + dclass).height(h);
+            $("#" + dclass).css("top", hh);
             z++;
-            $("." + dtype).css("z-index", z);
-            $("." + dtype).toggle(effect, options, duration);
-            break;
-        default:
-            break;
+            $("#" + dclass).css("z-index", z);
+            $('#' + dclass).toggle(effect, options, duration);
+        }
     }
 }
 // End Subview Kontrolü
+
+
+//Edit Kontrol
+function editControl(edtislemler) {
+    switch (edtislemler) {
+        case 'adminBolgeDetailEdit' :
+            $.AdminIslemler.adminBolgeDetailDuzenle();
+            break;
+
+        default :
+            break;
+    }
+}
+//End Edit Kontrol
+
+//Vazgeç Kontrol
+function vzgControl(vzgislemler) {
+    switch (vzgislemler) {
+        case 'adminBolgeDetailVazgec' :
+            $.AdminIslemler.adminBolgeDetailVazgec();
+            break;
+
+        default :
+            break;
+    }
+}
+//End Vezgeç Kontrol
+
+//Kaydet Kontrol
+function saveControl(saveislemler) {
+    switch (saveislemler) {
+        case 'adminBolgeDetailKaydet' :
+            $.AdminIslemler.adminBolgeDetailKaydet();
+            break;
+
+        default :
+            break;
+    }
+}
+//End Kaydet Kontrol 
+
 
 // CheckBox Kontrolü
 function checkIt() {
@@ -114,7 +228,7 @@ function initialize() {
             zoom: 16
         };
 
-        var map = new google.maps.Map(document.getElementById('map_div'),
+        var map = new google.maps.Map(document.getElementById('multiple_map'),
                 mapOptions);
 
         //son eklenen locationu haritada görme
@@ -220,7 +334,8 @@ function initialize() {
 function multipleMapping(gelen, index) {
     if (navigator.geolocation) {
         var iconURLPrefix = 'http://maps.google.com/mapfiles/ms/icons/';
-
+        console.log("gelen" + gelen);
+        console.log("index" + MultipleMapindex);
         var icons = [];
         for (var gelenicon = 0; gelenicon < gelen.length; gelenicon++) {
             if (gelenicon != index) {

@@ -138,10 +138,10 @@ $.AdminIslemler = {
                         $("tbody#adminBolgeRow").prepend("<tr style='background-color:#66FF66'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
                                 + "<i class='fa fa-search'></i> " + AdminBolgeKaydet[0] + "</a>"
                                 + "</td><td class='hidden-xs'>0</td><td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td></tr>");
-                        svControl('svAdd', 'bolge');
                     }
                 }
             });
+            return true;
         } else {
             alert("Lütfen Bölge Adını Giriniz");
         }
@@ -149,6 +149,7 @@ $.AdminIslemler = {
     adminAddBolgeVazgec: function () {
         $("input[name=BolgeAdi]").val('');
         $("textarea[name=BolgeAciklama]").val('');
+        return true;
     },
     adminBolgeDetailDuzenle: function () {
         //Firma İşlemleri Değerleri
@@ -173,8 +174,6 @@ $.AdminIslemler = {
                     $("input[name=BolgeDetailAdi]").val('');
                     $("textarea[name=BolgeDetailAciklama]").val('');
 
-                    svControl('svDetail', 'kurum');
-
                     var bolgeCount = $('#smallBolge').text();
                     bolgeCount--;
                     $('#smallBolge').text(bolgeCount);
@@ -188,7 +187,7 @@ $.AdminIslemler = {
                 }
             }
         });
-
+        return true;
     },
     adminBolgeDetailKaydet: function () {
         var bolgedetail_adi = $("input[name=BolgeDetailAdi]").val();
@@ -262,6 +261,7 @@ $.AdminIslemler = {
         var bolgkurumpostakodu = $("input[name=postal_code]").val('');
         var bolgkurumcaddeno = $("input[name=street_number]").val('');
         var bolgkurumlocation = $("input[name=KurumLokasyon]").val('');
+        return true;
     },
     adminBolgeKurumKaydet: function () {
         AdminBolgeDetailNewKurum = [];
@@ -312,15 +312,36 @@ $.AdminIslemler = {
                         $("ul#adminBolgeKurumDetail").prepend("<li class='list-group-item' style='background-color:#66FF66' value=" + cevap.newBolgeKurumID + ">"
                                 + "<a class='svToggle' data-type='svAdd' data-class='map' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + AdminBolgeDetailNewKurum[1] + "'>"
                                 + "<i class='fa fa-map-marker'></i>    " + AdminBolgeDetailNewKurum[0] + "</a><i></i></li>");
-                        svControl('svAdd', 'kurum');
                         AdminBolgeDetailNewKurum = [];
                     }
                 }
             });
+            return true;
         } else {
             alert("Lütfen Kurum Adını Giriniz");
         }
-    }
+    },
+    adminBolgeMultiMapping: function () {
+
+        var bolge_adi = $("input[name=BolgeDetailAdi]").val();
+
+        //Tıklanılan değer indexi
+        //var index = $(this).parent().index();
+
+        var count = $('ul#adminBolgeKurumDetail > li').length;
+
+        var MapValue = $(this).attr('value');
+
+        for (var countK = 0; countK < count; countK++) {
+            var bolgeKurumlarMap = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').attr('value');
+            var LocationBolme = bolgeKurumlarMap.split(",");
+            var bolgeKurumName = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').text();
+            MultipleMapArray[countK] = Array(bolgeKurumName, LocationBolme[0], LocationBolme[1]);
+        }
+        $("#multiMapBaslik").text(bolge_adi);
+        return true;
+    },
+    adminBolgeKurumTablo:function(){}
 }
 
 $(document).on('click', 'tbody#adminBolgeRow > tr > td > a', function (e) {
@@ -350,42 +371,42 @@ $(document).on('click', 'tbody#adminBolgeRow > tr > td > a', function (e) {
                     }
                     $("ul#adminBolgeKurumDetail").find("li").remove();
                     for (var kurum = 0; kurum < bolgeKurumSayi; kurum++) {
-                        $("ul#adminBolgeKurumDetail").append("<li class='list-group-item' value=" + cevap.adminBolgeKurumDetail[kurum][2] + ">"
-                                + "<a class='svToggle' data-type='svAdd' data-class='map' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminBolgeKurumDetail[kurum][1] + "'>"
+                        $("ul#adminBolgeKurumDetail").append("<li class='list-group-item'>"
+                                + "<a class='svToggle' data-type='svAdd' data-class='map' data-index='index' data-value=" + cevap.adminBolgeKurumDetail[kurum][2] + " data-islemler='adminBolgeMultiMap' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminBolgeKurumDetail[kurum][1] + "'>"
                                 + "<i class='fa fa-map-marker'></i>    " + cevap.adminBolgeKurumDetail[kurum][0] + "</a><i></i></li>");
                     }
                 }
-                svControl('svDetail');
+                svControl('svAdd', 'bolgeDetay', '');
                 i.removeClass("fa-spinner fa-spin");
                 i.addClass("fa-search");
             }
         }
     });
 });
-
+/*
 $(document).on('click', 'ul#adminBolgeKurumDetail > li > a', function (e) {
-    var AdminBolgeKurumMap =new Array();
-    
+    var AdminBolgeKurumMap = new Array();
+
     var bolge_adi = $("input[name=BolgeDetailAdi]").val();
-    
+
     //Tıklanılan değer indexi
     var index = $(this).parent().index();
 
     var count = $('ul#adminBolgeKurumDetail > li').length;
-    
+
     var MapValue = $(this).attr('value');
-    
+
     for (var countK = 0; countK < count; countK++) {
         var bolgeKurumlarMap = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').attr('value');
-        var LocationBolme=bolgeKurumlarMap.split(",");
+        var LocationBolme = bolgeKurumlarMap.split(",");
         var bolgeKurumName = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').text();
-        AdminBolgeKurumMap[countK]=Array(bolgeKurumName, LocationBolme[0], LocationBolme[1]);
+        AdminBolgeKurumMap[countK] = Array(bolgeKurumName, LocationBolme[0], LocationBolme[1]);
     }
     $("#kurumHaritaName").text(bolge_adi);
-    multipleMapping(AdminBolgeKurumMap,index);
+    multipleMapping(AdminBolgeKurumMap, index);
     google.maps.event.addDomListener(window, 'load', multipleMapping);
 });
-
+*/
 
 /*
  var proje_son_id;
