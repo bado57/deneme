@@ -58,10 +58,16 @@ class en {
             "Il" => "City",
             "Ulke" => "Country",
             "Ilce" => "State",
+            "Semt" => "Whereabouts",
+            "Mahalle" => "District",
+            "CaddeSokak" => "Cadde / Sokak",
+            "PostaKodu" => "Zip Code",
+            "CaddeNo" => "Street Number",
             "Telefon" => "Phone",
             "Email" => "Email",
             "WebSite" => "Web Site",
             "Lokasyon" => "Location",
+            "KonumuKaydet" => "Save Location",
             "Vazgec" => "Cancel",
             "Kaydet" => "Save",
             "Toplam" => "Total",
@@ -84,13 +90,13 @@ class en {
             "BolgeYeni" => "New Region",
             "Detay" => "Details",
             "Sil" => "Delete",
-            "BolgeAciklama" => "Region Details",
             "BolgeTanımlama" => "Region Description",
             "KurumTanımlama" => "Institution Description",
             "KurumAdı" => "Institution Name",
             "BolgeDetay" => "Region Details",
             "YeniEkle" => "Add New",
-            "TumunuGor" => "View All"
+            "TumunuGor" => "View All",
+            "KurumHarita" => "Institution Map"
         );
         return $endil;
     }

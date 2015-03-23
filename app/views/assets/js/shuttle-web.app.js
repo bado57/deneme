@@ -24,6 +24,8 @@ $(document).ready(function () {
     $("#" + activeMenu).find("#" + activeLink).addClass("activeli");
     // End Sol Menu Navigasyon Kontrolü
 
+
+    //subview kontrolü.Class Göre
     $(document).on("click", ".svToggle", function () {
         var dtype = $(this).attr("data-type");
         var dclass = $(this).attr("data-class");
@@ -95,13 +97,13 @@ $(document).ready(function () {
         $(".KurumAdresForm").fadeIn();
         $(".mapDiv").css("display", "none");
     });
-    
     $(document).on("click", "#ignoreLocation", function () {
         $(".addKurumForm").fadeIn();
         $(".KurumAdresForm").fadeIn();
         $(".mapDiv").css("display", "none");
     });
 });
+
 function initialize() {
     if (navigator.geolocation) {
 
@@ -111,6 +113,20 @@ function initialize() {
 
         var map = new google.maps.Map(document.getElementById('map_div'),
                 mapOptions);
+
+        //son eklenen locationu haritada görme
+        var posValue = $('input[name="KurumLokasyon"]').val();
+        var posSplitValue = posValue.split(",");
+        if (posValue != '') {
+            var pos = new google.maps.LatLng(posSplitValue[0],
+                    posSplitValue[1]);
+            var infowindow = new google.maps.InfoWindow({
+                map: map,
+                position: pos,
+                content: lastAdress
+            });
+        }
+
 
         navigator.geolocation.getCurrentPosition(function (position) {
             var pos = new google.maps.LatLng(position.coords.latitude,
@@ -141,13 +157,11 @@ function initialize() {
                 content: lastAdress
             });
         });
-
         google.maps.event.addListener(map, 'click', function (event) {
-            console.log(lastLocation);
             if (lastLocation != null) {
                 setAllMap(null);
             }
-            
+
             $.ajax({
                 type: "get",
                 url: "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + event.latLng.k + "," + event.latLng.D + "&sensor=true",
@@ -156,21 +170,17 @@ function initialize() {
                 success: function (cevap) {
                     ttl = cevap.results[0].formatted_address;
                     placeMarker(event.latLng);
-                    console.log(cevap.results[0].address_components);
                     var say = cevap.results[0].address_components.length;
                     for (var i = 0, max = say; i < max; i++) {
-                        console.log(cevap.results[0].address_components[i].types[0]);
                         var key = cevap.results[0].address_components[i].types[0];
                         var value = cevap.results[0].address_components[i].long_name;
-                        $('input[name="'+ key +'"]').val(value);
+                        $('input[name="' + key + '"]').val(value);
                     }
                     $('input[name="KurumLokasyon"]').val(event.latLng.k + "," + event.latLng.D);
-                    lastLocation = new google.maps.LatLng(event.latLng.k,event.latLng.D);
+                    lastLocation = new google.maps.LatLng(event.latLng.k, event.latLng.D);
                     lastAdress = ttl;
                 }
             });
-            console.log(event.latLng);
-            console.log(event.latLng.k + "-" + event.latLng.D);
         });
 
         // Sets the map on all markers in the array.
@@ -193,14 +203,90 @@ function initialize() {
             });
 
             infowindow.open(map, marker);
-            
-            console.log(ttl);
+
             markers.push(marker);
 
         }
 
     } else {
-        document.getElementById('google_canvas').innerHTML = 'No Geolocation Support.';
+        document.getElementById('google_canvas').innerHTML = 'Konumunuz bulunmadı.';
     }
 }
 // End Lokasyon Seçme İşlemleri
+
+//çoklu mapping işlemleri
+
+function multipleMapping(gelen, index) {
+    if (navigator.geolocation) {
+        var iconURLPrefix = 'http://maps.google.com/mapfiles/ms/icons/';
+
+        var icons = [];
+        for (var gelenicon = 0; gelenicon < gelen.length; gelenicon++) {
+            if (gelenicon != index) {
+                icons.push(iconURLPrefix + 'red-dot.png')
+            } else {
+                icons.push(iconURLPrefix + 'green-dot.png')
+            }
+        }
+
+        var iconsLength = icons.length;
+
+        var map = new google.maps.Map(document.getElementById('multiple_map'), {
+            zoom: 8,
+            center: new google.maps.LatLng(gelen[index][1], gelen[index][2]),
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: true,
+            streetViewControl: true,
+            panControl: true,
+            draggable: true,
+            zoomControlOptions: {
+                position: google.maps.ControlPosition.RIGHT_BOTTOM
+            }
+        });
+
+        var infowindow = new google.maps.InfoWindow({
+            maxWidth: 160
+        });
+
+        var markers = new Array();
+
+        var iconCounter = 0;
+        for (var i = 0; i < gelen.length; i++) {
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(gelen[i][1], gelen[i][2]),
+                map: map,
+                icon: icons[iconCounter]
+            });
+
+            markers.push(marker);
+
+            google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                return function () {
+                    infowindow.setContent(gelen[i][0]);
+                    infowindow.open(map, marker);
+                }
+            })(marker, i));
+
+            iconCounter++;
+
+            if (iconCounter >= iconsLength) {
+                iconCounter = 0;
+            }
+        }
+        
+
+        function autoCenter() {
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0; i < markers.length; i++) {
+                bounds.extend(markers[i].position);
+            }
+            map.fitBounds(bounds);
+        }
+        autoCenter();
+
+    } else {
+        document.getElementById('google_canvas').innerHTML = 'Konumunuz bulunmadı.';
+    }
+}
+
+//End çoklu mapping işlemleri

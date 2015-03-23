@@ -233,6 +233,8 @@ class AdminAjaxSorgu extends Controller {
                 case "adminBolgeDetailDelete":
 
                     $adminRutbe = Session::get("userRutbe");
+                    $uniqueKey = Session::get("username");
+                    $uniqueKey = $uniqueKey . '_ABolge';
 
                     if ($adminRutbe != 1) {
                         Session::destroy();
@@ -246,6 +248,10 @@ class AdminAjaxSorgu extends Controller {
                         if ($deleteresult) {
                             $resultdelete = $Panel_Model->adminBolgeIDDelete($adminBolgeDetailID);
                             if ($resultdelete) {
+                                $resultMemcache = $MemcacheModel->get($uniqueKey);
+                                if ($resultMemcache) {
+                                    $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                }
                                 $sonuc["delete"] = "Bölge kaydı başarıyla silinmiştir.";
                             } else {
                                 $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
@@ -256,6 +262,71 @@ class AdminAjaxSorgu extends Controller {
 
 
                         $sonuc["adminBolgeDetail"] = $data["adminBolgeDetail"];
+                    }
+
+                    break;
+
+                case "adminBolgeKurumKaydet":
+                    
+                    $adminRutbe = Session::get("userRutbe");
+                    $uniqueKey = Session::get("username");
+                    $uniqueKey = $uniqueKey . '_ABolge';
+
+                    if ($adminRutbe != 1) {
+                        Session::destroy();
+                        header("Location:" . SITE_URL);
+                    } else {
+
+                        $form->post('bolgeid', true);
+                        $form->post('bolgkurumadi', true);
+                        $form->post('bolgkurumTlfn', true);
+                        $form->post('bolgkurumEmail', true);
+                        $form->post('bolgkurumwebsite', true);
+                        $form->post('bolgkurumadrsDty', true);
+                        $form->post('bolgkurumaciklama', true);
+                        $form->post('bolgkurumulke', true);
+                        $form->post('bolgkurumil', true);
+                        $form->post('bolgkurumilce', true);
+                        $form->post('bolgkurumsemt', true);
+                        $form->post('bolgkurummahalle', true);
+                        $form->post('bolgkurumsokak', true);
+                        $form->post('bolgkurumpostakodu', true);
+                        $form->post('bolgkurumcaddeno', true);
+                        $form->post('bolgkurumlocation', true);
+
+                        if ($form->submit()) {
+                            $data = array(
+                                'SBKurumAdi' => $form->values['bolgkurumadi'],
+                                'SBKurumAciklama' => $form->values['bolgkurumaciklama'],
+                                'SBBolgeID' => $form->values['bolgeid'],
+                                'SBKurumUlke' => $form->values['bolgkurumulke'],
+                                'SBKurumIl' => $form->values['bolgkurumil'],
+                                'SBKurumIlce' => $form->values['bolgkurumilce'],
+                                'SBKurumSemt' => $form->values['bolgkurumsemt'],
+                                'SBKurumMahalle' => $form->values['bolgkurummahalle'],
+                                'SBKurumSokak' => $form->values['bolgkurumsokak'],
+                                'SBKurumLokasyon' => $form->values['bolgkurumlocation'],
+                                'SBKurumTelefon' => $form->values['bolgkurumTlfn'],
+                                'SBKurumAdres' => $form->values['bolgkurumadrsDty'],
+                                'SBKurumEmail' => $form->values['bolgkurumEmail'],
+                                'SBKurumWebsite' => $form->values['bolgkurumwebsite'],
+                                'SBKurumPostaKodu' => $form->values['bolgkurumpostakodu'],
+                                'SBKurumCaddeNo' => $form->values['bolgkurumcaddeno']
+                            );
+                        }
+
+                        $resultKurumID = $Panel_Model->addNewAdminBolgeKurum($data);
+
+                        if ($resultKurumID) {
+                            $resultMemcache = $MemcacheModel->get($uniqueKey);
+                            if ($resultMemcache) {
+                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                            }
+                            $sonuc["newBolgeKurumID"] = $resultKurumID;
+                            $sonuc["insert"] = "Başarıyla Bölgenize yeni Kurum Eklenmiştir.";
+                        } else {
+                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                        }
                     }
 
                     break;

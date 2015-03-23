@@ -81,7 +81,7 @@ class Panel_Model extends Model {
     
     //admin bölge kurum detail
     public function adminBolgeKurumDetail($adminBolgeDetailID) {
-        $sql = 'SELECT SBKurumAdi,SBKurumIl FROM sbkurum WHERE SBBolgeID=' . $adminBolgeDetailID;
+        $sql = 'SELECT SBKurumAdi,SBKurumLokasyon,SBKurumID FROM sbkurum WHERE SBBolgeID=' . $adminBolgeDetailID. ' ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
     
@@ -98,6 +98,11 @@ class Panel_Model extends Model {
     //admin bölge özellikleri düzenleme
     public function adminBolgeOzelliklerDuzenle($data, $adminBolgeDetailID) {
         return ($this->db->update("sbbolgeler", $data, "SBBolgeID=".$adminBolgeDetailID));
+    }
+    
+    //admin yeni bölge-> kurum kaydet
+    public function addNewAdminBolgeKurum($data) {
+        return ($this->db->insert("sbkurum", $data));
     }
 
     public function updateNewProject($data, $gelenlabel) {

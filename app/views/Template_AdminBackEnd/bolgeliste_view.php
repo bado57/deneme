@@ -32,7 +32,7 @@
                         <tr>
                             <th><?php echo $data["BolgeAd"]; ?></th>
                             <th class="hidden-xs"><?php echo $data["BolgeKurumSayi"]; ?></th>
-                            <th class="hidden-xs"><?php echo $data["BolgeAciklama"]; ?></th>
+                            <th class="hidden-xs"><?php echo $data["Aciklama"]; ?></th>
                         </tr>
                     </thead>
                     <tbody id="adminBolgeRow">
@@ -69,12 +69,12 @@
                         <input type="text" class="form-control" id="BolgeAdi" name="BolgeAdi" value="">
                     </div>
                     <div class="form-group">
-                        <label for="Aciklama"><?php echo $data["AdminFirmaAciklama"]; ?></label>
+                        <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
                         <textarea name="BolgeAciklama" class="form-control dsb" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <button data-type="svAdd"  data-class="bolge" type="button" class="svToggle btn btn-default" onclick="$.AdminIslemler.adminAddBolgeVazgec()"><?php echo $data["AdminFirmaBtnVazgec"]; ?></button>
-                        <button type="button" class="btn btn-success" onclick="$.AdminIslemler.adminBolgeKaydet()"><?php echo $data["AdminFirmaBtnKaydet"]; ?></button>
+                        <button data-type="svAdd"  data-class="bolge" type="button" class="svToggle btn btn-default" onclick="$.AdminIslemler.adminAddBolgeVazgec()"><?php echo $data["Vazgec"]; ?></button>
+                        <button type="button" class="btn btn-success" onclick="$.AdminIslemler.adminBolgeKaydet()"><?php echo $data["Kaydet"]; ?></button>
                     </div>
 
                 </form>
@@ -90,15 +90,16 @@
             <hr/>
             <div class="row" id="getPartialView">
                 <div class="form-vertical addKurumForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <input id="adminBolgeKurumEkleID" name="adminBolgeKurumEkleID" type="hidden" value="" />
                     <div class="form-group">
                         <label for="KurumAdi"><?php echo $data["KurumAdı"]; ?></label>
                         <input type="text" class="form-control" id="KurumAdi" name="KurumAdi" value="">
                     </div>
                     <div class="form-group">
-                        <label for="KurumLokasyon"><?php echo $data["AdminFirmaLokasyon"]; ?></label>
+                        <label for="KurumLokasyon"><?php echo $data["Lokasyon"]; ?></label>
                         <div class="input-group">
                             <span class="input-group-btn">
-                                <button class="btn btn-success" type="button" id="openMap">
+                                <button class="btn btn-success" type="button" id="openMap" onclick="$.AdminIslemler.adminBolgeKurumOpenMap()">
                                     <i class="fa fa-map-marker"></i>
                                 </button>
                             </span>
@@ -106,15 +107,15 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="KurumTelefon"><?php echo $data["AdminFirmaTelefon"]; ?></label>
+                        <label for="KurumTelefon"><?php echo $data["Telefon"]; ?></label>
                         <input type="text" class="form-control" id="KurumTelefon" name="KurumTelefon" value="">
                     </div>
                     <div class="form-group">
-                        <label for="KurumEmail"><?php echo $data["AdminFirmaEmail"]; ?></label>
+                        <label for="KurumEmail"><?php echo $data["Email"]; ?></label>
                         <input type="text" class="form-control" id="KurumEmail" name="KurumEmail" value="">
                     </div>
                     <div class="form-group">
-                        <label for="KurumWebSite"><?php echo $data["AdminFirmaWebSite"]; ?></label>
+                        <label for="KurumWebSite"><?php echo $data["WebSite"]; ?></label>
                         <input type="text" class="form-control" id="KurumWebSite" name="KurumWebSite" value="">
                     </div>
                     <div class="form-group">
@@ -122,53 +123,53 @@
                         <textarea name="KurumAdresDetay" class="form-control dsb" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="Aciklama"><?php echo $data["AdminFirmaAciklama"]; ?></label>
+                        <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
                         <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <button data-type="svAdd" data-class="kurum" type="button" class="svToggle btn btn-default"><?php echo $data["AdminFirmaBtnVazgec"]; ?></button>
-                        <button type="button" class="btn btn-success" ><?php echo $data["AdminFirmaBtnKaydet"]; ?></button>
+                        <button data-type="svAdd" data-class="kurum" type="button" class="svToggle btn btn-default" onclick="$.AdminIslemler.adminBolgeKurumVazgec()"><?php echo $data["Vazgec"]; ?></button>
+                        <button type="button" class="btn btn-success" onclick="$.AdminIslemler.adminBolgeKurumKaydet()"><?php echo $data["Kaydet"]; ?></button>
                     </div>
                 </div>
                 <div class="form-vertical KurumAdresForm col-lg-4 col-md-4 col-sm-12 col-xs-12" style="display:none;">
                     <div class="form-group">
-                        <label for="KurumUlke">Ülke</label>
+                        <label for="KurumUlke"><?php echo $data["Ulke"]; ?></label>
                         <input type="text" class="form-control" id="KurumUlke" name="country" value="" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="KurumSehir">İl</label>
+                        <label for="KurumSehir"><?php echo $data["Il"]; ?></label>
                         <input type="text" class="form-control" id="KurumSehir" name="administrative_area_level_1" value="" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="KurumIlce">İlçe</label>
+                        <label for="KurumIlce"><?php echo $data["Ilce"]; ?></label>
                         <input type="text" class="form-control" id="KurumIlce" name="administrative_area_level_2" value="" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="KurumSemt">Semt</label>
+                        <label for="KurumSemt"><?php echo $data["Semt"]; ?></label>
                         <input type="text" class="form-control" id="KurumSemt" name="locality" value="" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="KurumMahalle">Mahalle</label>
+                        <label for="KurumMahalle"><?php echo $data["Mahalle"]; ?></label>
                         <input type="text" class="form-control" id="KurumMahalle" name="neighborhood" value="" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="KurumSokak">Cadde / Sokak</label>
+                        <label for="KurumSokak"><?php echo $data["CaddeSokak"]; ?></label>
                         <input type="text" class="form-control" id="KurumSokak" name="route" value="" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="KurumPostaKodu">Posta Kodu</label>
+                        <label for="KurumPostaKodu"><?php echo $data["PostaKodu"]; ?></label>
                         <input type="text" class="form-control" id="KurumPostaKodu" name="postal_code" value="" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="street_number">Cadde No</label>
+                        <label for="street_number"><?php echo $data["CaddeNo"]; ?></label>
                         <input type="text" class="form-control" id="street_number" name="street_number" value="" disabled>
                     </div>
                 </div>
                 <div class="mapDiv col-lg-8 col-md-8 col-sm-12 col-xs-12" style="display:none;">
                     <div class="form-group">
-                            <button id="setLocation" type="button" class="btn btn-success">Konumu Kaydet</button>
-                            <button id="ignoreLocation" type="button" class="btn btn-default">Vazgeç</button>
-                        </div>
+                        <button id="setLocation" type="button" class="btn btn-success"><?php echo $data["KonumuKaydet"]; ?></button>
+                        <button id="ignoreLocation" type="button" class="btn btn-default" onclick="$.AdminIslemler.adminBolgeKurumMapVazgec()"><?php echo $data["Vazgec"]; ?></button>
+                    </div>
                     <div id="map_div" style="width: 100%; height: 400px;"></div>
                 </div>
             </div>
@@ -192,20 +193,20 @@
                             <input type="text" class="form-control dsb" id="BolgeAdi" name="BolgeDetailAdi" value="" disabled>
                         </div>
                         <div class="form-group">
-                            <label for="Aciklama"><?php echo $data["AdminFirmaAciklama"]; ?></label>
+                            <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
                             <textarea name="BolgeDetailAciklama" class="form-control dsb" rows="3" disabled=""></textarea>
                         </div>
                         <div class="form-group submit-group">
-                            <button data-type="svDetail" type="button" class="btn btn-default vzg" onclick="$.AdminIslemler.adminBolgeDetailVazgec()"><?php echo $data["AdminFirmaBtnVazgec"]; ?></button>
+                            <button data-type="svDetail" type="button" class="btn btn-default vzg" onclick="$.AdminIslemler.adminBolgeDetailVazgec()"><?php echo $data["Vazgec"]; ?></button>
                             <button type="button" class="btn btn-success" onclick="$.AdminIslemler.adminBolgeDetailKaydet()">Kaydet</button>
                         </div>
                         <div class="form-group edit-group">
-                            <button id="editForm" type="button" class="btn btn-success" onclick="$.AdminIslemler.adminBolgeDetailDuzenle()"><?php echo $data["AdminFirmaDuzenle"]; ?></button>
+                            <button id="editForm" type="button" class="btn btn-success" onclick="$.AdminIslemler.adminBolgeDetailDuzenle()"><?php echo $data["Duzenle"]; ?></button>
                             <button id="BolgeDetailDeleteBtn" type="button" class="btn btn-danger" onclick="$.AdminIslemler.adminBolgeDetailSil()"><?php echo $data["Sil"]; ?></button>
                         </div>
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                        <h4><?php echo $data["Kurumlar"]; ?> <button id="addNew" type="button" class="svToggle btn btn-success btn-sm pull-right addNewButton" data-type="svAdd" data-class="kurum"><i class="fa fa-plus-square"></i> <?php echo $data["YeniEkle"]; ?></button> <button class="btn btn-success btn-sm pull-right seeAllButton"><?php echo $data["TumunuGor"]; ?></button></h4>
+                        <h4><?php echo $data["Kurumlar"]; ?> <button id="addNew" type="button" class="svToggle btn btn-success btn-sm pull-right addNewButton" data-type="svAdd" data-class="kurum" onclick="$.AdminIslemler.adminBolgeDetailYeniEkle()"><i class="fa fa-plus-square"></i> <?php echo $data["YeniEkle"]; ?></button> <button class="btn btn-success btn-sm pull-right seeAllButton"><?php echo $data["TumunuGor"]; ?></button></h4>
                         <hr/>
                         <ul class="list-group" id="adminBolgeKurumDetail">
                         </ul>
@@ -215,6 +216,16 @@
         </div>
     </div>
 </div>
+
+
+<div id="map" class="svAdd col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+    <h3><b id="kurumHaritaName"></b>&nbsp;&nbsp;<?php echo $data["KurumHarita"]; ?> <span class="pull-right"><button data-type="svAdd" data-class="map" type="button" class="svToggle btn btn-danger" onclick="$.AdminIslemler.adminAddBolgeVazgec()"><i class="fa fa-times-circle"></i></button></span></h3>
+    <hr/>
+    <div class="row">
+        <div class="row" id="getPartialView">
+             <div id="multiple_map" style="width: 100%; height: 500px;"></div>
+        </div>
+    </div>
 </div><!-- ./wrapper -->
 
 

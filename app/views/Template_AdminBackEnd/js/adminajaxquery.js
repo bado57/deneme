@@ -18,6 +18,8 @@ $.ajaxSetup({
 var AdminVazgec = [];
 var AdminBolgeDetailVazgec = [];
 var AdminBolgeKaydet = [];
+var AdminBolgeKurumHarita = [];
+var AdminBolgeDetailNewKurum = [];
 
 $.AdminIslemler = {
     adminFirmaOzellik: function () {
@@ -133,7 +135,7 @@ $.AdminIslemler = {
                         var bolgeCount = $('#smallBolge').text();
                         bolgeCount++;
                         $('#smallBolge').text(bolgeCount);
-                        $("tbody#adminBolgeRow").prepend("<tr style='background-color:green'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
+                        $("tbody#adminBolgeRow").prepend("<tr style='background-color:#66FF66'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
                                 + "<i class='fa fa-search'></i> " + AdminBolgeKaydet[0] + "</a>"
                                 + "</td><td class='hidden-xs'>0</td><td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td></tr>");
                         svControl('svAdd', 'bolge');
@@ -207,12 +209,116 @@ $.AdminIslemler = {
                             var attrValueId = $("tbody#adminBolgeRow > tr > td > a").eq(t).attr('value');
                             if (attrValueId == bolgedetail_id) {
                                 $("tbody#adminBolgeRow > tr > td > a").eq(t).html('<i class="fa fa-search"></i> ' + bolgedetail_adi);
-                                $('tbody#adminBolgeRow > tr:eq(' + t + ') > td:eq(0)').css({"background-color": "green"});
+                                $('tbody#adminBolgeRow > tr:eq(' + t + ') > td:eq(0)').css({"background-color": "#66FF66"});
                             }
                         }
                     }
                 }
             });
+        }
+    },
+    adminBolgeKurumOpenMap: function () {
+        AdminBolgeKurumHarita = [];
+        //Firma İşlemleri Harita Değerleri
+        var bolgkurumulke = $("input[name=country]").val();
+        var bolgkurumil = $("input[name=administrative_area_level_1]").val();
+        var bolgkurumilce = $("input[name=administrative_area_level_2]").val();
+        var bolgkurumsemt = $("input[name=locality]").val();
+        var bolgkurummahalle = $("input[name=neighborhood]").val();
+        var bolgkurumsokak = $("input[name=route]").val();
+        var bolgkurumpostakodu = $("input[name=postal_code]").val();
+        var bolgkurumcaddeno = $("input[name=street_number]").val();
+        var bolgkurumlocation = $("input[name=KurumLokasyon]").val();
+        AdminBolgeKurumHarita.push(bolgkurumulke, bolgkurumil, bolgkurumilce, bolgkurumsemt, bolgkurummahalle, bolgkurumsokak, bolgkurumpostakodu, bolgkurumcaddeno, bolgkurumlocation);
+    },
+    adminBolgeKurumMapVazgec: function () {
+        $("input[name=country]").val(AdminBolgeKurumHarita[0]);
+        $("input[name=administrative_area_level_1]").val(AdminBolgeKurumHarita[1]);
+        $("input[name=administrative_area_level_2]").val(AdminBolgeKurumHarita[2]);
+        $("input[name=locality]").val(AdminBolgeKurumHarita[3]);
+        $("input[name=neighborhood]").val(AdminBolgeKurumHarita[4]);
+        $("input[name=route]").val(AdminBolgeKurumHarita[5]);
+        $("input[name=postal_code]").val(AdminBolgeKurumHarita[6]);
+        $("input[name=street_number]").val(AdminBolgeKurumHarita[7]);
+        $("input[name=KurumLokasyon]").val(AdminBolgeKurumHarita[8]);
+    },
+    adminBolgeDetailYeniEkle: function () {
+
+        var bolgeid = $("input[name=adminBolgeDetailID]").val();
+        $("input[name=adminBolgeKurumEkleID]").val(bolgeid);
+        //Bölge kurum İşlemleri Değerleri Temizleme
+        var bolgkurumadi = $("input[name=KurumAdi]").val('');
+        var bolgkurumTlfn = $("input[name=KurumTelefon]").val('');
+        var bolgkurumEmail = $("input[name=KurumEmail]").val('');
+        var bolgkurumwebsite = $("input[name=KurumWebSite]").val('');
+        var bolgkurumadrsDty = $("textarea[name=KurumAdresDetay]").val('');
+        var bolgkurumaciklama = $("textarea[name=Aciklama]").val('');
+        var bolgkurumulke = $("input[name=country]").val('');
+        var bolgkurumil = $("input[name=administrative_area_level_1]").val('');
+        var bolgkurumilce = $("input[name=administrative_area_level_2]").val('');
+        var bolgkurumsemt = $("input[name=locality]").val('');
+        var bolgkurummahalle = $("input[name=neighborhood]").val('');
+        var bolgkurumsokak = $("input[name=route]").val('');
+        var bolgkurumpostakodu = $("input[name=postal_code]").val('');
+        var bolgkurumcaddeno = $("input[name=street_number]").val('');
+        var bolgkurumlocation = $("input[name=KurumLokasyon]").val('');
+    },
+    adminBolgeKurumKaydet: function () {
+        AdminBolgeDetailNewKurum = [];
+        var bolgkurumadi = $("input[name=KurumAdi]").val();
+        var bolgkurumlocation = $("input[name=KurumLokasyon]").val();
+
+        AdminBolgeDetailNewKurum.push(bolgkurumadi);
+        AdminBolgeDetailNewKurum.push(bolgkurumlocation);
+
+        var bolgeid = $("input[name=adminBolgeDetailID]").val();
+        //Bölge kurum İşlemleri Değerleri Temizleme
+
+        var bolgkurumTlfn = $("input[name=KurumTelefon]").val();
+        var bolgkurumEmail = $("input[name=KurumEmail]").val();
+        var bolgkurumwebsite = $("input[name=KurumWebSite]").val();
+        var bolgkurumadrsDty = $("textarea[name=KurumAdresDetay]").val();
+        var bolgkurumaciklama = $("textarea[name=Aciklama]").val();
+        var bolgkurumulke = $("input[name=country]").val();
+        var bolgkurumil = $("input[name=administrative_area_level_1]").val();
+        var bolgkurumilce = $("input[name=administrative_area_level_2]").val();
+        var bolgkurumsemt = $("input[name=locality]").val();
+        var bolgkurummahalle = $("input[name=neighborhood]").val();
+        var bolgkurumsokak = $("input[name=route]").val();
+        var bolgkurumpostakodu = $("input[name=postal_code]").val();
+        var bolgkurumcaddeno = $("input[name=street_number]").val();
+
+
+        if (bolgkurumadi != '' && bolgeid != '') {
+            $.ajax({
+                data: {"bolgeid": bolgeid, "bolgkurumadi": bolgkurumadi, "bolgkurumTlfn": bolgkurumTlfn, "bolgkurumEmail": bolgkurumEmail,
+                    "bolgkurumwebsite": bolgkurumwebsite, "bolgkurumadrsDty": bolgkurumadrsDty, "bolgkurumaciklama": bolgkurumaciklama,
+                    "bolgkurumulke": bolgkurumulke, "bolgkurumil": bolgkurumil, "bolgkurumilce": bolgkurumilce, "bolgkurumsemt": bolgkurumsemt,
+                    "bolgkurummahalle": bolgkurummahalle, "bolgkurumsokak": bolgkurumsokak, "bolgkurumpostakodu": bolgkurumpostakodu,
+                    "bolgkurumcaddeno": bolgkurumcaddeno, "bolgkurumlocation": bolgkurumlocation, "tip": "adminBolgeKurumKaydet"},
+                success: function (cevap) {
+                    if (cevap.hata) {
+                        AdminBolgeDetailNewKurum = [];
+                        alert(cevap.hata);
+                    } else {
+                        for (var t = 0; t < $('tbody#adminBolgeRow tr').length; t++) {
+                            var attrValueId = $("tbody#adminBolgeRow > tr > td > a").eq(t).attr('value');
+                            if (attrValueId == bolgeid) {
+                                var bolgekurumsayac = $('tbody#adminBolgeRow > tr:eq(' + t + ') > td:eq(1)').text();
+                                bolgekurumsayac++;
+                                $('tbody#adminBolgeRow > tr:eq(' + t + ') > td:eq(1)').text(bolgekurumsayac);
+                            }
+                        }
+                        $("ul#adminBolgeKurumDetail").prepend("<li class='list-group-item' style='background-color:#66FF66' value=" + cevap.newBolgeKurumID + ">"
+                                + "<a class='svToggle' data-type='svAdd' data-class='map' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + AdminBolgeDetailNewKurum[1] + "'>"
+                                + "<i class='fa fa-map-marker'></i>    " + AdminBolgeDetailNewKurum[0] + "</a><i></i></li>");
+                        svControl('svAdd', 'kurum');
+                        AdminBolgeDetailNewKurum = [];
+                    }
+                }
+            });
+        } else {
+            alert("Lütfen Kurum Adını Giriniz");
         }
     }
 }
@@ -222,20 +328,21 @@ $(document).on('click', 'tbody#adminBolgeRow > tr > td > a', function (e) {
     i.removeClass("fa-search");
     i.addClass("fa-spinner fa-spin");
     var adminbolgeRowid = $(this).attr('value');
+    $('ul#adminBolgeKurumDetail > li').remove();
     $.ajax({
         data: {"adminbolgeRowid": adminbolgeRowid, "tip": "adminBolgeDetail"},
         success: function (cevap) {
             if (cevap.hata) {
                 alert(cevap.hata);
             } else {
-                $("input[name=BolgeDetailAdi]").val(cevap.adminBolgeDetail['5d7991851fff325b2e913c1093f8c7bb']);
-                $("textarea[name=BolgeDetailAciklama]").val(cevap.adminBolgeDetail['5dff8e4f44d1afe5716832b74770e3fe']);
+                $("input[name=BolgeDetailAdi]").val(cevap.adminBolgeDetail['5dff8e4f44d1afe5716832b74770e3fe']);
+                $("textarea[name=BolgeDetailAciklama]").val(cevap.adminBolgeDetail['5d7991851fff325b2e913c1093f8c7bb']);
                 $("input[name=adminBolgeDetailID]").val(cevap.adminBolgeDetail['95d1cff7e918f5edec2758321aeca910']);
 
                 if (cevap.adminBolgeKurumDetail == null) {
                     $("#BolgeDetailDeleteBtn").show();
                 } else {
-                    var bolgeKurumSayi = cevap.adminBolgeKurumDetail[0].length;
+                    var bolgeKurumSayi = cevap.adminBolgeKurumDetail.length;
                     if (bolgeKurumSayi != 0) {
                         $("#BolgeDetailDeleteBtn").hide();
                     } else {
@@ -243,16 +350,40 @@ $(document).on('click', 'tbody#adminBolgeRow > tr > td > a', function (e) {
                     }
                     $("ul#adminBolgeKurumDetail").find("li").remove();
                     for (var kurum = 0; kurum < bolgeKurumSayi; kurum++) {
-                        $("ul#adminBolgeKurumDetail").append("<li class='list-group-item'>" + cevap.adminBolgeKurumDetail[kurum][0] + "</li>");
+                        $("ul#adminBolgeKurumDetail").append("<li class='list-group-item' value=" + cevap.adminBolgeKurumDetail[kurum][2] + ">"
+                                + "<a class='svToggle' data-type='svAdd' data-class='map' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminBolgeKurumDetail[kurum][1] + "'>"
+                                + "<i class='fa fa-map-marker'></i>    " + cevap.adminBolgeKurumDetail[kurum][0] + "</a><i></i></li>");
                     }
                 }
                 svControl('svDetail');
                 i.removeClass("fa-spinner fa-spin");
                 i.addClass("fa-search");
-
             }
         }
     });
+});
+
+$(document).on('click', 'ul#adminBolgeKurumDetail > li > a', function (e) {
+    var AdminBolgeKurumMap =new Array();
+    
+    var bolge_adi = $("input[name=BolgeDetailAdi]").val();
+    
+    //Tıklanılan değer indexi
+    var index = $(this).parent().index();
+
+    var count = $('ul#adminBolgeKurumDetail > li').length;
+    
+    var MapValue = $(this).attr('value');
+    
+    for (var countK = 0; countK < count; countK++) {
+        var bolgeKurumlarMap = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').attr('value');
+        var LocationBolme=bolgeKurumlarMap.split(",");
+        var bolgeKurumName = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').text();
+        AdminBolgeKurumMap[countK]=Array(bolgeKurumName, LocationBolme[0], LocationBolme[1]);
+    }
+    $("#kurumHaritaName").text(bolge_adi);
+    multipleMapping(AdminBolgeKurumMap,index);
+    google.maps.event.addDomListener(window, 'load', multipleMapping);
 });
 
 
@@ -367,132 +498,11 @@ $(document).on('click', 'tbody#adminBolgeRow > tr > td > a', function (e) {
  }
  });
  });
- 
- 
- 
  }
  }
  });
- },
- blokKayit: function () {
- alert(proje_son_id);
- 
- }
- }
- 
- $('body').on('keyup', 'input[name=satis_giris_username]', function(){
- var availname=$(this).val();					
- if(availname!=''){
- $('.check').show();
- $('.check').fadeIn(400).html('<img src="../img/ajax-loading.gif" /> ');
- $.ajax({
- data: {"satis_giris":availname,"tip":"giris_adi"},
- success: function(result){
- if(!result.giris_adi==''){
- $('.check').html('<img src="../img/accept.png" /> Geçerli Kullanıcı Adı');
- $(".check").removeClass("red");
- $('.check').addClass("green");
- $(".satis_giris_username").removeClass("yellow");
- $(".satis_giris_username").addClass("white");
- }else{
- $('.check').html('<img src="../img/error.png" /> Geçersiz Kullanıcı Adı');
- $(".check").removeClass("green");
- $('.check').addClass("red")
- $(".satis_giris_username").removeClass("white");
- $(".satis_giris_username").addClass("yellow");
- }
- }
- });
- }else{
- $('.check').html('');
- }
- 
- });*/
+ }*/
 
-
-/*Grafiksel Gösterim HighCharts*/
-/*
- $('#container').highcharts({
- title: {
- text: 'Aylık Proje Kayıt Detayları',
- x: -20 //center
- },
- subtitle: {
- x: -20
- },
- xAxis: {
- categories: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
- 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
- },
- yAxis: {
- title: {
- text: 'Proje Detayları'
- },
- plotLines: [{
- value: 0,
- width: 1,
- color: '#808080'
- }]
- },
- tooltip: {
- valueSuffix: ''
- },
- legend: {
- layout: 'vertical',
- align: 'right',
- verticalAlign: 'middle',
- borderWidth: 0
- },
- series: [{
- name: 'Apartman',
- data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6, ]
- }, {
- name: 'Villa',
- data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
- }, {
- name: 'Müstakil',
- data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
- }, {
- name: 'Apart',
- data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
- }]
- });
- 
- 
- $('#satisprojeKayit_form').validate({
- rules: {
- name: {
- minlength: 2,
- required: true
- },
- email: {
- required: true,
- email: true
- },
- subject: {
- minlength: 2,
- required: true
- },
- message: {
- minlength: 2,
- required: true
- }
- },
- highlight: function(element) {
- $(element).closest('.control-group').removeClass('success').addClass('error');
- },
- success: function(element) {
- element
- .text('OK!').addClass('valid')
- .closest('.control-group').removeClass('error').addClass('success');
- }
- });*/
-
-
-
-/*DatePicker*/
-//$("#date_text").datepicker();
-//$("#date_text2").datepicker();
 
 
 

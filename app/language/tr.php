@@ -58,10 +58,16 @@ class tr {
             "Il" => "İl",
             "Ulke" => "Ülke",
             "Ilce" => "İlçe",
+            "Semt" => "Semt",
+            "Mahalle" => "Mahalle",
+            "CaddeSokak" => "Cadde / Sokak",
+            "PostaKodu" => "Posta Kodu",
+            "CaddeNo" => "Cadde No",
             "Telefon" => "Telefon",
             "Email" => "Email",
             "WebSite" => "Web Sitesi",
             "Lokasyon" => "Lokasyon",
+            "KonumuKaydet" => "Konumu Kaydet",
             "Vazgec" => "Vazgeç",
             "Kaydet" => "Kaydet",
             "Toplam" => "Toplam",
@@ -84,7 +90,6 @@ class tr {
             "BolgeYeni" => "Yeni Bölge",
             "Detay" => "Detaylar",
             "Sil" => "Sil",
-            "BolgeAciklama" => "Bölge Açıklama",
             "BolgeTanımlama" => "Bölge Tanımlama",
             "KurumTanımlama" => "Kurum Tanımlama",
             "KurumAdı" => "Kurum Adı",
@@ -92,6 +97,7 @@ class tr {
             "YeniEkle" => "Yeni Ekle",
             "TumunuGor" => "Tümünü Gör",
             "AdresDetay" => "Adres Detayları",
+            "KurumHarita" => "Kurum Harita"
             
         );
         return $trdil;
