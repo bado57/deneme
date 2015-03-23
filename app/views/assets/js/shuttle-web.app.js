@@ -1,5 +1,8 @@
 // Document Ready
 var z = 1;
+//var AdminBolgeKurumMap = new Array();
+//var index;
+
 $(document).ready(function () {
     // Form Enable / Disable Kontrolleri
     $(document).on("click", "#editForm", function () {
@@ -126,8 +129,6 @@ function initialize() {
                 content: lastAdress
             });
         }
-
-
         navigator.geolocation.getCurrentPosition(function (position) {
             var pos = new google.maps.LatLng(position.coords.latitude,
                     position.coords.longitude);
@@ -273,7 +274,7 @@ function multipleMapping(gelen, index) {
                 iconCounter = 0;
             }
         }
-        
+
 
         function autoCenter() {
             var bounds = new google.maps.LatLngBounds();

@@ -28,80 +28,96 @@ class AdminAjaxSorgu extends Controller {
             Switch ($tip) {
 
                 case "adminfirmaislem":
-                    $data = $form->post('usersloginadi', true);
-                    $data = $form->post('usersloginsifre', true);
-                    $data = $form->post('usersloginselect', true);
-                    if ($form->submit()) {
-                        $data = array(
-                            ':usersloginadi' => $form->values['usersloginadi'],
-                            ':usersloginsifre' => $form->values['usersloginsifre'],
-                            ':usersloginselect' => $form->values['usersloginselect']
-                        );
+                    $adminRutbe = Session::get("userRutbe");
+
+                    if ($adminRutbe != 1) {
+                        Session::destroy();
+                        header("Location:" . SITE_URL);
+                    } else {
+
+                        $data = $form->post('usersloginadi', true);
+                        $data = $form->post('usersloginsifre', true);
+                        $data = $form->post('usersloginselect', true);
+                        if ($form->submit()) {
+                            $data = array(
+                                ':usersloginadi' => $form->values['usersloginadi'],
+                                ':usersloginsifre' => $form->values['usersloginsifre'],
+                                ':usersloginselect' => $form->values['usersloginselect']
+                            );
+                        }
+                        $data["UsersLogin"] = $Panel_Model->susersLogin();
+                        $sonuc["usersLogin"] = $data["UsersLogin"];
                     }
-                    $data["UsersLogin"] = $Panel_Model->susersLogin();
-                    $sonuc["usersLogin"] = $data["UsersLogin"];
                     break;
 
                 case "adminFirmaIslemlerKaydet":
 
-                    $uniqueKey = Session::get("userFirmaKod");
-                    $uniqueKey = $uniqueKey . '_AFirma';
+                    $adminRutbe = Session::get("userRutbe");
 
-                    $form->post('firma_adi', true);
-                    $form->post('firma_aciklama', true);
-                    $form->post('ogrenci_chechkbox', true);
-                    $form->post('personel_chechkbox', true);
-                    $form->post('firma_adres', true);
-                    $form->post('firma_telefon', true);
-                    $form->post('firma_email', true);
-                    $form->post('firma_website', true);
-                    $form->post('firma_lokasyon', true);
-                    error_log("datakod" . $form->values['firma_kod']);
-
-                    if ($form->submit()) {
-                        $data = array(
-                            'BSFirmaAdi' => $form->values['firma_adi'],
-                            'BSFirmaAdres' => $form->values['firma_adres'],
-                            'BSFirmaTelefon' => $form->values['firma_telefon'],
-                            'BSFirmaWebsite' => $form->values['firma_website'],
-                            'BSFirmaEmail' => $form->values['firma_email'],
-                            'BSFirmaLokasyon' => $form->values['firma_lokasyon'],
-                            'BSFirmaAciklama' => $form->values['firma_aciklama'],
-                            'BSOgrenciServis' => $form->values['ogrenci_chechkbox'],
-                            'BSPersonelServis' => $form->values['personel_chechkbox'],
-                            'BSHesapAktif' => $form->values['hesap_aktif']
-                        );
-                    }
-
-
-                    //error_log("Firma Id".$data["FirmaListele"][0]["FirmaID"]);
-                    $resultupdate = $Panel_Model->firmaOzelliklerDuzenle($data);
-
-                    //memcache kadetmek için verileri üncellemeden sonra tekrar çekiyoruz.
-                    $data["FirmaOzellikler"] = $Panel_Model->firmaOzellikler();
-
-
-                    $returnModelData = $data['FirmaOzellikler'][0];
-
-                    $a = 0;
-                    foreach ($returnModelData as $key => $value) {
-                        $new_array['Firmasshkey'][$a] = md5(sha1(md5($key)));
-                        $a++;
-                    }
-                    $returnFormdata['FirmaOzellikler'] = $form->newKeys($data['FirmaOzellikler'][0], $new_array['Firmasshkey']);
-
-
-                    if ($resultupdate) {
-                        $resultMemcache = $MemcacheModel->get($uniqueKey);
-
-                        if ($resultMemcache) {
-                            $MemcacheModel->replace($uniqueKey, $returnFormdata['FirmaOzellikler'], false, 10);
-                        } else {
-                            $result = $MemcacheModel->set($uniqueKey, $returnFormdata['FirmaOzellikler'], false, 10);
-                        }
-                        $sonuc["update"] = "Başarıyla güncellenmiştir";
+                    if ($adminRutbe != 1) {
+                        Session::destroy();
+                        header("Location:" . SITE_URL);
                     } else {
-                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+
+                        $uniqueKey = Session::get("userFirmaKod");
+                        $uniqueKey = $uniqueKey . '_AFirma';
+
+                        $form->post('firma_adi', true);
+                        $form->post('firma_aciklama', true);
+                        $form->post('ogrenci_chechkbox', true);
+                        $form->post('personel_chechkbox', true);
+                        $form->post('firma_adres', true);
+                        $form->post('firma_telefon', true);
+                        $form->post('firma_email', true);
+                        $form->post('firma_website', true);
+                        $form->post('firma_lokasyon', true);
+                        error_log("datakod" . $form->values['firma_kod']);
+
+                        if ($form->submit()) {
+                            $data = array(
+                                'BSFirmaAdi' => $form->values['firma_adi'],
+                                'BSFirmaAdres' => $form->values['firma_adres'],
+                                'BSFirmaTelefon' => $form->values['firma_telefon'],
+                                'BSFirmaWebsite' => $form->values['firma_website'],
+                                'BSFirmaEmail' => $form->values['firma_email'],
+                                'BSFirmaLokasyon' => $form->values['firma_lokasyon'],
+                                'BSFirmaAciklama' => $form->values['firma_aciklama'],
+                                'BSOgrenciServis' => $form->values['ogrenci_chechkbox'],
+                                'BSPersonelServis' => $form->values['personel_chechkbox'],
+                                'BSHesapAktif' => $form->values['hesap_aktif']
+                            );
+                        }
+
+
+                        //error_log("Firma Id".$data["FirmaListele"][0]["FirmaID"]);
+                        $resultupdate = $Panel_Model->firmaOzelliklerDuzenle($data);
+
+                        //memcache kadetmek için verileri üncellemeden sonra tekrar çekiyoruz.
+                        $data["FirmaOzellikler"] = $Panel_Model->firmaOzellikler();
+
+
+                        $returnModelData = $data['FirmaOzellikler'][0];
+
+                        $a = 0;
+                        foreach ($returnModelData as $key => $value) {
+                            $new_array['Firmasshkey'][$a] = md5(sha1(md5($key)));
+                            $a++;
+                        }
+                        $returnFormdata['FirmaOzellikler'] = $form->newKeys($data['FirmaOzellikler'][0], $new_array['Firmasshkey']);
+
+
+                        if ($resultupdate) {
+                            $resultMemcache = $MemcacheModel->get($uniqueKey);
+
+                            if ($resultMemcache) {
+                                $MemcacheModel->replace($uniqueKey, $returnFormdata['FirmaOzellikler'], false, 10);
+                            } else {
+                                $result = $MemcacheModel->set($uniqueKey, $returnFormdata['FirmaOzellikler'], false, 10);
+                            }
+                            $sonuc["update"] = "Başarıyla güncellenmiştir";
+                        } else {
+                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                        }
                     }
 
                     break;
@@ -267,7 +283,7 @@ class AdminAjaxSorgu extends Controller {
                     break;
 
                 case "adminBolgeKurumKaydet":
-                    
+
                     $adminRutbe = Session::get("userRutbe");
                     $uniqueKey = Session::get("username");
                     $uniqueKey = $uniqueKey . '_ABolge';

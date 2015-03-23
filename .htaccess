@@ -9,6 +9,32 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-l
 
 RewriteRule ^([0-9a-zA-Z-_/]+)$ index.php?url=$1 [QSA,L]
+
+#Hata Yönlendirmeler
+# Error Pages
+ErrorDocument 400 /SProject
+ErrorDocument 401 /SProject
+ErrorDocument 402 /SProject
+ErrorDocument 403 /SProject
+ErrorDocument 404 /SProject
+ErrorDocument 405 /SProject
+ErrorDocument 406 /SProject
+ErrorDocument 407 /SProject
+ErrorDocument 408 /SProject
+ErrorDocument 409 /SProject
+ErrorDocument 410 /SProject
+ErrorDocument 411 /SProject
+ErrorDocument 412 /SProject
+ErrorDocument 413 /SProject
+ErrorDocument 414 /SProject
+ErrorDocument 500 /SProject
+ErrorDocument 501 /SProject
+ErrorDocument 502 /SProject
+ErrorDocument 503 /SProject
+ErrorDocument 504 /SProject
+ErrorDocument 505 /SProject
+
+
 RewriteCond %{HTTP_REFERER} !^$
 RewriteCond %{HTTP_REFERER} !^http://([-a-z0-9]+\.)?phpr\.org[NC]
 RewriteCond %{QUERY_STRING} base64_encode.*\(.*\) [OR]
