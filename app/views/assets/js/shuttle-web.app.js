@@ -65,8 +65,8 @@ function svControl(dtype, dclass, dislemler) {
     var h = $("." + dtype).parent().height();
     var hh = $(document).find("header").height();
 
-//svadd
-    if (dtype != 'svDetail') {
+//svOpen
+    if (dtype != 'svClose') {
         switch (dislemler) {
             case 'adminBolgeKurumEkle' :
                 var returnCevap = $.AdminIslemler.adminBolgeDetailYeniEkle();
@@ -100,8 +100,8 @@ function svControl(dtype, dclass, dislemler) {
             $("#" + dclass).css("z-index", z);
             $('#' + dclass).toggle(effect, options, duration);
         }
-    }//svDetail
-    else if (dtype != 'svAdd') {
+    }//svClose
+    else if (dtype != 'svOpen') {
         switch (dislemler) {
             case 'adminBolgeKayit' :
                 var returnCevap = $.AdminIslemler.adminBolgeKaydet();

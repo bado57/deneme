@@ -17,7 +17,7 @@
             <?php if (Session::get("userRutbe") != 0) { ?>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right" style="text-align:right;">
                     <div class="form-group">
-                        <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svAdd" data-class="bolge"><i class="fa fa-plus-square"></i> Yeni Bölge</button>
+                        <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svOpen" data-class="bolge"><i class="fa fa-plus-square"></i> Yeni Bölge</button>
                     </div>
                 </div>
             <?php } ?>
@@ -57,10 +57,10 @@
     </section><!-- /.content -->
 </aside><!-- /.right-side -->
 
-<div id="bolge" class="svAdd col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+<div id="bolge" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["BolgeTanımlama"]; ?> <span class="pull-right"><button data-type="svAdd" data-class="bolge"  type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["BolgeTanımlama"]; ?> <span class="pull-right"><button data-type="svOpen" data-class="bolge"  type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
                 <form class="form-vertical col-lg-4 col-md-4 col-sm-12 col-xs-12" method="post">
@@ -73,8 +73,8 @@
                         <textarea name="BolgeAciklama" class="form-control dsb" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <button data-type="svDetail"  data-class="bolge" type="button" data-islemler="adminBolgeCancel" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
-                        <button type="button" data-type="svDetail"  data-islemler="adminBolgeKayit" data-class="bolge" class="svToggle btn btn-success"><?php echo $data["Kaydet"]; ?></button>
+                        <button data-type="svClose"  data-class="bolge" type="button" data-islemler="adminBolgeCancel" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
+                        <button type="button" data-type="svClose"  data-islemler="adminBolgeKayit" data-class="bolge" class="svToggle btn btn-success"><?php echo $data["Kaydet"]; ?></button>
                     </div>
 
                 </form>
@@ -83,10 +83,10 @@
     </div>
 </div>
 
-<div id="kurum" class="svAdd col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+<div id="kurum" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["KurumTanımlama"]; ?> <span class="pull-right"><button data-type="svDetail" data-class="kurum" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["KurumTanımlama"]; ?> <span class="pull-right"><button data-type="svClose" data-class="kurum" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
                 <div class="form-vertical addKurumForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -99,7 +99,7 @@
                         <label for="KurumLokasyon"><?php echo $data["Lokasyon"]; ?></label>
                         <div class="input-group">
                             <span class="input-group-btn">
-                                <button data-type="svAdd" data-class="map" class="btn btn-success svToggle" data-islemler="adminBolgeSingleMap" type="button">
+                                <button data-type="svOpen" data-class="map" class="btn btn-success svToggle" data-islemler="adminBolgeSingleMap" type="button">
                                     <i class="fa fa-map-marker"></i>
                                 </button>
                             </span>
@@ -127,8 +127,8 @@
                         <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <button data-type="svDetail"  data-class="kurum" type="button" data-islemler="adminBolgeKurumVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
-                        <button type="button" class="svToggle btn btn-success" data-type="svDetail"  data-class="kurum" data-islemler="adminBolgeKurumKaydet"><?php echo $data["Kaydet"]; ?></button>
+                        <button data-type="svClose"  data-class="kurum" type="button" data-islemler="adminBolgeKurumVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
+                        <button type="button" class="svToggle btn btn-success" data-type="svClose"  data-class="kurum" data-islemler="adminBolgeKurumKaydet"><?php echo $data["Kaydet"]; ?></button>
                     </div>
                 </div>
                 <div class="form-vertical KurumAdresForm col-lg-4 col-md-4 col-sm-12 col-xs-12" style="display:none;">
@@ -176,10 +176,10 @@
     </div>
 </div>
 
-<div id="bolgeDetay" class="svDetail col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+<div id="bolgeDetay" class="svClose col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["BolgeDetay"]; ?> <span class="pull-right"><button data-type="svDetail" data-class="bolgeDetay" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["BolgeDetay"]; ?> <span class="pull-right"><button data-type="svClose" data-class="bolgeDetay" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -196,16 +196,16 @@
                             <textarea name="BolgeDetailAciklama" class="form-control dsb" rows="3" disabled=""></textarea>
                         </div>
                         <div class="form-group submit-group">
-                            <button data-type="svDetail" type="button" class="btn btn-default vzg" data-Vzgislem="adminBolgeDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
+                            <button data-type="svClose" type="button" class="btn btn-default vzg" data-Vzgislem="adminBolgeDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
                             <button type="button" class="btn btn-success save" data-Saveislem="adminBolgeDetailKaydet"><?php echo $data["Kaydet"]; ?></button>
                         </div>
                         <div class="form-group edit-group">
                             <button id="editForm" type="button" data-Editislem="adminBolgeDetailEdit" class="btn btn-success"><?php echo $data["Duzenle"]; ?></button>
-                            <button id="BolgeDetailDeleteBtn" data-type="svDetail"  data-class="bolgeDetay" type="button" data-islemler="adminBolgeDetailSil" class="btn btn-danger svToggle" ><?php echo $data["Sil"]; ?></button>
+                            <button id="BolgeDetailDeleteBtn" data-type="svClose"  data-class="bolgeDetay" type="button" data-islemler="adminBolgeDetailSil" class="btn btn-danger svToggle" ><?php echo $data["Sil"]; ?></button>
                         </div>
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                        <h4><?php echo $data["Kurumlar"]; ?> <button id="addNew" type="button" class="svToggle btn btn-success btn-sm pull-right addNewButton" data-type="svAdd" data-class="kurum" data-islemler="adminBolgeKurumEkle"><i class="fa fa-plus-square"></i> <?php echo $data["YeniEkle"]; ?></button> <button class="btn btn-success btn-sm pull-right seeAllButton"><?php echo $data["TumunuGor"]; ?></button></h4>
+                        <h4><?php echo $data["Kurumlar"]; ?> <button id="addNew" type="button" class="svToggle btn btn-success btn-sm pull-right addNewButton" data-type="svOpen" data-class="kurum" data-islemler="adminBolgeKurumEkle"><i class="fa fa-plus-square"></i> <?php echo $data["YeniEkle"]; ?></button> <button class="btn btn-success btn-sm pull-right seeAllButton"><?php echo $data["TumunuGor"]; ?></button></h4>
                         <hr/>
                         <ul class="list-group" id="adminBolgeKurumDetail">
                         </ul>
@@ -217,8 +217,8 @@
 </div>
 
 
-<div id="map" class="svAdd col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
-    <h3><b id="multiMapBaslik">&nbsp;&nbsp;<?php echo $data["KurumHarita"]; ?> </b><span class="pull-right"><button data-type="svDetail" data-class="map" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+<div id="map" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+    <h3><b id="multiMapBaslik">&nbsp;&nbsp;<?php echo $data["KurumHarita"]; ?> </b><span class="pull-right"><button data-type="svClose" data-class="map" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
     <hr/>
     <div class="row">
         <div class="row" id="getPartialView">

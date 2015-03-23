@@ -338,7 +338,7 @@ $.AdminIslemler = {
             var bolgeKurumName = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').text();
             MultipleMapArray[countK] = Array(bolgeKurumName, LocationBolme[0], LocationBolme[1]);
         }
-        $("#multiMapBaslik").text(bolge_adi);
+        $("#kurumHaritaName").text(bolge_adi);
         return true;
     },
     adminBolgeKurumTablo:function(){}
