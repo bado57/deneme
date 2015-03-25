@@ -8,6 +8,7 @@ class tr {
 
     public function multilanguage() {
         $trdil = array(
+            "LoginSelectlanguage" => "Dil Seçiniz",
             "LoginTitle" => "Giriş",
             "Loginkadi" => "Kullanıcı Adı",
             "Loginsifre" => "Şifre",

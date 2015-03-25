@@ -31,11 +31,13 @@ class UsersLogin extends Controller {
 
             $form->post('usersloginkadi', true);
             $form->post('usersloginsifre', true);
-            $form->post('loginselected', true);
+            //$form->post('loginselected', true);
 
             $loginKadi = $form->values['usersloginkadi'];
+            
 
             $loginfirmaID = $form->substrEnd($loginKadi, 6);
+            
             //return database results
             $UserSelectDb = $usersselect_model->kullaniciSelectDb($loginfirmaID);
 
@@ -45,9 +47,11 @@ class UsersLogin extends Controller {
             $SelectdbPassword = $UserSelectDb[0]['rootFirmaDbSifre'];
             $SelectdbFirmaKod = $UserSelectDb[0]['rootfirmaKodu'];
 
-            $loginTip = $form->values['loginselected'];
+            $loginTip = 1;
             $loginSifre = $form->values['usersloginsifre'];
             $loginDeger = "bs";
+            
+            error_log("Login Sifre".$loginSifre);
 
             $sifreilkeleman = $loginDeger . $loginKadi . $loginTip;
             $sifreilkeleman1 = $form->md5($sifreilkeleman);
@@ -117,6 +121,7 @@ class UsersLogin extends Controller {
                 $form = $this->load->multilanguage($lang);
                 $deger = $form->multilanguage();
             } else {
+                error_log("naber ya".Session::get("dil"));
                 $form = $this->load->multilanguage(Session::get("dil"));
                 $deger = $form->multilanguage();
             }

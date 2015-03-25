@@ -8,6 +8,7 @@ class en {
 
     public function multilanguage() {
         $endil = array(
+            "LoginSelectlanguage" => "Select language",
             "LoginTitle" => "Login",
             "Loginkadi" => "Username",
             "Loginsifre" => "Password",
@@ -16,7 +17,7 @@ class en {
             "LoginSelectVeli" => "Guardian",
             "LoginSelectOgrenci" => "Student",
             "LoginSelectPersonel" => "Employee",
-            "LoginButton" => "Enterance",
+            "LoginButton" => "Login",
             "Merhaba" => "Hello",
             "Baslik" => "Admin",
             "TitleSofor" => "Driver",
@@ -30,8 +31,8 @@ class en {
             "AracIslem" => "Vehicle Operations",
             "KullaniciIslem" => "User Operations",
             "TurIslem" => "Tour Operations",
-            "BolgeIslem" => "Bölge İşlemleri",
-            "KurumIslem" => "Kurum İşlemleri",
+            "BolgeIslem" => "Region Operations",
+            "KurumIslem" => "Institution İşlemleri",
             "BakiyeIslem" => "Balance Operations",
             "LokasyonSorgu" => "Location Query",
             "Duyuru" => "Announcements",

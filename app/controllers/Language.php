@@ -11,13 +11,27 @@ class Language extends Controller {
     }
 
     function selectlanguage() {
-        Session::init();
-        $dil = strip_tags($_GET["language"]);
-        if ($dil == "tr" || $dil == "en") {
-            Session::set("dil", $dil);
-            header("Location:" . SITE_URL_HOME . "/userslogin");
+        if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest") {
+            $sonuc = array();
+            
+            $form = $this->load->otherClasses('Form');
+            Session::init();
+
+            $form->post("lang", true);
+            $dil = $form->values['lang'];
+
+            if ($dil == "tr" || $dil == "en" ||$dil == "fr" || $dil == "ar" || $dil == "de" || $dil =="zh") {
+                Session::set("dil", $dil);
+            } else {
+                //eğer dil yoksa
+                $dil='en';
+                Session::set("dil", $dil);
+            }
+            $sonuc["lang"] =$dil;
+
+            echo json_encode($sonuc);
         } else {
-            header("Location:" . SITE_URL_HOME . "/userslogin");
+            die("Hacklemeye mi Çalışıyorsun pezevenk?");
         }
     }
 

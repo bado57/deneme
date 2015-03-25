@@ -17,7 +17,7 @@
             <?php if (Session::get("userRutbe") != 0) { ?>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right" style="text-align:right;">
                     <div class="form-group">
-                        <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svOpen" data-class="bolge"><i class="fa fa-plus-square"></i> Yeni Bölge</button>
+                        <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svOpen" data-class="bolge"><i class="fa fa-plus-square"></i> <?php echo $data['BolgeYeni'];?></button>
                     </div>
                 </div>
             <?php } ?>
