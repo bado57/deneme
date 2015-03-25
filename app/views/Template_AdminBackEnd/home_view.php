@@ -1,4 +1,4 @@
-<aside class="right-side">
+<aside class="right-side hiddenOnSv">
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>

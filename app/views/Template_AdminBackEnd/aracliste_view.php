@@ -10,9 +10,9 @@
 
 </script>
 <!-- Right side column. Contains the navbar and content of the page -->
-<aside class="right-side">
+<aside class="right-side hiddenOnSv">
     <!-- Content Header (Page header) -->
-    <form class="form-vertical" method="post">
+    <div class="form-vertical">
         <section class="content-header">
             <div class="row">
                 <div class="col-md-12">
@@ -128,7 +128,7 @@
                 </table>
             </div>
         </section><!-- /.content -->
-    </form>
+    </div>
 </aside><!-- /.right-side -->
 </div><!-- ./wrapper -->
 

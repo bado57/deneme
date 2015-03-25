@@ -98,7 +98,7 @@ class tr {
             "YeniEkle" => "Yeni Ekle",
             "TumunuGor" => "Tümünü Gör",
             "AdresDetay" => "Adres Detayları",
-            "KurumHarita" => "Kurum Harita"
+            "LokasyonTanımlama" => "Lokasyon Tanımlama"
             
         );
         return $trdil;

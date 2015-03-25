@@ -60,7 +60,7 @@
 <div id="bolge" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["BolgeTanımlama"]; ?> <span class="pull-right"><button data-type="svOpen" data-class="bolge"  type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["BolgeTanımlama"]; ?> <span class="pull-right"><button data-type="svClose" data-class="bolge"  type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
                 <form class="form-vertical col-lg-4 col-md-4 col-sm-12 col-xs-12" method="post">
@@ -103,7 +103,7 @@
                                     <i class="fa fa-map-marker"></i>
                                 </button>
                             </span>
-                            <input type="text" class="form-control" id="KurumLokasyon" name="KurumLokasyon" value="" disabled>
+                            <input type="text" class="locationInput form-control" id="KurumLokasyon" name="KurumLokasyon" value="" disabled>
                         </div>
                     </div>
                     <div class="form-group">
@@ -131,7 +131,7 @@
                         <button type="button" class="svToggle btn btn-success" data-type="svClose"  data-class="kurum" data-islemler="adminBolgeKurumKaydet"><?php echo $data["Kaydet"]; ?></button>
                     </div>
                 </div>
-                <div class="form-vertical KurumAdresForm col-lg-4 col-md-4 col-sm-12 col-xs-12" style="display:none;">
+                <div class="form-vertical KurumAdresForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <div class="form-group">
                         <label for="KurumUlke"><?php echo $data["Ulke"]; ?></label>
                         <input type="text" class="form-control" id="KurumUlke" name="country" value="" disabled>
@@ -165,12 +165,6 @@
                         <input type="text" class="form-control" id="street_number" name="street_number" value="" disabled>
                     </div>
                 </div>
-                <div class="mapDiv col-lg-8 col-md-8 col-sm-12 col-xs-12" style="display:none;">
-                    <div class="form-group">
-                        <button id="setLocation" type="button" class="btn btn-success"><?php echo $data["KonumuKaydet"]; ?></button>
-                        <button id="ignoreLocation" type="button" class="btn btn-default" onclick="$.AdminIslemler.adminBolgeKurumMapVazgec()"><?php echo $data["Vazgec"]; ?></button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -184,7 +178,7 @@
             <div class="row" id="getPartialView">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="generalInfo col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                        <h4><?php echo $data["AdminFirmaGenelBilgi"]; ?></h4>
+                        <h4><?php echo $data["GenelBilgi"]; ?></h4>
                         <hr/>
                         <input id="adminBolgeDetailID" name="adminBolgeDetailID" type="hidden" value="" />
                         <div class="form-group">
@@ -218,13 +212,14 @@
 
 
 <div id="map" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
-    <h3><b id="multiMapBaslik">&nbsp;&nbsp;<?php echo $data["KurumHarita"]; ?> </b><span class="pull-right"><button data-type="svClose" data-class="map" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+    <div id="mapHeader">
+        <h3><b id="singleMapBaslik"><?php echo $data["LokasyonTanımlama"]; ?> </b><b id="multiMapBaslik"></b>
+            <span class="pull-right"><button data-type="svClose" data-class="map" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span>
+            <span class="pull-right"><button id="saveMap" data-islemler="adminKurumHaritaKaydet" data-type="svClose" data-class="map" type="button" class="svToggle btn btn-success"><i class="fa fa-map-marker"></i> Konumu Kaydet</button></span>
+        </h3>
     <hr/>
-    <div class="row">
-        <div class="row" id="getPartialView">
-             <div id="multiple_map" style="width: 100%; height: 400px;"></div>
-        </div>
     </div>
+    <div id="multiple_map" style="width:100% !important;"></div>
 </div><!-- ./wrapper -->
 
 

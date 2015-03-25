@@ -13,9 +13,7 @@ $(document).ready(function () {
         checkIt();
         var edtislemler = $(this).attr("data-Editislem");
         editControl(edtislemler);
-
     });
-
     $(document).on("click", ".vzg", function (e) {
         e.preventDefault();
         $(document).find(".dsb").prop("disabled", true);
@@ -25,14 +23,11 @@ $(document).ready(function () {
         var vzgislemler = $(this).attr("data-Vzgislem");
         vzgControl(vzgislemler);
     });
-
     $(document).on("click", ".save", function (e) {
         e.preventDefault();
-
         var saveislemler = $(this).attr("data-Saveislem");
         saveControl(saveislemler);
     });
-
     // End Form Enable / Dissable Kontrolleri
 
     // Sol Menu Navigasyon Kontrolü   
@@ -42,8 +37,7 @@ $(document).ready(function () {
     $("#" + activeMenu).find("#" + activeLink).addClass("activeli");
     // End Sol Menu Navigasyon Kontrolü
 
-
-    //subview kontrolü.Class Göre
+    //subview kontrolü. Class'a Göre
     $(document).on("click", ".svToggle", function (e) {
         e.preventDefault();
         if ($(this).attr("data-index") == 'index') {
@@ -62,46 +56,58 @@ function svControl(dtype, dclass, dislemler) {
     var effect = 'slide';
     var options = {direction: 'right'};
     var duration = 500;
-    var h = $("." + dtype).parent().height();
+    var h = $(window).height();
     var hh = $(document).find("header").height();
+    var th = h - hh;
+    var isMap = false;
+    var isSingle = true;
 
-//svOpen
+//Subview açılıyor
     if (dtype != 'svClose') {
         switch (dislemler) {
             case 'adminBolgeKurumEkle' :
                 var returnCevap = $.AdminIslemler.adminBolgeDetailYeniEkle();
                 break;
             case 'adminBolgeMultiMap' :
+                isMap = true;
+                isSingle = false;
+                
                 var returnCevap = $.AdminIslemler.adminBolgeMultiMapping();
-                $("#multiMapBaslik").show();
-                multipleMapping(MultipleMapArray, MultipleMapindex);
-                google.maps.event.addDomListener(window, 'load', multipleMapping);
                 break;
             case 'adminBolgeSingleMap' :
-                //var returnCevap = $.AdminIslemler.adminBolgeKurumOpenMap();
-                var returnCevap=true;
-                $("#multiMapBaslik").hide();
-                initialize();
-                google.maps.event.addDomListener(window, 'load', initialize);
+                isMap = true;
+                var returnCevap = true;
                 break;
-
             default :
-                $("#" + dclass).height(h);
-                $("#" + dclass).css("top", hh);
-                z++;
+                $("#" + dclass).height(th);
                 $("#" + dclass).css("z-index", z);
                 $('#' + dclass).toggle(effect, options, duration);
+                z++;
                 break;
         }
         if (returnCevap == true) {
-            $("#" + dclass).height(h);
-            $("#" + dclass).css("top", hh);
-            z++;
+            $("#" + dclass).height(th);
             $("#" + dclass).css("z-index", z);
             $('#' + dclass).toggle(effect, options, duration);
+            z++;
+            if (isMap == true) {
+                var mh = $("#mapHeader").height();
+                var sh = th - mh;
+                $("#multiple_map").height(sh);
+                if (isSingle == true) {
+                    $("#saveMap").css("display", "block");
+                    initialize();
+                    google.maps.event.addDomListener(window, 'load', initialize);
+                } else {
+                    $("#saveMap").css("display", "none");
+                    multipleMapping(MultipleMapArray, MultipleMapindex);
+                    google.maps.event.addDomListener(window, 'load', multipleMapping);
+                }
+            }
         }
-    }//svClose
+    }//Subview kapanıyor
     else if (dtype != 'svOpen') {
+        console.log("kapanıyor");
         switch (dislemler) {
             case 'adminBolgeKayit' :
                 var returnCevap = $.AdminIslemler.adminBolgeKaydet();
@@ -118,26 +124,30 @@ function svControl(dtype, dclass, dislemler) {
             case 'adminBolgeKurumKaydet' :
                 var returnCevap = $.AdminIslemler.adminBolgeKurumKaydet();
                 break;
-
+            case 'adminKurumHaritaKaydet' :
+                var returnCevap = saveMap();
+                break;
             default :
-                $("#" + dclass).height(h);
-                $("#" + dclass).css("top", hh);
-                z++;
+                $("#" + dclass).height(th);
                 $("#" + dclass).css("z-index", z);
                 $('#' + dclass).toggle(effect, options, duration);
+                z--;
                 break;
         }
         if (returnCevap == true) {
-            $("#" + dclass).height(h);
-            $("#" + dclass).css("top", hh);
-            z++;
+            $("#" + dclass).height(th);
             $("#" + dclass).css("z-index", z);
             $('#' + dclass).toggle(effect, options, duration);
+            z--;
         }
+    }
+    if (z > 1) {
+        $(".wrapper").find("aside").css("display", "none");
+    } else {
+        $(".wrapper").find("aside").css("display", "block");
     }
 }
 // End Subview Kontrolü
-
 
 //Edit Kontrol
 function editControl(edtislemler) {
@@ -158,7 +168,6 @@ function vzgControl(vzgislemler) {
         case 'adminBolgeDetailVazgec' :
             $.AdminIslemler.adminBolgeDetailVazgec();
             break;
-
         default :
             break;
     }
@@ -178,7 +187,6 @@ function saveControl(saveislemler) {
 }
 //End Kaydet Kontrol 
 
-
 // CheckBox Kontrolü
 function checkIt() {
     $("input[type='checkbox'], input[type='radio']").iCheck({
@@ -188,12 +196,14 @@ function checkIt() {
 }
 // End CheckBox Kontrolü    
 
+// Form disable işlemleri
 function disabledForm() {
     $(document).find(".dsb").prop("disabled", true);
     $(document).find(".submit-group").css("display", "none");
     $(document).find(".edit-group").fadeIn();
     checkIt();
 }
+// End form disable işlemleri
 
 // Lokasyon Seçme İşlemleri
 var map;
@@ -201,25 +211,21 @@ var markers = [];
 var ttl = "";
 var lastLocation;
 var lastAdress = "";
-$(document).ready(function () {
-    $(document).on("click", "#openMap", function () {
-        $(".addKurumForm").css("display", "none");
-        $(".KurumAdresForm").fadeIn();
-        $(".mapDiv").fadeIn();
-        initialize();
-        google.maps.event.addDomListener(window, 'load', initialize);
-    });
-    $(document).on("click", "#setLocation", function () {
-        $(".addKurumForm").fadeIn();
-        $(".KurumAdresForm").fadeIn();
-        $(".mapDiv").css("display", "none");
-    });
-    $(document).on("click", "#ignoreLocation", function () {
-        $(".addKurumForm").fadeIn();
-        $(".KurumAdresForm").fadeIn();
-        $(".mapDiv").css("display", "none");
-    });
-});
+var incomeLocation;
+var mapEvent;
+
+
+function saveMap() {
+    var say = incomeLocation.results[0].address_components.length;
+    for (var i = 0, max = say; i < max; i++) {
+        var key = incomeLocation.results[0].address_components[i].types[0];
+        var value = incomeLocation.results[0].address_components[i].long_name;
+        $('input[name="' + key + '"]').val(value);
+    }
+    $('input[name="KurumLokasyon"]').val(mapEvent.latLng.k + "," + mapEvent.latLng.D);
+    lastLocation = new google.maps.LatLng(mapEvent.latLng.k, mapEvent.latLng.D);
+    return true;
+}
 
 function initialize() {
     if (navigator.geolocation) {
@@ -227,12 +233,11 @@ function initialize() {
         var mapOptions = {
             zoom: 16
         };
-
         var map = new google.maps.Map(document.getElementById('multiple_map'),
                 mapOptions);
 
         //son eklenen locationu haritada görme
-        var posValue = $('input[name="KurumLokasyon"]').val();
+        var posValue = $('input.locationInput').val();
         var posSplitValue = posValue.split(",");
         if (posValue != '') {
             var pos = new google.maps.LatLng(posSplitValue[0],
@@ -246,15 +251,12 @@ function initialize() {
         navigator.geolocation.getCurrentPosition(function (position) {
             var pos = new google.maps.LatLng(position.coords.latitude,
                     position.coords.longitude);
-
             var infowindow = new google.maps.InfoWindow({
                 map: map,
                 position: pos,
                 content: 'Sizin Konumunuz'
             });
-
             map.setCenter(pos);
-
         }, function () {
             handleNoGeolocation(true);
         });
@@ -263,6 +265,7 @@ function initialize() {
             position: lastLocation,
             map: map
         });
+        
         markers.push(marker);
 
         google.maps.event.addListener(marker, 'click', function () {
@@ -272,11 +275,11 @@ function initialize() {
                 content: lastAdress
             });
         });
+        
         google.maps.event.addListener(map, 'click', function (event) {
             if (lastLocation != null) {
                 setAllMap(null);
             }
-
             $.ajax({
                 type: "get",
                 url: "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + event.latLng.k + "," + event.latLng.D + "&sensor=true",
@@ -285,14 +288,8 @@ function initialize() {
                 success: function (cevap) {
                     ttl = cevap.results[0].formatted_address;
                     placeMarker(event.latLng);
-                    var say = cevap.results[0].address_components.length;
-                    for (var i = 0, max = say; i < max; i++) {
-                        var key = cevap.results[0].address_components[i].types[0];
-                        var value = cevap.results[0].address_components[i].long_name;
-                        $('input[name="' + key + '"]').val(value);
-                    }
-                    $('input[name="KurumLokasyon"]').val(event.latLng.k + "," + event.latLng.D);
-                    lastLocation = new google.maps.LatLng(event.latLng.k, event.latLng.D);
+                    incomeLocation = cevap;
+                    mapEvent = event;
                     lastAdress = ttl;
                 }
             });
@@ -318,7 +315,6 @@ function initialize() {
             });
 
             infowindow.open(map, marker);
-
             markers.push(marker);
 
         }
@@ -332,10 +328,10 @@ function initialize() {
 //çoklu mapping işlemleri
 
 function multipleMapping(gelen, index) {
+    
     if (navigator.geolocation) {
+        
         var iconURLPrefix = 'http://maps.google.com/mapfiles/ms/icons/';
-        console.log("gelen" + gelen);
-        console.log("index" + MultipleMapindex);
         var icons = [];
         for (var gelenicon = 0; gelenicon < gelen.length; gelenicon++) {
             if (gelenicon != index) {
@@ -344,22 +340,15 @@ function multipleMapping(gelen, index) {
                 icons.push(iconURLPrefix + 'green-dot.png')
             }
         }
-
+        var mapOptions = {
+            zoom: 16
+        };
         var iconsLength = icons.length;
-
-        var map = new google.maps.Map(document.getElementById('multiple_map'), {
-            zoom: 8,
-            center: new google.maps.LatLng(gelen[index][1], gelen[index][2]),
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            mapTypeControl: true,
-            streetViewControl: true,
-            panControl: true,
-            draggable: true,
-            zoomControlOptions: {
-                position: google.maps.ControlPosition.RIGHT_BOTTOM
-            }
-        });
-
+        var newPos = new google.maps.LatLng(gelen[index][1],
+                    gelen[index][2]);
+        var map = new google.maps.Map(document.getElementById('multiple_map'),
+            mapOptions);
+            
         var infowindow = new google.maps.InfoWindow({
             maxWidth: 160
         });
@@ -389,8 +378,11 @@ function multipleMapping(gelen, index) {
                 iconCounter = 0;
             }
         }
+        
+        map.setCenter(newPos);
 
-
+        //Tüm lokasyonları haritaya sığdırma
+        /*
         function autoCenter() {
             var bounds = new google.maps.LatLngBounds();
             for (var i = 0; i < markers.length; i++) {
@@ -399,6 +391,7 @@ function multipleMapping(gelen, index) {
             map.fitBounds(bounds);
         }
         autoCenter();
+        */
 
     } else {
         document.getElementById('google_canvas').innerHTML = 'Konumunuz bulunmadı.';

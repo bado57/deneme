@@ -8,9 +8,9 @@ form textarea{resize:vertical !important;}
 
 .activeli a{color:green !important;}
 
-.svOpen, .svClose, .svEdit{
+.svOpen, .svClose{
     position:absolute;
-    top:50px;
+    bottom:0px;
     background-color: white;
     z-index: 1000;
     display:none;
@@ -19,3 +19,13 @@ form textarea{resize:vertical !important;}
 .addNewButton{margin-left: 8px;}
 
 .generalInfo{margin-bottom: 30px;}
+
+#mapHeader{
+    position:relative;
+    display:inline-block;
+    float:left;
+    height: auto;
+    width: 100%;
+}
+
+#saveMap{margin-right: 10px;}
