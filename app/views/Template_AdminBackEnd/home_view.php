@@ -41,7 +41,7 @@
                                     </p>
                                 </div>
                                 <div class="icon">
-                                    <i class="fa fa-users"></i>
+                                    <i class="fa fa-th"></i>
                                 </div>
                             </a>
                         </div>
@@ -58,7 +58,7 @@
                                     </p>
                                 </div>
                                 <div class="icon">
-                                    <i class="fa fa-users"></i>
+                                    <i class="fa fa-building-o"></i>
                                 </div>
                             </a>
                         </div>
