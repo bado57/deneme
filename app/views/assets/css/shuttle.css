@@ -29,3 +29,5 @@ form textarea{resize:vertical !important;}
 }
 
 #saveMap{margin-right: 10px;}
+
+label input[type="search"]{width: auto !important;}

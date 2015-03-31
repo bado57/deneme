@@ -3,39 +3,40 @@
 
     <head>
         <meta charset="UTF-8">
-    <title><?php echo $data["Baslik"]; ?>/Shuttle</title>
+    <title><?php echo $data["Baslik"]; ?> | Shuttle</title>
     <link rel="shortcut icon" href="<?php echo SITE_PLUGINADMIN_IMG; ?>/favicon.png">
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-        <!-- bootstrap 3.0.2 -->
+        <!-- Bootstrap 3.0.2 -->
         <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <!-- Google Font -->
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-            <!-- font Awesome -->
+            <!-- Font Awesome -->
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/font-awesome.min.css" rel="stylesheet" type="text/css" />      
-            <!-- bootstrap wysihtml5 - text editor -->
+            <!-- Bootstrap wysihtml5 - text editor -->
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" />
             <!-- Theme style -->
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/AdminLTE.css" rel="stylesheet" type="text/css" />
+            <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/shuttle.css" rel="stylesheet" type="text/css" />
 
             <!-- jQuery 2.0.2 -->
-            <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+            <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery.min.js"></script>
             
             <!-- jQuery UI 1.10.3 -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
             <!-- Bootstrap -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/bootstrap.min.js" type="text/javascript"></script>
+            <!-- Datatables & Bootstrap -->
+            <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery.dataTables.min.js"></script>
+            <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/dataTables.bootstrap.js"></script>
             
-            <script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
-            <script src="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
-            <link href="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
-            <!--Ajax Query -->
+            <!-- Ajax Query -->
             <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminajaxquery.js" type="text/javascript"></script> 
 
             <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
             <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
             <!--[if lt IE 9]>
-              <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+              <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/html5shiv.js"></script>
               <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
             <![endif]-->
             </head>
