@@ -5,10 +5,6 @@
                         SHUTTLE
                         <small><?php echo $data["KontrolPanel"];?></small>
                     </h1>
-                    <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i><?php echo $data["Anasayfa"];?></a></li>
-                        <li class="active"><?php echo $data["Panel"];?></li>
-                    </ol>
                 </section>
 
                 <!-- Main content -->

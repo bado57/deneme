@@ -13,16 +13,6 @@
                     <p><?php echo Session::get("kullaniciad"); ?>&nbsp;<?php echo Session::get("kullanicisoyad"); ?></p>
                 </div>
             </div>
-            <!-- search form -->
-            <form action="#" method="get" class="sidebar-form">
-                <div class="input-group">
-                    <input type="text" name="q" class="form-control" placeholder="<?php echo $data["Search"]; ?>"/>
-                    <span class="input-group-btn">
-                        <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-                    </span>
-                </div>
-            </form>
-            <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
                 <li class="active">
@@ -30,15 +20,11 @@
                         <i class="fa fa-home"></i> <span><?php echo $data["Anasayfa"]; ?></span>
                     </a>
                 </li>
-                <li class="treeview" id="menu_firma">
-                    <a href="#">
+                <li id="menu_firma">
+                    <a href="<?php echo SITE_URL; ?>/adminweb/firmislem">
                         <i class="fa fa-building"></i>
                         <span><?php echo $data["FirmaIslem"]; ?></span>
-                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
-                    <ul class="treeview-menu">
-                        <li id="link_firmislem"><a href="<?php echo SITE_URL; ?>/adminweb/firmislem"><i class="fa fa-angle-right"></i><?php echo $data["FirmaBilgi"]; ?></a></li>
-                    </ul>
                 </li>
 
                 <li class="treeview" id="menu_bolge">
