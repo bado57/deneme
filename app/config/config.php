@@ -1,4 +1,5 @@
 <?php
+echo "selam";
 /*
  * Config kısmı genel sabitleri tanımlaya yaramaktadır.Buradan tanımladığımız define ları framework dosyalarımızın
  * istenilen her yerinden ulaşabiliriz.Bu kısma aşağıdaki gibi bir tanımalam yeterli gelecektir.
