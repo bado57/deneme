@@ -41,7 +41,8 @@ $(document).ready(function () {
     $(document).on("click", ".svToggle", function (e) {
         e.preventDefault();
         if ($(this).attr("data-index") == 'index') {
-            MultipleMapindex = $(this).parent().index();
+            MultipleMapindex = $(this).parent().parent().index();
+            console.log("Index"+MultipleMapindex);
         }
         var dtype = $(this).attr("data-type");
         var dclass = $(this).attr("data-class");
