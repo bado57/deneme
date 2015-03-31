@@ -14,6 +14,64 @@ $.ajaxSetup({
     }
 });
 
+$(document).ready(function () {
+
+    $('#adminBolgeTable').dataTable({
+        "paging": true,
+        "ordering": true,
+        "info": true
+    });
+    KurumTable = $('#adminBolgeKurumTable').dataTable({
+        "paging": true,
+        "ordering": true,
+        "info": true
+    });
+
+    $(document).on('click', 'tbody#adminBolgeRow > tr > td > a', function (e) {
+        var i = $(this).find("i")
+        i.removeClass("fa-search");
+        i.addClass("fa-spinner fa-spin");
+        var adminbolgeRowid = $(this).attr('value');
+        $('ul#adminBolgeKurumDetail > li').remove();
+        $.ajax({
+            data: {"adminbolgeRowid": adminbolgeRowid, "tip": "adminBolgeDetail"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    alert(cevap.hata);
+                } else {
+                    $("input[name=BolgeDetailAdi]").val(cevap.adminBolgeDetail['5dff8e4f44d1afe5716832b74770e3fe']);
+                    $("textarea[name=BolgeDetailAciklama]").val(cevap.adminBolgeDetail['5d7991851fff325b2e913c1093f8c7bb']);
+                    $("input[name=adminBolgeDetailID]").val(cevap.adminBolgeDetail['95d1cff7e918f5edec2758321aeca910']);
+
+                    if (cevap.adminBolgeKurumDetail == null) {
+                        $("#BolgeDetailDeleteBtn").show();
+                    } else {
+                        var bolgeKurumSayi = cevap.adminBolgeKurumDetail.length;
+                        if (bolgeKurumSayi != 0) {
+                            $("#BolgeDetailDeleteBtn").hide();
+                        } else {
+                            $("#BolgeDetailDeleteBtn").show();
+                        }
+                        $("ul#adminBolgeKurumDetail").find("li").remove();
+                        for (var kurum = 0; kurum < bolgeKurumSayi; kurum++) {
+                            /*
+                             $("ul#adminBolgeKurumDetail").append("<li class='list-group-item'>"
+                             + "<a class='svToggle' data-type='svOpen' data-islemler='adminBolgeMultiMap' data-class='map' data-index='index' data-value=" + cevap.adminBolgeKurumDetail[kurum][2] + " data-islemler='adminBolgeMultiMap' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminBolgeKurumDetail[kurum][1] + "'>"
+                             + "<i class='fa fa-map-marker'></i>    " + cevap.adminBolgeKurumDetail[kurum][0] + "</a><i></i></li>");*/
+                            var addRow = "<tr><td>"
+                                    + "<a class='svToggle' data-type='svOpen' data-islemler='adminBolgeMultiMap' data-class='map' data-index='index' data-value=" + cevap.adminBolgeKurumDetail[kurum][2] + " data-islemler='adminBolgeMultiMap' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminBolgeKurumDetail[kurum][1] + "'>"
+                                    + "<i class='fa fa-map-marker'></i>    " + cevap.adminBolgeKurumDetail[kurum][0] + "</a><i></i></td></tr>";
+                            KurumTable.DataTable().row.add($(addRow)).draw();
+                        }
+                    }
+                    svControl('svAdd', 'bolgeDetay', '');
+                    i.removeClass("fa-spinner fa-spin");
+                    i.addClass("fa-search");
+                }
+            }
+        });
+    });
+});
 
 var AdminVazgec = [];
 var AdminBolgeDetailVazgec = [];
@@ -309,9 +367,14 @@ $.AdminIslemler = {
                                 $('tbody#adminBolgeRow > tr:eq(' + t + ') > td:eq(1)').text(bolgekurumsayac);
                             }
                         }
-                        $("ul#adminBolgeKurumDetail").prepend("<li class='list-group-item' style='background-color:#F2F2F2'>"
+                        /*
+                         $("ul#adminBolgeKurumDetail").prepend("<li class='list-group-item' style='background-color:#F2F2F2'>"
+                         + "<a class='svToggle' data-type='svOpen' data-islemler='adminBolgeMultiMap' data-class='map' data-index='index' role='button' data-toggle='tooltip'data-value=" + cevap.newBolgeKurumID + " data-placement='top' title='' value='" + AdminBolgeDetailNewKurum[1] + "'>"
+                         + "<i class='fa fa-map-marker'></i>    " + AdminBolgeDetailNewKurum[0] + "</a><i></i></li>");*/
+                        var addRow = "<tr style='background-color:#F2F2F2'><td>"
                                 + "<a class='svToggle' data-type='svOpen' data-islemler='adminBolgeMultiMap' data-class='map' data-index='index' role='button' data-toggle='tooltip'data-value=" + cevap.newBolgeKurumID + " data-placement='top' title='' value='" + AdminBolgeDetailNewKurum[1] + "'>"
-                                + "<i class='fa fa-map-marker'></i>    " + AdminBolgeDetailNewKurum[0] + "</a><i></i></li>");
+                                + "<i class='fa fa-map-marker'></i>    " + AdminBolgeDetailNewKurum[0] + "</a><i></i></td></tr>";
+                        KurumTable.DataTable().row.add($(addRow)).draw();
                         AdminBolgeDetailNewKurum = [];
                     }
                 }
@@ -328,14 +391,17 @@ $.AdminIslemler = {
         //Tıklanılan değer indexi
         //var index = $(this).parent().index();
 
-        var count = $('ul#adminBolgeKurumDetail > li').length;
+        //var count = $('ul#adminBolgeKurumDetail > li').length;
+
+        var count = $('table#adminBolgeKurumTable > tbody > tr').length;
 
         var MapValue = $(this).attr('value');
 
         for (var countK = 0; countK < count; countK++) {
-            var bolgeKurumlarMap = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').attr('value');
+            //var bolgeKurumlarMap = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').attr('value');
+            var bolgeKurumlarMap = $('table#adminBolgeKurumTable > tbody > tr:eq(' + countK + ') > td > a').attr('value');
             var LocationBolme = bolgeKurumlarMap.split(",");
-            var bolgeKurumName = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').text();
+            var bolgeKurumName = $('table#adminBolgeKurumTable > tbody > tr:eq(' + countK + ') > td > a').text();
             MultipleMapArray[countK] = Array(bolgeKurumName, LocationBolme[0], LocationBolme[1]);
         }
         $("#singleMapBaslik").text(bolge_adi);
@@ -345,45 +411,7 @@ $.AdminIslemler = {
     }
 }
 
-$(document).on('click', 'tbody#adminBolgeRow > tr > td > a', function (e) {
-    var i = $(this).find("i")
-    i.removeClass("fa-search");
-    i.addClass("fa-spinner fa-spin");
-    var adminbolgeRowid = $(this).attr('value');
-    $('ul#adminBolgeKurumDetail > li').remove();
-    $.ajax({
-        data: {"adminbolgeRowid": adminbolgeRowid, "tip": "adminBolgeDetail"},
-        success: function (cevap) {
-            if (cevap.hata) {
-                alert(cevap.hata);
-            } else {
-                $("input[name=BolgeDetailAdi]").val(cevap.adminBolgeDetail['5dff8e4f44d1afe5716832b74770e3fe']);
-                $("textarea[name=BolgeDetailAciklama]").val(cevap.adminBolgeDetail['5d7991851fff325b2e913c1093f8c7bb']);
-                $("input[name=adminBolgeDetailID]").val(cevap.adminBolgeDetail['95d1cff7e918f5edec2758321aeca910']);
 
-                if (cevap.adminBolgeKurumDetail == null) {
-                    $("#BolgeDetailDeleteBtn").show();
-                } else {
-                    var bolgeKurumSayi = cevap.adminBolgeKurumDetail.length;
-                    if (bolgeKurumSayi != 0) {
-                        $("#BolgeDetailDeleteBtn").hide();
-                    } else {
-                        $("#BolgeDetailDeleteBtn").show();
-                    }
-                    $("ul#adminBolgeKurumDetail").find("li").remove();
-                    for (var kurum = 0; kurum < bolgeKurumSayi; kurum++) {
-                        $("ul#adminBolgeKurumDetail").append("<li class='list-group-item'>"
-                                + "<a class='svToggle' data-type='svOpen' data-islemler='adminBolgeMultiMap' data-class='map' data-index='index' data-value=" + cevap.adminBolgeKurumDetail[kurum][2] + " data-islemler='adminBolgeMultiMap' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminBolgeKurumDetail[kurum][1] + "'>"
-                                + "<i class='fa fa-map-marker'></i>    " + cevap.adminBolgeKurumDetail[kurum][0] + "</a><i></i></li>");
-                    }
-                }
-                svControl('svAdd', 'bolgeDetay', '');
-                i.removeClass("fa-spinner fa-spin");
-                i.addClass("fa-search");
-            }
-        }
-    });
-});
 /*
  $(document).on('click', 'ul#adminBolgeKurumDetail > li > a', function (e) {
  var AdminBolgeKurumMap = new Array();

@@ -185,6 +185,33 @@ class AdminWeb extends Controller {
         }
     }
 
+    function bolgelisteTable() {
+        //session güvenlik kontrolü
+        $formSession = $this->load->otherClasses('Form');
+        //sessionKontrol
+        $sessionKey = $formSession->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey) {
+            //memcache model bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+
+
+            $language = Session::get("dil");
+            //lanuage Kontrol
+            $formLanguage = $this->load->multilanguage($language);
+            $languagedeger = $formLanguage->multilanguage();
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/bolgelistetable");
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL);
+        }
+    }
+
 }
 
 ?>

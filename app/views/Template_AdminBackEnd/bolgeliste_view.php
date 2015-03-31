@@ -17,7 +17,7 @@
             <?php if (Session::get("userRutbe") != 0) { ?>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right" style="text-align:right;">
                     <div class="form-group">
-                        <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svOpen" data-class="bolge"><i class="fa fa-plus-square"></i> <?php echo $data['BolgeYeni'];?></button>
+                        <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svOpen" data-class="bolge"><i class="fa fa-plus-square"></i> <?php echo $data['BolgeYeni']; ?></button>
                     </div>
                 </div>
             <?php } ?>
@@ -27,7 +27,7 @@
     <section class="content">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table class="table table-responsive table-bordered table-hover" id="adminBolgeTable">
+                <table class="table table-responsive table-bordered table-hover table-condensed" id="adminBolgeTable">
                     <thead>
                         <tr>
                             <th><?php echo $data["BolgeAd"]; ?></th>
@@ -35,6 +35,7 @@
                             <th class="hidden-xs"><?php echo $data["Aciklama"]; ?></th>
                         </tr>
                     </thead>
+
                     <tbody id="adminBolgeRow">
 
                         <?php for ($v = 0; $v < count($model); $v++) { ?>
@@ -201,8 +202,17 @@
                     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                         <h4><?php echo $data["Kurumlar"]; ?> <button id="addNew" type="button" class="svToggle btn btn-success btn-sm pull-right addNewButton" data-type="svOpen" data-class="kurum" data-islemler="adminBolgeKurumEkle"><i class="fa fa-plus-square"></i> <?php echo $data["YeniEkle"]; ?></button> <button class="btn btn-success btn-sm pull-right seeAllButton"><?php echo $data["TumunuGor"]; ?></button></h4>
                         <hr/>
-                        <ul class="list-group" id="adminBolgeKurumDetail">
-                        </ul>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <table class="table table-responsive table-bordered table-hover table-condensed" id="adminBolgeKurumTable">
+                                    <thead>
+                                        <tr >
+                                            <th>Kurum Adı</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -217,7 +227,7 @@
             <span class="pull-right"><button data-type="svClose" data-class="map" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span>
             <span class="pull-right"><button id="saveMap" data-islemler="adminKurumHaritaKaydet" data-type="svClose" data-class="map" type="button" class="svToggle btn btn-success"><i class="fa fa-map-marker"></i> Konumu Kaydet</button></span>
         </h3>
-    <hr/>
+        <hr/>
     </div>
     <div id="multiple_map" style="width:100% !important;"></div>
 </div><!-- ./wrapper -->

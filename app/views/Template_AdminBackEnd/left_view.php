@@ -9,9 +9,8 @@
                     <img src="<?php echo SITE_PLUGINADMIN_IMG; ?>/avatar3.png" class="img-circle" alt="User Image" />
                 </div>
                 <div class="pull-left info">
-                    <p><?php echo $data["Merhaba"]; ?>, <?php echo Session::get("username"); ?></p>
-
-                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                    <p><?php echo $data["Merhaba"]; ?>,</p>
+                    <p><?php echo Session::get("kullaniciad"); ?>&nbsp;<?php echo Session::get("kullanicisoyad"); ?></p>
                 </div>
             </div>
             <!-- search form -->

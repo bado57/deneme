@@ -107,6 +107,8 @@ class UsersLogin extends Controller {
                 //session güvenlik anahtarı
                 Session::set("sessionkey", $sessionKey);
                 Session::set("username", $result[0][$Kadi]);
+                Session::set("kullaniciad", $result[0]['BSAdminAd']);
+                Session::set("kullanicisoyad", $result[0]['BSAdminSoyad']);
                 Session::set("userId", $result[0][$adminID]);
                 Session::set("userTip", $loginTip);
                 Session::set("userRutbe", $result[0]["BSSuperAdmin"]);

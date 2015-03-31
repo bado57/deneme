@@ -20,10 +20,15 @@
 
             <!-- jQuery 2.0.2 -->
             <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+            
             <!-- jQuery UI 1.10.3 -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
             <!-- Bootstrap -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/bootstrap.min.js" type="text/javascript"></script>
+            
+            <script src="https://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js"></script>
+            <script src="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+            <link href="//cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
             <!--Ajax Query -->
             <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminajaxquery.js" type="text/javascript"></script> 
 
@@ -175,14 +180,14 @@
                                 <li class="dropdown user user-menu">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                         <i class="glyphicon glyphicon-user"></i>
-                                        <span>  <?php echo Session::get("username"); ?><i class="caret"></i></span>
+                                        <span>  <?php echo Session::get("kullaniciad"); ?>&nbsp;<?php echo Session::get("kullanicisoyad"); ?><i class="caret"></i></span>
                                     </a>
                                     <ul class="dropdown-menu">
                                         <!-- User image -->
                                         <li class="user-header bg-light-blue">
                                             <img src="<?php echo SITE_PLUGINADMIN_IMG; ?>/avatar3.png" class="img-circle" alt="User Image" />
                                             <p>
-                                                <?php echo Session::get("username"); ?>
+                                                <?php echo Session::get("kullaniciad"); ?>&nbsp;<?php echo Session::get("kullanicisoyad"); ?>
                                             </p>
                                         </li>
                                         <!-- Menu Footer-->

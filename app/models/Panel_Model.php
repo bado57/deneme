@@ -9,6 +9,13 @@ class Panel_Model extends Model {
         $sql = "SELECT " . $Kadi . "," . $KullaniciID . " FROM " . $tableName . " WHERE " . $Kadi . " = :loginKadi && " . $Sifre . " = :loginSifre LIMIT 1";
         return ($count = $this->db->select($sql, $array));
     }
+   
+    
+    //admin firma özellikleri getirme
+    public function datatable() {
+         $sql = "SELECT SBBolgeAdi, SBBolgeAciklama FROM sbbolgeler";
+        return($this->db->select($sql));
+    }
 
     //admin firma özellikleri getirme
     public function firmaOzellikler() {

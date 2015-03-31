@@ -26,6 +26,8 @@ define("SITE_URL_HOME", "http://localhost/SProject");
 //PLUGINS URL
 define("SITE_PLUGIN", "http://localhost/SProject/plugins");
 
+//datatable
+define("SITE_PLUGINDATATABLE_JS", "http://localhost/SProject/app/views/assets/js/datatable");
 
 //admin back end
 define("SITE_PLUGINADMIN_CSS", "http://localhost/SProject/app/views/assets/css");
