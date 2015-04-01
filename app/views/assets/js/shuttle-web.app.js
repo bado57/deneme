@@ -4,6 +4,19 @@ var MultipleMapArray = new Array();
 var MultipleMapindex;
 
 $(document).ready(function () {
+    // Sayfa Scroll Olayı
+    $("html").niceScroll({
+		scrollspeed: 100,
+		mousescrollstep: 38,
+		cursorwidth: 6,
+		cursorborder: 0,
+		cursorcolor: '#808080',
+		autohidemode: true,
+		zindex: 9999999999,
+		horizrailenabled: false,
+		cursorborderradius: 3,
+	});
+    
     // Form Enable / Disable Kontrolleri
     $(document).on("click", "#editForm", function (e) {
         e.preventDefault();
@@ -72,7 +85,6 @@ function svControl(dtype, dclass, dislemler) {
             case 'adminBolgeMultiMap' :
                 isMap = true;
                 isSingle = false;
-                
                 var returnCevap = $.AdminIslemler.adminBolgeMultiMapping();
                 break;
             case 'adminBolgeSingleMap' :
@@ -82,6 +94,8 @@ function svControl(dtype, dclass, dislemler) {
             default :
                 $("#" + dclass).height(th);
                 $("#" + dclass).css("z-index", z);
+                $("#" + dclass).attr("data-z", z);
+                $('[data-z="'+(z-1)+'"]').css("display", "none");
                 $('#' + dclass).toggle(effect, options, duration);
                 z++;
                 break;
@@ -89,6 +103,8 @@ function svControl(dtype, dclass, dislemler) {
         if (returnCevap == true) {
             $("#" + dclass).height(th);
             $("#" + dclass).css("z-index", z);
+            $("#" + dclass).attr("data-z", z);
+            $('[data-z="'+(z-1)+'"]').css("display", "none");
             $('#' + dclass).toggle(effect, options, duration);
             z++;
             if (isMap == true) {
@@ -108,7 +124,6 @@ function svControl(dtype, dclass, dislemler) {
         }
     }//Subview kapanıyor
     else if (dtype != 'svOpen') {
-        console.log("kapanıyor");
         switch (dislemler) {
             case 'adminBolgeKayit' :
                 var returnCevap = $.AdminIslemler.adminBolgeKaydet();
@@ -131,6 +146,7 @@ function svControl(dtype, dclass, dislemler) {
             default :
                 $("#" + dclass).height(th);
                 $("#" + dclass).css("z-index", z);
+                $('[data-z="'+(z-2)+'"]').css("display", "block");
                 $('#' + dclass).toggle(effect, options, duration);
                 z--;
                 break;
@@ -138,6 +154,7 @@ function svControl(dtype, dclass, dislemler) {
         if (returnCevap == true) {
             $("#" + dclass).height(th);
             $("#" + dclass).css("z-index", z);
+            $('[data-z="'+(z-2)+'"]').css("display", "block");
             $('#' + dclass).toggle(effect, options, duration);
             z--;
         }

@@ -286,7 +286,7 @@ img {
 }
 
 .text-green {
-    color: #00a65a !important;
+    color: #009933 !important;
 }
 
 .text-navy {
@@ -906,7 +906,7 @@ body > .header {
                 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .glyphicon.success,
                 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .fa.success,
                 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .ion.success {
-                    background: #00a65a;
+                    background: #009933;
                 }
 
                 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .glyphicon.info,
@@ -1175,11 +1175,11 @@ body > .header {
     }
 
 .form-group.has-success label {
-    color: #00a65a;
+    color: #009933;
 }
 
 .form-group.has-success .form-control {
-    border-color: #00a65a !important;
+    border-color: #009933 !important;
     box-shadow: none;
 }
 
@@ -1269,7 +1269,7 @@ body > .header {
 
 .progress-bar-green,
 .progress-bar-success {
-    background-color: #00a65a;
+    background-color: #009933;
 }
 
 .progress-striped .progress-bar-green,
@@ -1531,7 +1531,7 @@ body > .header {
     }
 
     .box.box-success {
-        border-top-color: #00a65a;
+        border-top-color: #009933;
     }
 
     .box.height-control .box-body {
@@ -1750,8 +1750,8 @@ body > .header {
 
         .box.box-solid.box-success > .box-header {
             color: #fff;
-            background: #00a65a;
-            background-color: #00a65a;
+            background: #009933;
+            background-color: #009933;
         }
 
             .box.box-solid.box-success > .box-header a {
@@ -1819,7 +1819,7 @@ body > .header {
             }
 
             .box .todo-list > li.success {
-                border-left-color: #00a65a;
+                border-left-color: #009933;
             }
 
             .box .todo-list > li.primary {
@@ -1905,7 +1905,7 @@ body > .header {
             }
 
                 .box .chat .item > img.online {
-                    border: 2px solid #00a65a;
+                    border: 2px solid #009933;
                 }
 
                 .box .chat .item > img.offline {
@@ -2126,7 +2126,7 @@ Component: timeline
         }
 
     .btn.btn-success {
-        background-color: #00a65a;
+        background-color: #009933;
         border-color: #008d4c;
     }
 

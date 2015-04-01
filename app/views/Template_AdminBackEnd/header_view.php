@@ -10,10 +10,13 @@
         <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <!-- Google Font -->
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+            
             <!-- Font Awesome -->
-            <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/font-awesome.min.css" rel="stylesheet" type="text/css" />      
+            <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/font-awesome.min.css" rel="stylesheet" type="text/css" />
+            
             <!-- Bootstrap wysihtml5 - text editor -->
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" />
+            
             <!-- Theme style -->
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/AdminLTE.css" rel="stylesheet" type="text/css" />
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
@@ -24,8 +27,13 @@
             
             <!-- jQuery UI 1.10.3 -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
+            
+            <!-- Page Scroll -->
+            <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery.nicescroll.min.js"></script>
+
             <!-- Bootstrap -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/bootstrap.min.js" type="text/javascript"></script>
+            
             <!-- Datatables & Bootstrap -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery.dataTables.min.js"></script>
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/dataTables.bootstrap.js"></script>
