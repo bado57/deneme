@@ -10,7 +10,7 @@
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-left">
                 <h3>
                     <i class="fa fa-th"></i> <?php echo $data["Kurumlar"]; ?>
-                    <small id="smallBolge"><?php echo $model[0]['AdminKurumCount']; ?></small><small> Toplam </small>
+                    <small id="smallKurum"><?php echo $model[0]['AdminKurumCount']; ?></small>&nbsp<small><?php echo $data["Toplam"]; ?></small>
                 </h3>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right" style="text-align:right;">
@@ -59,7 +59,7 @@
 <div id="kurum" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["KurumTanımlama"]; ?> <span class="pull-right"><button data-type="svClose" data-class="kurum" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["KurumTanimlama"]; ?> <span class="pull-right"><button data-type="svClose" data-class="kurum" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
                 <div class="form-vertical addKurumForm col-lg-4 col-md-4 col-sm-12 col-xs-12">

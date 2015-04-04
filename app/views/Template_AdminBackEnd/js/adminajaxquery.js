@@ -16,7 +16,7 @@ $.ajaxSetup({
 
 $(document).ready(function () {
 
-    newBolgeTable=$('#adminBolgeTable').dataTable({
+    newBolgeTable = $('#adminBolgeTable').dataTable({
         "paging": true,
         "ordering": true,
         "info": true
@@ -251,7 +251,7 @@ $.AdminIslemler = {
                         var bolgeCount = $('#smallBolge').text();
                         bolgeCount++;
                         $('#smallBolge').text(bolgeCount);
-                        var addRow=("<tr style='background-color:#F2F2F2'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
+                        var addRow = ("<tr style='background-color:#F2F2F2'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
                                 + "<i class='fa fa-search'></i> " + AdminBolgeKaydet[0] + "</a>"
                                 + "</td><td class='hidden-xs'>0</td><td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td></tr>");
                         newBolgeTable.DataTable().row.add($(addRow)).draw();
@@ -298,7 +298,8 @@ $.AdminIslemler = {
                     for (var t = 0; t < $('tbody#adminBolgeRow tr').length; t++) {
                         var attrValueId = $("tbody#adminBolgeRow > tr > td > a").eq(t).attr('value');
                         if (attrValueId == bolgedetail_id) {
-                            $('tbody#adminBolgeRow > tr:eq(' + t + ')').remove();
+                            var deleteRow = $('tbody#adminBolgeRow > tr:eq(' + t + ')');
+                            newBolgeTable.DataTable().row($(deleteRow)).remove().draw();
                         }
                     }
                 }
@@ -514,7 +515,7 @@ $.AdminIslemler = {
                         var bolgeCount = $('#smallBolge').text();
                         bolgeCount++;
                         $('#smallBolge').text(bolgeCount);
-                        var addRow=("<tr style='background-color:#F2F2F2'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
+                        var addRow = ("<tr style='background-color:#F2F2F2'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
                                 + "<i class='fa fa-search'></i> " + AdminBolgeKaydet[0] + "</a>"
                                 + "</td><td class='hidden-xs'>0</td><td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td></tr>");
                         NewKurumTable.DataTable().row.add($(addRow)).draw();
@@ -543,14 +544,15 @@ $.AdminIslemler = {
                     $("textarea[name=KurumDetailAciklama]").val('');
                     $("input[name=adminKurumDetailID]").val('');
 
-                    var kurumCount = $('#smallBolge').text();
+                    var kurumCount = $('#smallKurum').text();
                     kurumCount--;
-                    $('#smallBolge').text(kurumCount);
+                    $('#smallKurum').text(kurumCount);
 
                     for (var t = 0; t < $('tbody#adminKurumRow tr').length; t++) {
                         var attrValueId = $("tbody#adminKurumRow > tr > td > a").eq(t).attr('value');
                         if (attrValueId == kurumdetail_id) {
-                            $('tbody#adminKurumRow > tr:eq(' + t + ')').remove();
+                            var deleteRow = $('tbody#adminKurumRow > tr:eq(' + t + ')');
+                            NewKurumTable.DataTable().row($(deleteRow)).remove().draw();
                         }
                     }
                 }
@@ -648,9 +650,12 @@ $.AdminIslemler = {
                     if (cevap.hata) {
                         alert(cevap.hata);
                     } else {
+                        var kurumCount = $('#smallKurum').text();
+                        kurumCount++;
+                        $('#smallKurum').text(kurumCount);
                         var addRow = "<tr style='background-color:#F2F2F2'><td>"
                                 + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newKurumID + "'>"
-                                + "<i class='fa fa-map-marker'></i>" + kurumadi + "</a></td>"
+                                + "<i class='fa fa-map-marker'></i> " + kurumadi + "</a></td>"
                                 + "<td class='hidden-xs' value='" + bolgeId + "'>" + bolgead + "</td>"
                                 + "<td class='hidden-xs'>0</td><td class='hidden-xs'>" + kurumaciklama + "</td></tr>";
                         NewKurumTable.DataTable().row.add($(addRow)).draw();
