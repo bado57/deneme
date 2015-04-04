@@ -10,7 +10,7 @@
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-left">
                 <h3>
                     <i class="fa fa-th"></i> <?php echo $data["Bolgeler"]; ?>
-                    <small id="smallBolge"><?php echo $model[0]['AdminBolgeCount']; ?></small><small> Toplam </small>
+                    <small id="smallBolge"><?php echo $model[0]['AdminBolgeCount']; ?></small>&nbsp<small><?php echo $data["Toplam"]; ?></small>
                 </h3>
             </div>
             <?php if (Session::get("userRutbe") != 0) { ?>
@@ -85,7 +85,7 @@
 <div id="kurum" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["KurumTanımlama"]; ?> <span class="pull-right"><button data-type="svClose" data-class="kurum" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["KurumTanimlama"]; ?> <span class="pull-right"><button data-type="svClose" data-class="kurum" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
                 <div class="form-vertical addKurumForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -205,7 +205,7 @@
                                 <table class="table table-responsive table-bordered table-hover table-condensed" id="adminBolgeKurumTable">
                                     <thead>
                                         <tr >
-                                            <th>Kurum Adı</th>
+                                            <th><?php echo $data["KurumAdi"]; ?></th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -223,7 +223,7 @@
     <div id="mapHeader">
         <h3><b id="singleMapBaslik"><?php echo $data["LokasyonTanimlama"]; ?> </b><b id="multiMapBaslik"></b>
             <span class="pull-right"><button data-type="svClose" data-class="map" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span>
-            <span class="pull-right"><button id="saveMap" data-islemler="adminKurumHaritaKaydet" data-type="svClose" data-class="map" type="button" class="svToggle btn btn-success"><i class="fa fa-map-marker"></i> Konumu Kaydet</button></span>
+            <span class="pull-right"><button id="saveMap" data-islemler="adminKurumHaritaKaydet" data-type="svClose" data-class="map" type="button" class="svToggle btn btn-success"><i class="fa fa-map-marker"></i><th>&nbsp<?php echo $data["KonumuKaydet"]; ?></th></button></span>
         </h3>
         <hr/>
     </div>

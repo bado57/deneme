@@ -32,7 +32,7 @@ class en {
             "KullaniciIslem" => "User Operations",
             "TurIslem" => "Tour Operations",
             "BolgeIslem" => "Region Operations",
-            "KurumIslem" => "Institution İşlemleri",
+            "KurumIslem" => "Institution Operations",
             "BakiyeIslem" => "Balance Operations",
             "LokasyonSorgu" => "Location Query",
             "Duyuru" => "Announcements",
@@ -74,7 +74,7 @@ class en {
             "Toplam" => "Total",
             "Odenmemis" => "Unpaid",
             "AktifServis" => "Active Service",
-            "Okunmamis"  => "Unread",
+            "Okunmamis" => "Unread",
             "YeniDuyuru" => "New Announcement",
             "YeniRapor" => "New Report",
             "GuvenliCikis" => "Secure Checkout",
@@ -100,7 +100,13 @@ class en {
             "AdresDetay" => "Adress Details",
             "LokasyonTanimlama" => "Location Description",
             "KurumYeni" => "New Institutions",
-            "TurSayi" => "Tour Count"
+            "TurSayi" => "Tour Count",
+            "KurumDetay" => "Institution Detail",
+            "Bolge" => "Region",
+            "Turlar" => "Tours",
+            "TurAdi" => "Tour Name",
+            "BolgeAdi" => "Region Name",
+            "Toplam" => "Total"
         );
         return $endil;
     }

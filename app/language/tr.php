@@ -105,7 +105,8 @@ class tr {
             "Bolge" => "Bölge",
             "Turlar" => "Turlar",
             "TurAdi" => "Tur Adı",
-            "BolgeAdi" => "Bölge Adı"
+            "BolgeAdi" => "Bölge Adı",
+            "Toplam" => "Toplam"
             
         );
         return $trdil;

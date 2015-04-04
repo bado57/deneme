@@ -15,7 +15,7 @@ $.ajaxSetup({
 });
 $(document).ready(function () {
 
-    $('#adminBolgeTable').dataTable({
+    newBolgeTable = $('#adminBolgeTable').dataTable({
         "paging": true,
         "ordering": true,
         "info": true
@@ -203,9 +203,10 @@ $.AdminIslemler = {
                         var bolgeCount = $('#smallBolge').text();
                         bolgeCount++;
                         $('#smallBolge').text(bolgeCount);
-                        $("tbody#adminBolgeRow").prepend("<tr style='background-color:#F2F2F2'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
+                        var addRow = ("<tr style='background-color:#F2F2F2'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
                                 + "<i class='fa fa-search'></i> " + AdminBolgeKaydet[0] + "</a>"
                                 + "</td><td class='hidden-xs'>0</td><td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td></tr>");
+                        newBolgeTable.DataTable().row.add($(addRow)).draw();
                     }
                 }
             });
@@ -252,7 +253,8 @@ $.AdminIslemler = {
                     for (var t = 0; t < $('tbody#adminBolgeRow tr').length; t++) {
                         var attrValueId = $("tbody#adminBolgeRow > tr > td > a").eq(t).attr('value');
                         if (attrValueId == bolgedetail_id) {
-                            $('tbody#adminBolgeRow > tr:eq(' + t + ')').remove();
+                            var deleteRow = $('tbody#adminBolgeRow > tr:eq(' + t + ')');
+                            newBolgeTable.DataTable().row($(deleteRow)).remove().draw();
                         }
                     }
                 }
