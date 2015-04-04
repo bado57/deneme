@@ -154,6 +154,15 @@ function svControl(dtype, dclass, dislemler) {
             case 'adminKurumKayit' :
                 var returnCevap = $.AdminIslemler.adminKurumKaydet();
                 break;
+            case 'adminKurumDetailSil' :
+                var returnCevap = $.AdminIslemler.adminKurumDetailSil();
+                break;
+            case 'adminKurumVazgec' :
+                var returnCevap = $.AdminIslemler.adminKurumVazgec();
+                break;
+            case 'adminKurumEkle' :
+                var returnCevap = $.AdminIslemler.adminKurumEkle();
+                break;
             default :
                 $("#" + dclass).height(th);
                 $("#" + dclass).css("z-index", z);
@@ -184,8 +193,11 @@ function editControl(edtislemler) {
         case 'adminBolgeDetailEdit' :
             $.AdminIslemler.adminBolgeDetailDuzenle();
             break;
-        case 'adminKurumDetailEdit' :
+        case 'adminFirmaDetailEdit' :
             $.AdminIslemler.adminFirmaDuzenle();
+            break;
+        case 'adminKurumDetailEdit' :
+            $.AdminIslemler.adminKurumDetailDuzenle();
             break;
 
         default :
@@ -203,6 +215,9 @@ function vzgControl(vzgislemler) {
         case 'adminFirmaDetailVazgec' :
             $.AdminIslemler.adminFirmaVazgec();
             break;
+        case 'adminKurumDetailVazgec' :
+            $.AdminIslemler.adminKurumDetailVazgec();
+            break;
         default :
             break;
     }
@@ -218,7 +233,9 @@ function saveControl(saveislemler) {
         case 'adminFirmaDetailKaydet' :
             $.AdminIslemler.adminFirmaOzellik();
             break;
-
+        case 'adminKurumDetailKaydet' :
+            $.AdminIslemler.adminKurumDetailKaydet();
+            break;
         default :
             break;
     }

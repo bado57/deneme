@@ -22,7 +22,7 @@
                                 <button type="button" class="btn btn-success  btn-sm save" data-Saveislem="adminFirmaDetailKaydet"><?php echo $data["Kaydet"]; ?></button>
                             </div>
                             <div class="form-group edit-group">
-                                <button type="button" id="editForm" class="btn btn-primary btn-sm" data-Editislem="adminKurumDetailEdit"><?php echo $data["Duzenle"]; ?></button>
+                                <button type="button" id="editForm" class="btn btn-primary btn-sm" data-Editislem="adminFirmaDetailEdit"><?php echo $data["Duzenle"]; ?></button>
                             </div>
                         </div>
                     <?php } ?>

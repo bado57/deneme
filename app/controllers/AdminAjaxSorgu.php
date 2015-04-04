@@ -31,7 +31,7 @@ class AdminAjaxSorgu extends Controller {
                     $adminRutbe = Session::get("userRutbe");
 
                     if ($adminRutbe != 1) {
-                         header("Location:" . SITE_URL_LOGOUT);
+                        header("Location:" . SITE_URL_LOGOUT);
                     } else {
 
                         $data = $form->post('usersloginadi', true);
@@ -54,7 +54,7 @@ class AdminAjaxSorgu extends Controller {
                     $adminRutbe = Session::get("userRutbe");
 
                     if ($adminRutbe != 1) {
-                         header("Location:" . SITE_URL_LOGOUT);
+                        header("Location:" . SITE_URL_LOGOUT);
                     } else {
 
                         $uniqueKey = Session::get("userFirmaKod");
@@ -169,10 +169,10 @@ class AdminAjaxSorgu extends Controller {
 
                 case "adminBolgeDetail":
 
-                    $adminRutbe = Session::get("userRutbe");
+                    $adminID = Session::get("userId");
 
-                    if ($adminRutbe != 1) {
-                         header("Location:" . SITE_URL_LOGOUT);
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
                     } else {
 
                         $form->post('adminbolgeRowid', true);
@@ -205,10 +205,10 @@ class AdminAjaxSorgu extends Controller {
 
                 case "adminBolgeDetailDuzenle":
 
-                    $adminRutbe = Session::get("userRutbe");
+                    $adminID = Session::get("userId");
 
-                    if ($adminRutbe != 1) {
-                         header("Location:" . SITE_URL_LOGOUT);
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
                     } else {
 
                         $uniqueKey = Session::get("username");
@@ -242,13 +242,13 @@ class AdminAjaxSorgu extends Controller {
 
                 case "adminBolgeDetailDelete":
 
-                    $adminRutbe = Session::get("userRutbe");
-                    $uniqueKey = Session::get("username");
-                    $uniqueKey = $uniqueKey . '_ABolge';
+                    $adminID = Session::get("userId");
 
-                    if ($adminRutbe != 1) {
-                         header("Location:" . SITE_URL_LOGOUT);
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
                     } else {
+                        $uniqueKey = Session::get("username");
+                        $uniqueKey = $uniqueKey . '_ABolge';
 
                         $form->post('bolgedetail_id', true);
                         $adminBolgeDetailID = $form->values['bolgedetail_id'];
@@ -277,13 +277,13 @@ class AdminAjaxSorgu extends Controller {
 
                 case "adminBolgeKurumKaydet":
 
-                    $adminRutbe = Session::get("userRutbe");
-                    $uniqueKey = Session::get("username");
-                    $uniqueKey = $uniqueKey . '_ABolge';
+                    $adminID = Session::get("userId");
 
-                    if ($adminRutbe != 1) {
+                    if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
+                        $uniqueKey = Session::get("username");
+                        $uniqueKey = $uniqueKey . '_ABolge';
 
                         $form->post('bolgeid', true);
                         $form->post('bolgead', true);
@@ -341,259 +341,218 @@ class AdminAjaxSorgu extends Controller {
 
                     break;
 
-                case "gayri_proje_ekle":
-                    $form->post('projeekle_kodu', true)
-                            ->isEmpty();
-                    $form->post('projeekle_durum', true);
-                    $form->post('projeekle_adi', true)
-                            ->isEmpty();
-                    $date = $form->post('projeekle_bas_tarih', true)
-                            ->tarihduzenle();
-                    $date1 = $form->post('projeekle_bitis_tarih', true)
-                            ->tarihduzenle();
-                    $form->post('projeekle_textarea', true);
-                    $form->post('projekytkydtkpt', true);
-                    if ($form->submit()) {
-                        $data = array(
-                            'insaat_proje_kodu' => $form->values['projeekle_kodu'],
-                            'insaat_proje_adi' => $form->values['projeekle_adi'],
-                            'insaat_proje_durum' => $form->values['projeekle_durum'],
-                            'insaat_proje_bas_tarih' => $date,
-                            'insaat_proje_bitis_tarih' => $date1,
-                            'insaat_proje_mesaj' => $form->values['projeekle_textarea']
-                        );
-                        $gelenlabel = $form->values['projekytkydtkpt'];
-                        if ($gelenlabel == "") {
-                            $model = $this->load->model("panel_model");
-                            $result = $model->addNewProjectInsert($data);
-                            if ($result) {
-                                $sonuc["proje_son_id"] = $result;
-                            } else {
-                                $sonuc = "Bi Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                //$sonuc["Id"]=$Idresult;
-                            }
-                        } else {
-                            $model = $this->load->model("panel_model");
-                            $resultupdate = $model->updateNewProject($data, $gelenlabel);
-                            if ($resultupdate) {
-                                $sonuc["proje_update"] = "Başarıyla güncellenmiştir";
-                            } else {
-                                $sonuc = "Bi Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                            }
+                case "adminKurumDetail":
+
+                    $adminID = Session::get("userId");
+
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+
+                        $form->post('adminkurumRowid', true);
+                        $adminKurumDetailID = $form->values['adminkurumRowid'];
+
+                        $data["adminKurumDetail"] = $Panel_Model->adminKurumDetail($adminKurumDetailID);
+
+                        $returnModelData = $data["adminKurumDetail"][0];
+
+                        $a = 0;
+                        foreach ($returnModelData as $key => $value) {
+                            $new_array['AdminKurumsshkey'][$a] = md5(sha1(md5($key)));
+                            $a++;
                         }
+
+                        $returnFormdata['adminKurumDetail'] = $form->newKeys($data["adminKurumDetail"][0], $new_array['AdminKurumsshkey']);
+
+
+                        $data["adminKurumTurDetail"] = $Panel_Model->adminKurumTurDetail($adminKurumDetailID);
+
+                        for ($tur = 0; $tur < count($data["adminKurumTurDetail"]); $tur++) {
+                            $data["adminKurumTur"][$tur] = array_values($data["adminKurumTurDetail"][$tur]);
+                        }
+
+                        $sonuc["adminKurumDetail"] = $returnFormdata['adminKurumDetail'];
+                        $sonuc["adminKurumTurDetail"] = $data["adminKurumTur"];
                     }
+
                     break;
 
-                case "projeSiteKayit":
-                    $dizi = array();
-                    $dizi_sayi = array();
-                    $form->post('projekayitSonId', true)
-                            ->isEmpty();
-                    $form->post('yapiekle_adi', true)
-                            ->isEmpty();
-                    $form->post('yapiekle_sayi', true)
-                            ->isEmpty();
-                    $form->post('yapiekle_tipi', true)
-                            ->isEmpty();
-                    $form->post('yapiekle_textarea', true);
-                    $form->post('blokkytkydtkpt', true);
-                    if ($form->submit()) {
-                        $data = array(
-                            'insaat_yapi_proje' => $form->values['projekayitSonId'],
-                            'insaat_proje_yapi_adi' => $form->values['yapiekle_adi'],
-                            'insaat_proje_yapi_sayi' => $form->values['yapiekle_sayi'],
-                            'insaat_proje_yapi_tip' => $form->values['yapiekle_tipi'],
-                            'insaat_proje_yapi_metin' => $form->values['yapiekle_textarea']
-                        );
-                        $gelenlabelblok = $form->values['blokkytkydtkpt'];
-                        if ($gelenlabelblok == "") {
-                            $model = $this->load->model("panel_model");
-                            $result = $model->addNewProjectBuildingInsert($data);
-                            if ($result) {
-                                $son = $form->dizipost('blok_adi', true);
-                                $donen = $form->values['blok_adi'];
+                case "adminKurumDetailDelete":
 
-                                $sonsayi = $form->dizipost('blok_sayi', true);
-                                $donensayi = $form->values['blok_sayi'];
+                    $adminID = Session::get("userId");
 
-                                $toplam = $form->count($donen);
-                                for ($i = 0; $i < $toplam; $i++) {
-                                    $gecici = array_push($dizi, $donen[$i]);
-                                    $gecici_sayi = array_push($dizi_sayi, $donensayi[$i]);
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $uniqueKey = Session::get("username");
+                        $uniqueKey = $uniqueKey . '_AKurum';
 
-                                    $data = array(
-                                        'insaat_proje_yapi_blok_adi' => $dizi[$i],
-                                        'insaat_proje_yapi_blok_sayi' => $dizi_sayi[$i],
-                                        'insaat_proje_yapi_id' => $result
-                                    );
-                                    $resultt = $model->addBuildingInsert($data);
-                                    if ($resultt) {
-                                        $sonuc["proje_yapi_label_id"] = $result;
-                                        $sonuc["projeKonutBasari"] = "Başarıyla kaydınız tamamlanmıştır.";
-                                    } else {
-                                        $sonuc["hata"] = "Lütfent tekrar deneyiniz.";
-                                    }
-                                }
-                            } else {
-                                $sonuc = "Bi Hata Oluştu Lütfen Tekrar Deneyiniz.";
+
+                        $form->post('kurumdetail_id', true);
+                        $adminKurumDetailID = $form->values['kurumdetail_id'];
+
+                        $deleteresult = $Panel_Model->adminKurumDelete($adminKurumDetailID);
+                        if ($deleteresult) {
+                            $resultMemcache = $MemcacheModel->get($uniqueKey);
+                            if ($resultMemcache) {
+                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                             }
+                            $sonuc["delete"] = "Kurum kaydı başarıyla silinmiştir.";
                         } else {
-                            $model = $this->load->model("panel_model");
-                            $resultupdatelabel = $model->updateNewBlokProject($data, $gelenlabelblok);
+                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                        }
+                    }
 
-                            if ($resultupdatelabel) {
-                                $sonucum = $model->addBuildingDelete($gelenlabelblok);
-                                if ($sonucum) {
+                    $sonuc["adminKurumDetail"] = $data["adminKurumDetail"];
 
-                                    $son = $form->dizipost('blok_adi', true);
-                                    $donen = $form->values['blok_adi'];
+                    break;
 
-                                    $sonsayi = $form->dizipost('blok_sayi', true);
-                                    $donensayi = $form->values['blok_sayi'];
+                case "adminKurumDetailDuzenle":
 
-                                    $toplam = $form->count($donen);
-                                    for ($i = 0; $i < $toplam; $i++) {
-                                        $gecici = array_push($dizi, $donen[$i]);
-                                        $gecici_sayi = array_push($dizi_sayi, $donensayi[$i]);
+                    $adminID = Session::get("userId");
 
-                                        $data = array(
-                                            'insaat_proje_yapi_blok_adi' => $dizi[$i],
-                                            'insaat_proje_yapi_blok_sayi' => $dizi_sayi[$i],
-                                            'insaat_proje_yapi_id' => $gelenlabelblok
-                                        );
-                                        $resultt = $model->addBuildingUpdateInsert($data, $gelenlabelblok);
-                                        if ($resultt) {
-                                            $sonuc["proje_yapi_label_id"] = $gelenlabelblok;
-                                            $sonuc["projeKonutBasariUpdate"] = "Başarıyla güncelleştirmeniz tamamlanmıştır.";
-                                        } else {
-                                            $sonuc["hata"] = "Lütfent tekrar deneyiniz.";
-                                        }
-                                    }
-                                } else {
-                                    $sonuc["hata"] = "Bir hata oluştu";
-                                }
-                            } else {
-                                $sonuc = "Bi Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+
+                        $uniqueKey = Session::get("username");
+                        $uniqueKey = $uniqueKey . '_AKurum';
+
+                        $form->post('kurumdetail_adi', true);
+                        $form->post('kurumdetail_bolge', true);
+                        $form->post('kurumdetail_telefon', true);
+                        $form->post('kurumdetail_email', true);
+                        $form->post('kurumdetail_adres', true);
+                        $form->post('kurumdetail_aciklama', true);
+
+                        $form->post('kurumdetail_id', true);
+                        $adminKurumDetailID = $form->values['kurumdetail_id'];
+
+                        if ($form->submit()) {
+                            $data = array(
+                                'SBKurumAdi' => $form->values['kurumdetail_adi'],
+                                'SBKurumAciklama' => $form->values['kurumdetail_aciklama'],
+                                'SBBolgeAdi' => $form->values['kurumdetail_bolge'],
+                                'SBKurumTelefon' => $form->values['kurumdetail_telefon'],
+                                'SBKurumAdres' => $form->values['kurumdetail_adres'],
+                                'SBKurumEmail' => $form->values['kurumdetail_email']
+                            );
+                        }
+                        $resultupdate = $Panel_Model->adminKurumOzelliklerDuzenle($data, $adminKurumDetailID);
+                        if ($resultupdate) {
+                            $resultMemcache = $MemcacheModel->get($uniqueKey);
+                            if ($resultMemcache) {
+                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                             }
+                            $sonuc["update"] = "Başarıyla Kurum Bilgileriniz Güncellenmiştir.";
+                        } else {
+                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
                         }
                     }
 
                     break;
+                case "adminKurumSelectBolge":
+                    $adminID = Session::get("userId");
 
-                case "proje_il_option":
-                    $PIlOption = $this->load->model("panel_model");
-                    $data["projeIlListele"] = $PIlOption->projeIlListele();
-                    $sonuc["projeIlListele"] = $data["projeIlListele"];
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $adminRutbe = Session::get("userRutbe");
+                        //super adminse tüm bölgeler çekilir
+                        if ($adminRutbe != 0) {
+                            $bolgeListe = $Panel_Model->kurumBolgeListele();
 
-                    break;
-                case "proje_ilce_option":
-
-                    $data = $form->post('proje_il_id', true);
-                    if ($form->submit()) {
-                        $data = array(
-                            ':proje_il_id' => $form->values['proje_il_id']
-                        );
-                    }
-                    $projeIlceListele = $this->load->model("panel_model");
-                    $data["projeIlceListele"] = $projeIlceListele->projeIlceListele($data);
-                    $sonuc["projeIlceListele"] = $data["projeIlceListele"];
-                    break;
-
-                case "proje_Semt_Option":
-
-                    $data = $form->post('proje_ilce_id', true);
-                    if ($form->submit()) {
-                        $data = array(
-                            ':proje_ilce_id' => $form->values['proje_ilce_id']
-                        );
-                    }
-                    $projeSemtListele = $this->load->model("panel_model");
-                    $data["projeSemtListele"] = $projeSemtListele->projeSemtListele($data);
-                    $sonuc["projeSemtListele"] = $data["projeSemtListele"];
-                    break;
-
-                case "proje_Mahalle_Option":
-
-                    $data = $form->post('proje_semt_id', true);
-                    if ($form->submit()) {
-                        $data = array(
-                            ':proje_semt_id' => $form->values['proje_semt_id']
-                        );
-                    }
-                    $projeMahalleListele = $this->load->model("panel_model");
-                    $data["projeMahalleListele"] = $projeMahalleListele->projeMahalleListele($data);
-                    $sonuc["projeMahalleListele"] = $data["projeMahalleListele"];
-                    break;
-
-                case "proje_PostaKodu_Option":
-
-                    $data = $form->post('proje_mahalle_id', true);
-                    if ($form->submit()) {
-                        $data = array(
-                            ':proje_mahalle_id' => $form->values['proje_mahalle_id']
-                        );
-                    }
-                    $projePostaKoduGoster = $this->load->model("panel_model");
-                    $data["projePostaKoduGoster"] = $projePostaKoduGoster->projePostaKoduGoster($data);
-                    $sonuc["projePostaKoduGoster"] = $data["projePostaKoduGoster"];
-                    break;
-
-                case "projeAdres_Deger":
-                    $form->post('projeadres_il', true);
-                    $form->post('projeadres_ilce', true);
-                    $form->post('projeadres_semt', true);
-                    $form->post('projeadres_mahalle', true);
-                    $form->post('projeadres_postaKodu', true);
-                    $form->post('projeadres_Adres', true);
-                    $form->post('projeAdres_proje_id', true);
-                    $form->post('projekayitAdres_label', true);
-                    if ($form->submit()) {
-                        $data = array(
-                            'insaat_proje_yapi_il' => $form->values['projeadres_il'],
-                            'insaat_proje_yapi_ilce' => $form->values['projeadres_ilce'],
-                            'insaat_proje_yapi_semt' => $form->values['projeadres_semt'],
-                            'insaat_proje_yapi_mahalle' => $form->values['projeadres_mahalle'],
-                            'insaat_proje_yapi_Pkodu' => $form->values['projeadres_postaKodu'],
-                            'insaat_proje_yapi_adres' => $form->values['projeadres_Adres'],
-                            'insaat_proje_yapi_id' => $form->values['projeAdres_proje_id']
-                        );
-                        $projekayitAdres_label = $form->values['projekayitAdres_label'];
-                        if ($projekayitAdres_label == "") {
-                            $model = $this->load->model("panel_model");
-                            $result = $model->addNewProjectAdressInsert($data);
-
-                            if ($result) {
-                                $sonuc["Adreslabel_id"] = $result;
-                                $sonuc["adres_basari"] = "Proje Adresiniz başarıyla eklenmiştir.";
-                            } else {
-                                $sonuc["hata"] = "Bi Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                //$sonuc["Id"]=$Idresult;
+                            for ($a = 0; $a < count($bolgeListe); $a++) {
+                                $adminBolge['AdminBolge'][$a] = $bolgeListe[$a]['SBBolgeAdi'];
+                                $adminBolge['AdminBolgeID'][$a] = $bolgeListe[$a]['SBBolgeID'];
                             }
+                        } else {//değilse admin ıd ye göre bölge görür
+                            $bolgeListeRutbe = $Panel_Model->adminKurumBolgeListele($adminID);
+
+                            for ($r = 0; $r < count($bolgeListeRutbe); $r++) {
+                                $bolgerutbeId[] = $bolgeListeRutbe[$r]['BSBolgeID'];
+                            }
+                            $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+
+                            $bolgeListe = $Panel_Model->adminRutbeKurumBolgeListele($rutbebolgedizi);
+
+                            for ($a = 0; $a < count($bolgeListe); $a++) {
+                                $adminBolge['AdminBolge'][$a] = $bolgeListe[$a]['SBBolgeAdi'];
+                                $adminBolge['AdminBolgeID'][$a] = $bolgeListe[$a]['SBBolgeID'];
+                            }
+                        }
+
+                        $sonuc["adminKurumBolge"] = $adminBolge['AdminBolge'];
+                        $sonuc["adminKurumBolgee"] = $adminBolge['AdminBolgeID'];
+                    }
+                    break;
+
+                case "adminKurumKaydet":
+
+                    $adminID = Session::get("userId");
+
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $uniqueKey = Session::get("username");
+                        $uniqueKey = $uniqueKey . '_AKurum';
+
+                        $form->post('kurumadi', true);
+                        $form->post('bolgead', true);
+                        $form->post('bolgeId', true);
+                        $form->post('kurumlocation', true);
+                        $form->post('kurumTlfn', true);
+                        $form->post('kurumEmail', true);
+                        $form->post('kurumwebsite', true);
+                        $form->post('kurumadrsDty', true);
+                        $form->post('kurumaciklama', true);
+                        $form->post('kurumulke', true);
+                        $form->post('kurumil', true);
+                        $form->post('kurumilce', true);
+                        $form->post('kurumsemt', true);
+                        $form->post('kurummahalle', true);
+                        $form->post('kurumsokak', true);
+                        $form->post('kurumpostakodu', true);
+                        $form->post('kurumcaddeno', true);
+
+
+                        if ($form->submit()) {
+                            $data = array(
+                                'SBKurumAdi' => $form->values['kurumadi'],
+                                'SBKurumAciklama' => $form->values['kurumaciklama'],
+                                'SBBolgeID' => $form->values['bolgeId'],
+                                'SBBolgeAdi' => $form->values['bolgead'],
+                                'SBKurumUlke' => $form->values['kurumulke'],
+                                'SBKurumIl' => $form->values['kurumil'],
+                                'SBKurumIlce' => $form->values['kurumilce'],
+                                'SBKurumSemt' => $form->values['kurumsemt'],
+                                'SBKurumMahalle' => $form->values['kurummahalle'],
+                                'SBKurumSokak' => $form->values['kurumsokak'],
+                                'SBKurumLokasyon' => $form->values['kurumlocation'],
+                                'SBKurumTelefon' => $form->values['kurumTlfn'],
+                                'SBKurumAdres' => $form->values['kurumadrsDty'],
+                                'SBKurumEmail' => $form->values['kurumEmail'],
+                                'SBKurumWebsite' => $form->values['kurumwebsite'],
+                                'SBKurumPostaKodu' => $form->values['kurumpostakodu'],
+                                'SBKurumCaddeNo' => $form->values['kurumcaddeno']
+                            );
+                        }
+
+                        $resultKurumID = $Panel_Model->addNewAdminKurum($data);
+
+                        if ($resultKurumID) {
+                            $resultMemcache = $MemcacheModel->get($uniqueKey);
+                            if ($resultMemcache) {
+                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                            }
+                            $sonuc["newKurumID"] = $resultKurumID;
+                            $sonuc["insert"] = "Başarıyla Kurum Eklenmiştir.";
                         } else {
-                            $model = $this->load->model("panel_model");
-                            $result = $model->updateProjectAdressInsert($data, $projekayitAdres_label);
-                            if ($result) {
-                                $sonuc["Adreslabel_id"] = $result;
-                                $sonuc["adres_basari"] = "Proje Adresiniz başarıyla güncellenmiştir.";
-                            } else {
-                                $sonuc["hata"] = "Bi Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                //$sonuc["Id"]=$Idresult;
-                            }
+                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
                         }
                     }
 
-                    break;
-
-                case "ProjeModalDetayIconId":
-                    $data = $form->post('projeModalDtyID', true);
-                    if ($form->submit()) {
-                        $data = array(
-                            ':projeModalDtyID' => $form->values['projeModalDtyID']
-                        );
-                    }
-                    $projeModalDetayIcon = $this->load->model("panel_model");
-                    $data["projeModalDetayIcons"] = $projeModalDetayIcon->projeModalDetayIcon($data);
-                    $sonuc["projeModalDetayIcons"] = $data["projeModalDetayIcons"];
                     break;
             }
             echo json_encode($sonuc);

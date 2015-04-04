@@ -223,6 +223,7 @@ class AdminWeb extends Controller {
                         $adminKurum[$a]['AdminKurumID'] = $kurumListe[$a]['SBKurumID'];
                         $adminKurum[$a]['AdminKurumAciklama'] = $kurumListe[$a]['SBKurumAciklama'];
                         $adminKurum[$a]['AdminKurumBolge'] = $kurumListe[$a]['SBBolgeAdi'];
+                        $adminKurum[$a]['AdminKurumBolgeID'] = $kurumListe[$a]['SBBolgeID'];
                         $kurumID[] = $kurumListe[$a]['SBKurumID'];
                     }
 
@@ -251,6 +252,7 @@ class AdminWeb extends Controller {
                         $adminKurum[$a]['AdminKurumID'] = $bolgeKurumListe[$a]['SBKurumID'];
                         $adminKurum[$a]['AdminKurumAciklama'] = $bolgeKurumListe[$a]['SBKurumAciklama'];
                         $adminKurum[$a]['AdminKurumBolge'] = $bolgeKurumListe[$a]['SBBolgeAdi'];
+                        $adminKurum[$a]['AdminKurumBolgeID'] = $kurumListe[$a]['SBBolgeID'];
                         $kurumID[] = $bolgeKurumListe[$a]['SBKurumID'];
                     }
 

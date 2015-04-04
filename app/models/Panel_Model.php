@@ -1,6 +1,7 @@
 <?php
 
 class Panel_Model extends Model {
+
     public function __construct() {
         parent::__construct();
     }
@@ -9,11 +10,10 @@ class Panel_Model extends Model {
         $sql = "SELECT " . $Kadi . "," . $KullaniciID . " FROM " . $tableName . " WHERE " . $Kadi . " = :loginKadi && " . $Sifre . " = :loginSifre LIMIT 1";
         return ($count = $this->db->select($sql, $array));
     }
-   
-    
+
     //admin firma özellikleri getirme
     public function datatable() {
-         $sql = "SELECT SBBolgeAdi, SBBolgeAciklama FROM sbbolgeler";
+        $sql = "SELECT SBBolgeAdi, SBBolgeAciklama FROM sbbolgeler";
         return($this->db->select($sql));
     }
 
@@ -42,14 +42,14 @@ class Panel_Model extends Model {
 
     //admin bölgeler listele
     public function rutbeBolgeListele($array = array()) {
-        $sql = 'SELECT SBBolgeAdi,SBBolgeID FROM sbbolgeler Where SBBolgeID IN ('.$array.') ORDER BY SBBolgeAdi ASC' ;
+        $sql = 'SELECT SBBolgeAdi,SBBolgeID FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
         return($this->db->select($sql));
     }
 
     //admin bölgeler kurum count
     public function bolgeKurum_Count($array = array(), $firmaID) {
         $sql = 'SELECT SBBolgeID FROM sbkurum WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ')';
-        error_log("zsql".$sql);
+        error_log("zsql" . $sql);
         return($this->db->select($sql));
     }
 
@@ -58,24 +58,24 @@ class Panel_Model extends Model {
         $sql = 'SELECT DISTINCT(SBTurAracID), SBBolgeID FROM sbtur WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And SBTurFirmaID=' . $firmaID;
         return($this->db->select($sql));
     }
-    
+
     //admin bölgeler öğrenci count
     public function bolgeOgrenci_Count($array = array(), $firmaID) {
         $sql = 'SELECT BSBolgeID FROM bsogrenci WHERE BSBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And BSFirmaID=' . $firmaID;
         return($this->db->select($sql));
     }
-    
+
     //admin bölgeler İŞÇİ count
     public function bolgeIsci_Count($array = array(), $firmaID) {
         $sql = 'SELECT SBBolgeID FROM sbisci WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And SBFirmaID=' . $firmaID;
         return($this->db->select($sql));
     }
-    
+
     //admin yeni bölge kaydet
     public function addNewAdminBolge($data) {
         return ($this->db->insert("sbbolgeler", $data));
     }
-    
+
     //admin-bölge kaydet
     public function addAdminBolge($data) {
         return ($this->db->insert("bsadminbolge", $data));
@@ -83,69 +83,111 @@ class Panel_Model extends Model {
 
     //admin bölge detail
     public function adminBolgeDetail($adminBolgeDetailID) {
-        $sql = 'SELECT * FROM sbbolgeler WHERE SBBolgeID=' . $adminBolgeDetailID;
+        $sql = 'SELECT SBBolgeID,SBBolgeAdi,SBBolgeAciklama FROM sbbolgeler WHERE SBBolgeID=' . $adminBolgeDetailID;
         return($this->db->select($sql));
     }
-    
+
     //admin bölge kurum detail
     public function adminBolgeKurumDetail($adminBolgeDetailID) {
-        $sql = 'SELECT SBKurumAdi,SBKurumLokasyon,SBKurumID FROM sbkurum WHERE SBBolgeID=' . $adminBolgeDetailID. ' ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumAdi,SBKurumLokasyon,SBKurumID FROM sbkurum WHERE SBBolgeID=' . $adminBolgeDetailID . ' ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
-    
+
     //admin bölge detail bölge delete
     public function adminBolgeDelete($adminBolgeDetailID) {
         return ($this->db->delete("sbbolgeler", "SBBolgeID=$adminBolgeDetailID"));
     }
-    
+
     //admin bölge detail bölge delete--idlerin tutulduğu tablo
     public function adminBolgeIDDelete($adminBolgeDetailID) {
         return ($this->db->delete("bsadminbolge", "BSBolgeID=$adminBolgeDetailID"));
     }
-    
+
     //admin bölge özellikleri düzenleme
     public function adminBolgeOzelliklerDuzenle($data, $adminBolgeDetailID) {
-        return ($this->db->update("sbbolgeler", $data, "SBBolgeID=".$adminBolgeDetailID));
+        return ($this->db->update("sbbolgeler", $data, "SBBolgeID=" . $adminBolgeDetailID));
     }
-    
+
     //admin yeni bölge-> kurum kaydet
     public function addNewAdminBolgeKurum($data) {
         return ($this->db->insert("sbkurum", $data));
     }
-    
-    //kurumliste
-    
+
     //admin kurum count
     public function kurumListeleCount() {
         $sql = "SELECT SBKurumID FROM sbkurum";
         return($this->db->select($sql));
     }
-    
+
     //admin kurumlar rutbe count
     public function rutbeKurumCount($array = array()) {
-        $sql = 'SELECT SBKurumID FROM sbkurum Where SBBolgeID IN ('.$array.')' ;
+        $sql = 'SELECT SBKurumID FROM sbkurum Where SBBolgeID IN (' . $array . ')';
         return($this->db->select($sql));
     }
-    
+
     //admin kruum listele
     public function kurumListele() {
         $sql = "SELECT SBKurumAdi,SBKurumID,SBKurumAciklama,SBBolgeID,SBBolgeAdi FROM sbkurum ORDER BY SBKurumAdi ASC";
         return($this->db->select($sql));
     }
-    
+
     //admin bölgeler kurum count
     public function kurumTur_Count($array = array()) {
         $sql = 'SELECT SBKurumID FROM sbtur WHERE SBKurumID IN (' . implode(',', array_map('intval', $array)) . ')';
         return($this->db->select($sql));
     }
-    
+
     //admin bölgeye öre kurum listele
     public function rutbeKurumBolgeListele($array = array()) {
-        $sql = 'SELECT SBKurumAdi,SBKurumID,SBKurumAciklama,SBBolgeID,SBBolgeAdi FROM sbkurum Where SBBolgeID IN ('.$array.') ORDER BY SBKurumAdi ASC' ;
+        $sql = 'SELECT SBKurumAdi,SBKurumID,SBKurumAciklama,SBBolgeID,SBBolgeAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
-    
-    
+
+    //admin kurum detail
+    public function adminKurumDetail($adminKurumDetailID) {
+        $sql = 'SELECT SBKurumID,SBKurumAdi,SBBolgeAdi,SBKurumTelefon,SBKurumEmail,SBKurumAdres,SBKurumAciklama FROM sbkurum WHERE SBKurumID=' . $adminKurumDetailID;
+        return($this->db->select($sql));
+    }
+
+    //admin kurum tur detail
+    public function adminKurumTurDetail($adminKurumDetailID) {
+        $sql = 'SELECT SBTurAdi,SBTurID FROM sbtur WHERE SBKurumID=' . $adminKurumDetailID . ' ORDER BY SBTurAdi ASC';
+        return($this->db->select($sql));
+    }
+
+    //admin kurum detail  delete
+    public function adminKurumDelete($adminKurumDetailID) {
+        return ($this->db->delete("sbkurum", "SBKurumID=$adminKurumDetailID"));
+    }
+
+    //admin kurum özellikleri düzenleme
+    public function adminKurumOzelliklerDuzenle($data, $adminKurumDetailID) {
+        return ($this->db->update("sbkurum", $data, "SBKurumID=" . $adminKurumDetailID));
+    }
+
+    //admin kurum bölge select listele
+    public function kurumBolgeListele() {
+        $sql = "SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler ORDER BY SBBolgeAdi ASC";
+        return($this->db->select($sql));
+    }
+
+    //admine göre kurum bölge select listele
+    public function adminKurumBolgeListele($adminID) {
+        $sql = "SELECT BSBolgeID FROM bsadminbolge Where BSAdminID=" . $adminID;
+        return($this->db->select($sql));
+    }
+
+    //admin rütbe kurum bölge select listele
+    public function adminRutbeKurumBolgeListele($array = array()) {
+        $sql = 'SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
+        return($this->db->select($sql));
+    }
+
+    //admin yeni bölge-> kurum kaydet
+    public function addNewAdminKurum($data) {
+        return ($this->db->insert("sbkurum", $data));
+    }
+
     public function updateNewProject($data, $gelenlabel) {
         return ($this->db->update("insaat_projeler", $data, "insaat_proje_id=$gelenlabel"));
     }
