@@ -144,6 +144,7 @@ function svControl(dtype, dclass, dislemler) {
                 $("#" + dclass).height(th);
                 $("#" + dclass).css("z-index", z);
                 $('[data-z="' + (z - 2) + '"]').css("display", "block");
+                svDiv = $('[data-z="' + (z - 2) + '"]');
                 $('#' + dclass).toggle(effect, options, duration);
                 z--;
                 break;
@@ -152,17 +153,38 @@ function svControl(dtype, dclass, dislemler) {
             $("#" + dclass).height(th);
             $("#" + dclass).css("z-index", z);
             $('[data-z="' + (z - 2) + '"]').css("display", "block");
+            svDiv = $('[data-z="' + (z - 2) + '"]');
             $('#' + dclass).toggle(effect, options, duration);
             z--;
         }
     }
     if (z > 1) {
         $(".wrapper").find("aside").css("display", "none");
+        setSvHeight();
     } else {
         $(".wrapper").find("aside").css("display", "block");
     }
 }
 // End Subview Kontrolü
+
+$(window).resize(function () {
+    setSvHeight();
+});
+
+// Subview Yükseklik Ayarlama
+function setSvHeight() {
+    if (z > 1) {
+        var hh  = $(".header").height();
+        svDiv.height($(window).height() - hh);
+    }
+
+    if (isMap == true) {
+        var mh = $("#mapHeader").height();
+        var hh  = $(".header").height();
+        var sh = $(window).height() - (mh + hh);
+        $("#multiple_map").height(sh);
+    }
+}
 
 //Edit Kontrol
 function editControl(edtislemler) {
@@ -324,7 +346,7 @@ function Mobileinitialize(Mobileenlem, Mobileboylam) {
     }
 
     function placeMarker(location) {
-
+        setAllMap(null);
         var marker = new google.maps.Marker({
             position: location,
             map: map,

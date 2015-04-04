@@ -6,10 +6,11 @@
     <title><?php echo $data["Baslik"]; ?> | Shuttle</title>
     <link rel="shortcut icon" href="<?php echo SITE_PLUGINADMIN_IMG; ?>/favicon.png">
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-        <!-- Bootstrap 3.0.2 -->
-        <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <!-- Google Font -->
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <!-- Bootstrap 3.0.2 -->
+        <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        
             
             <!-- Font Awesome -->
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/font-awesome.min.css" rel="stylesheet" type="text/css" />

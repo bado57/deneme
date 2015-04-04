@@ -15,7 +15,7 @@ form textarea{resize:vertical !important;}
     z-index: 1000;
     display:none;
 }
-
+.svContent{padding-bottom: 20px;}
 .addNewButton{margin-left: 8px;}
 
 .generalInfo{margin-bottom: 30px;}
@@ -27,7 +27,10 @@ form textarea{resize:vertical !important;}
     height: auto;
     width: 100%;
 }
-
+#multiple_map{
+    position: absolute !important;
+    bottom: 0;
+}
 #saveMap{margin-right: 10px;}
 
 label input[type="search"]{width: auto !important;}

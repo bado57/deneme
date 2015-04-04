@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <link href="<?php echo SITE_PLUGINMADMIN_CSS; ?>/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
             <link rel="stylesheet" href="<?php echo SITE_PLUGINMADMIN_FONTS; ?>/css/font-awesome.min.css">
                 <!-- Bootstrap wysihtml5 - text editor -->
                 <link href="<?php echo SITE_PLUGINMADMIN_CSS; ?>/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" />

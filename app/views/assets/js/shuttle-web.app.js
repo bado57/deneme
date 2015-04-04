@@ -63,7 +63,9 @@ $(document).ready(function () {
     });
 });
 // End Document Ready
-
+var isMap = false;
+var isSingle = true;
+var svDiv;
 // Subview Kontrolü
 function svControl(dtype, dclass, dislemler) {
     var effect = 'slide';
@@ -72,8 +74,7 @@ function svControl(dtype, dclass, dislemler) {
     var h = $(window).height();
     var hh = $(document).find("header").height();
     var th = h - hh;
-    var isMap = false;
-    var isSingle = true;
+    svDiv = $("#" + dclass);
 
 //Subview açılıyor
     if (dtype != 'svClose') {
@@ -167,6 +168,7 @@ function svControl(dtype, dclass, dislemler) {
                 $("#" + dclass).height(th);
                 $("#" + dclass).css("z-index", z);
                 $('[data-z="' + (z - 2) + '"]').css("display", "block");
+                svDiv = $('[data-z="' + (z - 2) + '"]');
                 $('#' + dclass).toggle(effect, options, duration);
                 z--;
                 break;
@@ -175,16 +177,40 @@ function svControl(dtype, dclass, dislemler) {
             $("#" + dclass).height(th);
             $("#" + dclass).css("z-index", z);
             $('[data-z="' + (z - 2) + '"]').css("display", "block");
+            svDiv = $('[data-z="' + (z - 2) + '"]');
             $('#' + dclass).toggle(effect, options, duration);
             z--;
         }
     }
     if (z > 1) {
         $(".wrapper").find("aside").css("display", "none");
+        setSvHeight();
     } else {
         $(".wrapper").find("aside").css("display", "block");
     }
 }
+
+$(window).resize(function () {
+    setSvHeight();
+});
+
+// Subview Yükseklik Ayarlama
+function setSvHeight() {
+    if (z > 1) {
+        var hh  = $(".header").height();
+        svDiv.height($(window).height() - hh);
+    }
+
+    if (isMap == true) {
+        var mh = $("#mapHeader").height();
+        var hh  = $(".header").height();
+        var sh = $(window).height() - (mh + hh);
+        $("#multiple_map").height(sh);
+    }
+}
+
+
+
 // End Subview Kontrolü
 
 //Edit Kontrol
@@ -358,7 +384,7 @@ function initialize() {
         }
 
         function placeMarker(location) {
-
+            setAllMap(null);
             var marker = new google.maps.Marker({
                 position: location,
                 map: map,
