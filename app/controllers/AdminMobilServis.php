@@ -82,28 +82,55 @@ class AdminMobilServis extends Controller {
 
                     case "bolgeislem":
 
-                        //model bağlantısı
-                        $Panel_Model = $this->load->model("panel_model");
-
                         $form->post("rutbe", true);
                         $rutbe = $form->values['rutbe'];
 
-                        $adminRutbe = Session::get("userRutbe");
-                        $adminID = Session::get("userId");
-                        $uniqueKey = Session::get("userFirmaKod");
-                        $uniqueKey = $uniqueKey . '_ABolge' . $adminID;
+                        $form->post("id", true);
+                        $kid = $form->values['id'];
+                        
+                        $form->post("enlem", true);
+                        $enlem = $form->values['enlem'];
+                        
+                        $form->post("boylam", true);
+                        $boylam = $form->values['boylam'];
+                        
+                        error_log($enlem);
+                        error_log($boylam);
 
+                        $formDbConfig = $this->load->otherClasses('DatabaseConfig');
+                        $usersselect_model = $this->load->model("adminselectdb_model");
 
+                        $loginfirmaID = $form->substrEnd($loginKadi, 6);
+                        //return database results
+                        $UserSelectDb = $usersselect_model->kullaniciSelectDb($loginfirmaID);
 
+                        $SelectdbName = $UserSelectDb[0]['rootFirmaDbName'];
+                        $SelectdbIp = $UserSelectDb[0]['rootFirmaDbIp'];
+                        $SelectdbUser = $UserSelectDb[0]['rootFirmaDbUser'];
+                        $SelectdbPassword = $UserSelectDb[0]['rootFirmaDbSifre'];
+                        $SelectdbFirmaKod = $UserSelectDb[0]['rootfirmaKodu'];
+
+                        $formDbConfig->configDb($SelectdbName, $SelectdbIp, $SelectdbUser, $SelectdbPassword);
+                        //model bağlantısı
+                        $Panel_Model = $this->load->model("panel_model_mobile");
+
+                        //benzersiz anahtar
+                        $uniqueKey = $loginKadi . '_ABolge';
+
+                        //bölge html ye username i gönderiyorum
+                        $adminBolge[0]['AdminUsername'] = $loginKadi;
+                        $adminBolge[0]['AdminUserID'] = $kid;
+                        $adminBolge[0]['AdminFirmaId'] = $loginfirmaID;
+                        $adminBolge[0]['enlem'] = $enlem;
+                        $adminBolge[0]['boylam'] = $boylam;
+                            
                         $resultMemcache = $MemcacheModel->get($uniqueKey);
                         if ($resultMemcache) {
                             $adminBolge = $resultMemcache;
                         } else {
                             //super adminse tüm bölgeleri görür
-                            if ($adminRutbe != 0) {
-
-                                $bolgeListe = $Panel_Model->bolgeListele();
-
+                            if ($rutbe != 0) {
+                                $bolgeListe = $Panel_Model->MbolgeListele();
                                 for ($a = 0; $a < count($bolgeListe); $a++) {
                                     $adminBolge[$a]['AdminBolge'] = $bolgeListe[$a]['SBBolgeAdi'];
                                     $adminBolge[$a]['AdminBolgeID'] = $bolgeListe[$a]['SBBolgeID'];
@@ -111,7 +138,10 @@ class AdminMobilServis extends Controller {
                                     $bolgeId[] = $bolgeListe[$a]['SBBolgeID'];
                                 }
                             } else {//değilse admin ıd ye göre bölge görür
-                                $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
+                                //adminID
+                                $adminID = $Panel_Model->MbolgeAdminID($loginKadi);
+
+                                $bolgeListeRutbe = $Panel_Model->MAdminbolgeListele($adminID);
                                 //echo count($bolgeListeRutbe);
 
                                 for ($r = 0; $r < count($bolgeListeRutbe); $r++) {
@@ -120,7 +150,7 @@ class AdminMobilServis extends Controller {
                                 $rutbebolgedizi = implode(',', $bolgerutbeId);
 
 
-                                $bolgeListe = $Panel_Model->rutbeBolgeListele($rutbebolgedizi);
+                                $bolgeListe = $Panel_Model->MrutbeBolgeListele($rutbebolgedizi);
 
                                 for ($a = 0; $a < count($bolgeListe); $a++) {
                                     $adminBolge[$a]['AdminBolge'] = $bolgeListe[$a]['SBBolgeAdi'];
@@ -129,17 +159,17 @@ class AdminMobilServis extends Controller {
                                 }
                             }
 
-                            $bolgekurumSayi[] = $Panel_Model->bolgeKurum_Count($bolgeId);
-
+                            $bolgekurumSayi[] = $Panel_Model->MbolgeKurum_Count($bolgeId);
                             for ($b = 0; $b < count($bolgeListe); $b++) {
-                                $sonuc = $formSession->array_deger_filtreleme($bolgekurumSayi[0], 'SBBolgeID', $bolgeListe[$b]['SBBolgeID']);
+                                $sonuc = $form->array_deger_filtreleme($bolgekurumSayi[0], 'SBBolgeID', $bolgeListe[$b]['SBBolgeID']);
                                 $adminBolge[$b]['AdminKurum'] = count($sonuc);
                             }
                             //memcache kayıt
                             $result = $MemcacheModel->set($uniqueKey, $adminBolge, false, 60);
                         }
 
-                        $this->load->view("Template_AdminBackEnd/MobileAdmin/adminbolgemobil", $deger, $adminBolge);
+                        $this->load->view("Template_AdminBackEnd/MobileAdmin/adminbolgemobil", $deger, $adminBolge, $rutbe);
+
 
                         break;
                 }

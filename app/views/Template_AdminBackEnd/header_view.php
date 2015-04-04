@@ -205,7 +205,7 @@
                                                 <a href="#" class="btn btn-default btn-flat"><?php echo $data["Profil"]; ?></a>
                                             </div>
                                             <div class="pull-right">
-                                                <a href="<?php echo SITE_URL_LOGINN; ?>/logout" class="btn btn-default btn-flat"><?php echo $data["CikisYap"]; ?></a>
+                                                <a href="<?php echo SITE_URL_LOGOUT; ?>" class="btn btn-default btn-flat"><?php echo $data["CikisYap"]; ?></a>
                                             </div>
                                         </li>
                                     </ul>

@@ -31,8 +31,7 @@ class AdminAjaxSorgu extends Controller {
                     $adminRutbe = Session::get("userRutbe");
 
                     if ($adminRutbe != 1) {
-                        Session::destroy();
-                        header("Location:" . SITE_URL);
+                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
 
                         $data = $form->post('usersloginadi', true);
@@ -55,8 +54,7 @@ class AdminAjaxSorgu extends Controller {
                     $adminRutbe = Session::get("userRutbe");
 
                     if ($adminRutbe != 1) {
-                        Session::destroy();
-                        header("Location:" . SITE_URL);
+                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
 
                         $uniqueKey = Session::get("userFirmaKod");
@@ -71,7 +69,6 @@ class AdminAjaxSorgu extends Controller {
                         $form->post('firma_email', true);
                         $form->post('firma_website', true);
                         $form->post('firma_lokasyon', true);
-                        error_log("datakod" . $form->values['firma_kod']);
 
                         if ($form->submit()) {
                             $data = array(
@@ -130,8 +127,7 @@ class AdminAjaxSorgu extends Controller {
                     $uniqueKey = $uniqueKey . '_ABolge';
 
                     if ($adminRutbe != 1) {
-                        Session::destroy();
-                        header("Location:" . SITE_URL);
+                        header("Location:" . SITE_URL_LOGOUT);
                     } else {
 
                         $form->post('bolge_adi', true);
@@ -176,8 +172,7 @@ class AdminAjaxSorgu extends Controller {
                     $adminRutbe = Session::get("userRutbe");
 
                     if ($adminRutbe != 1) {
-                        Session::destroy();
-                        header("Location:" . SITE_URL);
+                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
 
                         $form->post('adminbolgeRowid', true);
@@ -213,8 +208,7 @@ class AdminAjaxSorgu extends Controller {
                     $adminRutbe = Session::get("userRutbe");
 
                     if ($adminRutbe != 1) {
-                        Session::destroy();
-                        header("Location:" . SITE_URL);
+                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
 
                         $uniqueKey = Session::get("username");
@@ -253,8 +247,7 @@ class AdminAjaxSorgu extends Controller {
                     $uniqueKey = $uniqueKey . '_ABolge';
 
                     if ($adminRutbe != 1) {
-                        Session::destroy();
-                        header("Location:" . SITE_URL);
+                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
 
                         $form->post('bolgedetail_id', true);
@@ -289,11 +282,11 @@ class AdminAjaxSorgu extends Controller {
                     $uniqueKey = $uniqueKey . '_ABolge';
 
                     if ($adminRutbe != 1) {
-                        Session::destroy();
-                        header("Location:" . SITE_URL);
+                        header("Location:" . SITE_URL_LOGOUT);
                     } else {
 
                         $form->post('bolgeid', true);
+                        $form->post('bolgead', true);
                         $form->post('bolgkurumadi', true);
                         $form->post('bolgkurumTlfn', true);
                         $form->post('bolgkurumEmail', true);
@@ -315,6 +308,7 @@ class AdminAjaxSorgu extends Controller {
                                 'SBKurumAdi' => $form->values['bolgkurumadi'],
                                 'SBKurumAciklama' => $form->values['bolgkurumaciklama'],
                                 'SBBolgeID' => $form->values['bolgeid'],
+                                'SBBolgeAdi' => $form->values['bolgead'],
                                 'SBKurumUlke' => $form->values['bolgkurumulke'],
                                 'SBKurumIl' => $form->values['bolgkurumil'],
                                 'SBKurumIlce' => $form->values['bolgkurumilce'],

@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/AdminAjaxSorgu",
+    url: "http://192.168.1.21/SProject/AdminAjaxSorguMobil",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -13,7 +13,6 @@ $.ajaxSetup({
         }
     }
 });
-
 $(document).ready(function () {
 
     $('#adminBolgeTable').dataTable({
@@ -32,10 +31,11 @@ $(document).ready(function () {
         i.removeClass("fa-search");
         i.addClass("fa-spinner fa-spin");
         var adminbolgeRowid = $(this).attr('value');
+        var rutbe = $("input[name=adminRutbe]").val();
+        var firmId = $("input[name=adminFirmId]").val();
         KurumTable.DataTable().clear().draw();
-        console.log("gelen");
         $.ajax({
-            data: {"adminbolgeRowid": adminbolgeRowid, "tip": "adminBolgeDetail"},
+            data: {"adminbolgeRowid": adminbolgeRowid, "rutbe": rutbe, "firmId": firmId, "tip": "adminBolgeDetail"},
             success: function (cevap) {
                 if (cevap.hata) {
                     alert(cevap.hata);
@@ -79,12 +79,11 @@ var AdminBolgeDetailVazgec = [];
 var AdminBolgeKaydet = [];
 var AdminBolgeKurumHarita = [];
 var AdminBolgeDetailNewKurum = [];
-var AdminKurumKaydet = [];
 
 $.AdminIslemler = {
     adminFirmaOzellik: function () {
         //Firma İşlemleri Değerleri
-        //var firma_kod = $("input[name=FrmKod]").val();
+        var firma_kod = $("input[name=FrmKod]").val();
         var firma_adi = $("input[name=FirmaAdi]").val();
         var firma_aciklama = $("textarea[name=Aciklama]").val();
         var ogrenci_chechkbox = $('#OgrenciServis').is(':checked');
@@ -105,9 +104,8 @@ $.AdminIslemler = {
         var firma_email = $("input[name=FirmaEmail]").val();
         var firma_website = $("input[name=FirmaWebAdresi]").val();
         var firma_lokasyon = $("input[name=FirmaLokasyon]").val();
-
         $.ajax({
-            data: {"firma_adi": firma_adi, "firma_aciklama": firma_aciklama, "ogrenci_chechkbox": ogrenci_chechkbox,
+            data: {"firma_kod": firma_kod, "firma_adi": firma_adi, "firma_aciklama": firma_aciklama, "ogrenci_chechkbox": ogrenci_chechkbox,
                 "personel_chechkbox": personel_chechkbox, "firma_adres": firma_adres, "firma_telefon": firma_telefon,
                 "firma_email": firma_email, "firma_website": firma_website, "firma_lokasyon": firma_lokasyon, "tip": "adminFirmaIslemlerKaydet"},
             success: function (cevap) {
@@ -147,6 +145,7 @@ $.AdminIslemler = {
         $("input[name=FirmaEmail]").val(AdminVazgec[8]);
         $("input[name=FirmaWebAdresi]").val(AdminVazgec[9]);
         $("input[name=FirmaLokasyon]").val(AdminVazgec[10]);
+
     },
     adminFirmaDuzenle: function () {
 
@@ -185,13 +184,17 @@ $.AdminIslemler = {
         AdminBolgeKaydet = [];
         var bolge_adi = $("input[name=BolgeAdi]").val();
         var bolge_aciklama = $("textarea[name=BolgeAciklama]").val();
+        var id = $("input[name=adminUserID]").val();
+        var rutbe = $("input[name=adminRutbe]").val();
+        var username = $("input[name=adminUsername]").val();
+        var firmId = $("input[name=adminFirmId]").val();
 
         AdminBolgeKaydet.push(bolge_adi);
         AdminBolgeKaydet.push(bolge_aciklama);
 
-        if (bolge_adi != '') {
+        if (bolge_adi != '' && rutbe != 0 && id != '') {
             $.ajax({
-                data: {"bolge_adi": bolge_adi, "bolge_aciklama": bolge_aciklama, "tip": "adminBolgeYeniKaydet"},
+                data: {"bolge_adi": bolge_adi, "bolge_aciklama": bolge_aciklama, "firmId": firmId, "id": id, "rutbe": rutbe, "username": username, "tip": "adminBolgeYeniKaydet"},
                 success: function (cevap) {
                     if (cevap.hata) {
                         AdminBolgeKaydet = [];
@@ -229,8 +232,11 @@ $.AdminIslemler = {
     },
     adminBolgeDetailSil: function () {
         var bolgedetail_id = $("input[name=adminBolgeDetailID]").val();
+        var rutbe = $("input[name=adminRutbe]").val();
+        var username = $("input[name=adminUsername]").val();
+        var firmId = $("input[name=adminFirmId]").val();
         $.ajax({
-            data: {"bolgedetail_id": bolgedetail_id, "tip": "adminBolgeDetailDelete"},
+            data: {"firmId": firmId, "rutbe": rutbe, "username": username, "bolgedetail_id": bolgedetail_id, "tip": "adminBolgeDetailDelete"},
             success: function (cevap) {
                 if (cevap.hata) {
                     alert(cevap.hata);
@@ -258,11 +264,15 @@ $.AdminIslemler = {
         var bolgedetail_adi = $("input[name=BolgeDetailAdi]").val();
         var bolgedetail_aciklama = $("textarea[name=BolgeDetailAciklama]").val();
         var bolgedetail_id = $("input[name=adminBolgeDetailID]").val();
+        var rutbe = $("input[name=adminRutbe]").val();
+        var username = $("input[name=adminUsername]").val();
+        var firmId = $("input[name=adminFirmId]").val();
+
         if (AdminBolgeDetailVazgec[0] == bolgedetail_adi && AdminBolgeDetailVazgec[1] == bolgedetail_aciklama) {
             alert("Lütfen Değişiklik yaptığınıza emin olun.");
         } else {
             $.ajax({
-                data: {"bolgedetail_id": bolgedetail_id, "bolgedetail_adi": bolgedetail_adi, "bolgedetail_aciklama": bolgedetail_aciklama, "tip": "adminBolgeDetailDuzenle"},
+                data: {"firmId": firmId, "rutbe": rutbe, "username": username, "bolgedetail_id": bolgedetail_id, "bolgedetail_adi": bolgedetail_adi, "bolgedetail_aciklama": bolgedetail_aciklama, "tip": "adminBolgeDetailDuzenle"},
                 success: function (cevap) {
                     if (cevap.hata) {
                         alert(cevap.hata);
@@ -330,6 +340,10 @@ $.AdminIslemler = {
 
         var bolgeid = $("input[name=adminBolgeDetailID]").val();
         var bolgead = $("input[name=BolgeDetailAdi]").val();
+        //input hidden
+        var rutbe = $("input[name=adminRutbe]").val();
+        var username = $("input[name=adminUsername]").val();
+        var firmId = $("input[name=adminFirmId]").val();
         //Bölge kurum İşlemleri Değerleri Temizleme
 
         var bolgkurumTlfn = $("input[name=KurumTelefon]").val();
@@ -349,7 +363,7 @@ $.AdminIslemler = {
 
         if (bolgkurumadi != '' && bolgeid != '') {
             $.ajax({
-                data: {"bolgeid": bolgeid,"bolgead": bolgead, "bolgkurumadi": bolgkurumadi, "bolgkurumTlfn": bolgkurumTlfn, "bolgkurumEmail": bolgkurumEmail,
+                data: {"firmId": firmId, "bolgead": bolgead, "rutbe": rutbe, "username": username, "bolgeid": bolgeid, "bolgkurumadi": bolgkurumadi, "bolgkurumTlfn": bolgkurumTlfn, "bolgkurumEmail": bolgkurumEmail,
                     "bolgkurumwebsite": bolgkurumwebsite, "bolgkurumadrsDty": bolgkurumadrsDty, "bolgkurumaciklama": bolgkurumaciklama,
                     "bolgkurumulke": bolgkurumulke, "bolgkurumil": bolgkurumil, "bolgkurumilce": bolgkurumilce, "bolgkurumsemt": bolgkurumsemt,
                     "bolgkurummahalle": bolgkurummahalle, "bolgkurumsokak": bolgkurumsokak, "bolgkurumpostakodu": bolgkurumpostakodu,
@@ -367,10 +381,7 @@ $.AdminIslemler = {
                                 $('tbody#adminBolgeRow > tr:eq(' + t + ') > td:eq(1)').text(bolgekurumsayac);
                             }
                         }
-                        /*
-                         $("ul#adminBolgeKurumDetail").prepend("<li class='list-group-item' style='background-color:#F2F2F2'>"
-                         + "<a class='svToggle' data-type='svOpen' data-islemler='adminBolgeMultiMap' data-class='map' data-index='index' role='button' data-toggle='tooltip'data-value=" + cevap.newBolgeKurumID + " data-placement='top' title='' value='" + AdminBolgeDetailNewKurum[1] + "'>"
-                         + "<i class='fa fa-map-marker'></i>    " + AdminBolgeDetailNewKurum[0] + "</a><i></i></li>");*/
+
                         var addRow = "<tr style='background-color:#F2F2F2'><td>"
                                 + "<a class='svToggle' data-type='svOpen' data-islemler='adminBolgeMultiMap' data-class='map' data-index='index' role='button' data-toggle='tooltip'data-value=" + cevap.newBolgeKurumID + " data-placement='top' title='' value='" + AdminBolgeDetailNewKurum[1] + "'>"
                                 + "<i class='fa fa-map-marker'></i>    " + AdminBolgeDetailNewKurum[0] + "</a><i></i></td></tr>";
@@ -407,190 +418,15 @@ $.AdminIslemler = {
         $("#singleMapBaslik").text(bolge_adi);
         return true;
     },
-    adminKurumYeni: function () {
-        $("input[name=KurumAdi]").val('');
-        $("textarea[name=KurumAciklama]").val('');
-        return true;
-    },
-    adminAddKurumVazgec: function () {
-        $("input[name=KurumAdi]").val('');
-        $("textarea[name=KurumAciklama]").val('');
-        return true;
-    },
-    adminKurumKaydet: function () {
-        AdminKurumKaydet = [];
-        var kurum_adi = $("input[name=KurumAdi]").val();
-        var kurum_aciklama = $("textarea[name=KurumAciklama]").val();
+    adminBolgeMobilSingle: function () {
+        var enlem = $("input[name=enlem]").val();
+        var boylam = $("input[name=boylam]").val();
 
-        AdminKurumKaydet.push(kurum_adi);
-        AdminKurumKaydet.push(kurum_adi);
+        mobilEnlem = enlem;
+        mobilBoylam = boylam;
 
-        if (bolge_adi != '') {
-            $.ajax({
-                data: {"kurum_adi": kurum_adi, "kurum_aciklama": kurum_aciklama, "tip": "adminKurumYeniKaydet"},
-                success: function (cevap) {
-                    if (cevap.hata) {
-                        AdminKurumKaydet = [];
-                        alert(cevap.hata);
-                    } else {
-                        var bolgeCount = $('#smallBolge').text();
-                        bolgeCount++;
-                        $('#smallBolge').text(bolgeCount);
-                        $("tbody#adminBolgeRow").prepend("<tr style='background-color:#F2F2F2'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
-                                + "<i class='fa fa-search'></i> " + AdminBolgeKaydet[0] + "</a>"
-                                + "</td><td class='hidden-xs'>0</td><td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td></tr>");
-                    }
-                }
-            });
-            return true;
-        } else {
-            alert("Lütfen Kurum Adını Giriniz");
-        }
+        return true;
     }
 }
-
-
-/*
- $(document).on('click', 'ul#adminBolgeKurumDetail > li > a', function (e) {
- var AdminBolgeKurumMap = new Array();
- 
- var bolge_adi = $("input[name=BolgeDetailAdi]").val();
- 
- //Tıklanılan değer indexi
- var index = $(this).parent().index();
- 
- var count = $('ul#adminBolgeKurumDetail > li').length;
- 
- var MapValue = $(this).attr('value');
- 
- for (var countK = 0; countK < count; countK++) {
- var bolgeKurumlarMap = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').attr('value');
- var LocationBolme = bolgeKurumlarMap.split(",");
- var bolgeKurumName = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').text();
- AdminBolgeKurumMap[countK] = Array(bolgeKurumName, LocationBolme[0], LocationBolme[1]);
- }
- $("#kurumHaritaName").text(bolge_adi);
- multipleMapping(AdminBolgeKurumMap, index);
- google.maps.event.addDomListener(window, 'load', multipleMapping);
- });
- */
-
-/*
- var proje_son_id;
- 
- 
- var yapiekle_deger = $("#ProjeYapiSelect select option:selected").val();
- if (yapiekle_deger == 1) {
- yapiekle_deger = "Apartman";
- $('div#degisken_yapi').css("name", "InputBlokSayii");
- } else if (yapiekle_deger == 2) {
- yapiekle_deger = "Villa";
- $('div#degisken_yapi').css("name", "InputVillaSayii");
- } else {
- yapiekle_deger = "Müstakil";
- }
- 
- var degerim = $('#ProjeYapiSelect select option:selected').val();
- $("#ProjeYapiSelect select").change(function () {
- alert($('#ProjeYapiSelect select option:selected').html());
- });
- 
- //Blok sayısı değerleri*
- var blok_dizi = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'İ', 'J', 'K', 'L', 'M', 'N', 'O', 'Ö', 'U', 'Ü', 'P', 'R', 'S', 'T', 'U'];
- var eleman = 0;
- var indexx = 0;
- $('input[name=InputBlokSayii]').jStepper({minValue: 1, maxValue: 20, minLength: 2});
- $('body').on('keyup', 'input[name=InputBlokSayii]', function () {
- if (this.value.match(/[^0-9]/g)) {
- this.value = this.value.replace(/[^0-9]/g, '');
- return true;
- }
- var eski_eleman = eleman;
- eleman1 = $(this).val();
- 
- if ($.isNumeric(eleman1)) {
- eleman = eleman1
- } else {
- eleman = eleman;
- }
- 
- if (eski_eleman < eleman) {
- for (var i = eski_eleman; i < eleman; i++) {
- $('div#deneme>div').eq(i).css("display", "block");
- $('div#deneme input').eq(2 * i).val(blok_dizi[i] + "  BLOK");
- $('div#deneme input').eq(2 * i + 1).val(" 8 ");
- }
- } else {
- for (var y = eleman; y < eski_eleman; y++) {
- $('div#deneme>div').eq(y).css("display", "none");
- }
- }
- $("label#istek").html(eleman);
- indexx = $("label#istek").html();
- });
- 
- 
- 
- var ajax_dizi_Text = new Array();
- var ajax_dizi_Sayi = new Array();
- 
- $.SatisKayit = {
- projeKayit: function () {
- var projeekle_kodu = $("input[name=InputPKodu]").val();
- var projeekle_durum = $("select option:selected").val();
- var projeekle_adi = $("input[name=InputProjeAdi]").val();
- var projeekle_bas_tarih = $("input[name=projekayit_bas_tarih]").val();
- var projeekle_bitis_tarih = $("input[name=projekayit_bitis_tarih]").val();
- var projeekle_textarea = $("textarea[name=projeKayit_textarea]").val();
- $.ajax({
- data: {"projeekle_kodu": projeekle_kodu, "projeekle_durum": projeekle_durum, "projeekle_adi": projeekle_adi, "projeekle_bas_tarih": projeekle_bas_tarih, "projeekle_bitis_tarih": projeekle_bitis_tarih, "projeekle_textarea": projeekle_textarea, "tip": "projeKayitt"},
- success: function (cevap) {
- if (cevap.proje_hata) {
- alert(cevap.proje_hata);
- } else {
- alert(cevap.proje_sonuc);
- $("#satis_ilk_kayit_sag_proje_kayit").slideUp(2000);
- $("#satis_ilk_kayit_sag_site_kayit").slideDown(2000);
- 
- 
- var proje_son_id = cevap.proje_son_id;
- 
- $("#blokekle").click(function () {
- 
- ajax_dizi_Text = [];
- ajax_dizi_Sayi = [];
- 
- if (indexx == 0) {
- indexx = 1;
- }
- 
- for (var a = 1; a <= indexx; a++) {
- ajax_dizi_Text.push($("#InputBlokText" + a).val());
- }
- for (var c = 1; c <= indexx; c++) {
- ajax_dizi_Sayi.push($("#InputBlokSayi" + c).val());
- }
- 
- var yapiekle_adi = $("input[name=InputBlokAdi]").val();
- var yapiekle_tipi = $("#ProjeYapiSelect select option:selected").val();
- var yapiekle_sayi = $("input[name=InputBlokSayi]").val();
- var yapiekle_textarea = $("textarea[name=siteKayit_textarea]").val();
- $.ajax({
- data: {"proje_son_id": proje_son_id, "blok_adi[]": ajax_dizi_Text, "blok_sayi[]": ajax_dizi_Sayi, "yapiekle_adi": yapiekle_adi, "yapiekle_sayi": yapiekle_sayi, "yapiekle_tipi": yapiekle_tipi, "yapiekle_textarea": yapiekle_textarea, "tip": "siteKayitt"},
- success: function (cevap) {
- if (cevap.proje_yapi_hata) {
- alert(cevap.proje_yapi_hata);
- } else {
- $("#satis_ilk_kayit_sag_proje_kayit").slideUp(2000);
- }
- }
- });
- });
- }
- }
- });
- }*/
-
-
 
 

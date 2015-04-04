@@ -52,7 +52,7 @@
                             <div class="container" style="padding-top:100px;" style="text-align:center;">
                                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-1"></div>
                                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-10">
-                                        <form role="form" method="POST" action="<?php echo SITE_URL; ?>/userslogin" id="loginForm"> 
+                                        <form role="form" action="<?php echo SITE_URL; ?>/userslogin" method="POST"  id="loginForm"> 
                                             <div class="form-group">
                                                 <select id="kullaniciLanguage" class="form-control" name="loginselected" required>                                   
                                                     <option value="ar" <?php echo Session::get('dil')=='ar' ?  'selected' : '' ;?>>Arabic</option>
@@ -69,7 +69,7 @@
                                             <div class="form-group">
                                                 <input type="password" class="form-control" placeholder="<?php echo $data["Loginsifre"]; ?>"  name="usersloginsifre">
                                             </div>
-                                            <button type="submit" class="" id="loginFrom"><?php echo $data["LoginButton"]; ?></button>
+                                            <button type="submit" id="loginFrom"><?php echo $data["LoginButton"]; ?></button>
                                         </form>
                                     </div>
                                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-1"></div>

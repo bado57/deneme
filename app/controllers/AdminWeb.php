@@ -128,7 +128,6 @@ class AdminWeb extends Controller {
 
             $resultMemcache = $MemcacheModel->get($uniqueKey);
             if ($resultMemcache) {
-                error_log("son" . $uniqueKey);
                 $adminBolge = $resultMemcache;
             } else {
                 //super adminse tüm bölgeleri görür
@@ -171,7 +170,6 @@ class AdminWeb extends Controller {
                     $sonuc = $formSession->array_deger_filtreleme($bolgekurumSayi[0], 'SBBolgeID', $bolgeListe[$b]['SBBolgeID']);
                     $adminBolge[$b]['AdminKurum'] = count($sonuc);
                 }
-                error_log("Web" . $uniqueKey);
                 //memcache kayıt
                 $result = $MemcacheModel->set($uniqueKey, $adminBolge, false, 60);
             }
@@ -179,6 +177,98 @@ class AdminWeb extends Controller {
             $this->load->view("Template_AdminBackEnd/header", $languagedeger);
             $this->load->view("Template_AdminBackEnd/left", $languagedeger);
             $this->load->view("Template_AdminBackEnd/bolgeliste", $languagedeger, $adminBolge);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL);
+        }
+    }
+
+    function kurumliste() {
+        //session güvenlik kontrolü
+        $formSession = $this->load->otherClasses('Form');
+        //sessionKontrol
+        $sessionKey = $formSession->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey) {
+            //memcache model bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+
+
+            $language = Session::get("dil");
+            //lanuage Kontrol
+            $formLanguage = $this->load->multilanguage($language);
+            $languagedeger = $formLanguage->multilanguage();
+
+
+            $adminRutbe = Session::get("userRutbe");
+            $adminID = Session::get("userId");
+            $uniqueKey = Session::get("username");
+            $uniqueKey = $uniqueKey . '_AKurum';
+
+            $resultMemcache = $MemcacheModel->get($uniqueKey);
+            if ($resultMemcache) {
+                $adminKurum = $resultMemcache;
+            } else {
+                //super adminse tüm kurumları görür
+                if ($adminRutbe != 0) {
+
+                    $kurumListe = $Panel_Model->kurumListele();
+                    //kurum count
+                    $adminKurum[0]['AdminKurumCount'] = count($kurumListe);
+                    //kurum bilgileri
+                    for ($a = 0; $a < count($kurumListe); $a++) {
+                        $adminKurum[$a]['AdminKurum'] = $kurumListe[$a]['SBKurumAdi'];
+                        $adminKurum[$a]['AdminKurumID'] = $kurumListe[$a]['SBKurumID'];
+                        $adminKurum[$a]['AdminKurumAciklama'] = $kurumListe[$a]['SBKurumAciklama'];
+                        $adminKurum[$a]['AdminKurumBolge'] = $kurumListe[$a]['SBBolgeAdi'];
+                        $kurumID[] = $kurumListe[$a]['SBKurumID'];
+                    }
+
+                    //kurum tur işlemleri
+                    $kurumTurSayi[] = $Panel_Model->kurumTur_Count($kurumID);
+
+                    for ($b = 0; $b < count($kurumListe); $b++) {
+                        $sonuc = $formSession->array_deger_filtreleme($kurumTurSayi[0], 'SBKurumID', $kurumListe[$b]['SBKurumID']);
+                        $adminKurum[$b]['AdminKurumTur'] = count($sonuc);
+                    }
+                } else {//değilse admin ıd ye göre kurum görür
+                    $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
+
+                    for ($r = 0; $r < count($bolgeListeRutbe); $r++) {
+                        $bolgerutbeId[] = $bolgeListeRutbe[$r]['BSBolgeID'];
+                    }
+                    $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+
+                    $bolgeKurumListe = $Panel_Model->rutbeKurumBolgeListele($rutbebolgedizi);
+                    //bölge count için
+                    $adminKurum[0]['AdminKurumCount'] = count($bolgeKurumListe);
+
+                    for ($a = 0; $a < count($bolgeKurumListe); $a++) {
+                        $adminKurum[$a]['AdminKurum'] = $bolgeKurumListe[$a]['SBKurumAdi'];
+                        $adminKurum[$a]['AdminKurumID'] = $bolgeKurumListe[$a]['SBKurumID'];
+                        $adminKurum[$a]['AdminKurumAciklama'] = $bolgeKurumListe[$a]['SBKurumAciklama'];
+                        $adminKurum[$a]['AdminKurumBolge'] = $bolgeKurumListe[$a]['SBBolgeAdi'];
+                        $kurumID[] = $bolgeKurumListe[$a]['SBKurumID'];
+                    }
+
+                    //kurum tur işlemleri
+                    $kurumTurSayi[] = $Panel_Model->kurumTur_Count($kurumID);
+
+                    for ($b = 0; $b < count($bolgeKurumListe); $b++) {
+                        $sonuc = $formSession->array_deger_filtreleme($kurumTurSayi[0], 'SBKurumID', $bolgeKurumListe[$b]['SBKurumID']);
+                        $adminKurum[$b]['AdminKurumTur'] = count($sonuc);
+                    }
+                }
+                //memcache kayıt
+                $result = $MemcacheModel->set($uniqueKey, $adminKurum, false, 60);
+            }
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/kurumliste", $languagedeger, $adminKurum);
             $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
         } else {
             header("Location:" . SITE_URL);

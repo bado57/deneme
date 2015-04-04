@@ -1,6 +1,6 @@
 <script type="text/javascript">
-    var activeMenu = "menu_bolge";
-    var activeLink = "link_bolgeliste";
+    var activeMenu = "menu_kurum";
+    var activeLink = "link_kurumliste";
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
 
@@ -9,17 +9,15 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-left">
                 <h3>
-                    <i class="fa fa-th"></i> <?php echo $data["Bolgeler"]; ?>
-                    <small id="smallBolge"><?php echo $model[0]['AdminBolgeCount']; ?></small><small> Toplam </small>
+                    <i class="fa fa-th"></i> <?php echo $data["Kurumlar"]; ?>
+                    <small id="smallBolge"><?php echo $model[0]['AdminKurumCount']; ?></small><small> Toplam </small>
                 </h3>
             </div>
-            <?php if (Session::get("userRutbe") != 0) { ?>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right" style="text-align:right;">
-                    <div class="form-group">
-                        <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svOpen" data-islemler="adminBolgeYeni" data-class="bolge"><i class="fa fa-plus-square"></i> <?php echo $data['BolgeYeni']; ?></button>
-                    </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right" style="text-align:right;">
+                <div class="form-group">
+                    <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svOpen" data-islemler="adminKurumYeni" data-class="kurum"><i class="fa fa-plus-square"></i> <?php echo $data['KurumYeni']; ?></button>
                 </div>
-            <?php } ?>
+            </div>
         </div>
     </section>
     <section class="content">
@@ -28,8 +26,9 @@
                 <table class="table table-responsive table-bordered table-hover table-condensed" id="adminBolgeTable">
                     <thead>
                         <tr>
-                            <th><?php echo $data["BolgeAd"]; ?></th>
-                            <th class="hidden-xs"><?php echo $data["BolgeKurumSayi"]; ?></th>
+                            <th><?php echo $data["KurumAdi"]; ?></th>
+                            <th class="hidden-xs"><?php echo $data["BolgeAd"]; ?></th>
+                            <th class="hidden-xs"><?php echo $data["TurSayi"]; ?></th>
                             <th class="hidden-xs"><?php echo $data["Aciklama"]; ?></th>
                         </tr>
                     </thead>
@@ -38,14 +37,15 @@
 
                         <?php for ($v = 0; $v < count($model); $v++) { ?>
                             <tr>
-                        <input id="adminBolgeRow" name="adminBolgeRow" type="hidden" value="<?php echo $model[$v]['AdminBolgeID']; ?>" />
+                        <input id="adminBolgeRow" name="adminBolgeRow" type="hidden" value="<?php echo $model[$v]['AdminKurumID']; ?>" />
                         <td>
-                            <a data-toggle="tooltip" data-placement="top" title="<?php echo $data["Detay"]; ?>" value="<?php echo $model[$v]['AdminBolgeID']; ?>">
-                                <i class="fa fa-search"></i> <?php echo $model[$v]['AdminBolge']; ?>
+                            <a data-toggle="tooltip" data-placement="top" title="<?php echo $data["Detay"]; ?>" value="<?php echo $model[$v]['AdminKurumID']; ?>">
+                                <i class="fa fa-search"></i> <?php echo $model[$v]['AdminKurum']; ?>
                             </a>
                         </td>
-                        <td class="hidden-xs"><?php echo $model[$v]['AdminKurum']; ?></td>
-                        <td class="hidden-xs"><?php echo $model[$v]['AdminBolgeAciklama']; ?></td>
+                        <td class="hidden-xs"><?php echo $model[$v]['AdminKurumBolge']; ?></td>
+                        <td class="hidden-xs"><?php echo $model[$v]['AdminKurumTur']; ?></td>
+                        <td class="hidden-xs"><?php echo $model[$v]['AdminKurumAciklama']; ?></td>
                         </tr>
                     <?php } ?>
                     </tbody>
@@ -56,26 +56,25 @@
     </section>
 </aside>
 
-<div id="bolge" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+<div id="kurum" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["BolgeTanimlama"]; ?> <span class="pull-right"><button data-type="svClose" data-class="bolge"  type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["KurumTanimlama"]; ?> <span class="pull-right"><button data-type="svClose" data-class="kurum"  type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
                 <form class="form-vertical col-lg-4 col-md-4 col-sm-12 col-xs-12" method="post">
                     <div class="form-group">
-                        <label for="BolgeAdi"><?php echo $data["BolgeAd"]; ?></label>
-                        <input type="text" class="form-control" id="BolgeAdi" name="BolgeAdi" value="">
+                        <label for="KurumAdi"><?php echo $data["KurumAdi"]; ?></label>
+                        <input type="text" class="form-control" id="KurumAdi" name="KurumAdi" value="">
                     </div>
                     <div class="form-group">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="BolgeAciklama" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="KurumAciklama" class="form-control dsb" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <button data-type="svClose"  data-class="bolge" type="button" data-islemler="adminBolgeCancel" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
-                        <button type="button" data-type="svClose"  data-islemler="adminBolgeKayit" data-class="bolge" class="svToggle btn btn-success"><?php echo $data["Kaydet"]; ?></button>
+                        <button data-type="svClose"  data-class="kurum" type="button" data-islemler="adminKurumCancel" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
+                        <button type="button" data-type="svClose"  data-islemler="adminKurumKayit" data-class="kurum" class="svToggle btn btn-success"><?php echo $data["Kaydet"]; ?></button>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -189,7 +188,7 @@
                             <textarea name="BolgeDetailAciklama" class="form-control dsb" rows="3" disabled=""></textarea>
                         </div>
                         <div class="form-group submit-group">
-                            <button type="button" class="btn btn-default vzg" data-Vzgislem="adminBolgeDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
+                            <button data-type="svClose" type="button" class="btn btn-default vzg" data-Vzgislem="adminBolgeDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
                             <button type="button" class="btn btn-success save" data-Saveislem="adminBolgeDetailKaydet"><?php echo $data["Kaydet"]; ?></button>
                         </div>
                         <div class="form-group edit-group">

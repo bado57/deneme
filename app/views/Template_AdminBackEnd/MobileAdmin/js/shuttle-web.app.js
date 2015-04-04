@@ -2,6 +2,8 @@
 var z = 1;
 var MultipleMapArray = new Array();
 var MultipleMapindex;
+var mobilEnlem;
+var mobilBoylam;
 
 $(document).ready(function () {
     // Sayfa Scroll Olayı
@@ -43,13 +45,6 @@ $(document).ready(function () {
     });
     // End Form Enable / Dissable Kontrolleri
 
-    // Sol Menu Navigasyon Kontrolü   
-    $(".sidebar-menu").find(".active").removeClass("active");
-    $("#" + activeMenu).find("a").click();
-    $(".sidebar-menu").find(".activeli").removeClass("activeli");
-    $("#" + activeMenu).find("#" + activeLink).addClass("activeli");
-    // End Sol Menu Navigasyon Kontrolü
-
     //subview kontrolü. Class'a Göre
     $(document).on("click", ".svToggle", function (e) {
         e.preventDefault();
@@ -89,12 +84,9 @@ function svControl(dtype, dclass, dislemler) {
                 isSingle = false;
                 var returnCevap = $.AdminIslemler.adminBolgeMultiMapping();
                 break;
-            case 'adminBolgeSingleMap' :
+            case 'adminBolgeMobilSingleMap' :
                 isMap = true;
-                var returnCevap = true;
-                break;
-            case 'adminKurumYeni' :
-                var returnCevap = $.AdminIslemler.adminKurumYeni();
+                var returnCevap = $.AdminIslemler.adminBolgeMobilSingle();
                 break;
             default :
                 $("#" + dclass).height(th);
@@ -112,14 +104,14 @@ function svControl(dtype, dclass, dislemler) {
             $('[data-z="' + (z - 1) + '"]').css("display", "none");
             $('#' + dclass).toggle(effect, options, duration);
             z++;
-            if (isMap == true) {
+            if (isMap != false) {
                 var mh = $("#mapHeader").height();
                 var sh = th - mh;
                 $("#multiple_map").height(sh);
-                if (isSingle == true) {
+                if (isSingle != false) {
                     $("#saveMap").css("display", "block");
-                    initialize();
-                    google.maps.event.addDomListener(window, 'load', initialize);
+                    Mobileinitialize(mobilEnlem, mobilBoylam);
+                    google.maps.event.addDomListener(window, 'load', Mobileinitialize);
                 } else {
                     $("#saveMap").css("display", "none");
                     multipleMapping(MultipleMapArray, MultipleMapindex);
@@ -147,12 +139,6 @@ function svControl(dtype, dclass, dislemler) {
                 break;
             case 'adminKurumHaritaKaydet' :
                 var returnCevap = saveMap();
-                break;
-            case 'adminKurumCancel' :
-                var returnCevap = $.AdminIslemler.adminAddKurumVazgec();
-                break;
-            case 'adminKurumKayit' :
-                var returnCevap = $.AdminIslemler.adminKurumKaydet();
                 break;
             default :
                 $("#" + dclass).height(th);
@@ -265,103 +251,95 @@ function saveMap() {
     return true;
 }
 
-function initialize() {
-    if (navigator.geolocation) {
 
-        var mapOptions = {
-            zoom: 16
-        };
-        var map = new google.maps.Map(document.getElementById('multiple_map'),
-                mapOptions);
+function Mobileinitialize(Mobileenlem, Mobileboylam) {
 
-        //son eklenen locationu haritada görme
-        var posValue = $('input.locationInput').val();
-        var posSplitValue = posValue.split(",");
-        if (posValue != '') {
-            var pos = new google.maps.LatLng(posSplitValue[0],
-                    posSplitValue[1]);
-            var infowindow = new google.maps.InfoWindow({
-                map: map,
-                position: pos,
-                content: lastAdress
-            });
-        }
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var pos = new google.maps.LatLng(position.coords.latitude,
-                    position.coords.longitude);
-            var infowindow = new google.maps.InfoWindow({
-                map: map,
-                position: pos,
-                content: 'Sizin Konumunuz'
-            });
-            map.setCenter(pos);
-        }, function () {
-            handleNoGeolocation(true);
+    var mapOptions = {
+        zoom: 16
+    };
+    var map = new google.maps.Map(document.getElementById('multiple_map'),
+            mapOptions);
+
+    //son eklenen locationu haritada görme
+    var posValue = $('input.locationInput').val();
+    var posSplitValue = posValue.split(",");
+    if (posValue != '') {
+        var pos = new google.maps.LatLng(posSplitValue[0],
+                posSplitValue[1]);
+        var infowindow = new google.maps.InfoWindow({
+            map: map,
+            position: pos,
+            content: lastAdress
         });
+    }
+    //enlem boylam buraya gelecek
+    var pos = new google.maps.LatLng(Mobileenlem,
+            Mobileboylam);
+    var infowindow = new google.maps.InfoWindow({
+        map: map,
+        position: pos,
+        content: 'Sizin Konumunuz'
+    });
+    map.setCenter(pos);
+
+    var marker = new google.maps.Marker({
+        position: lastLocation,
+        map: map
+    });
+
+    markers.push(marker);
+
+    google.maps.event.addListener(marker, 'click', function () {
+        var infowindow = new google.maps.InfoWindow({
+            map: map,
+            position: pos,
+            content: lastAdress
+        });
+    });
+
+    google.maps.event.addListener(map, 'click', function (event) {
+        if (lastLocation != null) {
+            setAllMap(null);
+        }
+        $.ajax({
+            type: "get",
+            url: "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + event.latLng.k + "," + event.latLng.D + "&sensor=true",
+            //timeout:3000,
+            dataType: "json",
+            success: function (cevap) {
+                ttl = cevap.results[0].formatted_address;
+                placeMarker(event.latLng);
+                incomeLocation = cevap;
+                mapEvent = event;
+                lastAdress = ttl;
+            }
+        });
+    });
+
+    // Sets the map on all markers in the array.
+    function setAllMap(map) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }
+    }
+
+    function placeMarker(location) {
 
         var marker = new google.maps.Marker({
-            position: lastLocation,
-            map: map
+            position: location,
+            map: map,
+            title: ttl
         });
 
+        var infowindow = new google.maps.InfoWindow({
+            content: ttl
+        });
+
+        infowindow.open(map, marker);
         markers.push(marker);
 
-        google.maps.event.addListener(marker, 'click', function () {
-            var infowindow = new google.maps.InfoWindow({
-                map: map,
-                position: pos,
-                content: lastAdress
-            });
-        });
-
-        google.maps.event.addListener(map, 'click', function (event) {
-            if (lastLocation != null) {
-                setAllMap(null);
-            }
-            $.ajax({
-                type: "get",
-                url: "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + event.latLng.k + "," + event.latLng.D + "&sensor=true",
-                //timeout:3000,
-                dataType: "json",
-                success: function (cevap) {
-                    ttl = cevap.results[0].formatted_address;
-                    placeMarker(event.latLng);
-                    incomeLocation = cevap;
-                    mapEvent = event;
-                    lastAdress = ttl;
-                }
-            });
-        });
-
-        // Sets the map on all markers in the array.
-        function setAllMap(map) {
-            for (var i = 0; i < markers.length; i++) {
-                markers[i].setMap(map);
-            }
-        }
-
-        function placeMarker(location) {
-
-            var marker = new google.maps.Marker({
-                position: location,
-                map: map,
-                title: ttl
-            });
-
-            var infowindow = new google.maps.InfoWindow({
-                content: ttl
-            });
-
-            infowindow.open(map, marker);
-            markers.push(marker);
-
-        }
-
-    } else {
-        document.getElementById('google_canvas').innerHTML = 'Konumunuz bulunmadı.';
     }
 }
-// End Lokasyon Seçme İşlemleri
 
 //çoklu mapping işlemleri
 

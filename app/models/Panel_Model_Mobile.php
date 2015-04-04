@@ -28,6 +28,81 @@ class Panel_Model_Mobile extends ModelMobile {
         return ($this->db->select($sql));
     }
     
+    //admin id
+    public function MbolgeAdminID($username) {
+        $sql = "SELECT BSAdminID FROM bsadmin WHERE BSAdminKadi=".$username;
+        return($this->db->select($sql));
+    }
+    
+    
+    //admin bölgeler listele
+    public function MbolgeListele($firmaID) {
+        $sql = "SELECT * FROM sbbolgeler ORDER BY SBBolgeAdi ASC";
+        return($this->db->select($sql));
+    }
+    
+    
+    //admine göre bölge getirme
+    public function MAdminbolgeListele($adminID) {
+        $sql = "SELECT BSBolgeID FROM bsadminbolge Where BSAdminID=" . $adminID;
+        return($this->db->select($sql));
+    }
+    
+    //admin bölgeler listele
+    public function MrutbeBolgeListele($array = array()) {
+        $sql = 'SELECT SBBolgeAdi,SBBolgeID FROM sbbolgeler Where SBBolgeID IN ('.$array.') ORDER BY SBBolgeAdi ASC' ;
+        return($this->db->select($sql));
+    }
+    
+    //admin bölgeler kurum count
+    public function MbolgeKurum_Count($array = array(), $firmaID) {
+        $sql = 'SELECT SBBolgeID FROM sbkurum WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ')';
+        return($this->db->select($sql));
+    }
+    
+    //admin yeni bölge kaydet
+    public function MaddNewAdminBolge($data) {
+        return ($this->db->insert("sbbolgeler", $data));
+    }
+    
+    //admin-bölge kaydet
+    public function MaddAdminBolge($data) {
+        return ($this->db->insert("bsadminbolge", $data));
+    }
+    
+    //admin bölge detail
+    public function MadminBolgeDetail($adminBolgeDetailID) {
+        $sql = 'SELECT * FROM sbbolgeler WHERE SBBolgeID=' . $adminBolgeDetailID;
+        return($this->db->select($sql));
+    }
+    
+    //admin bölge kurum detail
+    public function MadminBolgeKurumDetail($adminBolgeDetailID) {
+        $sql = 'SELECT SBKurumAdi,SBKurumLokasyon,SBKurumID FROM sbkurum WHERE SBBolgeID=' . $adminBolgeDetailID. ' ORDER BY SBKurumAdi ASC';
+        return($this->db->select($sql));
+    }
+    
+     //admin bölge özellikleri düzenleme
+    public function MadminBolgeOzelliklerDuzenle($data, $adminBolgeDetailID) {
+        return ($this->db->update("sbbolgeler", $data, "SBBolgeID=".$adminBolgeDetailID));
+    }
+    
+    //admin bölge detail bölge delete
+    public function MadminBolgeDelete($adminBolgeDetailID) {
+        return ($this->db->delete("sbbolgeler", "SBBolgeID=$adminBolgeDetailID"));
+    }
+    
+    //admin bölge detail bölge delete--idlerin tutulduğu tablo
+    public function MadminBolgeIDDelete($adminBolgeDetailID) {
+        return ($this->db->delete("bsadminbolge", "BSBolgeID=$adminBolgeDetailID"));
+    }
+    
+    
+    //admin yeni bölge-> kurum kaydet
+    public function MaddNewAdminBolgeKurum($data) {
+        return ($this->db->insert("sbkurum", $data));
+    }
+    
     
 }
 

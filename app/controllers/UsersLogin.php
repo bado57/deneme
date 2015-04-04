@@ -12,7 +12,6 @@ class UsersLogin extends Controller {
 
     //daha önce login oldu ise
     function login() {
-        
         //session güvenlik kontrolü
         $form = $this->load->otherClasses('Form');
         $sessionKey = $form->sessionKontrol();
@@ -25,19 +24,17 @@ class UsersLogin extends Controller {
     }
 
     public function runLogin($form) {
-
-        if ($_POST) {
+        $form->post('usersloginkadi', true);
+        $loginKadi = $form->values['usersloginkadi'];
+        if (isset($loginKadi) && $loginKadi!='') {
             $usersselect_model = $this->load->model("adminselectdb_model");
 
             $form->post('usersloginkadi', true);
-            $form->post('usersloginsifre', true);
-            //$form->post('loginselected', true);
-
             $loginKadi = $form->values['usersloginkadi'];
-            
+            $form->post('usersloginsifre', true);
 
             $loginfirmaID = $form->substrEnd($loginKadi, 6);
-            
+
             //return database results
             $UserSelectDb = $usersselect_model->kullaniciSelectDb($loginfirmaID);
 
@@ -50,8 +47,6 @@ class UsersLogin extends Controller {
             $loginTip = 1;
             $loginSifre = $form->values['usersloginsifre'];
             $loginDeger = "bs";
-            
-            error_log("Login Sifre".$loginSifre);
 
             $sifreilkeleman = $loginDeger . $loginKadi . $loginTip;
             $sifreilkeleman1 = $form->md5($sifreilkeleman);
@@ -113,7 +108,7 @@ class UsersLogin extends Controller {
                 Session::set("userTip", $loginTip);
                 Session::set("userRutbe", $result[0]["BSSuperAdmin"]);
                 Session::set("userFirmaKod", $SelectdbFirmaKod);
-
+                
                 header("Location:" . SITE_URL_HOME . "/panel");
             }
         } else {
@@ -123,7 +118,6 @@ class UsersLogin extends Controller {
                 $form = $this->load->multilanguage($lang);
                 $deger = $form->multilanguage();
             } else {
-                error_log("naber ya".Session::get("dil"));
                 $form = $this->load->multilanguage(Session::get("dil"));
                 $deger = $form->multilanguage();
             }

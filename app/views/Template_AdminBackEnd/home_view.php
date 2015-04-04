@@ -48,13 +48,13 @@
                         
                         <div class="col-lg-3 col-xs-12">
                             <!-- Kullanıcı İşlemleri -->
-                            <a href="#" class="small-box bg-green">
+                            <a href="<?php echo SITE_URL; ?>/adminweb/kurumliste" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
                                         <?php echo $data["KurumIslem"];?>
                                     </h3>
                                     <p>
-                                        15 <?php echo $data["Toplam"];?>
+                                        <?php echo $model['AdminKurum'];?> <?php echo $data["Toplam"];?>
                                     </p>
                                 </div>
                                 <div class="icon">
@@ -201,7 +201,7 @@
 
                         <div class="col-lg-3 col-xs-12">
                             <!-- Çıkış -->
-                            <a href="<?php echo SITE_URL_LOGINN; ?>/logout" class="small-box bg-green">
+                            <a href="<?php echo SITE_URL_LOGOUT;?>" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
                                          <?php echo $data["CikisYap"];?>

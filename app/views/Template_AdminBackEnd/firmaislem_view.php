@@ -1,5 +1,4 @@
 <script type="text/javascript">
-    //$.adminFirmaIslem = function(args) {alert("hi");};
 
     var activeMenu = "menu_firma";
     var activeLink = "link_firmislem";
@@ -19,11 +18,11 @@
                     <?php if (Session::get("userRutbe") != 0) { ?>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right">
                             <div class="form-group submit-group">
-                                <button type="button" class="btn btn-default vzg btn-sm" onclick="$.AdminIslemler.adminFirmaVazgec()"><?php echo $data["Vazgec"]; ?></button>
-                                <button type="button" class="btn btn-success  btn-sm" onclick="$.AdminIslemler.adminFirmaOzellik()"><?php echo $data["Kaydet"]; ?></button>
+                                <button type="button" class="btn btn-default vzg btn-sm" data-Vzgislem="adminFirmaDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
+                                <button type="button" class="btn btn-success  btn-sm save" data-Saveislem="adminFirmaDetailKaydet"><?php echo $data["Kaydet"]; ?></button>
                             </div>
                             <div class="form-group edit-group">
-                                <button type="button" id="editForm" class="btn btn-primary btn-sm" onclick="$.AdminIslemler.adminFirmaDuzenle()"><?php echo $data["Duzenle"]; ?></button>
+                                <button type="button" id="editForm" class="btn btn-primary btn-sm" data-Editislem="adminKurumDetailEdit"><?php echo $data["Duzenle"]; ?></button>
                             </div>
                         </div>
                     <?php } ?>

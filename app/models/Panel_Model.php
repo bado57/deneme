@@ -29,7 +29,7 @@ class Panel_Model extends Model {
     }
 
     //admin bölgeler listele
-    public function bolgeListele($firmaID) {
+    public function bolgeListele() {
         $sql = "SELECT * FROM sbbolgeler ORDER BY SBBolgeAdi ASC";
         return($this->db->select($sql));
     }
@@ -49,6 +49,7 @@ class Panel_Model extends Model {
     //admin bölgeler kurum count
     public function bolgeKurum_Count($array = array(), $firmaID) {
         $sql = 'SELECT SBBolgeID FROM sbkurum WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ')';
+        error_log("zsql".$sql);
         return($this->db->select($sql));
     }
 
@@ -111,7 +112,40 @@ class Panel_Model extends Model {
     public function addNewAdminBolgeKurum($data) {
         return ($this->db->insert("sbkurum", $data));
     }
-
+    
+    //kurumliste
+    
+    //admin kurum count
+    public function kurumListeleCount() {
+        $sql = "SELECT SBKurumID FROM sbkurum";
+        return($this->db->select($sql));
+    }
+    
+    //admin kurumlar rutbe count
+    public function rutbeKurumCount($array = array()) {
+        $sql = 'SELECT SBKurumID FROM sbkurum Where SBBolgeID IN ('.$array.')' ;
+        return($this->db->select($sql));
+    }
+    
+    //admin kruum listele
+    public function kurumListele() {
+        $sql = "SELECT SBKurumAdi,SBKurumID,SBKurumAciklama,SBBolgeID,SBBolgeAdi FROM sbkurum ORDER BY SBKurumAdi ASC";
+        return($this->db->select($sql));
+    }
+    
+    //admin bölgeler kurum count
+    public function kurumTur_Count($array = array()) {
+        $sql = 'SELECT SBKurumID FROM sbtur WHERE SBKurumID IN (' . implode(',', array_map('intval', $array)) . ')';
+        return($this->db->select($sql));
+    }
+    
+    //admin bölgeye öre kurum listele
+    public function rutbeKurumBolgeListele($array = array()) {
+        $sql = 'SELECT SBKurumAdi,SBKurumID,SBKurumAciklama,SBBolgeID,SBBolgeAdi FROM sbkurum Where SBBolgeID IN ('.$array.') ORDER BY SBKurumAdi ASC' ;
+        return($this->db->select($sql));
+    }
+    
+    
     public function updateNewProject($data, $gelenlabel) {
         return ($this->db->update("insaat_projeler", $data, "insaat_proje_id=$gelenlabel"));
     }

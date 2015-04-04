@@ -91,13 +91,16 @@ class en {
             "BolgeYeni" => "New Region",
             "Detay" => "Details",
             "Sil" => "Delete",
-            "BolgeTanımlama" => "Region Description",
-            "KurumTanımlama" => "Institution Description",
-            "KurumAdı" => "Institution Name",
+            "BolgeTanimlama" => "Region Description",
+            "KurumTanimlama" => "Institution Description",
+            "KurumAdi" => "Institution Name",
             "BolgeDetay" => "Region Details",
             "YeniEkle" => "Add New",
             "TumunuGor" => "View All",
-            "KurumHarita" => "Institution Map"
+            "AdresDetay" => "Adress Details",
+            "LokasyonTanimlama" => "Location Description",
+            "KurumYeni" => "New Institutions",
+            "TurSayi" => "Tour Count"
         );
         return $endil;
     }

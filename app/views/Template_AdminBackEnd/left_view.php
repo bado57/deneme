@@ -37,14 +37,14 @@
                         <li id="link_bolgeliste"><a href="<?php echo SITE_URL; ?>/adminweb/bolgeliste"><i class="fa fa-angle-right"></i><?php echo $data["BolgeListe"]; ?></a></li>
                     </ul>
                 </li>
-                <li class="treeview" id="menu_arac">
+                <li class="treeview" id="menu_kurum">
                     <a href="#">
                         <i class="fa fa-building-o"></i>
                         <span><?php echo $data["Kurumlar"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li id="link_aracliste"><a href="<?php echo SITE_URL; ?>/adminweb/kurumliste"><i class="fa fa-angle-right"></i><?php echo $data["KurumListe"]; ?></a></li>
+                        <li id="link_kurumliste"><a href="<?php echo SITE_URL; ?>/adminweb/kurumliste"><i class="fa fa-angle-right"></i><?php echo $data["KurumListe"]; ?></a></li>
                     </ul>
                 </li>
                 <li class="treeview" id="menu_arac">

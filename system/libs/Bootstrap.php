@@ -73,8 +73,7 @@ class Bootstrap {
                 $this->_controller->{$this->_methodName}($this->_url[2]);
             } else {
                 //echo "Controller içinde method bulunamadı ";
-                Session::destroy();
-                header("Location:" . SITE_URL);
+                header("Location:" . SITE_URL_LOGOUT);
             }
         } else {
 
@@ -86,8 +85,7 @@ class Bootstrap {
                     $this->_controller->{$this->_methodName}();
                 } else {
                     //echo "Coontroller içinde bulunmadı";
-                    Session::destroy();
-                    header("Location:" . SITE_URL);
+                     header("Location:" . SITE_URL_LOGOUT);
                 }
             } else {
                 if (method_exists($this->_controller, $this->_methodName)) {

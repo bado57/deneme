@@ -1,5 +1,4 @@
 <?php
-echo "selam";
 /*
  * Config kısmı genel sabitleri tanımlaya yaramaktadır.Buradan tanımladığımız define ları framework dosyalarımızın
  * istenilen her yerinden ulaşabiliriz.Bu kısma aşağıdaki gibi bir tanımalam yeterli gelecektir.
@@ -21,6 +20,9 @@ define("SITE_URL_LOGIN", "http://localhost/SProject");
 define("SITE_URL_LOGINN", "http://localhost/SProject/userslogin");
 define("SITE_URL_LOGINJS", "http://localhost/SProject/app/views/Entry/js");
 
+//logout
+define("SITE_URL_LOGOUT", "http://localhost/SProject/userslogout");
+
 //UsersBackEnd
 define("SITE_URL_HOME", "http://localhost/SProject");
 
@@ -38,11 +40,12 @@ define("SITE_PLUGINADMIN_JS", "http://localhost/SProject/app/views/assets/js");
 define("SITE_PLUGINADMIN_AjaxJs", "http://localhost/SProject/app/views/Template_AdminBackEnd/js");
 
 //admin mobil 
-define("SITE_PLUGINMADMIN_CSS", "http://192.168.1.22/SProject/app/views/Template_AdminBackEnd/MobileAdmin/css");
-define("SITE_PLUGINMADMIN_FONTS", "http://192.168.1.22/SProject/app/views/Template_AdminBackEnd/MobileAdmin/font-awesome");
-define("SITE_PLUGINMADMIN_JS", "http://192.168.1.22/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js");
-define("SITE_PLUGINM_JS", "http://192.168.1.22/SProject/app/views/assets/js");
-define("SITE_PLUGINMADMIN_AjaxJs", "http://192.168.1.22/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js");
+define("SITE_PLUGINMADMIN_CSS", "http://192.168.1.21/SProject/app/views/Template_AdminBackEnd/MobileAdmin/css");
+define("SITE_PLUGIN_MCSS", "http://192.168.1.21/SProject/app/views/Template_AdminBackEnd/MobileAdmin/css");
+define("SITE_PLUGINMADMIN_FONTS", "http://192.168.1.21/SProject/app/views/Template_AdminBackEnd/MobileAdmin/font-awesome");
+define("SITE_PLUGINMADMIN_JS", "http://192.168.1.21/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js");
+define("SITE_PLUGINM_JS", "http://192.168.1.21/SProject/app/views/assets/js");
+define("SITE_PLUGINMADMIN_AjaxJs", "http://192.168.1.21/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js");
 //veli back end
 
 //öğrenci back end

@@ -58,8 +58,10 @@ class Panel extends Controller {
                 if ($adminRutbe != 0) {
 
                     $bolgeListe = $Panel_Model->bolgeListele();
+                    $kurumListe = $Panel_Model->kurumListeleCount();
                     
                     $adminBolge['AdminBolge']=count($bolgeListe);
+                    $adminBolge['AdminKurum']=count($kurumListe);
                     
                 } else {//değilse admin ıd ye göre bölge görür
                     $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
@@ -72,8 +74,10 @@ class Panel extends Controller {
 
 
                     $bolgeListe = $Panel_Model->rutbeBolgeListele($rutbebolgedizi);
+                    $kurumListe = $Panel_Model->rutbeKurumCount($rutbebolgedizi);
                     
                     $adminBolge['AdminBolge']=count($bolgeListe);
+                    $adminBolge['AdminKurum']=count($kurumListe);
                 }
                 
                 //memcache kayıt

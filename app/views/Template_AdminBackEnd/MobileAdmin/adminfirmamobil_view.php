@@ -12,7 +12,7 @@
                     <script src="<?php echo SITE_PLUGINMADMIN_JS; ?>/bootstrap.min.js"></script>
                     <script src="<?php echo SITE_PLUGINMADMIN_AjaxJs; ?>/adminajaxmobile.js" type="text/javascript"></script>
                     <script src="<?php echo SITE_PLUGINM_JS; ?>/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
-                    <script src="<?php echo SITE_PLUGINMADMIN_JS; ?>/shuttle.app.js"></script>
+                    <script src="<?php echo SITE_PLUGINMADMIN_JS; ?>/shuttle-web.app.js"></script>
                     </head>
                     <body>
                         <header class="mobile">
@@ -29,7 +29,7 @@
                                         <div class="collapse navbar-collapse" id="form-actions">
                                             <ul class="nav navbar-nav navbar-right app-navbar">
                                                 <li><button class="btn btn-app"><i class="fa fa-home"></i><?php echo $data["AnaMenuDon"]; ?></button></li>
-                                                <li><button type="button" class="btn btn-app" id="editForm" onclick="$.AdminIslemler.adminFirmaDuzenle()"><i class="fa fa-edit"></i><?php echo $data["Duzenle"]; ?></button></li>
+                                                <li><button type="button" class="btn btn-app" id="editForm" data-Editislem="adminKurumDetailEdit"><i class="fa fa-edit"></i><?php echo $data["Duzenle"]; ?></button></li>
                                             </ul>
                                         </div>
                                     <?php } ?>
@@ -129,8 +129,8 @@
 
                                     <div class="form-group submit-group">
                                         <hr />
-                                        <button type="button" class="btn btn-default vzg"  onclick="$.AdminIslemler.adminFirmaVazgec()"><?php echo $data["Vazgec"]; ?></button>
-                                        <button type="button" class="btn btn-success" onclick="$.AdminIslemler.adminFirmaOzellik()"><?php echo $data["Kaydet"]; ?></button>
+                                        <button type="button" class="btn btn-default vzg"  data-Vzgislem="adminFirmaDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
+                                        <button type="button" class="btn btn-success save" data-Saveislem="adminFirmaDetailKaydet"><?php echo $data["Kaydet"]; ?></button>
                                     </div>
                                 </form>
                             </div>
