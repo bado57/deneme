@@ -148,94 +148,6 @@
     </div>
 </div>
 
-
-<div id="kurum" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
-    <div class="row">
-        <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["KurumTanımlama"]; ?> <span class="pull-right"><button data-type="svClose" data-class="kurum" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
-            <hr/>
-            <div class="row" id="getPartialView">
-                <div class="form-vertical addKurumForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                    <input id="adminBolgeKurumEkleID" name="adminBolgeKurumEkleID" type="hidden" value="" />
-                    <div class="form-group">
-                        <label for="KurumAdi"><?php echo $data["KurumAdı"]; ?></label>
-                        <input type="text" class="form-control" id="KurumAdi" name="KurumAdi" value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="KurumLokasyon"><?php echo $data["Lokasyon"]; ?></label>
-                        <div class="input-group">
-                            <span class="input-group-btn">
-                                <button data-type="svOpen" data-class="map" class="btn btn-success svToggle" data-islemler="adminBolgeSingleMap" type="button">
-                                    <i class="fa fa-map-marker"></i>
-                                </button>
-                            </span>
-                            <input type="text" class="locationInput form-control" id="KurumLokasyon" name="KurumLokasyon" value="" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="KurumTelefon"><?php echo $data["Telefon"]; ?></label>
-                        <input type="text" class="form-control" id="KurumTelefon" name="KurumTelefon" value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="KurumEmail"><?php echo $data["Email"]; ?></label>
-                        <input type="text" class="form-control" id="KurumEmail" name="KurumEmail" value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="KurumWebSite"><?php echo $data["WebSite"]; ?></label>
-                        <input type="text" class="form-control" id="KurumWebSite" name="KurumWebSite" value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="KurumAdresDetay"><?php echo $data["AdresDetay"]; ?></label>
-                        <textarea name="KurumAdresDetay" class="form-control dsb" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <button data-type="svClose"  data-class="kurum" type="button" data-islemler="adminBolgeKurumVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
-                        <button type="button" class="svToggle btn btn-success" data-type="svClose"  data-class="kurum" data-islemler="adminBolgeKurumKaydet"><?php echo $data["Kaydet"]; ?></button>
-                    </div>
-                </div>
-                <div class="form-vertical KurumAdresForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
-                    <div class="form-group">
-                        <label for="KurumUlke"><?php echo $data["Ulke"]; ?></label>
-                        <input type="text" class="form-control" id="KurumUlke" name="country" value="" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="KurumSehir"><?php echo $data["Il"]; ?></label>
-                        <input type="text" class="form-control" id="KurumSehir" name="administrative_area_level_1" value="" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="KurumIlce"><?php echo $data["Ilce"]; ?></label>
-                        <input type="text" class="form-control" id="KurumIlce" name="administrative_area_level_2" value="" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="KurumSemt"><?php echo $data["Semt"]; ?></label>
-                        <input type="text" class="form-control" id="KurumSemt" name="locality" value="" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="KurumMahalle"><?php echo $data["Mahalle"]; ?></label>
-                        <input type="text" class="form-control" id="KurumMahalle" name="neighborhood" value="" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="KurumSokak"><?php echo $data["CaddeSokak"]; ?></label>
-                        <input type="text" class="form-control" id="KurumSokak" name="route" value="" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="KurumPostaKodu"><?php echo $data["PostaKodu"]; ?></label>
-                        <input type="text" class="form-control" id="KurumPostaKodu" name="postal_code" value="" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="street_number"><?php echo $data["CaddeNo"]; ?></label>
-                        <input type="text" class="form-control" id="street_number" name="street_number" value="" disabled>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="kurumDetay" class="svClose col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -247,9 +159,17 @@
                         <h4><?php echo $data["GenelBilgi"]; ?></h4>
                         <hr/>
                         <input id="adminKurumDetailID" name="adminKurumDetailID" type="hidden" value="" />
+                        <input id="adminKurumDetailLocation" name="adminKurumDetailLocation" type="hidden" value="" />
                         <div class="form-group">
                             <label for="KurumAdi"><?php echo $data["KurumAdi"]; ?></label>
-                            <input type="text" class="form-control dsb" id="KurumAdi" name="KurumDetailAdi" value="" disabled>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button data-type="svOpen" data-class="map" class="btn btn-success svToggle" data-islemler="adminKurumMap" type="button">
+                                        <i class="fa fa-map-marker"></i>
+                                    </button>
+                                </span>
+                                <input type="text" class="form-control dsb" id="KurumAdi" name="KurumDetailAdi" value="" disabled>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="KurumBolge"><?php echo $data["Bolge"]; ?></label>

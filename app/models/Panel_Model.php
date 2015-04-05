@@ -145,7 +145,7 @@ class Panel_Model extends Model {
 
     //admin kurum detail
     public function adminKurumDetail($adminKurumDetailID) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi,SBBolgeAdi,SBKurumTelefon,SBKurumEmail,SBKurumAdres,SBKurumAciklama FROM sbkurum WHERE SBKurumID=' . $adminKurumDetailID;
+        $sql = 'SELECT SBKurumID,SBKurumAdi,SBBolgeAdi,SBKurumTelefon,SBKurumEmail,SBKurumAdres,SBKurumAciklama,SBKurumLokasyon FROM sbkurum WHERE SBKurumID=' . $adminKurumDetailID;
         return($this->db->select($sql));
     }
 

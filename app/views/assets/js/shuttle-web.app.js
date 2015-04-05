@@ -97,6 +97,12 @@ function svControl(dtype, dclass, dislemler) {
             case 'adminKurumYeni' :
                 var returnCevap = $.AdminIslemler.adminKurumYeni();
                 break;
+            case 'adminKurumMap' :
+                isMap = true;
+                isSingle = false;
+                MultipleMapindex=0;
+                var returnCevap = $.AdminIslemler.adminKurumMap();
+                break;
             default :
                 $("#" + dclass).height(th);
                 $("#" + dclass).css("z-index", z);
@@ -197,13 +203,13 @@ $(window).resize(function () {
 // Subview Yükseklik Ayarlama
 function setSvHeight() {
     if (z > 1) {
-        var hh  = $(".header").height();
+        var hh = $(".header").height();
         svDiv.height($(window).height() - hh);
     }
 
     if (isMap == true) {
         var mh = $("#mapHeader").height();
-        var hh  = $(".header").height();
+        var hh = $(".header").height();
         var sh = $(window).height() - (mh + hh);
         $("#multiple_map").height(sh);
     }
