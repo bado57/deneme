@@ -9,13 +9,12 @@ form textarea{resize:vertical !important;}
 .activeli a{color:green !important;}
 
 .svOpen, .svClose{
-    position:absolute;
+    position:relative;
     bottom:0px;
     background-color: white;
     z-index: 1000;
     display:none;
 }
-
 .addNewButton{margin-left: 8px;}
 
 .generalInfo{margin-bottom: 30px;}
@@ -27,7 +26,8 @@ form textarea{resize:vertical !important;}
     height: auto;
     width: 100%;
 }
-
 #saveMap{margin-right: 10px;}
 
 label input[type="search"]{width: auto !important;}
+
+.paginate_button a i{padding: 3px 0 !important;}

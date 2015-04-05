@@ -75,7 +75,7 @@ $(document).ready(function () {
                     i.addClass("fa-search");
                 }
             }
-        });
+        })
     });
     //kurum işlemleri
     $(document).on('click', 'tbody#adminKurumRow > tr > td > a', function (e) {

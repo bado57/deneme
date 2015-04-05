@@ -53,18 +53,14 @@ $(document).ready(function () {
                         } else {
                             $("#BolgeDetailDeleteBtn").show();
                         }
-                        $("ul#adminBolgeKurumDetail").find("li").remove();
                         for (var kurum = 0; kurum < bolgeKurumSayi; kurum++) {
-                            /*
-                             $("ul#adminBolgeKurumDetail").append("<li class='list-group-item'>"
-                             + "<a class='svToggle' data-type='svOpen' data-islemler='adminBolgeMultiMap' data-class='map' data-index='index' data-value=" + cevap.adminBolgeKurumDetail[kurum][2] + " data-islemler='adminBolgeMultiMap' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminBolgeKurumDetail[kurum][1] + "'>"
-                             + "<i class='fa fa-map-marker'></i>    " + cevap.adminBolgeKurumDetail[kurum][0] + "</a><i></i></li>");*/
                             var addRow = "<tr><td>"
                                     + "<a class='svToggle' data-type='svOpen' data-islemler='adminBolgeMultiMap' data-class='map' data-index='index' data-value=" + cevap.adminBolgeKurumDetail[kurum][2] + " data-islemler='adminBolgeMultiMap' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminBolgeKurumDetail[kurum][1] + "'>"
                                     + "<i class='fa fa-map-marker'></i>    " + cevap.adminBolgeKurumDetail[kurum][0] + "</a><i></i></td></tr>";
                             KurumTable.DataTable().row.add($(addRow)).draw();
                         }
                     }
+
                     svControl('svAdd', 'bolgeDetay', '');
                     i.removeClass("fa-spinner fa-spin");
                     i.addClass("fa-search");

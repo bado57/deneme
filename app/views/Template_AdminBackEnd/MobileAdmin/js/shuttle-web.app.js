@@ -58,6 +58,9 @@ $(document).ready(function () {
     });
 });
 // End Document Ready
+var isMap = false;
+var isSingle = true;
+var svDiv;
 
 // Subview Kontrolü
 function svControl(dtype, dclass, dislemler) {
@@ -174,14 +177,12 @@ $(window).resize(function () {
 // Subview Yükseklik Ayarlama
 function setSvHeight() {
     if (z > 1) {
-        var hh  = $(".header").height();
-        svDiv.height($(window).height() - hh);
+        $(svDiv).height($(window).height());
     }
 
     if (isMap == true) {
         var mh = $("#mapHeader").height();
-        var hh  = $(".header").height();
-        var sh = $(window).height() - (mh + hh);
+        var sh = $(window).height() - mh;
         $("#multiple_map").height(sh);
     }
 }

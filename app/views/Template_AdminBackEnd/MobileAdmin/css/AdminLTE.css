@@ -20,6 +20,9 @@ body {
     background: #f9f9f9;
 }
 
+body .btn{font-size:15px !important;}
+td{font-size:18px !important;}
+
 thead{
     background-color: #eee;
 }
@@ -125,7 +128,7 @@ body.fixed .navbar {
 }
 
 body.fixed .wrapper {
-    margin-top: 50px;
+    //margin-top: 40px;
 }
 /* Content */
 .content {
@@ -474,7 +477,7 @@ body > .header {
 
 .right-side > .content-header {
     position: relative;
-    padding: 10px 15px 10px 20px;
+    padding: 20px 15px 10px 20px;
 }
 
     .right-side > .content-header > h1 {

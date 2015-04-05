@@ -41,8 +41,8 @@ div.dataTables_paginate ul.pagination {
 }
 
 @media screen and (max-width: 767px) {
-	div.dataTables_length,
-	div.dataTables_filter,
+	div.dataTables_length{text-align: left;}
+	div.dataTables_filter{text-align: right;}
 	div.dataTables_info,
 	div.dataTables_paginate {
 		text-align: center;
