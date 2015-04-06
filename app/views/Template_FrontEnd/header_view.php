@@ -84,7 +84,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                         </li>
                                                         <li><a href="#support">Destek</a>
                                                         </li>
-                                                        <li><a href="<?php echo SITE_URL; ?>/userslogin">Giriş Yap</a>
+                                                        <li><a href="<?php echo SITE_URL; ?>/loginform">Giriş Yap</a>
                                                         </li>
                                                     </ul>
                                                 </div>

@@ -27,7 +27,6 @@ class UsersLogout extends Controller {
         unset($_SESSION['userFirmaKod']);
 
         Session::destroy();
-        error_log("logout" . $_SESSION['selectDbEncryption']);
         header("Location:" . SITE_URL);
     }
 

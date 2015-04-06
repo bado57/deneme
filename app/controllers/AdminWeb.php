@@ -19,7 +19,7 @@ class AdminWeb extends Controller {
         if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey) {
             $this->firmislem();
         } else {
-            header("Location:" . SITE_URL_HOME);
+            header("Location:" . SITE_URL_LOGOUT);
         }
     }
 

@@ -12,8 +12,8 @@ RewriteRule ^([0-9a-zA-Z-_/]+)$(/?) index.php?url=$1 [QSA,L]
 #app dosyası yönlendirme
 RewriteRule ^([^/]+)/$ http://localhost/SProject/app/$1 [R=301,L]
 #session ve cookie süresi ayarlama
-php_value session.cookie_lifetime 60
-php_value session.gc_maxlifetime 60
+php_value session.cookie_lifetime 10000
+php_value session.gc_maxlifetime 10000
 
 #Hata Yönlendirmeler
 # Error Pages

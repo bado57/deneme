@@ -26,7 +26,7 @@ class UsersLogin extends Controller {
     public function runLogin($form) {
         $form->post('usersloginkadi', true);
         $loginKadi = $form->values['usersloginkadi'];
-        if (isset($loginKadi) && $loginKadi!='') {
+        if (isset($loginKadi) && $loginKadi != '') {
             $usersselect_model = $this->load->model("adminselectdb_model");
 
             $form->post('usersloginkadi', true);
@@ -108,27 +108,12 @@ class UsersLogin extends Controller {
                 Session::set("userTip", $loginTip);
                 Session::set("userRutbe", $result[0]["BSSuperAdmin"]);
                 Session::set("userFirmaKod", $SelectdbFirmaKod);
-                
+
                 header("Location:" . SITE_URL_HOME . "/panel");
             }
         } else {
-            $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-            if (!Session::get("dil")) {
-                Session::set("dil", $lang);
-                $form = $this->load->multilanguage($lang);
-                $deger = $form->multilanguage();
-            } else {
-                $form = $this->load->multilanguage(Session::get("dil"));
-                $deger = $form->multilanguage();
-            }
             $this->load->view("Entry/loginForm", $deger);
         }
-    }
-
-    //Çıkış Yap
-    public function logout() {
-        Session::destroy();
-        header("Location:" . SITE_URL);
     }
 
 }

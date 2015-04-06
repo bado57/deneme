@@ -557,7 +557,7 @@ class AdminAjaxSorgu extends Controller {
             }
             echo json_encode($sonuc);
         } else {
-            die("Hacklemeye mi Çalışıyorsun pezevenk?");
+            header("Location:" . SITE_URL_LOGOUT);
         }
     }
 

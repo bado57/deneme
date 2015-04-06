@@ -22,7 +22,7 @@ class Panel extends Controller {
         if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey) {
             $this->home();
         } else {
-            header("Location:" . SITE_URL_HOME);
+             header("Location:" . SITE_URL_LOGOUT);
         }
     }
 
