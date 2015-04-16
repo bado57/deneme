@@ -8,6 +8,7 @@ class en {
 
     public function multilanguage() {
         $endil = array(
+            "FirmaAd" => "Shuttle",
             "LoginSelectlanguage" => "Select language",
             "LoginTitle" => "Login",
             "Loginkadi" => "Username",
@@ -106,7 +107,20 @@ class en {
             "Turlar" => "Tours",
             "TurAdi" => "Tour Name",
             "BolgeAdi" => "Region Name",
-            "Toplam" => "Total"
+            "Toplam" => "Total",
+            "LoginNotification" => "Login to your account is made.",
+            "Araclar" => "Cars",
+            "Plaka" => "Number Plate",
+            "Marka" => "Car Brands",
+            "ModelYil" => "Model Year",
+            "AracKm" => "Car Miles",
+            "Kapasite" => "Capacity",
+            "YeniArac" => "New Car",
+            "AracTanimlama" => "Car Description",
+            "Surucu" => "Driver",
+            "AracDetay" => "Driver Details",
+            "TurListe" => "Tour List",
+            "Tür" => "Type"
         );
         return $endil;
     }

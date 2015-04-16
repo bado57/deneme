@@ -34,18 +34,17 @@
                     </thead>
 
                     <tbody id="adminKurumRow">
-
-                        <?php for ($v = 0; $v < count($model); $v++) { ?>
+                        <?php foreach ($model as $kurumModel) { ?>
                             <tr>
-                        <input id="adminKurumRow" name="adminKurumRow" type="hidden" value="<?php echo $model[$v]['AdminKurumID']; ?>" />
+                        <input id="adminKurumRow" name="adminKurumRow" type="hidden" value="<?php echo $kurumModel['AdminKurumID']; ?>" />
                         <td>
-                            <a data-toggle="tooltip" data-placement="top" title="<?php echo $data["Detay"]; ?>" value="<?php echo $model[$v]['AdminKurumID']; ?>">
-                                <i class="fa fa-search"></i> <?php echo $model[$v]['AdminKurum']; ?>
+                            <a data-toggle="tooltip" data-placement="top" title="<?php echo $data["Detay"]; ?>" value="<?php echo $kurumModel['AdminKurumID']; ?>">
+                                <i class="fa fa-search"></i> <?php echo $kurumModel['AdminKurum']; ?>
                             </a>
                         </td>
-                        <td class="hidden-xs" value="<?php echo $model[$v]['AdminKurumBolgeID']; ?>"><?php echo $model[$v]['AdminKurumBolge']; ?></td>
-                        <td class="hidden-xs"><?php echo $model[$v]['AdminKurumTur']; ?></td>
-                        <td class="hidden-xs"><?php echo $model[$v]['AdminKurumAciklama']; ?></td>
+                        <td class="hidden-xs" value="<?php echo $kurumModel['AdminKurumBolgeID']; ?>"><?php echo $kurumModel['AdminKurumBolge']; ?></td>
+                        <td class="hidden-xs"><?php echo $kurumModel['AdminKurumTur']; ?></td>
+                        <td class="hidden-xs"><?php echo $kurumModel['AdminKurumAciklama']; ?></td>
                         </tr>
                     <?php } ?>
                     </tbody>
@@ -209,6 +208,8 @@
                                     <thead>
                                         <tr >
                                             <th><?php echo $data["TurAdi"]; ?></th>
+                                            <th><?php echo $data["Tür"]; ?></th>
+                                            <th><?php echo $data["Aciklama"]; ?></th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -226,7 +227,7 @@
     <div id="mapHeader">
         <h3><b id="singleMapBaslik"><?php echo $data["LokasyonTanimlama"]; ?> </b><b id="multiMapBaslik"></b>
             <span class="pull-right"><button data-type="svClose" data-class="map" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span>
-            <span class="pull-right"><button id="saveMap" data-islemler="adminKurumHaritaKaydet" data-type="svClose" data-class="map" type="button" class="svToggle btn btn-success"><i class="fa fa-map-marker"></i> Konumu Kaydet</button></span>
+            <span class="pull-right"><button id="saveMap" data-islemler="adminHaritaKaydet" data-type="svClose" data-class="map" type="button" class="svToggle btn btn-success"><i class="fa fa-map-marker"></i> Konumu Kaydet</button></span>
         </h3>
         <hr/>
     </div>

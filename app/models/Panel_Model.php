@@ -47,26 +47,25 @@ class Panel_Model extends Model {
     }
 
     //admin bölgeler kurum count
-    public function bolgeKurum_Count($array = array(), $firmaID) {
+    public function bolgeKurum_Count($array = array()) {
         $sql = 'SELECT SBBolgeID FROM sbkurum WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ')';
-        error_log("zsql" . $sql);
         return($this->db->select($sql));
     }
 
     //admin bölgeler arac count
-    public function bolgeArac_Count($array = array(), $firmaID) {
+    public function bolgeArac_Count($array = array()) {
         $sql = 'SELECT DISTINCT(SBTurAracID), SBBolgeID FROM sbtur WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And SBTurFirmaID=' . $firmaID;
         return($this->db->select($sql));
     }
 
     //admin bölgeler öğrenci count
-    public function bolgeOgrenci_Count($array = array(), $firmaID) {
+    public function bolgeOgrenci_Count($array = array()) {
         $sql = 'SELECT BSBolgeID FROM bsogrenci WHERE BSBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And BSFirmaID=' . $firmaID;
         return($this->db->select($sql));
     }
 
     //admin bölgeler İŞÇİ count
-    public function bolgeIsci_Count($array = array(), $firmaID) {
+    public function bolgeIsci_Count($array = array()) {
         $sql = 'SELECT SBBolgeID FROM sbisci WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And SBFirmaID=' . $firmaID;
         return($this->db->select($sql));
     }
@@ -151,7 +150,7 @@ class Panel_Model extends Model {
 
     //admin kurum tur detail
     public function adminKurumTurDetail($adminKurumDetailID) {
-        $sql = 'SELECT SBTurAdi,SBTurID FROM sbtur WHERE SBKurumID=' . $adminKurumDetailID . ' ORDER BY SBTurAdi ASC';
+        $sql = 'SELECT SBTurID,SBTurAdi,SBTurAktiflik,SBTurType,SBTurAciklama FROM sbtur WHERE SBKurumID=' . $adminKurumDetailID . ' ORDER BY SBTurAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -188,87 +187,187 @@ class Panel_Model extends Model {
         return ($this->db->insert("sbkurum", $data));
     }
 
-    public function updateNewProject($data, $gelenlabel) {
-        return ($this->db->update("insaat_projeler", $data, "insaat_proje_id=$gelenlabel"));
+    //admin araç count
+    public function aracListeleCount() {
+        $sql = "SELECT SBAracID FROM sbarac";
+        return($this->db->select($sql));
     }
 
-    public function gayri_benzersiz_deger_kodu($array = array()) {
-        $sql = "SELECT * FROM insaat_projeler WHERE insaat_proje_kodu = :InputPkodu";
-        return ($count = $this->db->affectedRows($sql, $array));
+    //admin aktif arac listele
+    public function aracListele() {
+        $sql = 'SELECT SBAracID,SBAracPlaka,SBAracMarka,SBAracModelYili,SBAracKapasite,SBAracKm,SBAracDurum FROM sbarac ORDER BY SBAracPlaka ASC';
+        return($this->db->select($sql));
     }
 
-    public function gayri_benzersiz_deger_adi($array = array()) {
-        $sql = "SELECT * FROM insaat_projeler WHERE insaat_proje_adi = :InputPadi";
-        return ($count = $this->db->affectedRows($sql, $array));
+    //rutbe tur aktif arac ID listele
+    public function rutbearacIDListele($array = array()) {
+        $sql = 'SELECT DISTINCT SBAracID FROM sbaracbolge WHERE SBBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
     }
 
-    public function addNewProjectBuildingInsert($datam) {
-        return ($this->db->insert("insaat_proje_yapi", $datam));
+    //rubee göre araçlar
+    public function aracRutbeListele($array = array()) {
+        $sql = 'SELECT SBAracID,SBAracPlaka,SBAracMarka,SBAracModelYili,SBAracKapasite,SBAracKm,SBAracDurum FROM sbarac WHERE SBAracID IN (' . $array . ') ORDER BY SBAracPlaka ASC';
+        return($this->db->select($sql));
     }
 
-    public function addBuildingDelete($gelenbloklabell) {
-        return ($this->db->delete("insaat_proje_yapi_blok", "insaat_proje_yapi_id=$gelenbloklabell"));
+    //admin arac bölge select listele
+    public function aracBolgeListele() {
+        $sql = "SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler ORDER BY SBBolgeAdi ASC";
+        return($this->db->select($sql));
     }
 
-    public function updateNewBlokProject($datam, $gelenbloklabell) {
-        return ($this->db->update("insaat_proje_yapi", $datam, "insaat_proje_yapi_id=$gelenbloklabell"));
+    //admine göre arac bölge select listele
+    public function adminAracBolgeListele($adminID) {
+        $sql = "SELECT BSBolgeID FROM bsadminbolge Where BSAdminID=" . $adminID;
+        return($this->db->select($sql));
     }
 
-    public function addBuildingInsert($data) {
-        return ($this->db->insert("insaat_proje_yapi_blok", $data));
+    //admin arac şoför bölge select listele
+    public function aracSoforListele() {
+        $sql = "SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor ORDER BY BSSoforAd ASC";
+        return($this->db->select($sql));
     }
 
-    public function addBuildingUpdateInsert($data, $gelenyapi_id) {
-        return ($this->db->insert("insaat_proje_yapi_blok", $data, "insaat_proje_yapi_id=$gelenyapi_id"));
+    //admin rütbe arac bölge select listele
+    public function adminRutbeAracBolgeListele($array = array()) {
+        $sql = 'SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
+        return($this->db->select($sql));
     }
 
-    public function projeIlListele() {
-        $sql = "SELECT * FROM insaat_proje_il";
-        return $this->db->select($sql);
+    //admin rütbe arac ıd 
+    public function adminRutbeSoforIDListele($array = array()) {
+        $sql = 'SELECT DISTINCT BSSoforID FROM bssoforbolge Where BSBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
     }
 
-    public function projeIlceListele($array = array()) {
-        $sql = "Select * from insaat_proje_ilce WHERE il_id=:proje_il_id";
-        return $this->db->select($sql, $array);
+    //admin rütbe arac bölge select listele
+    public function adminRutbeSoforListele($array = array()) {
+        $sql = 'SELECT BSSoforID , BSSoforAd , BSSoforSoyad FROM bssofor Where BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
+        return($this->db->select($sql));
     }
 
-    public function projeSemtListele($array = array()) {
-        $sql = "Select * from insaat_proje_semt WHERE ilceID=:proje_ilce_id";
-        return $this->db->select($sql, $array);
+    //admin yeni araç kaydet
+    public function addNewAdminArac($data) {
+        return ($this->db->insert("sbarac", $data));
     }
 
-    public function projeMahalleListele($array = array()) {
-        $sql = "Select * from insaat_proje_mahalle WHERE semtID=:proje_semt_id";
-        return $this->db->select($sql, $array);
+    //admin araç şofor kaydet
+    public function addNewAdminAracSofor($data) {
+        return ($this->db->multiInsert('bsaracsofor', $data));
     }
 
-    public function projePostaKoduGoster($array = array()) {
-        $sql = "Select * from insaat_proje_postakodu WHERE mahalleID=:proje_mahalle_id";
-        return $this->db->select($sql, $array);
+    //admin araç bölge  kaydet
+    public function addNewAdminBolgeSofor($data) {
+        return ($this->db->multiInsert('sbaracbolge', $data));
     }
 
-    public function addNewProjectAdressInsert($data) {
-        return ($this->db->insert("insaat_proje_yapi_adres", $data));
+    //admin arac delete
+    public function adminAracDelete($adminAracID) {
+        return ($this->db->delete("sbarac", "SBAracID=$adminAracID"));
     }
 
-    public function updateProjectAdressInsert($data, $gelenadres_id) {
-        return ($this->db->insert("insaat_proje_yapi_adres", $data, "insaat_proje_yapi_adres_id=$gelenadres_id"));
+    //admin arac şöfor çoklu delete delete
+    public function adminAracSoforDelete($adminAracID) {
+        return ($this->db->delete("bsaracsofor", "BSAracID=$adminAracID"));
     }
 
-    public function projeModalDetayIcon($array = array()) {
-        $sql = "SELECT * FROM insaat_projeler LEFT JOIN insaat_proje_yapi ON insaat_proje_yapi.insaat_yapi_proje=insaat_projeler.insaat_proje_id LEFT JOIN insaat_proje_yapi_blok ON insaat_proje_yapi_blok.insaat_proje_yapi_id=insaat_proje_yapi.insaat_proje_yapi_id LEFT JOIN insaat_proje_yapi_adres ON insaat_proje_yapi_adres.insaat_proje_yapi_id=insaat_proje_yapi.insaat_proje_yapi_id WHERE insaat_proje_id=:projeModalDtyID";
-        return $this->db->select($sql, $array);
+    //admin seçili arac bolge listele
+    public function adminDetailAracBolge($aracID) {
+        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbaracbolge WHERE SBAracID=' . $aracID;
+        return($this->db->select($sql));
     }
 
-    public function dataTableListCount() {
-        $sql = "SELECT * FROM insaat_projeler";
-        return($this->db->affectedRows($sql));
+    //admin select dışı bölge listele
+    public function adminDetailAracSBolge($array = array()) {
+        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
+        return($this->db->select($sql));
     }
 
-    public function tableListele($data) {
-        //ORDER BY insaat_proje_id ASC LIMIT 0,3
-        $sql = "SELECT * FROM insaat_projeler " . $data . "";
-        return ($this->db->select($sql));
+    //admin seçili arac şoför listele
+    public function adminDetailAracSofor($aracID) {
+        $sql = 'SELECT BSSoforID,BSSoforAd FROM bsaracsofor WHERE BSAracID=' . $aracID;
+        return($this->db->select($sql));
+    }
+
+    //admin select dışı şoför listele
+    public function adminDetailAracSSofor($array = array()) {
+        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor WHERE BSSoforID NOT IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin arac detail özellik
+    public function adminDetailAracOzellik($aracID) {
+        $sql = 'SELECT SBAracID,SBAracPlaka,SBAracMarka,SBAracModelYili,SBAracKapasite,SBAracKm,SBAracDurum,SBAracAciklama FROM sbarac WHERE SBAracID=' . $aracID . ' ORDER BY SBAracPlaka ASC';
+        return($this->db->select($sql));
+    }
+
+    //admin rutbe select dışı bölge listele
+    public function adminRutbeDetailAracSBolge($array = array()) {
+        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin rutbe select dışı arac listele
+    public function adminRutbeDetailAracSSofor($array = array()) {
+        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor WHERE BSSoforID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin rutbe bölgesindeki şoförler
+    public function adminAracBolgeSofor($array = array()) {
+        $sql = 'SELECT BSSoforID FROM bssoforbolge WHERE BSBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin arac detail  delete
+    public function adminDetailAracDelete($adminAracDetailID) {
+        return ($this->db->delete("sbarac", "SBAracID=$adminAracDetailID"));
+    }
+
+    //admin arac bolge detail  delete
+    public function adminDetailAracBolgeDelete($adminAracDetailID) {
+        return ($this->db->delete("sbaracbolge", "SBAracID=$adminAracDetailID"));
+    }
+
+    //admin arac sofor detail  delete
+    public function adminDetailAracSoforDelete($adminAracDetailID) {
+        return ($this->db->delete("bsaracsofor", "BSAracID=$adminAracDetailID"));
+    }
+
+    //admin arac özellikleri düzenleme
+    public function adminAracOzelliklerDuzenle($data, $aracID) {
+        return ($this->db->update("sbarac", $data, "SBAracID=" . $aracID));
+    }
+
+    //admin seçili arac aktif tur listele
+    public function adminDetailAracTur($aracID) {
+        $sql = 'SELECT SBTurAktiflik FROM sbtur WHERE SBTurAracID=' . $aracID;
+        return($this->db->select($sql));
+    }
+
+    //admin rutbe bölgesindeki şoförler
+    public function adminDetailRutbeAracTur($array = array(), $aracID) {
+        $sql = 'SELECT SBTurAktiflik FROM sbtur WHERE BSBolgeID IN (' . $array . ') AND SBTurAracID=' . $aracID;
+        return($this->db->select($sql));
+    }
+
+    //admin arac detail 
+    public function adminAracTurDetail($adminAracDetailID) {
+        $sql = 'SELECT SBTurID,SBTurAdi,SBTurAktiflik,SBTurType,SBTurAciklama,SBKurumID,SBBolgeID FROM sbtur WHERE SBTurAracID=' . $adminAracDetailID;
+        return($this->db->select($sql));
+    }
+
+    //admin arac tur kurum
+    public function adminAracTurKurum($sql) {
+        //$sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin arac tur kurum
+    public function adminAracTurBolge($sql) {
+        //$sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
     }
 
 }

@@ -56,7 +56,13 @@ $(document).ready(function () {
         var dislemler = $(this).attr("data-islemler");
         svControl(dtype, dclass, dislemler);
     });
+
+
+
 });
+
+
+
 // End Document Ready
 var isMap = false;
 var isSingle = true;

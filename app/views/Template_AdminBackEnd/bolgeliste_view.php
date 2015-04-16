@@ -13,13 +13,11 @@
                     <small id="smallBolge"><?php echo $model[0]['AdminBolgeCount']; ?></small>&nbsp<small><?php echo $data["Toplam"]; ?></small>
                 </h3>
             </div>
-            <?php if (Session::get("userRutbe") != 0) { ?>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right" style="text-align:right;">
-                    <div class="form-group">
-                        <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svOpen" data-islemler="adminBolgeYeni" data-class="bolge"><i class="fa fa-plus-square"></i> <?php echo $data['BolgeYeni']; ?></button>
-                    </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right" style="text-align:right;">
+                <div class="form-group">
+                    <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svOpen" data-islemler="adminBolgeYeni" data-class="bolge"><i class="fa fa-plus-square"></i> <?php echo $data['BolgeYeni']; ?></button>
                 </div>
-            <?php } ?>
+            </div>
         </div>
     </section>
     <section class="content">
@@ -35,17 +33,16 @@
                     </thead>
 
                     <tbody id="adminBolgeRow">
-
-                        <?php for ($v = 0; $v < count($model); $v++) { ?>
+                        <?php foreach ($model as $bolgeModel) { ?>
                             <tr>
-                        <input id="adminBolgeRow" name="adminBolgeRow" type="hidden" value="<?php echo $model[$v]['AdminBolgeID']; ?>" />
+                        <input id="adminBolgeRow" name="adminBolgeRow" type="hidden" value="<?php echo $bolgeModel['AdminBolgeID']; ?>" />
                         <td>
-                            <a data-toggle="tooltip" data-placement="top" title="<?php echo $data["Detay"]; ?>" value="<?php echo $model[$v]['AdminBolgeID']; ?>">
-                                <i class="fa fa-search"></i> <?php echo $model[$v]['AdminBolge']; ?>
+                            <a data-toggle="tooltip" data-placement="top" title="<?php echo $data["Detay"]; ?>" value="<?php echo $bolgeModel['AdminBolgeID']; ?>">
+                                <i class="fa fa-search"></i> <?php echo $bolgeModel['AdminBolge']; ?>
                             </a>
                         </td>
-                        <td class="hidden-xs"><?php echo $model[$v]['AdminKurum']; ?></td>
-                        <td class="hidden-xs"><?php echo $model[$v]['AdminBolgeAciklama']; ?></td>
+                        <td class="hidden-xs"><?php echo $bolgeModel['AdminKurum']; ?></td>
+                        <td class="hidden-xs"><?php echo $bolgeModel['AdminBolgeAciklama']; ?></td>
                         </tr>
                     <?php } ?>
                     </tbody>
@@ -198,7 +195,7 @@
                         </div>
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                        <h4><?php echo $data["Kurumlar"]; ?> <button id="addNew" type="button" class="svToggle btn btn-success btn-sm pull-right addNewButton" data-type="svOpen" data-class="kurum" data-islemler="adminBolgeKurumEkle"><i class="fa fa-plus-square"></i> <?php echo $data["YeniEkle"]; ?></button> <button class="btn btn-success btn-sm pull-right seeAllButton" onclick="location.href='<?php echo SITE_PLUGINADMIN_Kurum;?>'"><?php echo $data["TumunuGor"]; ?></button></h4>
+                        <h4><?php echo $data["Kurumlar"]; ?> <button id="addNew" type="button" class="svToggle btn btn-success btn-sm pull-right addNewButton" data-type="svOpen" data-class="kurum" data-islemler="adminBolgeKurumEkle"><i class="fa fa-plus-square"></i> <?php echo $data["YeniEkle"]; ?></button> <button class="btn btn-success btn-sm pull-right seeAllButton" onclick="location.href = '<?php echo SITE_PLUGINADMIN_Kurum; ?>'"><?php echo $data["TumunuGor"]; ?></button></h4>
                         <hr/>
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -223,7 +220,7 @@
     <div id="mapHeader">
         <h3><b id="singleMapBaslik"><?php echo $data["LokasyonTanimlama"]; ?> </b><b id="multiMapBaslik"></b>
             <span class="pull-right"><button data-type="svClose" data-class="map" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span>
-            <span class="pull-right"><button id="saveMap" data-islemler="adminKurumHaritaKaydet" data-type="svClose" data-class="map" type="button" class="svToggle btn btn-success"><i class="fa fa-map-marker"></i><th>&nbsp<?php echo $data["KonumuKaydet"]; ?></th></button></span>
+            <span class="pull-right"><button id="saveMap" data-islemler="adminHaritaKaydet" data-type="svClose" data-class="map" type="button" class="svToggle btn btn-success"><i class="fa fa-map-marker"></i><th>&nbsp<?php echo $data["KonumuKaydet"]; ?></th></button></span>
         </h3>
         <hr/>
     </div>

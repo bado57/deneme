@@ -30,7 +30,17 @@ $(document).ready(function () {
         "ordering": true,
         "info": true
     });
-    TurTable = $('#adminKurumTurTable').dataTable({
+    NewAracTable = $('#adminAracTable').dataTable({
+        "paging": true,
+        "ordering": true,
+        "info": true
+    });
+    KurumTurTable = $('#adminKurumTurTable').dataTable({
+        "paging": true,
+        "ordering": true,
+        "info": true
+    });
+    AracTurTable = $('#adminAracTurTable').dataTable({
         "paging": true,
         "ordering": true,
         "info": true
@@ -80,7 +90,7 @@ $(document).ready(function () {
         i.removeClass("fa-search");
         i.addClass("fa-spinner fa-spin");
         var adminkurumRowid = $(this).attr('value');
-        KurumTable.DataTable().clear().draw();
+        KurumTurTable.DataTable().clear().draw();
         $.ajax({
             data: {"adminkurumRowid": adminkurumRowid, "tip": "adminKurumDetail"},
             success: function (cevap) {
@@ -96,25 +106,141 @@ $(document).ready(function () {
                     $("textarea[name=KurumDetailAciklama]").val(cevap.adminKurumDetail['b8ecd9075c0c9a7f7afa1784acb13c2e']);
                     $("input[name=adminKurumDetailID]").val(cevap.adminKurumDetail['3bcdc7d6f02b5b42c7be9604808e7c07']);
                     $("input[name=adminKurumDetailLocation]").val(cevap.adminKurumDetail['a465db00f313bd4781af6805a8d6fb31']);
-                    if (cevap.adminKurumTurDetail == null) {
-                        $("#KurumDetailDeleteBtn").show();
-                    } else {
+
+                    console.log(cevap.adminKurumTurDetail);
+                    if (cevap.adminKurumTurDetail) {
                         var KurumTurSayi = cevap.adminKurumTurDetail.length;
                         if (KurumTurSayi != 0) {
                             $("#KurumDetailDeleteBtn").hide();
                         } else {
                             $("#KurumDetailDeleteBtn").show();
                         }
-                        for (var tur = 0; tur < KurumTurSayi; tur++) {
-                            var addRow = "<tr><td>"
-                                    + "<a class='svToggle' data-type='svOpen' data-islemler='adminKurumMultiMap' data-class='map' data-index='index' data-value=" + cevap.adminKurumTurDetail[tur][1] + " data-islemler='adminKurumMultiMap' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminKurumTurDetail[tur][2] + "'>"
-                                    + "<i class='fa fa-map-marker'></i>    " + cevap.adminKurumTurDetail[tur][0] + "</a><i></i></td></tr>";
-                            TurTable.DataTable().row.add($(addRow)).draw();
+
+                        var turCount = cevap.adminKurumTurDetail.length;
+                        for (var i = 0; i < turCount; i++) {
+                            if (cevap.adminKurumTurDetail[i].KurumTurTip != 1) {
+                                TurTip = 'Öğrenci';
+                            } else {
+                                TurTip = 'İşçi';
+                            }
+
+                            if (cevap.adminKurumTurDetail[i].KurumTurAktiflik != 0) {
+                                var addRow = "<tr><td>"
+                                        + "<a class='svToggle' data-type='svOpen' data-islemler='adminKurumMultiMap' data-class='map' data-index='index' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminKurumTurDetail[i].KurumTurID + "'>"
+                                        + "<i class='fa fa-map-marker'></i> " + cevap.adminKurumTurDetail[i].KurumDetailTurAdi + "</a></td>"
+                                        + "<td class='hidden-xs' >" + TurTip + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.adminKurumTurDetail[i].KurumTurAcikla + "</td></tr>";
+                                KurumTurTable.DataTable().row.add($(addRow)).draw();
+                            } else {
+                                var addRow = "<tr><td>"
+                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminKurumTurDetail[i].KurumTurID + "'>"
+                                        + "<i class='fa fa-map-marker' style='color:red'></i> " + cevap.adminKurumTurDetail[i].KurumDetailTurAdi + "</a></td>"
+                                        + "<td class='hidden-xs' >" + TurTip + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.adminKurumTurDetail[i].KurumTurAcikla + "</td></tr>";
+                                KurumTurTable.DataTable().row.add($(addRow)).draw();
+                            }
+
                         }
                     }
+
                     svControl('svAdd', 'kurumDetay', '');
                     i.removeClass("fa-spinner fa-spin");
                     i.addClass("fa-search");
+                }
+            }
+        });
+    });
+    //araç işlemleri
+    $(document).on('click', 'tbody#adminAracRow > tr > td > a', function (e) {
+        var i = $(this).find("i")
+        i.removeClass("fa-bus");
+        i.addClass("fa-spinner fa-spin");
+        var adminaracRowid = $(this).attr('value');
+        $.ajax({
+            data: {"adminaracRowid": adminaracRowid, "tip": "adminAracDetail"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    alert(cevap.hata);
+                } else {
+
+                    if (cevap.adminAracTur) {
+                        var turCount = cevap.adminAracTur.length;
+                        if (turCount > 0) {
+                            $("#AracDetailDeleteBtn").hide();
+                            var aktifTur = 0;
+                            for (var s = 0; s < turCount; s++) {
+                                if (cevap.adminAracTur[s].SelectAracTur != 0) {
+                                    aktifTur++;
+                                }
+                            }
+                            if (aktifTur != 0) {
+                                if ($("#AracAktifTur").hasClass("btn-danger")) {
+                                    $("#AracAktifTur").prop("disabled", false).removeClass("btn-danger").addClass("btn-success");
+                                }
+                            } else {
+                                if ($("#AracAktifTur").hasClass("btn-success")) {
+                                    $("#AracAktifTur").prop("disabled", true).removeClass("btn-success").addClass("btn-danger");
+                                }
+                            }
+                        } else {
+                            if ($("#AracAktifTur").hasClass("btn-success")) {
+                                $("#AracAktifTur").prop("disabled", true).removeClass("btn-success").addClass("btn-danger");
+                            }
+                            $("#AracDetailDeleteBtn").show();
+                        }
+                    } else {
+                        if ($("#AracAktifTur").hasClass("btn-success")) {
+                            $("#AracAktifTur").prop("disabled", true).removeClass("btn-success").addClass("btn-danger");
+                        }
+                        $("#AracDetailDeleteBtn").show();
+                    }
+
+                    $("input[name=AracDetayPlaka]").val(cevap.adminAracOzellik[0].AdminAracPlaka);
+                    $("input[name=AracDetayMarka]").val(cevap.adminAracOzellik[0].AdminAracMarka);
+                    $("input[name=AracDetayModelYil]").val(cevap.adminAracOzellik[0].AdminAracYil);
+                    $("input[name=AracDetayKapasite]").val(cevap.adminAracOzellik[0].AdminAracKapasite);
+                    $("input[name=adminAracDetailDeger]").val(cevap.adminAracOzellik[0].AdminAracID);
+                    $("input[name=AracDetayKm]").val(cevap.adminAracOzellik[0].AdminAracKm);
+                    $("textarea[name=AracDetayAciklama]").val(cevap.adminAracOzellik[0].AdminAracAciklama);
+                    $('select#AracDetayDurum').val(cevap.adminAracOzellik[0].AdminAracDurum);
+                    var SelectBolgeOptions = new Array();
+                    var SelectAracOptions = new Array();
+                    if (cevap.adminAracSelectBolge) {
+                        var bolgelength = cevap.adminAracSelectBolge.length;
+                        for (var b = 0; b < bolgelength; b++) {
+                            SelectBolgeOptions[b] = {label: cevap.adminAracSelectBolge[b].SelectAracBolgeAdi, title: cevap.adminAracSelectBolge[b].SelectAracBolgeAdi, value: cevap.adminAracSelectBolge[b].SelectAracBolgeID, selected: true, disabled: true};
+                        }
+                    }
+                    if (cevap.adminAracBolge) {
+                        var aracBolgeLength = cevap.adminAracBolge.length;
+                        for (var z = 0; z < aracBolgeLength; z++) {
+                            SelectBolgeOptions[b] = {label: cevap.adminAracBolge[z].DigerAracBolgeAdi, title: cevap.adminAracBolge[z].DigerAracBolgeAdi, value: cevap.adminAracBolge[z].DigerAracBolgeID, disabled: true};
+                            b++;
+                        }
+
+                    }
+
+                    if (cevap.adminAracSelectSofor) {
+                        var soforselectlength = cevap.adminAracSelectSofor.length;
+                        for (var t = 0; t < soforselectlength; t++) {
+                            SelectAracOptions[t] = {label: cevap.adminAracSelectSofor[t].SelectAracSoforAdi, title: cevap.adminAracSelectSofor[t].SelectAracSoforAdi, value: cevap.adminAracSelectSofor[t].SelectAracSoforID, selected: true, disabled: true};
+                        }
+                    }
+                    if (cevap.adminAracSofor) {
+                        var soforlength = cevap.adminAracSofor.length;
+                        for (var f = 0; f < soforlength; f++) {
+                            SelectAracOptions[t] = {label: cevap.adminAracSofor[f].DigerAracSoforAdi, title: cevap.adminAracSofor[f].DigerAracSoforAdi, value: cevap.adminAracSofor[f].DigerAracSoforID, disabled: true};
+                            t++;
+                        }
+                    }
+
+                    $('#AracDetayBolgeSelect').multiselect('refresh');
+                    $('#AracDetaySurucu').multiselect('refresh');
+                    $('#AracDetayBolgeSelect').multiselect('dataprovider', SelectBolgeOptions);
+                    $('#AracDetaySurucu').multiselect('dataprovider', SelectAracOptions);
+                    svControl('svAdd', 'aracDetay', '');
+                    i.removeClass("fa-spinner fa-spin");
+                    i.addClass("fa fa-bus");
                 }
             }
         });
@@ -128,6 +254,7 @@ var AdminBolgeDetailNewKurum = [];
 var AdminKurumKaydet = [];
 var AdminKurumDetailVazgec = [];
 var AdminNewKurum = [];
+var AdminAracDetailVazgec = [];
 $.AdminIslemler = {
     adminFirmaOzellik: function () {
         //Firma İşlemleri Değerleri
@@ -152,10 +279,21 @@ $.AdminIslemler = {
         var firma_email = $("input[name=FirmaEmail]").val();
         var firma_website = $("input[name=FirmaWebAdresi]").val();
         var firma_lokasyon = $("input[name=FirmaLokasyon]").val();
+        var firmaulke = $("input[name=country]").val();
+        var firmail = $("input[name=administrative_area_level_1]").val();
+        var firmailce = $("input[name=administrative_area_level_2]").val();
+        var firmasemt = $("input[name=locality]").val();
+        var firmamahalle = $("input[name=neighborhood]").val();
+        var firmasokak = $("input[name=route]").val();
+        var firmapostakodu = $("input[name=postal_code]").val();
+        var firmacaddeno = $("input[name=street_number]").val();
         $.ajax({
             data: {"firma_adi": firma_adi, "firma_aciklama": firma_aciklama, "ogrenci_chechkbox": ogrenci_chechkbox,
                 "personel_chechkbox": personel_chechkbox, "firma_adres": firma_adres, "firma_telefon": firma_telefon,
-                "firma_email": firma_email, "firma_website": firma_website, "firma_lokasyon": firma_lokasyon, "tip": "adminFirmaIslemlerKaydet"},
+                "firma_email": firma_email, "firma_website": firma_website, "firma_lokasyon": firma_lokasyon,
+                "firmaulke": firmaulke, "firmail": firmail, "firmailce": firmailce,
+                "firmasemt": firmasemt, "firmamahalle": firmamahalle, "firmasokak": firmasokak,
+                "firmapostakodu": firmapostakodu, "firmacaddeno": firmacaddeno, "tip": "adminFirmaIslemlerKaydet"},
             success: function (cevap) {
                 if (cevap.hata) {
                     alert(cevap.hata);
@@ -192,6 +330,14 @@ $.AdminIslemler = {
         $("input[name=FirmaEmail]").val(AdminVazgec[8]);
         $("input[name=FirmaWebAdresi]").val(AdminVazgec[9]);
         $("input[name=FirmaLokasyon]").val(AdminVazgec[10]);
+        $("input[name=country]").val(AdminVazgec[11]);
+        $("input[name=administrative_area_level_1]").val(AdminVazgec[12]);
+        $("input[name=administrative_area_level_2]").val(AdminVazgec[13]);
+        $("input[name=locality]").val(AdminVazgec[14]);
+        $("input[name=neighborhood]").val(AdminVazgec[15]);
+        $("input[name=route]").val(AdminVazgec[16]);
+        $("input[name=postal_code]").val(AdminVazgec[17]);
+        $("input[name=street_number]").val(AdminVazgec[18]);
     },
     adminFirmaDuzenle: function () {
 
@@ -216,10 +362,21 @@ $.AdminIslemler = {
         var firma_email = $("input[name=FirmaEmail]").val();
         var firma_website = $("input[name=FirmaWebAdresi]").val();
         var firma_lokasyon = $("input[name=FirmaLokasyon]").val();
+        var firmakurumulke = $("input[name=country]").val();
+        var firmakurumil = $("input[name=administrative_area_level_1]").val();
+        var firmakurumilce = $("input[name=administrative_area_level_2]").val();
+        var firmakurumsemt = $("input[name=locality]").val();
+        var firmakurummahalle = $("input[name=neighborhood]").val();
+        var firmakurumsokak = $("input[name=route]").val();
+        var firmakurumpostakodu = $("input[name=postal_code]").val();
+        var firmakurumcaddeno = $("input[name=street_number]").val();
         //vazgeç için değerler
         var firma_kodu = $("input[name=FrmKod]").val();
         AdminVazgec = [];
-        AdminVazgec.push(firma_kodu, firma_adi, firma_aciklama, firma_durum, ogrenci_chechkbox, personel_chechkbox, firma_adres, firma_telefon, firma_email, firma_website, firma_lokasyon);
+        AdminVazgec.push(firma_kodu, firma_adi, firma_aciklama, firma_durum, ogrenci_chechkbox,
+                personel_chechkbox, firma_adres, firma_telefon, firma_email, firma_website,
+                firma_lokasyon, firmakurumulke, firmakurumil, firmakurumilce, firmakurumsemt,
+                firmakurummahalle, firmakurumsokak, firmakurumpostakodu, firmakurumcaddeno);
     },
     adminBolgeYeni: function () {
         $("input[name=BolgeAdi]").val('');
@@ -268,6 +425,7 @@ $.AdminIslemler = {
         AdminBolgeDetailVazgec.push(bolgedetail_adi, bolgedetail_aciklama);
     },
     adminBolgeDetailVazgec: function () {
+
         $("input[name=BolgeDetailAdi]").val(AdminBolgeDetailVazgec[0]);
         $("textarea[name=BolgeDetailAciklama]").val(AdminBolgeDetailVazgec[1]);
     },
@@ -285,7 +443,8 @@ $.AdminIslemler = {
                     var bolgeCount = $('#smallBolge').text();
                     bolgeCount--;
                     $('#smallBolge').text(bolgeCount);
-                    for (var t = 0; t < $('tbody#adminBolgeRow tr').length; t++) {
+                    var length = $('tbody#adminBolgeRow tr').length;
+                    for (var t = 0; t < length; t++) {
                         var attrValueId = $("tbody#adminBolgeRow > tr > td > a").eq(t).attr('value');
                         if (attrValueId == bolgedetail_id) {
                             var deleteRow = $('tbody#adminBolgeRow > tr:eq(' + t + ')');
@@ -311,8 +470,8 @@ $.AdminIslemler = {
                         alert(cevap.hata);
                     } else {
                         disabledForm();
-                        alert(cevap.update);
-                        for (var t = 0; t < $('tbody#adminBolgeRow tr').length; t++) {
+                        var length = $('tbody#adminBolgeRow tr').length;
+                        for (var t = 0; t < length; t++) {
                             var attrValueId = $("tbody#adminBolgeRow > tr > td > a").eq(t).attr('value');
                             if (attrValueId == bolgedetail_id) {
                                 $("tbody#adminBolgeRow > tr > td > a").eq(t).html('<i class="fa fa-search"></i> ' + bolgedetail_adi);
@@ -398,7 +557,8 @@ $.AdminIslemler = {
                         AdminBolgeDetailNewKurum = [];
                         alert(cevap.hata);
                     } else {
-                        for (var t = 0; t < $('tbody#adminBolgeRow tr').length; t++) {
+                        var length = $('tbody#adminBolgeRow tr').length;
+                        for (var t = 0; t < length; t++) {
                             var attrValueId = $("tbody#adminBolgeRow > tr > td > a").eq(t).attr('value');
                             if (attrValueId == bolgeid) {
                                 var bolgekurumsayac = $('tbody#adminBolgeRow > tr:eq(' + t + ') > td:eq(1)').text();
@@ -462,8 +622,11 @@ $.AdminIslemler = {
                 if (cevap.hata) {
                     alert(cevap.hata);
                 } else {
-                    for (var i = 0; i < cevap.adminKurumBolge.length; i++) {
-                        $("#KurumBolgeSelect").append('<option value="' + cevap.adminKurumBolgee[i] + '">' + cevap.adminKurumBolge[i] + '</option>');
+                    var length = cevap.adminKurumBolge.length;
+                    if (length > 0) {
+                        for (var i = 0; i < length; i++) {
+                            $("#KurumBolgeSelect").append('<option value="' + cevap.adminKurumBolgee[i] + '">' + cevap.adminKurumBolge[i] + '</option>');
+                        }
                     }
                 }
             }
@@ -523,7 +686,8 @@ $.AdminIslemler = {
                     var kurumCount = $('#smallKurum').text();
                     kurumCount--;
                     $('#smallKurum').text(kurumCount);
-                    for (var t = 0; t < $('tbody#adminKurumRow tr').length; t++) {
+                    var length = $('tbody#adminKurumRow tr').length;
+                    for (var t = 0; t < length; t++) {
                         var attrValueId = $("tbody#adminKurumRow > tr > td > a").eq(t).attr('value');
                         if (attrValueId == kurumdetail_id) {
                             var deleteRow = $('tbody#adminKurumRow > tr:eq(' + t + ')');
@@ -572,8 +736,8 @@ $.AdminIslemler = {
                         alert(cevap.hata);
                     } else {
                         disabledForm();
-                        //alert(cevap.update);
-                        for (var t = 0; t < $('tbody#adminKurumRow tr').length; t++) {
+                        var length = $('tbody#adminKurumRow tr').length;
+                        for (var t = 0; t < length; t++) {
                             var attrValueId = $("tbody#adminKurumRow > tr > td > a").eq(t).attr('value');
                             if (attrValueId == kurumdetail_id) {
                                 $("tbody#adminKurumRow > tr > td > a").eq(t).html('<i class="fa fa-search"></i> ' + kurumdetail_adi);
@@ -644,160 +808,454 @@ $.AdminIslemler = {
         } else {
             var count = $('table#adminBolgeKurumTable > tbody > tr').length;
             var MapValue = $(this).attr('value');
-            
-                var LocationBolme = kurum_location.split(",");
-                console.log(LocationBolme[0]);
-                console.log(LocationBolme[1]);
-                MultipleMapArray[0] = Array(kurum_adi, LocationBolme[0], LocationBolme[1]);
-            
+            var LocationBolme = kurum_location.split(",");
+            MultipleMapArray[0] = Array(kurum_adi, LocationBolme[0], LocationBolme[1]);
             $("#singleMapBaslik").text(kurum_adi);
             return true;
         }
+    },
+    adminAracYeni: function () {
+
+        $("input[name=AracPlaka]").val('');
+        $("input[name=BolgeAdi]").val('');
+        $("input[name=AracMarka]").val('');
+        $("input[name=AracYil]").val('');
+        $("textarea[name=AracAciklama]").val('');
+        $("input[name=AracKapasite]").val('');
+        var BolgeOptions = new Array();
+        var AracOptions = new Array();
+        $.ajax({
+            data: {"tip": "adminAracEkleSelect"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    alert(cevap.hata);
+                } else {
+                    if (cevap.adminAracBolge) {
+                        var bolgelength = cevap.adminAracBolge.AdminBolgeID.length;
+                        for (var i = 0; i < bolgelength; i++) {
+                            BolgeOptions[i] = {label: cevap.adminAracBolge.AdminBolge[i], title: cevap.adminAracBolge.AdminBolge[i], value: cevap.adminAracBolge.AdminBolgeID[i]};
+                        }
+                    }
+                    if (cevap.adminAracSofor) {
+                        var soforLength = cevap.adminAracSofor.AdminSoforID.length;
+                        for (var t = 0; t < soforLength; t++) {
+                            AracOptions[t] = {label: cevap.adminAracSofor.AdminSoforAd[t] + ' ' + cevap.adminAracSofor.AdminSoforSoyad[t], title: cevap.adminAracSofor.AdminSoforAd[t] + ' ' + cevap.adminAracSofor.AdminSoforSoyad[t], value: cevap.adminAracSofor.AdminSoforID[t]};
+                        }
+                    }
+                    $('#AracBolgeSelect').multiselect('refresh');
+                    $('#AracSurucu').multiselect('refresh');
+                    $('#AracBolgeSelect').multiselect('dataprovider', BolgeOptions);
+                    $('#AracSurucu').multiselect('dataprovider', AracOptions);
+                }
+
+            }
+        });
+        return true;
+    },
+    adminAracEkle: function () {
+
+        var aracPlaka = $("input[name=AracPlaka]").val();
+        if (aracPlaka == '') {
+            alert("Plaka Boş geçilemez");
+        } else {
+
+            var aracMarka = $("input[name=AracMarka]").val();
+            var aracModelYil = $("input[name=AracYil]").val();
+            var aracKapasite = $("input[name=AracKapasite]").val();
+            var aracAciklama = $("textarea[name=AracAciklama]").val();
+            var aracDurum = $("#AracDurum option:selected").val();
+            var aracDurumText = $("#AracDurum option:selected").text();
+            //araç Bölge ID
+            var aracBolgeID = new Array();
+            $('select#AracBolgeSelect option:selected').each(function () {
+                aracBolgeID.push($(this).val());
+            });
+            //araç Bölge Ad
+            var aracBolgeAd = new Array();
+            $('select#AracBolgeSelect option:selected').each(function () {
+                aracBolgeAd.push($(this).attr('title'));
+            });
+            //araç Şoför Id
+            var aracSoforID = new Array();
+            $('select#AracSurucu option:selected').each(function () {
+                aracSoforID.push($(this).val());
+            });
+            //araç Şoför Ad
+            var aracSoforAd = new Array();
+            $('select#AracSurucu option:selected').each(function () {
+                aracSoforAd.push($(this).attr('title'));
+            });
+            $.ajax({
+                data: {"aracBolgeID[]": aracBolgeID, "aracBolgeAd[]": aracBolgeAd, "aracSoforID[]": aracSoforID, "aracSoforAd[]": aracSoforAd, "aracPlaka": aracPlaka, "aracMarka": aracMarka, "aracModelYil": aracModelYil,
+                    "aracKapasite": aracKapasite, "aracAciklama": aracAciklama, "aracDurum": aracDurum, "tip": "adminAracKaydet"},
+                success: function (cevap) {
+                    if (cevap.hata) {
+                        alert(cevap.hata);
+                    } else {
+                        var aracCount = $('#smallArac').text();
+                        aracCount++;
+                        $('#smallArac').text(aracCount);
+                        if (aracDurum != 0) {
+                            var addRow = "<tr style='background-color:#F2F2F2'><td>"
+                                    + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newAracID + "'>"
+                                    + "<i class='fa fa-bus' style='color:green;'></i> " + aracPlaka + "</a></td>"
+                                    + "<td class='hidden-xs'>" + aracMarka + "</td>"
+                                    + "<td class='hidden-xs'>" + aracModelYil + "</td>"
+                                    + "<td class='hidden-xs'>" + aracKapasite + "</td>"
+                                    + "<td class='hidden-xs'>0</td>"
+                                    + "<td class='hidden-xs'>" + aracDurumText + "</td>";
+                            NewAracTable.DataTable().row.add($(addRow)).draw();
+                        } else {
+                            var addRow = "<tr style='background-color:#F2F2F2'><td>"
+                                    + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newAracID + "'>"
+                                    + "<i class='fa fa-bus' style='color:red;'></i> " + aracPlaka + "</a></td>"
+                                    + "<td class='hidden-xs'>" + aracMarka + "</td>"
+                                    + "<td class='hidden-xs'>" + aracModelYil + "</td>"
+                                    + "<td class='hidden-xs'>" + aracKapasite + "</td>"
+                                    + "<td class='hidden-xs'>0</td>"
+                                    + "<td class='hidden-xs'>" + aracDurumText + "</td>";
+                            NewAracTable.DataTable().row.add($(addRow)).draw();
+                        }
+                        aracBolgeID = [];
+                        aracBolgeAd = [];
+                        aracSoforID = [];
+                        aracSoforAd = [];
+                    }
+                }
+            });
+            return true;
+        }
+    },
+    adminAracVazgec: function () {
+        return true;
+    },
+    adminAracDetailDuzenle: function () {
+        //Araç İşlemleri Değerleri
+        var aracPlaka = $("input[name=AracDetayPlaka]").val();
+        var aracMarka = $("input[name=AracDetayMarka]").val();
+        var aracModelYil = $("input[name=AracDetayModelYil]").val();
+        var aracKapasite = $("input[name=AracDetayKapasite]").val();
+        var aracAciklama = $("textarea[name=AracDetayAciklama]").val();
+        var aracDurum = $("#AracDetayDurum option:selected").val();
+        //araç Bölge ID
+        var aracBolgeID = new Array();
+        $('select#AracDetayBolgeSelect option:selected').each(function () {
+            aracBolgeID.push($(this).val());
+        });
+        //araç Bölge Ad
+        var aracBolgeAd = new Array();
+        $('select#AracDetayBolgeSelect option:selected').each(function () {
+            aracBolgeAd.push($(this).attr('title'));
+        });
+        //araç Şoför Id
+        var aracSoforID = new Array();
+        $('select#AracDetaySurucu option:selected').each(function () {
+            aracSoforID.push($(this).val());
+        });
+        //araç Şoför Ad
+        var aracSoforAd = new Array();
+        $('select#AracDetaySurucu option:selected').each(function () {
+            aracSoforAd.push($(this).attr('title'));
+        });
+        //araç Seçili Olmayan Bölge ID
+        var aracBolgeNID = new Array();
+        $('select#AracDetayBolgeSelect option:not(:selected)').each(function () {
+            aracBolgeNID.push($(this).val());
+        });
+        //araç Seçili Olmayan Bölge Ad
+        var aracBolgeNAd = new Array();
+        $('select#AracDetayBolgeSelect option:not(:selected)').each(function () {
+            aracBolgeNAd.push($(this).attr('title'));
+        });
+        //araç Seçili Olmayan Şoför Id
+        var aracSoforNID = new Array();
+        $('select#AracDetaySurucu option:not(:selected)').each(function () {
+            aracSoforNID.push($(this).val());
+        });
+        //araç Seçili Olmayan Şoför Ad
+        var aracSoforNAd = new Array();
+        $('select#AracDetaySurucu option:not(:selected)').each(function () {
+            aracSoforNAd.push($(this).attr('title'));
+        });
+        var SelectBolgeOptions = new Array();
+        var SelectAracOptions = new Array();
+        if (aracBolgeID.length > 0) {
+            var bolgelength = aracBolgeID.length;
+            for (var b = 0; b < bolgelength; b++) {
+                SelectBolgeOptions[b] = {label: aracBolgeAd[b], title: aracBolgeAd[b], value: aracBolgeID[b], selected: true};
+            }
+        }
+        if (aracBolgeNID.length > 0) {
+            var aracBolgeLength = aracBolgeNID.length;
+            for (var z = 0; z < aracBolgeLength; z++) {
+                SelectBolgeOptions[b] = {label: aracBolgeNAd[z], title: aracBolgeNAd[z], value: aracBolgeNID[z]};
+                b++;
+            }
+
+        }
+        if (aracSoforID.length > 0) {
+            var soforselectlength = aracSoforID.length;
+            for (var t = 0; t < soforselectlength; t++) {
+                SelectAracOptions[t] = {label: aracSoforAd[t], title: aracSoforAd[t], value: aracSoforID[t], selected: true};
+            }
+        }
+        if (aracSoforNID.length > 0) {
+            var soforlength = aracSoforNID.length;
+            for (var f = 0; f < soforlength; f++) {
+                SelectAracOptions[t] = {label: aracSoforNAd[f], title: aracSoforNAd[f], value: aracSoforNID[f]};
+                t++;
+            }
+        }
+
+        $('#AracDetayBolgeSelect').multiselect('refresh');
+        $('#AracDetaySurucu').multiselect('refresh');
+        $('#AracDetayBolgeSelect').multiselect('dataprovider', SelectBolgeOptions);
+        $('#AracDetaySurucu').multiselect('dataprovider', SelectAracOptions);
+        AdminAracDetailVazgec = [];
+        AdminAracDetailVazgec.push(aracPlaka, aracMarka, aracModelYil, aracKapasite, aracAciklama, aracDurum, aracBolgeID, aracBolgeAd, aracBolgeNID, aracBolgeNAd, aracSoforID, aracSoforAd, aracSoforNID, aracSoforNAd);
+        console.log(AdminAracDetailVazgec);
+    },
+    adminAracDetailVazgec: function () {
+        $("input[name=AracDetayPlaka]").val(AdminAracDetailVazgec[0]);
+        $("input[name=AracDetayMarka]").val(AdminAracDetailVazgec[1]);
+        $("input[name=AracDetayModelYil]").val(AdminAracDetailVazgec[2]);
+        $("input[name=AracDetayKapasite]").val(AdminAracDetailVazgec[3]);
+        $("textarea[name=AracDetayAciklama]").val(AdminAracDetailVazgec[4]);
+        $("#AracDetayDurum").val(AdminAracDetailVazgec[5]);
+        var SelectBolgeOptions = new Array();
+        var SelectAracOptions = new Array();
+        if (AdminAracDetailVazgec[6].length > 0) {
+            var bolgelength = AdminAracDetailVazgec[6].length;
+            for (var b = 0; b < bolgelength; b++) {
+                SelectBolgeOptions[b] = {label: AdminAracDetailVazgec[7][b], title: AdminAracDetailVazgec[7][b], value: AdminAracDetailVazgec[6][b], selected: true, disabled: true};
+            }
+        }
+        if (AdminAracDetailVazgec[8].length > 0) {
+            var aracBolgeLength = AdminAracDetailVazgec[8].length;
+            for (var z = 0; z < aracBolgeLength; z++) {
+                SelectBolgeOptions[b] = {label: AdminAracDetailVazgec[9][z], title: AdminAracDetailVazgec[9][z], value: AdminAracDetailVazgec[8][z], disabled: true};
+                b++;
+            }
+        }
+        if (AdminAracDetailVazgec[10].length > 0) {
+            var soforselectlength = AdminAracDetailVazgec[10].length;
+            for (var t = 0; t < soforselectlength; t++) {
+                SelectAracOptions[t] = {label: AdminAracDetailVazgec[11][t], title: AdminAracDetailVazgec[11][t], value: AdminAracDetailVazgec[10][t], selected: true, disabled: true};
+            }
+        }
+        if (AdminAracDetailVazgec[12].length > 0) {
+            var soforlength = AdminAracDetailVazgec[12].length;
+            for (var f = 0; f < soforlength; f++) {
+                SelectAracOptions[t] = {label: AdminAracDetailVazgec[13][f], title: AdminAracDetailVazgec[13][f], value: AdminAracDetailVazgec[12][f], disabled: true};
+                t++;
+            }
+        }
+
+        $('#AracDetayBolgeSelect').multiselect('refresh');
+        $('#AracDetaySurucu').multiselect('refresh');
+        $('#AracDetayBolgeSelect').multiselect('dataprovider', SelectBolgeOptions);
+        $('#AracDetaySurucu').multiselect('dataprovider', SelectAracOptions);
+    },
+    adminAracDetailSil: function () {
+        var aracdetail_id = $("input[name=adminAracDetailDeger]").val();
+        $.ajax({
+            data: {"aracdetail_id": aracdetail_id, "tip": "adminAracDetailDelete"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    alert(cevap.hata);
+                } else {
+                    disabledForm();
+                    $("input[name=AracDetayPlaka]").val(' ');
+                    $("input[name=AracDetayMarka]").val(' ');
+                    $("input[name=AracDetayModelYil]").val(' ');
+                    $("input[name=AracDetayKapasite]").val(' ');
+                    $("textarea[name=AracDetayAciklama]").val(' ');
+                    $("#AracDetayDurum option:selected").val(' ');
+                    $("input[name=AracDetayKm]").val(' ');
+                    var aracCount = $('#smallArac').text();
+                    aracCount--;
+                    $('#smallArac').text(aracCount);
+                    var length = $('tbody#adminAracRow tr').length;
+                    for (var t = 0; t < length; t++) {
+                        var attrValueId = $("tbody#adminAracRow > tr > td > a").eq(t).attr('value');
+                        if (attrValueId == aracdetail_id) {
+                            var deleteRow = $('tbody#adminAracRow > tr:eq(' + t + ')');
+                            NewAracTable.DataTable().row($(deleteRow)).remove().draw();
+                        }
+                    }
+                }
+            }
+        });
+        return true;
+    },
+    adminAracDetailKaydet: function () {
+
+        var aracdetail_id = $("input[name=adminAracDetailDeger]").val();
+        var aracPlaka = $("input[name=AracDetayPlaka]").val();
+        var aracMarka = $("input[name=AracDetayMarka]").val();
+        var aracModelYil = $("input[name=AracDetayModelYil]").val();
+        var aracKapasite = $("input[name=AracDetayKapasite]").val();
+        var aracAciklama = $("textarea[name=AracDetayAciklama]").val();
+        var aracDurum = $("#AracDetayDurum option:selected").val();
+        var aracDurumText = $("#AracDetayDurum option:selected").text();
+        //araç Bölge ID
+        var aracBolgeID = new Array();
+        $('select#AracDetayBolgeSelect option:selected').each(function () {
+            aracBolgeID.push($(this).val());
+        });
+        //araç Bölge Ad
+        var aracBolgeAd = new Array();
+        $('select#AracDetayBolgeSelect option:selected').each(function () {
+            aracBolgeAd.push($(this).attr('title'));
+        });
+        //araç Şoför Id
+        var aracSoforID = new Array();
+        $('select#AracDetaySurucu option:selected').each(function () {
+            aracSoforID.push($(this).val());
+        });
+        //araç Şoför Ad
+        var aracSoforAd = new Array();
+        $('select#AracDetaySurucu option:selected').each(function () {
+            aracSoforAd.push($(this).attr('title'));
+        });
+        //araç Seçili Olmayan Bölge ID
+        var aracBolgeNID = new Array();
+        $('select#AracDetayBolgeSelect option:not(:selected)').each(function () {
+            aracBolgeNID.push($(this).val());
+        });
+        //araç Seçili Olmayan Bölge Ad
+        var aracBolgeNAd = new Array();
+        $('select#AracDetayBolgeSelect option:not(:selected)').each(function () {
+            aracBolgeNAd.push($(this).attr('title'));
+        });
+        //araç Seçili Olmayan Şoför Id
+        var aracSoforNID = new Array();
+        $('select#AracDetaySurucu option:not(:selected)').each(function () {
+            aracSoforNID.push($(this).val());
+        });
+        //araç Seçili Olmayan Şoför Ad
+        var aracSoforNAd = new Array();
+        $('select#AracDetaySurucu option:not(:selected)').each(function () {
+            aracSoforNAd.push($(this).attr('title'));
+        });
+        var farkbolge = farkArray(AdminAracDetailVazgec[6], aracBolgeID);
+        var farkbolgelength = farkbolge.length;
+        var farkarac = farkArray(AdminAracDetailVazgec[10], aracSoforID);
+        var farkaraclength = farkarac.length;
+        if (AdminAracDetailVazgec[0] == aracPlaka && AdminAracDetailVazgec[1] == aracMarka && AdminAracDetailVazgec[2] == aracModelYil && AdminAracDetailVazgec[3] == aracKapasite && AdminAracDetailVazgec[4] == aracAciklama && AdminAracDetailVazgec[5] == aracDurum && farkbolgelength == 0 && farkaraclength == 0) {
+            alert("Lütfen değişiklik yaptığınıza emin olun.");
+        } else {
+
+            $.ajax({
+                data: {"aracdetail_id": aracdetail_id, "aracBolgeID[]": aracBolgeID, "aracBolgeAd[]": aracBolgeAd, "aracSoforID[]": aracSoforID, "aracSoforAd[]": aracSoforAd, "aracPlaka": aracPlaka, "aracMarka": aracMarka, "aracModelYil": aracModelYil,
+                    "aracKapasite": aracKapasite, "aracAciklama": aracAciklama, "aracDurum": aracDurum, "tip": "adminAracDetailKaydet"},
+                success: function (cevap) {
+                    if (cevap.hata) {
+                        alert(cevap.hata);
+                    } else {
+
+                        disabledForm();
+                        var SelectBolgeOptions = new Array();
+                        var SelectAracOptions = new Array();
+                        if (aracBolgeID.length > 0) {
+                            var bolgelength = aracBolgeID.length;
+                            for (var b = 0; b < bolgelength; b++) {
+                                SelectBolgeOptions[b] = {label: aracBolgeAd[b], title: aracBolgeAd[b], value: aracBolgeID[b], disabled: true, selected: true};
+                            }
+                        }
+                        if (aracBolgeNID.length > 0) {
+                            var aracBolgeLength = aracBolgeNID.length;
+                            for (var z = 0; z < aracBolgeLength; z++) {
+                                SelectBolgeOptions[b] = {label: aracBolgeNAd[z], title: aracBolgeNAd[z], value: aracBolgeNID[z], disabled: true};
+                                b++;
+                            }
+
+                        }
+                        if (aracSoforID.length > 0) {
+                            var soforselectlength = aracSoforID.length;
+                            for (var t = 0; t < soforselectlength; t++) {
+                                SelectAracOptions[t] = {label: aracSoforAd[t], title: aracSoforAd[t], value: aracSoforID[t], disabled: true, selected: true};
+                            }
+                        }
+                        if (aracSoforNID.length > 0) {
+                            var soforlength = aracSoforNID.length;
+                            for (var f = 0; f < soforlength; f++) {
+                                SelectAracOptions[t] = {label: aracSoforNAd[f], title: aracSoforNAd[f], value: aracSoforNID[f], disabled: true};
+                                t++;
+                            }
+                        }
+
+                        $('#AracDetayBolgeSelect').multiselect('refresh');
+                        $('#AracDetaySurucu').multiselect('refresh');
+                        $('#AracDetayBolgeSelect').multiselect('dataprovider', SelectBolgeOptions);
+                        $('#AracDetaySurucu').multiselect('dataprovider', SelectAracOptions);
+                        var length = $('tbody#adminAracRow tr').length;
+                        for (var t = 0; t < length; t++) {
+                            var attrValueId = $("tbody#adminAracRow > tr > td > a").eq(t).attr('value');
+                            if (attrValueId == aracdetail_id) {
+                                $("tbody#adminAracRow > tr > td > a").eq(t).html('<i class="fa fa-bus"></i> ' + aracPlaka);
+                                $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(aracMarka);
+                                $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(aracModelYil);
+                                $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(aracKapasite);
+                                $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(aracDurumText);
+                                $('tbody#adminAracRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                            }
+                        }
+
+                        aracBolgeID = [];
+                        aracBolgeAd = [];
+                        aracSoforID = [];
+                        aracSoforAd = [];
+                    }
+                }
+            });
+        }
+    },
+    adminAracDetailTur: function () {
+        AracTurTable.DataTable().clear().draw();
+        var aracID = $("input[name=adminAracDetailDeger]").val();
+        $.ajax({
+            data: {"aracID": aracID, "tip": "adminAracDetailTur"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    alert(cevap.hata);
+                } else {
+                    if (cevap.adminAracDetailTur) {
+                        var turCount = cevap.adminAracDetailTur.length;
+                        for (var i = 0; i < turCount; i++) {
+                            if (cevap.adminAracDetailTur[i].AracTurTip != 1) {
+                                TurTip = 'Öğrenci';
+                            } else {
+                                TurTip = 'İşçi';
+                            }
+
+                            if (cevap.adminAracDetailTur[i].AracTurAktiflik != 0) {
+                                var addRow = "<tr><td>"
+                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminAracDetailTur[i].AracTurID + "'>"
+                                        + "<i class='fa fa-map-marker'></i> " + cevap.adminAracDetailTur[i].AracDetailTurAdi + "</a></td>"
+                                        + "<td class='hidden-xs' >" + TurTip + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.adminAracDetailTur[i].AracTurAcikla + "</td>"
+                                        + "<td class='hidden-xs' value='" + cevap.adminAracTurBolge[i].AracTurKurumID + "'>" + cevap.adminAracTurKurum[i].AracTurKurumAdi + "</td>"
+                                        + "<td class='hidden-xs' value='" + cevap.adminAracTurBolge[i].AracTurBolgeID + "'>" + cevap.adminAracTurBolge[i].AracTurBolgeAdi + "</td></tr>";
+                                AracTurTable.DataTable().row.add($(addRow)).draw();
+                            } else {
+                                var addRow = "<tr><td>"
+                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminAracDetailTur[i].AracTurID + "'>"
+                                        + "<i class='fa fa-map-marker' style='color:red'></i> " + cevap.adminAracDetailTur[i].AracDetailTurAdi + "</a></td>"
+                                        + "<td class='hidden-xs' >" + TurTip + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.adminAracDetailTur[i].AracTurAcikla + "</td>"
+                                        + "<td class='hidden-xs' value='" + cevap.adminAracTurBolge[i].AracTurKurumID + "'>" + cevap.adminAracTurKurum[i].AracTurKurumAdi + "</td>"
+                                        + "<td class='hidden-xs' value='" + cevap.adminAracTurBolge[i].AracTurBolgeID + "'>" + cevap.adminAracTurBolge[i].AracTurBolgeAdi + "</td></tr>";
+                                AracTurTable.DataTable().row.add($(addRow)).draw();
+                            }
+
+                        }
+                    }
+                }
+            }
+        });
+        return true;
     }
 }
-
-
-/*
- $(document).on('click', 'ul#adminBolgeKurumDetail > li > a', function (e) {
- var AdminBolgeKurumMap = new Array();
- 
- var bolge_adi = $("input[name=BolgeDetailAdi]").val();
- 
- //Tıklanılan değer indexi
- var index = $(this).parent().index();
- 
- var count = $('ul#adminBolgeKurumDetail > li').length;
- 
- var MapValue = $(this).attr('value');
- 
- for (var countK = 0; countK < count; countK++) {
- var bolgeKurumlarMap = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').attr('value');
- var LocationBolme = bolgeKurumlarMap.split(",");
- var bolgeKurumName = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').text();
- AdminBolgeKurumMap[countK] = Array(bolgeKurumName, LocationBolme[0], LocationBolme[1]);
- }
- $("#kurumHaritaName").text(bolge_adi);
- multipleMapping(AdminBolgeKurumMap, index);
- google.maps.event.addDomListener(window, 'load', multipleMapping);
- });
- */
-
-/*
- var proje_son_id;
- 
- 
- var yapiekle_deger = $("#ProjeYapiSelect select option:selected").val();
- if (yapiekle_deger == 1) {
- yapiekle_deger = "Apartman";
- $('div#degisken_yapi').css("name", "InputBlokSayii");
- } else if (yapiekle_deger == 2) {
- yapiekle_deger = "Villa";
- $('div#degisken_yapi').css("name", "InputVillaSayii");
- } else {
- yapiekle_deger = "Müstakil";
- }
- 
- var degerim = $('#ProjeYapiSelect select option:selected').val();
- $("#ProjeYapiSelect select").change(function () {
- alert($('#ProjeYapiSelect select option:selected').html());
- });
- 
- //Blok sayısı değerleri*
- var blok_dizi = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'İ', 'J', 'K', 'L', 'M', 'N', 'O', 'Ö', 'U', 'Ü', 'P', 'R', 'S', 'T', 'U'];
- var eleman = 0;
- var indexx = 0;
- $('input[name=InputBlokSayii]').jStepper({minValue: 1, maxValue: 20, minLength: 2});
- $('body').on('keyup', 'input[name=InputBlokSayii]', function () {
- if (this.value.match(/[^0-9]/g)) {
- this.value = this.value.replace(/[^0-9]/g, '');
- return true;
- }
- var eski_eleman = eleman;
- eleman1 = $(this).val();
- 
- if ($.isNumeric(eleman1)) {
- eleman = eleman1
- } else {
- eleman = eleman;
- }
- 
- if (eski_eleman < eleman) {
- for (var i = eski_eleman; i < eleman; i++) {
- $('div#deneme>div').eq(i).css("display", "block");
- $('div#deneme input').eq(2 * i).val(blok_dizi[i] + "  BLOK");
- $('div#deneme input').eq(2 * i + 1).val(" 8 ");
- }
- } else {
- for (var y = eleman; y < eski_eleman; y++) {
- $('div#deneme>div').eq(y).css("display", "none");
- }
- }
- $("label#istek").html(eleman);
- indexx = $("label#istek").html();
- });
- 
- 
- 
- var ajax_dizi_Text = new Array();
- var ajax_dizi_Sayi = new Array();
- 
- $.SatisKayit = {
- projeKayit: function () {
- var projeekle_kodu = $("input[name=InputPKodu]").val();
- var projeekle_durum = $("select option:selected").val();
- var projeekle_adi = $("input[name=InputProjeAdi]").val();
- var projeekle_bas_tarih = $("input[name=projekayit_bas_tarih]").val();
- var projeekle_bitis_tarih = $("input[name=projekayit_bitis_tarih]").val();
- var projeekle_textarea = $("textarea[name=projeKayit_textarea]").val();
- $.ajax({
- data: {"projeekle_kodu": projeekle_kodu, "projeekle_durum": projeekle_durum, "projeekle_adi": projeekle_adi, "projeekle_bas_tarih": projeekle_bas_tarih, "projeekle_bitis_tarih": projeekle_bitis_tarih, "projeekle_textarea": projeekle_textarea, "tip": "projeKayitt"},
- success: function (cevap) {
- if (cevap.proje_hata) {
- alert(cevap.proje_hata);
- } else {
- alert(cevap.proje_sonuc);
- $("#satis_ilk_kayit_sag_proje_kayit").slideUp(2000);
- $("#satis_ilk_kayit_sag_site_kayit").slideDown(2000);
- 
- 
- var proje_son_id = cevap.proje_son_id;
- 
- $("#blokekle").click(function () {
- 
- ajax_dizi_Text = [];
- ajax_dizi_Sayi = [];
- 
- if (indexx == 0) {
- indexx = 1;
- }
- 
- for (var a = 1; a <= indexx; a++) {
- ajax_dizi_Text.push($("#InputBlokText" + a).val());
- }
- for (var c = 1; c <= indexx; c++) {
- ajax_dizi_Sayi.push($("#InputBlokSayi" + c).val());
- }
- 
- var yapiekle_adi = $("input[name=InputBlokAdi]").val();
- var yapiekle_tipi = $("#ProjeYapiSelect select option:selected").val();
- var yapiekle_sayi = $("input[name=InputBlokSayi]").val();
- var yapiekle_textarea = $("textarea[name=siteKayit_textarea]").val();
- $.ajax({
- data: {"proje_son_id": proje_son_id, "blok_adi[]": ajax_dizi_Text, "blok_sayi[]": ajax_dizi_Sayi, "yapiekle_adi": yapiekle_adi, "yapiekle_sayi": yapiekle_sayi, "yapiekle_tipi": yapiekle_tipi, "yapiekle_textarea": yapiekle_textarea, "tip": "siteKayitt"},
- success: function (cevap) {
- if (cevap.proje_yapi_hata) {
- alert(cevap.proje_yapi_hata);
- } else {
- $("#satis_ilk_kayit_sag_proje_kayit").slideUp(2000);
- }
- }
- });
- });
- }
- }
- });
- }*/
-
-
 
 

@@ -79,6 +79,10 @@ function svControl(dtype, dclass, dislemler) {
 //Subview açılıyor
     if (dtype != 'svClose') {
         switch (dislemler) {
+            case 'adminFirmaSingleMap' :
+                isMap = true;
+                var returnCevap = true;
+                break;
             case 'adminBolgeYeni' :
                 var returnCevap = $.AdminIslemler.adminBolgeYeni();
                 break;
@@ -97,10 +101,16 @@ function svControl(dtype, dclass, dislemler) {
             case 'adminKurumYeni' :
                 var returnCevap = $.AdminIslemler.adminKurumYeni();
                 break;
+            case 'adminAracYeni' :
+                var returnCevap = $.AdminIslemler.adminAracYeni();
+                break;
+            case 'adminAracDetailTur' :
+                var returnCevap = $.AdminIslemler.adminAracDetailTur();
+                break;
             case 'adminKurumMap' :
                 isMap = true;
                 isSingle = false;
-                MultipleMapindex=0;
+                MultipleMapindex = 0;
                 var returnCevap = $.AdminIslemler.adminKurumMap();
                 break;
             default :
@@ -152,7 +162,7 @@ function svControl(dtype, dclass, dislemler) {
             case 'adminBolgeKurumKaydet' :
                 var returnCevap = $.AdminIslemler.adminBolgeKurumKaydet();
                 break;
-            case 'adminKurumHaritaKaydet' :
+            case 'adminHaritaKaydet' :
                 var returnCevap = saveMap();
                 break;
             case 'adminKurumCancel' :
@@ -169,6 +179,15 @@ function svControl(dtype, dclass, dislemler) {
                 break;
             case 'adminKurumEkle' :
                 var returnCevap = $.AdminIslemler.adminKurumEkle();
+                break;
+            case 'adminAracEkle' :
+                var returnCevap = $.AdminIslemler.adminAracEkle();
+                break;
+            case 'adminAracVazgec' :
+                var returnCevap = $.AdminIslemler.adminAracVazgec();
+                break;
+            case 'adminAracDetailSil' :
+                var returnCevap = $.AdminIslemler.adminAracDetailSil();
                 break;
             default :
                 $("#" + dclass).height(th);
@@ -231,6 +250,9 @@ function editControl(edtislemler) {
         case 'adminKurumDetailEdit' :
             $.AdminIslemler.adminKurumDetailDuzenle();
             break;
+        case 'adminAracDetailEdit' :
+            $.AdminIslemler.adminAracDetailDuzenle();
+            break;
 
         default :
             break;
@@ -250,6 +272,9 @@ function vzgControl(vzgislemler) {
         case 'adminKurumDetailVazgec' :
             $.AdminIslemler.adminKurumDetailVazgec();
             break;
+        case 'adminAracDetailVazgec' :
+            $.AdminIslemler.adminAracDetailVazgec();
+            break;
         default :
             break;
     }
@@ -267,6 +292,9 @@ function saveControl(saveislemler) {
             break;
         case 'adminKurumDetailKaydet' :
             $.AdminIslemler.adminKurumDetailKaydet();
+            break;
+        case 'adminAracDetailKaydet' :
+            $.AdminIslemler.adminAracDetailKaydet();
             break;
         default :
             break;
@@ -486,3 +514,26 @@ function multipleMapping(gelen, index) {
 }
 
 //End çoklu mapping işlemleri
+
+//dizi karşılaştırma
+function farkArray(a, b) {
+    if (a.length > b.length) {
+        var gelen = [], fark = [];
+        for (var i = 0; i < b.length; i++)
+            gelen[b[i]] = true;
+        for (var i = 0; i < a.length; i++)
+            if (!gelen[a[i]])
+                fark.push(a[i]);
+        return fark;
+    } else {
+        var gelen = [], fark = [];
+        var lengtha = a.length;
+        for (var i = 0; i < lengtha; i++)
+            gelen[a[i]] = true;
+        var lengthb = b.length;
+        for (var i = 0; i < lengthb; i++)
+            if (!gelen[b[i]])
+                fark.push(b[i]);
+        return fark;
+    }
+}

@@ -125,10 +125,25 @@ class Form {
             header("Refresh: {$time}; url={$paremetre}");
         }
     }
-    
+
+    //diziyi istenilen karekter göre bölme
+    function implode($divide, $array) {
+        if ($this->count($array) > 0) {
+            $implodeArray = implode($divide, $array);
+            return $implodeArray;
+        } else {
+            return $array;
+        }
+    }
+
     //gelen değeri  şifreleme
     function md5($value) {
         return md5($value);
+    }
+
+    //gelen değeri  şifreleme
+    function security($value) {
+        return md5(sha1(md5($value)));
     }
 
     //session kontrol değeri, real sunucuya kurunca yorumlar kaldırılacak
@@ -178,6 +193,39 @@ class Form {
             }
         }
         return $newarray;
+    }
+
+    function shuttleNotification($target_device = array(), $alert, $title) {
+        $appId = '54K06z74qYiVBTx1DAtHC0xgHWcQ8HcnZlJcS5th';
+        $restKey = 'z7J7f963G4HF3G4Vh2JDJDeFRXCQ2PpHByQ3UUPL';
+
+        $push_payload = json_encode(array(
+            "where" => array(
+                "UniqueId" => array(
+                    '$in' => $target_device)
+            ),
+            "data" => array(
+                "alert" => $alert,
+                "title" => $title
+            )
+        ));
+        $rest = curl_init();
+        curl_setopt($rest, CURLOPT_URL, SITE_NOTIFICATION);
+        curl_setopt($rest, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($rest, CURLOPT_PORT, 443);
+        curl_setopt($rest, CURLOPT_POST, 1);
+        curl_setopt($rest, CURLOPT_POSTFIELDS, $push_payload);
+        curl_setopt($rest, CURLOPT_HTTPHEADER, array("X-Parse-Application-Id: " . $appId,
+            "X-Parse-REST-API-Key: " . $restKey,
+            "Content-Type: application/json"));
+        curl_setopt($rest, CURLOPT_RETURNTRANSFER, 1);
+
+        $response = curl_exec($rest);
+        $result = json_decode($response);
+        $sonuc = $result->{"result"};
+        curl_close($rest);
+
+        return $sonuc;
     }
 
 }

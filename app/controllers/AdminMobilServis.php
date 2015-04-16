@@ -94,8 +94,8 @@ class AdminMobilServis extends Controller {
                         $form->post("boylam", true);
                         $boylam = $form->values['boylam'];
                         
-                        error_log($enlem);
-                        error_log($boylam);
+                        //error_log($enlem);
+                        //error_log($boylam);
 
                         $formDbConfig = $this->load->otherClasses('DatabaseConfig');
                         $usersselect_model = $this->load->model("adminselectdb_model");

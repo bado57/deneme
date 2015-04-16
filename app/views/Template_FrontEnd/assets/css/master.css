@@ -535,6 +535,7 @@ section::after {
 .tp-caption {
   font-family: 'Lato', Arial !important;
   -webkit-font-smoothing: antialiased;
+  max-height: 80%;
 }
 .tp-caption.large_white_bold {
   color: #ffffff;

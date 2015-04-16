@@ -11,7 +11,7 @@ form textarea{resize:vertical !important;}
 .svOpen, .svClose{
     position:absolute;
     bottom:0px;
-    background-color: white;
+    background-color: #f9f9f9;
     z-index: 1000;
     display:none;
 }
@@ -34,3 +34,7 @@ form textarea{resize:vertical !important;}
 #saveMap{margin-right: 10px;}
 
 label input[type="search"]{width: auto !important;}
+
+.multiselect{min-width: 100%}
+
+.mr10 {margin-right: 10px;}

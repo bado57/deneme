@@ -30,7 +30,6 @@ class AdminAjaxSorguMobil extends Controller {
             $formDbConfig = $this->load->otherClasses('DatabaseConfig');
             $usersselect_model = $this->load->model("adminselectdb_mobil");
 
-
             //return database results
             $UserSelectDb = $usersselect_model->adminFirmMobilID($firmId);
 
@@ -129,19 +128,16 @@ class AdminAjaxSorguMobil extends Controller {
 
                 case "adminBolgeYeniKaydet":
 
-                    $form->post('rutbe', true);
-                    $adminRutbe = $form->values['rutbe'];
 
-                    if ($adminRutbe != 1) {
-                        Session::destroy();
-                        header("Location:" . SITE_URL);
+                    $form->post('id', true);
+                    $adminID = $form->values['id'];
+
+                    if (!$adminID) {
+                        $sonuc["hata"] = "Hacking?";
                     } else {
                         $form->post('username', true);
                         $uniqueKey = $form->values['username'];
                         $uniqueKey = $uniqueKey . '_AFirma';
-                        $form->post('id', true);
-                        $adminID = $form->values['id'];
-
 
                         $form->post('bolge_adi', true);
                         $form->post('bolge_aciklama', true);
@@ -167,7 +163,7 @@ class AdminAjaxSorguMobil extends Controller {
                                 if ($resultMemcache) {
                                     $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                                 }
-                                $sonuc["newBolgeID"] = $resultIDD;
+                                $sonuc["newBolgeID"] = $resultuID;
                                 $sonuc["insert"] = "Başarıyla Yeni bölge Eklenmiştir.";
                             } else {
                                 $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
@@ -181,51 +177,47 @@ class AdminAjaxSorguMobil extends Controller {
 
                 case "adminBolgeDetail":
 
-                    $form->post('rutbe', true);
-                    $adminRutbe = $form->values['rutbe'];
+                    $form->post('id', true);
+                    $adminID = $form->values['id'];
 
-                    if ($adminRutbe != 1) {
-                        Session::destroy();
-                        header("Location:" . SITE_URL);
+                    if (!$adminID) {
+                        $sonuc["hata"] = "Hacking?";
                     } else {
 
                         $form->post('adminbolgeRowid', true);
                         $adminBolgeDetailID = $form->values['adminbolgeRowid'];
 
-                        $data["adminBolgeDetail"] = $Panel_Model->MadminBolgeDetail($adminBolgeDetailID);
-
-                        $returnModelData = $data["adminBolgeDetail"][0];
-
+                        $adminBolge = $Panel_Model->MadminBolgeDetail($adminBolgeDetailID);
+                        //arac bölge idler
                         $a = 0;
-                        foreach ($returnModelData as $key => $value) {
-                            $new_array['AdminBolgesshkey'][$a] = md5(sha1(md5($key)));
+                        foreach ($adminBolge as $aracBolgee) {
+                            $selectBolge[$a]['SelectBolgeID'] = $aracBolgee['SBBolgeID'];
+                            $selectBolge[$a]['SelectBolgeAdi'] = $aracBolgee['SBBolgeAdi'];
+                            $selectBolge[$a]['SelectBolgeAciklama'] = $aracBolgee['SBBolgeAciklama'];
                             $a++;
                         }
 
-                        $returnFormdata['adminBolgeDetail'] = $form->newKeys($data["adminBolgeDetail"][0], $new_array['AdminBolgesshkey']);
-
-
-                        $data["adminBolgeKurumDetail"] = $Panel_Model->MadminBolgeKurumDetail($adminBolgeDetailID);
-
-                        for ($kurum = 0; $kurum < count($data["adminBolgeKurumDetail"]); $kurum++) {
-                            $data["adminBolgeKurum"][$kurum] = array_values($data["adminBolgeKurumDetail"][$kurum]);
+                        $adminBolgeKurum = $Panel_Model->MadminBolgeDetailKurum($adminBolgeDetailID);
+                        if ($adminBolgeKurum) {
+                            $sonuc["adminBolgeKurum"] = 1;
+                        } else {
+                            $sonuc["adminBolgeKurum"] = 0;
                         }
-
-                        $sonuc["adminBolgeDetail"] = $returnFormdata['adminBolgeDetail'];
-                        $sonuc["adminBolgeKurumDetail"] = $data["adminBolgeKurum"];
+                        $sonuc["adminSelectBolge"] = $selectBolge;
+                        $sonuc["adminBolgeKurum"] = $sonuc["adminBolgeKurum"];
                     }
 
                     break;
 
                 case "adminBolgeDetailDuzenle":
 
-                    $form->post('rutbe', true);
-                    $adminRutbe = $form->values['rutbe'];
+                    $form->post('id', true);
+                    $adminID = $form->values['id'];
 
-                    if ($adminRutbe != 1) {
-                        Session::destroy();
-                        header("Location:" . SITE_URL);
+                    if (!$adminID) {
+                        $sonuc["hata"] = "Hacking?";
                     } else {
+
                         $form->post('username', true);
                         $uniqueKey = $form->values['username'];
                         $uniqueKey = $uniqueKey . '_ABolge';
@@ -258,18 +250,16 @@ class AdminAjaxSorguMobil extends Controller {
 
                 case "adminBolgeDetailDelete":
 
-                    $form->post('rutbe', true);
-                    $adminRutbe = $form->values['rutbe'];
+                    $form->post('id', true);
+                    $adminID = $form->values['id'];
 
-                    if ($adminRutbe != 1) {
-                        Session::destroy();
-                        header("Location:" . SITE_URL);
+                    if (!$adminID) {
+                        $sonuc["hata"] = "Hacking?";
                     } else {
 
                         $form->post('username', true);
                         $uniqueKey = $form->values['username'];
                         $uniqueKey = $uniqueKey . '_ABolge';
-
                         $form->post('bolgedetail_id', true);
                         $adminBolgeDetailID = $form->values['bolgedetail_id'];
 
@@ -288,21 +278,43 @@ class AdminAjaxSorguMobil extends Controller {
                         } else {
                             $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
                         }
+                    }
 
+                    break;
 
-                        $sonuc["adminBolgeDetail"] = $data["adminBolgeDetail"];
+                case "adminKurumDetail":
+
+                    $form->post('id', true);
+                    $adminID = $form->values['id'];
+
+                    if (!$adminID) {
+                        $sonuc["hata"] = "Hacking?";
+                    } else {
+
+                        $form->post('adminbolgeRowid', true);
+                        $adminBolgeDetailID = $form->values['adminbolgeRowid'];
+
+                        $adminBolgeKurum = $Panel_Model->MadminBolgeKurumDetail($adminBolgeDetailID);
+                        //arac bölge idler
+                        $a = 0;
+                        foreach ($adminBolgeKurum as $adminBolgeKurumm) {
+                            $selectBolgeKurum[$a]['SelectBolgeKurumID'] = $adminBolgeKurumm['SBKurumID'];
+                            $selectBolgeKurum[$a]['SelectBolgeKurumAdi'] = $adminBolgeKurumm['SBKurumAdi'];
+                            $selectBolgeKurum[$a]['SelectBolgeKurumLokasyon'] = $adminBolgeKurumm['SBKurumLokasyon'];
+                            $a++;
+                        }
+                        $sonuc["adminSelectBolgeKurum"] = $selectBolgeKurum;
                     }
 
                     break;
 
                 case "adminBolgeKurumKaydet":
 
-                    $form->post('rutbe', true);
-                    $adminRutbe = $form->values['rutbe'];
+                    $form->post('id', true);
+                    $adminID = $form->values['id'];
 
-                    if ($adminRutbe != 1) {
-                        Session::destroy();
-                        header("Location:" . SITE_URL);
+                    if (!$adminID) {
+                        $sonuc["hata"] = "Hacking?";
                     } else {
 
                         $form->post('username', true);

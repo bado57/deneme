@@ -55,10 +55,6 @@
                     </a>
                     <ul class="treeview-menu">
                         <li id="link_aracliste"><a href="<?php echo SITE_URL; ?>/adminweb/aracliste"><i class="fa fa-angle-right"></i><?php echo $data["AracListe"]; ?></a></li>
-                        <li><a href="pages/UI/icons.html"><i class="fa fa-angle-right"></i> Icons</a></li>
-                        <li><a href="pages/UI/buttons.html"><i class="fa fa-angle-right"></i> Buttons</a></li>
-                        <li><a href="pages/UI/sliders.html"><i class="fa fa-angle-right"></i> Sliders</a></li>
-                        <li><a href="pages/UI/timeline.html"><i class="fa fa-angle-right"></i> Timeline</a></li>
                     </ul>
                 </li>
                 <li class="treeview">

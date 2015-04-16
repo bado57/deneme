@@ -22,7 +22,7 @@ class Panel extends Controller {
         if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey) {
             $this->home();
         } else {
-             header("Location:" . SITE_URL_LOGOUT);
+            header("Location:" . SITE_URL_LOGOUT);
         }
     }
 
@@ -40,11 +40,11 @@ class Panel extends Controller {
         }
 
         if ($loginTip == 1) {
-             //memcache model bağlanısı
+            //memcache model bağlanısı
             $MemcacheModel = $this->load->model("adminmemcache_model");
             //model bağlantısı
             $Panel_Model = $this->load->model("panel_model");
-            
+
             $adminRutbe = Session::get("userRutbe");
             $adminID = Session::get("userId");
             $uniqueKey = Session::get("userFirmaKod");
@@ -59,39 +59,45 @@ class Panel extends Controller {
 
                     $bolgeListe = $Panel_Model->bolgeListele();
                     $kurumListe = $Panel_Model->kurumListeleCount();
-                    
-                    $adminBolge['AdminBolge']=count($bolgeListe);
-                    $adminBolge['AdminKurum']=count($kurumListe);
-                    
+                    $aracListe = $Panel_Model->aracListeleCount();
+
+                    $adminBolge['AdminBolge'] = count($bolgeListe);
+                    $adminBolge['AdminKurum'] = count($kurumListe);
+                    $adminBolge['AdminArac'] = count($aracListe);
                 } else {//değilse admin ıd ye göre bölge görür
                     $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
-                    //echo count($bolgeListeRutbe);
 
-                    for ($r = 0; $r < count($bolgeListeRutbe); $r++) {
-                        $bolgerutbeId[] = $bolgeListeRutbe[$r]['BSBolgeID'];
+                    foreach ($bolgeListeRutbe as $rutbe) {
+                        $bolgerutbeId[] = $rutbe['BSBolgeID'];
                     }
+
                     $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+                    //bölge araç idler
+                    $aracIDListe = $Panel_Model->rutbearacIDListele($rutbebolgedizi);
 
 
                     $bolgeListe = $Panel_Model->rutbeBolgeListele($rutbebolgedizi);
                     $kurumListe = $Panel_Model->rutbeKurumCount($rutbebolgedizi);
-                    
-                    $adminBolge['AdminBolge']=count($bolgeListe);
-                    $adminBolge['AdminKurum']=count($kurumListe);
+
+                    $adminBolge['AdminBolge'] = count($bolgeListe);
+                    $adminBolge['AdminKurum'] = count($kurumListe);
+                    $adminBolge['AdminArac'] = count($aracIDListe);
                 }
-                
+
                 //memcache kayıt
                 $result = $MemcacheModel->set($uniqueKey, $adminBolge, false, 60);
             }
-            
+
             $this->load->view("Template_AdminBackEnd/header", $deger);
             $this->load->view("Template_AdminBackEnd/left", $deger);
-            $this->load->view("Template_AdminBackEnd/home", $deger,$adminBolge);
+            $this->load->view("Template_AdminBackEnd/home", $deger, $adminBolge);
             $this->load->view("Template_AdminBackEnd/footer", $deger);
         } else {
             //$this->load->view("Entry/loginForm");
         }
     }
+
 }
 ?>
 

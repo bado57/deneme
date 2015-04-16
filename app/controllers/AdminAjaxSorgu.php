@@ -31,7 +31,7 @@ class AdminAjaxSorgu extends Controller {
                     $adminRutbe = Session::get("userRutbe");
 
                     if ($adminRutbe != 1) {
-                        header("Location:" . SITE_URL_LOGOUT);
+                        $form->yonlendir("Location:" . SITE_URL_LOGOUT);
                     } else {
 
                         $data = $form->post('usersloginadi', true);
@@ -54,7 +54,7 @@ class AdminAjaxSorgu extends Controller {
                     $adminRutbe = Session::get("userRutbe");
 
                     if ($adminRutbe != 1) {
-                        header("Location:" . SITE_URL_LOGOUT);
+                        $form->yonlendir("Location:" . SITE_URL_LOGOUT);
                     } else {
 
                         $uniqueKey = Session::get("userFirmaKod");
@@ -70,6 +70,15 @@ class AdminAjaxSorgu extends Controller {
                         $form->post('firma_website', true);
                         $form->post('firma_lokasyon', true);
 
+                        $form->post('firmaulke', true);
+                        $form->post('firmail', true);
+                        $form->post('firmailce', true);
+                        $form->post('firmasemt', true);
+                        $form->post('firmamahalle', true);
+                        $form->post('firmasokak', true);
+                        $form->post('firmapostakodu', true);
+                        $form->post('firmacaddeno', true);
+
                         if ($form->submit()) {
                             $data = array(
                                 'BSFirmaAdi' => $form->values['firma_adi'],
@@ -78,6 +87,14 @@ class AdminAjaxSorgu extends Controller {
                                 'BSFirmaWebsite' => $form->values['firma_website'],
                                 'BSFirmaEmail' => $form->values['firma_email'],
                                 'BSFirmaLokasyon' => $form->values['firma_lokasyon'],
+                                'BSFirmaUlke' => $form->values['firmaulke'],
+                                'BSFirmaIl' => $form->values['firmail'],
+                                'BSFirmaIlce' => $form->values['firmailce'],
+                                'BSFirmaSemt' => $form->values['firmasemt'],
+                                'BSFirmaMahalle' => $form->values['firmamahalle'],
+                                'BSFirmaSokak' => $form->values['firmasokak'],
+                                'BSFirmaPostaKodu' => $form->values['firmapostakodu'],
+                                'BSFirmaCaddeNo' => $form->values['firmacaddeno'],
                                 'BSFirmaAciklama' => $form->values['firma_aciklama'],
                                 'BSOgrenciServis' => $form->values['ogrenci_chechkbox'],
                                 'BSPersonelServis' => $form->values['personel_chechkbox'],
@@ -126,8 +143,8 @@ class AdminAjaxSorgu extends Controller {
                     $uniqueKey = Session::get("username");
                     $uniqueKey = $uniqueKey . '_ABolge';
 
-                    if ($adminRutbe != 1) {
-                        header("Location:" . SITE_URL_LOGOUT);
+                    if (!$adminID) {
+                        $form->yonlendir(SITE_URL_LOGOUT);
                     } else {
 
                         $form->post('bolge_adi', true);
@@ -163,8 +180,6 @@ class AdminAjaxSorgu extends Controller {
                         }
                     }
 
-                    //$data["FirmaOzellikler"] = $Panel_Model->firmaOzellikler();
-
                     break;
 
                 case "adminBolgeDetail":
@@ -192,9 +207,10 @@ class AdminAjaxSorgu extends Controller {
 
 
                         $data["adminBolgeKurumDetail"] = $Panel_Model->adminBolgeKurumDetail($adminBolgeDetailID);
-
-                        for ($kurum = 0; $kurum < count($data["adminBolgeKurumDetail"]); $kurum++) {
-                            $data["adminBolgeKurum"][$kurum] = array_values($data["adminBolgeKurumDetail"][$kurum]);
+                        $kurum = 0;
+                        foreach ($data["adminBolgeKurumDetail"] as $kurumdetail) {
+                            $data["adminBolgeKurum"][$kurum] = array_values($kurumdetail);
+                            $kurum++;
                         }
 
                         $sonuc["adminBolgeDetail"] = $returnFormdata['adminBolgeDetail'];
@@ -365,14 +381,21 @@ class AdminAjaxSorgu extends Controller {
                         $returnFormdata['adminKurumDetail'] = $form->newKeys($data["adminKurumDetail"][0], $new_array['AdminKurumsshkey']);
 
 
-                        $data["adminKurumTurDetail"] = $Panel_Model->adminKurumTurDetail($adminKurumDetailID);
+                        $adminKurumTurDetail = $Panel_Model->adminKurumTurDetail($adminKurumDetailID);
 
-                        for ($tur = 0; $tur < count($data["adminKurumTurDetail"]); $tur++) {
-                            $data["adminKurumTur"][$tur] = array_values($data["adminKurumTurDetail"][$tur]);
+                        //arac detail tur
+                        $b = 0;
+                        foreach ($adminKurumTurDetail as $adminKurumTurDetaill) {
+                            $kurumDetailTur[$b]['KurumTurID'] = $adminKurumTurDetaill['SBTurID'];
+                            $kurumDetailTur[$b]['KurumDetailTurAdi'] = $adminKurumTurDetaill['SBTurAdi'];
+                            $kurumDetailTur[$b]['KurumTurAktiflik'] = $adminKurumTurDetaill['SBTurAktiflik'];
+                            $kurumDetailTur[$b]['KurumTurTip'] = $adminKurumTurDetaill['SBTurType'];
+                            $kurumDetailTur[$b]['KurumTurAcikla'] = $adminKurumTurDetaill['SBTurAciklama'];
+                            $b++;
                         }
 
                         $sonuc["adminKurumDetail"] = $returnFormdata['adminKurumDetail'];
-                        $sonuc["adminKurumTurDetail"] = $data["adminKurumTur"];
+                        $sonuc["adminKurumTurDetail"] = $kurumDetailTur;
                     }
 
                     break;
@@ -462,24 +485,28 @@ class AdminAjaxSorgu extends Controller {
                         if ($adminRutbe != 0) {
                             $bolgeListe = $Panel_Model->kurumBolgeListele();
 
-                            for ($a = 0; $a < count($bolgeListe); $a++) {
-                                $adminBolge['AdminBolge'][$a] = $bolgeListe[$a]['SBBolgeAdi'];
-                                $adminBolge['AdminBolgeID'][$a] = $bolgeListe[$a]['SBBolgeID'];
+                            $kurumbolge = 0;
+                            foreach ($bolgeListe as $bolgelist) {
+                                $adminBolge['AdminBolge'][$kurumbolge] = $bolgelist['SBBolgeAdi'];
+                                $adminBolge['AdminBolgeID'][$kurumbolge] = $bolgelist['SBBolgeID'];
+                                $kurumbolge++;
                             }
                         } else {//değilse admin ıd ye göre bölge görür
                             $bolgeListeRutbe = $Panel_Model->adminKurumBolgeListele($adminID);
 
-                            for ($r = 0; $r < count($bolgeListeRutbe); $r++) {
-                                $bolgerutbeId[] = $bolgeListeRutbe[$r]['BSBolgeID'];
+                            foreach ($bolgeListeRutbe as $rutbe) {
+                                $bolgerutbeId[] = $rutbe['BSBolgeID'];
                             }
                             $rutbebolgedizi = implode(',', $bolgerutbeId);
 
 
                             $bolgeListe = $Panel_Model->adminRutbeKurumBolgeListele($rutbebolgedizi);
 
-                            for ($a = 0; $a < count($bolgeListe); $a++) {
-                                $adminBolge['AdminBolge'][$a] = $bolgeListe[$a]['SBBolgeAdi'];
-                                $adminBolge['AdminBolgeID'][$a] = $bolgeListe[$a]['SBBolgeID'];
+                            $kurumbolge = 0;
+                            foreach ($bolgeListe as $bolgelist) {
+                                $adminBolge['AdminBolge'][$kurumbolge] = $bolgelist['SBBolgeAdi'];
+                                $adminBolge['AdminBolgeID'][$kurumbolge] = $bolgelist['SBBolgeID'];
+                                $kurumbolge++;
                             }
                         }
 
@@ -551,6 +578,541 @@ class AdminAjaxSorgu extends Controller {
                         } else {
                             $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
                         }
+                    }
+
+                case "adminAracEkleSelect":
+                    $adminID = Session::get("userId");
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $adminRutbe = Session::get("userRutbe");
+                        //super adminse tüm bölgeler çekilir
+                        if ($adminRutbe != 0) {
+                            //bölgeleri getirir
+                            $bolgeListe = $Panel_Model->aracBolgeListele();
+
+                            $a = 0;
+                            foreach ($bolgeListe as $bolgelist) {
+                                $adminBolge['AdminBolge'][$a] = $bolgelist['SBBolgeAdi'];
+                                $adminBolge['AdminBolgeID'][$a] = $bolgelist['SBBolgeID'];
+                                $a++;
+                            }
+
+                            //şöforlar için
+                            $soforListe = $Panel_Model->aracSoforListele();
+
+                            $b = 0;
+                            foreach ($soforListe as $soforlist) {
+                                $adminSofor['AdminSoforID'][$b] = $soforlist['BSSoforID'];
+                                $adminSofor['AdminSoforAd'][$b] = $soforlist['BSSoforAd'];
+                                $adminSofor['AdminSoforSoyad'][$b] = $soforlist['BSSoforSoyad'];
+                                $b++;
+                            }
+                        } else {//değilse admin ıd ye göre bölge görür
+                            $bolgeListeRutbe = $Panel_Model->adminAracBolgeListele($adminID);
+
+                            foreach ($bolgeListeRutbe as $rutbe) {
+                                $bolgerutbeId[] = $rutbe['BSBolgeID'];
+                            }
+                            $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+                            //rütbeye göre bölge listele
+                            $bolgeListe = $Panel_Model->adminRutbeAracBolgeListele($rutbebolgedizi);
+
+                            $a = 0;
+                            foreach ($bolgeListe as $bolgelist) {
+                                $adminBolge['AdminBolge'][$a] = $bolgelist['SBBolgeAdi'];
+                                $adminBolge['AdminBolgeID'][$a] = $bolgelist['SBBolgeID'];
+                                $a++;
+                            }
+
+                            //rütbeye göre şoför listele
+                            $soforIDListe = $Panel_Model->adminRutbeSoforIDListele($rutbebolgedizi);
+
+                            $b = 0;
+                            foreach ($soforIDListe as $soforIDlist) {
+                                $bolgesoforId[] = $soforIDlist['BSSoforID'];
+                                $b++;
+                            }
+                            $rutbesofordizi = implode(',', $bolgesoforId);
+
+                            //rütbeye göre şoför listele
+                            $soforListe = $Panel_Model->adminRutbeSoforListele($rutbesofordizi);
+
+                            $c = 0;
+                            foreach ($soforListe as $soforlist) {
+                                $adminSofor['AdminSoforID'][$c] = $soforlist['BSSoforID'];
+                                $adminSofor['AdminSoforAd'][$c] = $soforlist['BSSoforAd'];
+                                $adminSofor['AdminSoforSoyad'][$c] = $soforlist['BSSoforSoyad'];
+                                $c++;
+                            }
+                        }
+
+                        $sonuc["adminAracBolge"] = $adminBolge;
+                        $sonuc["adminAracSofor"] = $adminSofor;
+                    }
+                    break;
+
+                    break;
+
+                case "adminAracKaydet":
+
+                    $adminID = Session::get("userId");
+
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $uniqueKey = Session::get("username");
+                        $uniqueKey = $uniqueKey . '_AArac';
+
+                        $form->post('aracPlaka', true);
+                        $form->post('aracMarka', true);
+                        $form->post('aracModelYil', true);
+                        $form->post('aracKapasite', true);
+                        $form->post('aracAciklama', true);
+                        $form->post('aracDurum', true);
+                        $aracSoforID = $_REQUEST['aracSoforID'];
+                        $aracSoforAd = $_REQUEST['aracSoforAd'];
+                        $aracBolgeAd = $_REQUEST['aracBolgeAd'];
+                        $aracBolgeID = $_REQUEST['aracBolgeID'];
+
+                        if ($form->submit()) {
+                            $data = array(
+                                'SBAracMarka' => $form->values['aracMarka'],
+                                'SBAracModelYili' => $form->values['aracModelYil'],
+                                'SBAracPlaka' => $form->values['aracPlaka'],
+                                'SBAracKapasite' => $form->values['aracKapasite'],
+                                'SBAracKm' => 0,
+                                'SBAracAciklama' => $form->values['aracAciklama'],
+                                'SBAracDurum' => $form->values['aracDurum']
+                            );
+                        }
+                        $resultAracID = $Panel_Model->addNewAdminArac($data);
+
+                        if ($resultAracID) {
+
+                            $soforID = count($aracSoforID);
+                            for ($a = 0; $a < $soforID; $a++) {
+                                $sofordata[$a] = array(
+                                    'BSAracID' => $resultAracID,
+                                    'BSSoforID' => $aracSoforID[$a],
+                                    'BSSoforAd' => $aracSoforAd[$a]
+                                );
+                            }
+                            $resultSoforID = $Panel_Model->addNewAdminAracSofor($sofordata);
+                            error_log($resultSoforID);
+                            if ($resultSoforID) {
+                                $bolgeID = count($aracBolgeID);
+                                for ($b = 0; $b < $bolgeID; $b++) {
+                                    $bolgedata[$b] = array(
+                                        'SBAracID' => $resultAracID,
+                                        'SBBolgeID' => $aracBolgeID[$b],
+                                        'SBBolgeAdi' => $aracBolgeAd[$b]
+                                    );
+                                }
+                                $resultBolgeID = $Panel_Model->addNewAdminBolgeSofor($bolgedata);
+                                error_log($resultBolgeID);
+                                if ($resultBolgeID) {
+                                    error_log("geldi");
+                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
+                                    if ($resultMemcache) {
+                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                    }
+
+                                    $sonuc["newAracID"] = $resultAracID;
+                                    $sonuc["insert"] = "Başarıyla Araç Eklenmiştir.";
+                                } else {
+                                    //arac şofor kaydedilirken bi hata meydana geldi ise
+                                    $deleteresult = $Panel_Model->adminAracDelete($resultAracID);
+
+                                    $deleteresultt = $Panel_Model->adminAracSoforDelete($resultAracID);
+                                    //arac şofmr kaydedilirken bi hata meydana geldi ise
+                                    if ($deleteresultt) {
+                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    }
+                                }
+                            } else {
+                                $deleteresult = $Panel_Model->adminAracDelete($resultAracID);
+                                //arac şofmr kaydedilirken bi hata meydana geldi ise
+                                if ($deleteresult) {
+                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                }
+                            }
+                        } else {
+                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                        }
+                    }
+
+                case "adminAracDetail":
+
+                    $adminID = Session::get("userId");
+
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $adminRutbe = Session::get("userRutbe");
+                        //superadminse
+                        if ($adminRutbe != 0) {
+                            $form->post('adminaracRowid', true);
+                            $adminAracDetailID = $form->values['adminaracRowid'];
+
+                            $adminAracBolge = $Panel_Model->adminDetailAracBolge($adminAracDetailID);
+                            //arac bölge idler
+                            $a = 0;
+                            foreach ($adminAracBolge as $aracBolge) {
+                                $selectAracBolge[$a]['SelectAracBolgeID'] = $aracBolge['SBBolgeID'];
+                                $selectAracBolge[$a]['SelectAracBolgeAdi'] = $aracBolge['SBBolgeAdi'];
+                                $aracbolgeId[] = $aracBolge['SBBolgeID'];
+                                $a++;
+                            }
+                            //aracın turu var mı yokmu
+                            $adminAracTur = $Panel_Model->adminDetailAracTur($adminAracDetailID);
+                            //arac bölge idler
+                            $z = 0;
+                            foreach ($adminAracTur as $adminAracTurr) {
+                                $selectAracTur[$z]['SelectAracTur'] = $adminAracTurr['SBTurAktiflik'];
+                                $z++;
+                            }
+
+                            $aracbolgedizi = implode(',', $aracbolgeId);
+                            //aracın bolgesi dışındakiler
+                            $digerBolge = $Panel_Model->adminDetailAracSBolge($aracbolgedizi);
+                            //arac diğer bölgeler
+                            $b = 0;
+                            foreach ($digerBolge as $digerBolgee) {
+                                $digerAracBolge[$b]['DigerAracBolgeID'] = $digerBolgee['SBBolgeID'];
+                                $digerAracBolge[$b]['DigerAracBolgeAdi'] = $digerBolgee['SBBolgeAdi'];
+                                $b++;
+                            }
+
+                            //admin araç seçili şoför
+                            $adminAracSofor = $Panel_Model->adminDetailAracSofor($adminAracDetailID);
+                            //arac Şofor idler
+                            $c = 0;
+                            foreach ($adminAracSofor as $adminAracSoforr) {
+                                $selectAracSofor[$c]['SelectAracSoforID'] = $adminAracSoforr['BSSoforID'];
+                                $selectAracSofor[$c]['SelectAracSoforAdi'] = $adminAracSoforr['BSSoforAd'];
+                                $aracsoforId[] = $adminAracSoforr['BSSoforID'];
+                                $c++;
+                            }
+                            $aracsofordizi = implode(',', $aracsoforId);
+                            //aracın şoforü dışındakiler
+                            $digerSofor = $Panel_Model->adminDetailAracSSofor($aracsofordizi);
+                            //arac diğer şoförler
+                            $d = 0;
+                            foreach ($digerSofor as $digerSoforr) {
+                                $digerAracSofor[$d]['DigerAracSoforID'] = $digerSoforr['BSSoforID'];
+                                $digerAracSofor[$d]['DigerAracSoforAdi'] = $digerSoforr['BSSoforAd'];
+                                $digerAracSofor[$d]['DigerAracSoforSoyad'] = $digerSoforr['BSSoforSoyad'];
+                                $d++;
+                            }
+
+                            //araç Özellikleri
+                            $aracOzellik = $Panel_Model->adminDetailAracOzellik($adminAracDetailID);
+                            $e = 0;
+                            foreach ($aracOzellik as $aracOzellikk) {
+                                $adminAracDetail[$e]['AdminAracID'] = $aracOzellikk['SBAracID'];
+                                $adminAracDetail[$e]['AdminAracPlaka'] = $aracOzellikk['SBAracPlaka'];
+                                $adminAracDetail[$e]['AdminAracMarka'] = $aracOzellikk['SBAracMarka'];
+                                $adminAracDetail[$e]['AdminAracYil'] = $aracOzellikk['SBAracModelYili'];
+                                $adminAracDetail[$e]['AdminAracKapasite'] = $aracOzellikk['SBAracKapasite'];
+                                $adminAracDetail[$e]['AdminAracKm'] = $aracOzellikk['SBAracKm'];
+                                $adminAracDetail[$e]['AdminAracDurum'] = $aracOzellikk['SBAracDurum'];
+                                $adminAracDetail[$e]['AdminAracAciklama'] = $aracOzellikk['SBAracAciklama'];
+                                $e++;
+                            }
+                        } else {
+                            $adminID = Session::get("userId");
+                            //normal adminse
+                            $form->post('adminaracRowid', true);
+                            $adminAracDetailID = $form->values['adminaracRowid'];
+
+                            //küçük adminin olan bölgeleri
+                            $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
+
+                            //bölge idler
+                            $r = 0;
+                            foreach ($bolgeListeRutbe as $bolgeListeRutbee) {
+                                $bolgerutbeId[] = $bolgeListeRutbee['BSBolgeID'];
+                                $r++;
+                            }
+                            $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+                            //aracın turu var mı yokmu
+                            $adminAracTur = $Panel_Model->adminDetailRutbeAracTur($rutbebolgedizi, $adminAracDetailID);
+                            //arac bölge idler
+                            $z = 0;
+                            foreach ($adminAracTur as $adminAracTurr) {
+                                $selectAracTur[$z]['SelectAracTur'] = $adminAracTurr['SBTurAktiflik'];
+                                $z++;
+                            }
+
+                            $adminAracBolge = $Panel_Model->adminDetailAracBolge($adminAracDetailID);
+                            //arac bölge idler
+                            $a = 0;
+                            foreach ($adminAracBolge as $adminAracBolgee) {
+                                $selectAracBolge[$a]['SelectAracBolgeID'] = $adminAracBolgee['SBBolgeID'];
+                                $selectAracBolge[$a]['SelectAracBolgeAdi'] = $adminAracBolgee['SBBolgeAdi'];
+                                $aracbolgeId[] = $adminAracBolgee['SBBolgeID'];
+                                $a++;
+                            }
+
+                            //küçük admine göre farkını alıp, select olmayan bölgeleri çıkarıyoruz
+                            $bolgefark = array_diff($bolgerutbeId, $aracbolgeId);
+                            $bolgefarkk = implode(',', $bolgefark);
+
+                            //aracın bolgesi dışındakiler
+                            $digerBolge = $Panel_Model->adminRutbeDetailAracSBolge($bolgefarkk);
+                            //arac diğer bölgeler
+                            $b = 0;
+                            foreach ($digerBolge as $digerBolgee) {
+                                $digerAracBolge[$b]['DigerAracBolgeID'] = $digerBolgee['SBBolgeID'];
+                                $digerAracBolge[$b]['DigerAracBolgeAdi'] = $digerBolgee['SBBolgeAdi'];
+                                $b++;
+                            }
+                            //admin araç seçili şoför
+                            $adminAracSofor = $Panel_Model->adminDetailAracSofor($adminAracDetailID);
+                            //arac Şofor idler
+                            $c = 0;
+                            foreach ($adminAracSofor as $adminAracSoforr) {
+                                $selectAracSofor[$c]['SelectAracSoforID'] = $adminAracSoforr['BSSoforID'];
+                                $selectAracSofor[$c]['SelectAracSoforAdi'] = $adminAracSoforr['BSSoforAd'];
+                                $aracsoforId[] = $adminAracSoforr['BSSoforID'];
+                                $c++;
+                            }
+                            //admin araç bölgedeki tüm  şöforler
+                            $bolgeAracSofor = $Panel_Model->adminAracBolgeSofor($rutbebolgedizi);
+                            //arac Şofor idler
+                            $k = 0;
+                            foreach ($bolgeAracSofor as $bolgeAracSoforr) {
+                                $bolgeSoforler[] = $bolgeAracSoforr['BSSoforID'];
+                                $k++;
+                            }
+                            //küçük admine göre farkını alıp, select olmayan aracları çıkarıyoruz
+                            $aracfark = array_diff($bolgeSoforler, $aracsoforId);
+                            $aracfarkk = implode(',', $aracfark);
+                            //aracın şoforü dışındakiler
+                            $digerSofor = $Panel_Model->adminRutbeDetailAracSSofor($aracfarkk);
+                            //arac diğer şoförler
+                            $d = 0;
+                            foreach ($digerSofor as $digerSoforr) {
+                                $digerAracSofor[$d]['DigerAracSoforID'] = $digerSoforr['BSSoforID'];
+                                $digerAracSofor[$d]['DigerAracSoforAdi'] = $digerSoforr['BSSoforAd'];
+                                $digerAracSofor[$d]['DigerAracSoforSoyad'] = $digerSoforr['BSSoforSoyad'];
+                                $d++;
+                            }
+                            //araç Özellikleri
+                            $aracOzellik = $Panel_Model->adminDetailAracOzellik($adminAracDetailID);
+                            $e = 0;
+                            foreach ($aracOzellik as $aracOzellikk) {
+                                $adminAracDetail[$e]['AdminAracID'] = $aracOzellikk['SBAracID'];
+                                $adminAracDetail[$e]['AdminAracPlaka'] = $aracOzellikk['SBAracPlaka'];
+                                $adminAracDetail[$e]['AdminAracMarka'] = $aracOzellikk['SBAracMarka'];
+                                $adminAracDetail[$e]['AdminAracYil'] = $aracOzellikk['SBAracModelYili'];
+                                $adminAracDetail[$e]['AdminAracKapasite'] = $aracOzellikk['SBAracKapasite'];
+                                $adminAracDetail[$e]['AdminAracKm'] = $aracOzellikk['SBAracKm'];
+                                $adminAracDetail[$e]['AdminAracDurum'] = $aracOzellikk['SBAracDurum'];
+                                $adminAracDetail[$e]['AdminAracAciklama'] = $aracOzellikk['SBAracAciklama'];
+                                $e++;
+                            }
+                        }
+                        //sonuçlar
+                        $sonuc["adminAracSelectBolge"] = $selectAracBolge;
+                        $sonuc["adminAracBolge"] = $digerAracBolge;
+                        $sonuc["adminAracSelectSofor"] = $selectAracSofor;
+                        $sonuc["adminAracSofor"] = $digerAracSofor;
+                        $sonuc["adminAracOzellik"] = $adminAracDetail;
+                        $sonuc["adminAracTur"] = $selectAracTur;
+                    }
+
+                    break;
+
+                case "adminAracDetailDelete":
+
+                    $adminID = Session::get("userId");
+
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $uniqueKey = Session::get("username");
+                        $uniqueKey = $uniqueKey . '_AArac';
+
+
+                        $form->post('aracdetail_id', true);
+                        $adminAracDetailID = $form->values['aracdetail_id'];
+
+                        $deleteresult = $Panel_Model->adminDetailAracDelete($adminAracDetailID);
+                        if ($deleteresult) {
+
+                            $deleteresultt = $Panel_Model->adminDetailAracSoforDelete($adminAracDetailID);
+                            if ($deleteresultt) {
+
+                                $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($adminAracDetailID);
+                                if ($deleteresultttß) {
+                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
+                                    if ($resultMemcache) {
+                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                    }
+                                    $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                }
+                            }
+                        } else {
+                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                        }
+                    }
+
+                    $sonuc["adminKurumDetail"] = $data["adminKurumDetail"];
+
+                    break;
+
+                case "adminAracDetailKaydet":
+
+                    $adminID = Session::get("userId");
+
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $uniqueKey = Session::get("username");
+                        $uniqueKey = $uniqueKey . '_AArac';
+
+                        $form->post('aracdetail_id', true);
+                        $aracID = $form->values['aracdetail_id'];
+
+                        $form->post('aracPlaka', true);
+                        $form->post('aracMarka', true);
+                        $form->post('aracModelYil', true);
+                        $form->post('aracKapasite', true);
+                        $form->post('aracAciklama', true);
+                        $form->post('aracDurum', true);
+                        $aracSoforID = $_REQUEST['aracSoforID'];
+                        $aracSoforAd = $_REQUEST['aracSoforAd'];
+                        $aracBolgeAd = $_REQUEST['aracBolgeAd'];
+                        $aracBolgeID = $_REQUEST['aracBolgeID'];
+
+                        if ($form->submit()) {
+                            $data = array(
+                                'SBAracMarka' => $form->values['aracMarka'],
+                                'SBAracModelYili' => $form->values['aracModelYil'],
+                                'SBAracPlaka' => $form->values['aracPlaka'],
+                                'SBAracKapasite' => $form->values['aracKapasite'],
+                                'SBAracAciklama' => $form->values['aracAciklama'],
+                                'SBAracDurum' => $form->values['aracDurum']
+                            );
+                        }
+                        $resultAracUpdate = $Panel_Model->adminAracOzelliklerDuzenle($data, $aracID);
+                        if ($resultAracUpdate) {
+                            $deleteresultt = $Panel_Model->adminAracSoforDelete($aracID);
+                            if ($deleteresultt) {
+                                $soforID = count($aracSoforID);
+                                for ($a = 0; $a < $soforID; $a++) {
+                                    $sofordata[$a] = array(
+                                        'BSAracID' => $aracID,
+                                        'BSSoforID' => $aracSoforID[$a],
+                                        'BSSoforAd' => $aracSoforAd[$a]
+                                    );
+                                }
+                                $resultSoforUpdate = $Panel_Model->addNewAdminAracSofor($sofordata);
+                                if ($resultSoforUpdate) {
+                                    $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($aracID);
+                                    if ($deleteresulttt) {
+                                        $bolgeID = count($aracBolgeID);
+                                        for ($b = 0; $b < $bolgeID; $b++) {
+                                            $bolgedata[$b] = array(
+                                                'SBAracID' => $aracID,
+                                                'SBBolgeID' => $aracBolgeID[$b],
+                                                'SBBolgeAdi' => $aracBolgeAd[$b]
+                                            );
+                                        }
+                                        $resultBolgeID = $Panel_Model->addNewAdminBolgeSofor($bolgedata);
+                                        if ($resultBolgeID) {
+                                            $resultMemcache = $MemcacheModel->get($uniqueKey);
+                                            if ($resultMemcache) {
+                                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                            }
+
+                                            $sonuc["newAracID"] = $aracID;
+                                            $sonuc["update"] = "Başarıyla Araç Düzenlenmiştir.";
+                                        } else {
+                                            //arac şofor kaydedilirken bi hata meydana geldi ise
+                                            //$deleteresult = $Panel_Model->adminAracDelete($resultAracID);
+                                            //$deleteresultt = $Panel_Model->adminAracSoforDelete($resultAracID);
+                                            //arac şofmr kaydedilirken bi hata meydana geldi ise
+                                            //if ($deleteresultt) {
+                                            //    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                            //}
+                                        }
+                                    } else {
+                                        //$deleteresult = $Panel_Model->adminAracDelete($resultAracID);
+                                        //arac şofmr kaydedilirken bi hata meydana geldi ise
+                                        //if ($deleteresult) {
+                                        //   $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        //}
+                                    }
+                                } else {
+                                    
+                                }
+                            } else {
+                                
+                            }
+                        } else {
+                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                        }
+                    }
+
+                case "adminAracDetailTur":
+
+                    $adminID = Session::get("userId");
+
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+
+                        $form->post('aracID', true);
+                        $adminAracDetailID = $form->values['aracID'];
+
+                        $adminAracTurDetail = $Panel_Model->adminAracTurDetail($adminAracDetailID);
+
+                        //arac detail tur
+                        $a = 0;
+                        foreach ($adminAracTurDetail as $adminAracTurDetaill) {
+                            $aracDetailTur[$a]['AracTurID'] = $adminAracTurDetaill['SBTurID'];
+                            $aracDetailTur[$a]['AracDetailTurAdi'] = $adminAracTurDetaill['SBTurAdi'];
+                            $aracDetailTur[$a]['AracTurAktiflik'] = $adminAracTurDetaill['SBTurAktiflik'];
+                            $aracDetailTur[$a]['AracTurTip'] = $adminAracTurDetaill['SBTurType'];
+                            $aracDetailTur[$a]['AracTurAcikla'] = $adminAracTurDetaill['SBTurAciklama'];
+                            $aracTurKurumId .= 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID=' . $adminAracTurDetaill['SBKurumID'] . ' UNION ALL ';
+                            $aracTurBolgeId .= 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID=' . $adminAracTurDetaill['SBBolgeID'] . ' UNION ALL ';
+                            $deger.='selam ';
+                            $a++;
+                        }
+
+                        $aracTurKurumTrim = rtrim($aracTurKurumId, " UNION ALL ");
+                        $aracTurBolgeTrim = rtrim($aracTurBolgeId, " UNION ALL ");
+
+                        $adminAracTurKurum = $Panel_Model->adminAracTurKurum($aracTurKurumTrim);
+
+                        //arac  detail tur kurum
+                        $b = 0;
+                        foreach ($adminAracTurKurum as $adminAracTurKurumm) {
+                            $aracDetailTurKurum[$b]['AracTurKurumID'] = $adminAracTurKurumm['SBKurumID'];
+                            $aracDetailTurKurum[$b]['AracTurKurumAdi'] = $adminAracTurKurumm['SBKurumAdi'];
+                            $b++;
+                        }
+
+                        $adminAracTurBolge = $Panel_Model->adminAracTurBolge($aracTurBolgeTrim);
+
+                        //arac  detail tur kurum
+                        $c = 0;
+                        foreach ($adminAracTurBolge as $adminAracTurBolgee) {
+                            $aracDetailTurBolge[$c]['AracTurBolgeID'] = $adminAracTurBolgee['SBBolgeID'];
+                            $aracDetailTurBolge[$c]['AracTurBolgeAdi'] = $adminAracTurBolgee['SBBolgeAdi'];
+                            $c++;
+                        }
+
+
+                        $sonuc["adminAracDetailTur"] = $aracDetailTur;
+                        $sonuc["adminAracTurKurum"] = $aracDetailTurKurum;
+                        $sonuc["adminAracTurBolge"] = $aracDetailTurBolge;
                     }
 
                     break;

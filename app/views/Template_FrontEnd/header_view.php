@@ -61,7 +61,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                                                         <span class="fa fa-bars fa-lg"></span>
                                                     </button>
-                                                    <a class="navbar-brand" href="<?php echo SITE_URL_HOME;?>">
+                                                    <a class="navbar-brand" href="<?php echo SITE_URL_HOME; ?>">
                                                         <img src="<?php echo SITE_USERFRONT_IMG ?>/eco/logo.png" alt="" class="logo">
                                                     </a>
                                                 </div>

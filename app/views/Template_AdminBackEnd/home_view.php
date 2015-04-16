@@ -2,7 +2,7 @@
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
                     <h1>
-                        SHUTTLE
+                        <?php echo $data["FirmaAd"];?>
                         <small><?php echo $data["KontrolPanel"];?></small>
                     </h1>
                 </section>
@@ -82,13 +82,13 @@
                         
                         <div class="col-lg-3 col-xs-12">
                             <!-- Araç İşlemleri -->
-                            <a href="#" class="small-box bg-green">
+                            <a href="<?php echo SITE_URL; ?>/adminweb/aracliste" class="small-box bg-green">
                                 <div class="inner">
                                     <h3>
                                        <?php echo $data["AracIslem"];?>
                                     </h3>
                                     <p>
-                                        35 <?php echo $data["Toplam"];?>
+                                       <?php echo $model['AdminArac'];?> <?php echo $data["Toplam"];?>
                                     </p>
                                 </div>
                                 <div class="icon">

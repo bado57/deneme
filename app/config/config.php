@@ -5,6 +5,11 @@
  */
 //sitenin url bilgisi
 define("SITE_URL", "http://localhost/SProject");
+//Dom animator
+define("SITE_URL_DOM", "http://localhost/SProject/app/views/assets/js/dom-animator.js");
+
+//notification
+define("SITE_NOTIFICATION","https://api.parse.com/1/push");
 
 //site language
 define("SITE_URLLANGUAGE", "http://localhost/SProject/app/language");
@@ -42,12 +47,12 @@ define("SITE_PLUGINADMIN_Kurum", "http://localhost/SProject/adminweb/kurumliste"
 define("SITE_PLUGINADMIN_Tur", "http://localhost/SProject/adminweb/turliste");
 
 //admin mobil 
-define("SITE_PLUGINMADMIN_CSS", "http://192.168.1.21/SProject/app/views/Template_AdminBackEnd/MobileAdmin/css");
-define("SITE_PLUGIN_MCSS", "http://192.168.1.21/SProject/app/views/Template_AdminBackEnd/MobileAdmin/css");
-define("SITE_PLUGINMADMIN_FONTS", "http://192.168.1.21/SProject/app/views/Template_AdminBackEnd/MobileAdmin/font-awesome");
-define("SITE_PLUGINMADMIN_JS", "http://192.168.1.21/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js");
-define("SITE_PLUGINM_JS", "http://192.168.1.21/SProject/app/views/assets/js");
-define("SITE_PLUGINMADMIN_AjaxJs", "http://192.168.1.21/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js");
+define("SITE_PLUGINMADMIN_CSS", "http://192.168.1.20/SProject/app/views/Template_AdminBackEnd/MobileAdmin/css");
+define("SITE_PLUGIN_MCSS", "http://192.168.1.20/SProject/app/views/Template_AdminBackEnd/MobileAdmin/css");
+define("SITE_PLUGINMADMIN_FONTS", "http://192.168.1.20/SProject/app/views/Template_AdminBackEnd/MobileAdmin/font-awesome");
+define("SITE_PLUGINMADMIN_JS", "http://192.168.1.20/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js");
+define("SITE_PLUGINM_JS", "http://192.168.1.20/SProject/app/views/assets/js");
+define("SITE_PLUGINMADMIN_AjaxJs", "http://192.168.1.20/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js");
 //veli back end
 
 //öğrenci back end

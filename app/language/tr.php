@@ -8,6 +8,7 @@ class tr {
 
     public function multilanguage() {
         $trdil = array(
+            "FirmaAd" => "Shuttle",
             "LoginSelectlanguage" => "Dil Seçiniz",
             "LoginTitle" => "Giriş",
             "Loginkadi" => "Kullanıcı Adı",
@@ -74,7 +75,7 @@ class tr {
             "Toplam" => "Toplam",
             "Odenmemis" => "Ödenmemiş",
             "AktifServis" => "Aktif Servis",
-            "Okunmamis"  => "Okunmamış",
+            "Okunmamis" => "Okunmamış",
             "YeniDuyuru" => "Yeni Duyuru",
             "YeniRapor" => "Yeni Rapor",
             "GuvenliCikis" => "Güvenli Çıkış",
@@ -106,8 +107,22 @@ class tr {
             "Turlar" => "Turlar",
             "TurAdi" => "Tur Adı",
             "BolgeAdi" => "Bölge Adı",
-            "Toplam" => "Toplam"
-            
+            "Toplam" => "Toplam",
+            "LoginNotification" => "Hesabiniza giris yapilmistir.",
+            "Araclar" => "Araçlar",
+            "Plaka" => "Plaka",
+            "Marka" => "Marka",
+            "ModelYil" => "Model Yılı",
+            "AracKm" => "Araç Km",
+            "Kapasite" => "Kapasite",
+            "YeniArac" => "Yeni Araç",
+            "AracTanimlama" => "Araç Tanımlama",
+            "Surucu" => "Sürücü",
+            "AracDetay" => "Araç Detayları",
+            "TurListe" => "Tur Listesi",
+            "Tür" => "Türü",
+            "Kurum" => "Kurum",
+            "KurumEkle" => "Kurum Ekle"
         );
         return $trdil;
     }
