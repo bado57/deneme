@@ -29,6 +29,8 @@ $("select#kullaniciLanguage").change(function () {
 });
 
 $(document).ready(function () {
+    
+    
     $("#loginForm").validate({
         rules: {
             usersloginkadi: {
@@ -46,5 +48,6 @@ $(document).ready(function () {
     jQuery.validator.addMethod('selectcheck', function (value) {
         return (value != '0');
     }, "Kullanıcı Türü Seçimi gereklidir.");
+    
 });
  

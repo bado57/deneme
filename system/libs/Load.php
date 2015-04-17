@@ -8,6 +8,7 @@
 class Load {
 
     public function __construct() {
+        
     }
 
     //controllers classları için
@@ -53,6 +54,12 @@ class Load {
     //language
     public function multilanguage($fileName) {
         include "app/language/" . $fileName . ".php";
+        return new $fileName;
+    }
+
+    //language
+    public function frontmultilanguage($fileName) {
+        include "app/frontlanguage/" . $fileName . ".php";
         return new $fileName;
     }
 

@@ -22,11 +22,11 @@ class LoginForm extends Controller {
             $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
             if (!Session::get("dil")) {
                 Session::set("dil", $lang);
-                $form = $this->load->multilanguage($lang);
-                $deger = $form->multilanguage();
+                $formMulti = $this->load->multilanguage($lang);
+                $deger = $formMulti->multilanguage();
             } else {
-                $form = $this->load->multilanguage(Session::get("dil"));
-                $deger = $form->multilanguage();
+                $formMulti = $this->load->multilanguage(Session::get("dil"));
+                $deger = $formMulti->multilanguage();
             }
             $this->load->view("Entry/loginForm", $deger);
         }

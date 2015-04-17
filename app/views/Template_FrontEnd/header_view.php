@@ -70,21 +70,31 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
                                                     <ul class="nav navbar-nav navbar-right">
-                                                        <li><a href="#about">Hakkında</a>
+                                                        <li>
+                                                            <select id="kullaniciLanguage" class="form-control" name="loginselected" required>                                   
+                                                                <option value="ar" <?php echo Session::get('dil') == 'ar' ? 'selected' : ''; ?>>Arabic</option>
+                                                                <option value="zh" <?php echo Session::get('dil') == 'zh' ? 'selected' : ''; ?>>Chinese</option>
+                                                                <option value="en" <?php echo Session::get('dil') == 'en' ? 'selected' : ''; ?>>English</option>
+                                                                <option value="fr" <?php echo Session::get('dil') == 'fr' ? 'selected' : ''; ?>>French</option>
+                                                                <option value="de" <?php echo Session::get('dil') == 'de' ? 'selected' : ''; ?>>German</option>
+                                                                <option value="tr" <?php echo Session::get('dil') == 'tr' ? 'selected' : ''; ?>>Turkish</option>
+                                                            </select>
                                                         </li>
-                                                        <li><a href="#features">Özellikler</a>
+                                                        <li><a href="#about"><?php echo $data["Hakkinda"]; ?></a>
+                                                        </li>
+                                                        <li><a href="#features"><?php echo $data["Ozellikler"]; ?></a>
                                                         </li>
                                                         <!--<li><a href="#reviews">Yorumlar</a>
                                                         </li>-->
-                                                        <li><a href="#screens">Ekranlar</a>
+                                                        <li><a href="#screens"><?php echo $data["Ekranlar"]; ?></a>
                                                         </li>
-                                                        <li><a href="#demo">Demo</a>
+                                                        <li><a href="#demo"><?php echo $data["Demo"]; ?></a>
                                                         </li>
-                                                        <li><a href="#getApp">İndir</a>
+                                                        <li><a href="#getApp"><?php echo $data["Indir"]; ?></a>
                                                         </li>
-                                                        <li><a href="#support">Destek</a>
+                                                        <li><a href="#support"><?php echo $data["Destek"]; ?></a>
                                                         </li>
-                                                        <li><a href="<?php echo SITE_URL; ?>/loginform">Giriş Yap</a>
+                                                        <li><a href="<?php echo SITE_URL; ?>/loginform"><?php echo $data["GirisYap"]; ?></a>
                                                         </li>
                                                     </ul>
                                                 </div>

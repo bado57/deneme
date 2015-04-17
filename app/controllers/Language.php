@@ -13,21 +13,26 @@ class Language extends Controller {
     function selectlanguage() {
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest") {
             $sonuc = array();
-            
+
             $form = $this->load->otherClasses('Form');
             Session::init();
 
             $form->post("lang", true);
             $dil = $form->values['lang'];
 
-            if ($dil == "tr" || $dil == "en" ||$dil == "fr" || $dil == "ar" || $dil == "de" || $dil =="zh") {
-                Session::set("dil", $dil);
+            if ($dil == "tr" || $dil == "en" || $dil == "fr" || $dil == "ar" || $dil == "de" || $dil == "zh") {
+                if (isset($_SESSION['dil'])) {
+                    unset($_SESSION['dil']);
+                    Session::set("dil", $dil);
+                } else {
+                    Session::set("dil", $dil);
+                }
             } else {
                 //eğer dil yoksa
-                $dil='en';
+                $dil = 'en';
                 Session::set("dil", $dil);
             }
-            $sonuc["lang"] =$dil;
+            $sonuc["lang"] = $dil;
 
             echo json_encode($sonuc);
         } else {
