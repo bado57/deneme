@@ -120,7 +120,8 @@ class en {
             "Surucu" => "Driver",
             "AracDetay" => "Driver Details",
             "TurListe" => "Tour List",
-            "Tür" => "Type"
+            "Tür" => "Type",
+            "KullaniciPanel" => "Users Panel"
         );
         return $endil;
     }

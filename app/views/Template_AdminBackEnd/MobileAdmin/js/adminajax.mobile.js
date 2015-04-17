@@ -277,7 +277,6 @@ $.AdminIslemler = {
                     if (cevap.hata) {
                         alert(cevap.hata);
                     } else {
-                        disabledForm();
                         //alert(cevap.update);
                         var length = $('ul#bolgeList li').length;
                         for (var t = 0; t < length; t++) {
@@ -287,6 +286,7 @@ $.AdminIslemler = {
                             }
                         }
                         $('ul#bolgeList').listview('refresh');
+                        disabledForm();
                     }
                 }
             });

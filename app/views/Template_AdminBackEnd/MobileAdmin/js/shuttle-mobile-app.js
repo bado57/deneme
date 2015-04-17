@@ -57,7 +57,7 @@ $(document).ready(function () {
         $.mobile.navigate(page);
     });
 
-    $(document).on("click", ".jmSingleValue", function (e) {//href="#bolgeKurumLokasyonEkle"
+    $(document).on("click", ".jmSingleValue", function (e) {
         e.preventDefault();
         mobilEnlem = $("input[name=enlem]").val();
         mobilBoylam = $("input[name=boylam]").val();
@@ -81,8 +81,6 @@ $(document).ready(function () {
 });
 
 $(document).on("pageshow", ".singleMap", function () {
-    console.log(mobilEnlem);
-    console.log(mobilBoylam);
     Mobileinitialize(mobilEnlem, mobilBoylam);
     var wh = $(window).height();
     var fh = $('#mapFooter').outerHeight();
@@ -107,14 +105,12 @@ $(document).on("click", "#saveMap", function () {
 });
 
 
-
 //ajax işlemleri
 $(document).on('pageinit', '.jmRun', '[data-role="page"]', function () {
     var dislemler = $(this).attr('data-islemler');
     window["$"]["AdminIslemler"][dislemler]();
 
 });
-
 
 
 function jmControl(dislemler) {

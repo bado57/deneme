@@ -122,7 +122,8 @@ class tr {
             "TurListe" => "Tur Listesi",
             "Tür" => "Türü",
             "Kurum" => "Kurum",
-            "KurumEkle" => "Kurum Ekle"
+            "KurumEkle" => "Kurum Ekle",
+            "KullaniciPanel" => "Kullanıcı Paneli"
         );
         return $trdil;
     }
