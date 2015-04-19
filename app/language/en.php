@@ -121,7 +121,9 @@ class en {
             "AracDetay" => "Driver Details",
             "TurListe" => "Tour List",
             "Tür" => "Type",
-            "KullaniciPanel" => "Users Panel"
+            "KullaniciPanel" => "Users Panel",
+            "Adi" => "Name",
+            "Soyadi" => "Username"
         );
         return $endil;
     }

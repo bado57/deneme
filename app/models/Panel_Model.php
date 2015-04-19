@@ -370,6 +370,38 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //admin aktif arac listele
+    public function adminCountListele($adminID) {
+        $sql = 'SELECT COUNT(*) FROM bsadmin WHERE BSAdminID NOT IN(' . $adminID . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin listele
+    public function adminListele($adminID) {
+        $sql = "SELECT BSAdminID,BSAdminAd,BSAdminSoyad,BSAdminPhone,BSAdminEmail,BSAdminStatus,BSAdminAciklama FROM bsadmin WHERE BSAdminID NOT IN($adminID)  ORDER BY BSAdminAd ASC";
+        return($this->db->select($sql));
+    }
+
+    //yeni admin Kaydet
+    public function addNewAdmin($data) {
+        return ($this->db->insert("bsadmin", $data));
+    }
+
+    //admin araç bölge  kaydet
+    public function addNewBolgeAdmin($data) {
+        return ($this->db->multiInsert('bsadminbolge', $data));
+    }
+
+    //admin delete
+    public function adminDelete($adminID) {
+        return ($this->db->delete("bsadmin", "BSAdminID=$adminID"));
+    }
+
+    //admin arac şöfor çoklu delete delete
+    public function adminMultiBolgeDelete($adminID) {
+        return ($this->db->delete("bsadminbolge", "BSAdminID=$adminID"));
+    }
+
 }
 
 ?>

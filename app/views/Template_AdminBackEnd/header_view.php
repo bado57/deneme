@@ -44,6 +44,8 @@
 
             <!--Jquery select -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/bootstrap-multiselect.js"></script>
+            <!--Validation-->
+            <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/validation.js"></script>
             <!-- Ajax Query -->
             <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminajaxquery.js" type="text/javascript"></script> 
 

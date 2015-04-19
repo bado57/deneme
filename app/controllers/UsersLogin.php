@@ -33,7 +33,7 @@ class UsersLogin extends Controller {
             $loginKadi = $form->values['usersloginkadi'];
             $form->post('usersloginsifre', true);
 
-            $loginfirmaID = $form->substrEnd($loginKadi, 6);
+            $loginfirmaID = $form->substrEnd($loginKadi, 8);
 
             //return database results
             $UserSelectDb = $usersselect_model->kullaniciSelectDb($loginfirmaID);
@@ -46,12 +46,7 @@ class UsersLogin extends Controller {
 
             $loginTip = 1;
             $loginSifre = $form->values['usersloginsifre'];
-            $loginDeger = "bs";
-
-            $sifreilkeleman = $loginDeger . $loginKadi . $loginTip;
-            $sifreilkeleman1 = $form->md5($sifreilkeleman);
-            $sifreikincieleman = $form->md5($loginSifre);
-            $sifresonuc = $sifreilkeleman1 . $sifreikincieleman;
+            $sifresonuc = $form->userSifreOlustur($loginKadi, $loginSifre, $loginTip);
 
             if ($loginTip == 1) {
                 $Kadi = 'BSAdminKadi';
@@ -108,6 +103,7 @@ class UsersLogin extends Controller {
                 Session::set("userTip", $loginTip);
                 Session::set("userRutbe", $result[0]["BSSuperAdmin"]);
                 Session::set("userFirmaKod", $SelectdbFirmaKod);
+                Session::set("FirmaId", $loginfirmaID);
 
                 header("Location:" . SITE_URL_HOME . "/panel");
             }

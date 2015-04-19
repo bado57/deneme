@@ -107,11 +107,18 @@ function svControl(dtype, dclass, dislemler) {
             case 'adminAracDetailTur' :
                 var returnCevap = $.AdminIslemler.adminAracDetailTur();
                 break;
+            case 'adminYeni' :
+                var returnCevap = $.AdminIslemler.adminYeni();
+                break;
             case 'adminKurumMap' :
                 isMap = true;
                 isSingle = false;
                 MultipleMapindex = 0;
                 var returnCevap = $.AdminIslemler.adminKurumMap();
+                break;
+            case 'adminSingleMap' :
+                isMap = true;
+                var returnCevap = true;
                 break;
             default :
                 $("#" + dclass).height(th);
@@ -188,6 +195,12 @@ function svControl(dtype, dclass, dislemler) {
                 break;
             case 'adminAracDetailSil' :
                 var returnCevap = $.AdminIslemler.adminAracDetailSil();
+                break;
+            case 'adminVazgec' :
+                var returnCevap = $.AdminIslemler.adminVazgec();
+                break;
+            case 'adminEkle' :
+                var returnCevap = $.AdminIslemler.adminEkle();
                 break;
             default :
                 $("#" + dclass).height(th);

@@ -13,11 +13,11 @@ class tr {
             "LoginTitle" => "Giriş",
             "Loginkadi" => "Kullanıcı Adı",
             "Loginsifre" => "Şifre",
-            "LoginSelectAdmin" => "Admin",
-            "LoginSelectSofor" => "Şoför",
-            "LoginSelectVeli" => "Veli",
-            "LoginSelectOgrenci" => "Öğrenci",
-            "LoginSelectPersonel" => "Personel",
+            "Admin" => "Admin",
+            "Sofor" => "Şoför",
+            "Veli" => "Veli",
+            "Ogrenci" => "Öğrenci",
+            "Personel" => "Personel",
             "LoginButton" => "Giriş",
             "Merhaba" => "Merhaba",
             "Baslik" => "Admin",
@@ -123,7 +123,11 @@ class tr {
             "Tür" => "Türü",
             "Kurum" => "Kurum",
             "KurumEkle" => "Kurum Ekle",
-            "KullaniciPanel" => "Kullanıcı Paneli"
+            "KullaniciPanel" => "Kullanıcı Paneli",
+            "Adi" => "Adı",
+            "Soyadi" => "Soyadı",
+            "YeniAdmin" => "Yeni Admin",
+            "AdminTanimlama" => "Admin Tanimlama"
         );
         return $trdil;
     }

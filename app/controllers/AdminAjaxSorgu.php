@@ -700,7 +700,6 @@ class AdminAjaxSorgu extends Controller {
                                 );
                             }
                             $resultSoforID = $Panel_Model->addNewAdminAracSofor($sofordata);
-                            error_log($resultSoforID);
                             if ($resultSoforID) {
                                 $bolgeID = count($aracBolgeID);
                                 for ($b = 0; $b < $bolgeID; $b++) {
@@ -711,9 +710,7 @@ class AdminAjaxSorgu extends Controller {
                                     );
                                 }
                                 $resultBolgeID = $Panel_Model->addNewAdminBolgeSofor($bolgedata);
-                                error_log($resultBolgeID);
                                 if ($resultBolgeID) {
-                                    error_log("geldi");
                                     $resultMemcache = $MemcacheModel->get($uniqueKey);
                                     if ($resultMemcache) {
                                         $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
@@ -1116,6 +1113,137 @@ class AdminAjaxSorgu extends Controller {
                     }
 
                     break;
+
+                case "adminEkleSelect":
+                    $adminID = Session::get("userId");
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $adminRutbe = Session::get("userRutbe");
+                        //super adminse tüm bölgeler çekilir
+                        if ($adminRutbe != 0) {
+                            //bölgeleri getirir
+                            $bolgeListe = $Panel_Model->aracBolgeListele();
+
+                            $a = 0;
+                            foreach ($bolgeListe as $bolgelist) {
+                                $adminBolge['AdminBolge'][$a] = $bolgelist['SBBolgeAdi'];
+                                $adminBolge['AdminBolgeID'][$a] = $bolgelist['SBBolgeID'];
+                                $a++;
+                            }
+                        }
+
+                        $sonuc["adminBolge"] = $adminBolge;
+                    }
+                    break;
+
+                    break;
+
+                case "adminKaydet":
+
+                    $adminID = Session::get("userId");
+
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $userTip = 1;
+
+                        $firmaID = Session::get("FirmaId");
+
+                        $userKadi = $form->kadiOlustur($firmaID);
+                        if ($userKadi) {
+                            $realSifre = $form->sifreOlustur();
+                            if ($realSifre) {//$loginKadi, $loginSifre, $loginTip
+                                $adminSifre = $form->userSifreOlustur($userKadi, $realSifre, $userTip);
+                                if ($adminSifre) {
+
+                                    $uniqueKey = Session::get("username");
+                                    $uniqueKey = $uniqueKey . '_AAdmin';
+
+                                    $form->post('adminAd', true);
+                                    $form->post('adminSoyad', true);
+                                    $form->post('adminEmail', true);
+                                    $form->post('adminDurum', true);
+                                    $form->post('adminLokasyon', true);
+                                    $form->post('adminTelefon', true);
+                                    $form->post('adminAdres', true);
+                                    $form->post('aciklama', true);
+                                    $form->post('ulke', true);
+                                    $form->post('il', true);
+                                    $form->post('ilce', true);
+                                    $form->post('semt', true);
+                                    $form->post('mahalle', true);
+                                    $form->post('sokak', true);
+                                    $form->post('postakodu', true);
+                                    $form->post('caddeno', true);
+
+                                    $adminBolgeID = $_REQUEST['adminBolgeID'];
+
+                                    if ($form->submit()) {
+                                        $data = array(
+                                            'BSAdminAd' => $form->values['adminAd'],
+                                            'BSAdminSoyad' => $form->values['adminSoyad'],
+                                            'BSAdminKadi' => $userKadi,
+                                            'BSAdminSifre' => $adminSifre,
+                                            'BSAdminRSifre' => $realSifre,
+                                            'BSAdminPhone' => $form->values['adminTelefon'],
+                                            'BSAdminEmail' => $form->values['adminEmail'],
+                                            'BSAdminLocation' => $form->values['adminLokasyon'],
+                                            'BSAdminUlke' => $form->values['ulke'],
+                                            'BSAdminIl' => $form->values['il'],
+                                            'BSAdminIlce' => $form->values['ilce'],
+                                            'BSAdminSemt' => $form->values['semt'],
+                                            'BSAdminMahalle' => $form->values['mahalle'],
+                                            'BSAdminSokak' => $form->values['sokak'],
+                                            'BSAdminPostaKodu' => $form->values['postakodu'],
+                                            'BSAdminCaddeNo' => $form->values['caddeno'],
+                                            'BSAdminAdres' => $form->values['adminAdres'],
+                                            'BSAdminStatus' => $form->values['adminDurum'],
+                                            'BSAdminAciklama' => $form->values['aciklama']
+                                        );
+                                    }
+                                    $resultAdminID = $Panel_Model->addNewAdmin($data);
+
+                                    if ($resultAdminID) {
+
+                                        $bolgeID = count($adminBolgeID);
+                                        for ($b = 0; $b < $bolgeID; $b++) {
+                                            $bolgedata[$b] = array(
+                                                'BSAdminID' => $resultAdminID,
+                                                'BSBolgeID' => $adminBolgeID[$b]
+                                            );
+                                        }
+                                        $resultBolgeID = $Panel_Model->addNewBolgeAdmin($bolgedata);
+                                        if ($resultBolgeID) {
+                                            $resultMemcache = $MemcacheModel->get($uniqueKey);
+                                            if ($resultMemcache) {
+                                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                            }
+
+                                            $sonuc["newAdminID"] = $resultAdminID;
+                                            $sonuc["insert"] = "Başarıyla Admin Eklenmiştir.";
+                                        } else {
+                                            //admin kaydedilirken hata geldi ise
+                                            $deleteresult = $Panel_Model->adminDelete($resultAdminID);
+
+                                            $deleteresultt = $Panel_Model->adminMultiBolgeDelete($resultAdminID);
+                                            if ($deleteresultt) {
+                                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                            }
+                                        }
+                                    } else {
+                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    }
+                                } else {
+                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                }
+                            } else {
+                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            }
+                        } else {
+                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                        }
+                    }
             }
             echo json_encode($sonuc);
         } else {

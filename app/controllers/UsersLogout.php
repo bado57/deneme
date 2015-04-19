@@ -25,6 +25,7 @@ class UsersLogout extends Controller {
         unset($_SESSION['userTip']);
         unset($_SESSION['userRutbe']);
         unset($_SESSION['userFirmaKod']);
+        unset($_SESSION['FirmaId']);
 
         Session::destroy();
         header("Location:" . SITE_URL);

@@ -228,6 +228,132 @@ class Form {
         return $sonuc;
     }
 
-}
+    function turkce_kucult_tr($string) {
+        $buyuk = array("A", "B", "C", "Ç", "D", "E", "F", "G", "Ğ", "H", "I", "İ", "J", "K", "L", "M", "N", "O", "Ö", "P", "R", "S", "Ş", "T", "U", "Ü", "V", "Y", "Z", "Q", "W", "X", "ç", "ş", "ğ", "ü", "ö", "ı");
+        $kucuk = array("a", "b", "c", "c", "d", "e", "f", "g", "g", "h", "i", "i", "j", "k", "l", "m", "n", "o", "o", "p", "r", "s", "s", "t", "u", "u", "v", "y", "z", "q", "w", "x", "c", "s", "g", "u", "o", "i");
+        $cikti = str_replace($buyuk, $kucuk, $string);
+        return $cikti;
+    }
 
+    function harf_Rakam_Donusum($string) {
+        $buyuk = array("A", "B", "C", "Ç", "D", "E", "F", "G", "Ğ", "H", "I", "İ", "J", "K", "L", "M", "N", "O", "Ö", "P", "R", "S", "Ş", "T", "U", "Ü", "V", "Y", "Z", "Q", "W", "X", "a", "b", "c", "ç", "d", "e", "f", "g", "ğ", "h", "ı", "i", "j", "k", "l", "m", "n", "o", "ö", "p", "r", "s", "ş", "t", "u", "ü", "v", "y", "z", "q", "w", "x");
+        $kucuk = array("1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "1", "2", "3", "4");
+        $cikti = str_replace($buyuk, $kucuk, $string);
+        return $cikti;
+    }
+
+    function benzersiz_Sayi_Harf($uzunluk) {
+        $karakterler = array(); // boş bir dizi oluşturuyoruz
+        $karakterler = array_merge(range(0, 9), range('a', 'z'), range('A', 'Z')); // range = belirtilen aralık arasında dizi oluşturur
+        // array_merge = dizileri arka arkaya ekler
+        srand((float) microtime() * 100000); // belirli bir düzen içerisinde rastgele sayı üretir
+        shuffle($karakterler); // dizideki elemanları rasgele sıralar
+        $sonuc = ''; // boş bir sonuc değişkeni oluşturuyoruz
+        for ($i = 0; $i < $uzunluk; $i++) {
+            $sonuc .= $karakterler[$i]; // karakterleri birleştirir
+        }
+        unset($karakterler); // tanımlanmamış hale getirir
+        return $sonuc; // çıkan sonucu ekrana yazdırır
+        //kod(8); // 5 haneli rastgele kod üretir isteğe göre ayarlanabilir
+    }
+
+    function benzersiz_Sayi($uzunluk) {
+        $karakterler = array();
+        $karakterler = array_merge(range(0, 9));
+        srand((float) microtime() * 100000);
+        shuffle($karakterler);
+        $sonuc = '';
+        for ($i = 0; $i < $uzunluk; $i++) {
+            $sonuc .= $karakterler[$i];
+        }
+        unset($karakterler);
+        return $sonuc;
+    }
+
+    function benzersiz_Harf($uzunluk) {
+        $karakterler = array();
+        $karakterler = array_merge(range('a', 'z'), range('A', 'Z'));
+        srand((float) microtime() * 100000);
+        shuffle($karakterler);
+        $sonuc = '';
+        for ($i = 0; $i < $uzunluk; $i++) {
+            $sonuc .= $karakterler[$i];
+        }
+        unset($karakterler);
+        return $sonuc;
+    }
+
+    function benzersiz_kucukHarf($uzunluk) {
+        $karakterler = array();
+        $karakterler = array_merge(range('a', 'z'));
+        srand((float) microtime() * 100000);
+        shuffle($karakterler);
+        $sonuc = '';
+        for ($i = 0; $i < $uzunluk; $i++) {
+            $sonuc .= $karakterler[$i];
+        }
+        unset($karakterler);
+        return $sonuc;
+    }
+
+    function benzersiz_Buyuk_Harf($uzunluk) {
+        $karakterler = array();
+        $karakterler = array_merge(range('A', 'Z'));
+        srand((float) microtime() * 100000);
+        shuffle($karakterler);
+        $sonuc = '';
+        for ($i = 0; $i < $uzunluk; $i++) {
+            $sonuc .= $karakterler[$i];
+        }
+        unset($karakterler);
+        return $sonuc;
+    }
+
+    function benzersiz_Istenilen_Sekilde($kharfuzunluk = 2, $bharfuzunluk = 2, $sayiuzunluk = 4) {
+
+        $karakterler = array(); // boş bir dizi oluşturuyoruz
+        $uzunluk = $kharfuzunluk + $bharfuzunluk + $sayiuzunluk;
+        $arr1 = array();
+        $arr1 = range(0, 9);
+        $arr2 = array();
+        $arr2 = range('a', 'z');
+        $arr3 = array();
+        $arr3 = range('A', 'Z');
+        shuffle($arr1);
+        shuffle($arr2);
+        shuffle($arr3);
+
+        $karakterler = array_merge(array_slice($arr1, 0, $sayiuzunluk), array_slice($arr2, 0, $kharfuzunluk), array_slice($arr3, 0, $bharfuzunluk));
+        shuffle($karakterler);
+        $sonuc = '';
+        for ($i = 0; $i < $uzunluk; $i++) {
+
+            $sonuc .= $karakterler[$i];
+        }
+        unset($karakterler); // tanımlanmamış hale getirir
+
+        return $sonuc; // çıkan sonucu ekrana yazdırır
+    }
+
+    function sifreOlustur() {
+        $userSifre = $this->benzersiz_Sayi_Harf(8);
+        return $userSifre;
+    }
+
+    function kadiOlustur($firmaID) {
+        $userKadi = $this->benzersiz_Sayi(8);
+        $userKadi = $userKadi . $firmaID;
+        return $userKadi;
+    }
+
+    function userSifreOlustur($loginKadi, $loginSifre, $loginTip) {
+        $loginDeger = "bs";
+        $sifreilkeleman = $loginDeger . $loginKadi . $loginTip;
+        $sifreilkeleman1 = md5($sifreilkeleman);
+        $sifreikincieleman = md5($loginSifre);
+        $sifresonuc = $sifreilkeleman1 . $sifreikincieleman;
+        return $sifresonuc;
+    }
+
+}
 ?>

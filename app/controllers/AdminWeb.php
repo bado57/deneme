@@ -58,7 +58,6 @@ class AdminWeb extends Controller {
                 $a = 0;
                 foreach ($returnModelData as $key => $value) {
                     $new_array['Firmasshkey'][$a] = md5(sha1(md5($key)));
-                    error_log($key . "--->" . $new_array['Firmasshkey'][$a]);
                     $a++;
                 }
                 $returnFormdata['FirmaOzellikler'] = $form->newKeys($data['FirmaOzellikler'][0], $new_array['Firmasshkey']);
@@ -360,8 +359,6 @@ class AdminWeb extends Controller {
 
             //model bağlantısı
             $Panel_Model = $this->load->model("panel_model");
-            //memcache model bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
 
             $formDbConfig = $this->load->otherClasses('DatabaseConfig');
             $formDbConfig->configDb();
@@ -371,12 +368,84 @@ class AdminWeb extends Controller {
             $languagedeger = $formlanguage->multilanguage();
 
 
+            $adminRutbe = Session::get("userRutbe");
+            $adminID = Session::get("userId");
+
+            //super adminse kendi hariç diğer adminleri görür
+            if ($adminRutbe != 0) {
+                $adminCount = $Panel_Model->adminCountListele($adminID);
+            } else {
+                
+            }
+
             $this->load->view("Template_AdminBackEnd/header", $languagedeger);
             $this->load->view("Template_AdminBackEnd/left", $languagedeger);
-            $this->load->view("Template_AdminBackEnd/kullanici", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/kullaniciliste", $languagedeger, $adminCount);
             $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
         } else {
             header("Location:" . SITE_URL);
+        }
+    }
+
+    function adminliste() {
+        //session güvenlik kontrolü
+        $formSession = $this->load->otherClasses('Form');
+        //sessionKontrol
+        $sessionKey = $formSession->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey) {
+            //memcache model bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+
+
+            $language = Session::get("dil");
+            //lanuage Kontrol
+            $formLanguage = $this->load->multilanguage($language);
+            $languagedeger = $formLanguage->multilanguage();
+
+
+            $adminRutbe = Session::get("userRutbe");
+            $adminID = Session::get("userId");
+            $uniqueKey = Session::get("username");
+            $uniqueKey = $uniqueKey . '_AAdmin';
+
+            $resultMemcache = $MemcacheModel->get($uniqueKey);
+            if ($resultMemcache) {
+                $adminliste = $resultMemcache;
+            } else {
+                //super adminse tüm bölgeleri görür
+                if ($adminRutbe != 0) {
+
+                    $adminListe = $Panel_Model->adminListele($adminID);
+                    //bölge count için
+                    if (count($adminListe) != 0) {
+                        $adminliste[0]['AdminCount'] = count($adminListe);
+                    }
+
+                    $a = 0;
+                    foreach ($adminListe as $adminListee) {
+                        $adminliste[$a]['AdminID'] = $adminListee['BSAdminID'];
+                        $adminliste[$a]['AdminAdi'] = $adminListee['BSAdminAd'];
+                        $adminliste[$a]['AdminSoyad'] = $adminListee['BSAdminSoyad'];
+                        $adminliste[$a]['AdminTelefon'] = $adminListee['BSAdminPhone'];
+                        $adminliste[$a]['AdminEmail'] = $adminListee['BSAdminEmail'];
+                        $adminliste[$a]['AdminAciklama'] = $adminListee['BSAdminAciklama'];
+                        $adminliste[$a]['AdminDurum'] = $adminListee['BSAdminStatus'];
+                        $a++;
+                    }
+                }
+                //memcache kayıt
+                $result = $MemcacheModel->set($uniqueKey, $adminliste, false, 5);
+            }
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/adminliste", $languagedeger, $adminliste);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL_LOGOUT);
         }
     }
 

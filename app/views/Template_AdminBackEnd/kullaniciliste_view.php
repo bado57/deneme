@@ -1,3 +1,6 @@
+<script type="text/javascript">
+    var activeMenu = "menu_kullanici";
+</script>
 <aside class="right-side hiddenOnSv">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -12,23 +15,24 @@
 
         <!-- Kutular -->
         <div class="row">
-            <div class="col-lg-3 col-xs-12">
-                <!-- Firma İşlemleri -->
-                <a href="#" class="small-box bg-green">
-                    <div class="inner">
-                        <h3>
-                            Admin
-                        </h3>
-                        <p>
-                            1  <?php echo $data["Toplam"]; ?>
-                        </p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-building"></i>
-                    </div>
-                </a>
-            </div>
-
+            <?php if (Session::get("userRutbe") != 0) { ?>
+                <div class="col-lg-3 col-xs-12">
+                    <!-- Firma İşlemleri -->
+                    <a href="<?php echo SITE_URL; ?>/adminweb/adminliste" class="small-box bg-green">
+                        <div class="inner">
+                            <h3>
+                                Admin
+                            </h3>
+                            <p>
+                                <?php echo $model[0]['COUNT(*)']; ?> <?php echo $data["Toplam"]; ?>
+                            </p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-building"></i>
+                        </div>
+                    </a>
+                </div>
+            <?php } ?>
             <div class="col-lg-3 col-xs-12">
                 <!-- Kullanıcı İşlemleri -->
                 <a href="#" class="small-box bg-green">

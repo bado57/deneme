@@ -45,6 +45,11 @@ $(document).ready(function () {
         "ordering": true,
         "info": true
     });
+    AdminTable = $('#adminTable').dataTable({
+        "paging": true,
+        "ordering": true,
+        "info": true
+    });
     //bölge işlemleri
     $(document).on('click', 'tbody#adminBolgeRow > tr > td > a', function (e) {
         var i = $(this).find("i")
@@ -106,7 +111,6 @@ $(document).ready(function () {
                     $("textarea[name=KurumDetailAciklama]").val(cevap.adminKurumDetail['b8ecd9075c0c9a7f7afa1784acb13c2e']);
                     $("input[name=adminKurumDetailID]").val(cevap.adminKurumDetail['3bcdc7d6f02b5b42c7be9604808e7c07']);
                     $("input[name=adminKurumDetailLocation]").val(cevap.adminKurumDetail['a465db00f313bd4781af6805a8d6fb31']);
-
                     console.log(cevap.adminKurumTurDetail);
                     if (cevap.adminKurumTurDetail) {
                         var KurumTurSayi = cevap.adminKurumTurDetail.length;
@@ -1255,7 +1259,138 @@ $.AdminIslemler = {
             }
         });
         return true;
-    }
+    },
+    adminYeni: function () {
+        $("input[name=AdminAdi]").val(' ');
+        $("input[name=AdminSoyadi]").val(' ');
+        $("#AdminDurum").val("0");
+        $("input[name=KurumLokasyon]").val(' ');
+        $("input[name=AdminTelefon]").val(' ');
+        $("input[name=AdminEmail]").val(' ');
+        $("textarea[name=AdminAdresDetay]").val(' ');
+        $("textarea[name=Aciklama]").val(' ');
+        $("input[name=country]").val(' ');
+        $("input[name=administrative_area_level_1]").val(' ');
+        $("input[name=administrative_area_level_2]").val(' ');
+        $("input[name=locality]").val(' ');
+        $("input[name=neighborhood]").val(' ');
+        $("input[name=route]").val(' ');
+        $("input[name=postal_code]").val(' ');
+        $("input[name=street_number]").val(' ');
+        var BolgeOptions = new Array();
+        $.ajax({
+            data: {"tip": "adminEkleSelect"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    alert(cevap.hata);
+                } else {
+                    if (cevap.adminBolge) {
+                        var bolgelength = cevap.adminBolge.AdminBolgeID.length;
+                        for (var i = 0; i < bolgelength; i++) {
+                            BolgeOptions[i] = {label: cevap.adminBolge.AdminBolge[i], title: cevap.adminBolge.AdminBolge[i], value: cevap.adminBolge.AdminBolgeID[i]};
+                        }
+                    }
+
+                    $('#AdminSelectBolge').multiselect('refresh');
+                    $('#AdminSelectBolge').multiselect('dataprovider', BolgeOptions);
+                }
+
+            }
+        });
+        return true;
+    },
+    adminVazgec: function () {
+        return true;
+    },
+    adminEkle: function () {
+
+        var adminAd = $("input[name=AdminAdi]").val();
+        adminAd = adminAd.trim();
+        if (adminAd == '') {
+            alert("Ad Boş geçilemez");
+        } else {
+            if (adminAd.length < 2) {
+                alert("İsim 2  karekterden az olamaz");
+            } else {
+                var adminSoyad = $("input[name=AdminSoyadi]").val();
+                adminSoyad = adminSoyad.trim();
+                if (adminSoyad == '') {
+                    alert("Soyad Boş geçilemez");
+                } else {
+                    if (adminSoyad.length < 2) {
+                        alert("Soyad 2  karekterden az olamaz");
+                    } else {
+                        var adminEmail = $("input[name=AdminEmail]").val();
+                        if (adminEmail == ' ') {
+                            alert("Eposta Boş geçilemez");
+                        } else {
+                            adminEmail = adminEmail.trim();
+                            var result = ValidateEmail(adminEmail);
+                            if (!result) {
+                                alert("Lütfen uygun bir email giriniz");
+                            } else {
+                                var adminDurum = $("#AdminDurum option:selected").val();
+                                var adminLokasyon = $("input[name=KurumLokasyon]").val();
+                                var adminTelefon = $("input[name=AdminTelefon]").val();
+                                var adminAdres = $("textarea[name=AdminAdresDetay]").val();
+                                var aciklama = $("textarea[name=Aciklama]").val();
+                                var ulke = $("input[name=country]").val();
+                                var il = $("input[name=administrative_area_level_1]").val();
+                                var ilce = $("input[name=administrative_area_level_2]").val();
+                                var semt = $("input[name=locality]").val();
+                                var mahalle = $("input[name=neighborhood]").val();
+                                var sokak = $("input[name=route]").val();
+                                var postakodu = $("input[name=postal_code]").val();
+                                var caddeno = $("input[name=street_number]").val();
+                                //admin Bölge ID
+                                var adminBolgeID = new Array();
+                                $('select#AdminSelectBolge option:selected').each(function () {
+                                    adminBolgeID.push($(this).val());
+                                });
+                                $.ajax({
+                                    data: {"adminBolgeID[]": adminBolgeID, "adminAd": adminAd,
+                                        "adminSoyad": adminSoyad, "adminDurum": adminDurum, "adminLokasyon": adminLokasyon, "adminTelefon": adminTelefon,
+                                        "adminEmail": adminEmail, "adminAdres": adminAdres, "aciklama": aciklama, "ulke": ulke,
+                                        "il": il, "ilce": ilce, "semt": semt, "mahalle": mahalle,
+                                        "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "tip": "adminKaydet"},
+                                    success: function (cevap) {
+                                        if (cevap.hata) {
+                                            alert(cevap.hata);
+                                        } else {
+                                            var adminCount = $('#smallAdmin').text();
+                                            adminCount++;
+                                            $('#smallAdmin').text(adminCount);
+                                            if (adminDurum != 0) {
+                                                var addRow = "<tr style='background-color:#F2F2F2'><td>"
+                                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newAdminID + "'>"
+                                                        + "<i class='glyphicon glyphicon-user' style='color:green;'></i> " + adminAd + "</a></td>"
+                                                        + "<td class='hidden-xs'>" + adminSoyad + "</td>"
+                                                        + "<td class='hidden-xs'>" + adminTelefon + "</td>"
+                                                        + "<td class='hidden-xs'>" + adminEmail + "</td>"
+                                                        + "<td class='hidden-xs'>" + aciklama + "</td>";
+                                                AdminTable.DataTable().row.add($(addRow)).draw();
+                                            } else {
+                                                var addRow = "<tr style='background-color:#F2F2F2'><td>"
+                                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newAdminID + "'>"
+                                                        + "<i class='glyphicon glyphicon-user' style='color:red;'></i> " + adminAd + "</a></td>"
+                                                        + "<td class='hidden-xs'>" + adminSoyad + "</td>"
+                                                        + "<td class='hidden-xs'>" + adminTelefon + "</td>"
+                                                        + "<td class='hidden-xs'>" + adminEmail + "</td>"
+                                                        + "<td class='hidden-xs'>" + aciklama + "</td>";
+                                                AdminTable.DataTable().row.add($(addRow)).draw();
+                                            }
+                                            adminBolgeID = [];
+                                        }
+                                    }
+                                });
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
 }
 
 
