@@ -42,7 +42,12 @@ class Database extends PDO {
         if ($sth->execute()) {
             return $this->lastInsertId();
         } else {
-            return false;
+            //unique için hata kodu
+            if ($sth->errorCode() == 23000 || $sth->errorCode() == 1062) {
+                return 'unique';
+            } else {
+                return false;
+            }
         }
     }
 
@@ -65,14 +70,18 @@ class Database extends PDO {
         }
         $sql = "INSERT INTO `$tableName` (" . implode(", ", $columnNames) . ") VALUES " . implode(", ", $rowsSQL);
         $sth = $this->prepare($sql);
-
         foreach ($toBind as $param => $val) {
             $sth->bindValue($param, $val);
         }
         if ($sth->execute()) {
             return $this->lastInsertId();
         } else {
-            return false;
+            //unique için hata kodu
+            if ($sth->errorCode() == 23000 || $sth->errorCode() == 1062) {
+                return 'unique';
+            } else {
+                return false;
+            }
         }
     }
 

@@ -336,7 +336,7 @@ class Form {
     }
 
     function sifreOlustur() {
-        $userSifre = $this->benzersiz_Sayi_Harf(8);
+        $userSifre = $this->benzersiz_Sayi(11);
         return $userSifre;
     }
 
@@ -356,4 +356,5 @@ class Form {
     }
 
 }
+
 ?>

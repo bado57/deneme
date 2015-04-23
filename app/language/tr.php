@@ -127,7 +127,13 @@ class tr {
             "Adi" => "Adı",
             "Soyadi" => "Soyadı",
             "YeniAdmin" => "Yeni Admin",
-            "AdminTanimlama" => "Admin Tanimlama"
+            "AdminTanimlama" => "Admin Tanimlama",
+            "AdminDetay" => "Admin Detaylari",
+            "YeniSofor" => "Yeni Şoför",
+            "SoforTanimlama" => "Şoför Tanimlama",
+            "SoforAdi" => "Şoför Adi",
+            "SoforDetay" => "Şoför Detayları",
+            "Arac" => "Araçlar"
         );
         return $trdil;
     }

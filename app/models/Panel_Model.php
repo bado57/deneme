@@ -36,13 +36,19 @@ class Panel_Model extends Model {
 
     //admine göre bölge getirme
     public function AdminbolgeListele($adminID) {
-        $sql = "SELECT BSBolgeID FROM bsadminbolge Where BSAdminID=" . $adminID;
+        $sql = "SELECT DISTINCT BSBolgeID FROM bsadminbolge Where BSAdminID=" . $adminID;
         return($this->db->select($sql));
     }
 
     //admin bölgeler listele
     public function rutbeBolgeListele($array = array()) {
         $sql = 'SELECT SBBolgeAdi,SBBolgeID FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
+        return($this->db->select($sql));
+    }
+
+    //admin bölgeler listele
+    public function rutbeNotBolgeListele($array = array()) {
+        $sql = 'SELECT SBBolgeAdi,SBBolgeID FROM sbbolgeler Where SBBolgeID NOT IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -290,15 +296,39 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //admin select dışı bölge listele
+    public function adminSelectBolgeSofor($arraybolge = array(), $arraysofor = array()) {
+        $sql = 'SELECT BSSoforID,BSSoforAd FROM bssoforbolge WHERE BSBolgeID IN (' . $arraybolge . ') AND BSSoforID NOT IN (' . $arraysofor . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin select dışı bölge listele
+    public function adminSelectBolgeSoforr($arraybolge = array()) {
+        $sql = 'SELECT DISTINCT BSSoforID,BSSoforAd FROM bssoforbolge WHERE BSBolgeID IN (' . $arraybolge . ')';
+        return($this->db->select($sql));
+    }
+
     //admin select dışı şoför listele
     public function adminDetailAracSSofor($array = array()) {
         $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor WHERE BSSoforID NOT IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
+    //admin select dışı bölge listele
+    public function adminDetailAracBolgeSofor($array = array()) {
+        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor WHERE BSSoforID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
     //admin arac detail özellik
     public function adminDetailAracOzellik($aracID) {
         $sql = 'SELECT SBAracID,SBAracPlaka,SBAracMarka,SBAracModelYili,SBAracKapasite,SBAracKm,SBAracDurum,SBAracAciklama FROM sbarac WHERE SBAracID=' . $aracID . ' ORDER BY SBAracPlaka ASC';
+        return($this->db->select($sql));
+    }
+
+    //admin arac detail özellik
+    public function adminRutbeDetailAracOzellik($adminID) {
+        $sql = 'SELECT SBAracID,SBAracPlaka,SBAracMarka,SBAracModelYili,SBAracKapasite,SBAracKm,SBAracDurum,SBAracAciklama FROM sbarac WHERE SBAdminID=' . $adminID . ' ORDER BY SBAracPlaka ASC';
         return($this->db->select($sql));
     }
 
@@ -378,7 +408,7 @@ class Panel_Model extends Model {
 
     //admin listele
     public function adminListele($adminID) {
-        $sql = "SELECT BSAdminID,BSAdminAd,BSAdminSoyad,BSAdminPhone,BSAdminEmail,BSAdminStatus,BSAdminAciklama FROM bsadmin WHERE BSAdminID NOT IN($adminID)  ORDER BY BSAdminAd ASC";
+        $sql = "SELECT BSAdminID,BSAdminAd,BSAdminSoyad,BSAdminPhone,BSAdminEmail,Status,BSAdminAciklama FROM bsadmin WHERE BSAdminID NOT IN($adminID)  ORDER BY BSAdminAd ASC";
         return($this->db->select($sql));
     }
 
@@ -400,6 +430,249 @@ class Panel_Model extends Model {
     //admin arac şöfor çoklu delete delete
     public function adminMultiBolgeDelete($adminID) {
         return ($this->db->delete("bsadminbolge", "BSAdminID=$adminID"));
+    }
+
+    //admin listele
+    public function adminIDListele($adminID) {
+        $sql = 'SELECT * FROM bsadmin WHERE BSAdminID=' . $adminID . ' ORDER BY BSAdminAd ASC';
+        return($this->db->select($sql));
+    }
+
+    //admin detail  delete
+    public function adminDetailDelete($adminDetailID) {
+        return ($this->db->delete("bsadmin", "BSAdminID=$adminDetailID"));
+    }
+
+    //admin bolge detail  delete
+    public function adminDetailBolgeDelete($adminDetailID) {
+        return ($this->db->delete("bsadminbolge", "BSAdminID=$adminDetailID"));
+    }
+
+    //admin özellikleri düzenleme
+    public function adminOzelliklerDuzenle($data, $adminID) {
+        return ($this->db->update("bsadmin", $data, "BSAdminID=" . $adminID));
+    }
+
+    //admin select dışı bölge listele
+    public function adminBolge() {
+        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler';
+        return($this->db->select($sql));
+    }
+
+    //admin select dışı şoför listele
+    public function adminAracSofor() {
+        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor';
+        return($this->db->select($sql));
+    }
+
+    //admin aktif arac listele
+    public function soforCountListele($adminID) {
+        $sql = 'SELECT COUNT(*) FROM bssofor';
+        return($this->db->select($sql));
+    }
+
+    //admin bölgeler listele
+    public function rutbeSoforCount($array = array()) {
+        $sql = 'SELECT COUNT(BSBolgeID) FROM bssoforbolge Where BSBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //şofor listele
+    public function soforListele() {
+        $sql = "SELECT BSSoforID,BSSoforAd,BSSoforSoyad,BSSoforPhone,BSSoforEmail,Status,BSSoforAciklama FROM bssofor ORDER BY BSSoforAd ASC";
+        return($this->db->select($sql));
+    }
+
+    //şoför bölgeler listele
+    public function soforBolgeListele($array = array()) {
+        $sql = 'SELECT BSSoforID FROM bssoforbolge Where BSBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //rutbe şofor listele
+    public function rutbeSoforListele($array = array()) {
+        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad,BSSoforPhone,BSSoforEmail,Status,BSSoforAciklama FROM bssofor Where BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
+        return($this->db->select($sql));
+    }
+
+    //şoför bölgeler listele
+    public function aracMultiSelectBolge($array = array()) {
+        $sql = 'SELECT SBAracID FROM sbaracbolge Where SBBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin arac bölge select listele
+    public function aracMultiSelect($array = array()) {
+        $sql = 'SELECT SBAracID,SBAracPlaka FROM sbarac Where SBAracID IN (' . $array . ') ORDER BY SBAracPlaka ASC';
+        return($this->db->select($sql));
+    }
+
+    //admin arac bölge select listele
+    public function soforRutbeBolgeListele($array = array()) {
+        $sql = 'SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
+        return($this->db->select($sql));
+    }
+
+    //yeni şoför Kaydet
+    public function addNewSofor($data) {
+        return ($this->db->insert("bssofor", $data));
+    }
+
+    //şoför  bölge  kaydet
+    public function addNewBolgeSofor($data) {
+        return ($this->db->multiInsert('bssoforbolge', $data));
+    }
+
+    //şoför  bölge  kaydet
+    public function addNewAracSofor($data) {
+        return ($this->db->multiInsert('bsaracsofor', $data));
+    }
+
+    //admin delete
+    public function soforDelete($soforID) {
+        return ($this->db->delete("bssofor", "BSSoforID=$soforID"));
+    }
+
+    //arac detail bölgeler listele
+    public function aracDetailMultiSelectBolge($array = array()) {
+        $sql = 'SELECT BSSoforID FROM bssoforbolge Where BSBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin arac bölge select listele
+    public function soforMultiSelect($array = array()) {
+        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor Where BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
+        return($this->db->select($sql));
+    }
+
+    //arac detail bölgeler listele
+    public function aracDetailMultiSelectBolgee($array = array()) {
+        $sql = 'SELECT BSSoforID FROM bssoforbolge Where BSBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin arac bölge select listele
+    public function soforMultiSelectt($array = array()) {
+        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor Where BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
+        return($this->db->select($sql));
+    }
+
+    //arac seçili şoförler
+    public function aracDetailMultiSelectSofor($aracID) {
+        $sql = 'SELECT BSSoforID FROM bsaracsofor WHERE BSAracID=' . $aracID;
+        return($this->db->select($sql));
+    }
+
+    //araç seçili şoförler dışındaki bölgeler
+    public function aracDetailMultiNotSelectSofor($arraybolge = array(), $arraysofor = array()) {
+        $sql = 'SELECT BSSoforID FROM bssoforbolge WHERE BSBolgeID IN (' . $arraybolge . ') AND BSSoforID NOT IN (' . $arraysofor . ')';
+        return($this->db->select($sql));
+    }
+
+    //arac seçili olmayan şoförler
+    public function adminDetailAracNotSelectSofor($array = array()) {
+        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor WHERE BSSoforID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //seçili şoför bolge listele
+    public function soforDetailBolge($soforID) {
+        $sql = 'SELECT BSBolgeID,BSBolgeAdi FROM bssoforbolge WHERE BSSoforID=' . $soforID;
+        return($this->db->select($sql));
+    }
+
+    //şoför select dışı bölge listele
+    public function soforDetailSBolge($array = array()) {
+        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //seçili şoför arac listele
+    public function adminDetailSoforArac($soforID) {
+        $sql = 'SELECT BSAracID,BSAracPlaka FROM bsaracsofor WHERE BSSoforID=' . $soforID;
+        return($this->db->select($sql));
+    }
+
+    //admin select dışı bölge listele
+    public function adminSelectSoforBolge($arraybolge = array(), $arrayarac = array()) {
+        $sql = 'SELECT SBAracID,SBAracPlaka FROM sbaracbolge WHERE SBBolgeID IN (' . $arraybolge . ') AND SBAracID NOT IN (' . $arrayarac . ')';
+        return($this->db->select($sql));
+    }
+
+    //select dışı bölge listele
+    public function adminSelectBolgeArac($arraybolge = array()) {
+        $sql = 'SELECT DISTINCT SBAracID,SBAracPlaka FROM sbaracbolge WHERE SBBolgeID IN (' . $arraybolge . ')';
+        return($this->db->select($sql));
+    }
+
+    //şoför detail özellik
+    public function soforDetail($soforID) {
+        $sql = 'SELECT * FROM bssofor WHERE BSSoforID=' . $soforID . ' ORDER BY BSSoforAd ASC';
+        return($this->db->select($sql));
+    }
+
+    //seçili şoför bolge listele
+    public function adminDetailSoforBolge($soforID) {
+        $sql = 'SELECT BSBolgeID,BSBolgeAdi FROM bssoforbolge WHERE BSSoforID=' . $soforID;
+        return($this->db->select($sql));
+    }
+
+    //şoför detail  delete
+    public function detailSoforDelete($soforDetailID) {
+        return ($this->db->delete("bssofor", "BSSoforID=$soforDetailID"));
+    }
+
+    //sofor arac detail  delete
+    public function detailSoforAracDelete($soforDetailID) {
+        return ($this->db->delete("bsaracsofor", "BSSoforID=$soforDetailID"));
+    }
+
+    //şoför bolge detail  delete
+    public function detailSoforBolgeDelete($soforDetailID) {
+        return ($this->db->delete("bssoforbolge", "BSSoforID=$soforDetailID"));
+    }
+
+    //admin şoför özellikleri düzenleme
+    public function soforOzelliklerDuzenle($data, $soforID) {
+        return ($this->db->update("bssofor", $data, "BSSoforID=" . $soforID));
+    }
+
+    //şöfor arac çoklu delete delete
+    public function adminSoforAracDelete($soforID) {
+        return ($this->db->delete("bsaracsofor", "BSSoforID=$soforID"));
+    }
+
+    //admin  şofor araç kaydet
+    public function addNewSoforArac($data) {
+        return ($this->db->multiInsert('bsaracsofor', $data));
+    }
+
+    //admin şoför bolge detail  delete
+    public function adminDetailSoforBolgeDelete($soforDetailID) {
+        return ($this->db->delete("bssoforbolge", "BSSoforID=$soforDetailID"));
+    }
+
+    //admin şoför  bölge  kaydet
+    public function addNewSoforBolge($data) {
+        return ($this->db->multiInsert('bssoforbolge', $data));
+    }
+
+    //şoför seçili arac
+    public function soforDetailMultiSelectSofor($soforID) {
+        $sql = 'SELECT BSAracID FROM bsaracsofor WHERE BSSoforID=' . $soforID;
+        return($this->db->select($sql));
+    }
+
+    //admin select dışı bölge listele
+    public function adminSelectBolgeAracc($arraybolge = array()) {
+        $sql = 'SELECT DISTINCT SBAracID,SBAracPlaka FROM sbaracbolge WHERE SBBolgeID IN (' . $arraybolge . ')';
+        return($this->db->select($sql));
+    }
+
+    //arac seçili olmayan şoförler
+    public function soforNotSelectArac($array = array()) {
+        $sql = 'SELECT SBAracID,SBAracPlaka FROM sbarac WHERE SBAracID IN (' . $array . ')';
+        return($this->db->select($sql));
     }
 
 }

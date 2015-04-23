@@ -17,6 +17,7 @@ class UsersLogout extends Controller {
         unset($_SESSION['selectDbIp']);
         unset($_SESSION['selectDbUser']);
         unset($_SESSION['selectDbPassword']);
+        unset($_SESSION['selectFirmaDurum']);
         unset($_SESSION['sessionkey']);
         unset($_SESSION['username']);
         unset($_SESSION['kullaniciad']);

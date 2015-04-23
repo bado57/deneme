@@ -123,7 +123,10 @@ class en {
             "Tür" => "Type",
             "KullaniciPanel" => "Users Panel",
             "Adi" => "Name",
-            "Soyadi" => "Username"
+            "Soyadi" => "Username",
+            "YeniAdmin" => "New Admin",
+            "AdminTanimlama" => "Admin Description",
+            "AdminDetay" => "Admin Detail"
         );
         return $endil;
     }

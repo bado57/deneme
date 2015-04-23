@@ -10,7 +10,15 @@
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-left">
                 <h3>
                     <i class="fa fa-th"></i> <?php echo $data["Araclar"]; ?>
-                    <small id="smallArac"><?php echo count($model); ?></small>&nbsp<small><?php echo $data["Toplam"]; ?></small>
+                    <small id="smallArac"><?php if (count($model[0]['AdminAracCount']) > 0) { ?>
+                            <?php
+                            echo $model[0]['AdminAracCount'];
+                        } else {
+                            ?>
+                            <?php
+                            echo '0 ';
+                        }
+                        ?></small>&nbsp;<small><?php echo $data["Toplam"]; ?></small>
                 </h3>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right" style="text-align:right;">
@@ -84,7 +92,7 @@
                     </div>
                     <div class="form-group">
                         <label for="AracAciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="AracAciklama" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="AracAciklama" class="form-control" rows="3"></textarea>
                     </div>
                     <div class="form-group">
                         <button data-type="svClose"  data-class="arac" type="button" data-islemler="adminAracVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
@@ -93,13 +101,13 @@
                 </div>
                 <div class="form-vertical col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <div class="form-group">
+                        <label for="AracKapasite"><?php echo $data["Kapasite"]; ?></label>
+                        <input type="text" class="form-control" id="AracKapasite" name="AracKapasite" value="">
+                    </div>
+                    <div class="form-group">
                         <label for="AracSurucu"><?php echo $data["Surucu"]; ?></label>
                         <select type="text" class="form-control" id="AracSurucu" name="AracSurucu" multiple="multiple" style="display: none;">
                         </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="AracKapasite"><?php echo $data["Kapasite"]; ?></label>
-                        <input type="text" class="form-control" id="AracKapasite" name="AracKapasite" value="">
                     </div>
                     <div class="form-group">
                         <label for="AracDurum"><?php echo $data["Durum"]; ?></label>
@@ -162,6 +170,10 @@
                     </div>
                     <div class="form-vertical col-lg-4 col-md-4 col-sm-12 col-xs-12">
                         <div class="form-group">
+                            <label for="AracDetayKm"><?php echo $data["AracKm"]; ?></label>
+                            <input type="text" class="form-control" id="AracDetayKm" name="AracDetayKm" value="" disabled>
+                        </div>
+                        <div class="form-group">
                             <label for="AracDetaySurucu"><?php echo $data["Surucu"]; ?></label>
                             <select type="text" class="form-control" id="AracDetaySurucu" name="AracDetaySurucu" multiple="multiple">
                             </select>
@@ -169,10 +181,6 @@
                         <div class="form-group">
                             <label for="AracDetayKapasite"><?php echo $data["Kapasite"]; ?></label>
                             <input type="text" class="form-control dsb" id="AracDetayKapasite" name="AracDetayKapasite" value="" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="AracDetayKm"><?php echo $data["AracKm"]; ?></label>
-                            <input type="text" class="form-control" id="AracDetayKm" name="AracDetayKm" value="" disabled>
                         </div>
                         <div class="form-group">
                             <label for="AracDetayDurum"><?php echo $data["Durum"]; ?></label>

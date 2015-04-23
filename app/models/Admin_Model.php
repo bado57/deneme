@@ -13,7 +13,7 @@ class Admin_Model extends Model {
         $sql = "SELECT BSAdminID , BSAdminKadi, BSSuperAdmin FROM " . $tableName . " WHERE " . $Kadi . " =:loginKadi AND " . $Sifre . "=:loginSifre LIMIT 1";
         $count = $this->db->affectedRows($sql, $array);
         if ($count > 0) {
-            $sql = "SELECT BSAdminID , BSAdminKadi, BSSuperAdmin, BSAdminAd, BSAdminSoyad FROM " . $tableName . " WHERE " . $Kadi . " =:loginKadi AND " . $Sifre . "=:loginSifre LIMIT 1";
+            $sql = "SELECT BSAdminID , BSAdminKadi, BSSuperAdmin, BSAdminAd, BSAdminSoyad,Status FROM " . $tableName . " WHERE " . $Kadi . " =:loginKadi AND " . $Sifre . "=:loginSifre LIMIT 1";
             return $this->db->select($sql, $array);
         } else {
             return false;

@@ -10,7 +10,15 @@
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-left">
                 <h3>
                     <i class="fa fa-th"></i> <?php echo $data["Bolgeler"]; ?>
-                    <small id="smallBolge"><?php echo $model[0]['AdminBolgeCount']; ?></small>&nbsp<small><?php echo $data["Toplam"]; ?></small>
+                    <small id="smallBolge"><?php if (count($model[0]['AdminBolgeCount']) > 0) { ?>
+                            <?php
+                            echo $model[0]['AdminBolgeCount'] . ' ' . $data["Toplam"];
+                        } else {
+                            ?>
+                            <?php
+                            echo '0 ' . $data["Toplam"];
+                        }
+                        ?></small>
                 </h3>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right" style="text-align:right;">

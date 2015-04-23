@@ -15,7 +15,7 @@
             </div>
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
-                <li class="active">
+                <li class="active"  id="menu_home" id="menu_home">
                     <a href="<?php echo SITE_URL; ?>/panel">
                         <i class="fa fa-home"></i> <span><?php echo $data["Anasayfa"]; ?></span>
                     </a>
@@ -57,14 +57,14 @@
                         <li id="link_aracliste"><a href="<?php echo SITE_URL; ?>/adminweb/aracliste"><i class="fa fa-angle-right"></i><?php echo $data["AracListe"]; ?></a></li>
                     </ul>
                 </li>
-                <li class="treeview" id="menu_kullanici">
+                <li class="treeview" id="menu_kullanici" id="menu_kullanici">
                     <a href="#">
                         <i class="fa fa-users"></i> <span><?php echo $data["KullaniciIslem"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
                         <li id="link_adminliste"><a href="<?php echo SITE_URL; ?>/adminweb/adminliste"><i class="fa fa-angle-right"></i><?php echo $data["Admin"]; ?></a></li>
-                        <li id="link_soforliste"><a href="#"><i class="fa fa-angle-right"></i><?php echo $data["Sofor"]; ?></a></li>
+                        <li id="link_soforliste"><a href="<?php echo SITE_URL; ?>/adminweb/soforliste"><i class="fa fa-angle-right"></i><?php echo $data["Sofor"]; ?></a></li>
                         <li id="link_veliliste"><a href="#"><i class="fa fa-angle-right"></i><?php echo $data["Veli"]; ?></a></li>
                         <li id="link_ogrenciliste"><a href="#"><i class="fa fa-angle-right"></i><?php echo $data["Ogrenci"]; ?></a></li>
                         <li id="link_isciliste"><a href="#"><i class="fa fa-angle-right"></i><?php echo $data["TitleIsci"]; ?></a></li>

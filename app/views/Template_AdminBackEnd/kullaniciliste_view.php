@@ -1,5 +1,6 @@
 <script type="text/javascript">
     var activeMenu = "menu_kullanici";
+    var activeLink = "menu_kullanici";
 </script>
 <aside class="right-side hiddenOnSv">
     <!-- Content Header (Page header) -->
@@ -21,10 +22,18 @@
                     <a href="<?php echo SITE_URL; ?>/adminweb/adminliste" class="small-box bg-green">
                         <div class="inner">
                             <h3>
-                                Admin
+                                <?php echo $data["Admin"]; ?>
                             </h3>
                             <p>
-                                <?php echo $model[0]['COUNT(*)']; ?> <?php echo $data["Toplam"]; ?>
+                                <?php if (count($model[0]['COUNT(*)']) > 0) { ?>
+                                    <?php
+                                    echo $model[0]['COUNT(*)'] . ' ' . $data["Toplam"];
+                                } else {
+                                    ?>
+                                    <?php
+                                    echo '0 ' . $data["Toplam"];
+                                }
+                                ?>
                             </p>
                         </div>
                         <div class="icon">
@@ -35,13 +44,21 @@
             <?php } ?>
             <div class="col-lg-3 col-xs-12">
                 <!-- Kullanıcı İşlemleri -->
-                <a href="#" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/adminweb/soforliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
-                            Şoför
+                            <?php echo $data["Sofor"]; ?>
                         </h3>
                         <p>
-                            <?php echo $model['AdminBolge']; ?> <?php echo $data["Toplam"]; ?>
+                            <?php if (count($model['SoforCount']) > 0) { ?>
+                                <?php
+                                echo $model['SoforCount'] . ' ' . $data["Toplam"];
+                            } else {
+                                ?>
+                                <?php
+                                echo '0 ' . $data["Toplam"];
+                            }
+                            ?>
                         </p>
                     </div>
                     <div class="icon">

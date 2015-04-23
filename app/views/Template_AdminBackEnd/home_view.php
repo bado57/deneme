@@ -1,3 +1,7 @@
+<script type="text/javascript">
+    var activeMenu = "menu_home";
+    var activeLink = "menu_home";
+</script>
 <aside class="right-side hiddenOnSv">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -37,7 +41,15 @@
                             <?php echo $data["BolgeIslem"]; ?>
                         </h3>
                         <p>
-                            <?php echo $model['AdminBolge']; ?> <?php echo $data["Toplam"]; ?>
+                            <?php if (count($model['AdminBolge']) > 0) { ?>
+                                <?php
+                                echo $model['AdminBolge'] . ' ' . $data["Toplam"];
+                            } else {
+                                ?>
+                                <?php
+                                echo '0 ' . $data["Toplam"];
+                            }
+                            ?>
                         </p>
                     </div>
                     <div class="icon">
@@ -54,7 +66,15 @@
                             <?php echo $data["KurumIslem"]; ?>
                         </h3>
                         <p>
-                            <?php echo $model['AdminKurum']; ?> <?php echo $data["Toplam"]; ?>
+                            <?php if (count($model['AdminKurum']) > 0) { ?>
+                                <?php
+                                echo $model['AdminKurum'] . ' ' . $data["Toplam"];
+                            } else {
+                                ?>
+                                <?php
+                                echo '0 ' . $data["Toplam"];
+                            }
+                            ?>
                         </p>
                     </div>
                     <div class="icon">
@@ -88,7 +108,15 @@
                             <?php echo $data["AracIslem"]; ?>
                         </h3>
                         <p>
-                            <?php echo $model['AdminArac']; ?> <?php echo $data["Toplam"]; ?>
+                            <?php if (count($model['AdminArac']) > 0) { ?>
+                                <?php
+                                echo $model['AdminArac'] . ' ' . $data["Toplam"];
+                            } else {
+                                ?>
+                                <?php
+                                echo '0 ' . $data["Toplam"];
+                            }
+                            ?>
                         </p>
                     </div>
                     <div class="icon">
