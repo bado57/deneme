@@ -126,7 +126,16 @@ class en {
             "Soyadi" => "Username",
             "YeniAdmin" => "New Admin",
             "AdminTanimlama" => "Admin Description",
-            "AdminDetay" => "Admin Detail"
+            "AdminDetay" => "Admin Detail",
+            "YeniSofor" => "New Driver",
+            "SoforTanimlama" => "Driver Description",
+            "SoforAdi" => "Driver Name",
+            "SoforDetay" => "Driver Details",
+            "Arac" => "Cars",
+            "YeniIsci" => "New Employee",
+            "IsciTanimlama" => "Employee Description",
+            "Kurumlar" => "Institutions",
+            "IsciDetay" => "Employee Details"
         );
         return $endil;
     }

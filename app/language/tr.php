@@ -133,7 +133,11 @@ class tr {
             "SoforTanimlama" => "Şoför Tanimlama",
             "SoforAdi" => "Şoför Adi",
             "SoforDetay" => "Şoför Detayları",
-            "Arac" => "Araçlar"
+            "Arac" => "Araçlar",
+            "YeniIsci" => "Yeni İşçi",
+            "IsciTanimlama" => "İşçi Tanimlama",
+            "Kurumlar" => "Kurumlar",
+            "IsciDetay" => "İşçi Detayları"
         );
         return $trdil;
     }

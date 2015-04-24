@@ -675,6 +675,142 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //işçi listele
+    public function isciCountListele($adminID) {
+        $sql = 'SELECT COUNT(*) FROM sbisci';
+        return($this->db->select($sql));
+    }
+
+    //admine göre işçi listeleme
+    public function rutbeIsciCount($array = array()) {
+        $sql = 'SELECT COUNT(SBBolgeID) FROM sbiscibolge Where SBBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //işçi listele
+    public function isciListele() {
+        $sql = "SELECT SBIsciID,SBIsciAd,SBIsciSoyad,SBIsciPhone,SBIsciEmail,Status,SBIsciAciklama FROM sbisci ORDER BY SBIsciAd ASC";
+        return($this->db->select($sql));
+    }
+
+    //işçi bölgeler listele
+    public function isciBolgeListele($array = array()) {
+        $sql = 'SELECT SBIsciID FROM sbiscibolge Where SBBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //rutbe işçi listele
+    public function rutbeIsciListele($array = array()) {
+        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciSoyad,SBIsciPhone,SBIsciEmail,Status,SBIsciAciklama FROM sbisci Where SBIsciID IN (' . $array . ') ORDER BY SBIsciAd ASC';
+        return($this->db->select($sql));
+    }
+
+    //admin arac bölge select listele
+    public function isciNewBolgeListele() {
+        $sql = "SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler ORDER BY SBBolgeAdi ASC";
+        return($this->db->select($sql));
+    }
+
+    //admin işçi kurum bölge select listele
+    public function isciKurumMultiSelect($array = array()) {
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') ORDER BY SBKurumAdi ASC';
+        return($this->db->select($sql));
+    }
+
+    //yeni işçi Kaydet
+    public function addNewIsci($data) {
+        return ($this->db->insert("sbisci", $data));
+    }
+
+    //işçi  bölge  kaydet
+    public function addNewBolgeIsci($data) {
+        return ($this->db->multiInsert('sbiscibolge', $data));
+    }
+
+    //işçi  kurum  kaydet
+    public function addNewIsciKurum($data) {
+        return ($this->db->multiInsert('sbiscikurum', $data));
+    }
+
+    //işçi delete
+    public function isciDelete($isciID) {
+        return ($this->db->delete("sbisci", "SBIsciID=$isciID"));
+    }
+
+    //seçili işçi bolge listele
+    public function isciDetailBolge($isciID) {
+        $sql = 'SELECT SBBolgeID,SBBolgeAd FROM sbiscibolge WHERE SBIsciID=' . $isciID;
+        return($this->db->select($sql));
+    }
+
+    //işçi select dışı bölge listele
+    public function isciDetailSBolge($array = array()) {
+        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //seçili işçi kuurm listele
+    public function adminDetailIsciKurum($isciID) {
+        $sql = 'SELECT SBKurumID,SBKurumAd FROM sbiscikurum WHERE SBIsciID=' . $isciID;
+        return($this->db->select($sql));
+    }
+
+    //admin select dışı bölge listele
+    public function adminSelectIsciBolge($arraybolge = array(), $arraykurum = array()) {
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ') AND SBKurumID NOT IN (' . $arraykurum . ')';
+        return($this->db->select($sql));
+    }
+
+    //select dışı bölge listele
+    public function adminSelectBolgeKurum($arraybolge = array()) {
+        $sql = 'SELECT DISTINCT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ')';
+        return($this->db->select($sql));
+    }
+
+    //işçi detail özellik
+    public function isciDetail($isciID) {
+        $sql = 'SELECT * FROM sbisci WHERE SBIsciID=' . $isciID . ' ORDER BY SBIsciSoyad ASC';
+        return($this->db->select($sql));
+    }
+
+    //işçi detail  delete
+    public function detailIsciDelete($isciDetailID) {
+        return ($this->db->delete("sbisci", "SBIsciID=$isciDetailID"));
+    }
+
+    //işçi arac detail  delete
+    public function detailIsciKurumDelete($isciDetailID) {
+        return ($this->db->delete("sbiscikurum", "SBIsciID=$isciDetailID"));
+    }
+
+    //İŞÇİ bolge detail  delete
+    public function detailIsciBolgeDelete($isciDetailID) {
+        return ($this->db->delete("sbiscibolge", "SBIsciID=$isciDetailID"));
+    }
+
+    //işçi özellikleri düzenleme
+    public function isciOzelliklerDuzenle($data, $isciID) {
+        return ($this->db->update("sbisci", $data, "SBIsciID=" . $isciID));
+    }
+
+    //işçi seçili kurum
+    public function isciDetailMultiSelectIsci($isciID) {
+        $sql = 'SELECT SBKurumID FROM sbiscikurum WHERE SBIsciID=' . $isciID;
+        return($this->db->select($sql));
+    }
+
+    //admin select dışı bölge listele
+    public function adminSelectBolgeKurumm($arraybolge = array()) {
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ')';
+        return($this->db->select($sql));
+    }
+
+    //kurum seçili olmayan işçiler
+    public function isciNotSelectKurum($array = array()) {
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
 }
 
 ?>

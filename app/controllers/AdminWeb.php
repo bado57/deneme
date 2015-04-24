@@ -380,7 +380,9 @@ class AdminWeb extends Controller {
             if ($adminRutbe != 0) {
                 $adminCount = $Panel_Model->adminCountListele($adminID);
                 $adminCount["SoforCount"] = $Panel_Model->soforCountListele();
+                $adminCount["IsciCount"] = $Panel_Model->isciCountListele();
                 $adminCount["SoforCount"] = $adminCount["SoforCount"][0]['COUNT(*)'];
+                $adminCount["IsciCount"] = $adminCount["IsciCount"][0]['COUNT(*)'];
             } else {
                 $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
 
@@ -391,7 +393,9 @@ class AdminWeb extends Controller {
 
 
                 $adminCount["SoforCount"] = $Panel_Model->rutbeSoforCount($rutbebolgedizi);
+                $adminCount["IsciCount"] = $Panel_Model->rutbeIsciCount($rutbebolgedizi);
                 $adminCount["SoforCount"] = $adminCount["SoforCount"][0]['COUNT(BSBolgeID)'];
+                $adminCount["IsciCount"] = $adminCount["IsciCount"][0]['COUNT(SBBolgeID)'];
             }
 
             $this->load->view("Template_AdminBackEnd/header", $languagedeger);
@@ -553,6 +557,100 @@ class AdminWeb extends Controller {
             $this->load->view("Template_AdminBackEnd/header", $languagedeger);
             $this->load->view("Template_AdminBackEnd/left", $languagedeger);
             $this->load->view("Template_AdminBackEnd/soforliste", $languagedeger, $soforliste);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL_LOGOUT);
+        }
+    }
+
+    function isciliste() {
+        //session güvenlik kontrolü
+        $formSession = $this->load->otherClasses('Form');
+        //sessionKontrol
+        $sessionKey = $formSession->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+            //memcache model bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+
+
+            $language = Session::get("dil");
+            //lanuage Kontrol
+            $formLanguage = $this->load->multilanguage($language);
+            $languagedeger = $formLanguage->multilanguage();
+
+
+            $adminRutbe = Session::get("userRutbe");
+            $adminID = Session::get("userId");
+            $uniqueKey = Session::get("username");
+            $uniqueKey = $uniqueKey . '_AIsci';
+
+            $resultMemcache = $MemcacheModel->get($uniqueKey);
+            if ($resultMemcache) {
+                $iscilist = $resultMemcache;
+            } else {
+                //super adminse tüm bölgeleri görür
+                if ($adminRutbe != 0) {
+
+                    $isciliste = $Panel_Model->isciListele();
+                    //bölge count için
+                    if (count($isciliste) != 0) {
+                        $iscilist[0]['IsciCount'] = count($isciliste);
+                    }
+
+                    $a = 0;
+                    foreach ($isciliste as $iscilistee) {
+                        $iscilist[$a]['IsciID'] = $iscilistee['SBIsciID'];
+                        $iscilist[$a]['IsciAdi'] = $iscilistee['SBIsciAd'];
+                        $iscilist[$a]['IsciSoyad'] = $iscilistee['SBIsciSoyad'];
+                        $iscilist[$a]['IsciTelefon'] = $iscilistee['SBIsciPhone'];
+                        $iscilist[$a]['IsciEmail'] = $iscilistee['SBIsciEmail'];
+                        $iscilist[$a]['IsciAciklama'] = $iscilistee['SBIsciAciklama'];
+                        $iscilist[$a]['IsciDurum'] = $iscilistee['Status'];
+                        $a++;
+                    }
+                } else {
+                    $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
+
+                    foreach ($bolgeListeRutbe as $rutbe) {
+                        $bolgerutbeId[] = $rutbe['BSBolgeID'];
+                    }
+                    $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+
+                    $isciBolgeListe = $Panel_Model->isciBolgeListele($rutbebolgedizi);
+                    foreach ($isciBolgeListe as $isciBolgeListe) {
+                        $iscirutbeId[] = $isciBolgeListe['SBIsciID'];
+                    }
+                    $rutbeiscidizi = implode(',', $iscirutbeId);
+
+                    $isciliste = $Panel_Model->rutbeIsciListele($rutbeiscidizi);
+                    //bölge count için
+                    if (count($isciliste) != 0) {
+                        $iscilist[0]['IsciCount'] = count($isciliste);
+                    }
+
+                    $a = 0;
+                    foreach ($isciliste as $iscilistee) {
+                        $iscilist[$a]['IsciID'] = $iscilistee['SBIsciID'];
+                        $iscilist[$a]['IsciAdi'] = $iscilistee['SBIsciAd'];
+                        $iscilist[$a]['IsciSoyad'] = $iscilistee['SBIsciSoyad'];
+                        $iscilist[$a]['IsciTelefon'] = $iscilistee['SBIsciPhone'];
+                        $iscilist[$a]['IsciEmail'] = $iscilistee['SBIsciEmail'];
+                        $iscilist[$a]['IsciAciklama'] = $iscilistee['SBIsciAciklama'];
+                        $iscilist[$a]['IsciDurum'] = $iscilistee['Status'];
+                        $a++;
+                    }
+                }
+                //memcache kayıt
+                $result = $MemcacheModel->set($uniqueKey, $iscilist, false, 5);
+            }
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/isciliste", $languagedeger, $iscilist);
             $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
         } else {
             header("Location:" . SITE_URL_LOGOUT);

@@ -102,14 +102,22 @@
             </div>
 
             <div class="col-lg-3 col-xs-12">
-                <!-- Araç İşlemleri -->
-                <a href="#" class="small-box bg-green">
+                <!-- İşçi İşlemleri -->
+                <a href="<?php echo SITE_URL; ?>/adminweb/isciliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
-                            İşci
+                            <?php echo $data["TitleIsci"]; ?>
                         </h3>
                         <p>
-                            <?php echo $model['AdminArac']; ?> <?php echo $data["Toplam"]; ?>
+                            <?php if (count($model['IsciCount']) > 0) { ?>
+                                <?php
+                                echo $model['IsciCount'] . ' ' . $data["Toplam"];
+                            } else {
+                                ?>
+                                <?php
+                                echo '0 ' . $data["Toplam"];
+                            }
+                            ?>
                         </p>
                     </div>
                     <div class="icon">
