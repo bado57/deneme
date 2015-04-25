@@ -116,6 +116,9 @@ function svControl(dtype, dclass, dislemler) {
             case 'isciYeni' :
                 var returnCevap = $.AdminIslemler.isciYeni();
                 break;
+            case 'veliYeni' :
+                var returnCevap = $.AdminIslemler.veliYeni();
+                break;
             case 'adminKurumMap' :
                 isMap = true;
                 isSingle = false;
@@ -229,6 +232,15 @@ function svControl(dtype, dclass, dislemler) {
             case 'isciDetailSil' :
                 var returnCevap = $.AdminIslemler.isciDetailSil();
                 break;
+            case 'veliVazgec' :
+                var returnCevap = $.AdminIslemler.veliVazgec();
+                break;
+            case 'veliEkle' :
+                var returnCevap = $.AdminIslemler.veliEkle();
+                break;
+            case 'veliDetailSil' :
+                var returnCevap = $.AdminIslemler.veliDetailSil();
+                break;
             default :
                 $("#" + dclass).height(th);
                 $("#" + dclass).css("z-index", z);
@@ -302,6 +314,9 @@ function editControl(edtislemler) {
         case 'isciDetailEdit' :
             $.AdminIslemler.isciDetailDuzenle();
             break;
+        case 'veliDetailEdit' :
+            $.AdminIslemler.veliDetailDuzenle();
+            break;
 
         default :
             break;
@@ -333,6 +348,9 @@ function vzgControl(vzgislemler) {
         case 'isciDetailVazgec' :
             $.AdminIslemler.isciDetailVazgec();
             break;
+        case 'veliDetailVazgec' :
+            $.AdminIslemler.veliDetailVazgec();
+            break;
         default :
             break;
     }
@@ -362,6 +380,9 @@ function saveControl(saveislemler) {
             break;
         case 'isciDetailKaydet' :
             $.AdminIslemler.isciDetailKaydet();
+            break;
+        case 'veliDetailKaydet' :
+            $.AdminIslemler.veliDetailKaydet();
             break;
         default :
             break;

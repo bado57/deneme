@@ -1,17 +1,8 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://192.168.1.20/SProject/AdminAjaxSorguMobil",
+    url: "http://192.168.1.21/SProject/AdminAjaxSorguMobil",
     //timeout:3000,
-    dataType: "json",
-    error: function (a, b) {
-        if (b == "timeout")
-            alert("İnternet Bağlantınızı Kontrol Ediniz.");
-    },
-    statusCode: {
-        404: function () {
-            alert("İnternet Bağlantınızı Kontrol Ediniz.");
-        }
-    }
+    dataType: "json"
 });
 var AdminVazgec = [];
 var AdminBolgeDetailVazgec = [];
@@ -277,6 +268,7 @@ $.AdminIslemler = {
                     if (cevap.hata) {
                         alert(cevap.hata);
                     } else {
+                        disabledForm();
                         //alert(cevap.update);
                         var length = $('ul#bolgeList li').length;
                         for (var t = 0; t < length; t++) {
@@ -286,7 +278,6 @@ $.AdminIslemler = {
                             }
                         }
                         $('ul#bolgeList').listview('refresh');
-                        disabledForm();
                     }
                 }
             });
@@ -311,7 +302,7 @@ $.AdminIslemler = {
                                 }).append($('<a/>', {
                                     'data-destination': '#bolgeKurumLokasyon',
                                     'class': 'jmMultiValue',
-                                    'text': cevap.adminSelectBolgeKurum[i].SelectBolgeKurumAdi,
+                                    'html': '<i class="fa fa-angle-right"></i> ' + cevap.adminSelectBolgeKurum[i].SelectBolgeKurumAdi,
                                     'value': cevap.adminSelectBolgeKurum[i].SelectBolgeKurumLokasyon,
                                     'id': cevap.adminSelectBolgeKurum[i].SelectBolgeKurumID,
                                     'data-parent': '#bolgeKurumList'
@@ -379,7 +370,6 @@ $.AdminIslemler = {
         var bolgkurumpostakodu = $("input[name=postal_code]").val();
         var bolgkurumcaddeno = $("input[name=street_number]").val();
 
-
         if (bolgkurumadi != '' && bolgeid != '') {
             $.ajax({
                 data: {"firmId": firmId, "bolgead": bolgead, "id": id, "username": username, "bolgeid": bolgeid, "bolgkurumadi": bolgkurumadi, "bolgkurumTlfn": bolgkurumTlfn, "bolgkurumEmail": bolgkurumEmail,
@@ -397,7 +387,7 @@ $.AdminIslemler = {
                         }).append($('<a/>', {
                             'data-destination': '#bolgeKurumLokasyon',
                             'class': 'jmMultiValue',
-                            'text': bolgkurumadi,
+                            'html': '<i class="fa fa-angle-right"></i> ' + bolgkurumadi,
                             'value': bolgkurumlocation,
                             'id': cevap.adminSelectBolgeKurum[i].SelectBolgeKurumID,
                             'data-parent': '#bolgeKurumList'

@@ -56,9 +56,9 @@ $(document).ready(function () {
         var dislemler = $(this).attr("data-islemler");
         svControl(dtype, dclass, dislemler);
     });
-
-
-
+    
+    
+    
 });
 
 

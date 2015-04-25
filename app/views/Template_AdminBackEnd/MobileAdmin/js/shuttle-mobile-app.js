@@ -57,7 +57,7 @@ $(document).ready(function () {
         $.mobile.navigate(page);
     });
 
-    $(document).on("click", ".jmSingleValue", function (e) {
+    $(document).on("click", ".jmSingleValue", function (e) {//href="#bolgeKurumLokasyonEkle"
         e.preventDefault();
         mobilEnlem = $("input[name=enlem]").val();
         mobilBoylam = $("input[name=boylam]").val();
@@ -81,9 +81,11 @@ $(document).ready(function () {
 });
 
 $(document).on("pageshow", ".singleMap", function () {
+    console.log(mobilEnlem);
+    console.log(mobilBoylam);
     Mobileinitialize(mobilEnlem, mobilBoylam);
     var wh = $(window).height();
-    var fh = $('#mapFooter').outerHeight();
+    var fh = $('#mapFooter').height();
     var mh = wh - fh;
     $('#single_map').css("height", mh);
     google.maps.event.addDomListener(window, 'load', Mobileinitialize);
@@ -93,7 +95,7 @@ $(document).on("pageshow", ".singleMap", function () {
 $(document).on("pageshow", ".multiMap", function () {
     multipleMapping(MultipleMapArray, MultipleMapindex);
     var wh = $(window).height();
-    var fh = $('#multiMapFooter').outerHeight();
+    var fh = $('#multiMapFooter').height();
     var mh = wh - fh;
     $('#multiple_map').css("height", mh);
     google.maps.event.addDomListener(window, 'load', multipleMapping);
@@ -105,12 +107,14 @@ $(document).on("click", "#saveMap", function () {
 });
 
 
+
 //ajax işlemleri
 $(document).on('pageinit', '.jmRun', '[data-role="page"]', function () {
     var dislemler = $(this).attr('data-islemler');
     window["$"]["AdminIslemler"][dislemler]();
 
 });
+
 
 
 function jmControl(dislemler) {

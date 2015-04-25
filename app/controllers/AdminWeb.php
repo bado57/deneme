@@ -381,8 +381,10 @@ class AdminWeb extends Controller {
                 $adminCount = $Panel_Model->adminCountListele($adminID);
                 $adminCount["SoforCount"] = $Panel_Model->soforCountListele();
                 $adminCount["IsciCount"] = $Panel_Model->isciCountListele();
+                $adminCount["VeliCount"] = $Panel_Model->veliCountListele();
                 $adminCount["SoforCount"] = $adminCount["SoforCount"][0]['COUNT(*)'];
                 $adminCount["IsciCount"] = $adminCount["IsciCount"][0]['COUNT(*)'];
+                $adminCount["VeliCount"] = $adminCount["VeliCount"][0]['COUNT(*)'];
             } else {
                 $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
 
@@ -394,8 +396,10 @@ class AdminWeb extends Controller {
 
                 $adminCount["SoforCount"] = $Panel_Model->rutbeSoforCount($rutbebolgedizi);
                 $adminCount["IsciCount"] = $Panel_Model->rutbeIsciCount($rutbebolgedizi);
-                $adminCount["SoforCount"] = $adminCount["SoforCount"][0]['COUNT(BSBolgeID)'];
-                $adminCount["IsciCount"] = $adminCount["IsciCount"][0]['COUNT(SBBolgeID)'];
+                $adminCount["VeliCount"] = $Panel_Model->rutbeVeliCount($rutbebolgedizi);
+                $adminCount["SoforCount"] = $adminCount["SoforCount"][0]['COUNT(BSSoforID)'];
+                $adminCount["IsciCount"] = $adminCount["IsciCount"][0]['COUNT(SBIsciID)'];
+                $adminCount["VeliCount"] = $adminCount["VeliCount"][0]['COUNT(BSVeliID)'];
             }
 
             $this->load->view("Template_AdminBackEnd/header", $languagedeger);
@@ -651,6 +655,100 @@ class AdminWeb extends Controller {
             $this->load->view("Template_AdminBackEnd/header", $languagedeger);
             $this->load->view("Template_AdminBackEnd/left", $languagedeger);
             $this->load->view("Template_AdminBackEnd/isciliste", $languagedeger, $iscilist);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL_LOGOUT);
+        }
+    }
+
+    function veliliste() {
+        //session güvenlik kontrolü
+        $formSession = $this->load->otherClasses('Form');
+        //sessionKontrol
+        $sessionKey = $formSession->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+            //memcache model bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+
+
+            $language = Session::get("dil");
+            //lanuage Kontrol
+            $formLanguage = $this->load->multilanguage($language);
+            $languagedeger = $formLanguage->multilanguage();
+
+
+            $adminRutbe = Session::get("userRutbe");
+            $adminID = Session::get("userId");
+            $uniqueKey = Session::get("username");
+            $uniqueKey = $uniqueKey . '_AVeli';
+
+            $resultMemcache = $MemcacheModel->get($uniqueKey);
+            if ($resultMemcache) {
+                $velilist = $resultMemcache;
+            } else {
+                //super adminse tüm bölgeleri görür
+                if ($adminRutbe != 0) {
+
+                    $veliliste = $Panel_Model->veliListele();
+                    //bölge count için
+                    if (count($veliliste) != 0) {
+                        $velilist[0]['VeliCount'] = count($veliliste);
+                    }
+
+                    $a = 0;
+                    foreach ($veliliste as $velilistee) {
+                        $velilist[$a]['VeliID'] = $velilistee['SBVeliID'];
+                        $velilist[$a]['VeliAdi'] = $velilistee['SBVeliAd'];
+                        $velilist[$a]['VeliSoyad'] = $velilistee['SBVeliSoyad'];
+                        $velilist[$a]['VeliTelefon'] = $velilistee['SBVeliPhone'];
+                        $velilist[$a]['VeliEmail'] = $velilistee['SBVeliEmail'];
+                        $velilist[$a]['VeliAciklama'] = $velilistee['SBVeliAciklama'];
+                        $velilist[$a]['VeliDurum'] = $velilistee['Status'];
+                        $a++;
+                    }
+                } else {
+                    $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
+
+                    foreach ($bolgeListeRutbe as $rutbe) {
+                        $bolgerutbeId[] = $rutbe['BSBolgeID'];
+                    }
+                    $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+
+                    $veliBolgeListe = $Panel_Model->veliBolgeListele($rutbebolgedizi);
+                    foreach ($veliBolgeListe as $veliBolgeListe) {
+                        $velirutbeId[] = $veliBolgeListe['BSVeliID'];
+                    }
+                    $rutbevelidizi = implode(',', $velirutbeId);
+
+                    $veliliste = $Panel_Model->rutbeVeliListele($rutbevelidizi);
+                    //bölge count için
+                    if (count($veliliste) != 0) {
+                        $velilist[0]['VeliCount'] = count($veliliste);
+                    }
+
+                    $a = 0;
+                    foreach ($veliliste as $velilistee) {
+                        $velilist[$a]['VeliID'] = $velilistee['SBVeliID'];
+                        $velilist[$a]['VeliAdi'] = $velilistee['SBVeliAd'];
+                        $velilist[$a]['VeliSoyad'] = $velilistee['SBVeliSoyad'];
+                        $velilist[$a]['VeliTelefon'] = $velilistee['SBVeliPhone'];
+                        $velilist[$a]['VeliEmail'] = $velilistee['SBVeliEmail'];
+                        $velilist[$a]['VeliAciklama'] = $velilistee['SBVeliAciklama'];
+                        $velilist[$a]['VeliDurum'] = $velilistee['Status'];
+                        $a++;
+                    }
+                }
+                //memcache kayıt
+                $result = $MemcacheModel->set($uniqueKey, $velilist, false, 5);
+            }
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/veliliste", $languagedeger, $velilist);
             $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
         } else {
             header("Location:" . SITE_URL_LOGOUT);
