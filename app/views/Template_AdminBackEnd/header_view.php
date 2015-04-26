@@ -47,8 +47,7 @@
             <!--Validation-->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/validation.js"></script>
             <!-- Ajax Query -->
-            <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminajaxquery.js" type="text/javascript"></script> 
-
+           
             <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
             <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
             <!--[if lt IE 9]>

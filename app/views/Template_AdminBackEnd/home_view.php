@@ -91,7 +91,15 @@
                             <?php echo $data["KullaniciIslem"]; ?>
                         </h3>
                         <p>
-                            650 <?php echo $data["Toplam"]; ?>
+                            <?php if (count($model['AdminKullanici']) > 0) { ?>
+                                <?php
+                                echo $model['AdminKullanici'] . ' ' . $data["Toplam"];
+                            } else {
+                                ?>
+                                <?php
+                                echo '0 ' . $data["Toplam"];
+                            }
+                            ?>
                         </p>
                     </div>
                     <div class="icon">

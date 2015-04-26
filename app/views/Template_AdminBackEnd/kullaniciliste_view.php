@@ -94,13 +94,21 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Kullanıcı İşlemleri -->
-                <a href="#" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/adminweb/ogrenciliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             Öğrenci
                         </h3>
                         <p>
-                            650 <?php echo $data["Toplam"]; ?>
+                            <?php if (count($model['OgrenciCount']) > 0) { ?>
+                                <?php
+                                echo $model['OgrenciCount'] . ' ' . $data["Toplam"];
+                            } else {
+                                ?>
+                                <?php
+                                echo '0 ' . $data["Toplam"];
+                            }
+                            ?>
                         </p>
                     </div>
                     <div class="icon">

@@ -4,6 +4,8 @@
     var activeLink = "link_firmislem";
 
 </script>
+<script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminbolgeajaxquery.js" type="text/javascript"></script> 
+<script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminbolge-web.app.js" type="text/javascript"></script> 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
 <!-- Right side column. Contains the navbar and content of the page -->
 <aside class="right-side hiddenOnSv">

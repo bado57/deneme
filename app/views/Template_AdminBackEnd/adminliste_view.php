@@ -2,6 +2,8 @@
     var activeMenu = "menu_kullanici";
     var activeLink = "link_adminliste";
 </script>
+<script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminadminajaxquery.js" type="text/javascript"></script> 
+<script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminadmin-web.app.js" type="text/javascript"></script> 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
 
 <aside class="right-side">

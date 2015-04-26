@@ -66,7 +66,7 @@
                         <li id="link_adminliste"><a href="<?php echo SITE_URL; ?>/adminweb/adminliste"><i class="fa fa-angle-right"></i><?php echo $data["Admin"]; ?></a></li>
                         <li id="link_soforliste"><a href="<?php echo SITE_URL; ?>/adminweb/soforliste"><i class="fa fa-angle-right"></i><?php echo $data["Sofor"]; ?></a></li>
                         <li id="link_veliliste"><a href="<?php echo SITE_URL; ?>/adminweb/veliliste"><i class="fa fa-angle-right"></i><?php echo $data["Veli"]; ?></a></li>
-                        <li id="link_ogrenciliste"><a href="#"><i class="fa fa-angle-right"></i><?php echo $data["Ogrenci"]; ?></a></li>
+                        <li id="link_ogrenciliste"><a href="<?php echo SITE_URL; ?>/adminweb/ogrenciliste"><i class="fa fa-angle-right"></i><?php echo $data["Ogrenci"]; ?></a></li>
                         <li id="link_isciliste"><a href="<?php echo SITE_URL; ?>/adminweb/isciliste"><i class="fa fa-angle-right"></i><?php echo $data["TitleIsci"]; ?></a></li>
                     </ul>
                 </li>

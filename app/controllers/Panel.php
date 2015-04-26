@@ -60,6 +60,12 @@ class Panel extends Controller {
                     $bolgeListe = $Panel_Model->bolgeListele();
                     $kurumListe = $Panel_Model->kurumListeleCount();
                     $aracListe = $Panel_Model->aracListeleCount();
+                    $adminCount["AdminCount"] = $Panel_Model->adminCountListele($adminID);
+                    $adminCount["SoforCount"] = $Panel_Model->soforCountListele();
+                    $adminCount["IsciCount"] = $Panel_Model->isciCountListele();
+                    $adminCount["VeliCount"] = $Panel_Model->veliCountListele();
+                    $adminCount["OgrenciCount"] = $Panel_Model->ogrenciCountListele();
+                    $adminBolge['AdminKullanici'] = $adminCount["AdminCount"][0]['COUNT(*)'] + $adminCount["SoforCount"][0]['COUNT(*)'] + $adminCount["IsciCount"][0]['COUNT(*)'] + $adminCount["VeliCount"][0]['COUNT(*)'] + $adminCount["OgrenciCount"][0]['COUNT(*)'];
 
                     $adminBolge['AdminBolge'] = count($bolgeListe);
                     $adminBolge['AdminKurum'] = count($kurumListe);
@@ -75,10 +81,13 @@ class Panel extends Controller {
 
                     //bölge araç idler
                     $aracIDListe = $Panel_Model->rutbearacIDListele($rutbebolgedizi);
-
-
                     $bolgeListe = $Panel_Model->rutbeBolgeListele($rutbebolgedizi);
                     $kurumListe = $Panel_Model->rutbeKurumCount($rutbebolgedizi);
+                    $adminCount["SoforCount"] = $Panel_Model->rutbeSoforCount($rutbebolgedizi);
+                    $adminCount["IsciCount"] = $Panel_Model->rutbeIsciCount($rutbebolgedizi);
+                    $adminCount["VeliCount"] = $Panel_Model->rutbeVeliCount($rutbebolgedizi);
+                    $adminCount["OgrenciCount"] = $Panel_Model->rutbeOgrenciCount($rutbebolgedizi);
+                    $adminBolge['AdminKullanici'] = $adminCount["SoforCount"][0]['COUNT(BSSoforID)'] + $adminCount["IsciCount"][0]['COUNT(SBIsciID)'] + $adminCount["VeliCount"][0]['COUNT(BSVeliID)'] + $adminCount["OgrenciCount"][0]['COUNT(BSOgrenciID)'];
 
                     $adminBolge['AdminBolge'] = count($bolgeListe);
                     $adminBolge['AdminKurum'] = count($kurumListe);

@@ -135,7 +135,14 @@ class en {
             "YeniIsci" => "New Employee",
             "IsciTanimlama" => "Employee Description",
             "Kurumlar" => "Institutions",
-            "IsciDetay" => "Employee Details"
+            "IsciDetay" => "Employee Details",
+            "YeniVeli" => "New Guardian",
+            "VeliTanimlama" => "Guardian Description",
+            "Ogrenciler" => "Students",
+            "VeliDetay" => "Guardian Details",
+            "YeniOgrenci" => "New Student",
+            "OgrenciTanimlama" => "Student Description",
+            "Veliler" => "Guardians"
         );
         return $endil;
     }

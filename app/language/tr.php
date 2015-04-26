@@ -141,7 +141,10 @@ class tr {
             "YeniVeli" => "Yeni Veli",
             "VeliTanimlama" => "Veli Tanimlama",
             "Ogrenciler" => "Öğrenciler",
-            "VeliDetay" => "Veli Detayları"
+            "VeliDetay" => "Veli Detayları",
+            "YeniOgrenci" => "Yeni Öğrenci",
+            "OgrenciTanimlama" => "Öğrenci Tanimlama",
+            "Veliler" => "Veliler"
         );
         return $trdil;
     }
