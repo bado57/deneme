@@ -1,0 +1,61 @@
+﻿body{color:#000; background-color: #fff !important; font-family: 'Open Sans', sans-serif;}
+.fs-13{font-size: 13px;}
+.br0{border-right: none !important;}
+.p10{padding: .6em; padding-top: 1em;}
+.w50{width: 50%; position: relative; display: inline-block; margin: 0;}
+.w100{width: 100%;}
+.ui-disabled, .ui-state-disabled, button[disabled], .ui-select .ui-btn.ui-state-disabled {opacity: 0.6;}
+[data-role=page]{background-color: #fff;}
+.submit-group, .edit-group{position: relative;display: inline-block; width: 100%;}
+.submit-group{display:none;}
+[data-role="footer"]{text-align: center;} 
+
+.ui-btn {
+  font-size: 16px;
+  margin: .5em 0;
+  padding: .7em 1em;
+  display: block;
+  position: relative;
+  text-align: center;
+  text-overflow: ellipsis-word;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+a.notext i{font-size: 30px;}
+a.wtext{font-size: 1em !important; padding-top: .8em !important; padding-bottom: .9em !important;}
+a.oi i{font-size: 1.3em !important;}
+[data-role="header"] h1{
+    padding: 0px !important;
+    margin: .6em .5em !important;
+}
+[data-role="footer"] .ui-btn{
+    padding: .4em .6em;
+}
+
+.pgTopNavbar li a{
+    font-size: 19px !important;
+}
+
+.btn-i i{font-size: 26px; color: #009933;}
+
+
+/*
+.ui-btn{margin: 8px;}
+ul[data-role=listview] li a{padding: 1em 1em;}
+   
+.ui-filterable, .ui-input-search{margin:0;padding: 0;}
+.ui-filterable{padding: 5px;}
+
+.dsb[disabled], .dsbtext[disabled], input[disabled=true], .ui-state-disabled input{border:1px solid #383838 !important; background-color: #ddd !important; color: #000 !important;}
+.ui-btn-icon-notext{font-size: 24px !important;}
+.ui-page-theme-a .ui-bar-inherit{background-color: #ddd;}
+.ui-btn:not(.ui-btn-icon-notext){text-overflow: ellipsis !important; padding: 0.9em 1em;}
+[data-role=navbar] ul li a{font-size: 16px; padding: 1.2em 1em;}
+.ui-field-contain>label, .ui-field-contain .ui-controlgroup-label, .ui-field-contain>.ui-rangeslider>label{margin: 0;}
+*/
