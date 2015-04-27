@@ -113,6 +113,7 @@ class AdminKurumAjaxSorgu extends Controller {
 
                         $form->post('kurumdetail_adi', true);
                         $form->post('kurumdetail_bolge', true);
+                        $form->post('kurumdetail_tip', true);
                         $form->post('kurumdetail_telefon', true);
                         $form->post('kurumdetail_email', true);
                         $form->post('kurumdetail_adres', true);
@@ -126,6 +127,7 @@ class AdminKurumAjaxSorgu extends Controller {
                                 'SBKurumAdi' => $form->values['kurumdetail_adi'],
                                 'SBKurumAciklama' => $form->values['kurumdetail_aciklama'],
                                 'SBBolgeAdi' => $form->values['kurumdetail_bolge'],
+                                'SBKurumTip' => $form->values['kurumdetail_tip'],
                                 'SBKurumTelefon' => $form->values['kurumdetail_telefon'],
                                 'SBKurumAdres' => $form->values['kurumdetail_adres'],
                                 'SBKurumEmail' => $form->values['kurumdetail_email']
@@ -199,6 +201,7 @@ class AdminKurumAjaxSorgu extends Controller {
                         $form->post('kurumadi', true);
                         $form->post('bolgead', true);
                         $form->post('bolgeId', true);
+                        $form->post('kurumtip', true);
                         $form->post('kurumlocation', true);
                         $form->post('kurumTlfn', true);
                         $form->post('kurumEmail', true);
@@ -221,6 +224,7 @@ class AdminKurumAjaxSorgu extends Controller {
                                 'SBKurumAciklama' => $form->values['kurumaciklama'],
                                 'SBBolgeID' => $form->values['bolgeId'],
                                 'SBBolgeAdi' => $form->values['bolgead'],
+                                'SBKurumTip' => $form->values['kurumtip'],
                                 'SBKurumUlke' => $form->values['kurumulke'],
                                 'SBKurumIl' => $form->values['kurumil'],
                                 'SBKurumIlce' => $form->values['kurumilce'],
@@ -250,6 +254,11 @@ class AdminKurumAjaxSorgu extends Controller {
                             $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
                         }
                     }
+
+                    break;
+                default :
+                    header("Location:" . SITE_URL_LOGOUT);
+                    break;
             }
             echo json_encode($sonuc);
         } else {

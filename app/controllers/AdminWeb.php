@@ -299,6 +299,7 @@ class AdminWeb extends Controller {
                         $adminKurum[$a]['AdminKurumAciklama'] = $kurum['SBKurumAciklama'];
                         $adminKurum[$a]['AdminKurumBolge'] = $kurum['SBBolgeAdi'];
                         $adminKurum[$a]['AdminKurumBolgeID'] = $kurum['SBBolgeID'];
+                        $adminKurum[$a]['AdminKurumTip'] = $kurum['SBKurumTip'];
                         $kurumID[] = $kurum['SBKurumID'];
                         $a++;
                     }
@@ -330,6 +331,7 @@ class AdminWeb extends Controller {
                         $adminKurum[$a]['AdminKurumAciklama'] = $kurum[$a]['SBKurumAciklama'];
                         $adminKurum[$a]['AdminKurumBolge'] = $kurum[$a]['SBBolgeAdi'];
                         $adminKurum[$a]['AdminKurumBolgeID'] = $kurum[$a]['SBBolgeID'];
+                        $adminKurum[$a]['AdminKurumTip'] = $kurum['SBKurumTip'];
                         $kurumID[] = $kurum[$a]['SBKurumID'];
                         $a++;
                     }
@@ -847,6 +849,78 @@ class AdminWeb extends Controller {
             $this->load->view("Template_AdminBackEnd/header", $languagedeger);
             $this->load->view("Template_AdminBackEnd/left", $languagedeger);
             $this->load->view("Template_AdminBackEnd/ogrenciliste", $languagedeger, $ogrencilist);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL_LOGOUT);
+        }
+    }
+
+    function turliste() {
+        //session güvenlik kontrolü
+        $formSession = $this->load->otherClasses('Form');
+        //sessionKontrol
+        $sessionKey = $formSession->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+
+
+            $language = Session::get("dil");
+            //lanuage Kontrol
+            $formLanguage = $this->load->multilanguage($language);
+            $languagedeger = $formLanguage->multilanguage();
+
+
+            $adminRutbe = Session::get("userRutbe");
+            $adminID = Session::get("userId");
+            //super adminse tüm turları görür
+            if ($adminRutbe != 0) {
+
+                $turListe = $Panel_Model->turListele();
+                //tur count
+                $adminTur[0]['AdminTurCount'] = count($turListe);
+                //tur bilgileri
+                $a = 0;
+                foreach ($turListe as $tur) {
+                    $adminTur[$a]['AdminTur'] = $tur['SBTurAd'];
+                    $adminTur[$a]['AdminTurID'] = $tur['SBTurID'];
+                    $adminTur[$a]['AdminTurAktiflik'] = $tur['SBTurAktiflik'];
+                    $adminTur[$a]['AdminTurBolgeAd'] = $tur['SBBolgeAd'];
+                    $adminTur[$a]['AdminTurKurumAd'] = $tur['SBKurumAd'];
+                    $adminTur[$a]['AdminTurTip'] = $tur['SBTurTip'];
+                    $adminTur[$a]['AdminTurAciklama'] = $tur['SBTurAciklama'];
+                    $a++;
+                }
+            } else {//değilse admin ıd ye göre tur görür
+                $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
+
+                for ($r = 0; $r < count($bolgeListeRutbe); $r++) {
+                    $bolgerutbeId[] = $bolgeListeRutbe[$r]['BSBolgeID'];
+                }
+                $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+
+                $turListe = $Panel_Model->rutbeTurBolgeListele($rutbebolgedizi);
+                //tur count
+                $adminTur[0]['AdminTurCount'] = count($turListe);
+                //tur bilgileri
+                $a = 0;
+                foreach ($turListe as $tur) {
+                    $adminTur[$a]['AdminTur'] = $tur['SBTurAd'];
+                    $adminTur[$a]['AdminTurID'] = $tur['SBTurID'];
+                    $adminTur[$a]['AdminTurAktiflik'] = $tur['SBTurAktiflik'];
+                    $adminTur[$a]['AdminTurBolgeAd'] = $tur['SBBolgeAd'];
+                    $adminTur[$a]['AdminTurKurumAd'] = $tur['SBKurumAd'];
+                    $adminTur[$a]['AdminTurTip'] = $tur['SBTurTip'];
+                    $adminTur[$a]['AdminTurAciklama'] = $tur['SBTurAciklama'];
+                    $a++;
+                }
+            }
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/turliste", $languagedeger, $adminTur);
             $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
         } else {
             header("Location:" . SITE_URL_LOGOUT);

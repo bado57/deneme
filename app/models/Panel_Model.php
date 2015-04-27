@@ -132,7 +132,7 @@ class Panel_Model extends Model {
 
     //admin kruum listele
     public function kurumListele() {
-        $sql = "SELECT SBKurumAdi,SBKurumID,SBKurumAciklama,SBBolgeID,SBBolgeAdi FROM sbkurum ORDER BY SBKurumAdi ASC";
+        $sql = "SELECT SBKurumAdi,SBKurumID,SBKurumAciklama,SBBolgeID,SBBolgeAdi,SBKurumTip FROM sbkurum ORDER BY SBKurumAdi ASC";
         return($this->db->select($sql));
     }
 
@@ -144,13 +144,13 @@ class Panel_Model extends Model {
 
     //admin bölgeye öre kurum listele
     public function rutbeKurumBolgeListele($array = array()) {
-        $sql = 'SELECT SBKurumAdi,SBKurumID,SBKurumAciklama,SBBolgeID,SBBolgeAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumAdi,SBKurumID,SBKurumAciklama,SBBolgeID,SBBolgeAdi,SBKurumTip FROM sbkurum Where SBBolgeID IN (' . $array . ') ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 
     //admin kurum detail
     public function adminKurumDetail($adminKurumDetailID) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi,SBBolgeAdi,SBKurumTelefon,SBKurumEmail,SBKurumAdres,SBKurumAciklama,SBKurumLokasyon FROM sbkurum WHERE SBKurumID=' . $adminKurumDetailID;
+        $sql = 'SELECT SBKurumID,SBKurumAdi,SBBolgeAdi,SBKurumTip,SBKurumTelefon,SBKurumEmail,SBKurumAdres,SBKurumAciklama,SBKurumLokasyon FROM sbkurum WHERE SBKurumID=' . $adminKurumDetailID;
         return($this->db->select($sql));
     }
 
@@ -713,7 +713,7 @@ class Panel_Model extends Model {
 
     //admin işçi kurum bölge select listele
     public function isciKurumMultiSelect($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND SBKurumTip=1 ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -801,13 +801,19 @@ class Panel_Model extends Model {
 
     //admin select dışı bölge listele
     public function adminSelectBolgeKurumm($arraybolge = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ')';
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ') AND SBKurumTip=0';
+        return($this->db->select($sql));
+    }
+
+    //admin select dışı bölge listele
+    public function adminSelectBolgeIsciKurum($arraybolge = array()) {
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ') AND SBKurumTip=1';
         return($this->db->select($sql));
     }
 
     //kurum seçili olmayan işçiler
     public function isciNotSelectKurum($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ')';
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ' ) AND SBKurumTip=1';
         return($this->db->select($sql));
     }
 
@@ -855,7 +861,7 @@ class Panel_Model extends Model {
 
     //admin veli kurum bölge select listele
     public function veliKurumMultiSelect($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND SBKurumTip=0 ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -970,7 +976,7 @@ class Panel_Model extends Model {
 
     //kurum seçili olmayan veliler
     public function veliNotSelectKurum($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ')';
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ') AND SBKurumTip=0';
         return($this->db->select($sql));
     }
 
@@ -1030,7 +1036,7 @@ class Panel_Model extends Model {
 
     //admin öğrenci kurum bölge select listele
     public function ogrenciKurumMultiSelect($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND SBKurumTip=0 ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -1140,7 +1146,7 @@ class Panel_Model extends Model {
 
     //kurum seçili olmayan öğrenciler
     public function ogrenciNotSelectKurum($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ')';
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ') AND SBKurumTip=0';
         return($this->db->select($sql));
     }
 
@@ -1159,6 +1165,54 @@ class Panel_Model extends Model {
     //kurum seçili olmayan veliler
     public function ogrenciNotSelectVeli($array = array()) {
         $sql = 'SELECT SBVeliID,SBVeliAd FROM sbveli WHERE SBVeliID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin tur listele
+    public function turListele() {
+        $sql = "SELECT SBTurID,SBTurAd,SBTurAktiflik,SBBolgeAd,SBKurumAd,SBTurTip,SBTurAciklama FROM sbtur ORDER BY SBTurAd ASC";
+        return($this->db->select($sql));
+    }
+
+    //admin tur count
+    public function turListeleCount() {
+        $sql = "SELECT SBTurID FROM sbtur";
+        return($this->db->select($sql));
+    }
+
+    //admin turlar rutbe count
+    public function rutbeTurCount($array = array()) {
+        $sql = 'SELECT SBTurID FROM sbtur Where SBBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin bölgeye göre tur listele
+    public function rutbeTurBolgeListele($array = array()) {
+        $sql = 'SELECT SBTurID,SBTurAd,SBTurAktiflik,SBBolgeAd,SBKurumAd,SBTurTip,SBTurAciklama FROM sbtur Where SBBolgeID IN (' . $array . ') ORDER BY SBTurAd ASC';
+        return($this->db->select($sql));
+    }
+
+    //admin tur bölge select listele
+    public function turBolgeListele() {
+        $sql = "SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler ORDER BY SBBolgeAdi ASC";
+        return($this->db->select($sql));
+    }
+
+    //admine göre tur bölge select listele
+    public function adminTurBolgeListele($adminID) {
+        $sql = "SELECT BSBolgeID FROM bsadminbolge Where BSAdminID=" . $adminID;
+        return($this->db->select($sql));
+    }
+
+    //admin tur bölge select listele
+    public function turRutbeBolgeListele($array = array()) {
+        $sql = 'SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
+        return($this->db->select($sql));
+    }
+
+    //admin veli kurum bölge select listele
+    public function turKurumSelect($bolgeID) {
+        $sql = 'SELECT SBKurumID,SBKurumAdi,SBKurumTip FROM sbkurum Where SBBolgeID=' . $bolgeID . '  ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 

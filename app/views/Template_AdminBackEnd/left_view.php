@@ -70,15 +70,13 @@
                         <li id="link_isciliste"><a href="<?php echo SITE_URL; ?>/adminweb/isciliste"><i class="fa fa-angle-right"></i><?php echo $data["TitleIsci"]; ?></a></li>
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview" id="menu_tur">
                     <a href="#">
                         <i class="fa fa-refresh"></i> <span><?php echo $data["TurIslem"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-right"></i> General Elements</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-right"></i> Advanced Elements</a></li>
-                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
+                        <li id="link_turliste"><a href="<?php echo SITE_URL; ?>/adminweb/turliste"><i class="fa fa-angle-right"></i><?php echo $data["TurListe"]; ?></a></li>
                     </ul>
                 </li>
                 <li class="treeview">

@@ -731,6 +731,10 @@ class AdminSoforAjaxSorgu extends Controller {
                         $sonuc["adminSoforArac"] = $digerSoforArac;
                     }
                     break;
+
+                default :
+                    header("Location:" . SITE_URL_LOGOUT);
+                    break;
             }
             echo json_encode($sonuc);
         } else {

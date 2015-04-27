@@ -12,7 +12,15 @@
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-left">
                 <h3>
                     <i class="fa fa-th"></i> <?php echo $data["Kurumlar"]; ?>
-                    <small id="smallKurum"><?php echo $model[0]['AdminKurumCount']; ?></small>&nbsp<small><?php echo $data["Toplam"]; ?></small>
+                    <small id="smallKurum"><?php if (count($model[0]['AdminKurumCount']) > 0) { ?>
+                            <?php
+                            echo $model[0]['AdminKurumCount'];
+                        } else {
+                            ?>
+                            <?php
+                            echo '0 ';
+                        }
+                        ?></small>&nbsp;<small><?php echo $data["Toplam"]; ?></small>
                 </h3>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right" style="text-align:right;">
@@ -31,6 +39,7 @@
                             <th><?php echo $data["KurumAdi"]; ?></th>
                             <th class="hidden-xs"><?php echo $data["BolgeAd"]; ?></th>
                             <th class="hidden-xs"><?php echo $data["TurSayi"]; ?></th>
+                            <th class="hidden-xs"><?php echo $data["Tür"]; ?></th>
                             <th class="hidden-xs"><?php echo $data["Aciklama"]; ?></th>
                         </tr>
                     </thead>
@@ -46,6 +55,12 @@
                         </td>
                         <td class="hidden-xs" value="<?php echo $kurumModel['AdminKurumBolgeID']; ?>"><?php echo $kurumModel['AdminKurumBolge']; ?></td>
                         <td class="hidden-xs"><?php echo $kurumModel['AdminKurumTur']; ?></td>
+                        <?php if ($kurumModel['AdminKurumTip'] != 1) { ?>
+                            <td class="hidden-xs"><?php echo $data["Ogrenci"]; ?></td>
+                        <?php } else { ?>
+                            <td class="hidden-xs"><?php echo $data["Isci"]; ?></td>
+                        <?php } ?>
+
                         <td class="hidden-xs"><?php echo $kurumModel['AdminKurumAciklama']; ?></td>
                         </tr>
                     <?php } ?>
@@ -72,6 +87,13 @@
                     <div class="form-group">
                         <label for="BolgeAdi"><?php echo $data["BolgeAdi"]; ?></label>
                         <select type="text" class="form-control" id="KurumBolgeSelect" name="KurumSelect">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="KurumTip"><?php echo $data["KurumTip"]; ?></label>
+                        <select type="text" class="form-control" id="KurumTip" name="KurumTip">
+                            <option value="0"><?php echo $data["Ogrenci"]; ?></option>
+                            <option value="1"><?php echo $data["Isci"]; ?></option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -175,6 +197,13 @@
                         <div class="form-group">
                             <label for="KurumBolge"><?php echo $data["Bolge"]; ?></label>
                             <input type="text" class="form-control" id="KurumBolgeAdi" name="KurumDetailBolge" value="" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="KurumDetayTip"><?php echo $data["KurumTip"]; ?></label>
+                            <select type="text" class="form-control dsb" id="KurumDetayTip" name="KurumDetayTip" disabled>
+                                <option value="0"><?php echo $data["Ogrenci"]; ?></option>
+                                <option value="1"><?php echo $data["Isci"]; ?></option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="KurumTel"><?php echo $data["Telefon"]; ?></label>

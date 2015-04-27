@@ -749,6 +749,10 @@ class AdminAracAjaxSorgu extends Controller {
                         $sonuc["aracYeniSoforMultiSelect"] = $aracSoforSelect;
                     }
                     break;
+
+                default :
+                    header("Location:" . SITE_URL_LOGOUT);
+                    break;
             }
             echo json_encode($sonuc);
         } else {

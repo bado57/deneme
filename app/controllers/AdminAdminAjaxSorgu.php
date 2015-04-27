@@ -384,6 +384,10 @@ class AdminAdminAjaxSorgu extends Controller {
                             $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
                         }
                     }
+                    break;
+                default :
+                    header("Location:" . SITE_URL_LOGOUT);
+                    break;
             }
             echo json_encode($sonuc);
         } else {

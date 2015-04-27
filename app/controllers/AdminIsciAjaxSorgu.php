@@ -659,7 +659,7 @@ class AdminIsciAjaxSorgu extends Controller {
                             //seçilen bölgeler
                             $iscibolgedizim = implode(',', $isciDetailBolgeID);
                             //seçilen bölgedeki kurumlar
-                            $IsciBolgeKurum = $Panel_Model->adminSelectBolgeKurumm($iscibolgedizim);
+                            $IsciBolgeKurum = $Panel_Model->adminSelectBolgeIsciKurum($iscibolgedizim);
                             $b = 0;
                             foreach ($IsciBolgeKurum as $IsciBolgeKurumm) {
                                 $isciDigerKurumId[] = $IsciBolgeKurumm['SBKurumID'];
@@ -706,7 +706,7 @@ class AdminIsciAjaxSorgu extends Controller {
                         } else {
                             $isciDetailBollgeID = implode(',', $isciDetailBolgeID);
                             //adamın seçili olab bölgedeki diğer kurumları
-                            $digerBolgeKurum = $Panel_Model->adminSelectBolgeKurumm($isciDetailBollgeID);
+                            $digerBolgeKurum = $Panel_Model->adminSelectBolgeIsciKurum($isciDetailBollgeID);
 
                             $d = 0;
                             foreach ($digerBolgeKurum as $digerBolgeKurumm) {
@@ -720,6 +720,10 @@ class AdminIsciAjaxSorgu extends Controller {
                         $sonuc["adminIsciSelectKurum"] = $selectIsciKurum;
                         $sonuc["adminIsciKurum"] = $digerIsciKurum;
                     }
+                    break;
+
+                default :
+                    header("Location:" . SITE_URL_LOGOUT);
                     break;
             }
             echo json_encode($sonuc);

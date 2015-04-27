@@ -60,6 +60,7 @@ class Panel extends Controller {
                     $bolgeListe = $Panel_Model->bolgeListele();
                     $kurumListe = $Panel_Model->kurumListeleCount();
                     $aracListe = $Panel_Model->aracListeleCount();
+                    $turListe = $Panel_Model->turListeleCount();
                     $adminCount["AdminCount"] = $Panel_Model->adminCountListele($adminID);
                     $adminCount["SoforCount"] = $Panel_Model->soforCountListele();
                     $adminCount["IsciCount"] = $Panel_Model->isciCountListele();
@@ -70,6 +71,7 @@ class Panel extends Controller {
                     $adminBolge['AdminBolge'] = count($bolgeListe);
                     $adminBolge['AdminKurum'] = count($kurumListe);
                     $adminBolge['AdminArac'] = count($aracListe);
+                    $adminBolge['AdminTur'] = count($turListe);
                 } else {//değilse admin ıd ye göre bölge görür
                     $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
 
@@ -83,6 +85,7 @@ class Panel extends Controller {
                     $aracIDListe = $Panel_Model->rutbearacIDListele($rutbebolgedizi);
                     $bolgeListe = $Panel_Model->rutbeBolgeListele($rutbebolgedizi);
                     $kurumListe = $Panel_Model->rutbeKurumCount($rutbebolgedizi);
+                    $turListe = $Panel_Model->rutbeTurCount($rutbebolgedizi);
                     $adminCount["SoforCount"] = $Panel_Model->rutbeSoforCount($rutbebolgedizi);
                     $adminCount["IsciCount"] = $Panel_Model->rutbeIsciCount($rutbebolgedizi);
                     $adminCount["VeliCount"] = $Panel_Model->rutbeVeliCount($rutbebolgedizi);
@@ -92,6 +95,7 @@ class Panel extends Controller {
                     $adminBolge['AdminBolge'] = count($bolgeListe);
                     $adminBolge['AdminKurum'] = count($kurumListe);
                     $adminBolge['AdminArac'] = count($aracIDListe);
+                    $adminBolge['AdminTur'] = count($turListe);
                 }
 
                 //memcache kayıt

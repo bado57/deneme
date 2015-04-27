@@ -135,13 +135,21 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Tur İşlemleri -->
-                <a href="#" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/adminweb/turliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["TurIslem"]; ?>
                         </h3>
                         <p>
-                            48 <?php echo $data["Toplam"]; ?>
+                            <?php if (count($model['AdminTur']) > 0) { ?>
+                                <?php
+                                echo $model['AdminTur'] . ' ' . $data["Toplam"];
+                            } else {
+                                ?>
+                                <?php
+                                echo '0 ' . $data["Toplam"];
+                            }
+                            ?>
                         </p>
                     </div>
                     <div class="icon">

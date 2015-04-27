@@ -354,6 +354,10 @@ class AdminBolgeAjaxSorgu extends Controller {
                     }
 
                     break;
+
+                default :
+                    header("Location:" . SITE_URL_LOGOUT);
+                    break;
             }
             echo json_encode($sonuc);
         } else {

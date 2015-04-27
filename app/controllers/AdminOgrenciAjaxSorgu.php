@@ -1032,6 +1032,10 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         $sonuc["adminOgrenciVeli"] = $digerOgrenciVeli;
                     }
                     break;
+
+                default :
+                    header("Location:" . SITE_URL_LOGOUT);
+                    break;
             }
             echo json_encode($sonuc);
         } else {
