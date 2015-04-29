@@ -14,6 +14,11 @@ $.ajaxSetup({
     }
 });
 $(document).ready(function () {
+    OgrenciTable = $('#ogrenciTable').dataTable({
+        "paging": true,
+        "ordering": true,
+        "info": true
+    });
     //Öğrenci İşlemleri
     $(document).on('click', 'tbody#ogrenciRow > tr > td > a', function (e) {
         var i = $(this).find("i");

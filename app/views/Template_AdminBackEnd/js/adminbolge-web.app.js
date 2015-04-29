@@ -466,3 +466,4 @@ function multipleMapping(gelen, index) {
 }
 
 //End çoklu mapping işlemleri
+

@@ -76,43 +76,34 @@
                 </table>
             </div>
         </div>
-
     </section>
 </aside>
 
 <div id="tur" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["TurTanimlama"]; ?> <span class="pull-right"><button id="addNew" type="button" class="svToggle btn btn-success addNewButton mr10" data-type="svOpen" data-class="#" data-islemler="#"><i class="glyphicon glyphicon-map-marker"></i> <?php echo $data["HaritaGor"]; ?></button><button data-type="svClose" data-class="tur" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["TurTanimlama"]; ?> <span class="pull-right"><button data-type="svClose" data-class="tur" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
-                <div class="form-vertical col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                    <div class="form-group">
-                        <input id="adminKurumBolgeEkleID" name="adminKurumBolgeEkleID" type="hidden"/>
-                        <div class="form-group">
-                            <label for="TurAdi"><?php echo $data["TurAdi"]; ?></label>
-                            <input type="text" class="form-control" id="TurAdi" name="TurAdi">
-                        </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-vertical">
+                    <input id="adminKurumBolgeEkleID" name="adminKurumBolgeEkleID" type="hidden"/>
+                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <label for="TurAdi"><?php echo $data["TurAdi"]; ?></label>
+                        <input type="text" class="form-control" id="TurAdi" name="TurAdi">
                     </div>
-                </div>
-                <div class="form-vertical col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                    <div class="form-group">
+                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label for="TurSelectBolge"><?php echo $data["BolgeAdi"]; ?></label>
                         <select type="text" class="form-control" id="TurSelectBolge" name="TurSelectBolge">
                             <option value="0"><?php echo $data["Seciniz"]; ?></option>
                         </select>
                     </div>
-                </div>
-                <div class="form-vertical col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                    <div class="form-group">
+                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label for="TurSelectKurum"><?php echo $data["KurumAdi"]; ?></label>
                         <select type="text" class="form-control" id="TurSelectKurum" name="TurSelectKurum">
-                            <option value="0"><?php echo $data["Seciniz"]; ?></option>
                         </select>
                     </div>
-                </div>
-                <div class="form-vertical col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                    <div class="form-group">
+                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label for="TurGun"><?php echo $data["Gunler"]; ?></label>
                         <select type="text" class="form-control" id="TurSelectGun" name="TurSelectGun" multiple="multiple">
                             <option value="Pzt"><?php echo $data["Pazartesi"]; ?></option>
@@ -124,52 +115,228 @@
                             <option value="Pzr"><?php echo $data["Pazar"]; ?></option>
                         </select>
                     </div>
-                </div>
-                <div class="form-vertical col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                    <div class="form-group">
+                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label for="TurSaat1"><?php echo $data["Saat"]; ?></label>
                         <select type="text" class="form-control" id="TurSaat1" name="TurSaat1">
-                            <option value="0"><?php echo $data["Seciniz"]; ?></option>
+                            <option value="-1"><?php echo $data["Seciniz"]; ?></option>
+                            <option value="0">00:00</option>
+                            <option value="115">01:15</option>
+                            <option value="130">01:30</option>
+                            <option value="145">01:45</option>
+                            <option value="200">02:00</option>
+                            <option value="215">02:15</option>
+                            <option value="230">02:30</option>
+                            <option value="245">02:45</option>
+                            <option value="300">03:00</option>
+                            <option value="315">03:15</option>
+                            <option value="330">03:30</option>
+                            <option value="345">03:45</option>
+                            <option value="400">04:00</option>
+                            <option value="415">04:15</option>
+                            <option value="430">04:30</option>
+                            <option value="445">04:45</option>
+                            <option value="500">05:00</option>
+                            <option value="515">05:15</option>
+                            <option value="530">05:30</option>
+                            <option value="545">05:45</option>
+                            <option value="600">06:00</option>
+                            <option value="615">06:15</option>
+                            <option value="630">06:30</option>
+                            <option value="645">06:45</option>
+                            <option value="700">07:00</option>
+                            <option value="715">07:15</option>
+                            <option value="730">07:30</option>
+                            <option value="745">07:45</option>
+                            <option value="800">08:00</option>
+                            <option value="815">08:15</option>
+                            <option value="830">08:30</option>
+                            <option value="845">08:45</option>
+                            <option value="900">09:00</option>
+                            <option value="915">09:15</option>
+                            <option value="930">09:30</option>
+                            <option value="945">09:45</option>
+                            <option value="1000">10:00</option>
+                            <option value="1015">10:15</option>
+                            <option value="1030">10:30</option>
+                            <option value="1045">10:45</option>
+                            <option value="1100">11:00</option>
+                            <option value="1115">11:15</option>
+                            <option value="1130">11:30</option>
+                            <option value="1145">11:45</option>
+                            <option value="1200">12:00</option>
+                            <option value="1215">12:15</option>
+                            <option value="1230">12:30</option>
+                            <option value="1245">12:45</option>
+                            <option value="1300">13:00</option>
+                            <option value="1315">13:15</option>
+                            <option value="1330">13:30</option>
+                            <option value="1345">13:45</option>
+                            <option value="1400">14:00</option>
+                            <option value="1415">14:15</option>
+                            <option value="1430">14:30</option>
+                            <option value="1445">14:45</option>
+                            <option value="1500">15:00</option>
+                            <option value="1515">15:15</option>
+                            <option value="1530">15:30</option>
+                            <option value="1545">15:45</option>
+                            <option value="1600">16:00</option>
+                            <option value="1615">16:15</option>
+                            <option value="1630">16:30</option>
+                            <option value="1645">16:45</option>
+                            <option value="1700">17:00</option>
+                            <option value="1715">17:15</option>
+                            <option value="1730">17:30</option>
+                            <option value="1745">17:45</option>
+                            <option value="1800">18:00</option>
+                            <option value="1815">18:15</option>
+                            <option value="1830">18:30</option>
+                            <option value="1845">18:45</option>
+                            <option value="1900">19:00</option>
+                            <option value="1915">19:15</option>
+                            <option value="1930">19:30</option>
+                            <option value="1945">19:45</option>
+                            <option value="2000">20:00</option>
+                            <option value="2015">20:15</option>
+                            <option value="2030">20:30</option>
+                            <option value="2045">20:45</option>
+                            <option value="2100">21:00</option>
+                            <option value="2115">21:15</option>
+                            <option value="2130">21:30</option>
+                            <option value="2145">21:45</option>
+                            <option value="2200">22:00</option>
+                            <option value="2215">22:15</option>
+                            <option value="2230">22:30</option>
+                            <option value="2245">22:45</option>
+                            <option value="2300">23:00</option>
+                            <option value="2315">23:15</option>
+                            <option value="2330">23:30</option>
+                            <option value="2345">23:45</option>
                         </select>
                     </div>
-                </div>
-                <div class="form-vertical col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                    <div class="form-group">
+                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label for="TurSaat2"><?php echo $data["Saat"]; ?></label>
                         <select type="text" class="form-control" id="TurSaat2" name="TurSaat2">
-                            <option value="0"><?php echo $data["Seciniz"]; ?></option>
+                            <option value="-1"><?php echo $data["Seciniz"]; ?></option>
+                            <option value="0">00:00</option>
+                            <option value="115">01:15</option>
+                            <option value="130">01:30</option>
+                            <option value="145">01:45</option>
+                            <option value="200">02:00</option>
+                            <option value="215">02:15</option>
+                            <option value="230">02:30</option>
+                            <option value="245">02:45</option>
+                            <option value="300">03:00</option>
+                            <option value="315">03:15</option>
+                            <option value="330">03:30</option>
+                            <option value="345">03:45</option>
+                            <option value="400">04:00</option>
+                            <option value="415">04:15</option>
+                            <option value="430">04:30</option>
+                            <option value="445">04:45</option>
+                            <option value="500">05:00</option>
+                            <option value="515">05:15</option>
+                            <option value="530">05:30</option>
+                            <option value="545">05:45</option>
+                            <option value="600">06:00</option>
+                            <option value="615">06:15</option>
+                            <option value="630">06:30</option>
+                            <option value="645">06:45</option>
+                            <option value="700">07:00</option>
+                            <option value="715">07:15</option>
+                            <option value="730">07:30</option>
+                            <option value="745">07:45</option>
+                            <option value="800">08:00</option>
+                            <option value="815">08:15</option>
+                            <option value="830">08:30</option>
+                            <option value="845">08:45</option>
+                            <option value="900">09:00</option>
+                            <option value="915">09:15</option>
+                            <option value="930">09:30</option>
+                            <option value="945">09:45</option>
+                            <option value="1000">10:00</option>
+                            <option value="1015">10:15</option>
+                            <option value="1030">10:30</option>
+                            <option value="1045">10:45</option>
+                            <option value="1100">11:00</option>
+                            <option value="1115">11:15</option>
+                            <option value="1130">11:30</option>
+                            <option value="1145">11:45</option>
+                            <option value="1200">12:00</option>
+                            <option value="1215">12:15</option>
+                            <option value="1230">12:30</option>
+                            <option value="1245">12:45</option>
+                            <option value="1300">13:00</option>
+                            <option value="1315">13:15</option>
+                            <option value="1330">13:30</option>
+                            <option value="1345">13:45</option>
+                            <option value="1400">14:00</option>
+                            <option value="1415">14:15</option>
+                            <option value="1430">14:30</option>
+                            <option value="1445">14:45</option>
+                            <option value="1500">15:00</option>
+                            <option value="1515">15:15</option>
+                            <option value="1530">15:30</option>
+                            <option value="1545">15:45</option>
+                            <option value="1600">16:00</option>
+                            <option value="1615">16:15</option>
+                            <option value="1630">16:30</option>
+                            <option value="1645">16:45</option>
+                            <option value="1700">17:00</option>
+                            <option value="1715">17:15</option>
+                            <option value="1730">17:30</option>
+                            <option value="1745">17:45</option>
+                            <option value="1800">18:00</option>
+                            <option value="1815">18:15</option>
+                            <option value="1830">18:30</option>
+                            <option value="1845">18:45</option>
+                            <option value="1900">19:00</option>
+                            <option value="1915">19:15</option>
+                            <option value="1930">19:30</option>
+                            <option value="1945">19:45</option>
+                            <option value="2000">20:00</option>
+                            <option value="2015">20:15</option>
+                            <option value="2030">20:30</option>
+                            <option value="2045">20:45</option>
+                            <option value="2100">21:00</option>
+                            <option value="2115">21:15</option>
+                            <option value="2130">21:30</option>
+                            <option value="2145">21:45</option>
+                            <option value="2200">22:00</option>
+                            <option value="2215">22:15</option>
+                            <option value="2230">22:30</option>
+                            <option value="2245">22:45</option>
+                            <option value="2300">23:00</option>
+                            <option value="2315">23:15</option>
+                            <option value="2330">23:30</option>
+                            <option value="2345">23:45</option>
                         </select>
                     </div>
-                </div>
-                <div class="form-vertical col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                    <div class="form-group">
+                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label for="TurArac"><?php echo $data["Araclar"]; ?></label>
-                        <select type="text" class="form-control" id="TurArac" name="TurArac">
-                            <option value="0"><?php echo $data["Seciniz"]; ?></option>
+                        <select type="text" class="form-control" id="TurArac" name="TurArac" multiple="multiple" style="display: none;">
                         </select>
                     </div>
-                </div>
-                <div class="form-vertical col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                    <div class="form-group">
+                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label for="TurSofor"><?php echo $data["Sofor"]; ?></label>
-                        <select type="text" class="form-control" id="TurSofor" name="TurSofor">
-                            <option value="0"><?php echo $data["Seciniz"]; ?></option>
+                        <select type="text" class="form-control" id="TurSofor" name="TurSofor" multiple="multiple" style="display: none;">
                         </select>
                     </div>
-                </div>
-                <div class="form-vertical col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                    <div class="form-group">
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label for="TurTuru"><?php echo $data["Tür"]; ?></label>
-                        <select type="text" class="form-control" id="TurSelectTip" name="TurSelectTip" multiple="multiple">
+                        <select type="text" class="form-control" id="TurSelectTip" name="TurSelectTip">
                             <option value="1"><?php echo $data["Gidis"]; ?></option>
                             <option value="0"><?php echo $data["Donus"]; ?></option>
                         </select>
                     </div>
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
+                        <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
+                    </div>
                 </div>
-                <div class="form-vertical col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                    <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                    <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
+                <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12" style="width:80% !important;height:80% !important; margin-left: 420px;">
+                    <div id="multiple_map" style="width:100% !important;"></div>
                 </div>
+
             </div>
         </div>
     </div>

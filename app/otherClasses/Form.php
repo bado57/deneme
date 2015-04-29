@@ -355,6 +355,212 @@ class Form {
         return $sifresonuc;
     }
 
+    function sqlGunSaat($turBolgeID, $turSaat1, $turSaat2, $gunler = array()) {
+        $sql = 'BSTurBolgeID=' . $turBolgeID . ' AND ((' . $turSaat1 . ' BETWEEN BSTurBslngc AND BSTurBts) OR (' . $turSaat2 . ' BETWEEN BSTurBslngc AND BSTurBts)) AND ';
+        if (in_array("Pzt", $gunler)) {
+            $sql .= '(BSTurPzt=1';
+
+            if (in_array("Sli", $gunler)) {
+                $sql .= ' OR BSTurSli=1';
+            }
+
+            if (in_array("Crs", $gunler)) {
+                $sql .= ' OR BSTurCrs=1';
+            }
+
+            if (in_array("Prs", $gunler)) {
+                $sql .= ' OR BSTurPrs=1';
+            }
+
+            if (in_array("Cma", $gunler)) {
+                $sql .= ' OR BSTurCma=1';
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR BSTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR BSTurPzr=1';
+            }
+        } else if (in_array("Sli", $gunler)) {
+            $sql .= '(BSTurSli=1';
+
+            if (in_array("Crs", $gunler)) {
+                $sql .= ' OR BSTurCrs=1';
+            }
+
+            if (in_array("Prs", $gunler)) {
+                $sql .= ' OR BSTurPrs=1';
+            }
+
+            if (in_array("Cma", $gunler)) {
+                $sql .= ' OR BSTurCma=1';
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR BSTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR BSTurPzr=1';
+            }
+        } else if (in_array("Crs", $gunler)) {
+            $sql .= '(BSTurCrs=1 ';
+            if (in_array("Prs", $gunler)) {
+                $sql .= ' OR BSTurPrs=1';
+            }
+
+            if (in_array("Cma", $gunler)) {
+                $sql .= ' OR BSTurCma=1';
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR BSTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR BSTurPzr=1';
+            }
+        } else if (in_array("Prs", $gunler)) {
+            $sql .= '(BSTurPrs=1';
+
+            if (in_array("Cma", $gunler)) {
+                $sql .= ' OR BSTurCma=1';
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR BSTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR BSTurPzr=1';
+            }
+        } else if (in_array("Cma", $gunler)) {
+            $sql .= '(BSTurCma=1';
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR BSTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR BSTurPzr=1';
+            }
+        } else if (in_array("Cmt", $gunler)) {
+            $sql .= 'BSTurCmt=1';
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR BSTurPzr=1';
+            }
+        } else {
+            $sql .= '(BSTurPzr=1';
+        }
+        $sql.=')';
+
+        return $sql;
+    }
+
+    function sqlGunSaatSofor($turBolgeID, $turAracID, $turSaat1, $turSaat2, $gunler = array()) {
+        $sql = 'BSTurBolgeID=' . $turBolgeID . ' AND BSTurAracID=' . $turAracID . ' AND ((' . $turSaat1 . ' BETWEEN BSTurBslngc AND BSTurBts) OR (' . $turSaat2 . ' BETWEEN BSTurBslngc AND BSTurBts)) AND ';
+        if (in_array("Pzt", $gunler)) {
+            $sql .= '(BSTurPzt=1';
+
+            if (in_array("Sli", $gunler)) {
+                $sql .= ' OR BSTurSli=1';
+            }
+
+            if (in_array("Crs", $gunler)) {
+                $sql .= ' OR BSTurCrs=1';
+            }
+
+            if (in_array("Prs", $gunler)) {
+                $sql .= ' OR BSTurPrs=1';
+            }
+
+            if (in_array("Cma", $gunler)) {
+                $sql .= ' OR BSTurCma=1';
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR BSTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR BSTurPzr=1';
+            }
+        } else if (in_array("Sli", $gunler)) {
+            $sql .= '(BSTurSli=1';
+
+            if (in_array("Crs", $gunler)) {
+                $sql .= ' OR BSTurCrs=1';
+            }
+
+            if (in_array("Prs", $gunler)) {
+                $sql .= ' OR BSTurPrs=1';
+            }
+
+            if (in_array("Cma", $gunler)) {
+                $sql .= ' OR BSTurCma=1';
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR BSTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR BSTurPzr=1';
+            }
+        } else if (in_array("Crs", $gunler)) {
+            $sql .= '(BSTurCrs=1 ';
+            if (in_array("Prs", $gunler)) {
+                $sql .= ' OR BSTurPrs=1';
+            }
+
+            if (in_array("Cma", $gunler)) {
+                $sql .= ' OR BSTurCma=1';
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR BSTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR BSTurPzr=1';
+            }
+        } else if (in_array("Prs", $gunler)) {
+            $sql .= '(BSTurPrs=1';
+
+            if (in_array("Cma", $gunler)) {
+                $sql .= ' OR BSTurCma=1';
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR BSTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR BSTurPzr=1';
+            }
+        } else if (in_array("Cma", $gunler)) {
+            $sql .= '(BSTurCma=1';
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR BSTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR BSTurPzr=1';
+            }
+        } else if (in_array("Cmt", $gunler)) {
+            $sql .= 'BSTurCmt=1';
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR BSTurPzr=1';
+            }
+        } else {
+            $sql .= '(BSTurPzr=1';
+        }
+        $sql.=')';
+
+        return $sql;
+    }
+
 }
 
 ?>

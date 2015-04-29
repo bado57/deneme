@@ -91,7 +91,7 @@
 
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <h4>Adres Bilgileri</h4>
+            <h4><?php echo $data["AdresBilgi"]; ?></h4>
             <hr />
             <div class="form-vertical KurumAdresForm">
                 <div class="form-group">

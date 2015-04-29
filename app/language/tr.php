@@ -163,6 +163,8 @@ class tr {
             "Donus" => "Dönüş",
             "Seciniz" => "Seçiniz",
             "HaritaGor" => "Haritada Gör",
+            "OgrenciPersonel" => "Öğrenci-Personel",
+            "AdresBilgi" => "Adres Bilgileri"
         );
         return $trdil;
     }

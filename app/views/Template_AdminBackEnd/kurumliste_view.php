@@ -55,10 +55,12 @@
                         </td>
                         <td class="hidden-xs" value="<?php echo $kurumModel['AdminKurumBolgeID']; ?>"><?php echo $kurumModel['AdminKurumBolge']; ?></td>
                         <td class="hidden-xs"><?php echo $kurumModel['AdminKurumTur']; ?></td>
-                        <?php if ($kurumModel['AdminKurumTip'] != 1) { ?>
+                        <?php if ($kurumModel['AdminKurumTip'] == 0) { ?>
                             <td class="hidden-xs"><?php echo $data["Ogrenci"]; ?></td>
-                        <?php } else { ?>
+                        <?php } else if ($kurumModel['AdminKurumTip'] == 1) { ?>
                             <td class="hidden-xs"><?php echo $data["Isci"]; ?></td>
+                        <?php } else { ?>
+                            <td class="hidden-xs"><?php echo $data["OgrenciPersonel"]; ?></td>
                         <?php } ?>
 
                         <td class="hidden-xs"><?php echo $kurumModel['AdminKurumAciklama']; ?></td>
@@ -94,6 +96,7 @@
                         <select type="text" class="form-control" id="KurumTip" name="KurumTip">
                             <option value="0"><?php echo $data["Ogrenci"]; ?></option>
                             <option value="1"><?php echo $data["Isci"]; ?></option>
+                            <option value="2"><?php echo $data["OgrenciPersonel"]; ?></option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -203,6 +206,7 @@
                             <select type="text" class="form-control dsb" id="KurumDetayTip" name="KurumDetayTip" disabled>
                                 <option value="0"><?php echo $data["Ogrenci"]; ?></option>
                                 <option value="1"><?php echo $data["Isci"]; ?></option>
+                                <option value="2"><?php echo $data["OgrenciPersonel"]; ?></option>
                             </select>
                         </div>
                         <div class="form-group">

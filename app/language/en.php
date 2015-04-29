@@ -146,7 +146,23 @@ class en {
             "Veliler" => "Guardians",
             "TurYeni" => "New Tour",
             "KurumTip" => "Institution Type",
-            "TurListe" => "Tour List"
+            "TurListe" => "Tour List",
+            "TurTanimlama" => "Tour Definition",
+            "Gunler" => "Days",
+            "Pazartesi" => "Monday",
+            "Sali" => "Sunday",
+            "Carsamba" => "Wednesday",
+            "Persembe" => "Thursday",
+            "Cuma" => "Friday",
+            "Cumartesi" => "Saturday",
+            "Pazar" => "Sunday",
+            "Saat" => "Time",
+            "Gidis" => "Going",
+            "Donus" => "Return",
+            "Seciniz" => "Choose",
+            "HaritaGor" => "See the map",
+            "OgrenciPersonel" => "Student-Employee",
+            "AdresBilgi" => "Address Information"
         );
         return $endil;
     }

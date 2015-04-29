@@ -236,7 +236,6 @@ $(document).ready(function () {
 var AdminAracDetailVazgec = [];
 $.AdminIslemler = {
     adminAracYeni: function () {
-
         $("input[name=AracPlaka]").val('');
         $("input[name=BolgeAdi]").val('');
         $("#AracDurum").val("1");

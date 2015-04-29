@@ -131,7 +131,6 @@ $(document).ready(function () {
                     $("textarea[name=KurumDetailAciklama]").val(cevap.adminKurumDetail['b8ecd9075c0c9a7f7afa1784acb13c2e']);
                     $("input[name=adminKurumDetailID]").val(cevap.adminKurumDetail['3bcdc7d6f02b5b42c7be9604808e7c07']);
                     $("input[name=adminKurumDetailLocation]").val(cevap.adminKurumDetail['a465db00f313bd4781af6805a8d6fb31']);
-                    console.log(cevap.adminKurumTurDetail);
                     if (cevap.adminKurumTurDetail) {
                         var KurumTurSayi = cevap.adminKurumTurDetail.length;
                         if (KurumTurSayi != 0) {
@@ -2012,7 +2011,6 @@ $.AdminIslemler = {
                             alert(cevap.hata);
                         } else {
                             var aracCount = $('#smallArac').text();
-                            console.log(aracCount);
                             aracCount++;
                             $('#smallArac').text(aracCount);
                             if (aracDurum != 0) {

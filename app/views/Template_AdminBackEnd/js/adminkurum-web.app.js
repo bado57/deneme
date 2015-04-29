@@ -92,6 +92,10 @@ function svControl(dtype, dclass, dislemler) {
                 isMap = true;
                 var returnCevap = true;
                 break;
+            case 'adminBolgeSingleMap' :
+                isMap = true;
+                var returnCevap = true;
+                break;
             default :
                 $("#" + dclass).height(th);
                 $("#" + dclass).css("z-index", z);

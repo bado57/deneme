@@ -441,3 +441,75 @@ function multipleMapping(gelen, index) {
 }
 
 //End çoklu mapping işlemleri
+
+//tur çoklu harita
+function multipleTurMapping(gelen, index) {
+
+    if (navigator.geolocation) {
+
+        var iconURLPrefix = 'http://maps.google.com/mapfiles/ms/icons/';
+        var icons = [];
+        for (var gelenicon = 0; gelenicon < gelen.length; gelenicon++) {
+            if (gelenicon != index) {
+                icons.push(iconURLPrefix + 'red-dot.png')
+            } else {
+                icons.push(iconURLPrefix + 'green-dot.png')
+            }
+        }
+        var mapOptions = {
+            zoom: 16
+        };
+        var iconsLength = icons.length;
+        var newPos = new google.maps.LatLng(gelen[index][1],
+                gelen[index][2]);
+        var map = new google.maps.Map(document.getElementById('multiple_map'),
+                mapOptions);
+
+        var infowindow = new google.maps.InfoWindow({
+            maxWidth: 160
+        });
+
+        var markers = new Array();
+
+        var iconCounter = 0;
+        for (var i = 0; i < gelen.length; i++) {
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(gelen[i][1], gelen[i][2]),
+                map: map,
+                icon: icons[iconCounter]
+            });
+
+            markers.push(marker);
+
+            google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                return function () {
+                    infowindow.setContent(gelen[i][0]);
+                    infowindow.open(map, marker);
+                }
+            })(marker, i));
+
+            iconCounter++;
+
+            if (iconCounter >= iconsLength) {
+                iconCounter = 0;
+            }
+        }
+
+        map.setCenter(newPos);
+
+        //Tüm lokasyonları haritaya sığdırma
+        /*
+         function autoCenter() {
+         var bounds = new google.maps.LatLngBounds();
+         for (var i = 0; i < markers.length; i++) {
+         bounds.extend(markers[i].position);
+         }
+         map.fitBounds(bounds);
+         }
+         autoCenter();
+         */
+
+    } else {
+        document.getElementById('google_canvas').innerHTML = 'Konumunuz bulunmadı.';
+    }
+}

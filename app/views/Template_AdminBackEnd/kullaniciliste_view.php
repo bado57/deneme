@@ -37,7 +37,7 @@
                             </p>
                         </div>
                         <div class="icon">
-                            <i class="fa fa-building"></i>
+                            <i class="fa fa-sitemap"></i>
                         </div>
                     </a>
                 </div>
@@ -62,7 +62,7 @@
                         </p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-th"></i>
+                        <i class="fa fa-bus"></i>
                     </div>
                 </a>
             </div>
@@ -72,7 +72,7 @@
                 <a href="<?php echo SITE_URL; ?>/adminweb/veliliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
-                            Veli
+                            <?php echo $data["Veli"]; ?>
                         </h3>
                         <p>
                             <?php if (count($model['VeliCount']) > 0) { ?>
@@ -87,7 +87,7 @@
                         </p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-building-o"></i>
+                        <i class="fa fa-home"></i>
                     </div>
                 </a>
             </div>
@@ -97,7 +97,7 @@
                 <a href="<?php echo SITE_URL; ?>/adminweb/ogrenciliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
-                            Öğrenci
+                            <?php echo $data["Ogrenci"]; ?>
                         </h3>
                         <p>
                             <?php if (count($model['OgrenciCount']) > 0) { ?>
@@ -112,7 +112,7 @@
                         </p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-users"></i>
+                        <i class="fa fa-graduation-cap"></i>
                     </div>
                 </a>
             </div>
@@ -122,7 +122,7 @@
                 <a href="<?php echo SITE_URL; ?>/adminweb/isciliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
-                            <?php echo $data["TitleIsci"]; ?>
+                            <?php echo $data["Isci"]; ?>
                         </h3>
                         <p>
                             <?php if (count($model['IsciCount']) > 0) { ?>
@@ -137,7 +137,7 @@
                         </p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-bus"></i>
+                        <i class="fa fa-briefcase"></i>
                     </div>
                 </a>
             </div>                      
