@@ -1112,6 +1112,7 @@
                             label: subOption.label || subOption.value,
                             title: subOption.title,
                             id: subOption.id,
+                            location: subOption.location,
                             selected: !!subOption.selected,
                             disabled: !!subOption.disabled
                         }));
@@ -1123,6 +1124,7 @@
                         label: option.label || option.value,
                         title: option.title,
                         id: option.id,
+                        location: option.location,
                         selected: !!option.selected,
                         disabled: !!option.disabled
                     });

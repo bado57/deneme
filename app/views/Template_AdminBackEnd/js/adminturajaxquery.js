@@ -98,7 +98,7 @@ $(document).ready(function () {
                             var kurumlength = cevap.kurumSelect.KurumSelectID.length;
                             SelectKurumOptions[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
                             for (var b = 0; b < kurumlength; b++) {
-                                SelectKurumOptions[b + 1] = {label: cevap.kurumSelect.KurumSelectAd[b], title: cevap.kurumSelect.KurumSelectAd[b], id: cevap.kurumSelect.KurumSelectTip[b], value: cevap.kurumSelect.KurumSelectID[b]};
+                                SelectKurumOptions[b + 1] = {label: cevap.kurumSelect.KurumSelectAd[b], title: cevap.kurumSelect.KurumSelectAd[b], id: cevap.kurumSelect.KurumSelectTip[b], location: cevap.kurumSelect.KurumSelectLokasyon[b], value: cevap.kurumSelect.KurumSelectID[b]};
                             }
                         }
                         $('#TurSelectKurum').multiselect('refresh');
@@ -181,22 +181,46 @@ $(document).ready(function () {
                         if (cevap.hata) {
                             alert(cevap.hata);
                         } else {
-                            if (cevap.kurumOKisi) {
+                            MultipleMapArray = [];
+                            var kurumLocation = $('select#TurSelectKurum option[value!="-1"]:selected').attr('location');
+                            var kurumName = $('select#TurSelectKurum option[value!="-1"]:selected').attr('title');
+                            var LocationKurumBolme = kurumLocation.split(",");
+                            MultipleMapArray[0] = Array(kurumName, LocationKurumBolme[0], LocationKurumBolme[1]);
+                            if (cevap.kurumOKisi) {//öğrenci
+                                MultipleMapindex = 0;
                                 var length = cevap.kurumOKisi.length;
                                 for (var countK = 0; countK < length; countK++) {
                                     var OKisiMap = cevap.kurumOKisi[countK].turOKisiLocation;
                                     var LocationBolme = OKisiMap.split(",");
                                     var OKisiName = cevap.kurumOKisi[countK].turOKisiAd + ' ' + cevap.kurumOKisi[countK].turOKisiSoyad;
-                                    MultipleMapArray[countK] = Array(OKisiName, LocationBolme[0], LocationBolme[1]);
+                                    MultipleMapArray[countK + 1] = Array(OKisiName, LocationBolme[0], LocationBolme[1]);
+                                }
+                                if (cevap.kurumPKisi) {//personel
+                                    ayiriciIndex = countK + 1;
+                                    var length = cevap.kurumPKisi.length;
+                                    countPe = countK + 1;
+                                    for (var countP = 0; countP < length; countP++) {
+                                        var PKisiMap = cevap.kurumPKisi[countP].turPKisiLocation;
+                                        var LocationBolme = PKisiMap.split(",");
+                                        var PKisiName = cevap.kurumPKisi[countP].turPKisiAd + ' ' + cevap.kurumPKisi[countP].turPKisiSoyad;
+                                        MultipleMapArray[countPe] = Array(PKisiName, LocationBolme[0], LocationBolme[1]);
+                                        countPe++;
+                                    }
+                                }
+                            } else if (cevap.kurumPKisi) {//personel
+                                MultipleMapindex = 1;
+                                var length = cevap.kurumPKisi.length;
+                                for (var countK = 0; countK < length; countK++) {
+                                    var PKisiMap = cevap.kurumPKisi[countK].turPKisiLocation;
+                                    var LocationBolme = PKisiMap.split(",");
+                                    var PKisiName = cevap.kurumPKisi[countK].turPKisiAd + ' ' + cevap.kurumPKisi[countK].turPKisiSoyad;
+                                    MultipleMapArray[countK + 1] = Array(PKisiName, LocationBolme[0], LocationBolme[1]);
                                 }
                             }
-                            if (cevap.kurumPKisi) {
 
-                            }
                             isMap = true;
                             isSingle = false;
-                            MultipleMapindex = 1;
-                            multipleTurMapping(MultipleMapArray, MultipleMapindex);
+                            multipleTurMapping(MultipleMapArray, MultipleMapindex, ayiriciIndex, sofor);
                             google.maps.event.addDomListener(window, 'load', multipleTurMapping);
                         }
                     }
@@ -233,7 +257,7 @@ $(document).ready(function () {
                                                 if (cevap.pasifSofor) {
                                                     var length = cevap.pasifSofor.length;
                                                     for (var i = 0; i < length; i++) {
-                                                        SelectSoforOptions[i] = {label: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, title: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, value: cevap.pasifSofor[i].turSoforID};
+                                                        SelectSoforOptions[i] = {label: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, title: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, location: cevap.pasifSofor[i].turSoforLocation, value: cevap.pasifSofor[i].turSoforID};
                                                     }
                                                     $('#TurSofor').multiselect('refresh');
                                                     $('#TurSofor').multiselect('dataprovider', SelectSoforOptions);
@@ -259,6 +283,20 @@ $(document).ready(function () {
                 }
             } else {
                 alert("Lütfen Bölge Seçiniz");
+            }
+        },
+        onChange: function (option, checked, select) {
+            var soforLocation = $('select#TurSofor option[value!="-1"]:selected').attr('location');
+            if (soforLocation) {
+                var diziIndex = MultipleMapArray.length;
+                sofor = 1;
+                var soforName = $('select#TurSofor option[value!="-1"]:selected').attr('title');
+                var LocationSoforBolme = soforLocation.split(",");
+                MultipleMapArray[diziIndex] = Array(soforName, LocationSoforBolme[0], LocationSoforBolme[1]);
+                isMap = true;
+                isSingle = false;
+                multipleTurMapping(MultipleMapArray, MultipleMapindex, ayiriciIndex, sofor);
+                google.maps.event.addDomListener(window, 'load', multipleTurMapping);
             }
         }
     });

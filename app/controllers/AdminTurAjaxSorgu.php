@@ -83,6 +83,7 @@ class AdminTurAjaxSorgu extends Controller {
                             $turKurumSelect['KurumSelectID'][$a] = $kurumListee['SBKurumID'];
                             $turKurumSelect['KurumSelectAd'][$a] = $kurumListee['SBKurumAdi'];
                             $turKurumSelect['KurumSelectTip'][$a] = $kurumListee['SBKurumTip'];
+                            $turKurumSelect['KurumSelectLokasyon'][$a] = $kurumListee['SBKurumLokasyon'];
                             $a++;
                         }
                         $sonuc["kurumSelect"] = $turKurumSelect;
@@ -197,6 +198,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $turSofor[$c]['turSoforID'] = $turPasifSoforListee['BSSoforID'];
                                         $turSofor[$c]['turSoforAd'] = $turPasifSoforListee['BSSoforAd'];
                                         $turSofor[$c]['turSoforSoyad'] = $turPasifSoforListee['BSSoforSoyad'];
+                                        $turSofor[$c]['turSoforLocation'] = $turPasifSoforListee['BSSoforLocation'];
                                         $c++;
                                     }
                                 }
@@ -208,6 +210,7 @@ class AdminTurAjaxSorgu extends Controller {
                                     $turSofor[$c]['turSoforID'] = $turPasifSoforListee['BSSoforID'];
                                     $turSofor[$c]['turSoforAd'] = $turPasifSoforListee['BSSoforAd'];
                                     $turSofor[$c]['turSoforSoyad'] = $turPasifSoforListee['BSSoforSoyad'];
+                                    $turSofor[$c]['turSoforLocation'] = $turPasifSoforListee['BSSoforLocation'];
                                     $c++;
                                 }
                             }

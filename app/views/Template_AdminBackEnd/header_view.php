@@ -46,14 +46,6 @@
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/bootstrap-multiselect.js"></script>
             <!--Validation-->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/validation.js"></script>
-            <!-- Ajax Query -->
-           
-            <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-            <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-            <!--[if lt IE 9]>
-              <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/html5shiv.js"></script>
-              <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-            <![endif]-->
             </head>
             <body class="skin-blue">
             <script>

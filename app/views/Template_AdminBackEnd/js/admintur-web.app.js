@@ -2,6 +2,8 @@
 var z = 1;
 var MultipleMapArray = new Array();
 var MultipleMapindex;
+var ayiriciIndex = 0;
+var sofor = 0;
 
 $(document).ready(function () {
     // Sayfa Scroll Olayı
@@ -81,6 +83,7 @@ function svControl(dtype, dclass, dislemler) {
         switch (dislemler) {
             case 'adminTurYeni' :
                 var returnCevap = $.AdminIslemler.adminTurYeni();
+                isMap = false;
                 break;
             case 'adminKurumMap' :
                 isMap = true;
@@ -371,6 +374,7 @@ function initialize() {
 
 function multipleMapping(gelen, index) {
 
+
     if (navigator.geolocation) {
 
         var iconURLPrefix = 'http://maps.google.com/mapfiles/ms/icons/';
@@ -443,73 +447,209 @@ function multipleMapping(gelen, index) {
 //End çoklu mapping işlemleri
 
 //tur çoklu harita
-function multipleTurMapping(gelen, index) {
+function multipleTurMapping(gelen, index, ayirici, sofor) {
 
+    var hh = $("#turForm").height();
+    var sh = (hh - 50);
+    $("#multiple_map").height(sh);
+    var directionsService = new google.maps.DirectionsService();
+    var renderOptions = {draggable: true};
+    var directionDisplay = new google.maps.DirectionsRenderer(renderOptions);
+    var items = new Array();
+    var originAddress = '';
+    var waypoints = [];
     if (navigator.geolocation) {
 
-        var iconURLPrefix = 'http://maps.google.com/mapfiles/ms/icons/';
         var icons = [];
-        for (var gelenicon = 0; gelenicon < gelen.length; gelenicon++) {
-            if (gelenicon != index) {
-                icons.push(iconURLPrefix + 'red-dot.png')
-            } else {
-                icons.push(iconURLPrefix + 'green-dot.png')
+        icons.push('../Plugins/mapView/build.png')
+        if (sofor != 0) {//şoför seçildi ve locatiionu varsa
+            for (var gelenicon = 1; gelenicon < gelen.length - 1; gelenicon++) {
+                if (ayirici == 0) {//yoksa, yani öğrencinin yanında personel yoksa
+                    if (index != 1) {//öğrenci
+                        icons.push('../Plugins/mapView/student.png')
+                    } else {//personel
+                        icons.push('../Plugins/mapView/employee.png')
+                    }
+                } else {//ikiside varsa
+                    if (gelenicon < ayirici) {//öğrenci
+                        icons.push('../Plugins/mapView/student.png')
+                    } else {//işçi
+                        icons.push('../Plugins/mapView/employee.png')
+                    }
+                }
+            }//şoför için
+            icons.push('../Plugins/mapView/driver.png')
+        } else {//şoför yoksa
+            for (var gelenicon = 1; gelenicon < gelen.length; gelenicon++) {
+                if (ayirici == 0) {//yoksa, yani öğrencinin yanında personel yoksa
+                    if (index != 1) {//öğrenci
+                        icons.push('../Plugins/mapView/student.png')
+                    } else {//personel
+                        icons.push('../Plugins/mapView/employee.png')
+                    }
+                } else {//ikiside varsa
+                    if (gelenicon < ayirici) {//öğrenci
+                        icons.push('../Plugins/mapView/student.png')
+                    } else {//işçi
+                        icons.push('../Plugins/mapView/employee.png')
+                    }
+                }
             }
         }
+
         var mapOptions = {
-            zoom: 16
+            zoom: 12,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
         };
         var iconsLength = icons.length;
-        var newPos = new google.maps.LatLng(gelen[index][1],
-                gelen[index][2]);
+        var newPos = new google.maps.LatLng(gelen[0][1],
+                gelen[0][2]);
         var map = new google.maps.Map(document.getElementById('multiple_map'),
                 mapOptions);
-
+        directionDisplay.setMap(map);
         var infowindow = new google.maps.InfoWindow({
             maxWidth: 160
         });
 
         var markers = new Array();
+        var marker;
 
         var iconCounter = 0;
-        for (var i = 0; i < gelen.length; i++) {
-            var marker = new google.maps.Marker({
+        var i = 0;
+        var click = 0;
+        var interval = setInterval(function () {
+            marker = new google.maps.Marker({
                 position: new google.maps.LatLng(gelen[i][1], gelen[i][2]),
                 map: map,
+                animation: google.maps.Animation.DROP,
                 icon: icons[iconCounter]
             });
-
             markers.push(marker);
+            (function (marker, i) {
+                google.maps.event.addListener(marker, "click", function (e) {
+                    if (click == 0) {
+                        originAddress = this.getPosition().lat() + ',' + this.getPosition().lng();
+                    } else {
+                        items.push(this.getPosition().lat() + ',' + this.getPosition().lng());
+                        var routelength = items.length;
+                        console.log(routelength);
+                        if (routelength >= 1) {
+                            waypoints = [];
+                            for (var a = 0; a < routelength; a++) {
+                                var address = items[a];
+                                if (address !== "") {
+                                    waypoints.push({
+                                        location: address,
+                                        stopover: true
+                                    });
+                                }
+                            }
+                            console.log(waypoints);
+                        } else {
+                            var sondanOnceki = routelength - 2;
+                            originAddress = items[sondanOnceki];
+                            waypoints = [];
 
-            google.maps.event.addListener(marker, 'click', (function (marker, i) {
-                return function () {
+                            for (var a = 0; a < routelength; a++) {
+                                var address = items[a];
+                                if (address !== "") {
+                                    waypoints.push({
+                                        location: address,
+                                        stopover: true
+                                    });
+                                }
+                            }
+                        }
+                        calcRoute();
+                    }
+                    click++;
                     infowindow.setContent(gelen[i][0]);
                     infowindow.open(map, marker);
-                }
-            })(marker, i));
+                });
+            })(marker, i);
+            i++;
+            if (i == gelen.length) {
+                clearInterval(interval);
+            }
 
             iconCounter++;
-
             if (iconCounter >= iconsLength) {
                 iconCounter = 0;
             }
-        }
+        }, 200);
 
         map.setCenter(newPos);
 
+        var destinationAddress = gelen[0][1] + ',' + gelen[0][2];
+
+        //route çizdirme
+        function calcRoute() {
+            var request = {
+                origin: originAddress,
+                destination: destinationAddress, //kurum lokasyon
+                waypoints: waypoints, //an array of waypoints
+                optimizeWaypoints: true,
+                travelMode: google.maps.DirectionsTravelMode.DRIVING
+            };
+            directionsService.route(request, function (response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionDisplay.setDirections(response);
+                }
+            });
+        }
+        //marker animatioın
+        function toggleBounce() {
+
+            if (marker.getAnimation() != null) {
+                marker.setAnimation(null);
+            } else {
+                marker.setAnimation(google.maps.Animation.BOUNCE);
+            }
+        }
+
         //Tüm lokasyonları haritaya sığdırma
-        /*
-         function autoCenter() {
-         var bounds = new google.maps.LatLngBounds();
-         for (var i = 0; i < markers.length; i++) {
-         bounds.extend(markers[i].position);
-         }
-         map.fitBounds(bounds);
-         }
-         autoCenter();
-         */
+        function autoCenter() {
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0; i < markers.length; i++) {
+                bounds.extend(markers[i].position);
+            }
+            map.fitBounds(bounds);
+        }
+        //autoCenter();
 
     } else {
         document.getElementById('google_canvas').innerHTML = 'Konumunuz bulunmadı.';
     }
 }
+
+/*
+ * eski hali
+ * 
+ * 
+ var iconCounter = 0;
+ for (var i = 0; i < gelen.length; i++) {
+ var marker = new google.maps.Marker({
+ position: new google.maps.LatLng(gelen[i][1], gelen[i][2]),
+ map: map,
+ animation: google.maps.Animation.DROP,
+ icon: icons[iconCounter]
+ });
+ //google.maps.event.addListener(marker, 'click', toggleBounce);
+ markers.push(marker);
+ 
+ 
+ google.maps.event.addListener(marker, 'click', (function (marker, i) {
+ return function () {
+ console.log(this.getPosition().lat() + ',' + this.getPosition().lng());
+ infowindow.setContent(gelen[i][0]);
+ infowindow.open(map, marker);
+ }
+ })(marker, i));
+ 
+ iconCounter++;
+ 
+ if (iconCounter >= iconsLength) {
+ iconCounter = 0;
+ }
+ }
+ */

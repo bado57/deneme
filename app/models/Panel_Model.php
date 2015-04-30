@@ -1212,7 +1212,7 @@ class Panel_Model extends Model {
 
     //admin veli kurum bölge select listele
     public function turKurumSelect($bolgeID) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi,SBKurumTip FROM sbkurum Where SBBolgeID=' . $bolgeID . '  ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumID,SBKurumAdi,SBKurumTip,SBKurumLokasyon FROM sbkurum Where SBBolgeID=' . $bolgeID . '  ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -1248,7 +1248,7 @@ class Panel_Model extends Model {
 
     //tur araç pasif şoför listele
     public function turAracPasifSoforListele($array = array()) {
-        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor WHERE BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
+        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad,BSSoforLocation FROM bssofor WHERE BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
         return($this->db->select($sql));
     }
 

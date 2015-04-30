@@ -258,47 +258,53 @@ $.AdminIslemler = {
         if (kurumadi == '') {
             alert("Kurum Adı Boş geçilemez");
         } else {
-
             var kurumlocation = $("input[name=KurumLokasyon]").val();
-            var bolgead = $("#KurumBolgeSelect option:selected").text();
-            var bolgeId = $("#KurumBolgeSelect option:selected").val();
-            var kurumtip = $("#KurumTip option:selected").val();
-            var kurumTlfn = $("input[name=KurumTelefon]").val();
-            var kurumEmail = $("input[name=KurumEmail]").val();
-            var kurumwebsite = $("input[name=KurumWebSite]").val();
-            var kurumadrsDty = $("textarea[name=KurumAdresDetay]").val();
-            var kurumaciklama = $("textarea[name=Aciklama]").val();
-            var kurumulke = $("input[name=country]").val();
-            var kurumil = $("input[name=administrative_area_level_1]").val();
-            var kurumilce = $("input[name=administrative_area_level_2]").val();
-            var kurumsemt = $("input[name=locality]").val();
-            var kurummahalle = $("input[name=neighborhood]").val();
-            var kurumsokak = $("input[name=route]").val();
-            var kurumpostakodu = $("input[name=postal_code]").val();
-            var kurumcaddeno = $("input[name=street_number]").val();
-            $.ajax({
-                data: {"kurumadi": kurumadi, "bolgeId": bolgeId, "kurumtip": kurumtip, "bolgead": bolgead, "kurumlocation": kurumlocation, "kurumTlfn": kurumTlfn, "kurumEmail": kurumEmail,
-                    "kurumwebsite": kurumwebsite, "kurumadrsDty": kurumadrsDty, "kurumaciklama": kurumaciklama,
-                    "kurumulke": kurumulke, "kurumil": kurumil, "kurumilce": kurumilce, "kurumsemt": kurumsemt,
-                    "kurummahalle": kurummahalle, "kurumsokak": kurumsokak, "kurumpostakodu": kurumpostakodu,
-                    "kurumcaddeno": kurumcaddeno, "tip": "adminKurumKaydet"},
-                success: function (cevap) {
-                    if (cevap.hata) {
-                        alert(cevap.hata);
-                    } else {
-                        var kurumCount = $('#smallKurum').text();
-                        kurumCount++;
-                        $('#smallKurum').text(kurumCount);
-                        var addRow = "<tr style='background-color:#F2F2F2'><td>"
-                                + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newKurumID + "'>"
-                                + "<i class='fa fa-map-marker'></i> " + kurumadi + "</a></td>"
-                                + "<td class='hidden-xs' value='" + bolgeId + "'>" + bolgead + "</td>"
-                                + "<td class='hidden-xs'>0</td><td class='hidden-xs'>" + kurumaciklama + "</td></tr>";
-                        NewKurumTable.DataTable().row.add($(addRow)).draw();
+            if (kurumlocation == '') {
+                alert("Kurum Lokasyonu geçilemez");
+            } else {
+                var bolgead = $("#KurumBolgeSelect option:selected").text();
+                var bolgeId = $("#KurumBolgeSelect option:selected").val();
+                var kurumtip = $("#KurumTip option:selected").val();
+                var kurumTlfn = $("input[name=KurumTelefon]").val();
+                var kurumEmail = $("input[name=KurumEmail]").val();
+                var kurumwebsite = $("input[name=KurumWebSite]").val();
+                var kurumadrsDty = $("textarea[name=KurumAdresDetay]").val();
+                var kurumaciklama = $("textarea[name=Aciklama]").val();
+                var kurumulke = $("input[name=country]").val();
+                var kurumil = $("input[name=administrative_area_level_1]").val();
+                var kurumilce = $("input[name=administrative_area_level_2]").val();
+                var kurumsemt = $("input[name=locality]").val();
+                var kurummahalle = $("input[name=neighborhood]").val();
+                var kurumsokak = $("input[name=route]").val();
+                var kurumpostakodu = $("input[name=postal_code]").val();
+                var kurumcaddeno = $("input[name=street_number]").val();
+                $.ajax({
+                    data: {"kurumadi": kurumadi, "bolgeId": bolgeId, "kurumtip": kurumtip, "bolgead": bolgead, "kurumlocation": kurumlocation, "kurumTlfn": kurumTlfn, "kurumEmail": kurumEmail,
+                        "kurumwebsite": kurumwebsite, "kurumadrsDty": kurumadrsDty, "kurumaciklama": kurumaciklama,
+                        "kurumulke": kurumulke, "kurumil": kurumil, "kurumilce": kurumilce, "kurumsemt": kurumsemt,
+                        "kurummahalle": kurummahalle, "kurumsokak": kurumsokak, "kurumpostakodu": kurumpostakodu,
+                        "kurumcaddeno": kurumcaddeno, "tip": "adminKurumKaydet"},
+                    success: function (cevap) {
+                        if (cevap.hata) {
+                            alert(cevap.hata);
+                        } else {
+                            var kurumCount = $('#smallKurum').text();
+                            kurumCount++;
+                            $('#smallKurum').text(kurumCount);
+                            var addRow = "<tr style='background-color:#F2F2F2'><td>"
+                                    + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newKurumID + "'>"
+                                    + "<i class='fa fa-map-marker'></i> " + kurumadi + "</a></td>"
+                                    + "<td class='hidden-xs' value='" + bolgeId + "'>" + bolgead + "</td>"
+                                    + "<td class='hidden-xs'>0</td><td class='hidden-xs'>" + kurumaciklama + "</td></tr>";
+                            NewKurumTable.DataTable().row.add($(addRow)).draw();
+                        }
                     }
-                }
-            });
-            return true;
+                });
+                return true;
+            }
+
+
+
         }
     },
     adminKurumMap: function () {

@@ -86,7 +86,7 @@
             <hr/>
             <div class="row" id="getPartialView">
 
-                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-vertical">
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-vertical" id="turForm">
                     <input id="adminKurumBolgeEkleID" name="adminKurumBolgeEkleID" type="hidden"/>
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label for="TurAdi"><?php echo $data["TurAdi"]; ?></label>
@@ -120,6 +120,10 @@
                         <select type="text" class="form-control" id="TurSaat1" name="TurSaat1">
                             <option value="-1"><?php echo $data["Seciniz"]; ?></option>
                             <option value="0">00:00</option>
+                            <option value="15">00:15</option>
+                            <option value="30">00:30</option>
+                            <option value="45">00:45</option>
+                            <option value="100">01:00</option>
                             <option value="115">01:15</option>
                             <option value="130">01:30</option>
                             <option value="145">01:45</option>
@@ -218,6 +222,10 @@
                         <select type="text" class="form-control" id="TurSaat2" name="TurSaat2">
                             <option value="-1"><?php echo $data["Seciniz"]; ?></option>
                             <option value="0">00:00</option>
+                            <option value="15">00:15</option>
+                            <option value="30">00:30</option>
+                            <option value="45">00:45</option>
+                            <option value="100">01:00</option>
                             <option value="115">01:15</option>
                             <option value="130">01:30</option>
                             <option value="145">01:45</option>
@@ -332,9 +340,13 @@
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
                         <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
                     </div>
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 submit-group" style="display:block !important">
+                        <button data-type="svClose" type="button" class="btn btn-default vzg" data-Vzgislem="#"><?php echo $data["Vazgec"]; ?></button>
+                        <button type="button" class="btn btn-success save" data-Saveislem="#"><?php echo $data["Kaydet"]; ?></button>
+                    </div>
                 </div>
-                <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12" style="width:80% !important;height:80% !important; margin-left: 420px;">
-                    <div id="multiple_map" style="width:100% !important;"></div>
+                <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12"  id="multiple_map" style="top: 100px; right:10px;border: 2px solid #009933 !important;bottom: 10%">
+
                 </div>
 
             </div>
@@ -417,17 +429,6 @@
     </div>
 </div>
 
-
-<div id="map" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
-    <div id="mapHeader">
-        <h3><b id="singleMapBaslik"><?php echo $data["LokasyonTanimlama"]; ?> </b><b id="multiMapBaslik"></b>
-            <span class="pull-right"><button data-type="svClose" data-class="map" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span>
-            <span class="pull-right"><button id="saveMap" data-islemler="adminHaritaKaydet" data-type="svClose" data-class="map" type="button" class="svToggle btn btn-success"><i class="fa fa-map-marker"></i> Konumu Kaydet</button></span>
-        </h3>
-        <hr/>
-    </div>
-    <div id="multiple_map" style="width:100% !important;"></div>
-</div><!-- ./wrapper -->
 
 
 
