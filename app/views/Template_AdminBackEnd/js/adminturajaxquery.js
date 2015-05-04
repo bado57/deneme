@@ -137,7 +137,7 @@ $(document).ready(function () {
                                             if (cevap.pasifArac) {
                                                 var length = cevap.pasifArac.length;
                                                 for (var i = 0; i < length; i++) {
-                                                    SelectAracOptions[i] = {label: cevap.pasifArac[i].turAracPlaka, title: cevap.pasifArac[i].turAracPlaka, value: cevap.pasifArac[i].turAracID};
+                                                    SelectAracOptions[i] = {label: cevap.pasifArac[i].turAracPlaka, title: cevap.pasifArac[i].turAracPlaka, value: cevap.pasifArac[i].turAracID, kapasite: cevap.pasifArac[i].turAracKapasite};
                                                 }
                                                 $('#TurArac').multiselect('refresh');
                                                 $('#TurArac').multiselect('dataprovider', SelectAracOptions);
@@ -174,7 +174,6 @@ $(document).ready(function () {
             var turKurumID = $('select#TurSelectKurum option[value!="-1"]:selected').val();
             var turKurumTip = $('select#TurSelectKurum option[value!="-1"]:selected').attr('id');
             if (turKurumID) {
-                var SelectKurumKisiOptions = new Array();
                 $.ajax({
                     data: {"turKurumID": turKurumID, "turKurumTip": turKurumTip, "tip": "turKurumSelectKisi"},
                     success: function (cevap) {
@@ -193,7 +192,8 @@ $(document).ready(function () {
                                     var OKisiMap = cevap.kurumOKisi[countK].turOKisiLocation;
                                     var LocationBolme = OKisiMap.split(",");
                                     var OKisiName = cevap.kurumOKisi[countK].turOKisiAd + ' ' + cevap.kurumOKisi[countK].turOKisiSoyad;
-                                    MultipleMapArray[countK + 1] = Array(OKisiName, LocationBolme[0], LocationBolme[1]);
+                                    var OKisiID = cevap.kurumOKisi[countK].turOKisiID;
+                                    MultipleMapArray[countK + 1] = Array(OKisiName, LocationBolme[0], LocationBolme[1], OKisiID, 0);
                                 }
                                 if (cevap.kurumPKisi) {//personel
                                     ayiriciIndex = countK + 1;
@@ -203,7 +203,8 @@ $(document).ready(function () {
                                         var PKisiMap = cevap.kurumPKisi[countP].turPKisiLocation;
                                         var LocationBolme = PKisiMap.split(",");
                                         var PKisiName = cevap.kurumPKisi[countP].turPKisiAd + ' ' + cevap.kurumPKisi[countP].turPKisiSoyad;
-                                        MultipleMapArray[countPe] = Array(PKisiName, LocationBolme[0], LocationBolme[1]);
+                                        var PKisiID = cevap.kurumPKisi[countP].turPKisiID;
+                                        MultipleMapArray[countPe] = Array(PKisiName, LocationBolme[0], LocationBolme[1], PKisiID, 1);
                                         countPe++;
                                     }
                                 }
@@ -214,7 +215,8 @@ $(document).ready(function () {
                                     var PKisiMap = cevap.kurumPKisi[countK].turPKisiLocation;
                                     var LocationBolme = PKisiMap.split(",");
                                     var PKisiName = cevap.kurumPKisi[countK].turPKisiAd + ' ' + cevap.kurumPKisi[countK].turPKisiSoyad;
-                                    MultipleMapArray[countK + 1] = Array(PKisiName, LocationBolme[0], LocationBolme[1]);
+                                    var PKisiID = cevap.kurumPKisi[countK].turPKisiID;
+                                    MultipleMapArray[countK + 1] = Array(PKisiName, LocationBolme[0], LocationBolme[1], PKisiID, 1);
                                 }
                             }
 
@@ -268,7 +270,6 @@ $(document).ready(function () {
                                 } else {
                                     alert("Lütfen Araç Seçiniz");
                                 }
-
                             } else {
                                 alert("Lütfen Saat Seçiniz");
                             }
@@ -286,25 +287,110 @@ $(document).ready(function () {
             }
         },
         onChange: function (option, checked, select) {
-            var soforLocation = $('select#TurSofor option[value!="-1"]:selected').attr('location');
-            if (soforLocation) {
-                var diziIndex = MultipleMapArray.length;
-                sofor = 1;
-                var soforName = $('select#TurSofor option[value!="-1"]:selected').attr('title');
-                var LocationSoforBolme = soforLocation.split(",");
-                MultipleMapArray[diziIndex] = Array(soforName, LocationSoforBolme[0], LocationSoforBolme[1]);
-                isMap = true;
-                isSingle = false;
-                multipleTurMapping(MultipleMapArray, MultipleMapindex, ayiriciIndex, sofor);
-                google.maps.event.addDomListener(window, 'load', multipleTurMapping);
+            if (kayitDeger == 0) {
+                var soforLocation = $('select#TurSofor option[value!="-1"]:selected').attr('location');
+                if (soforLocation) {
+                    var diziIndex = MultipleMapArray.length;
+                    sofor = 1;
+                    var soforName = $('select#TurSofor option[value!="-1"]:selected').attr('title');
+                    var soforID = $('select#TurSofor option[value!="-1"]:selected').attr('value');
+                    var LocationSoforBolme = soforLocation.split(",");
+                    MultipleMapArray[diziIndex] = Array(soforName, LocationSoforBolme[0], LocationSoforBolme[1], soforID);
+                    isMap = true;
+                    isSingle = false;
+                    multipleTurMapping(MultipleMapArray, MultipleMapindex, ayiriciIndex, sofor);
+                    google.maps.event.addDomListener(window, 'load', multipleTurMapping);
+                }
+            }
+        }
+    });
+    //saat1 e göre saat2
+    $('#TurSaat1').multiselect({
+        onDropdownShow: function (event) {
+            var SelectSaat1Options = new Array();
+            var SelectSaat1Value = new Array(0, 15, 30, 45, 100, 115, 130, 145, 200, 215, 230, 245, 300, 315, 330, 345, 400,
+                    415, 430, 445, 500, 515, 530, 545, 600, 615, 630, 645, 700, 715, 730, 745, 800, 815, 830, 845, 900, 915, 930,
+                    945, 1000, 1015, 1030, 1045, 1100, 1115, 1130, 1145, 1200, 1215, 1230, 1245, 1300, 1315, 1330, 1345, 1400,
+                    1415, 1430, 1445, 1500, 1515, 1530, 1545, 1600, 1615, 1630, 1645, 1700, 1715, 1730, 1745, 1800, 1815, 1830,
+                    1845, 1900, 1915, 1930, 1945, 2000, 2015, 2030, 2045, 2100, 2115, 2130, 2145, 2200, 2215, 2230, 2245, 2300,
+                    2315, 2330, 2345);
+            var SelectSaat1Text = new Array('00:00', '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45',
+                    '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15', '04:30', '04:45', '05:00',
+                    '05:15', '05:30', '05:45', '06:00', '06:15', '06:30', '06:45', '07:00', '07:15', '07:30', '07:45', '08:00', '08:15',
+                    '08:30', '08:45', '09:00', '09:15', '09:30', '09:45', '10:00', '10:15', '10:30', '10:45', '11:00', '11:15', '11:30',
+                    '11:45', '12:00', '12:15', '12:30', '12:45', '13:00', '13:15', '13:30', '13:45', '14:00', '14:15', '14:30', '14:45',
+                    '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00',
+                    '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15',
+                    '21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45');
+            SelectSaat1Options[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
+            var saat2Length = SelectSaat1Value.length;
+            for (var b = 0; b < saat2Length; b++) {
+                SelectSaat1Options[b + 1] = {label: SelectSaat1Text[b], title: SelectSaat1Text[b], value: SelectSaat1Value[b]};
+            }
+            $('#TurSaat1').multiselect('refresh');
+            $('#TurSaat1').multiselect('dataprovider', SelectSaat1Options);
+        },
+        onChange: function (option, checked, select) {
+            var turSaatSelect = $('select#TurSaat1 option[value!="-1"]:selected').val();
+            if (turSaatSelect) {
+                var turSaatIndex = $('select#TurSaat1 option:selected').index();
+                var SelectSaat2Options = new Array();
+                var SelectSaat2Value = new Array(0, 15, 30, 45, 100, 115, 130, 145, 200, 215, 230, 245, 300, 315, 330, 345, 400,
+                        415, 430, 445, 500, 515, 530, 545, 600, 615, 630, 645, 700, 715, 730, 745, 800, 815, 830, 845, 900, 915, 930,
+                        945, 1000, 1015, 1030, 1045, 1100, 1115, 1130, 1145, 1200, 1215, 1230, 1245, 1300, 1315, 1330, 1345, 1400,
+                        1415, 1430, 1445, 1500, 1515, 1530, 1545, 1600, 1615, 1630, 1645, 1700, 1715, 1730, 1745, 1800, 1815, 1830,
+                        1845, 1900, 1915, 1930, 1945, 2000, 2015, 2030, 2045, 2100, 2115, 2130, 2145, 2200, 2215, 2230, 2245, 2300,
+                        2315, 2330, 2345);
+                var SelectSaat2Text = new Array('00:00', '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45',
+                        '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15', '04:30', '04:45', '05:00',
+                        '05:15', '05:30', '05:45', '06:00', '06:15', '06:30', '06:45', '07:00', '07:15', '07:30', '07:45', '08:00', '08:15',
+                        '08:30', '08:45', '09:00', '09:15', '09:30', '09:45', '10:00', '10:15', '10:30', '10:45', '11:00', '11:15', '11:30',
+                        '11:45', '12:00', '12:15', '12:30', '12:45', '13:00', '13:15', '13:30', '13:45', '14:00', '14:15', '14:30', '14:45',
+                        '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00',
+                        '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15',
+                        '21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45');
+                SelectSaat2Options[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
+                var saat2Length = SelectSaat2Value.length;
+                for (var b = 0; b < turSaatIndex; b++) {
+                    SelectSaat2Options[b + 1] = {label: SelectSaat2Text[b], title: SelectSaat2Text[b], value: SelectSaat2Value[b], disabled: true};
+                }
+                for (var c = turSaatIndex; c < saat2Length; c++) {
+                    SelectSaat2Options[c + 1] = {label: SelectSaat2Text[c], title: SelectSaat2Text[c], value: SelectSaat2Value[c]};
+                }
+                $('#TurSaat2').multiselect('refresh');
+                $('#TurSaat2').multiselect('dataprovider', SelectSaat2Options);
+            } else {
+                alert("Lütfen Saat 1 Seçiniz");
+                var SelectSaat2Optionss = new Array();
+                $('#TurSaat2').multiselect('dataprovider', SelectSaat2Optionss);
+                $('#TurSaat2').multiselect('refresh');
+            }
+        }
+    });
+    //saat2 işlemleri
+    $('#TurSaat2').multiselect({
+        onDropdownShow: function (event) {
+            var turSaatSelect = $('select#TurSaat1 option[value!="-1"]:selected').val();
+            if (turSaatSelect) {
+                $('#TurSaat1').multiselect('refresh');
+            } else {
+                alert("Lütfen Saat 1 Seçiniz");
             }
         }
     });
 });
-
 $.AdminIslemler = {
     adminTurYeni: function () {
         $("input[name=TurAdi]").val(' ');
+        $("textarea[name=Aciklama]").val(' ');
+        var SelectAracOptions = new Array();
+        var SelectSaat1Options = new Array();
+        var SelectSaat2Options = new Array();
+        var SelectSoforOptions = new Array();
+        $('#TurArac').multiselect('dataprovider', SelectAracOptions);
+        $('#TurSaat1').multiselect('dataprovider', SelectSaat1Options);
+        $('#TurSaat2').multiselect('dataprovider', SelectSaat2Options);
+        $('#TurSofor').multiselect('dataprovider', SelectSoforOptions);
         $.ajax({
             data: {"tip": "turBolgeEkleSelect"},
             success: function (cevap) {
@@ -318,15 +404,9 @@ $.AdminIslemler = {
                         }
                     }
                     $('#TurSelectGun').multiselect('refresh');
-                    $('#TurSelectTip').multiselect();
-                    $('#TurSaat2').multiselect({
-                        maxHeight: 200,
-                        enableFiltering: true
-                    });
-                    $('#TurSaat1').multiselect({
-                        maxHeight: 200,
-                        enableFiltering: true
-                    });
+                    $('#TurSelectTip').multiselect('refresh');
+                    $('#TurSaat1').multiselect();
+                    $('#TurSaat2').multiselect();
                     $('#TurSelectBolge').multiselect();
                     $('#TurSelectKurum').multiselect();
                     $('#TurArac').multiselect('refresh');
@@ -340,172 +420,143 @@ $.AdminIslemler = {
         });
         return true;
     },
-    adminAddKurumVazgec: function () {
-        $("input[name=KurumAdi]").val('');
-        $("textarea[name=KurumAciklama]").val('');
-        return true;
-    },
-    adminKurumKaydet: function () {
-        AdminKurumKaydet = [];
-        var kurum_adi = $("input[name=KurumAdi]").val();
-        var kurum_aciklama = $("textarea[name=KurumAciklama]").val();
-        AdminKurumKaydet.push(kurum_adi);
-        AdminKurumKaydet.push(kurum_adi);
-        if (bolge_adi != '') {
-            $.ajax({
-                data: {"kurum_adi": kurum_adi, "kurum_aciklama": kurum_aciklama, "tip": "adminKurumYeniKaydet"},
-                success: function (cevap) {
-                    if (cevap.hata) {
-                        AdminKurumKaydet = [];
-                        alert(cevap.hata);
-                    } else {
-                        var bolgeCount = $('#smallBolge').text();
-                        bolgeCount++;
-                        $('#smallBolge').text(bolgeCount);
-                        var addRow = ("<tr style='background-color:#F2F2F2'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
-                                + "<i class='fa fa-search'></i> " + AdminBolgeKaydet[0] + "</a>"
-                                + "</td><td class='hidden-xs'>0</td><td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td></tr>");
-                        NewKurumTable.DataTable().row.add($(addRow)).draw();
-                    }
-                }
-            });
-            return true;
+    adminTurKaydet: function () {
+        if (locations.length < 2) {
+            alert("Lütfen Turlarınızı Oluşturunuz");
         } else {
-            alert("Lütfen Kurum Adını Giriniz");
-        }
-    },
-    adminKurumDetailSil: function () {
-        var kurumdetail_id = $("input[name=adminKurumDetailID]").val();
-        $.ajax({
-            data: {"kurumdetail_id": kurumdetail_id, "tip": "adminKurumDetailDelete"},
-            success: function (cevap) {
-                if (cevap.hata) {
-                    alert(cevap.hata);
-                } else {
-                    disabledForm();
-                    $("input[name=KurumDetailAdi]").val('');
-                    $("input[name=KurumDetailBolge]").val('');
-                    $("input[name=KurumDetailTelefon]").val('');
-                    $("input[name=KurumDetailEmail]").val('');
-                    $("textarea[name=KurumDetailAdres]").val('');
-                    $("textarea[name=KurumDetailAciklama]").val('');
-                    $("input[name=adminKurumDetailID]").val('');
-                    var kurumCount = $('#smallKurum').text();
-                    kurumCount--;
-                    $('#smallKurum').text(kurumCount);
-                    var length = $('tbody#adminKurumRow tr').length;
-                    for (var t = 0; t < length; t++) {
-                        var attrValueId = $("tbody#adminKurumRow > tr > td > a").eq(t).attr('value');
-                        if (attrValueId == kurumdetail_id) {
-                            var deleteRow = $('tbody#adminKurumRow > tr:eq(' + t + ')');
-                            NewKurumTable.DataTable().row($(deleteRow)).remove().draw();
-                        }
-                    }
-                }
-            }
-        });
-        return true;
-    },
-    adminKurumDetailDuzenle: function () {
-        //Kurum İşlemleri Değerleri
-        var kurumdetail_adi = $("input[name=KurumDetailAdi]").val();
-        var kurumdetail_bolge = $("input[name=KurumDetailBolge]").val();
-        var kurumdetail_telefon = $("input[name=KurumDetailTelefon]").val();
-        var kurumdetail_email = $("input[name=KurumDetailEmail]").val();
-        var kurumdetail_adres = $("textarea[name=KurumDetailAdres]").val();
-        var kurumdetail_aciklama = $("textarea[name=KurumDetailAciklama]").val();
-        AdminKurumDetailVazgec = [];
-        AdminKurumDetailVazgec.push(kurumdetail_adi, kurumdetail_bolge, kurumdetail_telefon, kurumdetail_email, kurumdetail_adres, kurumdetail_aciklama);
-    },
-    adminKurumDetailVazgec: function () {
-        $("input[name=KurumDetailAdi]").val(AdminKurumDetailVazgec[0]);
-        $("input[name=KurumDetailBolge]").val(AdminKurumDetailVazgec[1]);
-        $("input[name=KurumDetailTelefon]").val(AdminKurumDetailVazgec[2]);
-        $("input[name=KurumDetailEmail]").val(AdminKurumDetailVazgec[3]);
-        $("textarea[name=KurumDetailAdres]").val(AdminKurumDetailVazgec[4]);
-        $("textarea[name=KurumDetailAciklama]").val(AdminKurumDetailVazgec[5]);
-    },
-    adminKurumDetailKaydet: function () {
-        var kurumdetail_adi = $("input[name=KurumDetailAdi]").val();
-        var kurumdetail_bolge = $("input[name=KurumDetailBolge]").val();
-        var kurumdetail_telefon = $("input[name=KurumDetailTelefon]").val();
-        var kurumdetail_email = $("input[name=KurumDetailEmail]").val();
-        var kurumdetail_adres = $("textarea[name=KurumDetailAdres]").val();
-        var kurumdetail_aciklama = $("textarea[name=KurumDetailAciklama]").val();
-        var kurumdetail_id = $("input[name=adminKurumDetailID]").val();
-        if (AdminKurumDetailVazgec[0] == kurumdetail_adi && AdminKurumDetailVazgec[1] == kurumdetail_bolge && AdminKurumDetailVazgec[2] == kurumdetail_telefon && AdminKurumDetailVazgec[3] == kurumdetail_email && AdminKurumDetailVazgec[4] == kurumdetail_adres && AdminKurumDetailVazgec[5] == kurumdetail_aciklama) {
-            alert("Lütfen Değişiklik yaptığınıza emin olun.");
-        } else {
-            $.ajax({
-                data: {"kurumdetail_id": kurumdetail_id, "kurumdetail_adi": kurumdetail_adi, "kurumdetail_bolge": kurumdetail_bolge, "kurumdetail_telefon": kurumdetail_telefon, "kurumdetail_email": kurumdetail_email, "kurumdetail_adres": kurumdetail_adres, "kurumdetail_aciklama": kurumdetail_aciklama, "tip": "adminKurumDetailDuzenle"},
-                success: function (cevap) {
-                    if (cevap.hata) {
-                        alert(cevap.hata);
-                    } else {
-                        disabledForm();
-                        var length = $('tbody#adminKurumRow tr').length;
-                        for (var t = 0; t < length; t++) {
-                            var attrValueId = $("tbody#adminKurumRow > tr > td > a").eq(t).attr('value');
-                            if (attrValueId == kurumdetail_id) {
-                                $("tbody#adminKurumRow > tr > td > a").eq(t).html('<i class="fa fa-search"></i> ' + kurumdetail_adi);
-                                $("tbody#adminKurumRow > tr > td > a").eq(t).parent().parent().find('td:last-child').text(kurumdetail_aciklama);
-                                $('tbody#adminKurumRow > tr:eq(' + t + ') > td:eq(0)').css({"background-color": "#F2F2F2"});
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    },
-    adminKurumVazgec: function () {
-        return true;
-    },
-    adminKurumEkle: function () {
-        var kurumadi = $("input[name=KurumAdi]").val();
-        if (kurumadi == '') {
-            alert("Kurum Adı Boş geçilemez");
-        } else {
+            var turGidis = $("input[name=TurGidis]").val();
+            var turDonus = $("input[name=TurDonus]").val();
+            var turID = $("input[name=TurID]").val();
+            if (turGidis == '' || turDonus == '') {
+                var turAdi = $("input[name=TurAdi]").val();
+                if (turAdi) {
+                    var bolgeID = $('select#TurSelectBolge option[value!="0"]:selected').val();
+                    if (bolgeID) {
+                        var bolgead = $("#TurSelectBolge option:selected").text();
+                        var kurumId = $('select#TurSelectKurum option[value!="-1"]:selected').val();
+                        if (kurumId) {
+                            var kurumad = $("#TurSelectKurum option:selected").attr('label');
+                            var kurumTip = $('#TurSelectKurum option:selected').attr('id');
+                            var kurumLocation = $('#TurSelectKurum option:selected').attr('location');
+                            var turGun = new Array();
+                            $('select#TurSelectGun option:selected').each(function () {
+                                turGun.push($(this).val());
+                            });
+                            var turgunlength = turGun.length;
+                            if (turgunlength > 0) {
+                                var turSaat1 = $('select#TurSaat1 option[value!="-1"]:selected').val();
+                                if (turSaat1) {
+                                    var turSaat2 = $('select#TurSaat2 option[value!="-1"]:selected').val();
+                                    if (turSaat2) {
+                                        var aracID = $('select#TurArac option[value!="-1"]:selected').val();
+                                        if (aracID) {
+                                            var aracPlaka = $("select#TurArac option:selected").attr('label');
+                                            var soforID = $('select#TurSofor option:selected').val();
+                                            if (soforID) {
+                                                var soforAd = $("select#TurSofor option:selected").attr('label');
+                                                var turTip = $("select#TurSelectTip option:selected").val();
+                                                var turAciklama = $("textarea[name=Aciklama]").val();
+                                                $.ajax({
+                                                    data: {"turID": turID, "turAdi": turAdi, "bolgeID": bolgeID, "bolgead": bolgead, "kurumad": kurumad, "kurumId": kurumId,
+                                                        "kurumTip": kurumTip, "kurumLocation": kurumLocation, "turGun[]": turGun, "turSaat1": turSaat1, "turSaat2": turSaat2,
+                                                        "aracID": aracID, "aracPlaka": aracPlaka, "turGidis": turGidis, "turDonus": turDonus,
+                                                        "soforID": soforID, "soforAd": soforAd, "turTip": turTip, "turAciklama": turAciklama,
+                                                        "turOgrenciID[]": KisiOgrenciID, "turOgrenciAd[]": KisiOgrenciAd, "turOgrenciLocation[]": KisiOgrenciLocation, "turKisiIsciID[]": KisiIsciID,
+                                                        "turKisiIsciAd[]": KisiIsciAd, "turKisiIsciLocation[]": KisiIsciLocation, "tip": "turKaydet"},
+                                                    success: function (cevap) {
+                                                        if (cevap.hata) {
+                                                            alert(cevap.hata);
+                                                        } else {
+                                                            kayitDeger = 1;
+                                                            if (cevap.turGidis) {
+                                                                $("input[name=TurGidis]").val(cevap.turGidis);
+                                                                $('#TurSelectTip').multiselect('deselect', '0', true);
+                                                                var dropdown = $('#TurSelectTip').siblings('.multiselect-container');
+                                                                $('#TurSelectTip option:eq(0)').each(function () {
+                                                                    var input = $('input[value="' + $(this).val() + '"]');
+                                                                    input.prop('disabled', true);
+                                                                    input.parent('li').addClass('disabled');
+                                                                });
+                                                                $('#TurSelectTip').multiselect('select', '1', true);
+                                                            }
+                                                            if (cevap.turDonus) {
+                                                                $("input[name=TurDonus]").val(cevap.turDonus);
+                                                                $('#TurSelectTip').multiselect('deselect', '1', true);
+                                                                var dropdown = $('#TurSelectTip').siblings('.multiselect-container');
+                                                                $('#TurSelectTip option:eq(1)').each(function () {
+                                                                    var input = $('input[value="' + $(this).val() + '"]');
+                                                                    input.prop('disabled', true);
+                                                                    input.parent('li').addClass('disabled');
+                                                                });
+                                                                $('#TurSelectTip').multiselect('select', '0', true);
+                                                            }
+                                                            $('#TurSelectBolge').multiselect('disable');
+                                                            $('#TurSelectKurum').multiselect('disable');
+                                                            $('#TurSelectGun').multiselect('disable');
+                                                            $("input[name=TurID]").val(cevap.turID);
+                                                            var turGidisi = $("input[name=TurGidis]").val();
+                                                            var turDonusu = $("input[name=TurDonus]").val();
+                                                            if (turGidisi != '' && turDonusu != '') {
+                                                                //iki işlemde yapıldı ise kapanıyor direkt
+                                                                var turTurutipi;
+                                                                if (kurumTip == 0) {
+                                                                    turTurutipi = 'Öğrenci';
+                                                                } else if (kurumTip == 1) {
+                                                                    turTurutipi = 'İşçi';
+                                                                } else {
+                                                                    turTurutipi = 'Öğrenci/Personel';
+                                                                }
+                                                                var turCount = $('#smallTur').text();
+                                                                turCount++;
+                                                                $('#smallTur').text(turCount);
+                                                                var addRow = "<tr style='background-color:#F2F2F2'><td>"
+                                                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.turID + "'>"
+                                                                        + "<i class='glyphicon glyphicon-refresh' style='color:red;'></i> " + turAdi + "</a></td>"
+                                                                        + "<td class='hidden-xs'>" + bolgead + "</td>"
+                                                                        + "<td class='hidden-xs'>" + kurumad + "</td>"
+                                                                        + "<td class='hidden-xs'>" + turTurutipi + "</td>"
+                                                                        + "<td class='hidden-xs'>" + turAciklama + "</td>";
+                                                                TurTable.DataTable().row.add($(addRow)).draw();
+                                                                svControl('svClose', 'tur', '');
+                                                            } else {
+                                                                //işlemlerde eksik varsa kalıyor sayfa
+                                                                disabledForm();
+                                                            }
 
-            var kurumlocation = $("input[name=KurumLokasyon]").val();
-            var bolgead = $("#KurumBolgeSelect option:selected").text();
-            var bolgeId = $("#KurumBolgeSelect option:selected").val();
-            var kurumTlfn = $("input[name=KurumTelefon]").val();
-            var kurumEmail = $("input[name=KurumEmail]").val();
-            var kurumwebsite = $("input[name=KurumWebSite]").val();
-            var kurumadrsDty = $("textarea[name=KurumAdresDetay]").val();
-            var kurumaciklama = $("textarea[name=Aciklama]").val();
-            var kurumulke = $("input[name=country]").val();
-            var kurumil = $("input[name=administrative_area_level_1]").val();
-            var kurumilce = $("input[name=administrative_area_level_2]").val();
-            var kurumsemt = $("input[name=locality]").val();
-            var kurummahalle = $("input[name=neighborhood]").val();
-            var kurumsokak = $("input[name=route]").val();
-            var kurumpostakodu = $("input[name=postal_code]").val();
-            var kurumcaddeno = $("input[name=street_number]").val();
-            $.ajax({
-                data: {"kurumadi": kurumadi, "bolgeId": bolgeId, "bolgead": bolgead, "kurumlocation": kurumlocation, "kurumTlfn": kurumTlfn, "kurumEmail": kurumEmail,
-                    "kurumwebsite": kurumwebsite, "kurumadrsDty": kurumadrsDty, "kurumaciklama": kurumaciklama,
-                    "kurumulke": kurumulke, "kurumil": kurumil, "kurumilce": kurumilce, "kurumsemt": kurumsemt,
-                    "kurummahalle": kurummahalle, "kurumsokak": kurumsokak, "kurumpostakodu": kurumpostakodu,
-                    "kurumcaddeno": kurumcaddeno, "tip": "adminKurumKaydet"},
-                success: function (cevap) {
-                    if (cevap.hata) {
-                        alert(cevap.hata);
+                                                        }
+                                                    }
+                                                });
+                                            } else {
+                                                alert("Lütfen Şoför Seçiniz");
+                                            }
+                                        } else {
+                                            alert("Lütfen Araç Seçiniz");
+                                        }
+                                    } else {
+                                        alert("Lütfen Saat Seçiniz");
+                                    }
+                                } else {
+                                    alert("Lütfen Saat Seçiniz");
+                                }
+                            } else {
+                                alert("Lütfen Gün Seçiniz");
+                            }
+                        } else {
+                            alert("Lütfen Kurum Seçiniz");
+                        }
                     } else {
-                        var kurumCount = $('#smallKurum').text();
-                        kurumCount++;
-                        $('#smallKurum').text(kurumCount);
-                        var addRow = "<tr style='background-color:#F2F2F2'><td>"
-                                + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newKurumID + "'>"
-                                + "<i class='fa fa-map-marker'></i> " + kurumadi + "</a></td>"
-                                + "<td class='hidden-xs' value='" + bolgeId + "'>" + bolgead + "</td>"
-                                + "<td class='hidden-xs'>0</td><td class='hidden-xs'>" + kurumaciklama + "</td></tr>";
-                        NewKurumTable.DataTable().row.add($(addRow)).draw();
+                        alert("Lütfen Bölge Seçiniz");
                     }
+                } else {
+                    alert("Tur Adı Boş Geçilemez");
                 }
-            });
-            return true;
+            } else {
+                alert("Gidiş ve Dönüş Tur Eklemesini yapmışsınız");
+            }
         }
+    },
+    adminTurVazgec: function () {
+        return true;
     },
     adminKurumMap: function () {
         var kurum_location = $("input[name=adminKurumDetailLocation]").val();

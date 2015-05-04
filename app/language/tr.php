@@ -158,13 +158,16 @@ class tr {
             "Cuma" => "Cuma",
             "Cumartesi" => "Cumartesi",
             "Pazar" => "Pazar",
-            "Saat" => "Saat",
+            "BasSaat" => "Başlangıç Saati",
+            "BitSaat" => "Bitiş Saati",
             "Gidis" => "Gidiş",
             "Donus" => "Dönüş",
             "Seciniz" => "Seçiniz",
             "HaritaGor" => "Haritada Gör",
             "OgrenciPersonel" => "Öğrenci-Personel",
-            "AdresBilgi" => "Adres Bilgileri"
+            "AdresBilgi" => "Adres Bilgileri",
+            "TurAnimasyon" => "Animasyon Oynat",
+            "ToplamKm" => "Toplam Km"
         );
         return $trdil;
     }

@@ -879,18 +879,21 @@ class AdminWeb extends Controller {
 
                 $turListe = $Panel_Model->turListele();
                 //tur count
-                $adminTur[0]['AdminTurCount'] = count($turListe);
-                //tur bilgileri
-                $a = 0;
-                foreach ($turListe as $tur) {
-                    $adminTur[$a]['AdminTur'] = $tur['SBTurAd'];
-                    $adminTur[$a]['AdminTurID'] = $tur['SBTurID'];
-                    $adminTur[$a]['AdminTurAktiflik'] = $tur['SBTurAktiflik'];
-                    $adminTur[$a]['AdminTurBolgeAd'] = $tur['SBBolgeAd'];
-                    $adminTur[$a]['AdminTurKurumAd'] = $tur['SBKurumAd'];
-                    $adminTur[$a]['AdminTurTip'] = $tur['SBTurTip'];
-                    $adminTur[$a]['AdminTurAciklama'] = $tur['SBTurAciklama'];
-                    $a++;
+                if (count($turListe) > 0) {
+                    $adminTur[0]['AdminTurCount'] = count($turListe);
+
+                    //tur bilgileri
+                    $a = 0;
+                    foreach ($turListe as $tur) {
+                        $adminTur[$a]['AdminTur'] = $tur['SBTurAd'];
+                        $adminTur[$a]['AdminTurID'] = $tur['SBTurID'];
+                        $adminTur[$a]['AdminTurAktiflik'] = $tur['SBTurAktiflik'];
+                        $adminTur[$a]['AdminTurBolgeAd'] = $tur['SBBolgeAd'];
+                        $adminTur[$a]['AdminTurKurumAd'] = $tur['SBKurumAd'];
+                        $adminTur[$a]['AdminTurTip'] = $tur['SBTurTip'];
+                        $adminTur[$a]['AdminTurAciklama'] = $tur['SBTurAciklama'];
+                        $a++;
+                    }
                 }
             } else {//değilse admin ıd ye göre tur görür
                 $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
@@ -903,18 +906,21 @@ class AdminWeb extends Controller {
 
                 $turListe = $Panel_Model->rutbeTurBolgeListele($rutbebolgedizi);
                 //tur count
-                $adminTur[0]['AdminTurCount'] = count($turListe);
-                //tur bilgileri
-                $a = 0;
-                foreach ($turListe as $tur) {
-                    $adminTur[$a]['AdminTur'] = $tur['SBTurAd'];
-                    $adminTur[$a]['AdminTurID'] = $tur['SBTurID'];
-                    $adminTur[$a]['AdminTurAktiflik'] = $tur['SBTurAktiflik'];
-                    $adminTur[$a]['AdminTurBolgeAd'] = $tur['SBBolgeAd'];
-                    $adminTur[$a]['AdminTurKurumAd'] = $tur['SBKurumAd'];
-                    $adminTur[$a]['AdminTurTip'] = $tur['SBTurTip'];
-                    $adminTur[$a]['AdminTurAciklama'] = $tur['SBTurAciklama'];
-                    $a++;
+                if (count($turListe) > 0) {
+                    $adminTur[0]['AdminTurCount'] = count($turListe);
+
+                    //tur bilgileri
+                    $a = 0;
+                    foreach ($turListe as $tur) {
+                        $adminTur[$a]['AdminTur'] = $tur['SBTurAd'];
+                        $adminTur[$a]['AdminTurID'] = $tur['SBTurID'];
+                        $adminTur[$a]['AdminTurAktiflik'] = $tur['SBTurAktiflik'];
+                        $adminTur[$a]['AdminTurBolgeAd'] = $tur['SBBolgeAd'];
+                        $adminTur[$a]['AdminTurKurumAd'] = $tur['SBKurumAd'];
+                        $adminTur[$a]['AdminTurTip'] = $tur['SBTurTip'];
+                        $adminTur[$a]['AdminTurAciklama'] = $tur['SBTurAciklama'];
+                        $a++;
+                    }
                 }
             }
 

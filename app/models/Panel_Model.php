@@ -1230,7 +1230,7 @@ class Panel_Model extends Model {
 
     //tur bölge pasif araç listele
     public function turBolgePasifAracListele($array = array()) {
-        $sql = 'SELECT SBAracID,SBAracPlaka FROM sbarac WHERE SBAracID IN (' . $array . ') ORDER BY SBAracPlaka ASC';
+        $sql = 'SELECT SBAracID,SBAracPlaka,SBAracKapasite FROM sbarac WHERE SBAracID IN (' . $array . ') ORDER BY SBAracPlaka ASC';
         return($this->db->select($sql));
     }
 
@@ -1260,7 +1260,7 @@ class Panel_Model extends Model {
 
     //tur kurum öğrenci
     public function turKurumOgrencii($array = array()) {
-        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,BSOgrenciLocation FROM bsogrenci Where BSOgrenciID IN (' . $array . ')';
+        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,BSOgrenciLocation FROM bsogrenci Where BSOgrenciID IN (' . $array . ') AND Status=1';
         return($this->db->select($sql));
     }
 
@@ -1272,8 +1272,62 @@ class Panel_Model extends Model {
 
     //tur kurum işçi
     public function turKurumIscii($array = array()) {
-        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciSoyad,SBIsciLocation FROM sbisci Where SBIsciID IN (' . $array . ')';
+        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciSoyad,SBIsciLocation FROM sbisci Where SBIsciID IN (' . $array . ') AND Status=1';
         return($this->db->select($sql));
+    }
+
+    //kurumda herhangi bi tura kayıtlı öğrenciler
+    public function turKurumAitOgrenci($kurumID) {
+        $sql = 'SELECT DISTINCT BSOgrenciID FROM bsogrencitur Where BSKurumID=' . $kurumID;
+        return($this->db->select($sql));
+    }
+
+    //kurumda herhangi bi tura kayıtlı işçiler
+    public function turKurumAitIsci($kurumID) {
+        $sql = 'SELECT DISTINCT SBIsciID FROM sbiscitur Where SBKurumID=' . $kurumID;
+        return($this->db->select($sql));
+    }
+
+    //kurumda herhangi bi tura kayıtlı personeller
+    public function turKurumAitPersonel($kurumID) {
+        $sql = 'SELECT DISTINCT BSOgrenciIsciID FROM bsogrenciiscitur Where BSKullaniciTip=1 AND BSKurumID=' . $kurumID;
+        return($this->db->select($sql));
+    }
+
+    //kurumda herhangi bi tura kayıtlı öğrenciler
+    public function turKurumAitOgrenciler($kurumID) {
+        $sql = 'SELECT DISTINCT BSOgrenciIsciID FROM bsogrenciiscitur Where BSKullaniciTip=0 AND BSKurumID=' . $kurumID;
+        return($this->db->select($sql));
+    }
+
+    //yeni tur Kaydet
+    public function addNewTur($data) {
+        return ($this->db->insert("sbtur", $data));
+    }
+
+    //yeni tur tip Kaydet
+    public function addNewTurTip($data) {
+        return ($this->db->insert("bsturtip", $data));
+    }
+
+    //yeni tur öğrenci kaydet
+    public function addNewTurOgrenci($data) {
+        return ($this->db->insert("bsogrencitur", $data));
+    }
+
+    //yeni tur işçi kaydet
+    public function addNewTurIsci($data) {
+        return ($this->db->insert("sbiscitur", $data));
+    }
+
+    //yeni tur işçi öğrenci kaydet
+    public function addNewTurIsciOgrenci($data) {
+        return ($this->db->multiInsert("bsogrenciiscitur", $data));
+    }
+
+    //tur  tip güncelleme
+    public function turTipDuzenle($data, $turID) {
+        return ($this->db->update("sbtur", $data, "SBTurID=" . $turID));
     }
 
 }

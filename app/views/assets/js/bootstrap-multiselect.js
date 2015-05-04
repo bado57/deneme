@@ -250,7 +250,7 @@
             selectedClass: 'active',
             // Maximum height of the dropdown menu.
             // If maximum height is exceeded a scrollbar will be displayed.
-            maxHeight: false,
+            maxHeight: true,
             checkboxName: false,
             includeSelectAllOption: false,
             includeSelectAllIfMoreThan: 0,
@@ -342,7 +342,7 @@
             if (this.options.maxHeight) {
                 // TODO: Add a class for this option to move the css declarations.
                 this.$ul.css({
-                    'max-height': this.options.maxHeight + 'px',
+                    'max-height': 200 + 'px',
                     'overflow-y': 'auto',
                     'overflow-x': 'hidden'
                 });
@@ -1112,6 +1112,7 @@
                             label: subOption.label || subOption.value,
                             title: subOption.title,
                             id: subOption.id,
+                            kapasite: subOption.kapasite,
                             location: subOption.location,
                             selected: !!subOption.selected,
                             disabled: !!subOption.disabled
@@ -1124,6 +1125,7 @@
                         label: option.label || option.value,
                         title: option.title,
                         id: option.id,
+                        kapasite: option.kapasite,
                         location: option.location,
                         selected: !!option.selected,
                         disabled: !!option.disabled

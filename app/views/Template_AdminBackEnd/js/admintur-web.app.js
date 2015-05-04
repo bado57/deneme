@@ -4,6 +4,14 @@ var MultipleMapArray = new Array();
 var MultipleMapindex;
 var ayiriciIndex = 0;
 var sofor = 0;
+var KisiOgrenciID = new Array();
+var KisiOgrenciAd = new Array();
+var KisiOgrenciLocation = new Array();
+var KisiIsciID = new Array();
+var KisiIsciAd = new Array();
+var KisiIsciLocation = new Array();
+var locations = new Array();
+var kayitDeger = 0;
 
 $(document).ready(function () {
     // Sayfa Scroll Olayı
@@ -132,17 +140,8 @@ function svControl(dtype, dclass, dislemler) {
             case 'adminHaritaKaydet' :
                 var returnCevap = saveMap();
                 break;
-            case 'adminKurumCancel' :
-                var returnCevap = $.AdminIslemler.adminAddKurumVazgec();
-                break;
-            case 'adminKurumKayit' :
-                var returnCevap = $.AdminIslemler.adminKurumKaydet();
-                break;
-            case 'adminKurumDetailSil' :
-                var returnCevap = $.AdminIslemler.adminKurumDetailSil();
-                break;
-            case 'adminKurumVazgec' :
-                var returnCevap = $.AdminIslemler.adminKurumVazgec();
+            case 'adminTurVazgec' :
+                var returnCevap = $.AdminIslemler.adminTurVazgec();
                 break;
             case 'adminKurumEkle' :
                 var returnCevap = $.AdminIslemler.adminKurumEkle();
@@ -223,8 +222,8 @@ function vzgControl(vzgislemler) {
 //Kaydet Kontrol
 function saveControl(saveislemler) {
     switch (saveislemler) {
-        case 'adminKurumDetailKaydet' :
-            $.AdminIslemler.adminKurumDetailKaydet();
+        case 'adminTurKaydet' :
+            $.AdminIslemler.adminTurKaydet();
             break;
         default :
             break;
@@ -448,127 +447,242 @@ function multipleMapping(gelen, index) {
 
 //tur çoklu harita
 function multipleTurMapping(gelen, index, ayirici, sofor) {
-
+    /*
+     * Gelen tür
+     * 0->Öğrenci
+     * 1->İşçi
+     * 2->Şoför
+     * 3->Okul
+     */
     var hh = $("#turForm").height();
     var sh = (hh - 50);
     $("#multiple_map").height(sh);
-    var directionsService = new google.maps.DirectionsService();
-    var renderOptions = {draggable: true};
-    var directionDisplay = new google.maps.DirectionsRenderer(renderOptions);
+    var directionsDisplay = [];
+    var directionsService = [];
     var items = new Array();
-    var originAddress = '';
-    var waypoints = [];
+    var markerIs = new Array();
+    var infobox;
+    var soforDeger = 0;
+    var aracKapasite = $('select#TurArac option[value!="-1"]:selected').attr('kapasite');
     if (navigator.geolocation) {
 
         var icons = [];
         icons.push('../Plugins/mapView/build.png')
-        if (sofor != 0) {//şoför seçildi ve locatiionu varsa
+        if (sofor != 0) {//şoför seçildi ve locationu varsa
             for (var gelenicon = 1; gelenicon < gelen.length - 1; gelenicon++) {
                 if (ayirici == 0) {//yoksa, yani öğrencinin yanında personel yoksa
                     if (index != 1) {//öğrenci
-                        icons.push('../Plugins/mapView/student.png')
+                        icons.push('../Plugins/mapView/red_student.png')
                     } else {//personel
-                        icons.push('../Plugins/mapView/employee.png')
+                        icons.push('../Plugins/mapView/employee_red.png')
                     }
                 } else {//ikiside varsa
                     if (gelenicon < ayirici) {//öğrenci
-                        icons.push('../Plugins/mapView/student.png')
+                        icons.push('../Plugins/mapView/red_student.png')
                     } else {//işçi
-                        icons.push('../Plugins/mapView/employee.png')
+                        icons.push('../Plugins/mapView/employee_red.png')
                     }
                 }
             }//şoför için
             icons.push('../Plugins/mapView/driver.png')
+            soforDeger++;
         } else {//şoför yoksa
             for (var gelenicon = 1; gelenicon < gelen.length; gelenicon++) {
                 if (ayirici == 0) {//yoksa, yani öğrencinin yanında personel yoksa
                     if (index != 1) {//öğrenci
-                        icons.push('../Plugins/mapView/student.png')
+                        icons.push('../Plugins/mapView/red_student.png')
                     } else {//personel
-                        icons.push('../Plugins/mapView/employee.png')
+                        icons.push('../Plugins/mapView/employee_red.png')
                     }
                 } else {//ikiside varsa
                     if (gelenicon < ayirici) {//öğrenci
-                        icons.push('../Plugins/mapView/student.png')
+                        icons.push('../Plugins/mapView/red_student.png')
                     } else {//işçi
-                        icons.push('../Plugins/mapView/employee.png')
+                        icons.push('../Plugins/mapView/employee_red.png')
                     }
                 }
             }
         }
-
         var mapOptions = {
             zoom: 12,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
+            panControl: false,
+            zoomControl: true,
+            scaleControl: true,
+            streetViewControl: false,
+            mapTypeControl: true
         };
         var iconsLength = icons.length;
         var newPos = new google.maps.LatLng(gelen[0][1],
                 gelen[0][2]);
         var map = new google.maps.Map(document.getElementById('multiple_map'),
                 mapOptions);
-        directionDisplay.setMap(map);
-        var infowindow = new google.maps.InfoWindow({
-            maxWidth: 160
+        infobox = new InfoBox({
+            content: document.getElementById("infobox"),
+            disableAutoPan: false,
+            maxWidth: 150,
+            alignBottom: false,
+            pixelOffset: new google.maps.Size(-140, 0),
+            boxStyle: {
+                background: "url('http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/examples/tipbox.gif') no-repeat",
+                opacity: 1.75,
+                width: "280px"
+            },
+            closeBoxMargin: "12px 4px 2px 2px",
+            closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif",
+            infoBoxClearance: new google.maps.Size(1, 1)
         });
 
         var markers = new Array();
         var marker;
-
+        var number = 0;
         var iconCounter = 0;
-        var i = 0;
-        var click = 0;
+        var b = 0;
+        var key;
+        var tiklananNumber;
+        var artanKapasite = 0;
         var interval = setInterval(function () {
             marker = new google.maps.Marker({
-                position: new google.maps.LatLng(gelen[i][1], gelen[i][2]),
+                position: new google.maps.LatLng(gelen[b][1], gelen[b][2]),
                 map: map,
                 animation: google.maps.Animation.DROP,
-                icon: icons[iconCounter]
+                icon: icons[iconCounter],
+                title: gelen[b][0],
+                id: gelen[b][3],
+                tur: gelen[b][4],
+                number: number
             });
             markers.push(marker);
-            (function (marker, i) {
+            //var markerCluster = new MarkerClusterer(map, markers);
+            (function (marker, b) {
                 google.maps.event.addListener(marker, "click", function (e) {
-                    if (click == 0) {
-                        originAddress = this.getPosition().lat() + ',' + this.getPosition().lng();
+                    if (kayitDeger == 1) {
+                        alert("Kullanıcı Kayıt İşlemi Tamamlanmıştır");
                     } else {
-                        items.push(this.getPosition().lat() + ',' + this.getPosition().lng());
-                        var routelength = items.length;
-                        console.log(routelength);
-                        if (routelength >= 1) {
-                            waypoints = [];
-                            for (var a = 0; a < routelength; a++) {
-                                var address = items[a];
-                                if (address !== "") {
-                                    waypoints.push({
-                                        location: address,
-                                        stopover: true
-                                    });
-                                }
-                            }
-                            console.log(waypoints);
+                        if (soforDeger == 0) {
+                            alert("İşaretlemeye başlamak için lütfen şoför seçiniz.");
                         } else {
-                            var sondanOnceki = routelength - 2;
-                            originAddress = items[sondanOnceki];
-                            waypoints = [];
+                            if (this.number == 0) {
+                                alert("Kurum Seçilemez, Zaten Varış Noktasıdır.");
+                            } else {
+                                if (this.number == gelen.length - 1) {
+                                    alert("Şoför Seçilemez, İlk Noktaya Göre hareket eder");
+                                } else {
+                                    tiklananNumber = this.number;
+                                    var markerIndex = markerIs.indexOf(this.number);
+                                    if (markerIndex != -1) {
+                                        artanKapasite--;
+                                    }
+                                    if (artanKapasite < aracKapasite) {
+                                        if (markerIs.length == 0) {
+                                            KisiOgrenciID = [];
+                                            KisiOgrenciAd = [];
+                                            KisiOgrenciLocation = [];
+                                            KisiIsciID = [];
+                                            KisiIsciAd = [];
+                                            KisiIsciLocation = [];
+                                            if (this.tur == 0) {
+                                                KisiOgrenciID.push(this.id);
+                                                KisiOgrenciAd.push(this.title);
+                                                KisiOgrenciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
+                                                marker.setIcon('../Plugins/mapView/green_student.png');
+                                            } else {
+                                                KisiIsciID.push(this.id);
+                                                KisiIsciAd.push(this.title);
+                                                KisiIsciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
+                                                marker.setIcon('../Plugins/mapView/employee_green.png');
+                                            }
+                                            items = [];
 
-                            for (var a = 0; a < routelength; a++) {
-                                var address = items[a];
-                                if (address !== "") {
-                                    waypoints.push({
-                                        location: address,
-                                        stopover: true
-                                    });
+                                            markerIs.push(this.number);
+                                            artanKapasite++;
+                                            key = this.number;
+                                            var obj = {};
+                                            obj[key] = this.getPosition().lat() + ',' + this.getPosition().lng();
+
+                                            items.push(obj);
+                                            alert("Başlangıç Noktasını Belirlediniz, değiştirmek istediğiniz kişinin lütfen üzerine tekrar tıklayınız.");
+                                        } else {
+                                            tiklananNumber = this.number;
+                                            var markerIndex = markerIs.indexOf(this.number);
+                                            if (markerIndex == -1) {
+                                                if (this.tur == 0) {
+                                                    KisiOgrenciID.push(this.id);
+                                                    KisiOgrenciAd.push(this.title);
+                                                    KisiOgrenciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
+                                                    marker.setIcon('../Plugins/mapView/green_student.png');
+                                                } else {
+                                                    KisiIsciID.push(this.id);
+                                                    KisiIsciAd.push(this.title);
+                                                    KisiIsciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
+                                                    marker.setIcon('../Plugins/mapView/employee_green.png');
+                                                }
+                                                markerIs.push(this.number);
+                                                artanKapasite++;
+                                                if (items.length >= 2) {
+                                                    items.pop();
+                                                }
+                                                var obj = {};
+                                                key = this.number;
+                                                obj[key] = this.getPosition().lat() + ',' + this.getPosition().lng();
+                                                items.push(obj);
+                                                locations = [];
+                                                var obj = {};
+                                                key = 0;
+                                                obj[key] = gelen[0][1] + ',' + gelen[0][2];
+                                                items.push(obj);
+                                                var bounds = new google.maps.LatLngBounds();
+                                                for (var a = 0; a < items.length; a++) {
+                                                    for (var key in items[a])
+                                                    {
+                                                        var tmp_lat_lng = items[a][key].split(",");
+                                                        locations.push(new google.maps.LatLng(tmp_lat_lng[0], tmp_lat_lng[1]));
+                                                        bounds.extend(locations[locations.length - 1]);
+                                                    }
+                                                }
+                                                directionsService = [];
+                                                hesapRoute();
+                                            } else {
+                                                if (this.tur == 0) {
+                                                    idOgrenciTurArama(this.id);
+                                                    marker.setIcon('../Plugins/mapView/red_student.png');
+                                                } else {
+                                                    idIsciTurArama(this.id);
+                                                    marker.setIcon('../Plugins/mapView/employee_red.png');
+                                                }
+                                                markerKeyArama(items, tiklananNumber);
+                                                locations = [];
+                                                var bounds = new google.maps.LatLngBounds();
+                                                for (var a = 0; a < items.length; a++) {
+                                                    for (var key in items[a])
+                                                    {
+                                                        var tmp_lat_lng = items[a][key].split(",");
+                                                        locations.push(new google.maps.LatLng(tmp_lat_lng[0], tmp_lat_lng[1]));
+                                                        bounds.extend(locations[locations.length - 1]);
+                                                    }
+                                                }
+                                                directionsService = [];
+                                                hesapRoute();
+                                            }
+                                        }
+                                    } else {
+                                        alert("Araç Kapasitesinden fazla yolcu eklenemez");
+                                        console.log(KisiOgrenciID);
+                                        console.log(KisiOgrenciAd);
+                                        console.log(KisiOgrenciLocation);
+                                        console.log(KisiIsciID);
+                                    }
                                 }
                             }
+                            $("#infobox").text(this.title);
+                            infobox.open(map, marker);
                         }
-                        calcRoute();
                     }
-                    click++;
-                    infowindow.setContent(gelen[i][0]);
-                    infowindow.open(map, marker);
                 });
-            })(marker, i);
-            i++;
-            if (i == gelen.length) {
+            })(marker, b);
+            number++;
+            b++;
+            if (b == gelen.length) {
                 clearInterval(interval);
             }
 
@@ -578,24 +692,96 @@ function multipleTurMapping(gelen, index, ayirici, sofor) {
             }
         }, 200);
 
+
+        //hesaplama fonksiyonu
+        function hesapRoute() {
+            var m = locations.length;
+            var index = 0;
+
+            while (m != 0) {
+                if (m < 3) {
+                    var tmp_locations = new Array();
+                    for (var j = index; j < locations.length; j++) {
+                        tmp_locations.push(locations[index]);
+                    }
+                    cizRouteMap(tmp_locations);
+                    m = 0;
+                    index = locations.length;
+                }
+
+                if (m >= 3 && m <= 10) {
+                    var tmp_locations = new Array();
+                    for (var j = index; j < locations.length; j++) {
+                        tmp_locations.push(locations[j]);
+                    }
+                    cizRouteMap(tmp_locations);
+                    m = 0;
+                    index = locations.length;
+                }
+
+                if (m >= 10) {
+                    var tmp_locations = new Array();
+                    for (var j = index; j < index + 10; j++) {
+                        tmp_locations.push(locations[j]);
+                    }
+                    cizRouteMap(tmp_locations);
+                    m = m - 9;
+                    index = index + 9;
+                }
+            }
+        }
         map.setCenter(newPos);
 
-        var destinationAddress = gelen[0][1] + ',' + gelen[0][2];
-
         //route çizdirme
-        function calcRoute() {
+        function cizRouteMap(locations) {
+            var start, end;
+            var waypts = [];
+
+            for (var k = 0; k < locations.length; k++) {
+                if (k >= 1 && k <= locations.length - 2) {
+                    waypts.push({
+                        location: locations[k],
+                        stopover: true
+                    });
+                }
+                if (k == 0)
+                    start = locations[k];
+
+                if (k == locations.length - 1)
+                    end = locations[k];
+
+            }
             var request = {
-                origin: originAddress,
-                destination: destinationAddress, //kurum lokasyon
-                waypoints: waypoints, //an array of waypoints
+                origin: start,
+                destination: end,
+                waypoints: waypts,
                 optimizeWaypoints: true,
-                travelMode: google.maps.DirectionsTravelMode.DRIVING
+                travelMode: google.maps.TravelMode.DRIVING
             };
-            directionsService.route(request, function (response, status) {
+
+            directionsService.push(new google.maps.DirectionsService());
+            var instance = directionsService.length - 1;
+            directionsDisplay.push(new google.maps.DirectionsRenderer({
+                preserveViewport: true
+            }));
+            directionsDisplay[instance].setOptions({suppressMarkers: true});
+            directionsDisplay[instance].setMap(map);
+            directionsService[instance].route(request, function (response, status) {
                 if (status == google.maps.DirectionsStatus.OK) {
-                    directionDisplay.setDirections(response);
+                    directionsDisplay[instance].setDirections(response);
+                    totalKm(response);
                 }
             });
+        }
+        //total Km
+        function totalKm(result) {
+            var total = 0;
+            var myroute = result.routes[0];
+            for (var i = 0; i < myroute.legs.length; i++) {
+                total += myroute.legs[i].distance.value;
+            }
+            total = total / 1000.0;
+            document.getElementById('totalKm').innerHTML = total;
         }
         //marker animatioın
         function toggleBounce() {
@@ -606,16 +792,56 @@ function multipleTurMapping(gelen, index, ayirici, sofor) {
                 marker.setAnimation(google.maps.Animation.BOUNCE);
             }
         }
+        //tur animasyonu(Çok Fazla şekilde sistemsel olarak zayıflamaya yol açacağından sonra kullanılamk üzre bırakılmıştır.)
+        function animateCircle() {
+            var count = 0;
+            window.setInterval(function () {
+                count = (count + 1) % 200;
 
-        //Tüm lokasyonları haritaya sığdırma
-        function autoCenter() {
-            var bounds = new google.maps.LatLngBounds();
-            for (var i = 0; i < markers.length; i++) {
-                bounds.extend(markers[i].position);
-            }
-            map.fitBounds(bounds);
+                var icons = line.get('icons');
+                icons[0].offset = (count / 2) + '%';
+                line.set('icons', icons);
+            }, 20);
         }
-        //autoCenter();
+
+        function markerKeyArama(markerLocation, aranacak) {
+            var indexNumber;
+            for (var index = 0; index < markerLocation.length; index++) {
+                for (var key in markerLocation[index])
+                {
+                    //console.log("key " + key + " has value " + markerLocation[index][key]);
+                    if (key == aranacak) {
+                        indexNumber = index;
+                    }
+                }
+            }
+            items.splice(indexNumber, 1);
+            markerIs.splice(indexNumber, 1);
+        }
+        //id öğrenci arama
+        function idOgrenciTurArama(aranacak) {
+            var indexNumber;
+            for (var index = 0; index < KisiOgrenciID.length; index++) {
+                if (KisiOgrenciID[index] == aranacak) {
+                    indexNumber = index;
+                }
+            }
+            KisiOgrenciID.splice(indexNumber, 1);
+            KisiOgrenciAd.splice(indexNumber, 1);
+            KisiOgrenciLocation.splice(indexNumber, 1);
+        }
+        //id işçi arama
+        function idIsciTurArama(aranacak) {
+            var indexNumber;
+            for (var index = 0; index < KisiIsciID.length; index++) {
+                if (KisiIsciID[index] == aranacak) {
+                    indexNumber = index;
+                }
+            }
+            KisiIsciID.splice(indexNumber, 1);
+            KisiIsciAd.splice(indexNumber, 1);
+            KisiIsciLocation.splice(indexNumber, 1);
+        }
 
     } else {
         document.getElementById('google_canvas').innerHTML = 'Konumunuz bulunmadı.';

@@ -271,79 +271,82 @@ $.AdminIslemler = {
         return true;
     },
     adminAracEkle: function () {
-
         var aracPlaka = $("input[name=AracPlaka]").val().toUpperCase();
         if (aracPlaka == '') {
             alert("Plaka Boş geçilemez");
         } else {
             var select = $('select#AracBolgeSelect option:selected').val();
             if (select) {
-                var aracMarka = $("input[name=AracMarka]").val();
-                var aracModelYil = $("input[name=AracYil]").val();
                 var aracKapasite = $("input[name=AracKapasite]").val();
-                var aracAciklama = $("textarea[name=AracAciklama]").val();
-                var aracDurum = $("#AracDurum option:selected").val();
-                var aracDurumText = $("#AracDurum option:selected").text();
-                //araç Bölge ID
-                var aracBolgeID = new Array();
-                $('select#AracBolgeSelect option:selected').each(function () {
-                    aracBolgeID.push($(this).val());
-                });
-                //araç Bölge Ad
-                var aracBolgeAd = new Array();
-                $('select#AracBolgeSelect option:selected').each(function () {
-                    aracBolgeAd.push($(this).attr('title'));
-                });
-                //araç Şoför Id
-                var aracSoforID = new Array();
-                $('select#AracSurucu option:selected').each(function () {
-                    aracSoforID.push($(this).val());
-                });
-                //araç Şoför Ad
-                var aracSoforAd = new Array();
-                $('select#AracSurucu option:selected').each(function () {
-                    aracSoforAd.push($(this).attr('title'));
-                });
-                $.ajax({
-                    data: {"aracBolgeID[]": aracBolgeID, "aracBolgeAd[]": aracBolgeAd, "aracSoforID[]": aracSoforID, "aracSoforAd[]": aracSoforAd, "aracPlaka": aracPlaka, "aracMarka": aracMarka, "aracModelYil": aracModelYil,
-                        "aracKapasite": aracKapasite, "aracAciklama": aracAciklama, "aracDurum": aracDurum, "tip": "adminAracKaydet"},
-                    success: function (cevap) {
-                        if (cevap.hata) {
-                            alert(cevap.hata);
-                        } else {
-                            var aracCount = $('#smallArac').text();
-                            console.log(aracCount);
-                            aracCount++;
-                            $('#smallArac').text(aracCount);
-                            if (aracDurum != 0) {
-                                var addRow = "<tr style='background-color:#F2F2F2'><td>"
-                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newAracID + "'>"
-                                        + "<i class='fa fa-bus' style='color:green;'></i> " + aracPlaka + "</a></td>"
-                                        + "<td class='hidden-xs'>" + aracMarka + "</td>"
-                                        + "<td class='hidden-xs'>" + aracModelYil + "</td>"
-                                        + "<td class='hidden-xs'>" + aracKapasite + "</td>"
-                                        + "<td class='hidden-xs'>0</td>"
-                                        + "<td class='hidden-xs'>" + aracDurumText + "</td>";
-                                NewAracTable.DataTable().row.add($(addRow)).draw();
+                if (aracKapasite < 1) {
+                    alert("Araç Kapasitesi 1 den küçük olamaz");
+                } else {
+                    var aracMarka = $("input[name=AracMarka]").val();
+                    var aracModelYil = $("input[name=AracYil]").val();
+
+                    var aracAciklama = $("textarea[name=AracAciklama]").val();
+                    var aracDurum = $("#AracDurum option:selected").val();
+                    var aracDurumText = $("#AracDurum option:selected").text();
+                    //araç Bölge ID
+                    var aracBolgeID = new Array();
+                    $('select#AracBolgeSelect option:selected').each(function () {
+                        aracBolgeID.push($(this).val());
+                    });
+                    //araç Bölge Ad
+                    var aracBolgeAd = new Array();
+                    $('select#AracBolgeSelect option:selected').each(function () {
+                        aracBolgeAd.push($(this).attr('title'));
+                    });
+                    //araç Şoför Id
+                    var aracSoforID = new Array();
+                    $('select#AracSurucu option:selected').each(function () {
+                        aracSoforID.push($(this).val());
+                    });
+                    //araç Şoför Ad
+                    var aracSoforAd = new Array();
+                    $('select#AracSurucu option:selected').each(function () {
+                        aracSoforAd.push($(this).attr('title'));
+                    });
+                    $.ajax({
+                        data: {"aracBolgeID[]": aracBolgeID, "aracBolgeAd[]": aracBolgeAd, "aracSoforID[]": aracSoforID, "aracSoforAd[]": aracSoforAd, "aracPlaka": aracPlaka, "aracMarka": aracMarka, "aracModelYil": aracModelYil,
+                            "aracKapasite": aracKapasite, "aracAciklama": aracAciklama, "aracDurum": aracDurum, "tip": "adminAracKaydet"},
+                        success: function (cevap) {
+                            if (cevap.hata) {
+                                alert(cevap.hata);
                             } else {
-                                var addRow = "<tr style='background-color:#F2F2F2'><td>"
-                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newAracID + "'>"
-                                        + "<i class='fa fa-bus' style='color:red;'></i> " + aracPlaka + "</a></td>"
-                                        + "<td class='hidden-xs'>" + aracMarka + "</td>"
-                                        + "<td class='hidden-xs'>" + aracModelYil + "</td>"
-                                        + "<td class='hidden-xs'>" + aracKapasite + "</td>"
-                                        + "<td class='hidden-xs'>0</td>"
-                                        + "<td class='hidden-xs'>" + aracDurumText + "</td>";
-                                NewAracTable.DataTable().row.add($(addRow)).draw();
+                                var aracCount = $('#smallArac').text();
+                                aracCount++;
+                                $('#smallArac').text(aracCount);
+                                if (aracDurum != 0) {
+                                    var addRow = "<tr style='background-color:#F2F2F2'><td>"
+                                            + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newAracID + "'>"
+                                            + "<i class='fa fa-bus' style='color:green;'></i> " + aracPlaka + "</a></td>"
+                                            + "<td class='hidden-xs'>" + aracMarka + "</td>"
+                                            + "<td class='hidden-xs'>" + aracModelYil + "</td>"
+                                            + "<td class='hidden-xs'>" + aracKapasite + "</td>"
+                                            + "<td class='hidden-xs'>0</td>"
+                                            + "<td class='hidden-xs'>" + aracDurumText + "</td>";
+                                    NewAracTable.DataTable().row.add($(addRow)).draw();
+                                } else {
+                                    var addRow = "<tr style='background-color:#F2F2F2'><td>"
+                                            + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newAracID + "'>"
+                                            + "<i class='fa fa-bus' style='color:red;'></i> " + aracPlaka + "</a></td>"
+                                            + "<td class='hidden-xs'>" + aracMarka + "</td>"
+                                            + "<td class='hidden-xs'>" + aracModelYil + "</td>"
+                                            + "<td class='hidden-xs'>" + aracKapasite + "</td>"
+                                            + "<td class='hidden-xs'>0</td>"
+                                            + "<td class='hidden-xs'>" + aracDurumText + "</td>";
+                                    NewAracTable.DataTable().row.add($(addRow)).draw();
+                                }
+                                aracBolgeID = [];
+                                aracBolgeAd = [];
+                                aracSoforID = [];
+                                aracSoforAd = [];
                             }
-                            aracBolgeID = [];
-                            aracBolgeAd = [];
-                            aracSoforID = [];
-                            aracSoforAd = [];
                         }
-                    }
-                });
-                return true;
+                    });
+                    return true;
+                }
             } else {
                 alert("Lütfen Bölge Seçiniz");
             }
@@ -604,90 +607,98 @@ $.AdminIslemler = {
         if (AdminAracDetailVazgec[0] == aracPlaka && AdminAracDetailVazgec[1] == aracMarka && AdminAracDetailVazgec[2] == aracModelYil && AdminAracDetailVazgec[3] == aracKapasite && AdminAracDetailVazgec[4] == aracAciklama && AdminAracDetailVazgec[5] == aracDurum && farkbolgelength == 0 && farkaraclength == 0) {
             alert("Lütfen değişiklik yaptığınıza emin olun.");
         } else {
-            var aracBolgeLength = $('select#AracDetayBolgeSelect option:selected').val();
-            if (aracBolgeLength) {
-                $.ajax({
-                    data: {"aracdetail_id": aracdetail_id, "aracBolgeID[]": aracBolgeID, "aracBolgeAd[]": aracBolgeAd, "aracSoforID[]": aracSoforID, "aracSoforAd[]": aracSoforAd, "aracPlaka": aracPlaka, "aracMarka": aracMarka, "aracModelYil": aracModelYil,
-                        "aracKapasite": aracKapasite, "aracAciklama": aracAciklama, "aracDurum": aracDurum, "tip": "adminAracDetailKaydet"},
-                    success: function (cevap) {
-                        if (cevap.hata) {
-                            alert(cevap.hata);
-                        } else {
-
-                            disabledForm();
-                            var SelectBolgeOptions = new Array();
-                            var SelectAracOptions = new Array();
-                            if (aracBolgeID.length > 0) {
-                                var bolgelength = aracBolgeID.length;
-                                for (var b = 0; b < bolgelength; b++) {
-                                    SelectBolgeOptions[b] = {label: aracBolgeAd[b], title: aracBolgeAd[b], value: aracBolgeID[b], disabled: true, selected: true};
-                                }
-                            }
-                            if (aracBolgeNID.length > 0) {
-                                var aracBolgeLength = aracBolgeNID.length;
-                                for (var z = 0; z < aracBolgeLength; z++) {
-                                    SelectBolgeOptions[b] = {label: aracBolgeNAd[z], title: aracBolgeNAd[z], value: aracBolgeNID[z], disabled: true};
-                                    b++;
-                                }
-
-                            }
-                            if (aracSoforID.length > 0) {
-                                var soforselectlength = aracSoforID.length;
-                                for (var t = 0; t < soforselectlength; t++) {
-                                    SelectAracOptions[t] = {label: aracSoforAd[t], title: aracSoforAd[t], value: aracSoforID[t], disabled: true, selected: true};
-                                }
-
-                                if (aracSoforNID.length > 0) {
-                                    var soforlength = aracSoforNID.length;
-                                    for (var f = 0; f < soforlength; f++) {
-                                        SelectAracOptions[t] = {label: aracSoforNAd[f], title: aracSoforNAd[f], value: aracSoforNID[f], disabled: true};
-                                        t++;
-                                    }
-                                }
-                            } else {
-                                if (aracSoforNID.length > 0) {
-                                    var soforlength = aracSoforNID.length;
-                                    for (var t = 0; f < soforlength; t++) {
-                                        SelectAracOptions[t] = {label: aracSoforNAd[t], title: aracSoforNAd[t], value: aracSoforNID[ts], disabled: true};
-                                    }
-                                }
-                            }
-
-                            $('#AracDetayBolgeSelect').multiselect('refresh');
-                            $('#AracDetaySurucu').multiselect('refresh');
-                            $('#AracDetayBolgeSelect').multiselect('dataprovider', SelectBolgeOptions);
-                            $('#AracDetaySurucu').multiselect('dataprovider', SelectAracOptions);
-                            var length = $('tbody#adminAracRow tr').length;
-                            for (var t = 0; t < length; t++) {
-                                var attrValueId = $("tbody#adminAracRow > tr > td > a").eq(t).attr('value');
-                                if (attrValueId == aracdetail_id) {
-                                    if (aracDurum != 0) {
-                                        $("tbody#adminAracRow > tr > td > a").eq(t).html('<i class="fa fa-bus"></i> ' + aracPlaka);
-                                        $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(aracMarka);
-                                        $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(aracModelYil);
-                                        $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(aracKapasite);
-                                        $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(aracDurumText);
-                                        $('tbody#adminAracRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
-                                    } else {
-                                        $("tbody#adminAracRow > tr > td > a").eq(t).html('<i class="fa fa-bus" style="color:red"></i> ' + aracPlaka);
-                                        $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(aracMarka);
-                                        $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(aracModelYil);
-                                        $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(aracKapasite);
-                                        $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(aracDurumText);
-                                        $('tbody#adminAracRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
-                                    }
-                                }
-                            }
-
-                            aracBolgeID = [];
-                            aracBolgeAd = [];
-                            aracSoforID = [];
-                            aracSoforAd = [];
-                        }
-                    }
-                });
+            if (aracPlaka == '') {
+                alert("Plaka Boş Geçilemez");
             } else {
-                alert("Lütfen Bölge Seçiniz");
+                if (aracKapasite < 1) {
+                    alert("Kapasite 1 den küçük olamaz");
+                } else {
+                    var aracBolgeLength = $('select#AracDetayBolgeSelect option:selected').val();
+                    if (aracBolgeLength) {
+                        $.ajax({
+                            data: {"aracdetail_id": aracdetail_id, "aracBolgeID[]": aracBolgeID, "aracBolgeAd[]": aracBolgeAd, "aracSoforID[]": aracSoforID, "aracSoforAd[]": aracSoforAd, "aracPlaka": aracPlaka, "aracMarka": aracMarka, "aracModelYil": aracModelYil,
+                                "aracKapasite": aracKapasite, "aracAciklama": aracAciklama, "aracDurum": aracDurum, "tip": "adminAracDetailKaydet"},
+                            success: function (cevap) {
+                                if (cevap.hata) {
+                                    alert(cevap.hata);
+                                } else {
+
+                                    disabledForm();
+                                    var SelectBolgeOptions = new Array();
+                                    var SelectAracOptions = new Array();
+                                    if (aracBolgeID.length > 0) {
+                                        var bolgelength = aracBolgeID.length;
+                                        for (var b = 0; b < bolgelength; b++) {
+                                            SelectBolgeOptions[b] = {label: aracBolgeAd[b], title: aracBolgeAd[b], value: aracBolgeID[b], disabled: true, selected: true};
+                                        }
+                                    }
+                                    if (aracBolgeNID.length > 0) {
+                                        var aracBolgeLength = aracBolgeNID.length;
+                                        for (var z = 0; z < aracBolgeLength; z++) {
+                                            SelectBolgeOptions[b] = {label: aracBolgeNAd[z], title: aracBolgeNAd[z], value: aracBolgeNID[z], disabled: true};
+                                            b++;
+                                        }
+
+                                    }
+                                    if (aracSoforID.length > 0) {
+                                        var soforselectlength = aracSoforID.length;
+                                        for (var t = 0; t < soforselectlength; t++) {
+                                            SelectAracOptions[t] = {label: aracSoforAd[t], title: aracSoforAd[t], value: aracSoforID[t], disabled: true, selected: true};
+                                        }
+
+                                        if (aracSoforNID.length > 0) {
+                                            var soforlength = aracSoforNID.length;
+                                            for (var f = 0; f < soforlength; f++) {
+                                                SelectAracOptions[t] = {label: aracSoforNAd[f], title: aracSoforNAd[f], value: aracSoforNID[f], disabled: true};
+                                                t++;
+                                            }
+                                        }
+                                    } else {
+                                        if (aracSoforNID.length > 0) {
+                                            var soforlength = aracSoforNID.length;
+                                            for (var t = 0; f < soforlength; t++) {
+                                                SelectAracOptions[t] = {label: aracSoforNAd[t], title: aracSoforNAd[t], value: aracSoforNID[ts], disabled: true};
+                                            }
+                                        }
+                                    }
+
+                                    $('#AracDetayBolgeSelect').multiselect('refresh');
+                                    $('#AracDetaySurucu').multiselect('refresh');
+                                    $('#AracDetayBolgeSelect').multiselect('dataprovider', SelectBolgeOptions);
+                                    $('#AracDetaySurucu').multiselect('dataprovider', SelectAracOptions);
+                                    var length = $('tbody#adminAracRow tr').length;
+                                    for (var t = 0; t < length; t++) {
+                                        var attrValueId = $("tbody#adminAracRow > tr > td > a").eq(t).attr('value');
+                                        if (attrValueId == aracdetail_id) {
+                                            if (aracDurum != 0) {
+                                                $("tbody#adminAracRow > tr > td > a").eq(t).html('<i class="fa fa-bus"></i> ' + aracPlaka);
+                                                $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(aracMarka);
+                                                $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(aracModelYil);
+                                                $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(aracKapasite);
+                                                $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(aracDurumText);
+                                                $('tbody#adminAracRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                            } else {
+                                                $("tbody#adminAracRow > tr > td > a").eq(t).html('<i class="fa fa-bus" style="color:red"></i> ' + aracPlaka);
+                                                $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(aracMarka);
+                                                $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(aracModelYil);
+                                                $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(aracKapasite);
+                                                $("tbody#adminAracRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(aracDurumText);
+                                                $('tbody#adminAracRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                            }
+                                        }
+                                    }
+
+                                    aracBolgeID = [];
+                                    aracBolgeAd = [];
+                                    aracSoforID = [];
+                                    aracSoforAd = [];
+                                }
+                            }
+                        });
+                    } else {
+                        alert("Lütfen Bölge Seçiniz");
+                    }
+                }
             }
         }
     },
