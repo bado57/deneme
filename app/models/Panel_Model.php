@@ -713,7 +713,7 @@ class Panel_Model extends Model {
 
     //admin işçi kurum bölge select listele
     public function isciKurumMultiSelect($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND SBKurumTip=1 AND SBKurumTip=2 ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND (SBKurumTip=1 OR SBKurumTip=2) ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -801,19 +801,19 @@ class Panel_Model extends Model {
 
     //admin select dışı bölge listele
     public function adminSelectBolgeKurumm($arraybolge = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ') AND SBKurumTip=0 OR SBKurumTip=2';
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ') AND (SBKurumTip=0 OR SBKurumTip=2)';
         return($this->db->select($sql));
     }
 
     //admin select dışı bölge listele
     public function adminSelectBolgeIsciKurum($arraybolge = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ') AND SBKurumTip=1 OR SBKurumTip=2';
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ') AND (SBKurumTip=1 OR SBKurumTip=2)';
         return($this->db->select($sql));
     }
 
     //kurum seçili olmayan işçiler
     public function isciNotSelectKurum($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ' ) AND SBKurumTip=1 OR SBKurumTip=2';
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ' ) AND (SBKurumTip=1 OR SBKurumTip=2)';
         return($this->db->select($sql));
     }
 
@@ -861,7 +861,7 @@ class Panel_Model extends Model {
 
     //admin veli kurum bölge select listele
     public function veliKurumMultiSelect($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND SBKurumTip=0 OR SBKurumTip=2 ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND (SBKurumTip=0 OR SBKurumTip=2) ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -1036,7 +1036,7 @@ class Panel_Model extends Model {
 
     //admin öğrenci kurum bölge select listele
     public function ogrenciKurumMultiSelect($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND SBKurumTip=0 OR SBKurumTip=2 ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND (SBKurumTip=0 OR SBKurumTip=2) ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -1146,7 +1146,7 @@ class Panel_Model extends Model {
 
     //kurum seçili olmayan öğrenciler
     public function ogrenciNotSelectKurum($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ') AND SBKurumTip=0 OR SBKurumTip=2';
+        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ') AND (SBKurumTip=0 OR SBKurumTip=2)';
         return($this->db->select($sql));
     }
 
@@ -1328,6 +1328,90 @@ class Panel_Model extends Model {
     //tur  tip güncelleme
     public function turTipDuzenle($data, $turID) {
         return ($this->db->update("sbtur", $data, "SBTurID=" . $turID));
+    }
+
+    //tur kurum öğrenci
+    public function turDetayTip($turID) {
+        $sql = 'SELECT BSTurTipID,BSTurTip,BSTurGidisDonus,BSTurAracID,BSTurAracPlaka,BSTurAracKapasite,BSTurSoforID,BSTurSoforAd,BSTurSoforLocation,BSTurBslngc,BSTurBts,BSTurBolgeID,BSTurBolgeAd,BSTurKurumID,BSTurKurumAd,BSTurKurumLocation FROM bsturtip Where BSTurGidisDonus IN (0,1) AND BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //tur gidis detay
+    public function turDetayGidisIsciOgrenci($turID) {
+        $sql = 'SELECT BSKullaniciTip,BSOgrenciIsciID,BSOgrenciIsciAd,BSOgrenciIsciLocation,SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr FROM bsogrenciiscitur Where BSTurID=' . $turID . ' ORDER BY BSTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //tur gidis öğrenci detay
+    public function turDetayGidisOgrenci($turID) {
+        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciLocation,SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr FROM bsogrencitur Where BSTurID=' . $turID . ' ORDER BY BSTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //tur gidis detay
+    public function turDetayGidisIsci($turID) {
+        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciLocation,SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr FROM sbiscitur Where SBTurID=' . $turID . ' ORDER BY SBTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //gidiş tur tip güncelleme
+    public function turTipGidisDuzenle($data, $turTipID) {
+        return ($this->db->update("bsturtip", $data, "BSTurTipID=" . $turTipID));
+    }
+
+    // tur delete
+    public function turDelete($turID) {
+        return ($this->db->delete("sbtur", "SBTurID=$turID"));
+    }
+
+    // tur tip delete
+    public function turTipDelete($turID) {
+        return ($this->db->delete("bsturtip", "BSTurID=$turID"));
+    }
+
+    //öğrencitur delete
+    public function detailGidisOgrenciDelete($turID) {
+        return ($this->db->delete("bsogrencitur", "BSTurID=$turID"));
+    }
+
+    //işçi tur delete
+    public function detailGidisIsciDelete($turID) {
+        return ($this->db->delete("sbiscitur", "SBTurID=$turID"));
+    }
+
+    //işçi tur delete
+    public function detailGidisOgrenciIsciDelete($turID) {
+        return ($this->db->delete("bsogrenciiscitur", "BSTurID=$turID"));
+    }
+
+    //dönüş öğrenci tur düzenleme
+    public function turTipDonusOgrenciDuzenle($data, $turID) {
+        return ($this->db->update("bsogrencitur", $data, "BSTurID=" . $turID));
+    }
+
+    //dönüş işçi tur düzenleme
+    public function turTipDonusIsciDuzenle($data, $turID) {
+        return ($this->db->update("sbiscitur", $data, "SBTurID=" . $turID));
+    }
+
+    //dönüş öğrenci işçi tur düzenleme
+    public function turTipDonusOgrenciIsciDuzenle($data, $turID) {
+        return ($this->db->update("bsogrenciiscitur", $data, "BSTurID=" . $turID));
+    }
+
+    //gidiş öğrenci tur düzenleme
+    public function turTipGidisOgrenciDuzenle($data, $turID) {
+        return ($this->db->update("bsogrencitur", $data, "BSTurID=" . $turID));
+    }
+
+    //gidiş işçi tur düzenleme
+    public function turTipGidisIsciDuzenle($data, $turID) {
+        return ($this->db->update("sbiscitur", $data, "SBTurID=" . $turID));
+    }
+
+    //GİDİŞ öğrenci işçi tur düzenleme
+    public function turTipGidisOgrenciIsciDuzenle($data, $turID) {
+        return ($this->db->update("bsogrenciiscitur", $data, "BSTurID=" . $turID));
     }
 
 }

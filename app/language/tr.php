@@ -167,7 +167,10 @@ class tr {
             "OgrenciPersonel" => "Öğrenci-Personel",
             "AdresBilgi" => "Adres Bilgileri",
             "TurAnimasyon" => "Animasyon Oynat",
-            "ToplamKm" => "Toplam Km"
+            "ToplamKm" => "Toplam Km",
+            "TurSecim" => "Tur Detayları",
+            "TurGidis" => "Tur Gidiş",
+            "TurDonus" => "Tur Dönüş"
         );
         return $trdil;
     }

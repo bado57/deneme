@@ -5333,7 +5333,7 @@ $.AdminIslemler = {
                 alert("Lütfen Bölge Seçiniz");
             }
         }
-    },
+    }
 }
 
 

@@ -662,6 +662,170 @@ class Form {
         return $gunData;
     }
 
+    function sqlGunUpdate($gunler = array()) {
+        $gunData = array();
+        if (in_array("Pzt", $gunler)) {
+            $gunData['SBTurPzt'] = 1;
+
+            if (in_array("Sli", $gunler)) {
+                $gunData['SBTurSli'] = 1;
+            } else {
+                $gunData['SBTurSli'] = 0;
+            }
+
+            if (in_array("Crs", $gunler)) {
+                $gunData['SBTurCrs'] = 1;
+            } else {
+                $gunData['SBTurCrs'] = 0;
+            }
+
+            if (in_array("Prs", $gunler)) {
+                $gunData['SBTurPrs'] = 1;
+            } else {
+                $gunData['SBTurPrs'] = 0;
+            }
+
+            if (in_array("Cma", $gunler)) {
+                $gunData['SBTurCma'] = 1;
+            } else {
+                $gunData['SBTurCma'] = 0;
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $gunData['SBTurCmt'] = 1;
+            } else {
+                $gunData['SBTurCmt'] = 0;
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $gunData['SBTurPzr'] = 1;
+            } else {
+                $gunData['SBTurPzr'] = 0;
+            }
+        } else if (in_array("Sli", $gunler)) {
+            $gunData['SBTurPzt'] = 0;
+            $gunData['SBTurSli'] = 1;
+
+            if (in_array("Crs", $gunler)) {
+                $gunData['SBTurCrs'] = 1;
+            } else {
+                $gunData['SBTurCrs'] = 0;
+            }
+
+            if (in_array("Prs", $gunler)) {
+                $gunData['SBTurPrs'] = 1;
+            } else {
+                $gunData['SBTurPrs'] = 0;
+            }
+
+            if (in_array("Cma", $gunler)) {
+                $gunData['SBTurCma'] = 1;
+            } else {
+                $gunData['SBTurCma'] = 0;
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $gunData['SBTurCmt'] = 1;
+            } else {
+                $gunData['SBTurCmt'] = 0;
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $gunData['SBTurPzr'] = 1;
+            } else {
+                $gunData['SBTurPzr'] = 0;
+            }
+        } else if (in_array("Crs", $gunler)) {
+            $gunData['SBTurPzt'] = 0;
+            $gunData['SBTurSli'] = 0;
+            $gunData['SBTurCrs'] = 1;
+            if (in_array("Prs", $gunler)) {
+                $gunData['SBTurPrs'] = 1;
+            } else {
+                $gunData['SBTurPrs'] = 0;
+            }
+
+            if (in_array("Cma", $gunler)) {
+                $gunData['SBTurCma'] = 1;
+            } else {
+                $gunData['SBTurCma'] = 0;
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $gunData['SBTurCmt'] = 1;
+            } else {
+                $gunData['SBTurCmt'] = 0;
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $gunData['SBTurPzr'] = 1;
+            } else {
+                $gunData['SBTurPzr'] = 0;
+            }
+        } else if (in_array("Prs", $gunler)) {
+            $gunData['SBTurPzt'] = 0;
+            $gunData['SBTurSli'] = 0;
+            $gunData['SBTurCrs'] = 0;
+            $gunData['SBTurPrs'] = 1;
+
+            if (in_array("Cma", $gunler)) {
+                $gunData['SBTurCma'] = 1;
+            } else {
+                $gunData['SBTurCma'] = 0;
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $gunData['SBTurCmt'] = 1;
+            } else {
+                $gunData['SBTurCmt'] = 0;
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $gunData['SBTurPzr'] = 1;
+            } else {
+                $gunData['SBTurPzr'] = 0;
+            }
+        } else if (in_array("Cma", $gunler)) {
+            $gunData['SBTurPzt'] = 0;
+            $gunData['SBTurSli'] = 0;
+            $gunData['SBTurCrs'] = 0;
+            $gunData['SBTurPrs'] = 0;
+            $gunData['SBTurCma'] = 1;
+            if (in_array("Cmt", $gunler)) {
+                $gunData['SBTurCmt'] = 1;
+            } else {
+                $gunData['SBTurCmt'] = 0;
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $gunData['SBTurPzr'] = 1;
+            } else {
+                $gunData['SBTurPzr'] = 0;
+            }
+        } else if (in_array("Cmt", $gunler)) {
+            $gunData['SBTurPzt'] = 0;
+            $gunData['SBTurSli'] = 0;
+            $gunData['SBTurCrs'] = 0;
+            $gunData['SBTurPrs'] = 0;
+            $gunData['SBTurCma'] = 0;
+            $gunData['SBTurCmt'] = 1;
+            if (in_array("Pzr", $gunler)) {
+                $gunData['SBTurPzr'] = 1;
+            } else {
+                $gunData['SBTurPzr'] = 0;
+            }
+        } else {
+            $gunData['SBTurPzt'] = 0;
+            $gunData['SBTurSli'] = 0;
+            $gunData['SBTurCrs'] = 0;
+            $gunData['SBTurPrs'] = 0;
+            $gunData['SBTurCma'] = 0;
+            $gunData['SBTurCmt'] = 0;
+            $gunData['SBTurPzr'] = 1;
+        }
+        return $gunData;
+    }
+
 }
 
 ?>
