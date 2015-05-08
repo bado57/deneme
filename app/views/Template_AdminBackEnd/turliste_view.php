@@ -157,7 +157,7 @@
                     </div>
                 </div>
                 <div style=""><?php echo $data["ToplamKm"]; ?> : <span id="totalKm" style="font-weight: bold;color:black"></span></div>
-                <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12"  id="multiple_tur_map" style="top: 112px; right:10px;border: 2px solid #009933 !important;bottom: 10%">
+                <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12"  id="multiple_tur_map" style="top: 18%; right:10px;border: 2px solid #009933 !important;bottom: 10%">
 
                 </div>
             </div>
@@ -288,7 +288,7 @@
                     </div>
                 </div>
                 <div style=""><?php echo $data["ToplamKm"]; ?> : <span id="totalGidisKm" style="font-weight: bold;color:black"></span></div>
-                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12"  id="multiple_gidis_map" style="top: 112px; right:10px;border: 2px solid #009933 !important;bottom: 10%">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12"  id="multiple_gidis_map" style="top: 18%; right:10px;border: 2px solid #009933 !important;bottom: 10%">
 
                 </div>
 
@@ -306,85 +306,88 @@
                 <input id="TurGidis" name="TurGidis" type="hidden" value="" />
                 <input id="TurDonus" name="TurDonus" type="hidden" value="" />
                 <input id="TurID" name="TurID" type="hidden" value="" />
-                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-vertical" id="turForm">
-                    <input id="adminKurumBolgeEkleID" name="adminKurumBolgeEkleID" type="hidden"/>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 form-vertical" id="turDetayDonusForm">
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label for="TurAdi"><?php echo $data["TurAdi"]; ?></label>
-                        <input type="text" class="form-control dsb" id="TurAdi" name="TurAdi" >
+                        <label for="TurDetayDonusAd"><?php echo $data["TurAdi"]; ?></label>
+                        <input type="text" class="form-control dsb" id="TurDetayDonusAd" name="TurDetayDonusAd" disabled>
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label for="TurSelectBolge"><?php echo $data["BolgeAdi"]; ?></label>
-                        <select type="text" class="form-control" id="TurSelectBolge" name="TurSelectBolge">
-                            <option value="0"><?php echo $data["Seciniz"]; ?></option>
-                        </select>
+                        <input id="TurDetayGidisBolgeID" name="TurDetayDonusBolgeID" type="hidden" value="" />
+                        <label for="TurDetayDonusBolge"><?php echo $data["BolgeAd"]; ?></label>
+                        <input type="text" class="form-control" id="TurDetayDonusBolge" name="TurDetayDonusBolge" disabled>
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label for="TurSelectKurum"><?php echo $data["KurumAdi"]; ?></label>
-                        <select type="text" class="form-control" id="TurSelectKurum" name="TurSelectKurum">
-                        </select>
+                        <input id="TurDetayDonusKurumID" name="TurDetayDonusKurumID" type="hidden" value="" />
+                        <input id="TurDetayDonusKurumLocation" name="TurDetayDonusKurumLocation" type="hidden" value="" />
+                        <label for="TurDetayDonusKurum"><?php echo $data["KurumAdi"]; ?></label>
+                        <input type="text" class="form-control" id="TurDetayDonusKurum" name="TurDetayDonusKurum" disabled>
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label for="TurGun"><?php echo $data["Gunler"]; ?></label>
-                        <select type="text" class="form-control" id="TurSelectGun" name="TurSelectGun" multiple="multiple">
-                            <option value="Pzt"><?php echo $data["Pazartesi"]; ?></option>
-                            <option value="Sli"><?php echo $data["Sali"]; ?></option>
-                            <option value="Crs"><?php echo $data["Carsamba"]; ?></option>
-                            <option value="Prs"><?php echo $data["Persembe"]; ?></option>
-                            <option value="Cma"><?php echo $data["Cuma"]; ?></option>
-                            <option value="Cmt"><?php echo $data["Cumartesi"]; ?></option>
-                            <option value="Pzr"><?php echo $data["Pazar"]; ?></option>
+                        <label for="TurDetayDonusGun"><?php echo $data["Gunler"]; ?></label>
+                        <select type="text" class="form-control" id="TurDetayDonusGun" name="TurDetayDonusGun" multiple="multiple">
                         </select>
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0">
                         <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label for="TurSaat1"><?php echo $data["BasSaat"]; ?></label>
-                            <select type="text" class="form-control" id="TurSaat1" name="TurSaat1">
+                            <input id="donusSaat1" name="donusSaat1" type="hidden" value="" />
+                            <label for="TurDetayDonusSaat1"><?php echo $data["BasSaat"]; ?></label>
+                            <select type="text" class="form-control" id="TurDetayDonusSaat1" name="TurDetayDonusSaat1">
                             </select>
                         </div>
                         <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label for="TurSaat2"><?php echo $data["BitSaat"]; ?></label>
-                            <select type="text" class="form-control" id="TurSaat2" name="TurSaat2">
+                            <input id="donusSaat2" name="donusSaat2" type="hidden" value="" />
+                            <label for="TurDetayDonusSaat2"><?php echo $data["BitSaat"]; ?></label>
+                            <select type="text" class="form-control" id="TurDetayDonusSaat2" name="TurDetayDonusSaat2">
                             </select>
                         </div>
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label for="TurArac"><?php echo $data["Araclar"]; ?></label>
-                        <select type="text" class="form-control" id="TurArac" name="TurArac" multiple="multiple" style="display: none;">
+                        <label for="TurDetayDonusArac"><?php echo $data["Araclar"]; ?></label>
+                        <select type="text" class="form-control" id="TurDetayDonusArac" name="TurDetayDonusArac">
                         </select>
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label for="TurSofor"><?php echo $data["Sofor"]; ?></label>
-                        <select type="text" class="form-control" id="TurSofor" name="TurSofor" multiple="multiple" style="display: none;">
-                        </select>
-                    </div>
-                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label for="TurTuru"><?php echo $data["Tür"]; ?></label>
-                        <select type="text" class="form-control" id="TurSelectTip" name="TurSelectTip">
-                            <option value="0"><?php echo $data["Gidis"]; ?></option>
-                            <option value="1"><?php echo $data["Donus"]; ?></option>
+                        <input id="DonusSoforInput" name="DonusSoforInput" type="hidden" value="" />
+                        <input id="DonusSoforID" name="DonusSoforID" type="hidden" value="" />
+                        <input id="DonusSoforAd" name="DonusSoforAd" type="hidden" value="" />
+                        <label for="TurDetayDonusSofor"><?php echo $data["Sofor"]; ?></label>
+                        <select type="text" class="form-control" id="TurDetayDonusSofor" name="TurDetayDonusSofor">
                         </select>
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="TurDetayDonusAciklama" class="form-control dsb" rows="3" disabled></textarea>
                     </div>
-                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 submit-group" style="display:block !important">
-                        <button data-type="svClose"  data-class="tur" type="button" data-islemler="adminTurVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
-                        <button type="button" class="btn btn-success save" data-Saveislem="adminTurKaydet"><?php echo $data["Kaydet"]; ?></button>
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group submit-group">
+                            <button data-type="svClose" type="button" class="btn btn-default vzg" data-Vzgislem="turGidisDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
+                            <button type="button" class="btn btn-success save" data-Saveislem="turGidisDetailKaydet"><?php echo $data["Kaydet"]; ?></button>
+                        </div>
+                        <div class="form-group edit-group">
+                            <button id="editForm" type="button" data-Editislem="adminTurDetailEdit" class="btn btn-success"><?php echo $data["Duzenle"]; ?></button>
+                            <button data-type="svClose"  data-class="turDetayGidis" type="button" data-islemler="turGidisDetailSil" class="btn btn-danger svToggle" ><?php echo $data["Sil"]; ?></button>
+                        </div>
                     </div>
+                </div>
+                <div style=""><?php echo $data["ToplamKm"]; ?> : <span id="totalDonusKm" style="font-weight: bold;color:black"></span></div>
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12"  id="multiple_donus_map" style="top: 18%; right:10px;border: 2px solid #009933 !important;bottom: 10%">
+
                 </div>
 
             </div>
         </div>
     </div>
 </div>
-
 <div class="infobox-wrapper">
     <div id="infobox">
     </div>
 </div>
 <div class="infobox-gidis-wrapper">
     <div id="infoboxGidis">
+    </div>
+</div>
+<div class="infobox-donus-wrapper">
+    <div id="infoboxDonus">
     </div>
 </div>
 

@@ -162,7 +162,12 @@ class en {
             "Seciniz" => "Choose",
             "HaritaGor" => "See the map",
             "OgrenciPersonel" => "Student-Employee",
-            "AdresBilgi" => "Address Information"
+            "AdresBilgi" => "Address Information",
+            "TurAnimasyon" => "Play Animation",
+            "ToplamKm" => "Total Km",
+            "TurSecim" => "Tour Details",
+            "TurGidis" => "Tour Going",
+            "TurDonus" => "Tour Return"
         );
         return $endil;
     }

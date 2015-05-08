@@ -709,11 +709,12 @@ $.AdminIslemler = {
                                                 var soforLocation = $("select#TurSofor option:selected").attr('location');
                                                 var turTip = $("select#TurSelectTip option:selected").val();
                                                 var turAciklama = $("textarea[name=Aciklama]").val();
+                                                var turKm = $("span#infobox").text();
                                                 $.ajax({
                                                     data: {"turID": turID, "turAdi": turAdi, "bolgeID": bolgeID, "bolgead": bolgead, "kurumad": kurumad, "kurumId": kurumId,
                                                         "kurumTip": kurumTip, "kurumLocation": kurumLocation, "turGun[]": turGun, "turSaat1": turSaat1, "turSaat2": turSaat2,
                                                         "aracID": aracID, "aracPlaka": aracPlaka, "aracKapasite": aracKapasite, "turGidis": turGidis, "turDonus": turDonus,
-                                                        "soforID": soforID, "soforAd": soforAd, "soforLocation": soforLocation, "turTip": turTip, "turAciklama": turAciklama,
+                                                        "soforID": soforID, "soforAd": soforAd, "soforLocation": soforLocation, "turTip": turTip, "turAciklama": turAciklama, "turKm": turKm,
                                                         "turOgrenciID[]": KisiOgrenciID, "turOgrenciAd[]": KisiOgrenciAd, "turOgrenciLocation[]": KisiOgrenciLocation, "turOgrenciSira[]": KisiOgrenciSira, "turKisiIsciID[]": KisiIsciID,
                                                         "turKisiIsciAd[]": KisiIsciAd, "turKisiIsciLocation[]": KisiIsciLocation, "turKisiIsciSira[]": KisiIsciSira, "tip": "turKaydet"},
                                                     success: function (cevap) {
@@ -1128,6 +1129,7 @@ $.AdminIslemler = {
         var soforLocation = $('select#TurDetayGidisSofor option[value!="-1"]:selected').attr('location');
         var turSaat1 = $('select#TurDetayGidisSaat1 option:selected').val();
         var turSaat2 = $('select#TurDetayGidisSaat2 option:selected').val();
+        var turKm = $("span#infoboxGidis").text();
         //Tur Gün
         var turGun = new Array();
         $('select#TurDetayGidisGun option:selected').each(function () {
@@ -1152,7 +1154,7 @@ $.AdminIslemler = {
                         data: {"turGidisID": turGidisID, "turDonusID": turDonusID, "turID": turID, "turAdi": turAdi, "bolgeID": bolgeID, "bolgead": bolgead, "kurumad": kurumad, "kurumId": kurumId,
                             "kurumTip": kurumTip, "kurumLocation": kurumLocation, "turGun[]": turGun, "turSaat1": turSaat1, "turSaat2": turSaat2,
                             "aracID": aracID, "aracPlaka": aracPlaka, "aracKapasite": turDetayGidisAracKapasite,
-                            "soforID": soforID, "soforAd": soforAd, "soforLocation": soforLocation, "turAciklama": turAciklama,
+                            "soforID": soforID, "soforAd": soforAd, "soforLocation": soforLocation, "turAciklama": turAciklama, "turKm": turKm,
                             "turOgrenciID[]": KisiOgrenciID, "turOgrenciAd[]": KisiOgrenciAd, "turOgrenciLocation[]": KisiOgrenciLocation, "turOgrenciSira[]": KisiOgrenciSira, "turKisiIsciID[]": KisiIsciID,
                             "turKisiIsciAd[]": KisiIsciAd, "turKisiIsciLocation[]": KisiIsciLocation, "turKisiIsciSira[]": KisiIsciSira, "tip": "turGidisDKaydet"},
                         success: function (cevap) {

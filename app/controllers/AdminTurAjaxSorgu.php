@@ -404,6 +404,7 @@ class AdminTurAjaxSorgu extends Controller {
                         $form->post("kurumad", true);
                         $form->post("kurumId", true);
                         $form->post("kurumLocation", true);
+                        $form->post("turKm", true);
                         $bolgeID = $form->values['bolgeID'];
                         $bolgeAd = $form->values['bolgead'];
                         $kurumID = $form->values['kurumId'];
@@ -424,6 +425,7 @@ class AdminTurAjaxSorgu extends Controller {
                         $kurumTip = $form->values['kurumTip'];
                         $turTip = $form->values['turTip'];
                         $turID = $form->values['turID'];
+                        $turKm = $form->values['turKm'];
                         $turGunler = $_REQUEST['turGun'];
                         $turOgrenciID = $_REQUEST['turOgrenciID'];
                         $turOgrenciAd = $_REQUEST['turOgrenciAd'];
@@ -460,6 +462,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         'BSTurBslngc' => $turSaat1,
                                         'BSTurBts' => $turSaat2,
                                         'BSTurGidisDonus' => 1,
+                                        'BSTurKm' => $turKm,
                                     );
                                     $turDatam = array_merge($data, $turGunReturn);
                                 }
@@ -510,6 +513,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         'BSTurBslngc' => $turSaat1,
                                         'BSTurBts' => $turSaat2,
                                         'BSTurGidisDonus' => 0,
+                                        'BSTurKm' => $turKm,
                                     );
                                     $turDatam = array_merge($data, $turGunReturn);
                                 }
@@ -550,6 +554,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         'SBTurGidis' => 1,
                                         'SBTurDonus' => 0,
                                         'SBTurTip' => $kurumTip,
+                                        'SBTurKm' => $turKm,
                                     );
                                     $turData = array_merge($data, $turGunReturn);
                                 }
@@ -573,6 +578,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         'BSTurBslngc' => $turSaat1,
                                         'BSTurBts' => $turSaat2,
                                         'BSTurGidisDonus' => 0,
+                                        'BSTurKm' => $turKm,
                                     );
                                     $turDatam = array_merge($dataGidis, $turGunReturn);
                                 }
@@ -685,7 +691,8 @@ class AdminTurAjaxSorgu extends Controller {
                                         'SBBolgeAd' => $bolgeAd,
                                         'SBTurGidis' => 0,
                                         'SBTurDonus' => 1,
-                                        'SBTurTip' => $kurumTip
+                                        'SBTurTip' => $kurumTip,
+                                        'SBTurKm' => $turKm,
                                     );
                                     $turIlkDonusData = array_merge($dataIlkDonus, $turGunReturn);
                                 }
@@ -709,6 +716,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         'BSTurBslngc' => $turSaat1,
                                         'BSTurBts' => $turSaat2,
                                         'BSTurGidisDonus' => 1,
+                                        'BSTurKm' => $turKm,
                                     );
                                     $turDatam = array_merge($dataDonus, $turGunReturn);
                                 }
@@ -1224,6 +1232,7 @@ class AdminTurAjaxSorgu extends Controller {
                         $form->post("kurumad", true);
                         $form->post("kurumId", true);
                         $form->post("kurumLocation", true);
+                        $form->post("turKm", true);
                         $bolgeID = $form->values['bolgeID'];
                         $bolgeAd = $form->values['bolgead'];
                         $kurumID = $form->values['kurumId'];
@@ -1243,6 +1252,7 @@ class AdminTurAjaxSorgu extends Controller {
                         $turSoforLocation = $form->values['soforLocation'];
                         $kurumTip = $form->values['kurumTip'];
                         $turID = $form->values['turID'];
+                        $turKm = $form->values['turKm'];
                         $turGunler = $_REQUEST['turGun'];
                         $turOgrenciID = $_REQUEST['turOgrenciID'];
                         $turOgrenciAd = $_REQUEST['turOgrenciAd'];
@@ -1261,6 +1271,7 @@ class AdminTurAjaxSorgu extends Controller {
                                 'SBTurAd' => $turAdi,
                                 'SBTurAciklama' => $turAciklama,
                                 'SBTurGidis' => 1,
+                                'SBTurKm' => $turKm,
                             );
                             $turGidisUpdate = array_merge($updateGidisTur, $turGunReturnUpdate);
                         }
@@ -1279,6 +1290,7 @@ class AdminTurAjaxSorgu extends Controller {
                                     'BSTurSoforLocation' => $turSoforLocation,
                                     'BSTurBslngc' => $turSaat1,
                                     'BSTurBts' => $turSaat2,
+                                    'BSTurKm' => $turKm,
                                 );
                                 $turTipGidisDatam = array_merge($gidisTurTipdata, $turGunReturnUpdate);
                             }
@@ -1514,6 +1526,7 @@ class AdminTurAjaxSorgu extends Controller {
                                     'BSTurBslngc' => $turSaat1,
                                     'BSTurBts' => $turSaat2,
                                     'BSTurGidisDonus' => 0,
+                                    'BSTurKm' => $turKm,
                                 );
                                 $turUpdateDatam = array_merge($dataInsertGidis, $turGunReturn);
                             }
