@@ -579,47 +579,28 @@ class AdminAracAjaxSorgu extends Controller {
 
                         $adminAracTurDetail = $Panel_Model->adminAracTurDetail($adminAracDetailID);
 
-                        //arac detail tur
+                        //arac TUR İD
                         $a = 0;
                         foreach ($adminAracTurDetail as $adminAracTurDetaill) {
-                            $aracDetailTur[$a]['AracTurID'] = $adminAracTurDetaill['SBTurID'];
-                            $aracDetailTur[$a]['AracDetailTurAdi'] = $adminAracTurDetaill['SBTurAdi'];
-                            $aracDetailTur[$a]['AracTurAktiflik'] = $adminAracTurDetaill['SBTurAktiflik'];
-                            $aracDetailTur[$a]['AracTurTip'] = $adminAracTurDetaill['SBTurType'];
-                            $aracDetailTur[$a]['AracTurAcikla'] = $adminAracTurDetaill['SBTurAciklama'];
-                            $aracTurKurumId .= 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID=' . $adminAracTurDetaill['SBKurumID'] . ' UNION ALL ';
-                            $aracTurBolgeId .= 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID=' . $adminAracTurDetaill['SBBolgeID'] . ' UNION ALL ';
-                            $deger.='selam ';
+                            $aracturId[] = $adminAracTurDetaill['BSTurID'];
                             $a++;
                         }
+                        $turId = implode(',', $aracturId);
 
-                        $aracTurKurumTrim = rtrim($aracTurKurumId, " UNION ALL ");
-                        $aracTurBolgeTrim = rtrim($aracTurBolgeId, " UNION ALL ");
+                        $aracTur = $Panel_Model->adminAracDetailTur($turId);
 
-                        $adminAracTurKurum = $Panel_Model->adminAracTurKurum($aracTurKurumTrim);
-
-                        //arac  detail tur kurum
                         $b = 0;
-                        foreach ($adminAracTurKurum as $adminAracTurKurumm) {
-                            $aracDetailTurKurum[$b]['AracTurKurumID'] = $adminAracTurKurumm['SBKurumID'];
-                            $aracDetailTurKurum[$b]['AracTurKurumAdi'] = $adminAracTurKurumm['SBKurumAdi'];
+                        foreach ($aracTur as $aracTurr) {
+                            $aracDetailTur[$b]['TurID'] = $aracTurr['SBTurID'];
+                            $aracDetailTur[$b]['TurAd'] = $aracTurr['SBTurAd'];
+                            $aracDetailTur[$b]['TurAciklama'] = $aracTurr['SBTurAciklama'];
+                            $aracDetailTur[$b]['TurAktiflik'] = $aracTurr['SBTurAktiflik'];
+                            $aracDetailTur[$b]['TurKurum'] = $aracTurr['SBKurumAd'];
+                            $aracDetailTur[$b]['TurTip'] = $aracTurr['SBTurTip'];
+                            $aracDetailTur[$b]['TurBolge'] = $aracTurr['SBBolgeAd'];
                             $b++;
                         }
-
-                        $adminAracTurBolge = $Panel_Model->adminAracTurBolge($aracTurBolgeTrim);
-
-                        //arac  detail tur kurum
-                        $c = 0;
-                        foreach ($adminAracTurBolge as $adminAracTurBolgee) {
-                            $aracDetailTurBolge[$c]['AracTurBolgeID'] = $adminAracTurBolgee['SBBolgeID'];
-                            $aracDetailTurBolge[$c]['AracTurBolgeAdi'] = $adminAracTurBolgee['SBBolgeAdi'];
-                            $c++;
-                        }
-
-
-                        $sonuc["adminAracDetailTur"] = $aracDetailTur;
-                        $sonuc["adminAracTurKurum"] = $aracDetailTurKurum;
-                        $sonuc["adminAracTurBolge"] = $aracDetailTurBolge;
+                        $sonuc["aracDetailTur"] = $aracDetailTur;
                     }
 
                     break;

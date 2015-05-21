@@ -150,13 +150,13 @@ class Panel_Model extends Model {
 
     //admin kurum detail
     public function adminKurumDetail($adminKurumDetailID) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi,SBBolgeAdi,SBKurumTip,SBKurumTelefon,SBKurumEmail,SBKurumAdres,SBKurumAciklama,SBKurumLokasyon FROM sbkurum WHERE SBKurumID=' . $adminKurumDetailID;
+        $sql = 'SELECT SBKurumID,SBKurumAdi,SBBolgeAdi,SBBolgeID,SBKurumTip,SBKurumTelefon,SBKurumEmail,SBKurumAdres,SBKurumAciklama,SBKurumLokasyon FROM sbkurum WHERE SBKurumID=' . $adminKurumDetailID;
         return($this->db->select($sql));
     }
 
     //admin kurum tur detail
     public function adminKurumTurDetail($adminKurumDetailID) {
-        $sql = 'SELECT SBTurID,SBTurAdi,SBTurAktiflik,SBTurType,SBTurAciklama FROM sbtur WHERE SBKurumID=' . $adminKurumDetailID . ' ORDER BY SBTurAdi ASC';
+        $sql = 'SELECT SBTurID,SBTurAd,SBTurAktiflik,SBTurTip,SBTurAciklama FROM sbtur WHERE SBKurumID=' . $adminKurumDetailID . ' ORDER BY SBTurAd ASC';
         return($this->db->select($sql));
     }
 
@@ -384,19 +384,13 @@ class Panel_Model extends Model {
 
     //admin arac detail 
     public function adminAracTurDetail($adminAracDetailID) {
-        $sql = 'SELECT SBTurID,SBTurAdi,SBTurAktiflik,SBTurType,SBTurAciklama,SBKurumID,SBBolgeID FROM sbtur WHERE SBTurAracID=' . $adminAracDetailID;
+        $sql = 'SELECT DISTINCT BSTurID FROM bsturtip WHERE BSTurAracID=' . $adminAracDetailID;
         return($this->db->select($sql));
     }
 
-    //admin arac tur kurum
-    public function adminAracTurKurum($sql) {
-        //$sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ')';
-        return($this->db->select($sql));
-    }
-
-    //admin arac tur kurum
-    public function adminAracTurBolge($sql) {
-        //$sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID IN (' . $array . ')';
+    //admin rutbe bölgesindeki şoförler
+    public function adminAracDetailTur($array = array()) {
+        $sql = 'SELECT SBTurID,SBTurAd,SBTurAciklama,SBTurAktiflik,SBKurumAd,SBTurTip,SBBolgeAd FROM sbtur WHERE SBTurID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
@@ -1412,6 +1406,11 @@ class Panel_Model extends Model {
     //GİDİŞ öğrenci işçi tur düzenleme
     public function turTipGidisOgrenciIsciDuzenle($data, $turID) {
         return ($this->db->update("bsogrenciiscitur", $data, "BSTurID=" . $turID));
+    }
+
+    //dönüş tur tip güncelleme
+    public function turTipDonusDuzenle($data, $turTipID) {
+        return ($this->db->update("bsturtip", $data, "BSTurTipID=" . $turTipID));
     }
 
 }

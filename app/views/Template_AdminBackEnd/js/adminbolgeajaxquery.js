@@ -404,7 +404,6 @@ $.AdminIslemler = {
         //var count = $('ul#adminBolgeKurumDetail > li').length;
 
         var count = $('table#adminBolgeKurumTable > tbody > tr').length;
-        var MapValue = $(this).attr('value');
         for (var countK = 0; countK < count; countK++) {
             //var bolgeKurumlarMap = $('ul#adminBolgeKurumDetail > li:eq(' + countK + ') > a').attr('value');
             var bolgeKurumlarMap = $('table#adminBolgeKurumTable > tbody > tr:eq(' + countK + ') > td > a').attr('value');

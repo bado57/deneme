@@ -46,6 +46,7 @@
                     </thead>
 
                     <tbody id="adminTurRow">
+
                         <?php foreach ($model as $turModel) { ?>
                             <?php if ($turModel['AdminTurAktiflik'] != 0) { ?>
                                 <tr>
@@ -56,7 +57,15 @@
                                     </td>
                                     <td class="hidden-xs"><?php echo $turModel['AdminTurBolgeAd']; ?></td>
                                     <td class="hidden-xs"><?php echo $turModel['AdminTurKurumAd']; ?></td>
-                                    <td class="hidden-xs"><?php echo $turModel['AdminTurTip'] != 0 ? 'İşçi' : 'Öğrenci'; ?></td>
+                                    <td class="hidden-xs"><?php
+                                        if ($turModel['AdminTurTip'] == 0) {
+                                            echo $data["Ogrenci"];
+                                        } else if ($turModel['AdminTurTip'] == 1) {
+                                            echo $data["Personel"];
+                                        } else {
+                                            echo $data["OgrenciPersonel"];
+                                        }
+                                        ?></td>
                                     <td class="hidden-xs"><?php echo $turModel['AdminTurAciklama']; ?></td>
                                 </tr>
                             <?php } else { ?>
@@ -68,7 +77,15 @@
                                     </td>
                                     <td class="hidden-xs"><?php echo $turModel['AdminTurBolgeAd']; ?></td>
                                     <td class="hidden-xs"><?php echo $turModel['AdminTurKurumAd']; ?></td>
-                                    <td class="hidden-xs"><?php echo $turModel['AdminTurTip'] != 0 ? 'İşçi' : 'Öğrenci'; ?></td>
+                                    <td class="hidden-xs"><?php
+                                        if ($turModel['AdminTurTip'] == 0) {
+                                            echo $data["Ogrenci"];
+                                        } else if ($turModel['AdminTurTip'] == 1) {
+                                            echo $data["Personel"];
+                                        } else {
+                                            echo $data["OgrenciPersonel"];
+                                        }
+                                        ?></td>
                                     <td class="hidden-xs"><?php echo $turModel['AdminTurAciklama']; ?></td>
                                 </tr>
                             <?php } ?>
@@ -132,12 +149,12 @@
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label for="TurArac"><?php echo $data["Araclar"]; ?></label>
-                        <select type="text" class="form-control" id="TurArac" name="TurArac" multiple="multiple" style="display: none;">
+                        <select type="text" class="form-control" id="TurArac" name="TurArac" style="display: none;">
                         </select>
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label for="TurSofor"><?php echo $data["Sofor"]; ?></label>
-                        <select type="text" class="form-control" id="TurSofor" name="TurSofor" multiple="multiple" style="display: none;">
+                        <select type="text" class="form-control" id="TurSofor" name="TurSofor" style="display: none;">
                         </select>
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -196,7 +213,7 @@
                     <div class="col-lg-4 col-xs-12">
                         <!-- Dönüş İşlemleri -->
                         <input id="adminTurDetayDns" name="adminTurDetayDns" type="hidden" value="" />
-                        <a id="turDetayDonus" class="small-box bg-green">
+                        <a id="turDetayDns" class="svToggle small-box bg-green" data-type="svOpen" data-islemler="adminTurDetayDonus" data-class="turDetayDonus">
                             <div class="inner">
                                 <h3>
                                     <?php echo $data["Donus"]; ?>
@@ -360,12 +377,12 @@
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group submit-group">
-                            <button data-type="svClose" type="button" class="btn btn-default vzg" data-Vzgislem="turGidisDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
-                            <button type="button" class="btn btn-success save" data-Saveislem="turGidisDetailKaydet"><?php echo $data["Kaydet"]; ?></button>
+                            <button data-type="svClose" type="button" class="btn btn-default vzg" data-Vzgislem="turDonusDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
+                            <button type="button" class="btn btn-success save" data-Saveislem="turDonusDetailKaydet"><?php echo $data["Kaydet"]; ?></button>
                         </div>
                         <div class="form-group edit-group">
-                            <button id="editForm" type="button" data-Editislem="adminTurDetailEdit" class="btn btn-success"><?php echo $data["Duzenle"]; ?></button>
-                            <button data-type="svClose"  data-class="turDetayGidis" type="button" data-islemler="turGidisDetailSil" class="btn btn-danger svToggle" ><?php echo $data["Sil"]; ?></button>
+                            <button id="editForm" type="button" data-Editislem="adminTurDetailEditDonus" class="btn btn-success"><?php echo $data["Duzenle"]; ?></button>
+                            <button data-type="svClose"  data-class="turDetayDonus" type="button" data-islemler="turDonusDetailSil" class="btn btn-danger svToggle" ><?php echo $data["Sil"]; ?></button>
                         </div>
                     </div>
                 </div>
@@ -378,6 +395,7 @@
         </div>
     </div>
 </div>
+
 <div class="infobox-wrapper">
     <div id="infobox">
     </div>

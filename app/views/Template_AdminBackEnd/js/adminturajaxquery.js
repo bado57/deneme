@@ -13,15 +13,28 @@ $.ajaxSetup({
         }
     }
 });
-var turDetayGidisSaat1;
-var turDetayGidisSaat2;
-var turDetayGidisAracID;
-var turDetayGidisAracPlaka;
-var turDetayGidisAracKapasite;
-var turDetayGidisSoforID;
-var turDetayGidisSoforAd;
+//gidiş
+var turDetayGidisSaat1 = new Array();
+var turDetayGidisSaat2 = new Array();
+var turDetayGidisAracID = new Array();
+var turDetayGidisAracPlaka = new Array();
+var turDetayGidisAracKapasite = new Array();
+var turDetayGidisSoforID = new Array();
+var turDetayGidisSoforAd = new Array();
 var SelectDetayGidisGunOptions = new Array();
 var turGidisDetailEdt = new Array();
+//dönüş
+var turDetayDonusSaat1 = new Array();
+var turDetayDonusSaat2 = new Array();
+var turDetayDonusAracID = new Array();
+var turDetayDonusAracPlaka = new Array();
+var turDetayDonusAracKapasite = new Array();
+var turDetayDonusSoforID = new Array();
+var turDetayDonusSoforAd = new Array();
+var SelectDetayDonusGunOptions = new Array();
+var turDonusDetailEdt = new Array();
+var diziSayi = 0;
+
 $(document).ready(function () {
 
     TurTable = $('#adminTurTable').dataTable({
@@ -29,7 +42,7 @@ $(document).ready(function () {
         "ordering": true,
         "info": true
     });
-    //kurum işlemleri
+    //tur işlemleri
     $(document).on('click', 'tbody#adminTurRow > tr > td > a', function (e) {
         var s = $(this).find("i");
         s.removeClass("glyphicon glyphicon-refresh");
@@ -81,9 +94,70 @@ $(document).ready(function () {
                         //Dönüş
                         if (donusIndex != '' || donusIndex == 0) {
                             $('input[name=adminTurDetayDns]').val(cevap.turTipDetay.TurDetayTipID[donusIndex]);
+                            $('input[name=adminTurDetayTip]').val(cevap.turTipDetay.TurDetayTip[donusIndex]);
+                            $('input[name=TurDetayDonusAd]').val(adminturAd.trim());
+                            $('input[name=TurDetayDonusBolge]').val(cevap.turTipDetay.TurDetayBolgeAd[donusIndex]);
+                            $('input[name=TurDetayDonusBolgeID]').val(cevap.turTipDetay.TurDetayBolgeID[donusIndex]);
+                            $('input[name=TurDetayDonusKurum]').val(cevap.turTipDetay.TurDetayKurumAd[donusIndex]);
+                            $('input[name=TurDetayDonusKurumID]').val(cevap.turTipDetay.TurDetayKurumID[donusIndex]);
+                            $('input[name=TurDetayDonusKurumLocation]').val(cevap.turTipDetay.TurDetayKurumLocation[donusIndex]);
+                            $('textarea[name=TurDetayDonusAciklama]').text(adminturAciklama);
+                            $('input[name=DonusSoforInput]').val(cevap.turTipDetay.TurDetaySoforLocation[donusIndex]);
+                            $('input[name=DonusSoforID]').val(cevap.turTipDetay.TurDetaySoforID[donusIndex]);
+                            $('input[name=DonusSoforAd]').val(cevap.turTipDetay.TurDetaySoforAd[donusIndex]);
+                            turDetayDonusSaat1 = cevap.turTipDetay.TurDetayBsSaat[donusIndex];
+                            turDetayDonusSaat2 = cevap.turTipDetay.TurDetayBtsSaat[donusIndex];
+                            turDetayDonusAracID = cevap.turTipDetay.TurDetayAracID[donusIndex];
+                            turDetayDonusAracPlaka = cevap.turTipDetay.TurDetayAracPlaka[donusIndex];
+                            turDetayDonusAracKapasite = cevap.turTipDetay.TurDetayAracKapasite[donusIndex];
+                            turDetayDonusSoforID = cevap.turTipDetay.TurDetaySoforID[donusIndex];
+                            turDetayDonusSoforAd = cevap.turTipDetay.TurDetaySoforAd[donusIndex];
                         }
                     } else {
                         //ikisinden biri vardır
+                        //birisi de olsa bazı alanlar ortak olması lazım
+                        $('input[name=TurDetayGidisAd]').val(adminturAd.trim());
+                        $('input[name=TurDetayGidisBolge]').val(cevap.turTipDetay.TurDetayBolgeAd[0]);
+                        $('input[name=TurDetayGidisBolgeID]').val(cevap.turTipDetay.TurDetayBolgeID[0]);
+                        $('input[name=TurDetayGidisKurum]').val(cevap.turTipDetay.TurDetayKurumAd[0]);
+                        $('input[name=TurDetayGidisKurumID]').val(cevap.turTipDetay.TurDetayKurumID[0]);
+                        $('input[name=TurDetayGidisKurumLocation]').val(cevap.turTipDetay.TurDetayKurumLocation[0]);
+                        $('textarea[name=TurDetayGidisAciklama]').text(adminturAciklama);
+                        $('input[name=TurDetayDonusAd]').val(adminturAd.trim());
+                        $('input[name=TurDetayDonusBolge]').val(cevap.turTipDetay.TurDetayBolgeAd[0]);
+                        $('input[name=TurDetayDonusBolgeID]').val(cevap.turTipDetay.TurDetayBolgeID[0]);
+                        $('input[name=TurDetayDonusKurum]').val(cevap.turTipDetay.TurDetayKurumAd[0]);
+                        $('input[name=TurDetayDonusKurumID]').val(cevap.turTipDetay.TurDetayKurumID[0]);
+                        $('input[name=TurDetayDonusKurumLocation]').val(cevap.turTipDetay.TurDetayKurumLocation[0]);
+                        $('textarea[name=TurDetayDonusAciklama]').text(adminturAciklama);
+                        turDetayGidisAracKapasite = cevap.turTipDetay.TurDetayAracKapasite[0];
+                        turDetayDonusAracKapasite = cevap.turTipDetay.TurDetayAracKapasite[0];
+
+                        if (cevap.turTipDetay.TurDetayTur[0] == 0) {//gidiş
+                            $('input[name=adminTurDetayGds]').val(cevap.turTipDetay.TurDetayTipID[0]);
+                            $('input[name=adminTurDetayTip]').val(cevap.turTipDetay.TurDetayTip[0]);
+                            $('input[name=GidisSoforInput]').val(cevap.turTipDetay.TurDetaySoforLocation[0]);
+                            $('input[name=GidisSoforID]').val(cevap.turTipDetay.TurDetaySoforID[0]);
+                            $('input[name=GidisSoforAd]').val(cevap.turTipDetay.TurDetaySoforAd[0]);
+                            turDetayGidisSaat1 = cevap.turTipDetay.TurDetayBsSaat[0];
+                            turDetayGidisSaat2 = cevap.turTipDetay.TurDetayBtsSaat[0];
+                            turDetayGidisAracID = cevap.turTipDetay.TurDetayAracID[0];
+                            turDetayGidisAracPlaka = cevap.turTipDetay.TurDetayAracPlaka[0];
+                            turDetayGidisSoforID = cevap.turTipDetay.TurDetaySoforID[0];
+                            turDetayGidisSoforAd = cevap.turTipDetay.TurDetaySoforAd[0];
+                        } else {//dönüş
+                            $('input[name=adminTurDetayDns]').val(cevap.turTipDetay.TurDetayTipID[0]);
+                            $('input[name=adminTurDetayTip]').val(cevap.turTipDetay.TurDetayTip[0]);
+                            $('input[name=DonusSoforInput]').val(cevap.turTipDetay.TurDetaySoforLocation[0]);
+                            $('input[name=DonusSoforID]').val(cevap.turTipDetay.TurDetaySoforID[0]);
+                            $('input[name=DonusSoforAd]').val(cevap.turTipDetay.TurDetaySoforAd[0]);
+                            turDetayDonusSaat1 = cevap.turTipDetay.TurDetayBsSaat[0];
+                            turDetayDonusSaat2 = cevap.turTipDetay.TurDetayBtsSaat[0];
+                            turDetayDonusAracID = cevap.turTipDetay.TurDetayAracID[0];
+                            turDetayDonusAracPlaka = cevap.turTipDetay.TurDetayAracPlaka[0];
+                            turDetayDonusSoforID = cevap.turTipDetay.TurDetaySoforID[0];
+                            turDetayDonusSoforAd = cevap.turTipDetay.TurDetaySoforAd[0];
+                        }
                     }
                     svControl('svAdd', 'turSecim', '');
                     s.removeClass("fa fa-spinner fa-spin");
@@ -146,9 +220,9 @@ $(document).ready(function () {
                                             if (cevap.pasifArac) {
                                                 var length = cevap.pasifArac.length;
                                                 for (var i = 0; i < length; i++) {
-                                                    SelectAracOptions[i] = {label: cevap.pasifArac[i].turAracPlaka, title: cevap.pasifArac[i].turAracPlaka, value: cevap.pasifArac[i].turAracID, kapasite: cevap.pasifArac[i].turAracKapasite};
+                                                    SelectAracOptions[i] = {label: cevap.pasifArac[i].turAracPlaka, title: cevap.pasifArac[i].turAracPlaka + ' (' + cevap.pasifArac[i].turAracKapasite + ')', value: cevap.pasifArac[i].turAracID, kapasite: cevap.pasifArac[i].turAracKapasite};
                                                 }
-                                                $('#TurArac').multiselect('refresh');
+                                                $('#TurArac').multiselect();
                                                 $('#TurArac').multiselect('dataprovider', SelectAracOptions);
                                             }
                                         }
@@ -191,7 +265,7 @@ $(document).ready(function () {
                         } else {
                             MultipleMapArray = [];
                             var kurumLocation = $('select#TurSelectKurum option[value!="-1"]:selected').attr('location');
-                            var kurumName = $('select#TurSelectKurum option[value!="-1"]:selected').attr('title');
+                            var kurumName = $('select#TurSelectKurum option[value!="-1"]:selected').attr('label');
                             var LocationKurumBolme = kurumLocation.split(",");
                             MultipleMapArray[0] = Array(kurumName, LocationKurumBolme[0], LocationKurumBolme[1]);
                             if (cevap.kurumOKisi) {//öğrenci
@@ -265,8 +339,11 @@ $(document).ready(function () {
                                                 var SelectSoforOptions = new Array();
                                                 if (cevap.pasifSofor) {
                                                     var length = cevap.pasifSofor.length;
+                                                    SelectSoforOptions[0] = {label: 'Seçiniz', title: 'Seçiniz', value: -1};
+                                                    var a = 1;
                                                     for (var i = 0; i < length; i++) {
-                                                        SelectSoforOptions[i] = {label: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, title: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, location: cevap.pasifSofor[i].turSoforLocation, value: cevap.pasifSofor[i].turSoforID};
+                                                        SelectSoforOptions[a] = {label: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, title: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, location: cevap.pasifSofor[i].turSoforLocation, value: cevap.pasifSofor[i].turSoforID};
+                                                        a++;
                                                     }
                                                     $('#TurSofor').multiselect('refresh');
                                                     $('#TurSofor').multiselect('dataprovider', SelectSoforOptions);
@@ -297,16 +374,31 @@ $(document).ready(function () {
             if (kayitDeger == 0) {
                 var soforLocation = $('select#TurSofor option[value!="-1"]:selected').attr('location');
                 if (soforLocation) {
-                    var diziIndex = MultipleMapArray.length;
-                    sofor = 1;
-                    var soforName = $('select#TurSofor option[value!="-1"]:selected').attr('title');
-                    var soforID = $('select#TurSofor option[value!="-1"]:selected').attr('value');
-                    var LocationSoforBolme = soforLocation.split(",");
-                    MultipleMapArray[diziIndex] = Array(soforName, LocationSoforBolme[0], LocationSoforBolme[1], soforID);
-                    isMap = true;
-                    isSingle = false;
-                    multipleTurMapping(MultipleMapArray, MultipleMapindex, ayiriciIndex, sofor);
-                    google.maps.event.addDomListener(window, 'load', multipleTurMapping);
+                    if (diziSayi != 0) {
+                        MultipleMapArray.pop();
+                        var diziIndex = MultipleMapArray.length;
+                        sofor = 1;
+                        var soforName = $('select#TurSofor option[value!="-1"]:selected').attr('label');
+                        var soforID = $('select#TurSofor option[value!="-1"]:selected').attr('value');
+                        var LocationSoforBolme = soforLocation.split(",");
+                        MultipleMapArray[diziIndex] = Array(soforName, LocationSoforBolme[0], LocationSoforBolme[1], soforID);
+                        isMap = true;
+                        isSingle = false;
+                        multipleKurumTurMapping(MultipleMapArray, MultipleMapindex, ayiriciIndex, sofor);
+                        google.maps.event.addDomListener(window, 'load', multipleKurumTurMapping);
+                    } else {
+                        var diziIndex = MultipleMapArray.length;
+                        diziSayi++;
+                        sofor = 1;
+                        var soforName = $('select#TurSofor option[value!="-1"]:selected').attr('label');
+                        var soforID = $('select#TurSofor option[value!="-1"]:selected').attr('value');
+                        var LocationSoforBolme = soforLocation.split(",");
+                        MultipleMapArray[diziIndex] = Array(soforName, LocationSoforBolme[0], LocationSoforBolme[1], soforID);
+                        isMap = true;
+                        isSingle = false;
+                        multipleTurMapping(MultipleMapArray, MultipleMapindex, ayiriciIndex, sofor);
+                        google.maps.event.addDomListener(window, 'load', multipleTurMapping);
+                    }
                 }
             }
         }
@@ -527,18 +619,25 @@ $(document).ready(function () {
                                     var a = 1;
                                     if (cevap.pasifArac) {
                                         var length = cevap.pasifArac.length;
-                                        SelectAracOptions[0] = {label: turDetayGidisAracPlaka, title: turDetayGidisAracPlaka, value: turDetayGidisAracID, kapasite: turDetayGidisAracKapasite, selected: true};
-                                        for (var i = 0; i < length; i++) {
-                                            if (cevap.pasifArac[i].turAracID.indexOf(turDetayGidisAracID) == -1) {
-                                                SelectAracOptions[a] = {label: cevap.pasifArac[i].turAracPlaka, title: cevap.pasifArac[i].turAracPlaka, value: cevap.pasifArac[i].turAracID, kapasite: cevap.pasifArac[i].turAracKapasite};
-                                                a++;
+                                        if (turDetayGidisAracID.length > 0) {
+                                            SelectAracOptions[0] = {label: turDetayGidisAracPlaka, title: turDetayGidisAracPlaka + ' (' + turDetayGidisAracKapasite + ')', value: turDetayGidisAracID, kapasite: turDetayGidisAracKapasite, selected: true};
+                                            for (var i = 0; i < length; i++) {
+                                                if (cevap.pasifArac[i].turAracID.indexOf(turDetayGidisAracID) == -1) {
+                                                    SelectAracOptions[a] = {label: cevap.pasifArac[i].turAracPlaka, title: cevap.pasifArac[i].turAracPlaka + ' (' + cevap.pasifArac[i].turAracKapasite + ')', value: cevap.pasifArac[i].turAracID, kapasite: cevap.pasifArac[i].turAracKapasite};
+                                                    a++;
+                                                }
+                                            }
+                                        } else {
+                                            for (var i = 0; i < length; i++) {
+                                                SelectAracOptions[i] = {label: cevap.pasifArac[i].turAracPlaka, title: cevap.pasifArac[i].turAracPlaka + ' (' + cevap.pasifArac[i].turAracKapasite + ')', value: cevap.pasifArac[i].turAracID, kapasite: cevap.pasifArac[i].turAracKapasite};
                                             }
                                         }
-                                        $('#TurDetayGidisArac').multiselect('refresh');
+
+                                        $('#TurDetayGidisArac').multiselect();
                                         $('#TurDetayGidisArac').multiselect('dataprovider', SelectAracOptions);
                                     } else {
-                                        SelectAracOptions[0] = {label: turDetayGidisAracPlaka, title: turDetayGidisAracPlaka, value: turDetayGidisAracID, kapasite: turDetayGidisAracKapasite, selected: true};
-                                        $('#TurDetayGidisArac').multiselect('refresh');
+                                        SelectAracOptions[0] = {label: turDetayGidisAracPlaka, title: turDetayGidisAracPlaka + ' (' + turDetayGidisAracKapasite + ')', value: turDetayGidisAracID, kapasite: turDetayGidisAracKapasite, selected: true};
+                                        $('#TurDetayGidisArac').multiselect();
                                         $('#TurDetayGidisArac').multiselect('dataprovider', SelectAracOptions);
                                     }
                                 }
@@ -583,9 +682,18 @@ $(document).ready(function () {
                                         var a = 1;
                                         if (cevap.pasifSofor) {
                                             var length = cevap.pasifSofor.length;
-                                            SelectSoforOptions[0] = {label: turDetayGidisSoforAd, title: turDetayGidisSoforAd, location: soforLocation, value: turDetayGidisSoforID, selected: true};
-                                            for (var i = 0; i < length; i++) {
-                                                if (cevap.pasifSofor[i].turSoforID.indexOf(turDetayGidisSoforID) == -1) {
+                                            if (turDetayGidisSoforID.length > 0) {
+                                                SelectSoforOptions[0] = {label: turDetayGidisSoforAd, title: turDetayGidisSoforAd, location: soforLocation, value: turDetayGidisSoforID, selected: true};
+                                                for (var i = 0; i < length; i++) {
+                                                    if (cevap.pasifSofor[i].turSoforID.indexOf(turDetayGidisSoforID) == -1) {
+                                                        SelectSoforOptions[a] = {label: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, title: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, location: cevap.pasifSofor[i].turSoforLocation, value: cevap.pasifSofor[i].turSoforID};
+                                                        a++;
+                                                    }
+                                                }
+                                            } else {
+                                                SelectSoforOptions[0] = {label: 'Seçiniz', title: 'Seçiniz', value: -1};
+                                                var a = 1;
+                                                for (var i = 0; i < length; i++) {
                                                     SelectSoforOptions[a] = {label: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, title: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, location: cevap.pasifSofor[i].turSoforLocation, value: cevap.pasifSofor[i].turSoforID};
                                                     a++;
                                                 }
@@ -622,7 +730,266 @@ $(document).ready(function () {
                     var kurumAd = $('input[name=TurDetayGidisKurum]').val();
                     var kurumID = $('input[name=TurDetayGidisKurumID]').val();
                     var soforID = $('select#TurDetayGidisSofor option:selected').val();
-                    var soforAd = $('select#TurDetayGidisSofor option:selected').attr('title');
+                    var soforAd = $('select#TurDetayGidisSofor option:selected').attr('label');
+                    multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
+                    google.maps.event.addDomListener(window, 'load', multipleTurDetayMap);
+                }
+            }
+        }
+    });
+    //tur donüş detay saat1
+    $('#TurDetayDonusSaat1').multiselect({
+        onDropdownShow: function (event) {
+            var turSaatSelect1 = $('select#TurDetayDonusSaat1 option[value!="-1"]:selected').val();
+            var SelectSaat1Options = new Array();
+            var SelectSaat1Value = new Array(0, 15, 30, 45, 100, 115, 130, 145, 200, 215, 230, 245, 300, 315, 330, 345, 400,
+                    415, 430, 445, 500, 515, 530, 545, 600, 615, 630, 645, 700, 715, 730, 745, 800, 815, 830, 845, 900, 915, 930,
+                    945, 1000, 1015, 1030, 1045, 1100, 1115, 1130, 1145, 1200, 1215, 1230, 1245, 1300, 1315, 1330, 1345, 1400,
+                    1415, 1430, 1445, 1500, 1515, 1530, 1545, 1600, 1615, 1630, 1645, 1700, 1715, 1730, 1745, 1800, 1815, 1830,
+                    1845, 1900, 1915, 1930, 1945, 2000, 2015, 2030, 2045, 2100, 2115, 2130, 2145, 2200, 2215, 2230, 2245, 2300,
+                    2315, 2330, 2345);
+            var SelectSaat1Text = new Array('00:00', '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45',
+                    '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15', '04:30', '04:45', '05:00',
+                    '05:15', '05:30', '05:45', '06:00', '06:15', '06:30', '06:45', '07:00', '07:15', '07:30', '07:45', '08:00', '08:15',
+                    '08:30', '08:45', '09:00', '09:15', '09:30', '09:45', '10:00', '10:15', '10:30', '10:45', '11:00', '11:15', '11:30',
+                    '11:45', '12:00', '12:15', '12:30', '12:45', '13:00', '13:15', '13:30', '13:45', '14:00', '14:15', '14:30', '14:45',
+                    '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00',
+                    '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15',
+                    '21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45');
+            SelectSaat1Options[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
+            var saat2Length = SelectSaat1Value.length;
+            for (var b = 0; b < saat2Length; b++) {
+                if (SelectSaat1Value[b] == turSaatSelect1) {
+                    SelectSaat1Options[b + 1] = {label: SelectSaat1Text[b], title: SelectSaat1Text[b], value: SelectSaat1Value[b], selected: true};
+                } else {
+                    SelectSaat1Options[b + 1] = {label: SelectSaat1Text[b], title: SelectSaat1Text[b], value: SelectSaat1Value[b]};
+                }
+
+            }
+            $('#TurDetayDonusSaat1').multiselect('refresh');
+            $('#TurDetayDonusSaat1').multiselect('dataprovider', SelectSaat1Options);
+        },
+        onChange: function (option, checked, select) {
+            var turSaatSelect = $('select#TurDetayDonusSaat1 option[value!="-1"]:selected').val();
+            var turSaatSelect2 = $('select#TurDetayDonusSaat2 option[value!="-1"]:selected').val();
+            if (turSaatSelect) {
+                var SelectSaat2Options = new Array();
+                var SelectSaat2Value = new Array(0, 15, 30, 45, 100, 115, 130, 145, 200, 215, 230, 245, 300, 315, 330, 345, 400,
+                        415, 430, 445, 500, 515, 530, 545, 600, 615, 630, 645, 700, 715, 730, 745, 800, 815, 830, 845, 900, 915, 930,
+                        945, 1000, 1015, 1030, 1045, 1100, 1115, 1130, 1145, 1200, 1215, 1230, 1245, 1300, 1315, 1330, 1345, 1400,
+                        1415, 1430, 1445, 1500, 1515, 1530, 1545, 1600, 1615, 1630, 1645, 1700, 1715, 1730, 1745, 1800, 1815, 1830,
+                        1845, 1900, 1915, 1930, 1945, 2000, 2015, 2030, 2045, 2100, 2115, 2130, 2145, 2200, 2215, 2230, 2245, 2300,
+                        2315, 2330, 2345);
+                var SelectSaat2Text = new Array('00:00', '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45',
+                        '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15', '04:30', '04:45', '05:00',
+                        '05:15', '05:30', '05:45', '06:00', '06:15', '06:30', '06:45', '07:00', '07:15', '07:30', '07:45', '08:00', '08:15',
+                        '08:30', '08:45', '09:00', '09:15', '09:30', '09:45', '10:00', '10:15', '10:30', '10:45', '11:00', '11:15', '11:30',
+                        '11:45', '12:00', '12:15', '12:30', '12:45', '13:00', '13:15', '13:30', '13:45', '14:00', '14:15', '14:30', '14:45',
+                        '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00',
+                        '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15',
+                        '21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45');
+                SelectSaat2Options[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
+                var saat2Length = SelectSaat2Value.length;
+                for (var b = 0; b < saat2Length; b++) {
+                    if (SelectSaat2Value[b] <= turSaatSelect) {
+                        SelectSaat2Options[b + 1] = {label: SelectSaat2Text[b], title: SelectSaat2Text[b], value: SelectSaat2Value[b], disabled: true};
+                    } else {
+                        SelectSaat2Options[b + 1] = {label: SelectSaat2Text[b], title: SelectSaat2Text[b], value: SelectSaat2Value[b]};
+                        if (SelectSaat2Value[b] == turDetayDonusSaat2) {
+                            SelectSaat2Options[b + 1] = {label: SelectSaat2Text[b], title: SelectSaat2Text[b], value: SelectSaat2Value[b], selected: true};
+                        }
+                    }
+
+                }
+                $('#TurDetayDonusSaat2').multiselect('refresh');
+                $('#TurDetayDonusSaat2').multiselect('dataprovider', SelectSaat2Options);
+            } else {
+                alert("Lütfen Saat 1 Seçiniz");
+                var SelectSaat2Optionss = new Array();
+                $('#TurSaat2').multiselect('dataprovider', SelectSaat2Optionss);
+                $('#TurSaat2').multiselect('refresh');
+            }
+        }
+    });
+    //tur donüş detay saat2
+    $('#TurDetayDonusSaat2').multiselect({
+        onDropdownShow: function (event) {
+            var turSaatSelect = $('select#TurDetayDonusSaat1 option[value!="-1"]:selected').val();
+            if (turSaatSelect) {
+                var SelectSaat2Options = new Array();
+                var SelectSaat2Value = new Array(0, 15, 30, 45, 100, 115, 130, 145, 200, 215, 230, 245, 300, 315, 330, 345, 400,
+                        415, 430, 445, 500, 515, 530, 545, 600, 615, 630, 645, 700, 715, 730, 745, 800, 815, 830, 845, 900, 915, 930,
+                        945, 1000, 1015, 1030, 1045, 1100, 1115, 1130, 1145, 1200, 1215, 1230, 1245, 1300, 1315, 1330, 1345, 1400,
+                        1415, 1430, 1445, 1500, 1515, 1530, 1545, 1600, 1615, 1630, 1645, 1700, 1715, 1730, 1745, 1800, 1815, 1830,
+                        1845, 1900, 1915, 1930, 1945, 2000, 2015, 2030, 2045, 2100, 2115, 2130, 2145, 2200, 2215, 2230, 2245, 2300,
+                        2315, 2330, 2345);
+                var SelectSaat2Text = new Array('00:00', '00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45',
+                        '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15', '04:30', '04:45', '05:00',
+                        '05:15', '05:30', '05:45', '06:00', '06:15', '06:30', '06:45', '07:00', '07:15', '07:30', '07:45', '08:00', '08:15',
+                        '08:30', '08:45', '09:00', '09:15', '09:30', '09:45', '10:00', '10:15', '10:30', '10:45', '11:00', '11:15', '11:30',
+                        '11:45', '12:00', '12:15', '12:30', '12:45', '13:00', '13:15', '13:30', '13:45', '14:00', '14:15', '14:30', '14:45',
+                        '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00',
+                        '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15',
+                        '21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45');
+                SelectSaat2Options[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
+                var saat2Length = SelectSaat2Value.length;
+                for (var b = 0; b < saat2Length; b++) {
+                    if (SelectSaat2Value[b] <= turSaatSelect) {
+                        SelectSaat2Options[b + 1] = {label: SelectSaat2Text[b], title: SelectSaat2Text[b], value: SelectSaat2Value[b], disabled: true};
+                    } else {
+                        SelectSaat2Options[b + 1] = {label: SelectSaat2Text[b], title: SelectSaat2Text[b], value: SelectSaat2Value[b]};
+                        if (SelectSaat2Value[b] == turDetayDonusSaat2) {
+                            SelectSaat2Options[b + 1] = {label: SelectSaat2Text[b], title: SelectSaat2Text[b], value: SelectSaat2Value[b], selected: true};
+                        }
+                    }
+
+                }
+                $('#TurDetayDonusSaat2').multiselect('refresh');
+                $('#TurDetayDonusSaat2').multiselect('dataprovider', SelectSaat2Options);
+            } else {
+                alert("Lütfen Saat 1 Seçiniz");
+                var SelectSaat2Optionss = new Array();
+                $('#TurSaat2').multiselect('dataprovider', SelectSaat2Optionss);
+                $('#TurSaat2').multiselect('refresh');
+            }
+        }
+    });
+    //tur dönüş araç focus
+    $('#TurDetayDonusArac').multiselect({
+        onDropdownShow: function (event) {
+            var turGunID = new Array();
+            $('select#TurDetayDonusGun option:selected').each(function () {
+                turGunID.push($(this).val());
+            });
+            var turgunlength = turGunID.length;
+            if (turgunlength > 0) {
+                var turSaat1ID = $('select#TurDetayDonusSaat1 option[value!="-1"]:selected').val();
+                if (turSaat1ID) {
+                    var turSaat2ID = $('select#TurDetayDonusSaat2 option[value!="-1"]:selected').val();
+                    if (turSaat2ID) {
+                        var kurumID = $("input[name=TurDetayDonusKurumID]").val();
+                        var bolgeID = $("input[name=TurDetayDonusBolgeID]").val();
+                        $.ajax({
+                            data: {"bolgeID": bolgeID, "kurumID": kurumID, "turGunID[]": turGunID, "turSaat1ID": turSaat1ID, "turSaat2ID": turSaat2ID, "tip": "turDonusAracSelect"},
+                            success: function (cevap) {
+                                if (cevap.hata) {
+                                    alert(cevap.hata);
+                                } else {
+                                    var SelectAracOptions = new Array();
+                                    var a = 1;
+                                    if (cevap.pasifArac) {
+                                        var length = cevap.pasifArac.length;
+                                        if (turDetayDonusAracID.length > 0) {
+                                            SelectAracOptions[0] = {label: turDetayDonusAracPlaka, title: turDetayDonusAracPlaka + ' (' + turDetayDonusAracKapasite + ')', value: turDetayDonusAracID, kapasite: turDetayDonusAracKapasite, selected: true};
+                                            for (var i = 0; i < length; i++) {
+                                                if (cevap.pasifArac[i].turAracID.indexOf(turDetayDonusAracID) == -1) {
+                                                    SelectAracOptions[a] = {label: cevap.pasifArac[i].turAracPlaka, title: cevap.pasifArac[i].turAracPlaka + ' (' + cevap.pasifArac[i].turAracKapasite + ')', value: cevap.pasifArac[i].turAracID, kapasite: cevap.pasifArac[i].turAracKapasite};
+                                                    a++;
+                                                }
+                                            }
+                                        } else {
+                                            for (var i = 0; i < length; i++) {
+                                                SelectAracOptions[i] = {label: cevap.pasifArac[i].turAracPlaka, title: cevap.pasifArac[i].turAracPlaka + ' (' + cevap.pasifArac[i].turAracKapasite + ')', value: cevap.pasifArac[i].turAracID, kapasite: cevap.pasifArac[i].turAracKapasite};
+                                            }
+                                        }
+                                        $('#TurDetayDonusArac').multiselect('refresh');
+                                        $('#TurDetayDonusArac').multiselect('dataprovider', SelectAracOptions);
+                                    } else {
+                                        SelectAracOptions[0] = {label: turDetayDonusAracPlaka, title: turDetayDonusAracPlaka + ' (' + turDetayDonusAracKapasite + ')', value: turDetayDonusAracID, kapasite: turDetayDonusAracKapasite, selected: true};
+                                        $('#TurDetayDonusArac').multiselect('refresh');
+                                        $('#TurDetayDonusArac').multiselect('dataprovider', SelectAracOptions);
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        alert("Lütfen Saat2 Seçiniz");
+                    }
+                } else {
+                    alert("Lütfen Saat1 Seçiniz");
+                }
+            } else {
+                alert("Lütfen Gün Seçiniz");
+            }
+        }
+    });
+    //tur detay dönüş şoför focus
+    $('#TurDetayDonusSofor').multiselect({
+        onDropdownShow: function (event) {
+            var turGunID = new Array();
+            $('select#TurDetayDonusGun option:selected').each(function () {
+                turGunID.push($(this).val());
+            });
+            var turgunlength = turGunID.length;
+            if (turgunlength > 0) {
+                var turSaat1ID = $('select#TurDetayDonusSaat1 option[value!="-1"]:selected').val();
+                if (turSaat1ID) {
+                    var turSaat2ID = $('select#TurDetayDonusSaat2 option[value!="-1"]:selected').val();
+                    if (turSaat2ID) {
+                        var aracID = $('select#TurDetayDonusArac option:selected').val();
+                        if (aracID) {
+                            var kurumID = $("input[name=TurDetayDonusKurumID]").val();
+                            var bolgeID = $("input[name=TurDetayDonusBolgeID]").val();
+                            $.ajax({
+                                data: {"bolgeID": bolgeID, "kurumID": kurumID, "turGunID[]": turGunID, "turSaat1ID": turSaat1ID, "turSaat2ID": turSaat2ID, "aracID": aracID, "tip": "turDonusSoforSelect"},
+                                success: function (cevap) {
+                                    if (cevap.hata) {
+                                        alert(cevap.hata);
+                                    } else {
+                                        var SelectSoforOptions = new Array();
+                                        var soforLocation = $('input[name=DonusSoforInput]').val();
+                                        var a = 1;
+                                        if (cevap.pasifSofor) {
+                                            var length = cevap.pasifSofor.length;
+                                            if (turDetayDonusSoforID.length > 0) {
+                                                SelectSoforOptions[0] = {label: turDetayDonusSoforAd, title: turDetayDonusSoforAd, location: soforLocation, value: turDetayDonusSoforID, selected: true};
+                                                for (var i = 0; i < length; i++) {
+                                                    if (cevap.pasifSofor[i].turSoforID.indexOf(turDetayDonusSoforID) == -1) {
+                                                        SelectSoforOptions[a] = {label: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, title: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, location: cevap.pasifSofor[i].turSoforLocation, value: cevap.pasifSofor[i].turSoforID};
+                                                        a++;
+                                                    }
+                                                }
+                                            } else {
+                                                SelectSoforOptions[0] = {label: 'Seçiniz', title: 'Seçiniz', value: -1};
+                                                var a = 1;
+                                                for (var i = 0; i < length; i++) {
+                                                    SelectSoforOptions[a] = {label: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, title: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, location: cevap.pasifSofor[i].turSoforLocation, value: cevap.pasifSofor[i].turSoforID};
+                                                    a++
+                                                }
+                                            }
+                                            $('#TurDetayDonusSofor').multiselect('refresh');
+                                            $('#TurDetayDonusSofor').multiselect('dataprovider', SelectSoforOptions);
+                                        } else {
+                                            SelectSoforOptions[0] = {label: turDetayDonusSoforAd, title: turDetayDonusSoforAd, location: soforLocation, value: turDetayDonusSoforID};
+                                            $('#TurDetayDonusSofor').multiselect('refresh');
+                                            $('#TurDetayDonusSofor').multiselect('dataprovider', SelectSoforOptions);
+                                        }
+                                    }
+                                }
+                            });
+                        } else {
+                            alert("Lütfen Araç Seçiniz");
+                        }
+                    } else {
+                        alert("Lütfen Saat2 Seçiniz");
+                    }
+                } else {
+                    alert("Lütfen Saat1 Seçiniz");
+                }
+            } else {
+                alert("Lütfen Gün Seçiniz");
+            }
+        },
+        onChange: function (option, checked, select) {
+            if (kayitDeger == 0) {
+                var soforLocation = $('select#TurDetayGidisSofor option[value!="-1"]:selected').attr('location');
+                if (soforLocation) {
+                    //harita için
+                    var kurumLocation = $('input[name=TurDetayGidisKurumLocation]').val();
+                    var kurumAd = $('input[name=TurDetayGidisKurum]').val();
+                    var kurumID = $('input[name=TurDetayGidisKurumID]').val();
+                    var soforID = $('select#TurDetayGidisSofor option:selected').val();
+                    var soforAd = $('select#TurDetayGidisSofor option:selected').attr('label');
                     multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
                     google.maps.event.addDomListener(window, 'load', multipleTurDetayMap);
                 }
@@ -660,8 +1027,8 @@ $.AdminIslemler = {
                     $('#TurSaat2').multiselect();
                     $('#TurSelectBolge').multiselect();
                     $('#TurSelectKurum').multiselect();
-                    $('#TurArac').multiselect('refresh');
-                    $('#TurSofor').multiselect('refresh');
+                    $('#TurArac').multiselect();
+                    $('#TurSofor').multiselect();
                     var selectLength = $('#TurSelectBolge > option').length;
                     if (!selectLength) {
                         alert("Lütfen Öncelikle Bölge İşlemlerine Gidip Yeni Bölge Oluşturunuz");
@@ -709,7 +1076,7 @@ $.AdminIslemler = {
                                                 var soforLocation = $("select#TurSofor option:selected").attr('location');
                                                 var turTip = $("select#TurSelectTip option:selected").val();
                                                 var turAciklama = $("textarea[name=Aciklama]").val();
-                                                var turKm = $("span#infobox").text();
+                                                var turKm = $("span#totalKm").text();
                                                 $.ajax({
                                                     data: {"turID": turID, "turAdi": turAdi, "bolgeID": bolgeID, "bolgead": bolgead, "kurumad": kurumad, "kurumId": kurumId,
                                                         "kurumTip": kurumTip, "kurumLocation": kurumLocation, "turGun[]": turGun, "turSaat1": turSaat1, "turSaat2": turSaat2,
@@ -752,6 +1119,9 @@ $.AdminIslemler = {
                                                             var turDonusu = $("input[name=TurDonus]").val();
                                                             if (turGidisi != '' && turDonusu != '') {
                                                                 //iki işlemde yapıldı ise kapanıyor direkt
+                                                                svControl('svClose', 'tur', '');
+                                                            } else {
+                                                                //işlemlerde eksik varsa kalıyor sayfa
                                                                 var turTurutipi;
                                                                 if (kurumTip == 0) {
                                                                     turTurutipi = 'Öğrenci';
@@ -771,12 +1141,8 @@ $.AdminIslemler = {
                                                                         + "<td class='hidden-xs'>" + turTurutipi + "</td>"
                                                                         + "<td class='hidden-xs'>" + turAciklama + "</td>";
                                                                 TurTable.DataTable().row.add($(addRow)).draw();
-                                                                svControl('svClose', 'tur', '');
-                                                            } else {
-                                                                //işlemlerde eksik varsa kalıyor sayfa
                                                                 disabledForm();
                                                             }
-
                                                         }
                                                     }
                                                 });
@@ -827,6 +1193,7 @@ $.AdminIslemler = {
         }
     },
     adminTurDetayGidis: function () {
+        disabledForm();
         var gidisTipID = $('input[name=adminTurDetayGds]').val();
         var turTip = $('input[name=adminTurDetayTip]').val();
         var kurumID = $('input[name=TurDetayGidisKurumID]').val();
@@ -840,53 +1207,61 @@ $.AdminIslemler = {
                     //Saat1
                     var SelectSaat1Options = new Array();
                     var saat1;
-                    if (turDetayGidisSaat1.length == 1) {
-                        saat1 = '00:00'
-                    } else if (turDetayGidisSaat1.length == 2) {
-                        saat1 = '00:' + turDetayGidisSaat1;
-                    } else if (turDetayGidisSaat1.length == 3) {
-                        var ilkHarf1 = turDetayGidisSaat1.slice(0, 1);
-                        var sondaikiHarf1 = turDetayGidisSaat1.slice(1, 3);
-                        saat1 = '0' + ilkHarf1 + ':' + sondaikiHarf1;
-                    } else {
-                        var ilkikiHarf1 = turDetayGidisSaat1.slice(0, 2);
-                        var sondaikiHarf1 = turDetayGidisSaat1.slice(2, 4);
-                        saat1 = ilkikiHarf1 + ':' + sondaikiHarf1;
+                    if (turDetayGidisSaat1.length > 0) {
+                        if (turDetayGidisSaat1.length == 1) {
+                            saat1 = '00:00'
+                        } else if (turDetayGidisSaat1.length == 2) {
+                            saat1 = '00:' + turDetayGidisSaat1;
+                        } else if (turDetayGidisSaat1.length == 3) {
+                            var ilkHarf1 = turDetayGidisSaat1.slice(0, 1);
+                            var sondaikiHarf1 = turDetayGidisSaat1.slice(1, 3);
+                            saat1 = '0' + ilkHarf1 + ':' + sondaikiHarf1;
+                        } else {
+                            var ilkikiHarf1 = turDetayGidisSaat1.slice(0, 2);
+                            var sondaikiHarf1 = turDetayGidisSaat1.slice(2, 4);
+                            saat1 = ilkikiHarf1 + ':' + sondaikiHarf1;
+                        }
+                        SelectSaat1Options[0] = {label: saat1, value: turDetayGidisSaat1, disabled: true};
+                        $('#TurDetayGidisSaat1').multiselect('dataprovider', SelectSaat1Options);
                     }
-                    SelectSaat1Options[0] = {label: saat1, value: turDetayGidisSaat1, disabled: true};
-                    $('#TurDetayGidisSaat1').multiselect('dataprovider', SelectSaat1Options);
                     $('#TurDetayGidisSaat1').multiselect('refresh');
                     $('#TurDetayGidisSaat1').multiselect('disable');
                     //Saat2
                     var SelectSaat2Options = new Array();
                     var saat2;
-                    if (turDetayGidisSaat2.length == 1) {
-                        saat2 = '00:00'
-                    } else if (turDetayGidisSaat2.length == 2) {
-                        saat2 = '00:' + turDetayGidisSaat2;
-                    } else if (turDetayGidisSaat2.length == 3) {
-                        var ilkHarf2 = turDetayGidisSaat2.slice(0, 1);
-                        var sondaikiHarf2 = turDetayGidisSaat2.slice(1, 3);
-                        saat2 = '0' + ilkHarf2 + ':' + sondaikiHarf2;
-                    } else {
-                        var ilkikiHarf2 = turDetayGidisSaat2.slice(0, 2);
-                        var sondaikiHarf2 = turDetayGidisSaat2.slice(2, 4);
-                        saat2 = ilkikiHarf2 + ':' + sondaikiHarf2;
+                    if (turDetayGidisSaat2.length > 0) {
+                        if (turDetayGidisSaat2.length == 1) {
+                            saat2 = '00:00'
+                        } else if (turDetayGidisSaat2.length == 2) {
+                            saat2 = '00:' + turDetayGidisSaat2;
+                        } else if (turDetayGidisSaat2.length == 3) {
+                            var ilkHarf2 = turDetayGidisSaat2.slice(0, 1);
+                            var sondaikiHarf2 = turDetayGidisSaat2.slice(1, 3);
+                            saat2 = '0' + ilkHarf2 + ':' + sondaikiHarf2;
+                        } else {
+                            var ilkikiHarf2 = turDetayGidisSaat2.slice(0, 2);
+                            var sondaikiHarf2 = turDetayGidisSaat2.slice(2, 4);
+                            saat2 = ilkikiHarf2 + ':' + sondaikiHarf2;
+                        }
+                        SelectSaat2Options[0] = {label: saat2, value: turDetayGidisSaat2, disabled: true};
+                        $('#TurDetayGidisSaat2').multiselect('dataprovider', SelectSaat2Options);
                     }
-                    SelectSaat2Options[0] = {label: saat2, value: turDetayGidisSaat2, disabled: true};
-                    $('#TurDetayGidisSaat2').multiselect('dataprovider', SelectSaat2Options);
                     $('#TurDetayGidisSaat2').multiselect('refresh');
                     $('#TurDetayGidisSaat2').multiselect('disable');
                     //Araç
-                    var SelectAracOptions = new Array();
-                    SelectAracOptions[0] = {label: turDetayGidisAracPlaka, value: turDetayGidisAracID, disabled: true};
-                    $('#TurDetayGidisArac').multiselect('dataprovider', SelectAracOptions);
+                    if (turDetayGidisAracPlaka.length > 0) {
+                        var SelectAracOptions = new Array();
+                        SelectAracOptions[0] = {label: turDetayGidisAracPlaka, value: turDetayGidisAracID, disabled: true};
+                        $('#TurDetayGidisArac').multiselect('dataprovider', SelectAracOptions);
+                    }
                     $('#TurDetayGidisArac').multiselect('refresh');
                     $('#TurDetayGidisArac').multiselect('disable');
                     //Şoför
-                    var SelectSoforOptions = new Array();
-                    SelectSoforOptions[0] = {label: turDetayGidisSoforAd, value: turDetayGidisSoforID, disabled: true};
-                    $('#TurDetayGidisSofor').multiselect('dataprovider', SelectSoforOptions);
+                    if (turDetayGidisSoforAd.length > 0) {
+                        var SelectSoforOptions = new Array();
+                        SelectSoforOptions[0] = {label: turDetayGidisSoforAd, value: turDetayGidisSoforID, disabled: true};
+                        $('#TurDetayGidisSofor').multiselect('dataprovider', SelectSoforOptions);
+                    }
                     $('#TurDetayGidisSofor').multiselect('refresh');
                     $('#TurDetayGidisSofor').multiselect('disable');
                     //Gunler
@@ -1129,7 +1504,7 @@ $.AdminIslemler = {
         var soforLocation = $('select#TurDetayGidisSofor option[value!="-1"]:selected').attr('location');
         var turSaat1 = $('select#TurDetayGidisSaat1 option:selected').val();
         var turSaat2 = $('select#TurDetayGidisSaat2 option:selected').val();
-        var turKm = $("span#infoboxGidis").text();
+        var turKm = $("span#totalGidisKm").text();
         //Tur Gün
         var turGun = new Array();
         $('select#TurDetayGidisGun option:selected').each(function () {
@@ -1161,7 +1536,7 @@ $.AdminIslemler = {
                             if (cevap.hata) {
                                 alert(cevap.hata);
                             } else {
-                                kayitDeger = 1;
+                                kayitDegerGidis = 1;
                                 disabledForm();
                                 $('input[name=adminTurDetayGds]').val(cevap.turGidisID);
                                 $('#TurDetayGidisGun').multiselect('disable');
@@ -1222,7 +1597,414 @@ $.AdminIslemler = {
             }
         });
         return true;
-    }
+    },
+    adminTurDetayDonus: function () {
+        disabledForm();
+        var donusTipID = $('input[name=adminTurDetayDns]').val();
+        var turTip = $('input[name=adminTurDetayTip]').val();
+        var kurumID = $('input[name=TurDetayDonusKurumID]').val();
+        var turID = $('input[name=adminTurID]').val();
+        $.ajax({
+            data: {"turID": turID, "donusTipID": donusTipID, "turTip": turTip, "kurumID": kurumID, "tip": "adminTurDetayDonus"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    alert(cevap.hata);
+                } else {
+                    //Saat1
+                    var SelectSaat1Options = new Array();
+                    var saat1;
+                    if (turDetayDonusSaat1.length > 0) {
+                        if (turDetayDonusSaat1.length == 1) {
+                            saat1 = '00:00'
+                        } else if (turDetayDonusSaat1.length == 2) {
+                            saat1 = '00:' + turDetayDonusSaat1;
+                        } else if (turDetayDonusSaat1.length == 3) {
+                            var ilkHarf1 = turDetayDonusSaat1.slice(0, 1);
+                            var sondaikiHarf1 = turDetayDonusSaat1.slice(1, 3);
+                            saat1 = '0' + ilkHarf1 + ':' + sondaikiHarf1;
+                        } else {
+                            var ilkikiHarf1 = turDetayDonusSaat1.slice(0, 2);
+                            var sondaikiHarf1 = turDetayDonusSaat1.slice(2, 4);
+                            saat1 = ilkikiHarf1 + ':' + sondaikiHarf1;
+                        }
+                        SelectSaat1Options[0] = {label: saat1, value: turDetayDonusSaat1, disabled: true};
+                        $('#TurDetayDonusSaat1').multiselect('dataprovider', SelectSaat1Options);
+                    }
+                    $('#TurDetayDonusSaat1').multiselect('refresh');
+                    $('#TurDetayDonusSaat1').multiselect('disable');
+                    //Saat2
+                    var SelectSaat2Options = new Array();
+                    var saat2;
+                    if (turDetayDonusSaat2.length > 0) {
+                        if (turDetayDonusSaat2.length == 1) {
+                            saat2 = '00:00'
+                        } else if (turDetayDonusSaat2.length == 2) {
+                            saat2 = '00:' + turDetayDonusSaat2;
+                        } else if (turDetayDonusSaat2.length == 3) {
+                            var ilkHarf2 = turDetayDonusSaat2.slice(0, 1);
+                            var sondaikiHarf2 = turDetayDonusSaat2.slice(1, 3);
+                            saat2 = '0' + ilkHarf2 + ':' + sondaikiHarf2;
+                        } else {
+                            var ilkikiHarf2 = turDetayDonusSaat2.slice(0, 2);
+                            var sondaikiHarf2 = turDetayDonusSaat2.slice(2, 4);
+                            saat2 = ilkikiHarf2 + ':' + sondaikiHarf2;
+                        }
+                        SelectSaat2Options[0] = {label: saat2, value: turDetayDonusSaat2, disabled: true};
+                        $('#TurDetayDonusSaat2').multiselect('dataprovider', SelectSaat2Options);
+                    }
+                    $('#TurDetayDonusSaat2').multiselect('refresh');
+                    $('#TurDetayDonusSaat2').multiselect('disable');
+                    //Araç
+                    if (turDetayDonusAracPlaka.length > 0) {
+                        var SelectAracOptions = new Array();
+                        SelectAracOptions[0] = {label: turDetayDonusAracPlaka, value: turDetayDonusAracID, disabled: true};
+                        $('#TurDetayDonusArac').multiselect('dataprovider', SelectAracOptions);
+                    }
+                    $('#TurDetayDonusArac').multiselect('refresh');
+                    $('#TurDetayDonusArac').multiselect('disable');
+                    //Şoför
+                    if (turDetayDonusSoforAd.length > 0) {
+                        var SelectSoforOptions = new Array();
+                        SelectSoforOptions[0] = {label: turDetayDonusSoforAd, value: turDetayDonusSoforID, disabled: true};
+                        $('#TurDetayDonusSofor').multiselect('dataprovider', SelectSoforOptions);
+                    }
+                    $('#TurDetayDonusSofor').multiselect('refresh');
+                    $('#TurDetayDonusSofor').multiselect('disable');
+                    //Gunler
+
+                    if (cevap.donus.Pzt != 0) {
+                        SelectDetayDonusGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt', selected: true};
+                    } else {
+                        SelectDetayDonusGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt'};
+                    }
+                    if (cevap.donus.Sli != 0) {
+                        SelectDetayDonusGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli', selected: true};
+                    } else {
+                        SelectDetayDonusGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli'};
+                    }
+                    if (cevap.donus.Crs != 0) {
+                        SelectDetayDonusGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs', selected: true};
+                    } else {
+                        SelectDetayDonusGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs'};
+                    }
+                    if (cevap.donus.Prs != 0) {
+                        SelectDetayDonusGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs', selected: true};
+                    } else {
+                        SelectDetayDonusGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs'};
+                    }
+                    if (cevap.donus.Cma != 0) {
+                        SelectDetayDonusGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma', selected: true};
+                    } else {
+                        SelectDetayDonusGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma'};
+                    }
+                    if (cevap.donus.Cmt != 0) {
+                        SelectDetayDonusGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt', selected: true};
+                    } else {
+                        SelectDetayDonusGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt'};
+                    }
+                    if (cevap.donus.Pzr != 0) {
+                        SelectDetayDonusGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr', selected: true};
+                    } else {
+                        SelectDetayDonusGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr'};
+                    }
+                    $('#TurDetayDonusGun').multiselect('dataprovider', SelectDetayDonusGunOptions);
+                    $('#TurDetayDonusGun').multiselect('refresh');
+                    $('#TurDetayDonusGun').multiselect('disable');
+
+                    //harita için
+                    var kurumLocation = $('input[name=TurDetayDonusKurumLocation]').val();
+                    var kurumAd = $('input[name=TurDetayDonusKurum]').val();
+                    var kurumID = $('input[name=TurDetayDonusKurumID]').val();
+                    var soforLocation = $('input[name=DonusSoforInput]').val();
+                    var soforID = $('input[name=DonusSoforID]').val();
+                    var soforAd = $('input[name=DonusSoforAd]').val();
+                    //dizilerimizi boşaltıyoruz
+                    DetailDonusGelenAd = [];
+                    DetailDonusGelenID = [];
+                    DetailDonusGelenLocation = [];
+                    DetailDonusGelenTip = [];
+                    DetailDonusDigerKisi = [];
+                    for (var donusID = 0; donusID < cevap.donus.KisiID.length; donusID++) {
+                        DetailDonusGelenAd.push(cevap.donus.KisiAd[donusID]);
+                        DetailDonusGelenID.push(cevap.donus.KisiID[donusID]);
+                        DetailDonusGelenLocation.push(cevap.donus.KisiLocation[donusID]);
+                        DetailDonusGelenTip.push(cevap.donus.KisiTip[donusID]);
+                    }
+                    for (var donusDigerID = 0; donusDigerID < cevap.donusDiger.length; donusDigerID++) {
+                        DetailDonusDigerKisi.push(cevap.donusDiger[donusDigerID]);
+                    }
+
+                    multipleTurDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
+                    google.maps.event.addDomListener(window, 'load', multipleTurDetayDonusMap);
+                }
+            }
+        });
+        return true;
+    },
+    adminTurDetailDuzenleDonus: function () {
+        //Tur İşlemleri Değerleri
+        var turDetayAd = $('input[name=TurDetayDonusAd]').val();
+        var turDetayAciklama = $('textarea[name=TurDetayDonusAciklama]').val();
+        var aracID = $('select#TurDetayDonusArac option:selected').val();
+        var aracText = $('select#TurDetayDonusArac option:selected').attr('label');
+        var soforID = $('select#TurDetayDonusSofor option:selected').val();
+        var soforText = $('select#TurDetayDonusSofor option:selected').attr('label');
+        var saat1 = $('select#TurDetayDonusSaat1 option:selected').val();
+        var saat1Text = $('select#TurDetayDonusSaat1 option:selected').attr('label');
+        var saat2 = $('select#TurDetayDonusSaat2 option:selected').val();
+        var saat2Text = $('select#TurDetayDonusSaat2 option:selected').attr('label');
+        //Tur Gün
+        var turGunVal = new Array();
+        $('select#TurDetayDonusGun option:selected').each(function () {
+            turGunVal.push($(this).val());
+        });
+        //Tru Gün text
+        var turGunText = new Array();
+        $('select#TurDetayDonusGun option:selected').each(function () {
+            turGunText.push($(this).attr('label'));
+        });
+        turDonusDetailEdt = [];
+        turDonusDetailEdt.push(turDetayAd, turDetayAciklama, aracID, aracText, soforID, soforText, saat1, saat1Text, saat2, saat2Text, turGunVal, turGunText, DetailDonusGelenID);
+        //Gün ayarları
+        if (turGunVal.indexOf('Pzt') != -1) {
+            SelectDetayDonusGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt', selected: true};
+        } else {
+            SelectDetayDonusGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt'};
+        }
+        if (turGunVal.indexOf('Sli') != -1) {
+            SelectDetayDonusGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli', selected: true};
+        } else {
+            SelectDetayDonusGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli'};
+        }
+        if (turGunVal.indexOf('Crs') != -1) {
+            SelectDetayDonusGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs', selected: true};
+        } else {
+            SelectDetayDonusGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs'};
+        }
+        if (turGunVal.indexOf('Prs') != -1) {
+            SelectDetayDonusGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs', selected: true};
+        } else {
+            SelectDetayDonusGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs'};
+        }
+        if (turGunVal.indexOf('Cma') != -1) {
+            SelectDetayDonusGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma', selected: true};
+        } else {
+            SelectDetayDonusGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma'};
+        }
+        if (turGunVal.indexOf('Cmt') != -1) {
+            SelectDetayDonusGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt', selected: true};
+        } else {
+            SelectDetayDonusGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt'};
+        }
+        if (turGunVal.indexOf('Pzr') != -1) {
+            SelectDetayDonusGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr', selected: true};
+        } else {
+            SelectDetayDonusGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr'};
+        }
+        $('#TurDetayDonusGun').multiselect('dataprovider', SelectDetayDonusGunOptions);
+        $('#TurDetayDonusGun').multiselect('refresh');
+        $('#TurDetayDonusGun').multiselect('enable');
+        $('#TurDetayDonusSaat1').multiselect('enable');
+        $('#TurDetayDonusSaat2').multiselect('enable');
+        $('#TurDetayDonusArac').multiselect('enable');
+        $('#TurDetayDonusSofor').multiselect('enable');
+        kayitDegerDonus = 1;
+    },
+    turDonusDetailVazgec: function () {
+        kayitDegerDonus = 0;
+        //haritayı da eski haline geri getiriyorum
+        //harita için
+        var kurumLocation = $('input[name=TurDetayDonusKurumLocation]').val();
+        var kurumAd = $('input[name=TurDetayDonusKurum]').val();
+        var kurumID = $('input[name=TurDetayDonusKurumID]').val();
+        var soforLocation = $('input[name=DonusSoforInput]').val();
+        var soforID = $('input[name=DonusSoforID]').val();
+        var soforAd = $('input[name=DonusSoforAd]').val();
+        multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
+        google.maps.event.addDomListener(window, 'load', multipleTurDetayMap);
+
+        $('input[name=TurDetayDonusAd]').val(turDonusDetailEdt[0]);
+        $('textarea[name=TurDetayDonusAciklama]').val(turDonusDetailEdt[1]);
+
+        //Gün ayarları
+        if (turDonusDetailEdt[10].indexOf('Pzt') != -1) {
+            SelectDetayDonusGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt', selected: true};
+        } else {
+            SelectDetayDonusGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt'};
+        }
+        if (turDonusDetailEdt[10].indexOf('Sli') != -1) {
+            SelectDetayDonusGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli', selected: true};
+        } else {
+            SelectDetayDonusGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli'};
+        }
+        if (turDonusDetailEdt[10].indexOf('Crs') != -1) {
+            SelectDetayDonusGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs', selected: true};
+        } else {
+            SelectDetayDonusGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs'};
+        }
+        if (turDonusDetailEdt[10].indexOf('Prs') != -1) {
+            SelectDetayDonusGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs', selected: true};
+        } else {
+            SelectDetayDonusGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs'};
+        }
+        if (turDonusDetailEdt[10].indexOf('Cma') != -1) {
+            SelectDetayDonusGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma', selected: true};
+        } else {
+            SelectDetayDonusGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma'};
+        }
+        if (turDonusDetailEdt[10].indexOf('Cmt') != -1) {
+            SelectDetayDonusGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt', selected: true};
+        } else {
+            SelectDetayDonusGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt'};
+        }
+        if (turDonusDetailEdt[10].indexOf('Pzr') != -1) {
+            SelectDetayDonusGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr', selected: true};
+        } else {
+            SelectDetayDonusGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr'};
+        }
+        $('#TurDetayDonusGun').multiselect('dataprovider', SelectDetayDonusGunOptions);
+        $('#TurDetayDonusGun').multiselect('refresh');
+        $('#TurDetayDonusGun').multiselect('disable');
+        //saat1
+        var SelectSaat1Options = new Array();
+        SelectSaat1Options[0] = {label: turDonusDetailEdt[7], value: turDonusDetailEdt[6], disabled: true};
+        $('#TurDetayDonusSaat1').multiselect('dataprovider', SelectSaat1Options);
+        $('#TurDetayDonusSaat1').multiselect('refresh');
+        $('#TurDetayDonusSaat1').multiselect('disable');
+        //saat2
+        var SelectSaat2Options = new Array();
+        SelectSaat2Options[0] = {label: turDonusDetailEdt[9], value: turDonusDetailEdt[8], disabled: true};
+        $('#TurDetayDonusSaat2').multiselect('dataprovider', SelectSaat2Options);
+        $('#TurDetayDonusSaat2').multiselect('refresh');
+        $('#TurDetayDonusSaat2').multiselect('disable');
+        //Araç
+        var SelectAracOptions = new Array();
+        SelectAracOptions[0] = {label: turDonusDetailEdt[3], value: turDonusDetailEdt[2], disabled: true};
+        $('#TurDetayDonusArac').multiselect('dataprovider', SelectAracOptions);
+        $('#TurDetayDonusArac').multiselect('refresh');
+        $('#TurDetayDonusArac').multiselect('disable');
+        //Şoför
+        var SelectSoforOptions = new Array();
+        SelectSoforOptions[0] = {label: turDonusDetailEdt[5], value: turDonusDetailEdt[4], disabled: true};
+        $('#TurDetayDonusSofor').multiselect('dataprovider', SelectSoforOptions);
+        $('#TurDetayDonusSofor').multiselect('refresh');
+        $('#TurDetayDonusSofor').multiselect('disable');
+    },
+    turDonusDetailSil: function () {
+        var turID = $('input[name=adminTurID]').val();
+        var kurumTip = $('input[name=adminTurDetayTip]').val();
+        $.ajax({
+            data: {"turID": turID, "kurumTip": kurumTip, "tip": "turDetailDelete"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    alert(cevap.hata);
+                } else {
+                    disabledForm();
+
+                    var turCount = $('#smallTur').text();
+                    turCount--;
+                    $('#smallTur').text(turCount);
+                    var length = $('tbody#adminTurRow tr').length;
+                    for (var t = 0; t < length; t++) {
+                        var attrValueId = $("tbody#adminTurRow > tr > td > a").eq(t).attr('value');
+                        if (attrValueId == turID) {
+                            var deleteRow = $('tbody#adminTurRow > tr:eq(' + t + ')');
+                            TurTable.DataTable().row($(deleteRow)).remove().draw();
+                        }
+                    }
+                    //altta bulunan seçim pencerisini kapatma
+                    svControl('svClose', 'turSecim', '');
+                }
+            }
+        });
+        return true;
+    },
+    turDonusDetailKaydet: function () {
+        //Tur Gidiş İşlemleri Değerleri
+        var turGidisID = $('input[name=adminTurDetayGds]').val();
+        var turDonusID = $('input[name=adminTurDetayDns]').val();
+        var turID = $('input[name=adminTurID]').val();
+        var turAdi = $('input[name=TurDetayDonusAd]').val();
+        var turAciklama = $('textarea[name=TurDetayDonusAciklama]').val();
+        var bolgeID = $('input[name=TurDetayDonusBolgeID]').val();
+        var bolgead = $('input[name=TurDetayDonusBolge]').val();
+        var kurumad = $('input[name=TurDetayDonusKurum]').val();
+        var kurumId = $('input[name=TurDetayDonusKurumID]').val();
+        var kurumLocation = $('input[name=TurDetayDonusKurumLocation]').val();
+        var kurumTip = $('input[name=adminTurDetayTip]').val();
+        var aracID = $('select#TurDetayDonusArac option:selected').val();
+        var aracPlaka = $('select#TurDetayDonusArac option:selected').attr('label');
+        var soforID = $('select#TurDetayDonusSofor option:selected').val();
+        var soforAd = $('select#TurDetayDonusSofor option:selected').attr('label');
+        var soforLocation = $('select#TurDetayDonusSofor option[value!="-1"]:selected').attr('location');
+        var turSaat1 = $('select#TurDetayDonusSaat1 option:selected').val();
+        var turSaat2 = $('select#TurDetayDonusSaat2 option:selected').val();
+        var turKm = $("span#totalDonusKm").text();
+        //Tur Gün
+        var turGun = new Array();
+        $('select#TurDetayDonusGun option:selected').each(function () {
+            turGun.push($(this).val());
+        });
+        var farkturgun = farkArray(turDonusDetailEdt[10], turGun);
+        var farkturgunlength = farkturgun.length;
+        //haritada değişiklik var mı kontrolü
+        var kisiID = new Array();
+        var yeniID = new Array();
+        yeniID = kisiID.concat(KisiOgrenciID, KisiIsciID);
+        var farkturharita = farkArray(turDonusDetailEdt[12], yeniID);
+        var farkharita = farkturharita.length;
+        console.log(turDonusDetailEdt);
+        if (turDonusDetailEdt[0] == turAdi && turDonusDetailEdt[1] == turAciklama && turDonusDetailEdt[2] == aracID && turDonusDetailEdt[4] == soforID && turDonusDetailEdt[6] == turSaat1 && turDonusDetailEdt[8] == turSaat2 && farkturgunlength == 0 && farkharita == 0) {
+            alert("Lütfen değişiklik yaptığınıza emin olun.");
+        } else {
+            var turSaat1ID = $('select#TurDetayDonusSaat1 option[value!="-1"]:selected').val();
+            if (turSaat1ID) {
+                var turSaat2ID = $('select#TurDetayDonusSaat2 option[value!="-1"]:selected').val();
+                if (turSaat2ID) {
+                    $.ajax({
+                        data: {"turGidisID": turGidisID, "turDonusID": turDonusID, "turID": turID, "turAdi": turAdi, "bolgeID": bolgeID, "bolgead": bolgead, "kurumad": kurumad, "kurumId": kurumId,
+                            "kurumTip": kurumTip, "kurumLocation": kurumLocation, "turGun[]": turGun, "turSaat1": turSaat1, "turSaat2": turSaat2,
+                            "aracID": aracID, "aracPlaka": aracPlaka, "aracKapasite": turDetayGidisAracKapasite,
+                            "soforID": soforID, "soforAd": soforAd, "soforLocation": soforLocation, "turAciklama": turAciklama, "turKm": turKm,
+                            "turOgrenciID[]": KisiOgrenciID, "turOgrenciAd[]": KisiOgrenciAd, "turOgrenciLocation[]": KisiOgrenciLocation, "turOgrenciSira[]": KisiOgrenciSira, "turKisiIsciID[]": KisiIsciID,
+                            "turKisiIsciAd[]": KisiIsciAd, "turKisiIsciLocation[]": KisiIsciLocation, "turKisiIsciSira[]": KisiIsciSira, "tip": "turDonusKaydet"},
+                        success: function (cevap) {
+                            if (cevap.hata) {
+                                alert(cevap.hata);
+                            } else {
+                                kayitDegerDonus = 1;
+                                disabledForm();
+                                $('input[name=adminTurDetayDns]').val(cevap.turDonusID);
+                                $('#TurDetayDonusGun').multiselect('disable');
+                                //saat1
+                                $('#TurDetayDonusSaat1').multiselect('disable');
+                                //saat2
+                                $('#TurDetayDonusSaat2').multiselect('disable');
+                                //Araç
+                                $('#TurDetayDonusArac').multiselect('disable');
+                                //Şoför
+                                $('#TurDetayDonusSofor').multiselect('disable');
+
+                                var length = $('tbody#adminTurRow tr').length;
+                                for (var t = 0; t < length; t++) {
+                                    var attrValueId = $("tbody#adminTurRow > tr > td > a").eq(t).attr('value');
+                                    if (attrValueId == turID) {
+                                        $("tbody#adminTurRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-refresh" style="color:red"></i> ' + turAdi);
+                                        $("tbody#adminTurRow > tr > td > a").eq(t).parent().parent().find('td:eq(4)').text(turAciklama);
+                                        $('tbody#adminTurRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    alert("Lütfen Saat2 Seçiniz");
+                }
+            } else {
+                alert("Lütfen Saat1 Seçiniz");
+            }
+        }
+    },
 }
 
 

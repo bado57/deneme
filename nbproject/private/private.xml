@@ -5,11 +5,7 @@
         <group>
             <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/adminturajaxquery.js</file>
             <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/turliste_view.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/language/tr.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/firmaislem_view.php</file>
             <file>file:/C:/xampp/htdocs/SProject/app/controllers/AdminTurAjaxSorgu.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/admintur-web.app.js</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/models/Panel_Model.php</file>
         </group>
     </open-files>
 </project-private>

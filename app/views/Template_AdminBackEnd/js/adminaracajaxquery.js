@@ -705,41 +705,42 @@ $.AdminIslemler = {
     adminAracDetailTur: function () {
         AracTurTable.DataTable().clear().draw();
         var aracID = $("input[name=adminAracDetailDeger]").val();
+        console.log(aracID);
         $.ajax({
             data: {"aracID": aracID, "tip": "adminAracDetailTur"},
             success: function (cevap) {
                 if (cevap.hata) {
                     alert(cevap.hata);
                 } else {
-                    if (cevap.adminAracDetailTur) {
-                        var turCount = cevap.adminAracDetailTur.length;
+                    if (cevap.aracDetailTur) {
+                        var turCount = cevap.aracDetailTur.length;
                         for (var i = 0; i < turCount; i++) {
-                            if (cevap.adminAracDetailTur[i].AracTurTip != 1) {
+                            if (cevap.aracDetailTur[i].TurTip == 0) {
                                 TurTip = 'Öğrenci';
+                            } else if (cevap.aracDetailTur[i].TurTip == 1) {
+                                TurTip = 'Personel';
                             } else {
-                                TurTip = 'İşçi';
+                                TurTip = 'Öğrenci/Personel';
                             }
-
-                            if (cevap.adminAracDetailTur[i].AracTurAktiflik != 0) {
+                            if (cevap.aracDetailTur[i].TurAktiflik != 0) {
                                 var addRow = "<tr><td>"
-                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminAracDetailTur[i].AracTurID + "'>"
-                                        + "<i class='fa fa-map-marker'></i> " + cevap.adminAracDetailTur[i].AracDetailTurAdi + "</a></td>"
+                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.aracDetailTur[i].TurID + "'>"
+                                        + "<i class='fa fa-map-marker'></i> " + cevap.aracDetailTur[i].TurAd + "</a></td>"
                                         + "<td class='hidden-xs' >" + TurTip + "</td>"
-                                        + "<td class='hidden-xs' >" + cevap.adminAracDetailTur[i].AracTurAcikla + "</td>"
-                                        + "<td class='hidden-xs' value='" + cevap.adminAracTurBolge[i].AracTurKurumID + "'>" + cevap.adminAracTurKurum[i].AracTurKurumAdi + "</td>"
-                                        + "<td class='hidden-xs' value='" + cevap.adminAracTurBolge[i].AracTurBolgeID + "'>" + cevap.adminAracTurBolge[i].AracTurBolgeAdi + "</td></tr>";
+                                        + "<td class='hidden-xs' >" + cevap.aracDetailTur[i].TurAciklama + "</td>"
+                                        + "<td class='hidden-xs'>" + cevap.aracDetailTur[i].TurKurum + "</td>"
+                                        + "<td class='hidden-xs'>" + cevap.aracDetailTur[i].TurBolge + "</td></tr>";
                                 AracTurTable.DataTable().row.add($(addRow)).draw();
                             } else {
                                 var addRow = "<tr><td>"
-                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.adminAracDetailTur[i].AracTurID + "'>"
-                                        + "<i class='fa fa-map-marker' style='color:red'></i> " + cevap.adminAracDetailTur[i].AracDetailTurAdi + "</a></td>"
+                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.aracDetailTur[i].TurID + "'>"
+                                        + "<i class='fa fa-map-marker' style='color:red'></i> " + cevap.aracDetailTur[i].TurAd + "</a></td>"
                                         + "<td class='hidden-xs' >" + TurTip + "</td>"
-                                        + "<td class='hidden-xs' >" + cevap.adminAracDetailTur[i].AracTurAcikla + "</td>"
-                                        + "<td class='hidden-xs' value='" + cevap.adminAracTurBolge[i].AracTurKurumID + "'>" + cevap.adminAracTurKurum[i].AracTurKurumAdi + "</td>"
-                                        + "<td class='hidden-xs' value='" + cevap.adminAracTurBolge[i].AracTurBolgeID + "'>" + cevap.adminAracTurBolge[i].AracTurBolgeAdi + "</td></tr>";
+                                        + "<td class='hidden-xs' >" + cevap.aracDetailTur[i].TurAciklama + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.aracDetailTur[i].TurKurum + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.aracDetailTur[i].TurBolge + "</td></tr>";
                                 AracTurTable.DataTable().row.add($(addRow)).draw();
                             }
-
                         }
                     }
                 }
