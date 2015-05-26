@@ -167,7 +167,8 @@ class en {
             "ToplamKm" => "Total Km",
             "TurSecim" => "Tour Details",
             "TurGidis" => "Tour Going",
-            "TurDonus" => "Tour Return"
+            "TurDonus" => "Tour Return",
+            "OgrenciPersonel" => "Student/Employee"
         );
         return $endil;
     }

@@ -177,13 +177,21 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Lokasyon Sorgusu -->
-                <a href="#" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/adminweb/lokasyonliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["LokasyonSorgu"]; ?>
                         </h3>
                         <p>
-                            2  <?php echo $data["AktifServis"]; ?>
+                            <?php if (count($model['AdminLokasyon']) > 0) { ?>
+                                <?php
+                                echo $model['AdminLokasyon'] . ' ' . $data["Toplam"];
+                            } else {
+                                ?>
+                                <?php
+                                echo '0 ' . $data["Toplam"];
+                            }
+                            ?>
                         </p>
                     </div>
                     <div class="icon">

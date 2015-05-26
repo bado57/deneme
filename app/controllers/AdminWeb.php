@@ -933,6 +933,147 @@ class AdminWeb extends Controller {
         }
     }
 
+    function lokasyonliste() {
+
+        //session güvenlik kontrolü
+        $formSession = $this->load->otherClasses('Form');
+        $sessionKey = $formSession->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+            //memcache model bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+
+
+            $language = Session::get("dil");
+            //lanuage Kontrol
+            $formLanguage = $this->load->multilanguage($language);
+            $languagedeger = $formLanguage->multilanguage();
+
+            $adminRutbe = Session::get("userRutbe");
+            $adminID = Session::get("userId");
+            //super adminse tüm araçları görür
+            if ($adminRutbe != 0) {
+                //tüm  araçlar
+                $aracListe = $Panel_Model->aracIDListele();
+                if (count($aracListe) != 0) {
+                    foreach ($aracListe as $arac) {
+                        $aracId[] = $arac['BSAracID'];
+                        $aracTip[] = $arac['BSAracTurTip'];
+                        $aracTurID[] = $arac['BSAracTurID'];
+                    }
+                }
+
+                $aracLokasyonDizi = implode(',', $aracId);
+                $aracTipDizi = implode(',', $aracTip);
+                $aracTurDizi = implode(',', $aracTurID);
+
+                //tur adlar
+                $aracTurAdListe = $Panel_Model->aracTurAdListele($aracTurDizi);
+                $a = 0;
+                foreach ($aracTurAdListe as $aracTurAdListee) {
+                    $adminArac[$a]['aktifTurAd'] = $aracTurAdListee['SBTurAd'];
+                    $a++;
+                }
+
+                //aktif tur araçları
+                $aktifAracListe = $Panel_Model->aracAktifTurListele($aracLokasyonDizi, $aracTipDizi, $aracTurDizi);
+                $b = 0;
+                foreach ($aktifAracListe as $aktifAracListee) {
+                    $aktifaracId[] = $aktifAracListee['BSTurAracID'];
+                    $adminArac[$b]['aktifAracID'] = $aktifAracListee['BSTurAracID'];
+                    $adminArac[$b]['aktifAracPlaka'] = $aktifAracListee['BSTurAracPlaka'];
+                    $adminArac[$b]['aktifTurID'] = $aktifAracListee['BSTurID'];
+                    $adminArac[$b]['aktifTurTip'] = $aktifAracListee['BSTurTip'];
+                    $adminArac[$b]['aktifAracBolgeID'] = $aktifAracListee['BSTurBolgeID'];
+                    $adminArac[$b]['aktifAracBolgeAd'] = $aktifAracListee['BSTurBolgeAd'];
+                    $adminArac[$b]['aktifAracKurumID'] = $aktifAracListee['BSTurKurumID'];
+                    $adminArac[$b]['aktifAracKurumAd'] = $aktifAracListee['BSTurKurumAd'];
+                    $adminArac[$b]['aktifAracKurumLocation'] = $aktifAracListee['BSTurKurumLocation'];
+                    $adminArac[$b]['aktifAracSoforID'] = $aktifAracListee['BSTurSoforID'];
+                    $adminArac[$b]['aktifAracSoforAd'] = $aktifAracListee['BSTurSoforAd'];
+                    $adminArac[$b]['aktifAracSoforLocation'] = $aktifAracListee['BSTurSoforLocation'];
+                    $adminArac[$b]['aktifAracKapasite'] = $aktifAracListee['BSTurAracKapasite'];
+                    $adminArac[$b]['aktifAracTurKm'] = $aktifAracListee['BSTurKm'];
+                    $adminArac[$b]['aktifAracTip'] = $aktifAracListee['BSTurGidisDonus'];
+                    $b++;
+                }
+                if (count($aktifaracId) > 0) {
+                    $adminArac[0]['AdminAracCount'] = count($aktifaracId);
+                }
+            } else {//değilse admin ıd ye göre kurum görür
+                $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
+                //bölge idler
+                foreach ($bolgeListeRutbe as $rutbe) {
+                    $bolgerutbeId[] = $rutbe['BSBolgeID'];
+                }
+                $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+                //bölge araç ıdler
+                $aracIDListe = $Panel_Model->rutbearacIDListele($rutbebolgedizi);
+
+                foreach ($aracIDListe as $ID) {
+                    $aracID[] = $ID['SBAracID'];
+                }
+                $rutbearacdizi = implode(',', $aracID);
+
+                $aracListe = $Panel_Model->aracRutbeIDListele($rutbearacdizi);
+                if (count($aracListe) != 0) {
+                    $adminArac[0]['AdminAracCount'] = count($aracListe);
+                    foreach ($aracListe as $arac) {
+                        $aracId[] = $arac['BSAracID'];
+                        $aracTip[] = $arac['BSAracTurTip'];
+                        $aracTurID[] = $arac['BSAracTurID'];
+                    }
+                }
+
+                $aracLokasyonDizi = implode(',', $aracId);
+                $aracTipDizi = implode(',', $aracTip);
+                $aracTurDizi = implode(',', $aracTurID);
+                //tur adlar
+                $aracTurAdListe = $Panel_Model->aracTurAdListele($aracTurDizi);
+                $a = 0;
+                foreach ($aracTurAdListe as $aracTurAdListee) {
+                    $adminArac[$a]['aktifTurAd'] = $aracTurAdListee['SBTurAd'];
+                    $a++;
+                }
+                //aktif tur araçları
+                $aktifAracListe = $Panel_Model->aracAktifTurListele($aracLokasyonDizi, $aracTipDizi, $aracTurDizi);
+                $b = 0;
+                foreach ($aktifAracListe as $aktifAracListee) {
+                    $aktifaracId[] = $aktifAracListee['BSTurAracID'];
+                    $adminArac[$b]['aktifAracID'] = $aktifAracListee['BSTurAracID'];
+                    $adminArac[$b]['aktifAracPlaka'] = $aktifAracListee['BSTurAracPlaka'];
+                    $adminArac[$b]['aktifArac'] = $aktifAracListee['BSTurID'];
+                    $adminArac[$b]['aktifAracTip'] = $aktifAracListee['BSTurTip'];
+                    $adminArac[$b]['aktifAracBolgeID'] = $aktifAracListee['BSTurBolgeID'];
+                    $adminArac[$b]['aktifAracBolgeAd'] = $aktifAracListee['BSTurBolgeAd'];
+                    $adminArac[$b]['aktifAracKurumID'] = $aktifAracListee['BSTurKurumID'];
+                    $adminArac[$b]['aktifAracKurumAd'] = $aktifAracListee['BSTurKurumAd'];
+                    $adminArac[$b]['aktifAracKurumLocation'] = $aktifAracListee['BSTurKurumLocation'];
+                    $adminArac[$b]['aktifAracSoforID'] = $aktifAracListee['BSTurSoforID'];
+                    $adminArac[$b]['aktifAracSoforAd'] = $aktifAracListee['BSTurSoforAd'];
+                    $adminArac[$b]['aktifAracSoforLocation'] = $aktifAracListee['BSTurSoforLocation'];
+                    $adminArac[$b]['aktifAracKapasite'] = $aktifAracListee['BSTurAracKapasite'];
+                    $adminArac[$b]['aktifAracTurKm'] = $aktifAracListee['BSTurKm'];
+                    $adminArac[$b]['aktifAracTip'] = $aktifAracListee['BSTurGidisDonus'];
+                    $b++;
+                }
+                if (count($aktifaracId) > 0) {
+                    $adminArac[0]['AdminAracCount'] = count($aktifaracId);
+                }
+            }
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/lokasyonliste", $languagedeger, $adminArac);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL_LOGOUT);
+        }
+    }
+
 }
 
 ?>

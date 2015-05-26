@@ -171,7 +171,11 @@ class tr {
             "TurSecim" => "Tur Detayları",
             "TurGidis" => "Tur Gidiş",
             "TurDonus" => "Tur Dönüş",
-            "OgrenciPersonel" => "Öğrenci/Personel"
+            "OgrenciPersonel" => "Öğrenci/Personel",
+            "AracLokasyon" => "Araç Lokasyon",
+            "TurKurum" => "Tur Kurum",
+            "TurBolge" => "Tur Bölge",
+            "TurKm" => "Tur Km"
         );
         return $trdil;
     }

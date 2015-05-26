@@ -205,6 +205,30 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //araç ıd listele
+    public function aracIDListele() {
+        $sql = 'SELECT BSAracID,BSAracTurTip,BSAracTurID FROM bsaraclokasyon';
+        return($this->db->select($sql));
+    }
+
+    //araç lokasyon tur ad listele
+    public function aracTurAdListele($array = array()) {
+        $sql = 'SELECT SBTurAd FROM sbtur WHERE SBTurID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //araç rutbe ıd listele
+    public function aracRutbeIDListele($array = array()) {
+        $sql = 'SELECT BSAracID,BSAracTurTip,BSAracTurID FROM bsaraclokasyon WHERE BSAracID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //tura kayıtlı araçlar
+    public function aracAktifTurListele($array = array(), $array1 = array(), $array2 = array()) {
+        $sql = 'SELECT DISTINCT BSTurAracID,BSTurAracPlaka,BSTurSoforID,BSTurSoforAd,BSTurSoforLocation,BSTurKurumID,BSTurKurumAd,BSTurKurumLocation,BSTurBolgeID,BSTurBolgeAd,BSTurID,BSTurTip,BSTurAracKapasite,BSTurKm,BSTurGidisDonus FROM bsturtip WHERE BSTurAracID IN (' . $array . ') AND BSTurGidisDonus IN (' . $array1 . ') AND BSTurID IN (' . $array2 . ') GROUP BY BSTurAracID';
+        return($this->db->select($sql));
+    }
+
     //rutbe tur aktif arac ID listele
     public function rutbearacIDListele($array = array()) {
         $sql = 'SELECT DISTINCT SBAracID FROM sbaracbolge WHERE SBBolgeID IN (' . $array . ')';
@@ -1411,6 +1435,168 @@ class Panel_Model extends Model {
     //dönüş tur tip güncelleme
     public function turTipDonusDuzenle($data, $turTipID) {
         return ($this->db->update("bsturtip", $data, "BSTurTipID=" . $turTipID));
+    }
+
+    //lokasyon liste
+    public function lokasyonListeleCount() {
+        $sql = "SELECT BSAracID FROM bsaraclokasyon";
+        return($this->db->select($sql));
+    }
+
+    //aktif lokasyonu olan araçlar
+    public function rutbeAracLokasyonCount($array = array()) {
+        $sql = 'SELECT BSAracID FROM bsaraclokasyon Where BSAracID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //öğrencinin tura göre id listesi
+    public function turOgrenciIDListele($turID) {
+        $sql = 'SELECT BSOgrenciID FROM bsogrencitur WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //öğrencinin tur güne göre idler
+    public function turOgrenciGunIDListele($turID, $gun, $turGidisDonus) {
+        $sql = 'SELECT BSOgrenciID FROM bsseferogrenci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=0 AND BSTurTip=' . $turGidisDonus;
+        return($this->db->select($sql));
+    }
+
+    //tura gidişte binenler kimler
+    public function turOgrenciBinenIDListele($turID) {
+        $sql = 'SELECT BSKisiID FROM bsturgidis WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //öğrenci tur gidişte araca binmiş olanlar
+    public function turGidisOgrenciBinenListele($turID, $array = array()) {
+        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciLocation FROM bsogrencitur WHERE BSTurID=' . $turID . ' AND BSOgrenciID IN (' . $array . ') ORDER BY BSTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //öğrenci tur gidişte araca binmemiş olanlar
+    public function turGidisOgrenciBinmeyenListele($turID, $array = array()) {
+        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciLocation FROM bsogrencitur WHERE BSTurID=' . $turID . ' AND BSOgrenciID IN (' . $array . ') ORDER BY BSTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //işçinin tura göre id listesi
+    public function turIsciIDListele($turID) {
+        $sql = 'SELECT SBIsciID FROM sbiscitur WHERE SBTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //işçinin tur güne göre idler
+    public function turIsciGunIDListele($turID, $gun, $turGidisDonus) {
+        $sql = 'SELECT BSIsciID FROM bsseferisci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=0 AND BSTurTip=' . $turGidisDonus;
+        return($this->db->select($sql));
+    }
+
+    //tura gidişte binenler kimler
+    public function turIsciBinenIDListele($turID) {
+        $sql = 'SELECT BSKisiID FROM bsturgidis WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //işçi tur gidişte araca binmiş olanlar
+    public function turGidisIsciBinenListele($turID, $array = array()) {
+        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciLocation FROM sbiscitur WHERE SBTurID=' . $turID . ' AND SBIsciID IN (' . $array . ') ORDER BY SBTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //işçi tur gidişte araca binmemiş olanlar
+    public function turGidisIsciBinmeyenListele($turID, $array = array()) {
+        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciLocation FROM sbiscitur WHERE SBTurID=' . $turID . ' AND SBIsciID IN (' . $array . ') ORDER BY SBTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //işçi ve öğrenci tura göre id listesi
+    public function turIsciOgrenciIDListele($turID) {
+        $sql = 'SELECT BSOgrenciIsciID,BSKullaniciTip FROM bsogrenciiscitur WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //öğrenci ve işçinin tur güne göre idler
+    public function turIsciOgrenciGunIDListele($turID, $gun, $turGidisDonus) {
+        $sql = 'SELECT BSKisiID,BSKullaniciTip FROM bsseferogrenciisci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=0 AND BSTurTip=' . $turGidisDonus;
+        return($this->db->select($sql));
+    }
+
+    //tura gidişte binenler kimler
+    public function turIsciOgrenciBinenIDListele($turID) {
+        $sql = 'SELECT BSKisiID,BSKisiTip FROM bsturgidis WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //işçi öğrenci tur gidişte araca binmiş olanlar
+    public function turGidisIsciOgrenciBinenListele($turID, $array = array(), $array1 = array()) {
+        $sql = 'SELECT BSOgrenciIsciID,BSKullaniciTip,BSOgrenciIsciAd,BSOgrenciIsciLocation FROM bsogrenciiscitur WHERE BSTurID=' . $turID . ' AND BSOgrenciIsciID IN (' . $array . ') AND BSKullaniciTip IN (' . $array1 . ') ORDER BY BSTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //işçi öğrenci tur gidişte araca binmemiş olanlar
+    public function turGidisOgrenciIsciBinmeyenListele($turID, $array = array(), $array1 = array()) {
+        $sql = 'SELECT BSOgrenciIsciID,BSKullaniciTip,BSOgrenciIsciAd,BSOgrenciIsciLocation FROM bsogrenciiscitur WHERE BSTurID=' . $turID . ' AND BSOgrenciIsciID IN (' . $array . ') AND BSKullaniciTip IN (' . $array1 . ') ORDER BY BSTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //tura dönüşte binenler kimler
+    public function turOgrenciInenIDListele($turID) {
+        $sql = 'SELECT BSKisiID FROM bsturdonus WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //öğrenci tur dönüşte araca binmemiş olanlar
+    public function turDonusOgrenciInmeyenListele($turID, $array = array()) {
+        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciLocation FROM bsogrencitur WHERE BSTurID=' . $turID . ' AND BSOgrenciID IN (' . $array . ') ORDER BY BSTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //öğrenci tur dönüşte araca binmiş olanlar
+    public function turDonusOgrenciInenListele($turID, $array = array()) {
+        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciLocation FROM bsogrencitur WHERE BSTurID=' . $turID . ' AND BSOgrenciID IN (' . $array . ') ORDER BY BSTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //tura dönüşte binenler kimler
+    public function turIsciDonenIDListele($turID) {
+        $sql = 'SELECT BSKisiID FROM bsturdonus WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //işçi tur dönüşte araca binmiş olanlar
+    public function turDonusIsciInenListele($turID, $array = array()) {
+        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciLocation FROM sbiscitur WHERE SBTurID=' . $turID . ' AND SBIsciID IN (' . $array . ') ORDER BY SBTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //işçi tur DÖNÜŞTE araca binmemiş olanlar
+    public function turDonusIsciInmeyenListele($turID, $array = array()) {
+        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciLocation FROM sbiscitur WHERE SBTurID=' . $turID . ' AND SBIsciID IN (' . $array . ') ORDER BY SBTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //tura dönüşte inenler kimler
+    public function turIsciOgrenciInenIDListele($turID) {
+        $sql = 'SELECT BSKisiID,BSKisiTip FROM bsturdonus WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //işçi öğrenci tur dönüşte araca binmiş olanlar
+    public function turDonusIsciOgrenciInenListele($turID, $array = array(), $array1 = array()) {
+        $sql = 'SELECT BSOgrenciIsciID,BSKullaniciTip,BSOgrenciIsciAd,BSOgrenciIsciLocation FROM bsogrenciiscitur WHERE BSTurID=' . $turID . ' AND BSOgrenciIsciID IN (' . $array . ') AND BSKullaniciTip IN (' . $array1 . ') ORDER BY BSTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //işçi öğrenci tur dönüşte araca binmemiş olanlar
+    public function turDonusOgrenciIsciInmeyenListele($turID, $array = array(), $array1 = array()) {
+        $sql = 'SELECT BSOgrenciIsciID,BSKullaniciTip,BSOgrenciIsciAd,BSOgrenciIsciLocation FROM bsogrenciiscitur WHERE BSTurID=' . $turID . ' AND BSOgrenciIsciID IN (' . $array . ') AND BSKullaniciTip IN (' . $array1 . ') ORDER BY BSTurSira ASC';
+        return($this->db->select($sql));
+    }
+
+    //aktif lokasyonu olan araç
+    public function aracLokasyon($aracID) {
+        $sql = 'SELECT BSAracLokasyon FROM bsaraclokasyon Where BSAracID=' . $aracID;
+        return($this->db->select($sql));
     }
 
 }

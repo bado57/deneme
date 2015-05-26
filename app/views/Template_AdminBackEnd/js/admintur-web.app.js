@@ -530,15 +530,15 @@ function multipleTurMapping(gelen, index, ayirici, sofor) {
             for (var gelenicon = 1; gelenicon < gelen.length; gelenicon++) {
                 if (ayirici == 0) {//yoksa, yani öğrencinin yanında personel yoksa
                     if (index != 1) {//öğrenci
-                        icons.push('../Plugins/mapView/red_student.png')
+                        icons.push('../Plugins/mapView/red_student.png');
                     } else {//personel
-                        icons.push('../Plugins/mapView/employee_red.png')
+                        icons.push('../Plugins/mapView/employee_red.png');
                     }
                 } else {//ikiside varsa
                     if (gelenicon < ayirici) {//öğrenci
-                        icons.push('../Plugins/mapView/red_student.png')
+                        icons.push('../Plugins/mapView/red_student.png');
                     } else {//işçi
-                        icons.push('../Plugins/mapView/employee_red.png')
+                        icons.push('../Plugins/mapView/employee_red.png');
                     }
                 }
             }

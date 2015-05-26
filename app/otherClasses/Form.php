@@ -826,6 +826,26 @@ class Form {
         return $gunData;
     }
 
+    function gunCevirme($gun) {
+
+        if ($gun == 'Mon') {
+            $yeniGun = 'BSPzt';
+        } else if ($gun == 'Tue') {
+            $yeniGun = 'BSSli';
+        } else if ($gun == 'Wed') {
+            $yeniGun = 'BSCrs';
+        } else if ($gun == 'Thu') {
+            $yeniGun = 'BSPrs';
+        } else if ($gun == 'Fri') {
+            $yeniGun = 'BSCma';
+        } else if ($gun == 'Sat') {
+            $yeniGun = 'BSCmt';
+        } else {
+            $yeniGun = 'BSPzr';
+        }
+        return $yeniGun;
+    }
+
 }
 
 ?>

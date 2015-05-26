@@ -57,7 +57,7 @@
                         <li id="link_aracliste"><a href="<?php echo SITE_URL; ?>/adminweb/aracliste"><i class="fa fa-angle-right"></i><?php echo $data["AracListe"]; ?></a></li>
                     </ul>
                 </li>
-                <li class="treeview" id="menu_kullanici" id="menu_kullanici">
+                <li class="treeview" id="menu_kullanici">
                     <a href="#">
                         <i class="fa fa-users"></i> <span><?php echo $data["KullaniciIslem"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
@@ -90,15 +90,13 @@
                         <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview" id="menu_lokasyon">
                     <a href="#">
                         <i class="fa fa-map-marker"></i> <span><?php echo $data["LokasyonSorgu"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-right"></i> General Elements</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-right"></i> Advanced Elements</a></li>
-                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
+                        <li id="link_lokasyonliste"><a href="<?php echo SITE_URL; ?>/adminweb/lokasyonliste"><i class="fa fa-angle-right"></i><?php echo $data["AracLokasyon"]; ?></a></li>
                     </ul>
                 </li>
                 <li class="treeview">
