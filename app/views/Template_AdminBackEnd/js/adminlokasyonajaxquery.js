@@ -5,11 +5,15 @@ $.ajaxSetup({
     dataType: "json",
     error: function (a, b) {
         if (b == "timeout")
-            alert("Ajax İsteği Zaman Aşımına Uğradı");
+            reset();
+        alertify.alert(jsDil.InternetBaglanti);
+        return false;
     },
     statusCode: {
         404: function () {
-            alert("Ajax dosyası bulunamadı");
+            reset();
+            alertify.alert(jsDil.InternetBaglanti);
+            return false;
         }
     }
 });
@@ -24,7 +28,7 @@ $(document).ready(function () {
         var i = $(this).find("i");
         i.removeClass("fa-bus");
         i.addClass("fa-spinner fa-spin");
-        var turTipText = $(this).parent().parent().find('td:eq(6)').text();
+        var turTipText = $(this).parent().parent().find('td:eq(5)').text();
         $("#turTipSubView").text(turTipText);
         var aracID = $(this).attr('value');
         var aracPlaka = $(this).text();
@@ -43,7 +47,9 @@ $(document).ready(function () {
                 data: {"aracID": aracID, "turID": turID, "turTipID": turTipID, "turGidisDonus": turGidisDonus, "tip": "aracLokasyonDetail"},
                 success: function (cevap) {
                     if (cevap.hata) {
-                        alert(cevap.hata);
+                        reset();
+                        alertify.alert(jsDil.Hata);
+                        return false;
                     } else {
                         //gidiş değerleri
                         binen = [];

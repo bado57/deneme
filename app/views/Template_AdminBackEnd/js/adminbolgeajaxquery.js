@@ -5,11 +5,15 @@ $.ajaxSetup({
     dataType: "json",
     error: function (a, b) {
         if (b == "timeout")
-            alert("Ajax İsteği Zaman Aşımına Uğradı");
+            reset();
+        alertify.alert(jsDil.InternetBaglanti);
+        return false;
     },
     statusCode: {
         404: function () {
-            alert("Ajax dosyası bulunamadı");
+            reset();
+            alertify.alert(jsDil.InternetBaglanti);
+            return false;
         }
     }
 });
@@ -36,7 +40,9 @@ $(document).ready(function () {
             data: {"adminbolgeRowid": adminbolgeRowid, "tip": "adminBolgeDetail"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     $("input[name=BolgeDetailAdi]").val(cevap.adminBolgeDetail['5dff8e4f44d1afe5716832b74770e3fe']);
                     $("textarea[name=BolgeDetailAciklama]").val(cevap.adminBolgeDetail['5d7991851fff325b2e913c1093f8c7bb']);
@@ -111,10 +117,13 @@ $.AdminIslemler = {
                 "firmapostakodu": firmapostakodu, "firmacaddeno": firmacaddeno, "tip": "adminFirmaIslemlerKaydet"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     disabledForm();
-                    alert(cevap.update);
+                    reset();
+                    alertify.success(jsDil.FirmaDuzenle);
                 }
             }
         });
@@ -204,15 +213,18 @@ $.AdminIslemler = {
         var bolge_aciklama = $("textarea[name=BolgeAciklama]").val();
         AdminBolgeKaydet.push(bolge_adi);
         AdminBolgeKaydet.push(bolge_aciklama);
-        console.log("js");
         if (bolge_adi != '') {
             $.ajax({
                 data: {"bolge_adi": bolge_adi, "bolge_aciklama": bolge_aciklama, "tip": "adminBolgeYeniKaydet"},
                 success: function (cevap) {
                     if (cevap.hata) {
                         AdminBolgeKaydet = [];
-                        alert(cevap.hata);
+                        reset();
+                        alertify.alert(jsDil.Hata);
+                        return false;
                     } else {
+                        reset();
+                        alertify.success(jsDil.BolgeKaydet);
                         var bolgeCount = $('#smallBolge').text();
                         bolgeCount++;
                         $('#smallBolge').text(bolgeCount);
@@ -225,7 +237,9 @@ $.AdminIslemler = {
             });
             return true;
         } else {
-            alert("Lütfen Bölge Adını Giriniz");
+            reset();
+            alertify.alert(jsDil.BolgeAd);
+            return false;
         }
     },
     adminAddBolgeVazgec: function () {
@@ -246,46 +260,63 @@ $.AdminIslemler = {
         $("textarea[name=BolgeDetailAciklama]").val(AdminBolgeDetailVazgec[1]);
     },
     adminBolgeDetailSil: function () {
-        var bolgedetail_id = $("input[name=adminBolgeDetailID]").val();
-        $.ajax({
-            data: {"bolgedetail_id": bolgedetail_id, "tip": "adminBolgeDetailDelete"},
-            success: function (cevap) {
-                if (cevap.hata) {
-                    alert(cevap.hata);
-                } else {
-                    disabledForm();
-                    $("input[name=BolgeDetailAdi]").val('');
-                    $("textarea[name=BolgeDetailAciklama]").val('');
-                    var bolgeCount = $('#smallBolge').text();
-                    bolgeCount--;
-                    $('#smallBolge').text(bolgeCount);
-                    var length = $('tbody#adminBolgeRow tr').length;
-                    for (var t = 0; t < length; t++) {
-                        var attrValueId = $("tbody#adminBolgeRow > tr > td > a").eq(t).attr('value');
-                        if (attrValueId == bolgedetail_id) {
-                            var deleteRow = $('tbody#adminBolgeRow > tr:eq(' + t + ')');
-                            newBolgeTable.DataTable().row($(deleteRow)).remove().draw();
+        reset();
+        alertify.confirm(jsDil.SilOnay, function (e) {
+            if (e) {
+                var bolgedetail_id = $("input[name=adminBolgeDetailID]").val();
+                $.ajax({
+                    data: {"bolgedetail_id": bolgedetail_id, "tip": "adminBolgeDetailDelete"},
+                    success: function (cevap) {
+                        if (cevap.hata) {
+                            reset();
+                            alertify.alert(jsDil.Hata);
+                            return false;
+                        } else {
+                            disabledForm();
+                            $("input[name=BolgeDetailAdi]").val('');
+                            $("textarea[name=BolgeDetailAciklama]").val('');
+                            var bolgeCount = $('#smallBolge').text();
+                            bolgeCount--;
+                            $('#smallBolge').text(bolgeCount);
+                            var length = $('tbody#adminBolgeRow tr').length;
+                            for (var t = 0; t < length; t++) {
+                                var attrValueId = $("tbody#adminBolgeRow > tr > td > a").eq(t).attr('value');
+                                if (attrValueId == bolgedetail_id) {
+                                    var deleteRow = $('tbody#adminBolgeRow > tr:eq(' + t + ')');
+                                    newBolgeTable.DataTable().row($(deleteRow)).remove().draw();
+                                }
+                            }
+                            reset();
+                            alertify.success(jsDil.SilEvet);
+                            svControl('svClose', 'bolgeDetay', '');
                         }
                     }
-                }
+                });
+            } else {
+                alertify.error(jsDil.SilRed);
             }
         });
-        return true;
     },
     adminBolgeDetailKaydet: function () {
         var bolgedetail_adi = $("input[name=BolgeDetailAdi]").val();
         var bolgedetail_aciklama = $("textarea[name=BolgeDetailAciklama]").val();
         var bolgedetail_id = $("input[name=adminBolgeDetailID]").val();
         if (AdminBolgeDetailVazgec[0] == bolgedetail_adi && AdminBolgeDetailVazgec[1] == bolgedetail_aciklama) {
-            alert("Lütfen Değişiklik yaptığınıza emin olun.");
+            reset();
+            alertify.alert(jsDil.Degisiklik);
+            return false;
         } else {
             $.ajax({
                 data: {"bolgedetail_id": bolgedetail_id, "bolgedetail_adi": bolgedetail_adi, "bolgedetail_aciklama": bolgedetail_aciklama, "tip": "adminBolgeDetailDuzenle"},
                 success: function (cevap) {
                     if (cevap.hata) {
-                        alert(cevap.hata);
+                        reset();
+                        alertify.alert(jsDil.Hata);
+                        return false;
                     } else {
                         disabledForm();
+                        reset();
+                        alertify.success(jsDil.BolgeDuzenle);
                         var length = $('tbody#adminBolgeRow tr').length;
                         for (var t = 0; t < length; t++) {
                             var attrValueId = $("tbody#adminBolgeRow > tr > td > a").eq(t).attr('value');
@@ -371,8 +402,12 @@ $.AdminIslemler = {
                 success: function (cevap) {
                     if (cevap.hata) {
                         AdminBolgeDetailNewKurum = [];
-                        alert(cevap.hata);
+                        reset();
+                        alertify.alert(jsDil.Hata);
+                        return false;
                     } else {
+                        reset();
+                        alertify.success(jsDil.KurumKaydet);
                         var length = $('tbody#adminBolgeRow tr').length;
                         for (var t = 0; t < length; t++) {
                             var attrValueId = $("tbody#adminBolgeRow > tr > td > a").eq(t).attr('value');
@@ -392,7 +427,9 @@ $.AdminIslemler = {
             });
             return true;
         } else {
-            alert("Lütfen Kurum Adını Giriniz");
+            reset();
+            alertify.alert(jsDil.KurumAd);
+            return false;
         }
     },
     adminBolgeMultiMapping: function () {

@@ -5,11 +5,15 @@ $.ajaxSetup({
     dataType: "json",
     error: function (a, b) {
         if (b == "timeout")
-            alert("Ajax İsteği Zaman Aşımına Uğradı");
+            reset();
+        alertify.alert(jsDil.InternetBaglanti);
+        return false;
     },
     statusCode: {
         404: function () {
-            alert("Ajax dosyası bulunamadı");
+            reset();
+            alertify.alert(jsDil.InternetBaglanti);
+            return false;
         }
     }
 });
@@ -29,7 +33,9 @@ $(document).ready(function () {
             data: {"adminRowid": adminRowid, "tip": "adminDetail"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     $("input[name=AdminDetayAdi]").val(cevap.adminDetail[0].AdminListAd);
                     $("input[name=AdminDetaySoyadi]").val(cevap.adminDetail[0].AdminListSoyad);
@@ -107,7 +113,9 @@ $.AdminIslemler = {
             data: {"tip": "adminEkleSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.adminBolge) {
                         var bolgelength = cevap.adminBolge.AdminBolgeID.length;
@@ -120,7 +128,9 @@ $.AdminIslemler = {
                     $('#AdminSelectBolge').multiselect('dataprovider', BolgeOptions);
                     var selectLength = $('#AdminSelectBolge > option').length;
                     if (!selectLength) {
-                        alert("Lütfen Öncelikle Bölge İşlemlerine Gidip Yeni Bölge Oluşturunuz");
+                        reset();
+                        alertify.alert(jsDil.BolgeOlustur);
+                        return false;
                     }
                 }
 
@@ -136,27 +146,39 @@ $.AdminIslemler = {
         var adminAd = $("input[name=AdminAdi]").val();
         adminAd = adminAd.trim();
         if (adminAd == '') {
-            alert("Ad Boş geçilemez");
+            reset();
+            alertify.alert(jsDil.IsimBos);
+            return false;
         } else {
             if (adminAd.length < 2) {
-                alert("İsim 2  karekterden az olamaz");
+                reset();
+                alertify.alert(jsDil.IsimKarekter);
+                return false;
             } else {
                 var adminSoyad = $("input[name=AdminSoyadi]").val();
                 adminSoyad = adminSoyad.trim();
                 if (adminSoyad == '') {
-                    alert("Soyad Boş geçilemez");
+                    reset();
+                    alertify.alert(jsDil.SoyadBos);
+                    return false;
                 } else {
                     if (adminSoyad.length < 2) {
-                        alert("Soyad 2  karekterden az olamaz");
+                        reset();
+                        alertify.alert(jsDil.SoyadKarekter);
+                        return false;
                     } else {
                         var adminEmail = $("input[name=AdminEmail]").val();
                         if (adminEmail == ' ') {
-                            alert("Eposta Boş geçilemez");
+                            reset();
+                            alertify.alert(jsDil.EpostaBos);
+                            return false;
                         } else {
                             adminEmail = adminEmail.trim();
                             var result = ValidateEmail(adminEmail);
                             if (!result) {
-                                alert("Lütfen uygun bir email giriniz");
+                                reset();
+                                alertify.alert(jsDil.EpostaUygun);
+                                return false;
                             } else {
                                 var selectLength = $('#AdminSelectBolge > option').length;
                                 if (selectLength) {
@@ -188,8 +210,12 @@ $.AdminIslemler = {
                                                 "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "tip": "adminKaydet"},
                                             success: function (cevap) {
                                                 if (cevap.hata) {
-                                                    alert(cevap.hata);
+                                                    reset();
+                                                    alertify.alert(jsDil.Hata);
+                                                    return false;
                                                 } else {
+                                                    reset();
+                                                    alertify.success(jsDil.AdminKaydet);
                                                     var adminCount = $('#smallAdmin').text();
                                                     adminCount++;
                                                     $('#smallAdmin').text(adminCount);
@@ -218,10 +244,14 @@ $.AdminIslemler = {
                                         });
                                         return true;
                                     } else {
-                                        alert("Lütfen Bölge Seçiniz");
+                                        reset();
+                                        alertify.alert(jsDil.BolgeSec);
+                                        return false;
                                     }
                                 } else {
-                                    alert("Lütfen Öncelikle Bölge İşlemlerine Gidip Yeni Bölge Oluşturunuz");
+                                    reset();
+                                    alertify.alert(jsDil.BolgeOlustur);
+                                    return false;
                                 }
                             }
                         }
@@ -344,45 +374,56 @@ $.AdminIslemler = {
         $('#AdminDetaySelectBolge').multiselect('dataprovider', SelectBolgeOptions);
     },
     adminDetailSil: function () {
-        var admindetail_id = $("input[name=adminDetayID]").val();
-        $.ajax({
-            data: {"admindetail_id": admindetail_id, "tip": "adminDetailDelete"},
-            success: function (cevap) {
-                if (cevap.hata) {
-                    alert(cevap.hata);
-                } else {
-                    disabledForm();
-                    $("input[name=AdminDetayAdi]").val();
-                    $("input[name=AdminDetaySoyadi]").val();
-                    $("input[name=AdminDetayEmail]").val();
-                    $("#AdminDetayDurum option:selected").val();
-                    $("input[name=KurumLokasyon]").val();
-                    $("input[name=AdminDetayTelefon]").val();
-                    $("textarea[name=AdminDetayAdresDetay]").val();
-                    $("textarea[name=DetayAciklama]").val();
-                    $("input[name=country]").val();
-                    $("input[name=administrative_area_level_1]").val();
-                    $("input[name=administrative_area_level_2]").val();
-                    $("input[name=locality]").val();
-                    $("input[name=neighborhood]").val();
-                    $("input[name=route]").val();
-                    $("input[name=postal_code]").val();
-                    $("input[name=street_number]").val();
-                    var adminCount = $('#smallAdmin').text();
-                    adminCount--;
-                    $('#smallAdmin').text(adminCount);
-                    var length = $('tbody#adminRow tr').length;
-                    for (var t = 0; t < length; t++) {
-                        var attrValueId = $("tbody#adminRow > tr > td > a").eq(t).attr('value');
-                        if (attrValueId == admindetail_id) {
-                            var deleteRow = $('tbody#adminRow > tr:eq(' + t + ')');
-                            AdminTable.DataTable().row($(deleteRow)).remove().draw();
+        reset();
+        alertify.confirm(jsDil.SilOnay, function (e) {
+            if (e) {
+                var admindetail_id = $("input[name=adminDetayID]").val();
+                $.ajax({
+                    data: {"admindetail_id": admindetail_id, "tip": "adminDetailDelete"},
+                    success: function (cevap) {
+                        if (cevap.hata) {
+                            reset();
+                            alertify.alert(jsDil.Hata);
+                            return false;
+                        } else {
+                            disabledForm();
+                            $("input[name=AdminDetayAdi]").val();
+                            $("input[name=AdminDetaySoyadi]").val();
+                            $("input[name=AdminDetayEmail]").val();
+                            $("#AdminDetayDurum option:selected").val();
+                            $("input[name=KurumLokasyon]").val();
+                            $("input[name=AdminDetayTelefon]").val();
+                            $("textarea[name=AdminDetayAdresDetay]").val();
+                            $("textarea[name=DetayAciklama]").val();
+                            $("input[name=country]").val();
+                            $("input[name=administrative_area_level_1]").val();
+                            $("input[name=administrative_area_level_2]").val();
+                            $("input[name=locality]").val();
+                            $("input[name=neighborhood]").val();
+                            $("input[name=route]").val();
+                            $("input[name=postal_code]").val();
+                            $("input[name=street_number]").val();
+                            var adminCount = $('#smallAdmin').text();
+                            adminCount--;
+                            $('#smallAdmin').text(adminCount);
+                            var length = $('tbody#adminRow tr').length;
+                            for (var t = 0; t < length; t++) {
+                                var attrValueId = $("tbody#adminRow > tr > td > a").eq(t).attr('value');
+                                if (attrValueId == admindetail_id) {
+                                    var deleteRow = $('tbody#adminRow > tr:eq(' + t + ')');
+                                    AdminTable.DataTable().row($(deleteRow)).remove().draw();
+                                }
+                            }
+                            reset();
+                            alertify.success(jsDil.SilEvet);
+                            svControl('svClose', 'adminDetay', '');
                         }
                     }
-                }
+                });
+            } else {
+                alertify.error(jsDil.SilRed);
             }
         });
-        return true;
     },
     adminDetailKaydet: function () {
 
@@ -426,7 +467,9 @@ $.AdminIslemler = {
         var farkbolge = farkArray(AdminDetailVazgec[16], adminBolgeID);
         var farkbolgelength = farkbolge.length;
         if (AdminDetailVazgec[0] == adminAd && AdminDetailVazgec[1] == adminSoyad && AdminDetailVazgec[2] == adminEmail && AdminDetailVazgec[3] == adminDurum && AdminDetailVazgec[4] == adminLokasyon && AdminDetailVazgec[5] == adminTelefon && AdminDetailVazgec[6] == adminAdres && AdminDetailVazgec[7] == aciklama && AdminDetailVazgec[8] == ulke && AdminDetailVazgec[9] == il && AdminDetailVazgec[10] == ilce && AdminDetailVazgec[11] == semt && AdminDetailVazgec[12] == mahalle && AdminDetailVazgec[13] == sokak && AdminDetailVazgec[14] == postakodu && AdminDetailVazgec[15] == caddeno && farkbolgelength == 0) {
-            alert("Lütfen değişiklik yaptığınıza emin olun.");
+            reset();
+            alertify.alert(jsDil.Degisiklik);
+            return false;
         } else {
             var bolgeselectLength = $('select#AdminDetaySelectBolge option:selected').val();
             if (bolgeselectLength) {
@@ -438,10 +481,13 @@ $.AdminIslemler = {
                         "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "tip": "adminDetailKaydet"},
                     success: function (cevap) {
                         if (cevap.hata) {
-                            alert(cevap.hata);
+                            reset();
+                            alertify.alert(jsDil.Hata);
+                            return false;
                         } else {
-
                             disabledForm();
+                            reset();
+                            alertify.success(jsDil.AdminDuzenle);
                             var SelectBolgeOptions = new Array();
                             var SelectAracOptions = new Array();
                             if (adminBolgeID.length > 0) {
@@ -466,9 +512,6 @@ $.AdminIslemler = {
                                     }
                                 }
                             }
-
-
-
                             $('#AdminDetaySelectBolge').multiselect('refresh');
                             $('#AdminDetaySelectBolge').multiselect('dataprovider', SelectBolgeOptions);
                             var length = $('tbody#adminRow tr').length;
@@ -492,14 +535,15 @@ $.AdminIslemler = {
                                     }
                                 }
                             }
-
                             adminBolgeID = [];
                             adminBolgeAd = [];
                         }
                     }
                 });
             } else {
-                alert("Lütfen Bölge Seçiniz.");
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
             }
 
         }

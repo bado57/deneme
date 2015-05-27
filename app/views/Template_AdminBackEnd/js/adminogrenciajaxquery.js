@@ -5,11 +5,15 @@ $.ajaxSetup({
     dataType: "json",
     error: function (a, b) {
         if (b == "timeout")
-            alert("Ajax İsteği Zaman Aşımına Uğradı");
+            reset();
+        alertify.alert(jsDil.InternetBaglanti);
+        return false;
     },
     statusCode: {
         404: function () {
-            alert("Ajax dosyası bulunamadı");
+            reset();
+            alertify.alert(jsDil.InternetBaglanti);
+            return false;
         }
     }
 });
@@ -29,7 +33,9 @@ $(document).ready(function () {
             data: {"ogrenciRowid": ogrenciRowid, "tip": "ogrenciDetail"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
 
                     $("input[name=OgrenciDetayAdi]").val(cevap.ogrenciDetail[0].OgrenciListAd);
@@ -142,7 +148,9 @@ $(document).ready(function () {
             data: {"ogrenciBolgeID[]": ogrenciBolgeID, "tip": "ogrenciKurumMultiSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.kurumMultiSelect) {
                         var kurumlength = cevap.kurumMultiSelect.KurumSelectID.length;
@@ -169,7 +177,9 @@ $(document).ready(function () {
             data: {"kurumBolgeID[]": kurumBolgeID, "tip": "ogrenciVeliMultiSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.veliMultiSelect) {
                         var velilength = cevap.veliMultiSelect.VeliSelectID.length;
@@ -199,7 +209,9 @@ $(document).ready(function () {
             data: {"ogrenciID": ogrenciID, "ogrenciDetailBolgeID[]": ogrenciDetailBolgeID, "tip": "OgrenciBolgeDetailMultiSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.adminOgrenciSelectKurum) {
                         var ogrenciselectlength = cevap.adminOgrenciSelectKurum.length;
@@ -240,7 +252,9 @@ $(document).ready(function () {
             data: {"ogrenciID": ogrenciID, "veliDetailKurumID[]": veliDetailKurumID, "tip": "OgrenciVeliDetailMultiSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.adminOgrenciSelectVeli) {
                         var veliselectlength = cevap.adminOgrenciSelectVeli.length;
@@ -332,7 +346,9 @@ $.AdminIslemler = {
             data: {"tip": "ogrenciEkleSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.adminBolge) {
                         var bolgelength = cevap.adminBolge.AdminBolgeID.length;
@@ -352,7 +368,9 @@ $.AdminIslemler = {
                     $('#OgrenciVeliSelect').multiselect('dataprovider', VeliKurumOptions);
                     var selectLength = $('#OgrenciSelectBolge > option').length;
                     if (!selectLength) {
-                        alert("Lütfen Öncelikle Bölge İşlemlerine Gidip Yeni Bölge Oluşturunuz");
+                        reset();
+                        alertify.alert(jsDil.BolgeOlustur);
+                        return false;
                     }
                 }
             }
@@ -367,27 +385,39 @@ $.AdminIslemler = {
         var ogrenciAd = $("input[name=OgrenciAdi]").val();
         ogrenciAd = ogrenciAd.trim();
         if (ogrenciAd == '') {
-            alert("Ad Boş geçilemez");
+            reset();
+            alertify.alert(jsDil.IsimBos);
+            return false;
         } else {
             if (ogrenciAd.length < 2) {
-                alert("İsim 2  karekterden az olamaz");
+                reset();
+                alertify.alert(jsDil.IsimKarekter);
+                return false;
             } else {
                 var ogrenciSoyad = $("input[name=OgrenciSoyadi]").val();
                 ogrenciSoyad = ogrenciSoyad.trim();
                 if (ogrenciSoyad == '') {
-                    alert("Soyad Boş geçilemez");
+                    reset();
+                    alertify.alert(jsDil.SoyadBos);
+                    return false;
                 } else {
                     if (ogrenciSoyad.length < 2) {
-                        alert("Soyad 2  karekterden az olamaz");
+                        reset();
+                        alertify.alert(jsDil.SoyadKarekter);
+                        return false;
                     } else {
                         var ogrenciEmail = $("input[name=OgrenciEmail]").val();
                         if (ogrenciEmail == ' ') {
-                            alert("Eposta Boş geçilemez");
+                            reset();
+                            alertify.alert(jsDil.EpostaBos);
+                            return false;
                         } else {
                             ogrenciEmail = ogrenciEmail.trim();
                             var result = ValidateEmail(ogrenciEmail);
                             if (!result) {
-                                alert("Lütfen uygun bir email giriniz");
+                                reset();
+                                alertify.alert(jsDil.EpostaUygun);
+                                return false;
                             } else {
                                 var selectLength = $('#OgrenciSelectBolge > option').length;
                                 if (selectLength) {
@@ -450,8 +480,12 @@ $.AdminIslemler = {
                                                         "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "tip": "ogrenciKaydet"},
                                                     success: function (cevap) {
                                                         if (cevap.hata) {
-                                                            alert(cevap.hata);
+                                                            reset();
+                                                            alertify.alert(jsDil.Hata);
+                                                            return false;
                                                         } else {
+                                                            reset();
+                                                            alertify.success(jsDil.OgrenciKaydet);
                                                             var ogrenciCount = $('#smallOgrenci').text();
                                                             ogrenciCount++;
                                                             $('#smallOgrenci').text(ogrenciCount);
@@ -479,16 +513,24 @@ $.AdminIslemler = {
                                                 });
                                                 return true;
                                             } else {
-                                                alert("Lütfen Kurum Seçiniz");
+                                                reset();
+                                                alertify.alert(jsDil.KurumSec);
+                                                return false;
                                             }
                                         } else {
-                                            alert("Lütfen Öncelikle Kurum İşlemlerine Gidip Yeni Kurum Oluşturunuz");
+                                            reset();
+                                            alertify.alert(jsDil.KurumOlustur);
+                                            return false;
                                         }
                                     } else {
-                                        alert("Lütfen Bölge Seçiniz");
+                                        reset();
+                                        alertify.alert(jsDil.BolgeSec);
+                                        return false;
                                     }
                                 } else {
-                                    alert("Lütfen Öncelikle Bölge İşlemlerine Gidip Yeni Bölge Oluşturunuz");
+                                    reset();
+                                    alertify.alert(jsDil.BolgeOlustur);
+                                    return false;
                                 }
                             }
                         }
@@ -749,45 +791,56 @@ $.AdminIslemler = {
         $('#OgrenciDetayVeliSelect').multiselect('dataprovider', SelectOgrenciOptions);
     },
     ogrenciDetailSil: function () {
-        var ogrencidetail_id = $("input[name=ogrenciDetayID]").val();
-        $.ajax({
-            data: {"ogrencidetail_id": ogrencidetail_id, "tip": "ogrenciDetailDelete"},
-            success: function (cevap) {
-                if (cevap.hata) {
-                    alert(cevap.hata);
-                } else {
-                    disabledForm();
-                    $("input[name=OgrenciDetayAdi]").val(' ');
-                    $("input[name=OgrenciDetaySoyadi]").val(' ');
-                    $("#OgrenciDetayDurum").val(' ');
-                    $("input[name=KurumLokasyon]").val(' ');
-                    $("input[name=OgrenciDetayTelefon]").val(' ');
-                    $("input[name=OgrenciDetayEmail]").val(' ');
-                    $("textarea[name=OgrenciDetayAdresDetay]").val(' ');
-                    $("textarea[name=DetayAciklama]").val(' ');
-                    $("input[name=country]").val(' ');
-                    $("input[name=administrative_area_level_1]").val(' ');
-                    $("input[name=administrative_area_level_2]").val(' ');
-                    $("input[name=locality]").val(' ');
-                    $("input[name=neighborhood]").val(' ');
-                    $("input[name=route]").val(' ');
-                    $("input[name=postal_code]").val(' ');
-                    $("input[name=street_number]").val(' ');
-                    var ogrenciCount = $('#smallOgrenci').text();
-                    ogrenciCount--;
-                    $('#smallOgrenci').text(ogrenciCount);
-                    var length = $('tbody#ogrenciRow tr').length;
-                    for (var t = 0; t < length; t++) {
-                        var attrValueId = $("tbody#ogrenciRow > tr > td > a").eq(t).attr('value');
-                        if (attrValueId == ogrencidetail_id) {
-                            var deleteRow = $('tbody#ogrenciRow > tr:eq(' + t + ')');
-                            OgrenciTable.DataTable().row($(deleteRow)).remove().draw();
+        reset();
+        alertify.confirm(jsDil.SilOnay, function (e) {
+            if (e) {
+                var ogrencidetail_id = $("input[name=ogrenciDetayID]").val();
+                $.ajax({
+                    data: {"ogrencidetail_id": ogrencidetail_id, "tip": "ogrenciDetailDelete"},
+                    success: function (cevap) {
+                        if (cevap.hata) {
+                            reset();
+                            alertify.alert(jsDil.Hata);
+                            return false;
+                        } else {
+                            disabledForm();
+                            $("input[name=OgrenciDetayAdi]").val(' ');
+                            $("input[name=OgrenciDetaySoyadi]").val(' ');
+                            $("#OgrenciDetayDurum").val(' ');
+                            $("input[name=KurumLokasyon]").val(' ');
+                            $("input[name=OgrenciDetayTelefon]").val(' ');
+                            $("input[name=OgrenciDetayEmail]").val(' ');
+                            $("textarea[name=OgrenciDetayAdresDetay]").val(' ');
+                            $("textarea[name=DetayAciklama]").val(' ');
+                            $("input[name=country]").val(' ');
+                            $("input[name=administrative_area_level_1]").val(' ');
+                            $("input[name=administrative_area_level_2]").val(' ');
+                            $("input[name=locality]").val(' ');
+                            $("input[name=neighborhood]").val(' ');
+                            $("input[name=route]").val(' ');
+                            $("input[name=postal_code]").val(' ');
+                            $("input[name=street_number]").val(' ');
+                            var ogrenciCount = $('#smallOgrenci').text();
+                            ogrenciCount--;
+                            $('#smallOgrenci').text(ogrenciCount);
+                            var length = $('tbody#ogrenciRow tr').length;
+                            for (var t = 0; t < length; t++) {
+                                var attrValueId = $("tbody#ogrenciRow > tr > td > a").eq(t).attr('value');
+                                if (attrValueId == ogrencidetail_id) {
+                                    var deleteRow = $('tbody#ogrenciRow > tr:eq(' + t + ')');
+                                    OgrenciTable.DataTable().row($(deleteRow)).remove().draw();
+                                }
+                            }
+                            reset();
+                            alertify.success(jsDil.SilEvet);
+                            svControl('svClose', 'OgrenciDetay', '');
                         }
                     }
-                }
+                });
+            } else {
+                alertify.error(jsDil.SilRed);
             }
         });
-        return true;
     },
     ogrenciDetailKaydet: function () {
         var ogrencidetail_id = $("input[name=ogrenciDetayID]").val();
@@ -875,7 +928,9 @@ $.AdminIslemler = {
         var farkogrenci = farkArray(OgrenciDetailVazgec[24], ogrenciVeliID);
         var farkogrencilength = farkogrenci.length;
         if (OgrenciDetailVazgec[0] == ogrenciDetayAd && OgrenciDetailVazgec[1] == ogrenciDetaySoyad && OgrenciDetailVazgec[2] == ogrenciDetayDurum && OgrenciDetailVazgec[3] == ogrenciDetayLokasyon && OgrenciDetailVazgec[4] == ogrenciDetayTelefon && OgrenciDetailVazgec[5] == ogrenciDetayEmail && OgrenciDetailVazgec[6] == ogrenciDetayAdres && OgrenciDetailVazgec[7] == ogrenciDetayAciklama && OgrenciDetailVazgec[8] == ogrenciDetayUlke && OgrenciDetailVazgec[9] == ogrenciDetayIl && OgrenciDetailVazgec[10] == ogrenciDetayIlce && OgrenciDetailVazgec[11] == ogrenciDetaySemt && OgrenciDetailVazgec[12] == ogrenciDetayMahalle && OgrenciDetailVazgec[13] == ogrenciDetaySokak && OgrenciDetailVazgec[14] == ogrenciDetayPostaKodu && OgrenciDetailVazgec[15] == ogrenciDetayCaddeNo && farkbolgelength == 0 && farkkurumlength == 0 && farkogrencilength == 0) {
-            alert("Lütfen değişiklik yaptığınıza emin olun.");
+            reset();
+            alertify.alert(jsDil.Degisiklik);
+            return false;
         } else {
             var ogrenciBolgeLength = $('select#OgrenciDetaySelectBolge option:selected').val();
             if (ogrenciBolgeLength) {
@@ -890,9 +945,13 @@ $.AdminIslemler = {
                             "ogrenciDetaySokak": ogrenciDetaySokak, "ogrenciDetayPostaKodu": ogrenciDetayPostaKodu, "ogrenciDetayCaddeNo": ogrenciDetayCaddeNo, "tip": "ogrenciDetailKaydet"},
                         success: function (cevap) {
                             if (cevap.hata) {
-                                alert(cevap.hata);
+                                reset();
+                                alertify.alert(jsDil.Hata);
+                                return false;
                             } else {
                                 disabledForm();
+                                reset();
+                                alertify.success(jsDil.OgrenciDuzenle);
                                 var SelectBolgeOptions = new Array();
                                 var SelectKurumOptions = new Array();
                                 var SelectVeliOptions = new Array();
@@ -997,10 +1056,14 @@ $.AdminIslemler = {
                         }
                     });
                 } else {
-                    alert("Lütfen Kurum Seçiniz");
+                    reset();
+                    alertify.alert(jsDil.KurumSec);
+                    return false;
                 }
             } else {
-                alert("Lütfen Bölge Seçiniz");
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
             }
         }
     },

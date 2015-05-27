@@ -141,6 +141,7 @@ class en {
             "VeliTanimlama" => "Guardian Description",
             "Ogrenciler" => "Students",
             "VeliDetay" => "Guardian Details",
+            "OgrenciDetay" => "Student Details",
             "YeniOgrenci" => "New Student",
             "OgrenciTanimlama" => "Student Description",
             "Veliler" => "Guardians",

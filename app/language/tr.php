@@ -143,6 +143,7 @@ class tr {
             "VeliTanimlama" => "Veli Tanimlama",
             "Ogrenciler" => "Öğrenciler",
             "VeliDetay" => "Veli Detayları",
+            "OgrenciDetay" => "Öğrenci Detayları",
             "YeniOgrenci" => "Yeni Öğrenci",
             "OgrenciTanimlama" => "Öğrenci Tanimlama",
             "Veliler" => "Veliler",

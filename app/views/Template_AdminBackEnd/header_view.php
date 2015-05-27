@@ -24,6 +24,8 @@
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/shuttle.css" rel="stylesheet" type="text/css" />
+            <!-- Alert style -->
+            <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/alertify.css" rel="stylesheet" type="text/css" />
 
             <!-- jQuery 2.0.2 -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery.min.js"></script>
@@ -46,6 +48,23 @@
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/bootstrap-multiselect.js"></script>
             <!--Validation-->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/validation.js"></script>
+            <!--Script Language-->
+            <script src="<?php echo SITE_JS_LANGUAGE; ?>/<?php echo Session::get("dil"); ?>.js"></script>
+            <!--Alert-->
+            <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/alertify.js"></script>
+            <script>
+                function reset() {
+                    alertify.set({
+                        labels: {
+                            ok: jsDil.Tamam,
+                            cancel: jsDil.Kapat
+                        },
+                        delay: 3000,
+                        buttonReverse: false,
+                        buttonFocus: "ok"
+                    });
+                }
+            </script>
             </head>
             <body class="skin-blue">
             <script>

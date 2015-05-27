@@ -5,16 +5,20 @@ $.ajaxSetup({
     dataType: "json",
     error: function (a, b) {
         if (b == "timeout")
-            alert("Ajax İsteği Zaman Aşımına Uğradı");
+            reset();
+        alertify.alert(jsDil.InternetBaglanti);
+        return false;
     },
     statusCode: {
         404: function () {
-            alert("Ajax dosyası bulunamadı");
+            reset();
+            alertify.alert(jsDil.InternetBaglanti);
+            return false;
         }
     }
 });
 $(document).ready(function () {
-    
+
     VeliTable = $('#veliTable').dataTable({
         "paging": true,
         "ordering": true,
@@ -30,7 +34,9 @@ $(document).ready(function () {
             data: {"veliRowid": veliRowid, "tip": "veliDetail"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
 
                     $("input[name=VeliDetayAdi]").val(cevap.veliDetail[0].VeliListAd);
@@ -143,7 +149,9 @@ $(document).ready(function () {
             data: {"veliBolgeID[]": veliBolgeID, "tip": "veliKurumMultiSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.kurumMultiSelect) {
                         var kurumlength = cevap.kurumMultiSelect.KurumSelectID.length;
@@ -170,7 +178,9 @@ $(document).ready(function () {
             data: {"kurumBolgeID[]": kurumBolgeID, "tip": "veliOgrenciMultiSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.ogrenciMultiSelect) {
                         var ogrencilength = cevap.ogrenciMultiSelect.OgrenciSelectID.length;
@@ -200,7 +210,9 @@ $(document).ready(function () {
             data: {"veliID": veliID, "veliDetailBolgeID[]": veliDetailBolgeID, "tip": "VeliDetailMultiSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.adminVeliSelectKurum) {
                         var veliselectlength = cevap.adminVeliSelectKurum.length;
@@ -241,7 +253,9 @@ $(document).ready(function () {
             data: {"veliID": veliID, "veliDetailKurumID[]": veliDetailKurumID, "tip": "OgrenciDetailMultiSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.adminVeliSelectOgrenci) {
                         var veliselectlength = cevap.adminVeliSelectOgrenci.length;
@@ -309,7 +323,6 @@ $(document).ready(function () {
 });
 var VeliDetailVazgec = [];
 $.AdminIslemler = {
-    
     veliYeni: function () {
         $("input[name=VeliAdi]").val(' ');
         $("input[name=VeliSoyadi]").val(' ');
@@ -334,7 +347,9 @@ $.AdminIslemler = {
             data: {"tip": "veliEkleSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.adminBolge) {
                         var bolgelength = cevap.adminBolge.AdminBolgeID.length;
@@ -354,7 +369,9 @@ $.AdminIslemler = {
                     $('#VeliOgrenciSelect').multiselect('dataprovider', OgrenciKurumOptions);
                     var selectLength = $('#VeliSelectBolge > option').length;
                     if (!selectLength) {
-                        alert("Lütfen Öncelikle Bölge İşlemlerine Gidip Yeni Bölge Oluşturunuz");
+                        reset();
+                        alertify.alert(jsDil.BolgeOlustur);
+                        return false;
                     }
                 }
             }
@@ -369,27 +386,39 @@ $.AdminIslemler = {
         var veliAd = $("input[name=VeliAdi]").val();
         veliAd = veliAd.trim();
         if (veliAd == '') {
-            alert("Ad Boş geçilemez");
+            reset();
+            alertify.alert(jsDil.IsimBos);
+            return false;
         } else {
             if (veliAd.length < 2) {
-                alert("İsim 2  karekterden az olamaz");
+                reset();
+                alertify.alert(jsDil.IsimKarekter);
+                return false;
             } else {
                 var veliSoyad = $("input[name=VeliSoyadi]").val();
                 veliSoyad = veliSoyad.trim();
                 if (veliSoyad == '') {
-                    alert("Soyad Boş geçilemez");
+                    reset();
+                    alertify.alert(jsDil.SoyadBos);
+                    return false;
                 } else {
                     if (veliSoyad.length < 2) {
-                        alert("Soyad 2  karekterden az olamaz");
+                        reset();
+                        alertify.alert(jsDil.SoyadKarekter);
+                        return false;
                     } else {
                         var veliEmail = $("input[name=VeliEmail]").val();
                         if (veliEmail == ' ') {
-                            alert("Eposta Boş geçilemez");
+                            reset();
+                            alertify.alert(jsDil.EpostaBos);
+                            return false;
                         } else {
                             veliEmail = veliEmail.trim();
                             var result = ValidateEmail(veliEmail);
                             if (!result) {
-                                alert("Lütfen uygun bir email giriniz");
+                                reset();
+                                alertify.alert(jsDil.EpostaUygun);
+                                return false;
                             } else {
                                 var selectLength = $('#VeliSelectBolge > option').length;
                                 if (selectLength) {
@@ -452,8 +481,12 @@ $.AdminIslemler = {
                                                         "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "tip": "veliKaydet"},
                                                     success: function (cevap) {
                                                         if (cevap.hata) {
-                                                            alert(cevap.hata);
+                                                            reset();
+                                                            alertify.alert(jsDil.Hata);
+                                                            return false;
                                                         } else {
+                                                            reset();
+                                                            alertify.success(jsDil.VeliKaydet);
                                                             var veliCount = $('#smallVeli').text();
                                                             veliCount++;
                                                             $('#smallVeli').text(veliCount);
@@ -481,16 +514,24 @@ $.AdminIslemler = {
                                                 });
                                                 return true;
                                             } else {
-                                                alert("Lütfen Kurum Seçiniz");
+                                                reset();
+                                                alertify.alert(jsDil.KurumSec);
+                                                return false;
                                             }
                                         } else {
-                                            alert("Lütfen Öncelikle Kurum İşlemlerine Gidip Yeni Kurum Oluşturunuz");
+                                            reset();
+                                            alertify.alert(jsDil.KurumOlustur);
+                                            return false;
                                         }
                                     } else {
-                                        alert("Lütfen Bölge Seçiniz");
+                                        reset();
+                                        alertify.alert(jsDil.BolgeSec);
+                                        return false;
                                     }
                                 } else {
-                                    alert("Lütfen Öncelikle Bölge İşlemlerine Gidip Yeni Bölge Oluşturunuz");
+                                    reset();
+                                    alertify.alert(jsDil.BolgeOlustur);
+                                    return false;
                                 }
                             }
                         }
@@ -751,45 +792,56 @@ $.AdminIslemler = {
         $('#VeliDetayOgrenciSelect').multiselect('dataprovider', SelectOgrenciOptions);
     },
     veliDetailSil: function () {
-        var velidetail_id = $("input[name=veliDetayID]").val();
-        $.ajax({
-            data: {"velidetail_id": velidetail_id, "tip": "veliDetailDelete"},
-            success: function (cevap) {
-                if (cevap.hata) {
-                    alert(cevap.hata);
-                } else {
-                    disabledForm();
-                    $("input[name=VeliDetayAdi]").val(' ');
-                    $("input[name=VeliDetaySoyadi]").val(' ');
-                    $("#VeliDetayDurum").val(' ');
-                    $("input[name=KurumLokasyon]").val(' ');
-                    $("input[name=VeliDetayTelefon]").val(' ');
-                    $("input[name=VeliDetayEmail]").val(' ');
-                    $("textarea[name=VeliDetayAdresDetay]").val(' ');
-                    $("textarea[name=DetayAciklama]").val(' ');
-                    $("input[name=country]").val(' ');
-                    $("input[name=administrative_area_level_1]").val(' ');
-                    $("input[name=administrative_area_level_2]").val(' ');
-                    $("input[name=locality]").val(' ');
-                    $("input[name=neighborhood]").val(' ');
-                    $("input[name=route]").val(' ');
-                    $("input[name=postal_code]").val(' ');
-                    $("input[name=street_number]").val(' ');
-                    var veliCount = $('#smallVeli').text();
-                    veliCount--;
-                    $('#smallVeli').text(veliCount);
-                    var length = $('tbody#veliRow tr').length;
-                    for (var t = 0; t < length; t++) {
-                        var attrValueId = $("tbody#veliRow > tr > td > a").eq(t).attr('value');
-                        if (attrValueId == velidetail_id) {
-                            var deleteRow = $('tbody#veliRow > tr:eq(' + t + ')');
-                            VeliTable.DataTable().row($(deleteRow)).remove().draw();
+        reset();
+        alertify.confirm(jsDil.SilOnay, function (e) {
+            if (e) {
+                var velidetail_id = $("input[name=veliDetayID]").val();
+                $.ajax({
+                    data: {"velidetail_id": velidetail_id, "tip": "veliDetailDelete"},
+                    success: function (cevap) {
+                        if (cevap.hata) {
+                            reset();
+                            alertify.alert(jsDil.Hata);
+                            return false;
+                        } else {
+                            disabledForm();
+                            $("input[name=VeliDetayAdi]").val(' ');
+                            $("input[name=VeliDetaySoyadi]").val(' ');
+                            $("#VeliDetayDurum").val(' ');
+                            $("input[name=KurumLokasyon]").val(' ');
+                            $("input[name=VeliDetayTelefon]").val(' ');
+                            $("input[name=VeliDetayEmail]").val(' ');
+                            $("textarea[name=VeliDetayAdresDetay]").val(' ');
+                            $("textarea[name=DetayAciklama]").val(' ');
+                            $("input[name=country]").val(' ');
+                            $("input[name=administrative_area_level_1]").val(' ');
+                            $("input[name=administrative_area_level_2]").val(' ');
+                            $("input[name=locality]").val(' ');
+                            $("input[name=neighborhood]").val(' ');
+                            $("input[name=route]").val(' ');
+                            $("input[name=postal_code]").val(' ');
+                            $("input[name=street_number]").val(' ');
+                            var veliCount = $('#smallVeli').text();
+                            veliCount--;
+                            $('#smallVeli').text(veliCount);
+                            var length = $('tbody#veliRow tr').length;
+                            for (var t = 0; t < length; t++) {
+                                var attrValueId = $("tbody#veliRow > tr > td > a").eq(t).attr('value');
+                                if (attrValueId == velidetail_id) {
+                                    var deleteRow = $('tbody#veliRow > tr:eq(' + t + ')');
+                                    VeliTable.DataTable().row($(deleteRow)).remove().draw();
+                                }
+                            }
+                            reset();
+                            alertify.success(jsDil.SilEvet);
+                            svControl('svClose', 'VeliDetay', '');
                         }
                     }
-                }
+                });
+            } else {
+                alertify.error(jsDil.SilRed);
             }
         });
-        return true;
     },
     veliDetailKaydet: function () {
         var velidetail_id = $("input[name=veliDetayID]").val();
@@ -877,7 +929,9 @@ $.AdminIslemler = {
         var farkogrenci = farkArray(VeliDetailVazgec[24], veliOgrenciID);
         var farkogrencilength = farkogrenci.length;
         if (VeliDetailVazgec[0] == veliDetayAd && VeliDetailVazgec[1] == veliDetaySoyad && VeliDetailVazgec[2] == veliDetayDurum && VeliDetailVazgec[3] == veliDetayLokasyon && VeliDetailVazgec[4] == veliDetayTelefon && VeliDetailVazgec[5] == veliDetayEmail && VeliDetailVazgec[6] == veliDetayAdres && VeliDetailVazgec[7] == veliDetayAciklama && VeliDetailVazgec[8] == veliDetayUlke && VeliDetailVazgec[9] == veliDetayIl && VeliDetailVazgec[10] == veliDetayIlce && VeliDetailVazgec[11] == veliDetaySemt && VeliDetailVazgec[12] == veliDetayMahalle && VeliDetailVazgec[13] == veliDetaySokak && VeliDetailVazgec[14] == veliDetayPostaKodu && VeliDetailVazgec[15] == veliDetayCaddeNo && farkbolgelength == 0 && farkkurumlength == 0 && farkogrencilength == 0) {
-            alert("Lütfen değişiklik yaptığınıza emin olun.");
+            reset();
+            alertify.alert(jsDil.Degisiklik);
+            return false;
         } else {
             var veliBolgeLength = $('select#VeliDetaySelectBolge option:selected').val();
             if (veliBolgeLength) {
@@ -892,9 +946,13 @@ $.AdminIslemler = {
                             "veliDetaySokak": veliDetaySokak, "veliDetayPostaKodu": veliDetayPostaKodu, "veliDetayCaddeNo": veliDetayCaddeNo, "tip": "veliDetailKaydet"},
                         success: function (cevap) {
                             if (cevap.hata) {
-                                alert(cevap.hata);
+                                reset();
+                                alertify.alert(jsDil.Hata);
+                                return false;
                             } else {
                                 disabledForm();
+                                reset();
+                                alertify.success(jsDil.VeliDuzenle);
                                 var SelectBolgeOptions = new Array();
                                 var SelectKurumOptions = new Array();
                                 var SelectOgrenciOptions = new Array();
@@ -999,10 +1057,14 @@ $.AdminIslemler = {
                         }
                     });
                 } else {
-                    alert("Lütfen Kurum Seçiniz");
+                    reset();
+                    alertify.alert(jsDil.KurumSec);
+                    return false;
                 }
             } else {
-                alert("Lütfen Bölge Seçiniz");
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
             }
         }
     }

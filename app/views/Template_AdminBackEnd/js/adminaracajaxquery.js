@@ -5,11 +5,15 @@ $.ajaxSetup({
     dataType: "json",
     error: function (a, b) {
         if (b == "timeout")
-            alert("Ajax İsteği Zaman Aşımına Uğradı");
+            reset();
+        alertify.alert(jsDil.InternetBaglanti);
+        return false;
     },
     statusCode: {
         404: function () {
-            alert("Ajax dosyası bulunamadı");
+            reset();
+            alertify.alert(jsDil.InternetBaglanti);
+            return false;
         }
     }
 });
@@ -35,7 +39,9 @@ $(document).ready(function () {
             data: {"adminaracRowid": adminaracRowid, "tip": "adminAracDetail"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
 
                     if (cevap.adminAracTur) {
@@ -158,7 +164,9 @@ $(document).ready(function () {
             data: {"aracID": aracID, "aracDetailBolgeID[]": aracDetailBolgeID, "tip": "AracDetailMultiSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.adminAracSelectSofor) {
                         var soforselectlength = cevap.adminAracSelectSofor.length;
@@ -196,7 +204,9 @@ $(document).ready(function () {
             data: {"aracBolgeID[]": aracBolgeID, "tip": "AracSoforMultiSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.aracYeniSoforMultiSelect) {
                         var soforlength = cevap.aracYeniSoforMultiSelect.SoforSelectID.length;
@@ -248,7 +258,9 @@ $.AdminIslemler = {
             data: {"tip": "adminAracEkleSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.adminAracBolge) {
                         var bolgelength = cevap.adminAracBolge.AdminBolgeID.length;
@@ -261,7 +273,9 @@ $.AdminIslemler = {
                     $('#AracSurucu').multiselect('refresh');
                     var selectLength = $('#AracBolgeSelect > option').length;
                     if (!selectLength) {
-                        alert("Lütfen Öncelikle Bölge İşlemlerine Gidip Yeni Bölge Oluşturunuz");
+                        reset();
+                        alertify.alert(jsDil.BolgeOlustur);
+                        return false;
                     }
 
                 }
@@ -273,13 +287,17 @@ $.AdminIslemler = {
     adminAracEkle: function () {
         var aracPlaka = $("input[name=AracPlaka]").val().toUpperCase();
         if (aracPlaka == '') {
-            alert("Plaka Boş geçilemez");
+            reset();
+            alertify.alert(jsDil.PlakaBos);
+            return false;
         } else {
             var select = $('select#AracBolgeSelect option:selected').val();
             if (select) {
                 var aracKapasite = $("input[name=AracKapasite]").val();
-                if (aracKapasite < 1) {
-                    alert("Araç Kapasitesi 1 den küçük olamaz");
+                if (aracKapasite < 2) {
+                    reset();
+                    alertify.alert(jsDil.AracKapasite);
+                    return false;
                 } else {
                     var aracMarka = $("input[name=AracMarka]").val();
                     var aracModelYil = $("input[name=AracYil]").val();
@@ -312,8 +330,12 @@ $.AdminIslemler = {
                             "aracKapasite": aracKapasite, "aracAciklama": aracAciklama, "aracDurum": aracDurum, "tip": "adminAracKaydet"},
                         success: function (cevap) {
                             if (cevap.hata) {
-                                alert(cevap.hata);
+                                reset();
+                                alertify.alert(jsDil.Hata);
+                                return false;
                             } else {
+                                reset();
+                                alertify.success(jsDil.AracKaydet);
                                 var aracCount = $('#smallArac').text();
                                 aracCount++;
                                 $('#smallArac').text(aracCount);
@@ -348,7 +370,9 @@ $.AdminIslemler = {
                     return true;
                 }
             } else {
-                alert("Lütfen Bölge Seçiniz");
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
             }
 
 
@@ -519,36 +543,47 @@ $.AdminIslemler = {
         $('#AracDetaySurucu').multiselect('dataprovider', SelectAracOptions);
     },
     adminAracDetailSil: function () {
-        var aracdetail_id = $("input[name=adminAracDetailDeger]").val();
-        $.ajax({
-            data: {"aracdetail_id": aracdetail_id, "tip": "adminAracDetailDelete"},
-            success: function (cevap) {
-                if (cevap.hata) {
-                    alert(cevap.hata);
-                } else {
-                    disabledForm();
-                    $("input[name=AracDetayPlaka]").val(' ');
-                    $("input[name=AracDetayMarka]").val(' ');
-                    $("input[name=AracDetayModelYil]").val(' ');
-                    $("input[name=AracDetayKapasite]").val(' ');
-                    $("textarea[name=AracDetayAciklama]").val(' ');
-                    $("#AracDetayDurum option:selected").val(' ');
-                    $("input[name=AracDetayKm]").val(' ');
-                    var aracCount = $('#smallArac').text();
-                    aracCount--;
-                    $('#smallArac').text(aracCount);
-                    var length = $('tbody#adminAracRow tr').length;
-                    for (var t = 0; t < length; t++) {
-                        var attrValueId = $("tbody#adminAracRow > tr > td > a").eq(t).attr('value');
-                        if (attrValueId == aracdetail_id) {
-                            var deleteRow = $('tbody#adminAracRow > tr:eq(' + t + ')');
-                            NewAracTable.DataTable().row($(deleteRow)).remove().draw();
+        reset();
+        alertify.confirm(jsDil.SilOnay, function (e) {
+            if (e) {
+                var aracdetail_id = $("input[name=adminAracDetailDeger]").val();
+                $.ajax({
+                    data: {"aracdetail_id": aracdetail_id, "tip": "adminAracDetailDelete"},
+                    success: function (cevap) {
+                        if (cevap.hata) {
+                            reset();
+                            alertify.alert(jsDil.Hata);
+                            return false;
+                        } else {
+                            disabledForm();
+                            $("input[name=AracDetayPlaka]").val(' ');
+                            $("input[name=AracDetayMarka]").val(' ');
+                            $("input[name=AracDetayModelYil]").val(' ');
+                            $("input[name=AracDetayKapasite]").val(' ');
+                            $("textarea[name=AracDetayAciklama]").val(' ');
+                            $("#AracDetayDurum option:selected").val(' ');
+                            $("input[name=AracDetayKm]").val(' ');
+                            var aracCount = $('#smallArac').text();
+                            aracCount--;
+                            $('#smallArac').text(aracCount);
+                            var length = $('tbody#adminAracRow tr').length;
+                            for (var t = 0; t < length; t++) {
+                                var attrValueId = $("tbody#adminAracRow > tr > td > a").eq(t).attr('value');
+                                if (attrValueId == aracdetail_id) {
+                                    var deleteRow = $('tbody#adminAracRow > tr:eq(' + t + ')');
+                                    NewAracTable.DataTable().row($(deleteRow)).remove().draw();
+                                }
+                            }
+                            reset();
+                            alertify.success(jsDil.SilEvet);
+                            svControl('svClose', 'aracDetay', '');
                         }
                     }
-                }
+                });
+            } else {
+                alertify.error(jsDil.SilRed);
             }
         });
-        return true;
     },
     adminAracDetailKaydet: function () {
 
@@ -605,13 +640,19 @@ $.AdminIslemler = {
         var farkarac = farkArray(AdminAracDetailVazgec[10], aracSoforID);
         var farkaraclength = farkarac.length;
         if (AdminAracDetailVazgec[0] == aracPlaka && AdminAracDetailVazgec[1] == aracMarka && AdminAracDetailVazgec[2] == aracModelYil && AdminAracDetailVazgec[3] == aracKapasite && AdminAracDetailVazgec[4] == aracAciklama && AdminAracDetailVazgec[5] == aracDurum && farkbolgelength == 0 && farkaraclength == 0) {
-            alert("Lütfen değişiklik yaptığınıza emin olun.");
+            reset();
+            alertify.alert(jsDil.Degisiklik);
+            return false;
         } else {
             if (aracPlaka == '') {
-                alert("Plaka Boş Geçilemez");
+                reset();
+                alertify.alert(jsDil.PlakaBos);
+                return false;
             } else {
-                if (aracKapasite < 1) {
-                    alert("Kapasite 1 den küçük olamaz");
+                if (aracKapasite < 2) {
+                    reset();
+                    alertify.alert(jsDil.AracKapasite);
+                    return false;
                 } else {
                     var aracBolgeLength = $('select#AracDetayBolgeSelect option:selected').val();
                     if (aracBolgeLength) {
@@ -620,10 +661,13 @@ $.AdminIslemler = {
                                 "aracKapasite": aracKapasite, "aracAciklama": aracAciklama, "aracDurum": aracDurum, "tip": "adminAracDetailKaydet"},
                             success: function (cevap) {
                                 if (cevap.hata) {
-                                    alert(cevap.hata);
+                                    reset();
+                                    alertify.alert(jsDil.Hata);
+                                    return false;
                                 } else {
-
                                     disabledForm();
+                                    reset();
+                                    alertify.success(jsDil.AracDuzenle);
                                     var SelectBolgeOptions = new Array();
                                     var SelectAracOptions = new Array();
                                     if (aracBolgeID.length > 0) {
@@ -696,7 +740,9 @@ $.AdminIslemler = {
                             }
                         });
                     } else {
-                        alert("Lütfen Bölge Seçiniz");
+                        reset();
+                        alertify.alert(jsDil.BolgeSec);
+                        return false;
                     }
                 }
             }
@@ -705,12 +751,13 @@ $.AdminIslemler = {
     adminAracDetailTur: function () {
         AracTurTable.DataTable().clear().draw();
         var aracID = $("input[name=adminAracDetailDeger]").val();
-        console.log(aracID);
         $.ajax({
             data: {"aracID": aracID, "tip": "adminAracDetailTur"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.aracDetailTur) {
                         var turCount = cevap.aracDetailTur.length;

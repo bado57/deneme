@@ -5,11 +5,15 @@ $.ajaxSetup({
     dataType: "json",
     error: function (a, b) {
         if (b == "timeout")
-            alert("Ajax İsteği Zaman Aşımına Uğradı");
+            reset();
+        alertify.alert(jsDil.InternetBaglanti);
+        return false;
     },
     statusCode: {
         404: function () {
-            alert("Ajax dosyası bulunamadı");
+            reset();
+            alertify.alert(jsDil.InternetBaglanti);
+            return false;
         }
     }
 });
@@ -30,7 +34,9 @@ $(document).ready(function () {
             data: {"soforRowid": soforRowid, "tip": "soforDetail"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
 
                     $("input[name=SoforDetayAdi]").val(cevap.soforDetail[0].SoforListAd);
@@ -119,7 +125,9 @@ $(document).ready(function () {
             data: {"soforBolgeID[]": soforBolgeID, "tip": "soforAracMultiSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.aracMultiSelect) {
                         var araclength = cevap.aracMultiSelect.AracSelectID.length;
@@ -136,7 +144,7 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     $('#SoforDetaySelectBolge').on('change', function () {
 
         var soforID = $("input[name=soforDetayID]").val();
@@ -150,7 +158,9 @@ $(document).ready(function () {
             data: {"soforID": soforID, "soforDetailBolgeID[]": soforDetailBolgeID, "tip": "SoforDetailMultiSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.adminSoforSelectArac) {
                         var aracselectlength = cevap.adminSoforSelectArac.length;
@@ -223,7 +233,9 @@ $.AdminIslemler = {
             data: {"tip": "soforEkleSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.adminBolge) {
                         var bolgelength = cevap.adminBolge.AdminBolgeID.length;
@@ -241,7 +253,9 @@ $.AdminIslemler = {
                     $('#SoforAracSelect').multiselect('dataprovider', AracOptions);
                     var selectLength = $('#SoforSelectBolge > option').length;
                     if (!selectLength) {
-                        alert("Lütfen Öncelikle Bölge İşlemlerine Gidip Yeni Bölge Oluşturunuz");
+                        reset();
+                        alertify.alert(jsDil.BolgeOlustur);
+                        return false;
                     }
                 }
 
@@ -257,27 +271,39 @@ $.AdminIslemler = {
         var soforAd = $("input[name=SoforAdi]").val();
         soforAd = soforAd.trim();
         if (soforAd == '') {
-            alert("Ad Boş geçilemez");
+            reset();
+            alertify.alert(jsDil.IsimBos);
+            return false;
         } else {
             if (soforAd.length < 2) {
-                alert("İsim 2  karekterden az olamaz");
+                reset();
+                alertify.alert(jsDil.IsimKarekter);
+                return false;
             } else {
                 var soforSoyad = $("input[name=SoforSoyadi]").val();
                 soforSoyad = soforSoyad.trim();
                 if (soforSoyad == '') {
-                    alert("Soyad Boş geçilemez");
+                    reset();
+                    alertify.alert(jsDil.SoyadBos);
+                    return false;
                 } else {
                     if (soforSoyad.length < 2) {
-                        alert("Soyad 2  karekterden az olamaz");
+                        reset();
+                        alertify.alert(jsDil.SoyadKarekter);
+                        return false;
                     } else {
                         var soforEmail = $("input[name=SoforEmail]").val();
                         if (soforEmail == ' ') {
-                            alert("Eposta Boş geçilemez");
+                            reset();
+                            alertify.alert(jsDil.EpostaBos);
+                            return false;
                         } else {
                             soforEmail = soforEmail.trim();
                             var result = ValidateEmail(soforEmail);
                             if (!result) {
-                                alert("Lütfen uygun bir email giriniz");
+                                reset();
+                                alertify.alert(jsDil.EpostaUygun);
+                                return false;
                             } else {
                                 var selectLength = $('#SoforSelectBolge > option').length;
                                 if (selectLength) {
@@ -324,8 +350,12 @@ $.AdminIslemler = {
                                                 "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "tip": "soforKaydet"},
                                             success: function (cevap) {
                                                 if (cevap.hata) {
-                                                    alert(cevap.hata);
+                                                    reset();
+                                                    alertify.alert(jsDil.Hata);
+                                                    return false;
                                                 } else {
+                                                    reset();
+                                                    alertify.success(jsDil.SoforKaydet);
                                                     var soforCount = $('#smallSofor').text();
                                                     soforCount++;
                                                     $('#smallSofor').text(soforCount);
@@ -355,10 +385,14 @@ $.AdminIslemler = {
                                         });
                                         return true;
                                     } else {
-                                        alert("Lütfen Bölge Seçiniz");
+                                        reset();
+                                        alertify.alert(jsDil.BolgeSec);
+                                        return false;
                                     }
                                 } else {
-                                    alert("Lütfen Öncelikle Bölge İşlemlerine Gidip Yeni Bölge Oluşturunuz");
+                                    reset();
+                                    alertify.alert(jsDil.BolgeOlustur);
+                                    return false;
                                 }
                             }
                         }
@@ -549,45 +583,56 @@ $.AdminIslemler = {
         SoforDetailVazgec.push(soforDetayAd, soforDetaySoyad, soforDetayDurum, soforDetayLokasyon, soforDetayTelefon, soforDetayEmail, soforDetayAdres, soforDetayAciklama, soforDetayUlke, soforDetayIl, soforDetayIlce, soforDetaySemt, soforDetayMahalle, soforDetaySokak, soforDetayPostaKodu, soforDetayCaddeNo, soforBolgeID, soforBolgeAd, soforBolgeNID, soforBolgeNAd, soforAracID, soforAracPlaka, soforAracNID, soforAracNAd);
     },
     soforDetailSil: function () {
-        var sofordetail_id = $("input[name=soforDetayID]").val();
-        $.ajax({
-            data: {"sofordetail_id": sofordetail_id, "tip": "soforDetailDelete"},
-            success: function (cevap) {
-                if (cevap.hata) {
-                    alert(cevap.hata);
-                } else {
-                    disabledForm();
-                    $("input[name=SoforDetayAdi]").val(' ');
-                    $("input[name=SoforDetaySoyadi]").val(' ');
-                    $("#SoforDetayDurum").val(' ');
-                    $("input[name=KurumLokasyon]").val(' ');
-                    $("input[name=SoforDetayTelefon]").val(' ');
-                    $("input[name=SoforDetayEmail]").val(' ');
-                    $("textarea[name=SoforDetayAdresDetay]").val(' ');
-                    $("textarea[name=DetayAciklama]").val(' ');
-                    $("input[name=country]").val(' ');
-                    $("input[name=administrative_area_level_1]").val(' ');
-                    $("input[name=administrative_area_level_2]").val(' ');
-                    $("input[name=locality]").val(' ');
-                    $("input[name=neighborhood]").val(' ');
-                    $("input[name=route]").val(' ');
-                    $("input[name=postal_code]").val(' ');
-                    $("input[name=street_number]").val(' ');
-                    var soforCount = $('#smallSofor').text();
-                    soforCount--;
-                    $('#smallSofor').text(soforCount);
-                    var length = $('tbody#soforRow tr').length;
-                    for (var t = 0; t < length; t++) {
-                        var attrValueId = $("tbody#soforRow > tr > td > a").eq(t).attr('value');
-                        if (attrValueId == sofordetail_id) {
-                            var deleteRow = $('tbody#soforRow > tr:eq(' + t + ')');
-                            SoforTable.DataTable().row($(deleteRow)).remove().draw();
+        reset();
+        alertify.confirm(jsDil.SilOnay, function (e) {
+            if (e) {
+                var sofordetail_id = $("input[name=soforDetayID]").val();
+                $.ajax({
+                    data: {"sofordetail_id": sofordetail_id, "tip": "soforDetailDelete"},
+                    success: function (cevap) {
+                        if (cevap.hata) {
+                            reset();
+                            alertify.alert(jsDil.Hata);
+                            return false;
+                        } else {
+                            disabledForm();
+                            $("input[name=SoforDetayAdi]").val(' ');
+                            $("input[name=SoforDetaySoyadi]").val(' ');
+                            $("#SoforDetayDurum").val(' ');
+                            $("input[name=KurumLokasyon]").val(' ');
+                            $("input[name=SoforDetayTelefon]").val(' ');
+                            $("input[name=SoforDetayEmail]").val(' ');
+                            $("textarea[name=SoforDetayAdresDetay]").val(' ');
+                            $("textarea[name=DetayAciklama]").val(' ');
+                            $("input[name=country]").val(' ');
+                            $("input[name=administrative_area_level_1]").val(' ');
+                            $("input[name=administrative_area_level_2]").val(' ');
+                            $("input[name=locality]").val(' ');
+                            $("input[name=neighborhood]").val(' ');
+                            $("input[name=route]").val(' ');
+                            $("input[name=postal_code]").val(' ');
+                            $("input[name=street_number]").val(' ');
+                            var soforCount = $('#smallSofor').text();
+                            soforCount--;
+                            $('#smallSofor').text(soforCount);
+                            var length = $('tbody#soforRow tr').length;
+                            for (var t = 0; t < length; t++) {
+                                var attrValueId = $("tbody#soforRow > tr > td > a").eq(t).attr('value');
+                                if (attrValueId == sofordetail_id) {
+                                    var deleteRow = $('tbody#soforRow > tr:eq(' + t + ')');
+                                    SoforTable.DataTable().row($(deleteRow)).remove().draw();
+                                }
+                            }
+                            reset();
+                            alertify.success(jsDil.SilEvet);
+                            svControl('svClose', 'soforDetay', '');
                         }
                     }
-                }
+                });
+            } else {
+                alertify.error(jsDil.SilRed);
             }
         });
-        return true;
     },
     soforDetailKaydet: function () {
         var sofordetail_id = $("input[name=soforDetayID]").val();
@@ -653,7 +698,9 @@ $.AdminIslemler = {
         var farksofor = farkArray(SoforDetailVazgec[20], soforAracID);
         var farksoforlength = farksofor.length;
         if (SoforDetailVazgec[0] == soforDetayAd && SoforDetailVazgec[1] == soforDetaySoyad && SoforDetailVazgec[2] == soforDetayDurum && SoforDetailVazgec[3] == soforDetayLokasyon && SoforDetailVazgec[4] == soforDetayTelefon && SoforDetailVazgec[5] == soforDetayEmail && SoforDetailVazgec[6] == soforDetayAdres && SoforDetailVazgec[7] == soforDetayAciklama && SoforDetailVazgec[8] == soforDetayUlke && SoforDetailVazgec[9] == soforDetayIl && SoforDetailVazgec[10] == soforDetayIlce && SoforDetailVazgec[11] == soforDetaySemt && SoforDetailVazgec[12] == soforDetayMahalle && SoforDetailVazgec[13] == soforDetaySokak && SoforDetailVazgec[14] == soforDetayPostaKodu && SoforDetailVazgec[15] == soforDetayCaddeNo && farkbolgelength == 0 && farksoforlength == 0) {
-            alert("Lütfen değişiklik yaptığınıza emin olun.");
+            reset();
+            alertify.alert(jsDil.Degisiklik);
+            return false;
         } else {
             var soforBolgeLength = $('select#SoforDetaySelectBolge option:selected').val();
             if (soforBolgeLength) {
@@ -665,10 +712,13 @@ $.AdminIslemler = {
                         "soforDetaySokak": soforDetaySokak, "soforDetayPostaKodu": soforDetayPostaKodu, "soforDetayCaddeNo": soforDetayCaddeNo, "tip": "soforDetailKaydet"},
                     success: function (cevap) {
                         if (cevap.hata) {
-                            alert(cevap.hata);
+                            reset();
+                            alertify.alert(jsDil.Hata);
+                            return false;
                         } else {
-
                             disabledForm();
+                            reset();
+                            alertify.success(jsDil.SoforDuzenle);
                             var SelectBolgeOptions = new Array();
                             var SelectSoforOptions = new Array();
                             if (soforBolgeID.length > 0) {
@@ -736,7 +786,9 @@ $.AdminIslemler = {
                     }
                 });
             } else {
-                alert("Lütfen Bölge Seçiniz");
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
             }
         }
     }

@@ -5,11 +5,15 @@ $.ajaxSetup({
     dataType: "json",
     error: function (a, b) {
         if (b == "timeout")
-            alert("Ajax İsteği Zaman Aşımına Uğradı");
+            reset();
+        alertify.alert(jsDil.InternetBaglanti);
+        return false;
     },
     statusCode: {
         404: function () {
-            alert("Ajax dosyası bulunamadı");
+            reset();
+            alertify.alert(jsDil.InternetBaglanti);
+            return false;
         }
     }
 });
@@ -54,7 +58,9 @@ $(document).ready(function () {
             data: {"adminturRowid": adminturRowid, "tip": "adminTurDetaySecim"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     $('input[name=adminTurID]').val(adminturRowid);
                     //hem gidiş hem de dönüş vardır
@@ -175,11 +181,13 @@ $(document).ready(function () {
                 data: {"turBolgeID": turBolgeID, "tip": "turKurumSelect"},
                 success: function (cevap) {
                     if (cevap.hata) {
-                        alert(cevap.hata);
+                        reset();
+                        alertify.alert(jsDil.Hata);
+                        return false;
                     } else {
                         if (cevap.kurumSelect) {
                             var kurumlength = cevap.kurumSelect.KurumSelectID.length;
-                            SelectKurumOptions[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
+                            SelectKurumOptions[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: '-1'};
                             for (var b = 0; b < kurumlength; b++) {
                                 SelectKurumOptions[b + 1] = {label: cevap.kurumSelect.KurumSelectAd[b], title: cevap.kurumSelect.KurumSelectAd[b], id: cevap.kurumSelect.KurumSelectTip[b], location: cevap.kurumSelect.KurumSelectLokasyon[b], value: cevap.kurumSelect.KurumSelectID[b]};
                             }
@@ -214,7 +222,9 @@ $(document).ready(function () {
                                     data: {"turBolgeID": turBolgeID, "turKurumID": turKurumID, "turGunID[]": turGunID, "turSaat1ID": turSaat1ID, "turSaat2ID": turSaat2ID, "tip": "turAracSelect"},
                                     success: function (cevap) {
                                         if (cevap.hata) {
-                                            alert(cevap.hata);
+                                            reset();
+                                            alertify.alert(jsDil.Hata);
+                                            return false;
                                         } else {
                                             var SelectAracOptions = new Array();
                                             if (cevap.pasifArac) {
@@ -229,19 +239,29 @@ $(document).ready(function () {
                                     }
                                 });
                             } else {
-                                alert("Lütfen Saat Seçiniz");
+                                reset();
+                                alertify.alert(jsDil.Saat2Sec);
+                                return false;
                             }
                         } else {
-                            alert("Lütfen Saat Seçiniz");
+                            reset();
+                            alertify.alert(jsDil.Saat1Sec);
+                            return false;
                         }
                     } else {
-                        alert("Lütfen Gün Seçiniz");
+                        reset();
+                        alertify.alert(jsDil.GunSec);
+                        return false;
                     }
                 } else {
-                    alert("Lütfen Kurum Seçiniz");
+                    reset();
+                    alertify.alert(jsDil.KurumSec);
+                    return false;
                 }
             } else {
-                alert("Lütfen Bölge Seçiniz");
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
             }
         }
     });
@@ -250,7 +270,9 @@ $(document).ready(function () {
         onDropdownShow: function (event) {
             var turBolgeID = $('select#TurSelectBolge option[value!="0"]:selected').val();
             if (!turBolgeID) {
-                alert("Lütfen Bölge Seçiniz");
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
             }
         },
         onChange: function (option, checked, select) {
@@ -261,7 +283,9 @@ $(document).ready(function () {
                     data: {"turKurumID": turKurumID, "turKurumTip": turKurumTip, "tip": "turKurumSelectKisi"},
                     success: function (cevap) {
                         if (cevap.hata) {
-                            alert(cevap.hata);
+                            reset();
+                            alertify.alert(jsDil.Hata);
+                            return false;
                         } else {
                             MultipleMapArray = [];
                             var kurumLocation = $('select#TurSelectKurum option[value!="-1"]:selected').attr('location');
@@ -334,12 +358,14 @@ $(document).ready(function () {
                                         data: {"turBolgeID": turBolgeID, "turKurumID": turKurumID, "turGunID[]": turGunID, "turSaat1ID": turSaat1ID, "turSaat2ID": turSaat2ID, "aracID": aracID, "tip": "turSoforSelect"},
                                         success: function (cevap) {
                                             if (cevap.hata) {
-                                                alert(cevap.hata);
+                                                reset();
+                                                alertify.alert(jsDil.Hata);
+                                                return false;
                                             } else {
                                                 var SelectSoforOptions = new Array();
                                                 if (cevap.pasifSofor) {
                                                     var length = cevap.pasifSofor.length;
-                                                    SelectSoforOptions[0] = {label: 'Seçiniz', title: 'Seçiniz', value: -1};
+                                                    SelectSoforOptions[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: -1};
                                                     var a = 1;
                                                     for (var i = 0; i < length; i++) {
                                                         SelectSoforOptions[a] = {label: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, title: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, location: cevap.pasifSofor[i].turSoforLocation, value: cevap.pasifSofor[i].turSoforID};
@@ -352,22 +378,34 @@ $(document).ready(function () {
                                         }
                                     });
                                 } else {
-                                    alert("Lütfen Araç Seçiniz");
+                                    reset();
+                                    alertify.alert(jsDil.AracSec);
+                                    return false;
                                 }
                             } else {
-                                alert("Lütfen Saat Seçiniz");
+                                reset();
+                                alertify.alert(jsDil.Saat2Sec);
+                                return false;
                             }
                         } else {
-                            alert("Lütfen Saat Seçiniz");
+                            reset();
+                            alertify.alert(jsDil.Saat1Sec);
+                            return false;
                         }
                     } else {
-                        alert("Lütfen Gün Seçiniz");
+                        reset();
+                        alertify.alert(jsDil.GunSec);
+                        return false;
                     }
                 } else {
-                    alert("Lütfen Kurum Seçiniz");
+                    reset();
+                    alertify.alert(jsDil.KurumSec);
+                    return false;
                 }
             } else {
-                alert("Lütfen Bölge Seçiniz");
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
             }
         },
         onChange: function (option, checked, select) {
@@ -421,7 +459,7 @@ $(document).ready(function () {
                     '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00',
                     '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15',
                     '21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45');
-            SelectSaat1Options[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
+            SelectSaat1Options[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: '-1'};
             var saat2Length = SelectSaat1Value.length;
             for (var b = 0; b < saat2Length; b++) {
                 SelectSaat1Options[b + 1] = {label: SelectSaat1Text[b], title: SelectSaat1Text[b], value: SelectSaat1Value[b]};
@@ -448,7 +486,7 @@ $(document).ready(function () {
                         '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00',
                         '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15',
                         '21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45');
-                SelectSaat2Options[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
+                SelectSaat2Options[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: '-1'};
                 var saat2Length = SelectSaat2Value.length;
                 for (var b = 0; b < turSaatIndex; b++) {
                     SelectSaat2Options[b + 1] = {label: SelectSaat2Text[b], title: SelectSaat2Text[b], value: SelectSaat2Value[b], disabled: true};
@@ -459,7 +497,9 @@ $(document).ready(function () {
                 $('#TurSaat2').multiselect('refresh');
                 $('#TurSaat2').multiselect('dataprovider', SelectSaat2Options);
             } else {
-                alert("Lütfen Saat 1 Seçiniz");
+                reset();
+                alertify.alert(jsDil.Saat1Sec);
+                return false;
                 var SelectSaat2Optionss = new Array();
                 $('#TurSaat2').multiselect('dataprovider', SelectSaat2Optionss);
                 $('#TurSaat2').multiselect('refresh');
@@ -473,7 +513,9 @@ $(document).ready(function () {
             if (turSaatSelect) {
                 $('#TurSaat1').multiselect('refresh');
             } else {
-                alert("Lütfen Saat 1 Seçiniz");
+                reset();
+                alertify.alert(jsDil.Saat1Sec);
+                return false;
             }
         }
     });
@@ -496,7 +538,7 @@ $(document).ready(function () {
                     '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00',
                     '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15',
                     '21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45');
-            SelectSaat1Options[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
+            SelectSaat1Options[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: '-1'};
             var saat2Length = SelectSaat1Value.length;
             for (var b = 0; b < saat2Length; b++) {
                 if (SelectSaat1Value[b] == turSaatSelect1) {
@@ -528,7 +570,7 @@ $(document).ready(function () {
                         '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00',
                         '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15',
                         '21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45');
-                SelectSaat2Options[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
+                SelectSaat2Options[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: '-1'};
                 var saat2Length = SelectSaat2Value.length;
                 for (var b = 0; b < saat2Length; b++) {
                     if (SelectSaat2Value[b] <= turSaatSelect) {
@@ -544,7 +586,9 @@ $(document).ready(function () {
                 $('#TurDetayGidisSaat2').multiselect('refresh');
                 $('#TurDetayGidisSaat2').multiselect('dataprovider', SelectSaat2Options);
             } else {
-                alert("Lütfen Saat 1 Seçiniz");
+                reset();
+                alertify.alert(jsDil.Saat1Sec);
+                return false;
                 var SelectSaat2Optionss = new Array();
                 $('#TurSaat2').multiselect('dataprovider', SelectSaat2Optionss);
                 $('#TurSaat2').multiselect('refresh');
@@ -571,7 +615,7 @@ $(document).ready(function () {
                         '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00',
                         '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15',
                         '21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45');
-                SelectSaat2Options[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
+                SelectSaat2Options[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: '-1'};
                 var saat2Length = SelectSaat2Value.length;
                 for (var b = 0; b < saat2Length; b++) {
                     if (SelectSaat2Value[b] <= turSaatSelect) {
@@ -587,7 +631,9 @@ $(document).ready(function () {
                 $('#TurDetayGidisSaat2').multiselect('refresh');
                 $('#TurDetayGidisSaat2').multiselect('dataprovider', SelectSaat2Options);
             } else {
-                alert("Lütfen Saat 1 Seçiniz");
+                reset();
+                alertify.alert(jsDil.Saat1Sec);
+                return false;
                 var SelectSaat2Optionss = new Array();
                 $('#TurSaat2').multiselect('dataprovider', SelectSaat2Optionss);
                 $('#TurSaat2').multiselect('refresh');
@@ -613,7 +659,9 @@ $(document).ready(function () {
                             data: {"bolgeID": bolgeID, "kurumID": kurumID, "turGunID[]": turGunID, "turSaat1ID": turSaat1ID, "turSaat2ID": turSaat2ID, "tip": "turGidisAracSelect"},
                             success: function (cevap) {
                                 if (cevap.hata) {
-                                    alert(cevap.hata);
+                                    reset();
+                                    alertify.alert(jsDil.Hata);
+                                    return false;
                                 } else {
                                     var SelectAracOptions = new Array();
                                     var a = 1;
@@ -644,13 +692,19 @@ $(document).ready(function () {
                             }
                         });
                     } else {
-                        alert("Lütfen Saat2 Seçiniz");
+                        reset();
+                        alertify.alert(jsDil.Saat2Sec);
+                        return false;
                     }
                 } else {
-                    alert("Lütfen Saat1 Seçiniz");
+                    reset();
+                    alertify.alert(jsDil.Saat1Sec);
+                    return false;
                 }
             } else {
-                alert("Lütfen Gün Seçiniz");
+                reset();
+                alertify.alert(jsDil.GunSec);
+                return false;
             }
         }
     });
@@ -675,7 +729,9 @@ $(document).ready(function () {
                                 data: {"bolgeID": bolgeID, "kurumID": kurumID, "turGunID[]": turGunID, "turSaat1ID": turSaat1ID, "turSaat2ID": turSaat2ID, "aracID": aracID, "tip": "turGidisSoforSelect"},
                                 success: function (cevap) {
                                     if (cevap.hata) {
-                                        alert(cevap.hata);
+                                        reset();
+                                        alertify.alert(jsDil.Hata);
+                                        return false;
                                     } else {
                                         var SelectSoforOptions = new Array();
                                         var soforLocation = $('input[name=GidisSoforInput]').val();
@@ -691,7 +747,7 @@ $(document).ready(function () {
                                                     }
                                                 }
                                             } else {
-                                                SelectSoforOptions[0] = {label: 'Seçiniz', title: 'Seçiniz', value: -1};
+                                                SelectSoforOptions[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: -1};
                                                 var a = 1;
                                                 for (var i = 0; i < length; i++) {
                                                     SelectSoforOptions[a] = {label: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, title: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, location: cevap.pasifSofor[i].turSoforLocation, value: cevap.pasifSofor[i].turSoforID};
@@ -709,16 +765,24 @@ $(document).ready(function () {
                                 }
                             });
                         } else {
-                            alert("Lütfen Araç Seçiniz");
+                            reset();
+                            alertify.alert(jsDil.AracSec);
+                            return false;
                         }
                     } else {
-                        alert("Lütfen Saat2 Seçiniz");
+                        reset();
+                        alertify.alert(jsDil.Saat2Sec);
+                        return false;
                     }
                 } else {
-                    alert("Lütfen Saat1 Seçiniz");
+                    reset();
+                    alertify.alert(jsDil.Saat1Sec);
+                    return false;
                 }
             } else {
-                alert("Lütfen Gün Seçiniz");
+                reset();
+                alertify.alert(jsDil.GunSec);
+                return false;
             }
         },
         onChange: function (option, checked, select) {
@@ -756,7 +820,7 @@ $(document).ready(function () {
                     '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00',
                     '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15',
                     '21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45');
-            SelectSaat1Options[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
+            SelectSaat1Options[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: '-1'};
             var saat2Length = SelectSaat1Value.length;
             for (var b = 0; b < saat2Length; b++) {
                 if (SelectSaat1Value[b] == turSaatSelect1) {
@@ -788,7 +852,7 @@ $(document).ready(function () {
                         '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00',
                         '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15',
                         '21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45');
-                SelectSaat2Options[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
+                SelectSaat2Options[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: '-1'};
                 var saat2Length = SelectSaat2Value.length;
                 for (var b = 0; b < saat2Length; b++) {
                     if (SelectSaat2Value[b] <= turSaatSelect) {
@@ -804,7 +868,9 @@ $(document).ready(function () {
                 $('#TurDetayDonusSaat2').multiselect('refresh');
                 $('#TurDetayDonusSaat2').multiselect('dataprovider', SelectSaat2Options);
             } else {
-                alert("Lütfen Saat 1 Seçiniz");
+                reset();
+                alertify.alert(jsDil.Saat1Sec);
+                return false;
                 var SelectSaat2Optionss = new Array();
                 $('#TurSaat2').multiselect('dataprovider', SelectSaat2Optionss);
                 $('#TurSaat2').multiselect('refresh');
@@ -831,7 +897,7 @@ $(document).ready(function () {
                         '15:00', '15:15', '15:30', '15:45', '16:00', '16:15', '16:30', '16:45', '17:00', '17:15', '17:30', '17:45', '18:00',
                         '18:15', '18:30', '18:45', '19:00', '19:15', '19:30', '19:45', '20:00', '20:15', '20:30', '20:45', '21:00', '21:15',
                         '21:30', '21:45', '22:00', '22:15', '22:30', '22:45', '23:00', '23:15', '23:30', '23:45');
-                SelectSaat2Options[0] = {label: 'Seçiniz', title: 'Seçiniz', value: '-1'};
+                SelectSaat2Options[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: '-1'};
                 var saat2Length = SelectSaat2Value.length;
                 for (var b = 0; b < saat2Length; b++) {
                     if (SelectSaat2Value[b] <= turSaatSelect) {
@@ -847,7 +913,9 @@ $(document).ready(function () {
                 $('#TurDetayDonusSaat2').multiselect('refresh');
                 $('#TurDetayDonusSaat2').multiselect('dataprovider', SelectSaat2Options);
             } else {
-                alert("Lütfen Saat 1 Seçiniz");
+                reset();
+                alertify.alert(jsDil.Saat1Sec);
+                return false;
                 var SelectSaat2Optionss = new Array();
                 $('#TurSaat2').multiselect('dataprovider', SelectSaat2Optionss);
                 $('#TurSaat2').multiselect('refresh');
@@ -873,7 +941,9 @@ $(document).ready(function () {
                             data: {"bolgeID": bolgeID, "kurumID": kurumID, "turGunID[]": turGunID, "turSaat1ID": turSaat1ID, "turSaat2ID": turSaat2ID, "tip": "turDonusAracSelect"},
                             success: function (cevap) {
                                 if (cevap.hata) {
-                                    alert(cevap.hata);
+                                    reset();
+                                    alertify.alert(jsDil.Hata);
+                                    return false;
                                 } else {
                                     var SelectAracOptions = new Array();
                                     var a = 1;
@@ -903,13 +973,19 @@ $(document).ready(function () {
                             }
                         });
                     } else {
-                        alert("Lütfen Saat2 Seçiniz");
+                        reset();
+                        alertify.alert(jsDil.Saat2Sec);
+                        return false;
                     }
                 } else {
-                    alert("Lütfen Saat1 Seçiniz");
+                    reset();
+                    alertify.alert(jsDil.Saat1Sec);
+                    return false;
                 }
             } else {
-                alert("Lütfen Gün Seçiniz");
+                reset();
+                alertify.alert(jsDil.GunSec);
+                return false;
             }
         }
     });
@@ -934,7 +1010,9 @@ $(document).ready(function () {
                                 data: {"bolgeID": bolgeID, "kurumID": kurumID, "turGunID[]": turGunID, "turSaat1ID": turSaat1ID, "turSaat2ID": turSaat2ID, "aracID": aracID, "tip": "turDonusSoforSelect"},
                                 success: function (cevap) {
                                     if (cevap.hata) {
-                                        alert(cevap.hata);
+                                        reset();
+                                        alertify.alert(jsDil.Hata);
+                                        return false;
                                     } else {
                                         var SelectSoforOptions = new Array();
                                         var soforLocation = $('input[name=DonusSoforInput]').val();
@@ -950,7 +1028,7 @@ $(document).ready(function () {
                                                     }
                                                 }
                                             } else {
-                                                SelectSoforOptions[0] = {label: 'Seçiniz', title: 'Seçiniz', value: -1};
+                                                SelectSoforOptions[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: -1};
                                                 var a = 1;
                                                 for (var i = 0; i < length; i++) {
                                                     SelectSoforOptions[a] = {label: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, title: cevap.pasifSofor[i].turSoforAd + ' ' + cevap.pasifSofor[i].turSoforSoyad, location: cevap.pasifSofor[i].turSoforLocation, value: cevap.pasifSofor[i].turSoforID};
@@ -968,16 +1046,24 @@ $(document).ready(function () {
                                 }
                             });
                         } else {
-                            alert("Lütfen Araç Seçiniz");
+                            reset();
+                            alertify.alert(jsDil.AracSec);
+                            return false;
                         }
                     } else {
-                        alert("Lütfen Saat2 Seçiniz");
+                        reset();
+                        alertify.alert(jsDil.Saat2Sec);
+                        return false;
                     }
                 } else {
-                    alert("Lütfen Saat1 Seçiniz");
+                    reset();
+                    alertify.alert(jsDil.Saat1Sec);
+                    return false;
                 }
             } else {
-                alert("Lütfen Gün Seçiniz");
+                reset();
+                alertify.alert(jsDil.GunSec);
+                return false;
             }
         },
         onChange: function (option, checked, select) {
@@ -1013,7 +1099,9 @@ $.AdminIslemler = {
             data: {"tip": "turBolgeEkleSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     if (cevap.adminTurBolgee) {
                         var length = cevap.adminTurBolgee.length;
@@ -1031,7 +1119,9 @@ $.AdminIslemler = {
                     $('#TurSofor').multiselect();
                     var selectLength = $('#TurSelectBolge > option').length;
                     if (!selectLength) {
-                        alert("Lütfen Öncelikle Bölge İşlemlerine Gidip Yeni Bölge Oluşturunuz");
+                        reset();
+                        alertify.alert(jsDil.KurumAd);
+                        return false;
                     }
                 }
             }
@@ -1040,7 +1130,9 @@ $.AdminIslemler = {
     },
     adminTurKaydet: function () {
         if (locations.length < 2) {
-            alert("Lütfen Turlarınızı Oluşturunuz");
+            reset();
+            alertify.alert(jsDil.TurOlustur);
+            return false;
         } else {
             var turGidis = $("input[name=TurGidis]").val();
             var turDonus = $("input[name=TurDonus]").val();
@@ -1086,10 +1178,14 @@ $.AdminIslemler = {
                                                         "turKisiIsciAd[]": KisiIsciAd, "turKisiIsciLocation[]": KisiIsciLocation, "turKisiIsciSira[]": KisiIsciSira, "tip": "turKaydet"},
                                                     success: function (cevap) {
                                                         if (cevap.hata) {
-                                                            alert(cevap.hata);
+                                                            reset();
+                                                            alertify.alert(jsDil.Hata);
+                                                            return false;
                                                         } else {
                                                             kayitDeger = 1;
                                                             if (cevap.turGidis) {
+                                                                reset();
+                                                                alertify.success(jsDil.GidisTur);
                                                                 $("input[name=TurGidis]").val(cevap.turGidis);
                                                                 $('#TurSelectTip').multiselect('deselect', '0', true);
                                                                 var dropdown = $('#TurSelectTip').siblings('.multiselect-container');
@@ -1101,6 +1197,8 @@ $.AdminIslemler = {
                                                                 $('#TurSelectTip').multiselect('select', '1', true);
                                                             }
                                                             if (cevap.turDonus) {
+                                                                reset();
+                                                                alertify.success(jsDil.DonusTur);
                                                                 $("input[name=TurDonus]").val(cevap.turDonus);
                                                                 $('#TurSelectTip').multiselect('deselect', '1', true);
                                                                 var dropdown = $('#TurSelectTip').siblings('.multiselect-container');
@@ -1119,6 +1217,8 @@ $.AdminIslemler = {
                                                             var turDonusu = $("input[name=TurDonus]").val();
                                                             if (turGidisi != '' && turDonusu != '') {
                                                                 //iki işlemde yapıldı ise kapanıyor direkt
+                                                                reset();
+                                                                alertify.success(jsDil.GidisDonusTur);
                                                                 svControl('svClose', 'tur', '');
                                                             } else {
                                                                 //işlemlerde eksik varsa kalıyor sayfa
@@ -1147,31 +1247,49 @@ $.AdminIslemler = {
                                                     }
                                                 });
                                             } else {
-                                                alert("Lütfen Şoför Seçiniz");
+                                                reset();
+                                                alertify.alert(jsDil.SoforSec);
+                                                return false;
                                             }
                                         } else {
-                                            alert("Lütfen Araç Seçiniz");
+                                            reset();
+                                            alertify.alert(jsDil.AracSec);
+                                            return false;
                                         }
                                     } else {
-                                        alert("Lütfen Saat Seçiniz");
+                                        reset();
+                                        alertify.alert(jsDil.Saat2Sec);
+                                        return false;
                                     }
                                 } else {
-                                    alert("Lütfen Saat Seçiniz");
+                                    reset();
+                                    alertify.alert(jsDil.Saat1Sec);
+                                    return false;
                                 }
                             } else {
-                                alert("Lütfen Gün Seçiniz");
+                                reset();
+                                alertify.alert(jsDil.GunSec);
+                                return false;
                             }
                         } else {
-                            alert("Lütfen Kurum Seçiniz");
+                            reset();
+                            alertify.alert(jsDil.KurumSec);
+                            return false;
                         }
                     } else {
-                        alert("Lütfen Bölge Seçiniz");
+                        reset();
+                        alertify.alert(jsDil.BolgeSec);
+                        return false;
                     }
                 } else {
-                    alert("Tur Adı Boş Geçilemez");
+                    reset();
+                    alertify.alert(jsDil.TurAd);
+                    return false;
                 }
             } else {
-                alert("Gidiş ve Dönüş Tur Eklemesini yapmışsınız");
+                reset();
+                alertify.alert(jsDil.GidisDonusTurEkleme);
+                return false;
             }
         }
     },
@@ -1182,7 +1300,9 @@ $.AdminIslemler = {
         var kurum_location = $("input[name=adminKurumDetailLocation]").val();
         var kurum_adi = $("input[name=KurumDetailAdi]").val();
         if (!kurum_location) {
-            alert("Kurumunuza ait lokasyon bilgisi bulunmamaktadır");
+            reset();
+            alertify.alert(jsDil.KurumLokasyonYok);
+            return false;
         } else {
             var count = $('table#adminBolgeKurumTable > tbody > tr').length;
             var MapValue = $(this).attr('value');
@@ -1202,7 +1322,9 @@ $.AdminIslemler = {
             data: {"turID": turID, "gidisTipID": gidisTipID, "turTip": turTip, "kurumID": kurumID, "tip": "adminTurDetayGidis"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     //Saat1
                     var SelectSaat1Options = new Array();
@@ -1519,7 +1641,9 @@ $.AdminIslemler = {
         var farkturharita = farkArray(turGidisDetailEdt[12], yeniID);
         var farkharita = farkturharita.length;
         if (turGidisDetailEdt[0] == turAdi && turGidisDetailEdt[1] == turAciklama && turGidisDetailEdt[2] == aracID && turGidisDetailEdt[4] == soforID && turGidisDetailEdt[6] == turSaat1 && turGidisDetailEdt[8] == turSaat2 && farkturgunlength == 0 && farkharita == 0) {
-            alert("Lütfen değişiklik yaptığınıza emin olun.");
+            reset();
+            alertify.alert(jsDil.Degisiklik);
+            return false;
         } else {
             var turSaat1ID = $('select#TurDetayGidisSaat1 option[value!="-1"]:selected').val();
             if (turSaat1ID) {
@@ -1534,10 +1658,14 @@ $.AdminIslemler = {
                             "turKisiIsciAd[]": KisiIsciAd, "turKisiIsciLocation[]": KisiIsciLocation, "turKisiIsciSira[]": KisiIsciSira, "tip": "turGidisDKaydet"},
                         success: function (cevap) {
                             if (cevap.hata) {
-                                alert(cevap.hata);
+                                reset();
+                                alertify.alert(jsDil.Hata);
+                                return false;
                             } else {
                                 kayitDegerGidis = 1;
                                 disabledForm();
+                                reset();
+                                alertify.success(jsDil.GidisTurDuzenle);
                                 $('input[name=adminTurDetayGds]').val(cevap.turGidisID);
                                 $('#TurDetayGidisGun').multiselect('disable');
                                 //saat1
@@ -1562,41 +1690,56 @@ $.AdminIslemler = {
                         }
                     });
                 } else {
-                    alert("Lütfen Saat2 Seçiniz");
+                    reset();
+                    alertify.alert(jsDil.Saat2Sec);
+                    return false;
                 }
             } else {
-                alert("Lütfen Saat1 Seçiniz");
+                reset();
+                alertify.alert(jsDil.Saat1Sec);
+                return false;
             }
         }
     },
     turGidisDetailSil: function () {
-        var turID = $('input[name=adminTurID]').val();
-        var kurumTip = $('input[name=adminTurDetayTip]').val();
-        $.ajax({
-            data: {"turID": turID, "kurumTip": kurumTip, "tip": "turDetailDelete"},
-            success: function (cevap) {
-                if (cevap.hata) {
-                    alert(cevap.hata);
-                } else {
-                    disabledForm();
+        reset();
+        alertify.confirm(jsDil.SilOnay, function (e) {
+            if (e) {
+                var turID = $('input[name=adminTurID]').val();
+                var kurumTip = $('input[name=adminTurDetayTip]').val();
+                $.ajax({
+                    data: {"turID": turID, "kurumTip": kurumTip, "tip": "turDetailDelete"},
+                    success: function (cevap) {
+                        if (cevap.hata) {
+                            reset();
+                            alertify.alert(jsDil.Hata);
+                            return false;
+                        } else {
+                            disabledForm();
 
-                    var turCount = $('#smallTur').text();
-                    turCount--;
-                    $('#smallTur').text(turCount);
-                    var length = $('tbody#adminTurRow tr').length;
-                    for (var t = 0; t < length; t++) {
-                        var attrValueId = $("tbody#adminTurRow > tr > td > a").eq(t).attr('value');
-                        if (attrValueId == turID) {
-                            var deleteRow = $('tbody#adminTurRow > tr:eq(' + t + ')');
-                            TurTable.DataTable().row($(deleteRow)).remove().draw();
+                            var turCount = $('#smallTur').text();
+                            turCount--;
+                            $('#smallTur').text(turCount);
+                            var length = $('tbody#adminTurRow tr').length;
+                            for (var t = 0; t < length; t++) {
+                                var attrValueId = $("tbody#adminTurRow > tr > td > a").eq(t).attr('value');
+                                if (attrValueId == turID) {
+                                    var deleteRow = $('tbody#adminTurRow > tr:eq(' + t + ')');
+                                    TurTable.DataTable().row($(deleteRow)).remove().draw();
+                                }
+                            }
+                            //altta bulunan seçim pencerisini kapatma
+                            reset();
+                            alertify.success(jsDil.SilEvet);
+                            svControl('svClose', 'turSecim', '');
+                            svControl('svClose', 'turDetayGidis', '');
                         }
                     }
-                    //altta bulunan seçim pencerisini kapatma
-                    svControl('svClose', 'turSecim', '');
-                }
+                });
+            } else {
+                alertify.error(jsDil.SilRed);
             }
         });
-        return true;
     },
     adminTurDetayDonus: function () {
         disabledForm();
@@ -1608,7 +1751,9 @@ $.AdminIslemler = {
             data: {"turID": turID, "donusTipID": donusTipID, "turTip": turTip, "kurumID": kurumID, "tip": "adminTurDetayDonus"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    alert(cevap.hata);
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
                 } else {
                     //Saat1
                     var SelectSaat1Options = new Array();
@@ -1891,33 +2036,43 @@ $.AdminIslemler = {
         $('#TurDetayDonusSofor').multiselect('disable');
     },
     turDonusDetailSil: function () {
-        var turID = $('input[name=adminTurID]').val();
-        var kurumTip = $('input[name=adminTurDetayTip]').val();
-        $.ajax({
-            data: {"turID": turID, "kurumTip": kurumTip, "tip": "turDetailDelete"},
-            success: function (cevap) {
-                if (cevap.hata) {
-                    alert(cevap.hata);
-                } else {
-                    disabledForm();
-
-                    var turCount = $('#smallTur').text();
-                    turCount--;
-                    $('#smallTur').text(turCount);
-                    var length = $('tbody#adminTurRow tr').length;
-                    for (var t = 0; t < length; t++) {
-                        var attrValueId = $("tbody#adminTurRow > tr > td > a").eq(t).attr('value');
-                        if (attrValueId == turID) {
-                            var deleteRow = $('tbody#adminTurRow > tr:eq(' + t + ')');
-                            TurTable.DataTable().row($(deleteRow)).remove().draw();
+        reset();
+        alertify.confirm(jsDil.SilOnay, function (e) {
+            if (e) {
+                var turID = $('input[name=adminTurID]').val();
+                var kurumTip = $('input[name=adminTurDetayTip]').val();
+                $.ajax({
+                    data: {"turID": turID, "kurumTip": kurumTip, "tip": "turDetailDelete"},
+                    success: function (cevap) {
+                        if (cevap.hata) {
+                            reset();
+                            alertify.alert(jsDil.Hata);
+                            return false;
+                        } else {
+                            disabledForm();
+                            var turCount = $('#smallTur').text();
+                            turCount--;
+                            $('#smallTur').text(turCount);
+                            var length = $('tbody#adminTurRow tr').length;
+                            for (var t = 0; t < length; t++) {
+                                var attrValueId = $("tbody#adminTurRow > tr > td > a").eq(t).attr('value');
+                                if (attrValueId == turID) {
+                                    var deleteRow = $('tbody#adminTurRow > tr:eq(' + t + ')');
+                                    TurTable.DataTable().row($(deleteRow)).remove().draw();
+                                }
+                            }
+                            //altta bulunan seçim pencerisini kapatma
+                            reset();
+                            alertify.success(jsDil.SilEvet);
+                            svControl('svClose', 'turSecim', '');
+                            svControl('svClose', 'turDetayDonus', '');
                         }
                     }
-                    //altta bulunan seçim pencerisini kapatma
-                    svControl('svClose', 'turSecim', '');
-                }
+                });
+            } else {
+                alertify.error(jsDil.SilRed);
             }
         });
-        return true;
     },
     turDonusDetailKaydet: function () {
         //Tur Gidiş İşlemleri Değerleri
@@ -1955,7 +2110,9 @@ $.AdminIslemler = {
         var farkharita = farkturharita.length;
         console.log(turDonusDetailEdt);
         if (turDonusDetailEdt[0] == turAdi && turDonusDetailEdt[1] == turAciklama && turDonusDetailEdt[2] == aracID && turDonusDetailEdt[4] == soforID && turDonusDetailEdt[6] == turSaat1 && turDonusDetailEdt[8] == turSaat2 && farkturgunlength == 0 && farkharita == 0) {
-            alert("Lütfen değişiklik yaptığınıza emin olun.");
+            reset();
+            alertify.alert(jsDil.Degisiklik);
+            return false;
         } else {
             var turSaat1ID = $('select#TurDetayDonusSaat1 option[value!="-1"]:selected').val();
             if (turSaat1ID) {
@@ -1970,10 +2127,14 @@ $.AdminIslemler = {
                             "turKisiIsciAd[]": KisiIsciAd, "turKisiIsciLocation[]": KisiIsciLocation, "turKisiIsciSira[]": KisiIsciSira, "tip": "turDonusKaydet"},
                         success: function (cevap) {
                             if (cevap.hata) {
-                                alert(cevap.hata);
+                                reset();
+                                alertify.alert(jsDil.Hata);
+                                return false;
                             } else {
                                 kayitDegerDonus = 1;
                                 disabledForm();
+                                reset();
+                                alertify.success(jsDil.DonusTurDuzenle);
                                 $('input[name=adminTurDetayDns]').val(cevap.turDonusID);
                                 $('#TurDetayDonusGun').multiselect('disable');
                                 //saat1
@@ -1998,13 +2159,17 @@ $.AdminIslemler = {
                         }
                     });
                 } else {
-                    alert("Lütfen Saat2 Seçiniz");
+                    reset();
+                    alertify.alert(jsDil.Saat2Sec);
+                    return false;
                 }
             } else {
-                alert("Lütfen Saat1 Seçiniz");
+                reset();
+                alertify.alert(jsDil.Saat1Sec);
+                return false;
             }
         }
-    },
+    }
 }
 
 

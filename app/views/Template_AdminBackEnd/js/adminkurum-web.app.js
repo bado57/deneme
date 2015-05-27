@@ -130,8 +130,6 @@ function svControl(dtype, dclass, dislemler) {
             case 'adminKurumTurYeni' :
                 var returnCevap = $.AdminIslemler.adminKurumTurYeni();
                 isMap = false;
-            case 'adminKurumTurDetail' :
-                var returnCevap = $.AdminIslemler.adminKurumTurDetail();
                 break;
             case 'adminTurDetayGidis' :
                 var returnCevap = $.AdminIslemler.adminKurumTurDetayGidis();
@@ -1389,10 +1387,6 @@ function multipleKurumTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, sofo
         //id öğrenci arama
         function idOgrenciTurArama(aranacak) {
             var indexNumber;
-
-            console.log(KisiOgrenciID);
-            console.log(KisiOgrenciLocation);
-            console.log(aranacak);
             for (var index = 0; index < KisiOgrenciID.length; index++) {
                 if (KisiOgrenciID[index] == aranacak) {
                     indexNumber = index;
@@ -1402,10 +1396,6 @@ function multipleKurumTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, sofo
             KisiOgrenciAd.splice(indexNumber, 1);
             KisiOgrenciLocation.splice(indexNumber, 1);
             KisiOgrenciSira.splice(indexNumber, 1);
-            console.log(KisiOgrenciID);
-            console.log(KisiOgrenciAd);
-            console.log(KisiOgrenciLocation);
-            console.log(KisiOgrenciSira);
 
         }
         //id işçi arama
