@@ -247,6 +247,12 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //admin hostes bölge select listele
+    public function hostesBolgeListelee() {
+        $sql = "SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler ORDER BY SBBolgeAdi ASC";
+        return($this->db->select($sql));
+    }
+
     //admine göre arac bölge select listele
     public function adminAracBolgeListele($adminID) {
         $sql = "SELECT BSBolgeID FROM bsadminbolge Where BSAdminID=" . $adminID;
@@ -483,15 +489,27 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
-    //admin aktif arac listele
+    //admin şoför listele
     public function soforCountListele() {
         $sql = 'SELECT COUNT(*) FROM bssofor';
         return($this->db->select($sql));
     }
 
-    //admin bölgeler listele
+    //admin  hostes listele
+    public function hostesCountListele() {
+        $sql = 'SELECT COUNT(*) FROM bshostes';
+        return($this->db->select($sql));
+    }
+
+    //admin rutbeye göre şoför listele
     public function rutbeSoforCount($array = array()) {
         $sql = 'SELECT COUNT(DISTINCT(BSSoforID)) FROM bssoforbolge Where BSBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin rutbeye göre hostes listele
+    public function rutbeHostesCount($array = array()) {
+        $sql = 'SELECT COUNT(DISTINCT(BSHostesID)) FROM bshostesbolge Where BSBolgeID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
@@ -501,15 +519,33 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //hostes listele
+    public function hostesListele() {
+        $sql = "SELECT BSHostesID,BSHostesAd,BSHostesSoyad,BSHostesPhone,BSHostesEmail,Status,BSHostesAciklama FROM bshostes ORDER BY BSHostesAd ASC";
+        return($this->db->select($sql));
+    }
+
     //şoför bölgeler listele
     public function soforBolgeListele($array = array()) {
         $sql = 'SELECT DISTINCT BSSoforID FROM bssoforbolge Where BSBolgeID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
+    //hostes bölgeler listele
+    public function hostesBolgeListele($array = array()) {
+        $sql = 'SELECT DISTINCT BSHostesID FROM bshostesbolge Where BSBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
     //rutbe şofor listele
     public function rutbeSoforListele($array = array()) {
         $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad,BSSoforPhone,BSSoforEmail,Status,BSSoforAciklama FROM bssofor Where BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
+        return($this->db->select($sql));
+    }
+
+    //rutbe hostes listele
+    public function rutbeHostesListele($array = array()) {
+        $sql = 'SELECT BSHostesID,BSHostesAd,BSHostesSoyad,BSHostesPhone,BSHostesEmail,Status,BSHostesAciklama FROM bshostes Where BSHostesID IN (' . $array . ') ORDER BY BSHostesAd ASC';
         return($this->db->select($sql));
     }
 
@@ -531,9 +567,20 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //admin hostes bölge select listele
+    public function hostesRutbeBolgeListele($array = array()) {
+        $sql = 'SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
+        return($this->db->select($sql));
+    }
+
     //yeni şoför Kaydet
     public function addNewSofor($data) {
         return ($this->db->insert("bssofor", $data));
+    }
+
+    //yeni hostes Kaydet
+    public function addNewHostes($data) {
+        return ($this->db->insert("bshostes", $data));
     }
 
     //şoför  bölge  kaydet
@@ -541,14 +588,29 @@ class Panel_Model extends Model {
         return ($this->db->multiInsert('bssoforbolge', $data));
     }
 
-    //şoför  bölge  kaydet
+    //hostes  bölge  kaydet
+    public function addNewBolgeHostes($data) {
+        return ($this->db->multiInsert('bshostesbolge', $data));
+    }
+
+    //şoför  araç  kaydet
     public function addNewAracSofor($data) {
         return ($this->db->multiInsert('bsaracsofor', $data));
     }
 
-    //admin delete
+    //hostes  araç  kaydet
+    public function addNewAracHostes($data) {
+        return ($this->db->multiInsert('bsarachostes', $data));
+    }
+
+    //şoör delete
     public function soforDelete($soforID) {
         return ($this->db->delete("bssofor", "BSSoforID=$soforID"));
+    }
+
+    //hostes delete
+    public function hostesDelete($soforID) {
+        return ($this->db->delete("bshostes", "BSHostesID=$soforID"));
     }
 
     //arac detail bölgeler listele
@@ -599,8 +661,20 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //seçili hostes bolge listele
+    public function hostesDetailBolge($hostesID) {
+        $sql = 'SELECT BSBolgeID,BSBolgeAdi FROM bshostesbolge WHERE BSHostesID=' . $hostesID;
+        return($this->db->select($sql));
+    }
+
     //şoför select dışı bölge listele
     public function soforDetailSBolge($array = array()) {
+        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //hostes select dışı bölge listele
+    public function hostesDetailSBolge($array = array()) {
         $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
         return($this->db->select($sql));
     }
@@ -611,8 +685,20 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //seçili hostes arac listele
+    public function adminDetailHostesArac($hostesID) {
+        $sql = 'SELECT BSAracID,BSAracPlaka FROM bsarachostes WHERE BSHostesID=' . $hostesID;
+        return($this->db->select($sql));
+    }
+
     //admin select dışı bölge listele
     public function adminSelectSoforBolge($arraybolge = array(), $arrayarac = array()) {
+        $sql = 'SELECT SBAracID,SBAracPlaka FROM sbaracbolge WHERE SBBolgeID IN (' . $arraybolge . ') AND SBAracID NOT IN (' . $arrayarac . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin select dışı bölge listele
+    public function adminSelectHostesBolge($arraybolge = array(), $arrayarac = array()) {
         $sql = 'SELECT SBAracID,SBAracPlaka FROM sbaracbolge WHERE SBBolgeID IN (' . $arraybolge . ') AND SBAracID NOT IN (' . $arrayarac . ')';
         return($this->db->select($sql));
     }
@@ -629,9 +715,21 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //hostes detail özellik
+    public function hostesDetail($hostesID) {
+        $sql = 'SELECT * FROM bshostes WHERE BSHostesID=' . $hostesID . ' ORDER BY BSHostesAd ASC';
+        return($this->db->select($sql));
+    }
+
     //seçili şoför bolge listele
     public function adminDetailSoforBolge($soforID) {
         $sql = 'SELECT BSBolgeID,BSBolgeAdi FROM bssoforbolge WHERE BSSoforID=' . $soforID;
+        return($this->db->select($sql));
+    }
+
+    //seçili hostes bolge listele
+    public function adminDetailHostesBolge($hostesID) {
+        $sql = 'SELECT BSBolgeID,BSBolgeAdi FROM bshostesbolge WHERE BSHostesID=' . $hostesID;
         return($this->db->select($sql));
     }
 
@@ -640,9 +738,19 @@ class Panel_Model extends Model {
         return ($this->db->delete("bssofor", "BSSoforID=$soforDetailID"));
     }
 
+    //hostes detail  delete
+    public function detailHostesDelete($hostesDetailID) {
+        return ($this->db->delete("bshostes", "BSHostesID=$hostesDetailID"));
+    }
+
     //sofor arac detail  delete
     public function detailSoforAracDelete($soforDetailID) {
         return ($this->db->delete("bsaracsofor", "BSSoforID=$soforDetailID"));
+    }
+
+    //hostes arac detail  delete
+    public function detailHostesAracDelete($hostesDetailID) {
+        return ($this->db->delete("bsarachostes", "BSHostesID=$hostesDetailID"));
     }
 
     //şoför bolge detail  delete
@@ -650,9 +758,19 @@ class Panel_Model extends Model {
         return ($this->db->delete("bssoforbolge", "BSSoforID=$soforDetailID"));
     }
 
+    //hostes bolge detail  delete
+    public function detailHostesBolgeDelete($hostesDetailID) {
+        return ($this->db->delete("bshostesbolge", "BSHostesID=$hostesDetailID"));
+    }
+
     //admin şoför özellikleri düzenleme
     public function soforOzelliklerDuzenle($data, $soforID) {
         return ($this->db->update("bssofor", $data, "BSSoforID=" . $soforID));
+    }
+
+    //admin hostes özellikleri düzenleme
+    public function hostesOzelliklerDuzenle($data, $hostesID) {
+        return ($this->db->update("bshostes", $data, "BSHostesID=" . $hostesID));
     }
 
     //şöfor arac çoklu delete delete
@@ -660,9 +778,19 @@ class Panel_Model extends Model {
         return ($this->db->delete("bsaracsofor", "BSSoforID=$soforID"));
     }
 
+    //hostes arac çoklu delete delete
+    public function adminHostesAracDelete($hostesID) {
+        return ($this->db->delete("bsarachostes", "BSHostesID=$hostesID"));
+    }
+
     //admin  şofor araç kaydet
     public function addNewSoforArac($data) {
         return ($this->db->multiInsert('bsaracsofor', $data));
+    }
+
+    //admin  hostes araç kaydet
+    public function addNewHostesArac($data) {
+        return ($this->db->multiInsert('bsarachostes', $data));
     }
 
     //admin şoför bolge detail  delete
@@ -670,14 +798,30 @@ class Panel_Model extends Model {
         return ($this->db->delete("bssoforbolge", "BSSoforID=$soforDetailID"));
     }
 
+    //admin hostes bolge detail  delete
+    public function adminDetailHostesBolgeDelete($hostesDetailID) {
+        return ($this->db->delete("bshostesbolge", "BSHostesID=$hostesDetailID"));
+    }
+
     //admin şoför  bölge  kaydet
     public function addNewSoforBolge($data) {
         return ($this->db->multiInsert('bssoforbolge', $data));
     }
 
+    //admin hostes  bölge  kaydet
+    public function addNewHostesBolge($data) {
+        return ($this->db->multiInsert('bshostesbolge', $data));
+    }
+
     //şoför seçili arac
     public function soforDetailMultiSelectSofor($soforID) {
         $sql = 'SELECT BSAracID FROM bsaracsofor WHERE BSSoforID=' . $soforID;
+        return($this->db->select($sql));
+    }
+
+    //hostes seçili arac
+    public function hostesDetailMultiSelectHostes($hostesID) {
+        $sql = 'SELECT BSAracID FROM bsarachostes WHERE BSHostesID=' . $hostesID;
         return($this->db->select($sql));
     }
 
@@ -689,6 +833,12 @@ class Panel_Model extends Model {
 
     //arac seçili olmayan şoförler
     public function soforNotSelectArac($array = array()) {
+        $sql = 'SELECT SBAracID,SBAracPlaka FROM sbarac WHERE SBAracID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //arac seçili olmayan hostesler
+    public function hostesNotSelectArac($array = array()) {
         $sql = 'SELECT SBAracID,SBAracPlaka FROM sbarac WHERE SBAracID IN (' . $array . ')';
         return($this->db->select($sql));
     }

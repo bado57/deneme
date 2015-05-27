@@ -382,10 +382,12 @@ class AdminWeb extends Controller {
             if ($adminRutbe != 0) {
                 $adminCount = $Panel_Model->adminCountListele($adminID);
                 $adminCount["SoforCount"] = $Panel_Model->soforCountListele();
+                $adminCount["HostesCount"] = $Panel_Model->hostesCountListele();
                 $adminCount["IsciCount"] = $Panel_Model->isciCountListele();
                 $adminCount["VeliCount"] = $Panel_Model->veliCountListele();
                 $adminCount["OgrenciCount"] = $Panel_Model->ogrenciCountListele();
                 $adminCount["SoforCount"] = $adminCount["SoforCount"][0]['COUNT(*)'];
+                $adminCount["HostesCount"] = $adminCount["HostesCount"][0]['COUNT(*)'];
                 $adminCount["IsciCount"] = $adminCount["IsciCount"][0]['COUNT(*)'];
                 $adminCount["VeliCount"] = $adminCount["VeliCount"][0]['COUNT(*)'];
                 $adminCount["OgrenciCount"] = $adminCount["OgrenciCount"][0]['COUNT(*)'];
@@ -399,10 +401,12 @@ class AdminWeb extends Controller {
 
 
                 $adminCount["SoforCount"] = $Panel_Model->rutbeSoforCount($rutbebolgedizi);
+                $adminCount["HostesCount"] = $Panel_Model->rutbeHostesCount($rutbebolgedizi);
                 $adminCount["IsciCount"] = $Panel_Model->rutbeIsciCount($rutbebolgedizi);
                 $adminCount["VeliCount"] = $Panel_Model->rutbeVeliCount($rutbebolgedizi);
                 $adminCount["OgrenciCount"] = $Panel_Model->rutbeOgrenciCount($rutbebolgedizi);
                 $adminCount["SoforCount"] = $adminCount["SoforCount"][0]['COUNT(BSSoforID)'];
+                $adminCount["HostesCount"] = $adminCount["HostesCount"][0]['COUNT(BSHostesID)'];
                 $adminCount["IsciCount"] = $adminCount["IsciCount"][0]['COUNT(SBIsciID)'];
                 $adminCount["VeliCount"] = $adminCount["VeliCount"][0]['COUNT(BSVeliID)'];
                 $adminCount["OgrenciCount"] = $adminCount["OgrenciCount"][0]['COUNT(BSOgrenciID)'];
@@ -1068,6 +1072,100 @@ class AdminWeb extends Controller {
             $this->load->view("Template_AdminBackEnd/header", $languagedeger);
             $this->load->view("Template_AdminBackEnd/left", $languagedeger);
             $this->load->view("Template_AdminBackEnd/lokasyonliste", $languagedeger, $adminArac);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL_LOGOUT);
+        }
+    }
+
+    function hostesliste() {
+        //session güvenlik kontrolü
+        $formSession = $this->load->otherClasses('Form');
+        //sessionKontrol
+        $sessionKey = $formSession->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+            //memcache model bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+
+
+            $language = Session::get("dil");
+            //lanuage Kontrol
+            $formLanguage = $this->load->multilanguage($language);
+            $languagedeger = $formLanguage->multilanguage();
+
+
+            $adminRutbe = Session::get("userRutbe");
+            $adminID = Session::get("userId");
+            $uniqueKey = Session::get("username");
+            $uniqueKey = $uniqueKey . '_AHostes';
+
+            $resultMemcache = $MemcacheModel->get($uniqueKey);
+            if ($resultMemcache) {
+                $soforliste = $resultMemcache;
+            } else {
+                //super adminse tüm bölgeleri görür
+                if ($adminRutbe != 0) {
+
+                    $hostesListe = $Panel_Model->hostesListele();
+                    //bölge count için
+                    if (count($hostesListe) != 0) {
+                        $hostesliste[0]['HostesCount'] = count($hostesListe);
+                    }
+
+                    $a = 0;
+                    foreach ($hostesListe as $hostesListee) {
+                        $hostesliste[$a]['HostesID'] = $hostesListee['BSHostesID'];
+                        $hostesliste[$a]['HostesAdi'] = $hostesListee['BSHostesAd'];
+                        $hostesliste[$a]['HostesSoyad'] = $hostesListee['BSHostesSoyad'];
+                        $hostesliste[$a]['HostesTelefon'] = $hostesListee['BSHostesPhone'];
+                        $hostesliste[$a]['HostesEmail'] = $hostesListee['BSHostesEmail'];
+                        $hostesliste[$a]['HostesAciklama'] = $hostesListee['BSHostesAciklama'];
+                        $hostesliste[$a]['HostesDurum'] = $hostesListee['Status'];
+                        $a++;
+                    }
+                } else {
+                    $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
+
+                    foreach ($bolgeListeRutbe as $rutbe) {
+                        $bolgerutbeId[] = $rutbe['BSBolgeID'];
+                    }
+                    $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+
+                    $hostesBolgeListe = $Panel_Model->hostesBolgeListele($rutbebolgedizi);
+                    foreach ($hostesBolgeListe as $hostesBolgeListee) {
+                        $hostesrutbeId[] = $hostesBolgeListee['BSHostesID'];
+                    }
+                    $rutbehostesdizi = implode(',', $hostesrutbeId);
+
+                    $hostesListe = $Panel_Model->rutbeHostesListele($rutbehostesdizi);
+                    //bölge count için
+                    if (count($hostesListe) != 0) {
+                        $hostesliste[0]['HostesCount'] = count($hostesListe);
+                    }
+
+                    $a = 0;
+                    foreach ($hostesListe as $hostesListee) {
+                        $hostesliste[$a]['HostesID'] = $hostesListee['BSHostesID'];
+                        $hostesliste[$a]['HostesAdi'] = $hostesListee['BSHostesAd'];
+                        $hostesliste[$a]['HostesSoyad'] = $hostesListee['BSHostesSoyad'];
+                        $hostesliste[$a]['HostesTelefon'] = $hostesListee['BSHostesPhone'];
+                        $hostesliste[$a]['HostesEmail'] = $hostesListee['BSHostesEmail'];
+                        $hostesliste[$a]['HostesAciklama'] = $hostesListee['BSHostesAciklama'];
+                        $hostesliste[$a]['HostesDurum'] = $hostesListee['Status'];
+                        $a++;
+                    }
+                }
+                //memcache kayıt
+                $result = $MemcacheModel->set($uniqueKey, $hostesliste, false, 5);
+            }
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/hostesliste", $languagedeger, $hostesliste);
             $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
         } else {
             header("Location:" . SITE_URL_LOGOUT);

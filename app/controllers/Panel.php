@@ -57,10 +57,11 @@ class Panel extends Controller {
                 $lokasyonListe = $Panel_Model->lokasyonListeleCount();
                 $adminCount["AdminCount"] = $Panel_Model->adminCountListele($adminID);
                 $adminCount["SoforCount"] = $Panel_Model->soforCountListele();
+                $adminCount["HostesCount"] = $Panel_Model->hostesCountListele();
                 $adminCount["IsciCount"] = $Panel_Model->isciCountListele();
                 $adminCount["VeliCount"] = $Panel_Model->veliCountListele();
                 $adminCount["OgrenciCount"] = $Panel_Model->ogrenciCountListele();
-                $adminBolge['AdminKullanici'] = $adminCount["AdminCount"][0]['COUNT(*)'] + $adminCount["SoforCount"][0]['COUNT(*)'] + $adminCount["IsciCount"][0]['COUNT(*)'] + $adminCount["VeliCount"][0]['COUNT(*)'] + $adminCount["OgrenciCount"][0]['COUNT(*)'];
+                $adminBolge['AdminKullanici'] = $adminCount["AdminCount"][0]['COUNT(*)'] + $adminCount["SoforCount"][0]['COUNT(*)'] + $adminCount["HostesCount"][0]['COUNT(*)'] + $adminCount["IsciCount"][0]['COUNT(*)'] + $adminCount["VeliCount"][0]['COUNT(*)'] + $adminCount["OgrenciCount"][0]['COUNT(*)'];
 
                 $adminBolge['AdminBolge'] = count($bolgeListe);
                 $adminBolge['AdminKurum'] = count($kurumListe);
@@ -89,10 +90,11 @@ class Panel extends Controller {
                 $kurumListe = $Panel_Model->rutbeKurumCount($rutbebolgedizi);
                 $turListe = $Panel_Model->rutbeTurCount($rutbebolgedizi);
                 $adminCount["SoforCount"] = $Panel_Model->rutbeSoforCount($rutbebolgedizi);
+                $adminCount["HostesCount"] = $Panel_Model->rutbeHostesCount($rutbebolgedizi);
                 $adminCount["IsciCount"] = $Panel_Model->rutbeIsciCount($rutbebolgedizi);
                 $adminCount["VeliCount"] = $Panel_Model->rutbeVeliCount($rutbebolgedizi);
                 $adminCount["OgrenciCount"] = $Panel_Model->rutbeOgrenciCount($rutbebolgedizi);
-                $adminBolge['AdminKullanici'] = $adminCount["SoforCount"][0]['COUNT(BSSoforID)'] + $adminCount["IsciCount"][0]['COUNT(SBIsciID)'] + $adminCount["VeliCount"][0]['COUNT(BSVeliID)'] + $adminCount["OgrenciCount"][0]['COUNT(BSOgrenciID)'];
+                $adminBolge['AdminKullanici'] = $adminCount["SoforCount"][0]['COUNT(BSSoforID)'] + $adminCount["HostesCount"][0]['COUNT(BSHostesID)'] + $adminCount["IsciCount"][0]['COUNT(SBIsciID)'] + $adminCount["VeliCount"][0]['COUNT(BSVeliID)'] + $adminCount["OgrenciCount"][0]['COUNT(BSOgrenciID)'];
 
                 $adminBolge['AdminBolge'] = count($bolgeListe);
                 $adminBolge['AdminKurum'] = count($kurumListe);

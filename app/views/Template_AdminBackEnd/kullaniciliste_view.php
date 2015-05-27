@@ -69,6 +69,31 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Kullanıcı İşlemleri -->
+                <a href="<?php echo SITE_URL; ?>/adminweb/hostesliste" class="small-box bg-green">
+                    <div class="inner">
+                        <h3>
+                            <?php echo $data["Hostes"]; ?>
+                        </h3>
+                        <p>
+                            <?php if (count($model['HostesCount']) > 0) { ?>
+                                <?php
+                                echo $model['HostesCount'] . ' ' . $data["Toplam"];
+                            } else {
+                                ?>
+                                <?php
+                                echo '0 ' . $data["Toplam"];
+                            }
+                            ?>
+                        </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-bus"></i>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-lg-3 col-xs-12">
+                <!-- Kullanıcı İşlemleri -->
                 <a href="<?php echo SITE_URL; ?>/adminweb/veliliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>

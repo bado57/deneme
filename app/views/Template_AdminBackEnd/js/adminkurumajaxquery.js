@@ -1095,9 +1095,9 @@ $.AdminIslemler = {
                     } else {
                         reset();
                         alertify.success(jsDil.KurumKaydet);
-                        var bolgeCount = $('#smallBolge').text();
-                        bolgeCount++;
-                        $('#smallBolge').text(bolgeCount);
+                        var kurumCount = $('#smallBolge').text();
+                        kurumCount++;
+                        $('#smallBolge').text(kurumCount);
                         var addRow = ("<tr style='background-color:#F2F2F2'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
                                 + "<i class='fa fa-search'></i> " + AdminBolgeKaydet[0] + "</a>"
                                 + "</td><td class='hidden-xs'>0</td><td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td></tr>");

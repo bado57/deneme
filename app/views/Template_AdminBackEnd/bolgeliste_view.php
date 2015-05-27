@@ -14,13 +14,13 @@
                     <i class="fa fa-th"></i> <?php echo $data["Bolgeler"]; ?>
                     <small id="smallBolge"><?php if (count($model[0]['AdminBolgeCount']) > 0) { ?>
                             <?php
-                            echo $model[0]['AdminBolgeCount'] . ' ' . $data["Toplam"];
+                            echo $model[0]['AdminBolgeCount'];
                         } else {
                             ?>
                             <?php
-                            echo '0 ' . $data["Toplam"];
+                            echo '0 ';
                         }
-                        ?></small>
+                        ?></small><small> <?php echo $data["Toplam"]; ?></small>
                 </h3>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right" style="text-align:right;">

@@ -226,6 +226,7 @@ $.AdminIslemler = {
                         reset();
                         alertify.success(jsDil.BolgeKaydet);
                         var bolgeCount = $('#smallBolge').text();
+                        console.log(bolgeCount);
                         bolgeCount++;
                         $('#smallBolge').text(bolgeCount);
                         var addRow = ("<tr style='background-color:#F2F2F2'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"

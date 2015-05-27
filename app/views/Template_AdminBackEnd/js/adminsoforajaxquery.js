@@ -726,15 +726,22 @@ $.AdminIslemler = {
                                 for (var b = 0; b < bolgelength; b++) {
                                     SelectBolgeOptions[b] = {label: soforBolgeAd[b], title: soforBolgeAd[b], value: soforBolgeID[b], disabled: true, selected: true};
                                 }
-                            }
-                            if (soforBolgeNID.length > 0) {
-                                var aracBolgeLength = soforBolgeNID.length;
-                                for (var z = 0; z < aracBolgeLength; z++) {
-                                    SelectBolgeOptions[b] = {label: soforBolgeNAd[z], title: soforBolgeNAd[z], value: soforBolgeNID[z], disabled: true};
-                                    b++;
-                                }
 
+                                if (soforBolgeNID.length > 0) {
+                                    var aracBolgeLength = soforBolgeNID.length;
+                                    for (var z = 0; z < aracBolgeLength; z++) {
+                                        SelectBolgeOptions[b] = {label: soforBolgeNAd[z], title: soforBolgeNAd[z], value: soforBolgeNID[z], disabled: true};
+                                        b++;
+                                    }
+
+                                }
+                            } else {
+                                var bolgelength = soforBolgeID.length;
+                                for (var b = 0; b < bolgelength; b++) {
+                                    SelectBolgeOptions[b] = {label: soforBolgeAd[b], title: soforBolgeAd[b], value: soforBolgeID[b], disabled: true, selected: true};
+                                }
                             }
+
                             if (soforAracID.length > 0) {
                                 var soforselectlength = soforAracID.length;
                                 for (var t = 0; t < soforselectlength; t++) {
