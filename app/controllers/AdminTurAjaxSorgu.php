@@ -220,6 +220,75 @@ class AdminTurAjaxSorgu extends Controller {
                     }
                     break;
 
+                case "turHostesSelect":
+                    $adminID = Session::get("userId");
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $form->post("turBolgeID", true);
+                        $form->post("turKurumID", true);
+                        $form->post("turSaat1ID", true);
+                        $form->post("turSaat2ID", true);
+                        $form->post("aracID", true);
+                        $turBolgeID = $form->values['turBolgeID'];
+                        $turKurumID = $form->values['turKurumID'];
+                        $turSaat1ID = $form->values['turSaat1ID'];
+                        $turSaat2ID = $form->values['turSaat2ID'];
+                        $turAracID = $form->values['aracID'];
+                        $turGunler = $_REQUEST['turGunID'];
+
+                        $gunSaatHostesSql = $form->sqlGunSaatHostes($turBolgeID, $turAracID, $turSaat1ID, $turSaat2ID, $turGunler);
+
+                        $turHostesListe = $Panel_Model->turHostesSelect($gunSaatHostesSql);
+
+                        $a = 0;
+                        foreach ($turHostesListe as $turHostesListee) {
+                            $turAktifHostesId[] = $turHostesListee['BSTurHostesID'];
+                            $a++;
+                        }
+
+                        $turAracHostesListe = $Panel_Model->turAracHostesListele($turAracID);
+
+                        if (count($turAracHostesListe) > 0) {
+                            //araça ait hostes varsa
+                            $b = 0;
+                            foreach ($turAracHostesListe as $turAracHostesListee) {
+                                $turAracHostes[] = $turAracHostesListee['BSHostesID'];
+                                $b++;
+                            }
+
+                            if (count($turHostesListe) > 0) {//aktif hostes varsa
+                                $bolgePasifHostes = array_diff($turAracHostes, $turAktifHostesId);
+                                if (count($bolgePasifHostes) > 0) {//aracın birden fazla hostesi varsa
+                                    $pasifHostes = implode(',', $bolgePasifHostes);
+                                    //bölgedeki pasif hostesler
+                                    $turPasifHostesListe = $Panel_Model->turAracPasifHostesListele($pasifHostes);
+                                    $c = 0;
+                                    foreach ($turPasifHostesListe as $turPasifHostesListee) {
+                                        $turHostes[$c]['turHostesID'] = $turPasifHostesListee['BSHostesID'];
+                                        $turHostes[$c]['turHostesAd'] = $turPasifHostesListee['BSHostesAd'];
+                                        $turHostes[$c]['turHostesSoyad'] = $turPasifHostesListee['BSHostesSoyad'];
+                                        $turHostes[$c]['turHostesLocation'] = $turPasifHostesListee['BSHostesLocation'];
+                                        $c++;
+                                    }
+                                }
+                            } else {//aktif hostes yoksa
+                                $pasifHostes = implode(',', $turAracHostes);
+                                $turPasifHostesListe = $Panel_Model->turAracPasifHostesListele($pasifHostes);
+                                $c = 0;
+                                foreach ($turPasifHostesListe as $turPasifHostesListee) {
+                                    $turHostes[$c]['turHostesID'] = $turPasifHostesListee['BSHostesID'];
+                                    $turHostes[$c]['turHostesAd'] = $turPasifHostesListee['BSHostesAd'];
+                                    $turHostes[$c]['turHostesSoyad'] = $turPasifHostesListee['BSHostesSoyad'];
+                                    $turHostes[$c]['turHostesLocation'] = $turPasifHostesListee['BSHostesLocation'];
+                                    $c++;
+                                }
+                            }
+                        }
+                        $sonuc["pasifHostes"] = $turHostes;
+                    }
+                    break;
+
                 case "turKurumSelectKisi":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -392,6 +461,9 @@ class AdminTurAjaxSorgu extends Controller {
                         $form->post("soforID", true);
                         $form->post("soforAd", true);
                         $form->post("soforLocation", true);
+                        $form->post("hostesID", true);
+                        $form->post("hostesAd", true);
+                        $form->post("hostesLocation", true);
                         $form->post("turTip", true);
                         $form->post("turID", true);
                         $form->post("turGidis", true);
@@ -422,6 +494,9 @@ class AdminTurAjaxSorgu extends Controller {
                         $turSoforID = $form->values['soforID'];
                         $turSoforAd = $form->values['soforAd'];
                         $turSoforLocation = $form->values['soforLocation'];
+                        $turHostesID = $form->values['hostesID'];
+                        $turHostesAd = $form->values['hostesAd'];
+                        $turHostesLocation = $form->values['hostesLocation'];
                         $kurumTip = $form->values['kurumTip'];
                         $turTip = $form->values['turTip'];
                         $turID = $form->values['turID'];
@@ -459,6 +534,9 @@ class AdminTurAjaxSorgu extends Controller {
                                         'BSTurSoforID' => $turSoforID,
                                         'BSTurSoforAd' => $turSoforAd,
                                         'BSTurSoforLocation' => $turSoforLocation,
+                                        'BSTurHostesID' => $turHostesID,
+                                        'BSTurHostesAd' => $turHostesAd,
+                                        'BSTurHostesLocation' => $turHostesLocation,
                                         'BSTurBslngc' => $turSaat1,
                                         'BSTurBts' => $turSaat2,
                                         'BSTurGidisDonus' => 1,
@@ -510,6 +588,9 @@ class AdminTurAjaxSorgu extends Controller {
                                         'BSTurSoforID' => $turSoforID,
                                         'BSTurSoforAd' => $turSoforAd,
                                         'BSTurSoforLocation' => $turSoforLocation,
+                                        'BSTurHostesID' => $turHostesID,
+                                        'BSTurHostesAd' => $turHostesAd,
+                                        'BSTurHostesLocation' => $turHostesLocation,
                                         'BSTurBslngc' => $turSaat1,
                                         'BSTurBts' => $turSaat2,
                                         'BSTurGidisDonus' => 0,
@@ -575,6 +656,9 @@ class AdminTurAjaxSorgu extends Controller {
                                         'BSTurSoforID' => $turSoforID,
                                         'BSTurSoforAd' => $turSoforAd,
                                         'BSTurSoforLocation' => $turSoforLocation,
+                                        'BSTurHostesID' => $turHostesID,
+                                        'BSTurHostesAd' => $turHostesAd,
+                                        'BSTurHostesLocation' => $turHostesLocation,
                                         'BSTurBslngc' => $turSaat1,
                                         'BSTurBts' => $turSaat2,
                                         'BSTurGidisDonus' => 0,
@@ -713,6 +797,9 @@ class AdminTurAjaxSorgu extends Controller {
                                         'BSTurSoforID' => $turSoforID,
                                         'BSTurSoforAd' => $turSoforAd,
                                         'BSTurSoforLocation' => $turSoforLocation,
+                                        'BSTurHostesID' => $turHostesID,
+                                        'BSTurHostesAd' => $turHostesAd,
+                                        'BSTurHostesLocation' => $turHostesLocation,
                                         'BSTurBslngc' => $turSaat1,
                                         'BSTurBts' => $turSaat2,
                                         'BSTurGidisDonus' => 1,
@@ -846,6 +933,9 @@ class AdminTurAjaxSorgu extends Controller {
                             $turTipDetay['TurDetaySoforID'][$a] = $turDetayTipp['BSTurSoforID'];
                             $turTipDetay['TurDetaySoforAd'][$a] = $turDetayTipp['BSTurSoforAd'];
                             $turTipDetay['TurDetaySoforLocation'][$a] = $turDetayTipp['BSTurSoforLocation'];
+                            $turTipDetay['TurDetayHostesID'][$a] = $turDetayTipp['BSTurHostesID'];
+                            $turTipDetay['TurDetayHostesAd'][$a] = $turDetayTipp['BSTurHostesAd'];
+                            $turTipDetay['TurDetayHostesLocation'][$a] = $turDetayTipp['BSTurHostesLocation'];
                             $turTipDetay['TurDetayBsSaat'][$a] = $turDetayTipp['BSTurBslngc'];
                             $turTipDetay['TurDetayBtsSaat'][$a] = $turDetayTipp['BSTurBts'];
                             $turTipDetay['TurDetayBolgeID'][$a] = $turDetayTipp['BSTurBolgeID'];
@@ -1207,6 +1297,75 @@ class AdminTurAjaxSorgu extends Controller {
                     }
                     break;
 
+                case "turGidisHostesSelect":
+                    $adminID = Session::get("userId");
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $form->post("bolgeID", true);
+                        $form->post("kurumID", true);
+                        $form->post("turSaat1ID", true);
+                        $form->post("turSaat2ID", true);
+                        $form->post("aracID", true);
+                        $turBolgeID = $form->values['bolgeID'];
+                        $turKurumID = $form->values['kurumID'];
+                        $turSaat1ID = $form->values['turSaat1ID'];
+                        $turSaat2ID = $form->values['turSaat2ID'];
+                        $turAracID = $form->values['aracID'];
+                        $turGunler = $_REQUEST['turGunID'];
+
+                        $gunSaatHostesSql = $form->sqlGunSaatHostes($turBolgeID, $turAracID, $turSaat1ID, $turSaat2ID, $turGunler);
+
+                        $turHostesListe = $Panel_Model->turHostesSelect($gunSaatHostesSql);
+
+                        $a = 0;
+                        foreach ($turHostesListe as $turHostesListee) {
+                            $turAktifHostesId[] = $turHostesListee['BSTurHostesID'];
+                            $a++;
+                        }
+
+                        $turAracHostesListe = $Panel_Model->turAracHostesListele($turAracID);
+
+                        if (count($turAracHostesListe) > 0) {
+                            //araça ait hostes varsa
+                            $b = 0;
+                            foreach ($turAracHostesListe as $turAracHostesListee) {
+                                $turAracHostes[] = $turAracHostesListee['BSHostesID'];
+                                $b++;
+                            }
+
+                            if (count($turHostesListe) > 0) {//aktif hostes varsa
+                                $bolgePasifHostes = array_diff($turAracHostes, $turAktifHostesId);
+                                if (count($bolgePasifHostes) > 0) {//aracın birden fazla hostesi varsa
+                                    $pasifHostes = implode(',', $bolgePasifHostes);
+                                    //bölgedeki pasif hostesler
+                                    $turPasifSoforListe = $Panel_Model->turAracPasifHostesListele($pasifHostes);
+                                    $c = 0;
+                                    foreach ($turPasifSoforListe as $turPasifHostesListee) {
+                                        $turHostes[$c]['turHostesID'] = $turPasifHostesListee['BSHostesID'];
+                                        $turHostes[$c]['turHostesAd'] = $turPasifHostesListee['BSHostesAd'];
+                                        $turHostes[$c]['turHostesSoyad'] = $turPasifHostesListee['BSHostesSoyad'];
+                                        $turHostes[$c]['turHostesLocation'] = $turPasifHostesListee['BSHostesLocation'];
+                                        $c++;
+                                    }
+                                }
+                            } else {//aktif hostes yoksa
+                                $pasifHostes = implode(',', $turAracHostes);
+                                $turPasifHostesListe = $Panel_Model->turAracPasifHostesListele($pasifHostes);
+                                $c = 0;
+                                foreach ($turPasifHostesListe as $turPasifHostesListee) {
+                                    $turHostes[$c]['turHostesID'] = $turPasifHostesListee['BSHostesID'];
+                                    $turHostes[$c]['turHostesAd'] = $turPasifHostesListee['BSHostesAd'];
+                                    $turHostes[$c]['turHostesSoyad'] = $turPasifHostesListee['BSHostesSoyad'];
+                                    $turHostes[$c]['turHostesLocation'] = $turPasifHostesListee['BSHostesLocation'];
+                                    $c++;
+                                }
+                            }
+                        }
+                        $sonuc["pasifHostes"] = $turHostes;
+                    }
+                    break;
+
                 case "turGidisDKaydet":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -1221,6 +1380,9 @@ class AdminTurAjaxSorgu extends Controller {
                         $form->post("soforID", true);
                         $form->post("soforAd", true);
                         $form->post("soforLocation", true);
+                        $form->post("hostesID", true);
+                        $form->post("hostesAd", true);
+                        $form->post("hostesLocation", true);
                         $form->post("turID", true);
                         $form->post("turGidisID", true);
                         $form->post("turDonusID", true);
@@ -1250,6 +1412,9 @@ class AdminTurAjaxSorgu extends Controller {
                         $turSoforID = $form->values['soforID'];
                         $turSoforAd = $form->values['soforAd'];
                         $turSoforLocation = $form->values['soforLocation'];
+                        $turHostesID = $form->values['hostesID'];
+                        $turHostesAd = $form->values['hostesAd'];
+                        $turHostesLocation = $form->values['hostesLocation'];
                         $kurumTip = $form->values['kurumTip'];
                         $turID = $form->values['turID'];
                         $turKm = $form->values['turKm'];
@@ -1288,6 +1453,9 @@ class AdminTurAjaxSorgu extends Controller {
                                     'BSTurSoforID' => $turSoforID,
                                     'BSTurSoforAd' => $turSoforAd,
                                     'BSTurSoforLocation' => $turSoforLocation,
+                                    'BSTurHostesID' => $turHostesID,
+                                    'BSTurHostesAd' => $turHostesAd,
+                                    'BSTurHostesLocation' => $turHostesLocation,
                                     'BSTurBslngc' => $turSaat1,
                                     'BSTurBts' => $turSaat2,
                                     'BSTurKm' => $turKm,
@@ -1523,6 +1691,9 @@ class AdminTurAjaxSorgu extends Controller {
                                     'BSTurSoforID' => $turSoforID,
                                     'BSTurSoforAd' => $turSoforAd,
                                     'BSTurSoforLocation' => $turSoforLocation,
+                                    'BSTurHostesID' => $turHostesID,
+                                    'BSTurHostesAd' => $turHostesAd,
+                                    'BSTurHostesLocation' => $turHostesLocation,
                                     'BSTurBslngc' => $turSaat1,
                                     'BSTurBts' => $turSaat2,
                                     'BSTurGidisDonus' => 0,
@@ -2020,6 +2191,75 @@ class AdminTurAjaxSorgu extends Controller {
                     }
                     break;
 
+                case "turDonusHostesSelect":
+                    $adminID = Session::get("userId");
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $form->post("bolgeID", true);
+                        $form->post("kurumID", true);
+                        $form->post("turSaat1ID", true);
+                        $form->post("turSaat2ID", true);
+                        $form->post("aracID", true);
+                        $turBolgeID = $form->values['bolgeID'];
+                        $turKurumID = $form->values['kurumID'];
+                        $turSaat1ID = $form->values['turSaat1ID'];
+                        $turSaat2ID = $form->values['turSaat2ID'];
+                        $turAracID = $form->values['aracID'];
+                        $turGunler = $_REQUEST['turGunID'];
+
+                        $gunSaatHostesSql = $form->sqlGunSaatHostes($turBolgeID, $turAracID, $turSaat1ID, $turSaat2ID, $turGunler);
+
+                        $turHostesListe = $Panel_Model->turHostesSelect($gunSaatHostesSql);
+
+                        $a = 0;
+                        foreach ($turHostesListe as $turHostesListee) {
+                            $turAktifHostesId[] = $turHostesListee['BSTurHostesID'];
+                            $a++;
+                        }
+
+                        $turAracHostesListe = $Panel_Model->turAracHostesListele($turAracID);
+
+                        if (count($turAracHostesListe) > 0) {
+                            //araça ait hostes varsa
+                            $b = 0;
+                            foreach ($turAracHostesListe as $turAracHostesListee) {
+                                $turAracHostes[] = $turAracHostesListee['BSHostesID'];
+                                $b++;
+                            }
+
+                            if (count($turHostesListe) > 0) {//aktif hostes varsa
+                                $bolgePasifHostes = array_diff($turAracHostes, $turAktifHostesId);
+                                if (count($bolgePasifHostes) > 0) {//aracın birden fazla hostesi varsa
+                                    $pasifHostes = implode(',', $bolgePasifHostes);
+                                    //bölgedeki pasif hostesler
+                                    $turPasifHostesListe = $Panel_Model->turAracPasifHostesListele($pasifHostes);
+                                    $c = 0;
+                                    foreach ($turPasifHostesListe as $turPasifHostesListee) {
+                                        $turHostes[$c]['turHostesID'] = $turPasifHostesListee['BSHostesID'];
+                                        $turHostes[$c]['turHostesAd'] = $turPasifHostesListee['BSHostesAd'];
+                                        $turHostes[$c]['turHostesSoyad'] = $turPasifHostesListee['BSHostesSoyad'];
+                                        $turHostes[$c]['turHostesLocation'] = $turPasifHostesListee['BSHostesLocation'];
+                                        $c++;
+                                    }
+                                }
+                            } else {//aktif şoför yoksa
+                                $pasifHostes = implode(',', $turAracHostes);
+                                $turPasifHostesListe = $Panel_Model->turAracPasifHostesListele($pasifHostes);
+                                $c = 0;
+                                foreach ($turPasifHostesListe as $turPasifHostesListee) {
+                                    $turHostes[$c]['turHostesID'] = $turPasifHostesListee['BSHostesID'];
+                                    $turHostes[$c]['turHostesAd'] = $turPasifHostesListee['BSHostesAd'];
+                                    $turHostes[$c]['turHostesSoyad'] = $turPasifHostesListee['BSHostesSoyad'];
+                                    $turHostes[$c]['turHostesLocation'] = $turPasifHostesListee['BSHostesLocation'];
+                                    $c++;
+                                }
+                            }
+                        }
+                        $sonuc["pasifHostes"] = $turHostes;
+                    }
+                    break;
+
                 case "turDonusKaydet":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -2034,6 +2274,9 @@ class AdminTurAjaxSorgu extends Controller {
                         $form->post("soforID", true);
                         $form->post("soforAd", true);
                         $form->post("soforLocation", true);
+                        $form->post("hostesID", true);
+                        $form->post("hostesAd", true);
+                        $form->post("hostesLocation", true);
                         $form->post("turID", true);
                         $form->post("turGidisID", true);
                         $form->post("turDonusID", true);
@@ -2063,6 +2306,9 @@ class AdminTurAjaxSorgu extends Controller {
                         $turSoforID = $form->values['soforID'];
                         $turSoforAd = $form->values['soforAd'];
                         $turSoforLocation = $form->values['soforLocation'];
+                        $turHostesID = $form->values['hostesID'];
+                        $turHostesAd = $form->values['hostesAd'];
+                        $turHostesLocation = $form->values['hostesLocation'];
                         $kurumTip = $form->values['kurumTip'];
                         $turID = $form->values['turID'];
                         $turKm = $form->values['turKm'];
@@ -2101,6 +2347,9 @@ class AdminTurAjaxSorgu extends Controller {
                                     'BSTurSoforID' => $turSoforID,
                                     'BSTurSoforAd' => $turSoforAd,
                                     'BSTurSoforLocation' => $turSoforLocation,
+                                    'BSTurHostesID' => $turHostesID,
+                                    'BSTurHostesAd' => $turHostesAd,
+                                    'BSTurHostesLocation' => $turHostesLocation,
                                     'BSTurBslngc' => $turSaat1,
                                     'BSTurBts' => $turSaat2,
                                     'BSTurKm' => $turKm,
@@ -2336,6 +2585,9 @@ class AdminTurAjaxSorgu extends Controller {
                                     'BSTurSoforID' => $turSoforID,
                                     'BSTurSoforAd' => $turSoforAd,
                                     'BSTurSoforLocation' => $turSoforLocation,
+                                    'BSTurHostesID' => $turHostesID,
+                                    'BSTurHostesAd' => $turHostesAd,
+                                    'BSTurHostesLocation' => $turHostesLocation,
                                     'BSTurBslngc' => $turSaat1,
                                     'BSTurBts' => $turSaat2,
                                     'BSTurGidisDonus' => 0,

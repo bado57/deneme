@@ -191,7 +191,7 @@ function setSvHeight() {
 function editControl(edtislemler) {
     switch (edtislemler) {
         case 'hostesDetailEdit' :
-            $.AdminIslemler.hostesDetailEdit();
+            $.AdminIslemler.hostesDetailDuzenle();
             break;
         default :
             break;

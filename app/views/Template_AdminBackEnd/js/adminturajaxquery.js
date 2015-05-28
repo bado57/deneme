@@ -25,6 +25,8 @@ var turDetayGidisAracPlaka = new Array();
 var turDetayGidisAracKapasite = new Array();
 var turDetayGidisSoforID = new Array();
 var turDetayGidisSoforAd = new Array();
+var turDetayGidisHostesID = new Array();
+var turDetayGidisHostesAd = new Array();
 var SelectDetayGidisGunOptions = new Array();
 var turGidisDetailEdt = new Array();
 //dönüş
@@ -35,10 +37,12 @@ var turDetayDonusAracPlaka = new Array();
 var turDetayDonusAracKapasite = new Array();
 var turDetayDonusSoforID = new Array();
 var turDetayDonusSoforAd = new Array();
+var turDetayDonusHostesID = new Array();
+var turDetayDonusHostesAd = new Array();
 var SelectDetayDonusGunOptions = new Array();
 var turDonusDetailEdt = new Array();
 var diziSayi = 0;
-
+var diziHostesSayi = 0;
 $(document).ready(function () {
 
     TurTable = $('#adminTurTable').dataTable({
@@ -89,6 +93,9 @@ $(document).ready(function () {
                             $('input[name=GidisSoforInput]').val(cevap.turTipDetay.TurDetaySoforLocation[gidisIndex]);
                             $('input[name=GidisSoforID]').val(cevap.turTipDetay.TurDetaySoforID[gidisIndex]);
                             $('input[name=GidisSoforAd]').val(cevap.turTipDetay.TurDetaySoforAd[gidisIndex]);
+                            $('input[name=GidisHostesInput]').val(cevap.turTipDetay.TurDetayHostesLocation[gidisIndex]);
+                            $('input[name=GidisHostesID]').val(cevap.turTipDetay.TurDetayHostesID[gidisIndex]);
+                            $('input[name=GidisHostesAd]').val(cevap.turTipDetay.TurDetayHostesAd[gidisIndex]);
                             turDetayGidisSaat1 = cevap.turTipDetay.TurDetayBsSaat[gidisIndex];
                             turDetayGidisSaat2 = cevap.turTipDetay.TurDetayBtsSaat[gidisIndex];
                             turDetayGidisAracID = cevap.turTipDetay.TurDetayAracID[gidisIndex];
@@ -96,6 +103,8 @@ $(document).ready(function () {
                             turDetayGidisAracKapasite = cevap.turTipDetay.TurDetayAracKapasite[gidisIndex];
                             turDetayGidisSoforID = cevap.turTipDetay.TurDetaySoforID[gidisIndex];
                             turDetayGidisSoforAd = cevap.turTipDetay.TurDetaySoforAd[gidisIndex];
+                            turDetayGidisHostesID = cevap.turTipDetay.TurDetayHostesID[gidisIndex];
+                            turDetayGidisHostesAd = cevap.turTipDetay.TurDetayHostesAd[gidisIndex];
                         }
                         //Dönüş
                         if (donusIndex != '' || donusIndex == 0) {
@@ -111,6 +120,9 @@ $(document).ready(function () {
                             $('input[name=DonusSoforInput]').val(cevap.turTipDetay.TurDetaySoforLocation[donusIndex]);
                             $('input[name=DonusSoforID]').val(cevap.turTipDetay.TurDetaySoforID[donusIndex]);
                             $('input[name=DonusSoforAd]').val(cevap.turTipDetay.TurDetaySoforAd[donusIndex]);
+                            $('input[name=DonusHostesInput]').val(cevap.turTipDetay.TurDetayHostesLocation[gidisIndex]);
+                            $('input[name=DonusHostesID]').val(cevap.turTipDetay.TurDetayHostesID[gidisIndex]);
+                            $('input[name=DonusHostesAd]').val(cevap.turTipDetay.TurDetayHostesAd[gidisIndex]);
                             turDetayDonusSaat1 = cevap.turTipDetay.TurDetayBsSaat[donusIndex];
                             turDetayDonusSaat2 = cevap.turTipDetay.TurDetayBtsSaat[donusIndex];
                             turDetayDonusAracID = cevap.turTipDetay.TurDetayAracID[donusIndex];
@@ -118,6 +130,8 @@ $(document).ready(function () {
                             turDetayDonusAracKapasite = cevap.turTipDetay.TurDetayAracKapasite[donusIndex];
                             turDetayDonusSoforID = cevap.turTipDetay.TurDetaySoforID[donusIndex];
                             turDetayDonusSoforAd = cevap.turTipDetay.TurDetaySoforAd[donusIndex];
+                            turDetayDonusHostesID = cevap.turTipDetay.TurDetayHostesID[donusIndex];
+                            turDetayDonusHostesAd = cevap.turTipDetay.TurDetayHostesAd[donusIndex];
                         }
                     } else {
                         //ikisinden biri vardır
@@ -138,31 +152,40 @@ $(document).ready(function () {
                         $('textarea[name=TurDetayDonusAciklama]').text(adminturAciklama);
                         turDetayGidisAracKapasite = cevap.turTipDetay.TurDetayAracKapasite[0];
                         turDetayDonusAracKapasite = cevap.turTipDetay.TurDetayAracKapasite[0];
-
                         if (cevap.turTipDetay.TurDetayTur[0] == 0) {//gidiş
                             $('input[name=adminTurDetayGds]').val(cevap.turTipDetay.TurDetayTipID[0]);
                             $('input[name=adminTurDetayTip]').val(cevap.turTipDetay.TurDetayTip[0]);
                             $('input[name=GidisSoforInput]').val(cevap.turTipDetay.TurDetaySoforLocation[0]);
                             $('input[name=GidisSoforID]').val(cevap.turTipDetay.TurDetaySoforID[0]);
                             $('input[name=GidisSoforAd]').val(cevap.turTipDetay.TurDetaySoforAd[0]);
+                            $('input[name=GidisHostesInput]').val(cevap.turTipDetay.TurDetayHostesLocation[0]);
+                            $('input[name=GidisHostesID]').val(cevap.turTipDetay.TurDetayHostesID[0]);
+                            $('input[name=GidisHostesAd]').val(cevap.turTipDetay.TurDetayHostesAd[0]);
                             turDetayGidisSaat1 = cevap.turTipDetay.TurDetayBsSaat[0];
                             turDetayGidisSaat2 = cevap.turTipDetay.TurDetayBtsSaat[0];
                             turDetayGidisAracID = cevap.turTipDetay.TurDetayAracID[0];
                             turDetayGidisAracPlaka = cevap.turTipDetay.TurDetayAracPlaka[0];
                             turDetayGidisSoforID = cevap.turTipDetay.TurDetaySoforID[0];
                             turDetayGidisSoforAd = cevap.turTipDetay.TurDetaySoforAd[0];
+                            turDetayGidisHostesID = cevap.turTipDetay.TurDetayHostesID[0];
+                            turDetayGidisHostesAd = cevap.turTipDetay.TurDetayHostesAd[0];
                         } else {//dönüş
                             $('input[name=adminTurDetayDns]').val(cevap.turTipDetay.TurDetayTipID[0]);
                             $('input[name=adminTurDetayTip]').val(cevap.turTipDetay.TurDetayTip[0]);
                             $('input[name=DonusSoforInput]').val(cevap.turTipDetay.TurDetaySoforLocation[0]);
                             $('input[name=DonusSoforID]').val(cevap.turTipDetay.TurDetaySoforID[0]);
                             $('input[name=DonusSoforAd]').val(cevap.turTipDetay.TurDetaySoforAd[0]);
+                            $('input[name=DonusHostesInput]').val(cevap.turTipDetay.TurDetayHostesLocation[0]);
+                            $('input[name=DonusHostesID]').val(cevap.turTipDetay.TurDetayHostesID[0]);
+                            $('input[name=DonusHostesAd]').val(cevap.turTipDetay.TurDetayHostesAd[0]);
                             turDetayDonusSaat1 = cevap.turTipDetay.TurDetayBsSaat[0];
                             turDetayDonusSaat2 = cevap.turTipDetay.TurDetayBtsSaat[0];
                             turDetayDonusAracID = cevap.turTipDetay.TurDetayAracID[0];
                             turDetayDonusAracPlaka = cevap.turTipDetay.TurDetayAracPlaka[0];
                             turDetayDonusSoforID = cevap.turTipDetay.TurDetaySoforID[0];
                             turDetayDonusSoforAd = cevap.turTipDetay.TurDetaySoforAd[0];
+                            turDetayDonusHostesID = cevap.turTipDetay.TurDetayHostesID[0];
+                            turDetayDonusHostesAd = cevap.turTipDetay.TurDetayHostesAd[0];
                         }
                     }
                     svControl('svAdd', 'turSecim', '');
@@ -413,7 +436,13 @@ $(document).ready(function () {
                 var soforLocation = $('select#TurSofor option[value!="-1"]:selected').attr('location');
                 if (soforLocation) {
                     if (diziSayi != 0) {
-                        MultipleMapArray.pop();
+                        if (diziHostesSayi == 0) {
+                            MultipleMapArray.pop();
+                        } else {
+                            MultipleMapArray.pop();
+                            MultipleMapArray.pop();
+                        }
+                        diziHostesSayi = 0;
                         var diziIndex = MultipleMapArray.length;
                         sofor = 1;
                         var soforName = $('select#TurSofor option[value!="-1"]:selected').attr('label');
@@ -422,9 +451,10 @@ $(document).ready(function () {
                         MultipleMapArray[diziIndex] = Array(soforName, LocationSoforBolme[0], LocationSoforBolme[1], soforID);
                         isMap = true;
                         isSingle = false;
-                        multipleKurumTurMapping(MultipleMapArray, MultipleMapindex, ayiriciIndex, sofor);
-                        google.maps.event.addDomListener(window, 'load', multipleKurumTurMapping);
+                        multipleTurMapping(MultipleMapArray, MultipleMapindex, ayiriciIndex, sofor);
+                        google.maps.event.addDomListener(window, 'load', multipleTurMapping);
                     } else {
+                        diziHostesSayi = 0;
                         var diziIndex = MultipleMapArray.length;
                         diziSayi++;
                         sofor = 1;
@@ -437,6 +467,127 @@ $(document).ready(function () {
                         multipleTurMapping(MultipleMapArray, MultipleMapindex, ayiriciIndex, sofor);
                         google.maps.event.addDomListener(window, 'load', multipleTurMapping);
                     }
+                } else {
+                    reset();
+                    alertify.alert(jsDil.SoforLokasyon);
+                    return false;
+                }
+            }
+        }
+    });
+    //tur hostes focus
+    $('#TurHostes').multiselect({
+        onDropdownShow: function (event) {
+            var turBolgeID = $('select#TurSelectBolge option[value!="0"]:selected').val();
+            if (turBolgeID) {
+                var turKurumID = $('select#TurSelectKurum option[value!="-1"]:selected').val();
+                if (turKurumID) {
+                    var turGunID = new Array();
+                    $('select#TurSelectGun option:selected').each(function () {
+                        turGunID.push($(this).val());
+                    });
+                    var turgunlength = turGunID.length;
+                    if (turgunlength > 0) {
+                        var turSaat1ID = $('select#TurSaat1 option[value!="-1"]:selected').val();
+                        if (turSaat1ID) {
+                            var turSaat2ID = $('select#TurSaat2 option[value!="-1"]:selected').val();
+                            if (turSaat2ID) {
+                                var aracID = $('select#TurArac option[value!="-1"]:selected').val();
+                                if (aracID) {
+                                    var soforID = $('select#TurSofor option[value!="-1"]:selected').val();
+                                    if (soforID) {
+                                        $.ajax({
+                                            data: {"turBolgeID": turBolgeID, "turKurumID": turKurumID, "turGunID[]": turGunID, "turSaat1ID": turSaat1ID, "turSaat2ID": turSaat2ID, "aracID": aracID, "tip": "turHostesSelect"},
+                                            success: function (cevap) {
+                                                if (cevap.hata) {
+                                                    reset();
+                                                    alertify.alert(jsDil.Hata);
+                                                    return false;
+                                                } else {
+                                                    var SelectHostesOptions = new Array();
+                                                    if (cevap.pasifHostes) {
+                                                        var length = cevap.pasifHostes.length;
+                                                        SelectHostesOptions[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: -1};
+                                                        var a = 1;
+                                                        for (var i = 0; i < length; i++) {
+                                                            SelectHostesOptions[a] = {label: cevap.pasifHostes[i].turHostesAd + ' ' + cevap.pasifHostes[i].turHostesSoyad, title: cevap.pasifHostes[i].turHostesAd + ' ' + cevap.pasifHostes[i].turHostesSoyad, location: cevap.pasifHostes[i].turHostesLocation, value: cevap.pasifHostes[i].turHostesID};
+                                                            a++;
+                                                        }
+                                                        $('#TurHostes').multiselect('refresh');
+                                                        $('#TurHostes').multiselect('dataprovider', SelectHostesOptions);
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        reset();
+                                        alertify.alert(jsDil.SoforSec);
+                                        return false;
+                                    }
+                                } else {
+                                    reset();
+                                    alertify.alert(jsDil.AracSec);
+                                    return false;
+                                }
+                            } else {
+                                reset();
+                                alertify.alert(jsDil.Saat2Sec);
+                                return false;
+                            }
+                        } else {
+                            reset();
+                            alertify.alert(jsDil.Saat1Sec);
+                            return false;
+                        }
+                    } else {
+                        reset();
+                        alertify.alert(jsDil.GunSec);
+                        return false;
+                    }
+                } else {
+                    reset();
+                    alertify.alert(jsDil.KurumSec);
+                    return false;
+                }
+            } else {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            }
+        },
+        onChange: function (option, checked, select) {
+            if (kayitDeger == 0) {
+                var hostesLocation = $('select#TurHostes option[value!="-1"]:selected').attr('location');
+                if (hostesLocation) {
+                    if (diziHostesSayi != 0) {
+                        MultipleMapArray.pop();
+                        var diziIndex = MultipleMapArray.length;
+                        hostes = 1;
+                        var hostesName = $('select#TurHostes option[value!="-1"]:selected').attr('label');
+                        var hostesID = $('select#TurHostes option[value!="-1"]:selected').attr('value');
+                        var LocationHostesBolme = hostesLocation.split(",");
+                        MultipleMapArray[diziIndex] = Array(hostesName, LocationHostesBolme[0], LocationHostesBolme[1], hostesID);
+                        isMap = true;
+                        isSingle = false;
+                        multipleHostesTurMapping(MultipleMapArray, MultipleMapindex, ayiriciIndex, hostes);
+                        google.maps.event.addDomListener(window, 'load', multipleHostesTurMapping);
+                    } else {
+                        var diziIndex = MultipleMapArray.length;
+                        diziHostesSayi++;
+                        hostes = 1;
+                        var hostesName = $('select#TurHostes option[value!="-1"]:selected').attr('label');
+                        var hostesID = $('select#TurHostes option[value!="-1"]:selected').attr('value');
+                        var LocationHostesBolme = hostesLocation.split(",");
+                        MultipleMapArray[diziIndex] = Array(hostesName, LocationHostesBolme[0], LocationHostesBolme[1], hostesID);
+                        isMap = true;
+                        isSingle = false;
+                        multipleHostesTurMapping(MultipleMapArray, MultipleMapindex, ayiriciIndex, hostes);
+                        google.maps.event.addDomListener(window, 'load', multipleHostesTurMapping);
+                    }
+                } else {
+                    reset();
+                    alertify.alert(jsDil.HostesLokasyon);
+                    return false;
                 }
             }
         }
@@ -801,6 +952,109 @@ $(document).ready(function () {
             }
         }
     });
+    //tur detay gidis hostes focus
+    $('#TurDetayGidisHostes').multiselect({
+        onDropdownShow: function (event) {
+            var turGunID = new Array();
+            $('select#TurDetayGidisGun option:selected').each(function () {
+                turGunID.push($(this).val());
+            });
+            var turgunlength = turGunID.length;
+            if (turgunlength > 0) {
+                var turSaat1ID = $('select#TurDetayGidisSaat1 option[value!="-1"]:selected').val();
+                if (turSaat1ID) {
+                    var turSaat2ID = $('select#TurDetayGidisSaat2 option[value!="-1"]:selected').val();
+                    if (turSaat2ID) {
+                        var aracID = $('select#TurDetayGidisArac option[value!="-1"]:selected').val();
+                        if (aracID) {
+                            var soforID = $('select#TurDetayGidisSofor option[value!="-1"]:selected').val();
+                            if (soforID) {
+                                var kurumID = $("input[name=TurDetayGidisKurumID]").val();
+                                var bolgeID = $("input[name=TurDetayGidisBolgeID]").val();
+                                $.ajax({
+                                    data: {"bolgeID": bolgeID, "kurumID": kurumID, "turGunID[]": turGunID, "turSaat1ID": turSaat1ID, "turSaat2ID": turSaat2ID, "aracID": aracID, "tip": "turGidisHostesSelect"},
+                                    success: function (cevap) {
+                                        if (cevap.hata) {
+                                            reset();
+                                            alertify.alert(jsDil.Hata);
+                                            return false;
+                                        } else {
+                                            var SelectHostesOptions = new Array();
+                                            var hostesLocation = $('input[name=GidisHostesInput]').val();
+                                            var a = 1;
+                                            if (cevap.pasifHostes) {
+                                                var length = cevap.pasifHostes.length;
+                                                if (turDetayGidisHostesID.length > 0) {
+                                                    SelectHostesOptions[0] = {label: turDetayGidisHostesAd, title: turDetayGidisHostesAd, location: hostesLocation, value: turDetayGidisHostesID, selected: true};
+                                                    for (var i = 0; i < length; i++) {
+                                                        if (cevap.pasifHostes[i].turSoforID.indexOf(turDetayGidisSoforID) == -1) {
+                                                            SelectHostesOptions[a] = {label: cevap.pasifHostes[i].turHostesAd + ' ' + cevap.pasifHostes[i].turHostesSoyad, title: cevap.pasifHostes[i].turHostesAd + ' ' + cevap.pasifHostes[i].turHostesSoyad, location: cevap.pasifHostes[i].turHostesLocation, value: cevap.pasifHostes[i].turHostesID};
+                                                            a++;
+                                                        }
+                                                    }
+                                                } else {
+                                                    SelectHostesOptions[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: -1};
+                                                    var a = 1;
+                                                    for (var i = 0; i < length; i++) {
+                                                        SelectHostesOptions[a] = {label: cevap.pasifHostes[i].turHostesAd + ' ' + cevap.pasifHostes[i].turHostesSoyad, title: cevap.pasifHostes[i].turHostesAd + ' ' + cevap.pasifHostes[i].turHostesSoyad, location: cevap.pasifHostes[i].turHostesLocation, value: cevap.pasifHostes[i].turHostesID};
+                                                        a++;
+                                                    }
+                                                }
+                                                $('#TurDetayGidisHostes').multiselect('refresh');
+                                                $('#TurDetayGidisHostes').multiselect('dataprovider', SelectHostesOptions);
+                                            } else {
+                                                SelectHostesOptions[0] = {label: turDetayGidisHostesAd, title: turDetayGidisHostesAd, location: hostesLocation, value: turDetayGidisHostesID};
+                                                $('#TurDetayGidisHostes').multiselect('refresh');
+                                                $('#TurDetayGidisHostes').multiselect('dataprovider', SelectHostesOptions);
+                                            }
+                                        }
+                                    }
+                                });
+                            } else {
+                                reset();
+                                alertify.alert(jsDil.SoforSec);
+                                return false;
+                            }
+                        } else {
+                            reset();
+                            alertify.alert(jsDil.AracSec);
+                            return false;
+                        }
+                    } else {
+                        reset();
+                        alertify.alert(jsDil.Saat2Sec);
+                        return false;
+                    }
+                } else {
+                    reset();
+                    alertify.alert(jsDil.Saat1Sec);
+                    return false;
+                }
+            } else {
+                reset();
+                alertify.alert(jsDil.GunSec);
+                return false;
+            }
+        },
+        onChange: function (option, checked, select) {
+            if (kayitDeger == 0) {
+                var hostesLocation = $('select#TurDetayGidisHostes option[value!="-1"]:selected').attr('location');
+                var soforLocation = $('select#TurDetayGidisSofor option[value!="-1"]:selected').attr('location');
+                if (hostesLocation) {
+                    //harita için
+                    var kurumLocation = $('input[name=TurDetayGidisKurumLocation]').val();
+                    var kurumAd = $('input[name=TurDetayGidisKurum]').val();
+                    var kurumID = $('input[name=TurDetayGidisKurumID]').val();
+                    var soforID = $('select#TurDetayGidisSofor option:selected').val();
+                    var soforAd = $('select#TurDetayGidisSofor option:selected').attr('label');
+                    var hostesID = $('select#TurDetayGidisHostes option:selected').val();
+                    var hostesAd = $('select#TurDetayGidisHostes option:selected').attr('label');
+                    multipleTurHostesDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation, hostesAd, hostesID, hostesLocation);
+                    google.maps.event.addDomListener(window, 'load', multipleTurHostesDetayMap);
+                }
+            }
+        }
+    });
     //tur donüş detay saat1
     $('#TurDetayDonusSaat1').multiselect({
         onDropdownShow: function (event) {
@@ -1068,16 +1322,119 @@ $(document).ready(function () {
         },
         onChange: function (option, checked, select) {
             if (kayitDeger == 0) {
-                var soforLocation = $('select#TurDetayGidisSofor option[value!="-1"]:selected').attr('location');
+                var soforLocation = $('select#TurDetayDonusSofor option[value!="-1"]:selected').attr('location');
                 if (soforLocation) {
                     //harita için
                     var kurumLocation = $('input[name=TurDetayGidisKurumLocation]').val();
                     var kurumAd = $('input[name=TurDetayGidisKurum]').val();
                     var kurumID = $('input[name=TurDetayGidisKurumID]').val();
-                    var soforID = $('select#TurDetayGidisSofor option:selected').val();
-                    var soforAd = $('select#TurDetayGidisSofor option:selected').attr('label');
+                    var soforID = $('select#TurDetayDonusSofor option:selected').val();
+                    var soforAd = $('select#TurDetayDonusSofor option:selected').attr('label');
                     multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
                     google.maps.event.addDomListener(window, 'load', multipleTurDetayMap);
+                }
+            }
+        }
+    });
+    //tur detay dönüş hostes focus
+    $('#TurDetayDonusHostes').multiselect({
+        onDropdownShow: function (event) {
+            var turGunID = new Array();
+            $('select#TurDetayDonusGun option:selected').each(function () {
+                turGunID.push($(this).val());
+            });
+            var turgunlength = turGunID.length;
+            if (turgunlength > 0) {
+                var turSaat1ID = $('select#TurDetayDonusSaat1 option[value!="-1"]:selected').val();
+                if (turSaat1ID) {
+                    var turSaat2ID = $('select#TurDetayDonusSaat2 option[value!="-1"]:selected').val();
+                    if (turSaat2ID) {
+                        var aracID = $('select#TurDetayDonusArac option:selected').val();
+                        if (aracID) {
+                            var kurumID = $("input[name=TurDetayDonusKurumID]").val();
+                            var soforID = $('select#TurDetayGidisSofor option[value!="-1"]:selected').val();
+                            if (soforID) {
+                                var bolgeID = $("input[name=TurDetayDonusBolgeID]").val();
+                                $.ajax({
+                                    data: {"bolgeID": bolgeID, "kurumID": kurumID, "turGunID[]": turGunID, "turSaat1ID": turSaat1ID, "turSaat2ID": turSaat2ID, "aracID": aracID, "tip": "turDonusHostesSelect"},
+                                    success: function (cevap) {
+                                        if (cevap.hata) {
+                                            reset();
+                                            alertify.alert(jsDil.Hata);
+                                            return false;
+                                        } else {
+                                            var SelectHostesOptions = new Array();
+                                            var hostesLocation = $('input[name=DonusHostesInput]').val();
+                                            var a = 1;
+                                            if (cevap.pasifHostes) {
+                                                var length = cevap.pasifHostes.length;
+                                                if (turDetayDonusSoforID.length > 0) {
+                                                    SelectHostesOptions[0] = {label: turDetayDonusHostesAd, title: turDetayDonusHostesAd, location: hostesLocation, value: turDetayDonusHostesID, selected: true};
+                                                    for (var i = 0; i < length; i++) {
+                                                        if (cevap.pasifHostes[i].turHostesID.indexOf(turDetayDonusSoforID) == -1) {
+                                                            SelectHostesOptions[a] = {label: cevap.pasifHostes[i].turHostesAd + ' ' + cevap.pasifHostes[i].turHostesSoyad, title: cevap.pasifHostes[i].turHostesAd + ' ' + cevap.pasifHostes[i].turHostesSoyad, location: cevap.pasifHostes[i].turHostesLocation, value: cevap.pasifHostes[i].turHostesID};
+                                                            a++;
+                                                        }
+                                                    }
+                                                } else {
+                                                    SelectHostesOptions[0] = {label: jsDil.Seciniz, title: jsDil.Seciniz, value: -1};
+                                                    var a = 1;
+                                                    for (var i = 0; i < length; i++) {
+                                                        SelectHostesOptions[a] = {label: cevap.pasifHostes[i].turHostesAd + ' ' + cevap.pasifHostes[i].turHostesSoyad, title: cevap.pasifHostes[i].turHostesAd + ' ' + cevap.pasifHostes[i].turHostesSoyad, location: cevap.pasifHostes[i].turHostesLocation, value: cevap.pasifHostes[i].turHostesID};
+                                                        a++
+                                                    }
+                                                }
+                                                $('#TurDetayDonusHostes').multiselect('refresh');
+                                                $('#TurDetayDonusHostes').multiselect('dataprovider', SelectHostesOptions);
+                                            } else {
+                                                SelectHostesOptions[0] = {label: turDetayDonusHostesAd, title: turDetayDonusHostesAd, location: hostesLocation, value: turDetayDonusHostesID};
+                                                $('#TurDetayDonusHostes').multiselect('refresh');
+                                                $('#TurDetayDonusHostes').multiselect('dataprovider', SelectHostesOptions);
+                                            }
+                                        }
+                                    }
+                                });
+                            } else {
+                                reset();
+                                alertify.alert(jsDil.SoforSec);
+                                return false;
+                            }
+                        } else {
+                            reset();
+                            alertify.alert(jsDil.AracSec);
+                            return false;
+                        }
+                    } else {
+                        reset();
+                        alertify.alert(jsDil.Saat2Sec);
+                        return false;
+                    }
+                } else {
+                    reset();
+                    alertify.alert(jsDil.Saat1Sec);
+                    return false;
+                }
+            } else {
+                reset();
+                alertify.alert(jsDil.GunSec);
+                return false;
+            }
+        },
+        onChange: function (option, checked, select) {
+            if (kayitDeger == 0) {
+                var hostesLocation = $('select#TurDetayDonusHostes option[value!="-1"]:selected').attr('location');
+                var soforLocation = $('select#TurDetayDonusSofor option[value!="-1"]:selected').attr('location');
+                if (hostesLocation) {
+                    //harita için
+                    var kurumLocation = $('input[name=TurDetayGidisKurumLocation]').val();
+                    var kurumAd = $('input[name=TurDetayGidisKurum]').val();
+                    var kurumID = $('input[name=TurDetayGidisKurumID]').val();
+                    var soforID = $('select#TurDetayDonusSofor option:selected').val();
+                    var soforAd = $('select#TurDetayDonusSofor option:selected').attr('label');
+                    var hostesID = $('select#TurDetayDonusHostes option:selected').val();
+                    var hostesAd = $('select#TurDetayDonusHostes option:selected').attr('label');
+                    multipleTurHostesDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation, hostesAd, hostesID, hostesLocation);
+                    google.maps.event.addDomListener(window, 'load', multipleTurHostesDetayMap);
                 }
             }
         }
@@ -1091,10 +1448,12 @@ $.AdminIslemler = {
         var SelectSaat1Options = new Array();
         var SelectSaat2Options = new Array();
         var SelectSoforOptions = new Array();
+        var SelectHostesOptions = new Array();
         $('#TurArac').multiselect('dataprovider', SelectAracOptions);
         $('#TurSaat1').multiselect('dataprovider', SelectSaat1Options);
         $('#TurSaat2').multiselect('dataprovider', SelectSaat2Options);
         $('#TurSofor').multiselect('dataprovider', SelectSoforOptions);
+        $('#TurHostes').multiselect('dataprovider', SelectHostesOptions);
         $.ajax({
             data: {"tip": "turBolgeEkleSelect"},
             success: function (cevap) {
@@ -1117,6 +1476,7 @@ $.AdminIslemler = {
                     $('#TurSelectKurum').multiselect();
                     $('#TurArac').multiselect();
                     $('#TurSofor').multiselect();
+                    $('#TurHostes').multiselect();
                     var selectLength = $('#TurSelectBolge > option').length;
                     if (!selectLength) {
                         reset();
@@ -1166,6 +1526,9 @@ $.AdminIslemler = {
                                             if (soforID) {
                                                 var soforAd = $("select#TurSofor option:selected").attr('label');
                                                 var soforLocation = $("select#TurSofor option:selected").attr('location');
+                                                var hostesID = $("select#TurHostes option:selected").val();
+                                                var hostesAd = $("select#TurHostes option:selected").attr('label');
+                                                var hostesLocation = $("select#TurHostes option:selected").attr('location');
                                                 var turTip = $("select#TurSelectTip option:selected").val();
                                                 var turAciklama = $("textarea[name=Aciklama]").val();
                                                 var turKm = $("span#totalKm").text();
@@ -1173,8 +1536,10 @@ $.AdminIslemler = {
                                                     data: {"turID": turID, "turAdi": turAdi, "bolgeID": bolgeID, "bolgead": bolgead, "kurumad": kurumad, "kurumId": kurumId,
                                                         "kurumTip": kurumTip, "kurumLocation": kurumLocation, "turGun[]": turGun, "turSaat1": turSaat1, "turSaat2": turSaat2,
                                                         "aracID": aracID, "aracPlaka": aracPlaka, "aracKapasite": aracKapasite, "turGidis": turGidis, "turDonus": turDonus,
-                                                        "soforID": soforID, "soforAd": soforAd, "soforLocation": soforLocation, "turTip": turTip, "turAciklama": turAciklama, "turKm": turKm,
-                                                        "turOgrenciID[]": KisiOgrenciID, "turOgrenciAd[]": KisiOgrenciAd, "turOgrenciLocation[]": KisiOgrenciLocation, "turOgrenciSira[]": KisiOgrenciSira, "turKisiIsciID[]": KisiIsciID,
+                                                        "soforID": soforID, "soforAd": soforAd, "soforLocation": soforLocation, "hostesID": hostesID, "hostesAd": hostesAd,
+                                                        "hostesLocation": hostesLocation, "turTip": turTip, "turAciklama": turAciklama, "turKm": turKm,
+                                                        "turOgrenciID[]": KisiOgrenciID, "turOgrenciAd[]": KisiOgrenciAd, "turOgrenciLocation[]": KisiOgrenciLocation,
+                                                        "turOgrenciSira[]": KisiOgrenciSira, "turKisiIsciID[]": KisiIsciID,
                                                         "turKisiIsciAd[]": KisiIsciAd, "turKisiIsciLocation[]": KisiIsciLocation, "turKisiIsciSira[]": KisiIsciSira, "tip": "turKaydet"},
                                                     success: function (cevap) {
                                                         if (cevap.hata) {
@@ -1386,6 +1751,14 @@ $.AdminIslemler = {
                     }
                     $('#TurDetayGidisSofor').multiselect('refresh');
                     $('#TurDetayGidisSofor').multiselect('disable');
+                    //Hostes
+                    if (turDetayGidisHostesAd.length > 0) {
+                        var SelectHostesOptions = new Array();
+                        SelectHostesOptions[0] = {label: turDetayGidisHostesAd, value: turDetayGidisHostesID, disabled: true};
+                        $('#TurDetayGidisHostes').multiselect('dataprovider', SelectHostesOptions);
+                    }
+                    $('#TurDetayGidisHostes').multiselect('refresh');
+                    $('#TurDetayGidisHostes').multiselect('disable');
                     //Gunler
 
                     if (cevap.gidis.Pzt != 0) {
@@ -1426,7 +1799,6 @@ $.AdminIslemler = {
                     $('#TurDetayGidisGun').multiselect('dataprovider', SelectDetayGidisGunOptions);
                     $('#TurDetayGidisGun').multiselect('refresh');
                     $('#TurDetayGidisGun').multiselect('disable');
-
                     //harita için
                     var kurumLocation = $('input[name=TurDetayGidisKurumLocation]').val();
                     var kurumAd = $('input[name=TurDetayGidisKurum]').val();
@@ -1434,6 +1806,9 @@ $.AdminIslemler = {
                     var soforLocation = $('input[name=GidisSoforInput]').val();
                     var soforID = $('input[name=GidisSoforID]').val();
                     var soforAd = $('input[name=GidisSoforAd]').val();
+                    var hostesLocation = $('input[name=GidisHostesInput]').val();
+                    var hostesID = $('input[name=GidisHostesID]').val();
+                    var hostesAd = $('input[name=GidisHostesAd]').val();
                     //dizilerimizi boşaltıyoruz
                     DetailGidisGelenAd = [];
                     DetailGidisGelenID = [];
@@ -1449,9 +1824,13 @@ $.AdminIslemler = {
                     for (var gidisDigerID = 0; gidisDigerID < cevap.gidisDiger.length; gidisDigerID++) {
                         DetailGidisDigerKisi.push(cevap.gidisDiger[gidisDigerID]);
                     }
-
-                    multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
-                    google.maps.event.addDomListener(window, 'load', multipleTurDetayMap);
+                    if (hostesID != 0) {
+                        multipleTurHostesDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation, hostesAd, hostesID, hostesLocation);
+                        google.maps.event.addDomListener(window, 'load', multipleTurHostesDetayMap);
+                    } else {
+                        multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
+                        google.maps.event.addDomListener(window, 'load', multipleTurDetayMap);
+                    }
                 }
             }
         });
@@ -1465,6 +1844,8 @@ $.AdminIslemler = {
         var aracText = $('select#TurDetayGidisArac option:selected').attr('label');
         var soforID = $('select#TurDetayGidisSofor option:selected').val();
         var soforText = $('select#TurDetayGidisSofor option:selected').attr('label');
+        var hostesID = $('select#TurDetayGidisHostes option:selected').val();
+        var hostesText = $('select#TurDetayGidisHostes option:selected').attr('label');
         var saat1 = $('select#TurDetayGidisSaat1 option:selected').val();
         var saat1Text = $('select#TurDetayGidisSaat1 option:selected').attr('label');
         var saat2 = $('select#TurDetayGidisSaat2 option:selected').val();
@@ -1480,7 +1861,7 @@ $.AdminIslemler = {
             turGunText.push($(this).attr('label'));
         });
         turGidisDetailEdt = [];
-        turGidisDetailEdt.push(turDetayAd, turDetayAciklama, aracID, aracText, soforID, soforText, saat1, saat1Text, saat2, saat2Text, turGunVal, turGunText, DetailGidisGelenID);
+        turGidisDetailEdt.push(turDetayAd, turDetayAciklama, aracID, aracText, soforID, soforText, saat1, saat1Text, saat2, saat2Text, turGunVal, turGunText, DetailGidisGelenID, hostesID, hostesText);
         //Gün ayarları
         if (turGunVal.indexOf('Pzt') != -1) {
             SelectDetayGidisGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt', selected: true};
@@ -1524,6 +1905,7 @@ $.AdminIslemler = {
         $('#TurDetayGidisSaat2').multiselect('enable');
         $('#TurDetayGidisArac').multiselect('enable');
         $('#TurDetayGidisSofor').multiselect('enable');
+        $('#TurDetayGidisHostes').multiselect('enable');
         kayitDegerGidis = 1;
     },
     turGidisDetailVazgec: function () {
@@ -1536,12 +1918,19 @@ $.AdminIslemler = {
         var soforLocation = $('input[name=GidisSoforInput]').val();
         var soforID = $('input[name=GidisSoforID]').val();
         var soforAd = $('input[name=GidisSoforAd]').val();
-        multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
-        google.maps.event.addDomListener(window, 'load', multipleTurDetayMap);
+        var hostesLocation = $('input[name=GidisHostesInput]').val();
+        var hostesID = $('input[name=GidisHostesID]').val();
+        var hostesAd = $('input[name=GidisHostesAd]').val();
+        if (hostesID != 0) {
+            multipleTurHostesDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation, hostesAd, hostesID, hostesLocation);
+            google.maps.event.addDomListener(window, 'load', multipleTurHostesDetayMap);
+        } else {
+            multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
+            google.maps.event.addDomListener(window, 'load', multipleTurDetayMap);
+        }
 
         $('input[name=TurDetayGidisAd]').val(turGidisDetailEdt[0]);
         $('textarea[name=TurDetayGidisAciklama]').val(turGidisDetailEdt[1]);
-
         //Gün ayarları
         if (turGidisDetailEdt[10].indexOf('Pzt') != -1) {
             SelectDetayGidisGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt', selected: true};
@@ -1605,6 +1994,12 @@ $.AdminIslemler = {
         $('#TurDetayGidisSofor').multiselect('dataprovider', SelectSoforOptions);
         $('#TurDetayGidisSofor').multiselect('refresh');
         $('#TurDetayGidisSofor').multiselect('disable');
+        //Hostes
+        var SelectHostesOptions = new Array();
+        SelectHostesOptions[0] = {label: turGidisDetailEdt[14], value: turGidisDetailEdt[13], disabled: true};
+        $('#TurDetayGidisHostes').multiselect('dataprovider', SelectHostesOptions);
+        $('#TurDetayGidisHostes').multiselect('refresh');
+        $('#TurDetayGidisHostes').multiselect('disable');
     },
     turGidisDetailKaydet: function () {
         //Tur Gidiş İşlemleri Değerleri
@@ -1624,6 +2019,9 @@ $.AdminIslemler = {
         var soforID = $('select#TurDetayGidisSofor option:selected').val();
         var soforAd = $('select#TurDetayGidisSofor option:selected').attr('label');
         var soforLocation = $('select#TurDetayGidisSofor option[value!="-1"]:selected').attr('location');
+        var hostesID = $('select#TurDetayGidisHostes option[value!="-1"]:selected').val();
+        var hostesAd = $('select#TurDetayGidisHostes option[value!="-1"]:selected').attr('label');
+        var hostesLocation = $('select#TurDetayGidisHostes option[value!="-1"]:selected').attr('location');
         var turSaat1 = $('select#TurDetayGidisSaat1 option:selected').val();
         var turSaat2 = $('select#TurDetayGidisSaat2 option:selected').val();
         var turKm = $("span#totalGidisKm").text();
@@ -1640,7 +2038,7 @@ $.AdminIslemler = {
         yeniID = kisiID.concat(KisiOgrenciID, KisiIsciID);
         var farkturharita = farkArray(turGidisDetailEdt[12], yeniID);
         var farkharita = farkturharita.length;
-        if (turGidisDetailEdt[0] == turAdi && turGidisDetailEdt[1] == turAciklama && turGidisDetailEdt[2] == aracID && turGidisDetailEdt[4] == soforID && turGidisDetailEdt[6] == turSaat1 && turGidisDetailEdt[8] == turSaat2 && farkturgunlength == 0 && farkharita == 0) {
+        if (turGidisDetailEdt[0] == turAdi && turGidisDetailEdt[1] == turAciklama && turGidisDetailEdt[2] == aracID && turGidisDetailEdt[4] == soforID && turGidisDetailEdt[6] == turSaat1 && turGidisDetailEdt[8] == turSaat2 && farkturgunlength == 0 && farkharita == 0 && turGidisDetailEdt[13] == hostesID) {
             reset();
             alertify.alert(jsDil.Degisiklik);
             return false;
@@ -1653,7 +2051,8 @@ $.AdminIslemler = {
                         data: {"turGidisID": turGidisID, "turDonusID": turDonusID, "turID": turID, "turAdi": turAdi, "bolgeID": bolgeID, "bolgead": bolgead, "kurumad": kurumad, "kurumId": kurumId,
                             "kurumTip": kurumTip, "kurumLocation": kurumLocation, "turGun[]": turGun, "turSaat1": turSaat1, "turSaat2": turSaat2,
                             "aracID": aracID, "aracPlaka": aracPlaka, "aracKapasite": turDetayGidisAracKapasite,
-                            "soforID": soforID, "soforAd": soforAd, "soforLocation": soforLocation, "turAciklama": turAciklama, "turKm": turKm,
+                            "soforID": soforID, "soforAd": soforAd, "soforLocation": soforLocation, "hostesID": hostesID,
+                            "hostesAd": hostesAd, "hostesLocation": hostesLocation, "turAciklama": turAciklama, "turKm": turKm,
                             "turOgrenciID[]": KisiOgrenciID, "turOgrenciAd[]": KisiOgrenciAd, "turOgrenciLocation[]": KisiOgrenciLocation, "turOgrenciSira[]": KisiOgrenciSira, "turKisiIsciID[]": KisiIsciID,
                             "turKisiIsciAd[]": KisiIsciAd, "turKisiIsciLocation[]": KisiIsciLocation, "turKisiIsciSira[]": KisiIsciSira, "tip": "turGidisDKaydet"},
                         success: function (cevap) {
@@ -1676,7 +2075,8 @@ $.AdminIslemler = {
                                 $('#TurDetayGidisArac').multiselect('disable');
                                 //Şoför
                                 $('#TurDetayGidisSofor').multiselect('disable');
-
+                                //Hostes
+                                $('#TurDetayGidisHostes').multiselect('disable');
                                 var length = $('tbody#adminTurRow tr').length;
                                 for (var t = 0; t < length; t++) {
                                     var attrValueId = $("tbody#adminTurRow > tr > td > a").eq(t).attr('value');
@@ -1716,7 +2116,6 @@ $.AdminIslemler = {
                             return false;
                         } else {
                             disabledForm();
-
                             var turCount = $('#smallTur').text();
                             turCount--;
                             $('#smallTur').text(turCount);
@@ -1815,6 +2214,14 @@ $.AdminIslemler = {
                     }
                     $('#TurDetayDonusSofor').multiselect('refresh');
                     $('#TurDetayDonusSofor').multiselect('disable');
+                    //Hostes
+                    if (turDetayDonusHostesAd.length > 0) {
+                        var SelectHostesOptions = new Array();
+                        SelectHostesOptions[0] = {label: turDetayDonusHostesAd, value: turDetayDonusHostesID, disabled: true};
+                        $('#TurDetayDonusHostes').multiselect('dataprovider', SelectHostesOptions);
+                    }
+                    $('#TurDetayDonusHostes').multiselect('refresh');
+                    $('#TurDetayDonusHostes').multiselect('disable');
                     //Gunler
 
                     if (cevap.donus.Pzt != 0) {
@@ -1855,14 +2262,18 @@ $.AdminIslemler = {
                     $('#TurDetayDonusGun').multiselect('dataprovider', SelectDetayDonusGunOptions);
                     $('#TurDetayDonusGun').multiselect('refresh');
                     $('#TurDetayDonusGun').multiselect('disable');
-
                     //harita için
                     var kurumLocation = $('input[name=TurDetayDonusKurumLocation]').val();
                     var kurumAd = $('input[name=TurDetayDonusKurum]').val();
                     var kurumID = $('input[name=TurDetayDonusKurumID]').val();
+                    //şoför
                     var soforLocation = $('input[name=DonusSoforInput]').val();
                     var soforID = $('input[name=DonusSoforID]').val();
                     var soforAd = $('input[name=DonusSoforAd]').val();
+                    //hostes
+                    var hostesLocation = $('input[name=DonusHostesInput]').val();
+                    var hostesID = $('input[name=DonusHostesID]').val();
+                    var hostesAd = $('input[name=DonusHostesAd]').val();
                     //dizilerimizi boşaltıyoruz
                     DetailDonusGelenAd = [];
                     DetailDonusGelenID = [];
@@ -1878,9 +2289,14 @@ $.AdminIslemler = {
                     for (var donusDigerID = 0; donusDigerID < cevap.donusDiger.length; donusDigerID++) {
                         DetailDonusDigerKisi.push(cevap.donusDiger[donusDigerID]);
                     }
+                    if (hostesID != 0) {
+                        multipleTurHostesDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation, hostesAd, hostesID, hostesLocation);
+                        google.maps.event.addDomListener(window, 'load', multipleTurHostesDetayDonusMap);
+                    } else {
+                        multipleTurDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
+                        google.maps.event.addDomListener(window, 'load', multipleTurDetayDonusMap);
+                    }
 
-                    multipleTurDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
-                    google.maps.event.addDomListener(window, 'load', multipleTurDetayDonusMap);
                 }
             }
         });
@@ -1894,6 +2310,8 @@ $.AdminIslemler = {
         var aracText = $('select#TurDetayDonusArac option:selected').attr('label');
         var soforID = $('select#TurDetayDonusSofor option:selected').val();
         var soforText = $('select#TurDetayDonusSofor option:selected').attr('label');
+        var hostesID = $('select#TurDetayDonusHostes option:selected').val();
+        var hostesText = $('select#TurDetayDonusHostes option:selected').attr('label');
         var saat1 = $('select#TurDetayDonusSaat1 option:selected').val();
         var saat1Text = $('select#TurDetayDonusSaat1 option:selected').attr('label');
         var saat2 = $('select#TurDetayDonusSaat2 option:selected').val();
@@ -1909,7 +2327,7 @@ $.AdminIslemler = {
             turGunText.push($(this).attr('label'));
         });
         turDonusDetailEdt = [];
-        turDonusDetailEdt.push(turDetayAd, turDetayAciklama, aracID, aracText, soforID, soforText, saat1, saat1Text, saat2, saat2Text, turGunVal, turGunText, DetailDonusGelenID);
+        turDonusDetailEdt.push(turDetayAd, turDetayAciklama, aracID, aracText, soforID, soforText, saat1, saat1Text, saat2, saat2Text, turGunVal, turGunText, DetailDonusGelenID, hostesID, hostesText);
         //Gün ayarları
         if (turGunVal.indexOf('Pzt') != -1) {
             SelectDetayDonusGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt', selected: true};
@@ -1953,6 +2371,7 @@ $.AdminIslemler = {
         $('#TurDetayDonusSaat2').multiselect('enable');
         $('#TurDetayDonusArac').multiselect('enable');
         $('#TurDetayDonusSofor').multiselect('enable');
+        $('#TurDetayDonusHostes').multiselect('enable');
         kayitDegerDonus = 1;
     },
     turDonusDetailVazgec: function () {
@@ -1965,12 +2384,18 @@ $.AdminIslemler = {
         var soforLocation = $('input[name=DonusSoforInput]').val();
         var soforID = $('input[name=DonusSoforID]').val();
         var soforAd = $('input[name=DonusSoforAd]').val();
-        multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
-        google.maps.event.addDomListener(window, 'load', multipleTurDetayMap);
-
+        var hostesLocation = $('input[name=DonusHostesInput]').val();
+        var hostesID = $('input[name=DonusHostesID]').val();
+        var hostesAd = $('input[name=DonusHostesAd]').val();
+        if (hostesID != 0) {
+            multipleTurHostesDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation, hostesAd, hostesID, hostesLocation);
+            google.maps.event.addDomListener(window, 'load', multipleTurHostesDetayDonusMap);
+        } else {
+            multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
+            google.maps.event.addDomListener(window, 'load', multipleTurDetayMap);
+        }
         $('input[name=TurDetayDonusAd]').val(turDonusDetailEdt[0]);
         $('textarea[name=TurDetayDonusAciklama]').val(turDonusDetailEdt[1]);
-
         //Gün ayarları
         if (turDonusDetailEdt[10].indexOf('Pzt') != -1) {
             SelectDetayDonusGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt', selected: true};
@@ -2034,6 +2459,12 @@ $.AdminIslemler = {
         $('#TurDetayDonusSofor').multiselect('dataprovider', SelectSoforOptions);
         $('#TurDetayDonusSofor').multiselect('refresh');
         $('#TurDetayDonusSofor').multiselect('disable');
+        //Hostes
+        var SelectHostesOptions = new Array();
+        SelectHostesOptions[0] = {label: turDonusDetailEdt[14], value: turDonusDetailEdt[13], disabled: true};
+        $('#TurDetayDonusSofor').multiselect('dataprovider', SelectHostesOptions);
+        $('#TurDetayDonusSofor').multiselect('refresh');
+        $('#TurDetayDonusSofor').multiselect('disable');
     },
     turDonusDetailSil: function () {
         reset();
@@ -2092,6 +2523,9 @@ $.AdminIslemler = {
         var soforID = $('select#TurDetayDonusSofor option:selected').val();
         var soforAd = $('select#TurDetayDonusSofor option:selected').attr('label');
         var soforLocation = $('select#TurDetayDonusSofor option[value!="-1"]:selected').attr('location');
+        var hostesID = $('select#TurDetayDonusHostes option:selected').val();
+        var hostesAd = $('select#TurDetayDonusHostes option:selected').attr('label');
+        var hostesLocation = $('select#TurDetayDonusHostes option[value!="-1"]:selected').attr('location');
         var turSaat1 = $('select#TurDetayDonusSaat1 option:selected').val();
         var turSaat2 = $('select#TurDetayDonusSaat2 option:selected').val();
         var turKm = $("span#totalDonusKm").text();
@@ -2108,8 +2542,7 @@ $.AdminIslemler = {
         yeniID = kisiID.concat(KisiOgrenciID, KisiIsciID);
         var farkturharita = farkArray(turDonusDetailEdt[12], yeniID);
         var farkharita = farkturharita.length;
-        console.log(turDonusDetailEdt);
-        if (turDonusDetailEdt[0] == turAdi && turDonusDetailEdt[1] == turAciklama && turDonusDetailEdt[2] == aracID && turDonusDetailEdt[4] == soforID && turDonusDetailEdt[6] == turSaat1 && turDonusDetailEdt[8] == turSaat2 && farkturgunlength == 0 && farkharita == 0) {
+        if (turDonusDetailEdt[0] == turAdi && turDonusDetailEdt[1] == turAciklama && turDonusDetailEdt[2] == aracID && turDonusDetailEdt[4] == soforID && turDonusDetailEdt[6] == turSaat1 && turDonusDetailEdt[8] == turSaat2 && farkturgunlength == 0 && farkharita == 0 && turDonusDetailEdt[13] == hostesID) {
             reset();
             alertify.alert(jsDil.Degisiklik);
             return false;
@@ -2122,8 +2555,10 @@ $.AdminIslemler = {
                         data: {"turGidisID": turGidisID, "turDonusID": turDonusID, "turID": turID, "turAdi": turAdi, "bolgeID": bolgeID, "bolgead": bolgead, "kurumad": kurumad, "kurumId": kurumId,
                             "kurumTip": kurumTip, "kurumLocation": kurumLocation, "turGun[]": turGun, "turSaat1": turSaat1, "turSaat2": turSaat2,
                             "aracID": aracID, "aracPlaka": aracPlaka, "aracKapasite": turDetayGidisAracKapasite,
-                            "soforID": soforID, "soforAd": soforAd, "soforLocation": soforLocation, "turAciklama": turAciklama, "turKm": turKm,
-                            "turOgrenciID[]": KisiOgrenciID, "turOgrenciAd[]": KisiOgrenciAd, "turOgrenciLocation[]": KisiOgrenciLocation, "turOgrenciSira[]": KisiOgrenciSira, "turKisiIsciID[]": KisiIsciID,
+                            "soforID": soforID, "soforAd": soforAd, "soforLocation": soforLocation,
+                            "hostesID": hostesID, "hostesAd": hostesAd, "hostesLocation": hostesLocation, "turAciklama": turAciklama, "turKm": turKm,
+                            "turOgrenciID[]": KisiOgrenciID, "turOgrenciAd[]": KisiOgrenciAd, "turOgrenciLocation[]": KisiOgrenciLocation,
+                            "turOgrenciSira[]": KisiOgrenciSira, "turKisiIsciID[]": KisiIsciID,
                             "turKisiIsciAd[]": KisiIsciAd, "turKisiIsciLocation[]": KisiIsciLocation, "turKisiIsciSira[]": KisiIsciSira, "tip": "turDonusKaydet"},
                         success: function (cevap) {
                             if (cevap.hata) {
@@ -2145,7 +2580,8 @@ $.AdminIslemler = {
                                 $('#TurDetayDonusArac').multiselect('disable');
                                 //Şoför
                                 $('#TurDetayDonusSofor').multiselect('disable');
-
+                                //Hostes
+                                $('#TurDetayDonusHostes').multiselect('disable');
                                 var length = $('tbody#adminTurRow tr').length;
                                 for (var t = 0; t < length; t++) {
                                     var attrValueId = $("tbody#adminTurRow > tr > td > a").eq(t).attr('value');

@@ -90,6 +90,8 @@ class AdminAracAjaxSorgu extends Controller {
 
                         $aracSoforID = $_REQUEST['aracSoforID'];
                         $aracSoforAd = $_REQUEST['aracSoforAd'];
+                        $aracHostesID = $_REQUEST['aracHostesID'];
+                        $aracHostesAd = $_REQUEST['aracHostesAd'];
                         $aracBolgeAd = $_REQUEST['aracBolgeAd'];
                         $aracBolgeID = $_REQUEST['aracBolgeID'];
 
@@ -108,6 +110,7 @@ class AdminAracAjaxSorgu extends Controller {
 
                         if ($resultAracID) {
                             $soforID = count($aracSoforID);
+                            $hostesID = count($aracHostesID);
                             if ($soforID > 0) {
                                 for ($a = 0; $a < $soforID; $a++) {
                                     $sofordata[$a] = array(
@@ -119,6 +122,18 @@ class AdminAracAjaxSorgu extends Controller {
                                 }
                                 $resultSoforID = $Panel_Model->addNewAdminAracSofor($sofordata);
                                 if ($resultSoforID) {
+                                    if ($hostesID > 0) {
+                                        for ($h = 0; $h < $soforID; $h++) {
+                                            $hostesdata[$h] = array(
+                                                'BSAracID' => $resultAracID,
+                                                'BSAracPlaka' => $aracPlaka,
+                                                'BSHostesID' => $aracHostesID[$h],
+                                                'BSHostesAd' => $aracHostesAd[$h]
+                                            );
+                                        }
+                                        $resultHostesID = $Panel_Model->addNewAdminAracHostes($hostesdata);
+                                    }
+
                                     $bolgeID = count($aracBolgeID);
                                     for ($b = 0; $b < $bolgeID; $b++) {
                                         $bolgedata[$b] = array(
@@ -142,6 +157,8 @@ class AdminAracAjaxSorgu extends Controller {
                                         $deleteresult = $Panel_Model->adminAracDelete($resultAracID);
 
                                         $deleteresultt = $Panel_Model->adminAracSoforDelete($resultAracID);
+
+                                        $deleteresulttt = $Panel_Model->adminAracHostesDelete($resultAracID);
                                         //arac şofmr kaydedilirken bi hata meydana geldi ise
                                         if ($deleteresultt) {
                                             $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
@@ -155,6 +172,18 @@ class AdminAracAjaxSorgu extends Controller {
                                     }
                                 }
                             } else {
+                                if ($hostesID > 0) {
+                                    for ($h = 0; $h < $soforID; $h++) {
+                                        $hostesdata[$h] = array(
+                                            'BSAracID' => $resultAracID,
+                                            'BSAracPlaka' => $aracPlaka,
+                                            'BSHostesID' => $aracHostesID[$h],
+                                            'BSHostesAd' => $aracHostesAd[$h]
+                                        );
+                                    }
+                                    $resultHostesID = $Panel_Model->addNewAdminAracHostes($hostesdata);
+                                }
+
                                 $bolgeID = count($aracBolgeID);
                                 for ($b = 0; $b < $bolgeID; $b++) {
                                     $bolgedata[$b] = array(
@@ -178,6 +207,8 @@ class AdminAracAjaxSorgu extends Controller {
                                     $deleteresult = $Panel_Model->adminAracDelete($resultAracID);
 
                                     $deleteresultt = $Panel_Model->adminAracSoforDelete($resultAracID);
+
+                                    $deleteresulttt = $Panel_Model->adminAracHostesDelete($resultAracID);
                                     //arac şofmr kaydedilirken bi hata meydana geldi ise
                                     if ($deleteresultt) {
                                         $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
@@ -237,9 +268,51 @@ class AdminAracAjaxSorgu extends Controller {
 
                             //admin araç seçili şoför
                             $adminAracSofor = $Panel_Model->adminDetailAracSofor($adminAracDetailID);
+                            //admin araç hostes
+                            $adminAracHostes = $Panel_Model->adminDetailAracHostes($adminAracDetailID);
                             $aracSoforCount = count($adminAracSofor);
+                            $aracHostesCount = count($adminAracHostes);
                             //eğer aracın seçili şoförü varsa burası gelecek
                             if ($aracSoforCount > 0) {
+                                if ($aracHostesCount > 0) {
+                                    //arac Hostes idler
+                                    $h = 0;
+                                    foreach ($adminAracHostes as $adminAracHostess) {
+                                        $selectAracHostes[$h]['SelectAracHostesID'] = $adminAracHostess['BSHostesID'];
+                                        $selectAracHostes[$h]['SelectAracHostesAdi'] = $adminAracHostess['BSHostesAd'];
+                                        $arachostesId[] = $adminAracHostess['BSHostesID'];
+                                        $h++;
+                                    }
+                                    //seçili olan bölge
+                                    $aracbolgedizim = implode(',', $aracbolgeId);
+                                    //seöili olan hostes
+                                    $aracbolgehostes = implode(',', $arachostesId);
+                                    //adamın seçili olab bölgedeki diğer hostesleri
+                                    $adminAracBolgeHostes = $Panel_Model->adminSelectBolgeHostes($aracbolgedizim, $aracbolgehostes);
+
+                                    if (count($adminAracBolgeHostes) > 0) {
+
+                                        $t = 0;
+                                        foreach ($adminAracBolgeHostes as $adminAracBolgeHostess) {
+                                            $digerAracHostes[$t]['DigerAracHostesID'] = $adminAracBolgeHostess['BSHostesID'];
+                                            $digerAracHostes[$t]['DigerAracHostesAdi'] = $adminAracBolgeHostess['BSHostesAd'];
+                                            $t++;
+                                        }
+                                    }
+                                } else {
+                                    //seçili olan bölge
+                                    $aracbolgedizim = implode(',', $aracbolgeId);
+                                    //adamın seçili olab bölgedeki diğer hostesi
+                                    $adminAracBolgeHostes = $Panel_Model->adminSelectBolgeHostess($aracbolgedizim);
+
+                                    $t = 0;
+                                    foreach ($adminAracBolgeHostes as $adminAracBolgeHostess) {
+                                        $digerAracHostes[$t]['DigerAracHostesID'] = $adminAracBolgeHostess['BSHostesID'];
+                                        $digerAracHostes[$t]['DigerAracHostesAdi'] = $adminAracBolgeHostess['BSHostesAd'];
+                                        $t++;
+                                    }
+                                }
+
                                 //arac Şofor idler
                                 $c = 0;
                                 foreach ($adminAracSofor as $adminAracSoforr) {
@@ -265,6 +338,45 @@ class AdminAracAjaxSorgu extends Controller {
                                     }
                                 }
                             } else {
+                                if ($aracHostesCount > 0) {
+                                    //arac Hostes idler
+                                    $h = 0;
+                                    foreach ($adminAracHostes as $adminAracHostess) {
+                                        $selectAracHostes[$h]['SelectAracHostesID'] = $adminAracHostess['BSHostesID'];
+                                        $selectAracHostes[$h]['SelectAracHostesAdi'] = $adminAracHostess['BSHostesAd'];
+                                        $arachostesId[] = $adminAracHostess['BSHostesID'];
+                                        $h++;
+                                    }
+                                    //seçili olan bölge
+                                    $aracbolgedizim = implode(',', $aracbolgeId);
+                                    //seöili olan hostes
+                                    $aracbolgehostes = implode(',', $arachostesId);
+                                    //adamın seçili olab bölgedeki diğer hostesleri
+                                    $adminAracBolgeHostes = $Panel_Model->adminSelectBolgeHostes($aracbolgedizim, $aracbolgehostes);
+
+                                    if (count($adminAracBolgeHostes) > 0) {
+
+                                        $t = 0;
+                                        foreach ($adminAracBolgeHostes as $adminAracBolgeHostess) {
+                                            $digerAracHostes[$t]['DigerAracHostesID'] = $adminAracBolgeHostess['BSHostesID'];
+                                            $digerAracHostes[$t]['DigerAracHostesAdi'] = $adminAracBolgeHostess['BSHostesAd'];
+                                            $t++;
+                                        }
+                                    }
+                                } else {
+                                    //seçili olan bölge
+                                    $aracbolgedizim = implode(',', $aracbolgeId);
+                                    //adamın seçili olab bölgedeki diğer hostesi
+                                    $adminAracBolgeHostes = $Panel_Model->adminSelectBolgeHostess($aracbolgedizim);
+
+                                    $t = 0;
+                                    foreach ($adminAracBolgeHostes as $adminAracBolgeHostess) {
+                                        $digerAracHostes[$t]['DigerAracHostesID'] = $adminAracBolgeHostess['BSHostesID'];
+                                        $digerAracHostes[$t]['DigerAracHostesAdi'] = $adminAracBolgeHostess['BSHostesAd'];
+                                        $t++;
+                                    }
+                                }
+
                                 //seçili olan bölge
                                 $aracbolgedizim = implode(',', $aracbolgeId);
                                 //adamın seçili olab bölgedeki diğer şoförleri
@@ -341,11 +453,51 @@ class AdminAracAjaxSorgu extends Controller {
                                 $digerAracBolge[$b]['DigerAracBolgeAdi'] = $digerBolgee['SBBolgeAdi'];
                                 $b++;
                             }
-
-
+                            //araç şoförler
                             $adminAracSofor = $Panel_Model->adminDetailAracSofor($adminAracDetailID);
-                            $adminAracCount = count($adminAracSofor);
-                            if ($adminAracCount > 0) {
+                            //araç hostesler
+                            $adminAracHostes = $Panel_Model->adminDetailAracHostes($adminAracDetailID);
+                            $aracSoforCount = count($adminAracSofor);
+                            $aracHostesCount = count($adminAracHostes);
+                            if ($aracSoforCount > 0) {
+                                if ($aracHostesCount > 0) {
+                                    //arac Hostes idler
+                                    $h = 0;
+                                    foreach ($adminAracHostes as $adminAracHostess) {
+                                        $selectAracHostes[$h]['SelectAracHostesID'] = $adminAracHostess['BSHostesID'];
+                                        $selectAracHostes[$h]['SelectAracHostesAdi'] = $adminAracHostess['BSHostesAd'];
+                                        $arachostesId[] = $adminAracHostess['BSHostesID'];
+                                        $h++;
+                                    }
+                                    //seçili olan bölge
+                                    $aracbolgedizim = implode(',', $aracbolgeId);
+                                    //seöili olan hostes
+                                    $aracbolgehostes = implode(',', $arachostesId);
+                                    //adamın seçili olab bölgedeki diğer hostesleri
+                                    $adminAracBolgeHostes = $Panel_Model->adminSelectBolgeHostes($aracbolgedizim, $aracbolgehostes);
+
+                                    if (count($adminAracBolgeHostes) > 0) {
+
+                                        $t = 0;
+                                        foreach ($adminAracBolgeHostes as $adminAracBolgeHostess) {
+                                            $digerAracHostes[$t]['DigerAracHostesID'] = $adminAracBolgeHostess['BSHostesID'];
+                                            $digerAracHostes[$t]['DigerAracHostesAdi'] = $adminAracBolgeHostess['BSHostesAd'];
+                                            $t++;
+                                        }
+                                    }
+                                } else {
+                                    //seçili olan bölge
+                                    $aracbolgedizim = implode(',', $aracbolgeId);
+                                    //adamın seçili olab bölgedeki diğer hostesi
+                                    $adminAracBolgeHostes = $Panel_Model->adminSelectBolgeHostess($aracbolgedizim);
+
+                                    $t = 0;
+                                    foreach ($adminAracBolgeHostes as $adminAracBolgeHostess) {
+                                        $digerAracHostes[$t]['DigerAracHostesID'] = $adminAracBolgeHostess['BSHostesID'];
+                                        $digerAracHostes[$t]['DigerAracHostesAdi'] = $adminAracBolgeHostess['BSHostesAd'];
+                                        $t++;
+                                    }
+                                }
                                 //arac Şofor idler
                                 $c = 0;
                                 foreach ($adminAracSofor as $adminAracSoforr) {
@@ -368,6 +520,43 @@ class AdminAracAjaxSorgu extends Controller {
                                     $d++;
                                 }
                             } else {
+                                if ($aracHostesCount > 0) {
+                                    //arac Hostes idler
+                                    $h = 0;
+                                    foreach ($adminAracHostes as $adminAracHostess) {
+                                        $selectAracHostes[$h]['SelectAracHostesID'] = $adminAracHostess['BSHostesID'];
+                                        $selectAracHostes[$h]['SelectAracHostesAdi'] = $adminAracHostess['BSHostesAd'];
+                                        $arachostesId[] = $adminAracHostess['BSHostesID'];
+                                        $h++;
+                                    }
+                                    //seçili olan bölge
+                                    $aracbolgedizim = implode(',', $aracbolgeId);
+                                    //seçili olan hostes
+                                    $aracbolgehostes = implode(',', $arachostesId);
+                                    //adamın seçili olab bölgedeki diğer hostesleri
+                                    $adminAracBolgeHostes = $Panel_Model->adminSelectBolgeHostes($aracbolgedizim, $aracbolgehostes);
+
+                                    if (count($adminAracBolgeHostes) > 0) {
+                                        $t = 0;
+                                        foreach ($adminAracBolgeHostes as $adminAracBolgeHostess) {
+                                            $digerAracHostes[$t]['DigerAracHostesID'] = $adminAracBolgeHostess['BSHostesID'];
+                                            $digerAracHostes[$t]['DigerAracHostesAdi'] = $adminAracBolgeHostess['BSHostesAd'];
+                                            $t++;
+                                        }
+                                    }
+                                } else {
+                                    //seçili olan bölge
+                                    $aracbolgedizim = implode(',', $aracbolgeId);
+                                    //adamın seçili olab bölgedeki diğer hostesi
+                                    $adminAracBolgeHostes = $Panel_Model->adminSelectBolgeHostess($aracbolgedizim);
+
+                                    $t = 0;
+                                    foreach ($adminAracBolgeHostes as $adminAracBolgeHostess) {
+                                        $digerAracHostes[$t]['DigerAracHostesID'] = $adminAracBolgeHostess['BSHostesID'];
+                                        $digerAracHostes[$t]['DigerAracHostesAdi'] = $adminAracBolgeHostess['BSHostesAd'];
+                                        $t++;
+                                    }
+                                }
 
                                 //adamın seçili olab bölgedeki diğer şoförleri
                                 $adminAracBolgeSofor = $Panel_Model->adminSelectBolgeSoforr($rutbebolgedizi);
@@ -399,6 +588,8 @@ class AdminAracAjaxSorgu extends Controller {
                         $sonuc["adminAracBolge"] = $digerAracBolge;
                         $sonuc["adminAracSelectSofor"] = $selectAracSofor;
                         $sonuc["adminAracSofor"] = $digerAracSofor;
+                        $sonuc["adminAracSelectHostes"] = $selectAracHostes;
+                        $sonuc["adminAracHostes"] = $digerAracHostes;
                         $sonuc["adminAracOzellik"] = $adminAracDetail;
                         $sonuc["adminAracTur"] = $selectAracTur;
                     }
@@ -424,22 +615,46 @@ class AdminAracAjaxSorgu extends Controller {
 
                             $deleteresultt = $Panel_Model->adminDetailAracSoforDelete($adminAracDetailID);
                             if ($deleteresultt) {
-                                $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($adminAracDetailID);
-                                if ($deleteresulttt) {
-                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                    if ($resultMemcache) {
-                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                $deletehostes = $Panel_Model->adminDetailAracHostesDelete($adminAracDetailID);
+                                if ($deletehostes) {
+                                    $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($adminAracDetailID);
+                                    if ($deleteresulttt) {
+                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
+                                        if ($resultMemcache) {
+                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                        }
+                                        $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
                                     }
-                                    $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                } else {
+                                    $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($adminAracDetailID);
+                                    if ($deleteresulttt) {
+                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
+                                        if ($resultMemcache) {
+                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                        }
+                                        $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                    }
                                 }
                             } else {
-                                $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($adminAracDetailID);
-                                if ($deleteresulttt) {
-                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                    if ($resultMemcache) {
-                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                $deletehostes = $Panel_Model->adminDetailAracHostesDelete($adminAracDetailID);
+                                if ($deletehostes) {
+                                    $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($adminAracDetailID);
+                                    if ($deleteresulttt) {
+                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
+                                        if ($resultMemcache) {
+                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                        }
+                                        $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
                                     }
-                                    $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                } else {
+                                    $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($adminAracDetailID);
+                                    if ($deleteresulttt) {
+                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
+                                        if ($resultMemcache) {
+                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                        }
+                                        $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                    }
                                 }
                             }
                         } else {
@@ -475,6 +690,8 @@ class AdminAracAjaxSorgu extends Controller {
 
                         $aracSoforID = $_REQUEST['aracSoforID'];
                         $aracSoforAd = $_REQUEST['aracSoforAd'];
+                        $aracHostesID = $_REQUEST['aracHostesID'];
+                        $aracHostesAd = $_REQUEST['aracHostesAd'];
                         $aracBolgeAd = $_REQUEST['aracBolgeAd'];
                         $aracBolgeID = $_REQUEST['aracBolgeID'];
 
@@ -491,6 +708,7 @@ class AdminAracAjaxSorgu extends Controller {
                         $resultAracUpdate = $Panel_Model->adminAracOzelliklerDuzenle($data, $aracID);
                         if ($resultAracUpdate) {
                             $soforID = count($aracSoforID);
+                            $hostesID = count($aracHostesID);
                             if ($soforID > 0) {
                                 $deleteresultt = $Panel_Model->adminAracSoforDelete($aracID);
                                 for ($a = 0; $a < $soforID; $a++) {
@@ -503,6 +721,19 @@ class AdminAracAjaxSorgu extends Controller {
                                 }
                                 $resultSoforUpdate = $Panel_Model->addNewAdminAracSofor($sofordata);
                                 if ($resultSoforUpdate) {
+                                    //hostes seçildi ise
+                                    if ($hostesID > 0) {
+                                        $deletehostes = $Panel_Model->adminAracHostesDelete($aracID);
+                                        for ($h = 0; $h < $hostesID; $h++) {
+                                            $hostesdata[$h] = array(
+                                                'BSAracID' => $aracID,
+                                                'BSAracPlaka' => $aracPlaka,
+                                                'BSHostesID' => $aracHostesID[$h],
+                                                'BSHostesAd' => $aracHostesAd[$h]
+                                            );
+                                        }
+                                        $resultHostesUpdate = $Panel_Model->addNewAdminAracHostes($hostesdata);
+                                    }
                                     $bolgeID = count($aracBolgeID);
                                     $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($aracID);
                                     if ($deleteresulttt) {
@@ -533,6 +764,19 @@ class AdminAracAjaxSorgu extends Controller {
                                     $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
                                 }
                             } else {
+                                //hostes seçildi ise
+                                if ($hostesID > 0) {
+                                    $deletehostes = $Panel_Model->adminAracHostesDelete($aracID);
+                                    for ($h = 0; $h < $hostesID; $h++) {
+                                        $hostesdata[$h] = array(
+                                            'BSAracID' => $aracID,
+                                            'BSAracPlaka' => $aracPlaka,
+                                            'BSHostesID' => $aracHostesID[$h],
+                                            'BSHostesAd' => $aracHostesAd[$h]
+                                        );
+                                    }
+                                    $resultHostesUpdate = $Panel_Model->addNewAdminAracHostes($hostesdata);
+                                }
                                 $deleteresultt = $Panel_Model->adminAracSoforDelete($aracID);
                                 $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($aracID);
                                 if ($deleteresulttt) {
@@ -727,7 +971,26 @@ class AdminAracAjaxSorgu extends Controller {
                             $aracSoforSelect['SoforSelectSoyad'][$a] = $soforListee['BSSoforSoyad'];
                             $a++;
                         }
+
+                        //hostes bilgileri
+                        $hostesBolgeListe = $Panel_Model->aracDetailHostesMultiSelectBolgee($multisofordizi);
+                        foreach ($hostesBolgeListe as $hostesBolgeListee) {
+                            $hostesrutbeId[] = $hostesBolgeListee['BSHostesID'];
+                        }
+                        $rutbehostesdizi = implode(',', $hostesrutbeId);
+                        //bölgeleri getirir
+                        $hostesListe = $Panel_Model->hostesMultiSelectt($rutbehostesdizi);
+
+                        $a = 0;
+                        foreach ($hostesListe as $hostesListee) {
+                            $aracHostesSelect['HostesSelectID'][$a] = $hostesListee['BSHostesID'];
+                            $aracHostesSelect['HostesSelectAd'][$a] = $hostesListee['BSHostesAd'];
+                            $aracHostesSelect['HostesSelectSoyad'][$a] = $hostesListee['BSHostesSoyad'];
+                            $a++;
+                        }
+
                         $sonuc["aracYeniSoforMultiSelect"] = $aracSoforSelect;
+                        $sonuc["aracYeniHostesMultiSelect"] = $aracHostesSelect;
                     }
                     break;
 

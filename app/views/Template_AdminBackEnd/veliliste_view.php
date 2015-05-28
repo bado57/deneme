@@ -246,7 +246,7 @@
                                     <i class="fa fa-map-marker"></i>
                                 </button>
                             </span>
-                            <input type="text" class="locationInput form-control dsb" id="KurumLokasyon" name="KurumLokasyon" value="" disabled>
+                            <input type="text" class="locationInput form-control" id="KurumLokasyon" name="KurumLokasyon" value="" disabled>
                         </div>
                     </div>
                     <div class="form-group">

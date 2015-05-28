@@ -1104,7 +1104,7 @@ class AdminWeb extends Controller {
 
             $resultMemcache = $MemcacheModel->get($uniqueKey);
             if ($resultMemcache) {
-                $soforliste = $resultMemcache;
+                $hostesliste = $resultMemcache;
             } else {
                 //super adminse tüm bölgeleri görür
                 if ($adminRutbe != 0) {

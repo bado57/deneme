@@ -561,6 +561,109 @@ class Form {
         return $sql;
     }
 
+    function sqlGunSaatHostes($turBolgeID, $turAracID, $turSaat1, $turSaat2, $gunler = array()) {
+        $sql = 'BSTurBolgeID=' . $turBolgeID . ' AND BSTurAracID=' . $turAracID . ' AND ((' . $turSaat1 . ' BETWEEN BSTurBslngc AND BSTurBts) OR (' . $turSaat2 . ' BETWEEN BSTurBslngc AND BSTurBts)) AND ';
+        if (in_array("Pzt", $gunler)) {
+            $sql .= '(SBTurPzt=1';
+
+            if (in_array("Sli", $gunler)) {
+                $sql .= ' OR SBTurSli=1';
+            }
+
+            if (in_array("Crs", $gunler)) {
+                $sql .= ' OR SBTurCrs=1';
+            }
+
+            if (in_array("Prs", $gunler)) {
+                $sql .= ' OR SBTurPrs=1';
+            }
+
+            if (in_array("Cma", $gunler)) {
+                $sql .= ' OR SBTurCma=1';
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR SBTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR SBTurPzr=1';
+            }
+        } else if (in_array("Sli", $gunler)) {
+            $sql .= '(SBTurSli=1';
+
+            if (in_array("Crs", $gunler)) {
+                $sql .= ' OR SBTurCrs=1';
+            }
+
+            if (in_array("Prs", $gunler)) {
+                $sql .= ' OR SBTurPrs=1';
+            }
+
+            if (in_array("Cma", $gunler)) {
+                $sql .= ' OR SBTurCma=1';
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR SBTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR SBTurPzr=1';
+            }
+        } else if (in_array("Crs", $gunler)) {
+            $sql .= '(SBTurCrs=1 ';
+            if (in_array("Prs", $gunler)) {
+                $sql .= ' OR SBTurPrs=1';
+            }
+
+            if (in_array("Cma", $gunler)) {
+                $sql .= ' OR SBTurCma=1';
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR SBTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR SBTurPzr=1';
+            }
+        } else if (in_array("Prs", $gunler)) {
+            $sql .= '(SBTurPrs=1';
+
+            if (in_array("Cma", $gunler)) {
+                $sql .= ' OR SBTurCma=1';
+            }
+
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR SBTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR SBTurPzr=1';
+            }
+        } else if (in_array("Cma", $gunler)) {
+            $sql .= '(SBTurCma=1';
+            if (in_array("Cmt", $gunler)) {
+                $sql .= ' OR SBTurCmt=1';
+            }
+
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR SBTurPzr=1';
+            }
+        } else if (in_array("Cmt", $gunler)) {
+            $sql .= 'SBTurCmt=1';
+            if (in_array("Pzr", $gunler)) {
+                $sql .= ' OR SBTurPzr=1';
+            }
+        } else {
+            $sql .= '(SBTurPzr=1';
+        }
+        $sql.=')';
+
+        return $sql;
+    }
+
     function sqlGunInsert($gunler = array()) {
         $gunData = array();
         if (in_array("Pzt", $gunler)) {

@@ -86,6 +86,7 @@ $(document).ready(function () {
                     $('select#AracDetayDurum').val(cevap.adminAracOzellik[0].AdminAracDurum);
                     var SelectBolgeOptions = new Array();
                     var SelectAracOptions = new Array();
+                    var SelectHostesOptions = new Array();
                     if (cevap.adminAracSelectBolge) {
                         var bolgelength = cevap.adminAracSelectBolge.length;
                         for (var b = 0; b < bolgelength; b++) {
@@ -109,7 +110,7 @@ $(document).ready(function () {
                         }
                     }
 
-
+                    //Şoför varsa
                     if (cevap.adminAracSelectSofor) {
                         var soforselectlength = cevap.adminAracSelectSofor.length;
                         for (var t = 0; t < soforselectlength; t++) {
@@ -131,10 +132,34 @@ $(document).ready(function () {
                         }
                     }
 
+                    //Hostes varsa
+                    if (cevap.adminAracSelectHostes) {
+                        var hostesselectlength = cevap.adminAracSelectHostes.length;
+                        for (var h = 0; h < hostesselectlength; h++) {
+                            SelectHostesOptions[h] = {label: cevap.adminAracSelectHostes[h].SelectAracHostesAdi, title: cevap.adminAracSelectHostes[h].SelectAracHostesAdi, value: cevap.adminAracSelectHostes[h].SelectAracHostesID, selected: true, disabled: true};
+                        }
+                        if (cevap.adminAracHostes) {
+                            var hosteslength = cevap.adminAracHostes.length;
+                            for (var v = 0; v < hosteslength; v++) {
+                                SelectHostesOptions[h] = {label: cevap.adminAracHostes[v].DigerAracHostesAdi, title: cevap.adminAracHostes[v].DigerAracHostesAdi, value: cevap.adminAracHostes[v].DigerAracHostesID, disabled: true};
+                                t++;
+                            }
+                        }
+                    } else {
+                        if (cevap.adminAracHostes) {
+                            var hosteslength = cevap.adminAracHostes.length;
+                            for (var v = 0; v < hosteslength; v++) {
+                                SelectHostesOptions[v] = {label: cevap.adminAracHostes[v].DigerAracHostesAdi, title: cevap.adminAracHostes[v].DigerAracHostesAdi, value: cevap.adminAracHostes[v].DigerAracHostesID, disabled: true};
+                            }
+                        }
+                    }
+
                     $('#AracDetayBolgeSelect').multiselect('refresh');
                     $('#AracDetaySurucu').multiselect('refresh');
+                    $('#AracDetayHostes').multiselect('refresh');
                     $('#AracDetayBolgeSelect').multiselect('dataprovider', SelectBolgeOptions);
                     $('#AracDetaySurucu').multiselect('dataprovider', SelectAracOptions);
+                    $('#AracDetayHostes').multiselect('dataprovider', SelectHostesOptions);
                     svControl('svAdd', 'aracDetay', '');
                     i.removeClass("fa-spinner fa-spin");
                     i.addClass("fa fa-bus");
@@ -150,16 +175,9 @@ $(document).ready(function () {
         $('select#AracDetayBolgeSelect option:selected').each(function () {
             aracDetailBolgeID.push($(this).val());
         });
-        var aracDetailSoforID = new Array();
-        $('select#AracDetaySurucu option:selected').each(function () {
-            aracDetailSoforID.push($(this).index());
-        });
-        if (aracDetailSoforID.length > 0) {
-            $('#example-deselect').multiselect('deselect', ['1', '2']);
-            $('#AracDetaySurucu').multiselect('refresh');
-        }
 
         var SoforOptions = new Array();
+        var HostesOptions = new Array();
         $.ajax({
             data: {"aracID": aracID, "aracDetailBolgeID[]": aracDetailBolgeID, "tip": "AracDetailMultiSelect"},
             success: function (cevap) {
@@ -168,6 +186,27 @@ $(document).ready(function () {
                     alertify.alert(jsDil.Hata);
                     return false;
                 } else {
+                    if (cevap.adminAracSelectSofor) {
+                        var soforselectlength = cevap.adminAracSelectSofor.length;
+                        for (var t = 0; t < soforselectlength; t++) {
+                            SoforOptions[t] = {label: cevap.adminAracSelectSofor[t].SelectAracSoforAd + ' ' + cevap.adminAracSelectSofor[t].SelectAracSoforSoyad, title: cevap.adminAracSelectSofor[t].SelectAracSoforAd + ' ' + cevap.adminAracSelectSofor[t].SelectAracSoforSoyad, value: cevap.adminAracSelectSofor[t].SelectAracSoforID, selected: true};
+                        }
+                        if (cevap.adminAracSofor) {
+                            var soforlength = cevap.adminAracSofor.length;
+                            for (var f = 0; f < soforlength; f++) {
+                                SoforOptions[t] = {label: cevap.adminAracSofor[f].DigerAracSoforAdi + ' ' + cevap.adminAracSofor[f].DigerAracSoforSoyad, title: cevap.adminAracSofor[f].DigerAracSoforAdi + ' ' + cevap.adminAracSofor[f].DigerAracSoforSoyad, value: cevap.adminAracSofor[f].DigerAracSoforID};
+                                t++;
+                            }
+                        }
+                    } else {
+                        if (cevap.adminAracSofor) {
+                            var soforlength = cevap.adminAracSofor.length;
+                            for (var t = 0; t < soforlength; t++) {
+                                SoforOptions[t] = {label: cevap.adminAracSofor[t].DigerAracSoforAdi + ' ' + cevap.adminAracSofor[t].DigerAracSoforSoyad, title: cevap.adminAracSofor[t].DigerAracSoforAdi + ' ' + cevap.adminAracSofor[t].DigerAracSoforSoyad, value: cevap.adminAracSofor[t].DigerAracSoforID};
+                            }
+                        }
+                    }
+
                     if (cevap.adminAracSelectSofor) {
                         var soforselectlength = cevap.adminAracSelectSofor.length;
                         for (var t = 0; t < soforselectlength; t++) {
@@ -200,6 +239,7 @@ $(document).ready(function () {
             aracBolgeID.push($(this).val());
         });
         var AracSoforOptions = new Array();
+        var AracHostesOptions = new Array();
         $.ajax({
             data: {"aracBolgeID[]": aracBolgeID, "tip": "AracSoforMultiSelect"},
             success: function (cevap) {
@@ -219,6 +259,18 @@ $(document).ready(function () {
                         $('#AracSurucu').multiselect('refresh');
                         $('#AracSurucu').multiselect('dataprovider', AracSoforOptions);
                     }
+
+                    if (cevap.aracYeniHostesMultiSelect) {
+                        var hosteslength = cevap.aracYeniHostesMultiSelect.HostesSelectID.length;
+                        for (var h = 0; h < hosteslength; h++) {
+                            AracHostesOptions[h] = {label: cevap.aracYeniHostesMultiSelect.HostesSelectAd[h] + ' ' + cevap.aracYeniHostesMultiSelect.HostesSelectSoyad[h], title: cevap.aracYeniHostesMultiSelect.HostesSelectAd[h] + ' ' + cevap.aracYeniHostesMultiSelect.HostesSelectSoyad[h], value: cevap.aracYeniHostesMultiSelect.HostesSelectID[h]};
+                        }
+                        $('#AracHostes').multiselect('refresh');
+                        $('#AracHostes').multiselect('dataprovider', AracHostesOptions);
+                    } else {
+                        $('#AracHostes').multiselect('refresh');
+                        $('#AracHostes').multiselect('dataprovider', AracHostesOptions);
+                    }
                 }
             }
         });
@@ -228,18 +280,22 @@ $(document).ready(function () {
     $('#AracBolgeSelect').multiselect({
         onDropdownShow: function (event) {
             $('#AracSurucu').show();
+            $('#AracHostes').show();
         },
         onDropdownHide: function (event) {
             $('#AracSurucu').hide();
+            $('#AracHostes').hide();
         }
     });
 //araç detail
     $('#AracDetayBolgeSelect').multiselect({
         onDropdownShow: function (event) {
             $('#AracDetaySurucu').show();
+            $('#AracDetayHostes').show();
         },
         onDropdownHide: function (event) {
             $('#AracDetaySurucu').hide();
+            $('#AracDetayHostes').hide();
         }
     });
 });
@@ -271,6 +327,7 @@ $.AdminIslemler = {
                     $('#AracBolgeSelect').multiselect('refresh');
                     $('#AracBolgeSelect').multiselect('dataprovider', BolgeOptions);
                     $('#AracSurucu').multiselect('refresh');
+                    $('#AracHostes').multiselect('refresh');
                     var selectLength = $('#AracBolgeSelect > option').length;
                     if (!selectLength) {
                         reset();
@@ -325,8 +382,19 @@ $.AdminIslemler = {
                     $('select#AracSurucu option:selected').each(function () {
                         aracSoforAd.push($(this).attr('title'));
                     });
+                    //araç Hostes Id
+                    var aracHostesID = new Array();
+                    $('select#AracHostes option:selected').each(function () {
+                        aracHostesID.push($(this).val());
+                    });
+                    //araç Hostes Ad
+                    var aracHostesAd = new Array();
+                    $('select#AracHostes option:selected').each(function () {
+                        aracHostesAd.push($(this).attr('title'));
+                    });
                     $.ajax({
-                        data: {"aracBolgeID[]": aracBolgeID, "aracBolgeAd[]": aracBolgeAd, "aracSoforID[]": aracSoforID, "aracSoforAd[]": aracSoforAd, "aracPlaka": aracPlaka, "aracMarka": aracMarka, "aracModelYil": aracModelYil,
+                        data: {"aracBolgeID[]": aracBolgeID, "aracBolgeAd[]": aracBolgeAd, "aracSoforID[]": aracSoforID, "aracSoforAd[]": aracSoforAd,
+                            "aracHostesID[]": aracHostesID, "aracHostesAd[]": aracHostesAd, "aracPlaka": aracPlaka, "aracMarka": aracMarka, "aracModelYil": aracModelYil,
                             "aracKapasite": aracKapasite, "aracAciklama": aracAciklama, "aracDurum": aracDurum, "tip": "adminAracKaydet"},
                         success: function (cevap) {
                             if (cevap.hata) {
@@ -364,6 +432,8 @@ $.AdminIslemler = {
                                 aracBolgeAd = [];
                                 aracSoforID = [];
                                 aracSoforAd = [];
+                                aracHostesID = [];
+                                aracHostesAd = [];
                             }
                         }
                     });
@@ -409,6 +479,16 @@ $.AdminIslemler = {
         $('select#AracDetaySurucu option:selected').each(function () {
             aracSoforAd.push($(this).attr('title'));
         });
+        //araç Hostes Id
+        var aracHostesID = new Array();
+        $('select#AracDetayHostes option:selected').each(function () {
+            aracHostesID.push($(this).val());
+        });
+        //araç Hostes Ad
+        var aracHostesAd = new Array();
+        $('select#AracDetayHostes option:selected').each(function () {
+            aracHostesAd.push($(this).attr('title'));
+        });
         //araç Seçili Olmayan Bölge ID
         var aracBolgeNID = new Array();
         $('select#AracDetayBolgeSelect option:not(:selected)').each(function () {
@@ -429,8 +509,19 @@ $.AdminIslemler = {
         $('select#AracDetaySurucu option:not(:selected)').each(function () {
             aracSoforNAd.push($(this).attr('title'));
         });
+        //araç Seçili Olmayan Hostes Id
+        var aracHostesNID = new Array();
+        $('select#AracDetayHostes option:not(:selected)').each(function () {
+            aracHostesNID.push($(this).val());
+        });
+        //araç Seçili Olmayan Hostes Ad
+        var aracHostesNAd = new Array();
+        $('select#AracDetayHostes option:not(:selected)').each(function () {
+            aracHostesNAd.push($(this).attr('title'));
+        });
         var SelectBolgeOptions = new Array();
         var SelectAracOptions = new Array();
+        var SelectHostesOptions = new Array();
         if (aracBolgeID.length > 0) {
             var bolgelength = aracBolgeID.length;
             for (var b = 0; b < bolgelength; b++) {
@@ -478,12 +569,37 @@ $.AdminIslemler = {
             }
         }
 
+        if (aracHostesID.length > 0) {
+            var hostesselectlength = aracHostesID.length;
+            for (var h = 0; h < hostesselectlength; h++) {
+                SelectHostesOptions[h] = {label: aracHostesAd[h], title: aracHostesAd[h], value: aracHostesID[h], selected: true};
+            }
+
+            if (aracHostesNID.length > 0) {
+                var hosteslength = aracHostesNID.length;
+                for (var v = 0; v < hosteslength; v++) {
+                    SelectHostesOptions[h] = {label: aracHostesNAd[v], title: aracHostesNAd[v], value: aracHostesNID[v]};
+                    h++;
+                }
+            }
+        } else {
+            if (aracHostesNID.length > 0) {
+                var hosteslength = aracHostesNID.length;
+                for (var v = 0; v < hosteslength; v++) {
+                    SelectHostesOptions[v] = {label: aracHostesNAd[v], title: aracHostesNAd[v], value: aracHostesNID[v]};
+                }
+            }
+        }
+
+
         $('#AracDetayBolgeSelect').multiselect('refresh');
         $('#AracDetaySurucu').multiselect('refresh');
+        $('#AracDetayHostes').multiselect('refresh');
         $('#AracDetayBolgeSelect').multiselect('dataprovider', SelectBolgeOptions);
         $('#AracDetaySurucu').multiselect('dataprovider', SelectAracOptions);
+        $('#AracDetayHostes').multiselect('dataprovider', SelectHostesOptions);
         AdminAracDetailVazgec = [];
-        AdminAracDetailVazgec.push(aracPlaka, aracMarka, aracModelYil, aracKapasite, aracAciklama, aracDurum, aracBolgeID, aracBolgeAd, aracBolgeNID, aracBolgeNAd, aracSoforID, aracSoforAd, aracSoforNID, aracSoforNAd);
+        AdminAracDetailVazgec.push(aracPlaka, aracMarka, aracModelYil, aracKapasite, aracAciklama, aracDurum, aracBolgeID, aracBolgeAd, aracBolgeNID, aracBolgeNAd, aracSoforID, aracSoforAd, aracSoforNID, aracSoforNAd, aracHostesID, aracHostesAd, aracHostesNID, aracHostesNAd);
     },
     adminAracDetailVazgec: function () {
         $("input[name=AracDetayPlaka]").val(AdminAracDetailVazgec[0]);
@@ -494,6 +610,7 @@ $.AdminIslemler = {
         $("#AracDetayDurum").val(AdminAracDetailVazgec[5]);
         var SelectBolgeOptions = new Array();
         var SelectAracOptions = new Array();
+        var SelectHostesOptions = new Array();
         if (AdminAracDetailVazgec[6].length > 0) {
             var bolgelength = AdminAracDetailVazgec[6].length;
             for (var b = 0; b < bolgelength; b++) {
@@ -537,10 +654,33 @@ $.AdminIslemler = {
             }
         }
 
+        if (AdminAracDetailVazgec[14].length > 0) {
+            var hostesselectlength = AdminAracDetailVazgec[14].length;
+            for (var h = 0; h < hostesselectlength; h++) {
+                SelectHostesOptions[h] = {label: AdminAracDetailVazgec[15][h], title: AdminAracDetailVazgec[15][h], value: AdminAracDetailVazgec[14][h], selected: true, disabled: true};
+            }
+            if (AdminAracDetailVazgec[16].length > 0) {
+                var hosteslength = AdminAracDetailVazgec[16].length;
+                for (var v = 0; v < hosteslength; v++) {
+                    SelectHostesOptions[h] = {label: AdminAracDetailVazgec[17][v], title: AdminAracDetailVazgec[17][v], value: AdminAracDetailVazgec[16][v], disabled: true};
+                    h++;
+                }
+            }
+        } else {
+            if (AdminAracDetailVazgec[16].length > 0) {
+                var soforlength = AdminAracDetailVazgec[16].length;
+                for (var v = 0; v < soforlength; v++) {
+                    SelectHostesOptions[v] = {label: AdminAracDetailVazgec[17][v], title: AdminAracDetailVazgec[17][v], value: AdminAracDetailVazgec[16][v], disabled: true};
+                }
+            }
+        }
+
         $('#AracDetayBolgeSelect').multiselect('refresh');
         $('#AracDetaySurucu').multiselect('refresh');
+        $('#AracDetayHostes').multiselect('refresh');
         $('#AracDetayBolgeSelect').multiselect('dataprovider', SelectBolgeOptions);
         $('#AracDetaySurucu').multiselect('dataprovider', SelectAracOptions);
+        $('#AracDetayHostes').multiselect('dataprovider', SelectHostesOptions);
     },
     adminAracDetailSil: function () {
         reset();
@@ -615,6 +755,16 @@ $.AdminIslemler = {
         $('select#AracDetaySurucu option:selected').each(function () {
             aracSoforAd.push($(this).attr('title'));
         });
+        //araç Hostes Id
+        var aracHostesID = new Array();
+        $('select#AracDetayHostes option:selected').each(function () {
+            aracHostesID.push($(this).val());
+        });
+        //araç Hostes Ad
+        var aracHostesAd = new Array();
+        $('select#AracDetayHostes option:selected').each(function () {
+            aracHostesAd.push($(this).attr('title'));
+        });
         //araç Seçili Olmayan Bölge ID
         var aracBolgeNID = new Array();
         $('select#AracDetayBolgeSelect option:not(:selected)').each(function () {
@@ -635,11 +785,23 @@ $.AdminIslemler = {
         $('select#AracDetaySurucu option:not(:selected)').each(function () {
             aracSoforNAd.push($(this).attr('title'));
         });
+        //araç Seçili Olmayan Hostes Id
+        var aracHostesNID = new Array();
+        $('select#AracDetayHostes option:not(:selected)').each(function () {
+            aracHostesNID.push($(this).val());
+        });
+        //araç Seçili Olmayan Hostes Ad
+        var aracHostesNAd = new Array();
+        $('select#AracDetayHostes option:not(:selected)').each(function () {
+            aracHostesNAd.push($(this).attr('title'));
+        });
         var farkbolge = farkArray(AdminAracDetailVazgec[6], aracBolgeID);
         var farkbolgelength = farkbolge.length;
         var farkarac = farkArray(AdminAracDetailVazgec[10], aracSoforID);
         var farkaraclength = farkarac.length;
-        if (AdminAracDetailVazgec[0] == aracPlaka && AdminAracDetailVazgec[1] == aracMarka && AdminAracDetailVazgec[2] == aracModelYil && AdminAracDetailVazgec[3] == aracKapasite && AdminAracDetailVazgec[4] == aracAciklama && AdminAracDetailVazgec[5] == aracDurum && farkbolgelength == 0 && farkaraclength == 0) {
+        var farkhostes = farkArray(AdminAracDetailVazgec[14], aracHostesID);
+        var farkhosteslength = farkhostes.length;
+        if (AdminAracDetailVazgec[0] == aracPlaka && AdminAracDetailVazgec[1] == aracMarka && AdminAracDetailVazgec[2] == aracModelYil && AdminAracDetailVazgec[3] == aracKapasite && AdminAracDetailVazgec[4] == aracAciklama && AdminAracDetailVazgec[5] == aracDurum && farkbolgelength == 0 && farkaraclength == 0 && farkhosteslength == 0) {
             reset();
             alertify.alert(jsDil.Degisiklik);
             return false;
@@ -657,7 +819,9 @@ $.AdminIslemler = {
                     var aracBolgeLength = $('select#AracDetayBolgeSelect option:selected').val();
                     if (aracBolgeLength) {
                         $.ajax({
-                            data: {"aracdetail_id": aracdetail_id, "aracBolgeID[]": aracBolgeID, "aracBolgeAd[]": aracBolgeAd, "aracSoforID[]": aracSoforID, "aracSoforAd[]": aracSoforAd, "aracPlaka": aracPlaka, "aracMarka": aracMarka, "aracModelYil": aracModelYil,
+                            data: {"aracdetail_id": aracdetail_id, "aracBolgeID[]": aracBolgeID, "aracBolgeAd[]": aracBolgeAd,
+                                "aracSoforID[]": aracSoforID, "aracSoforAd[]": aracSoforAd, "aracHostesID[]": aracHostesID, "aracHostesAd[]": aracHostesAd,
+                                "aracPlaka": aracPlaka, "aracMarka": aracMarka, "aracModelYil": aracModelYil,
                                 "aracKapasite": aracKapasite, "aracAciklama": aracAciklama, "aracDurum": aracDurum, "tip": "adminAracDetailKaydet"},
                             success: function (cevap) {
                                 if (cevap.hata) {
@@ -670,6 +834,7 @@ $.AdminIslemler = {
                                     alertify.success(jsDil.AracDuzenle);
                                     var SelectBolgeOptions = new Array();
                                     var SelectAracOptions = new Array();
+                                    var SelectHostesOptions = new Array();
                                     if (aracBolgeID.length > 0) {
                                         var bolgelength = aracBolgeID.length;
                                         for (var b = 0; b < bolgelength; b++) {
@@ -684,6 +849,7 @@ $.AdminIslemler = {
                                         }
 
                                     }
+                                    //şoför multi select
                                     if (aracSoforID.length > 0) {
                                         var soforselectlength = aracSoforID.length;
                                         for (var t = 0; t < soforselectlength; t++) {
@@ -700,16 +866,40 @@ $.AdminIslemler = {
                                     } else {
                                         if (aracSoforNID.length > 0) {
                                             var soforlength = aracSoforNID.length;
-                                            for (var t = 0; f < soforlength; t++) {
-                                                SelectAracOptions[t] = {label: aracSoforNAd[t], title: aracSoforNAd[t], value: aracSoforNID[ts], disabled: true};
+                                            for (var f = 0; f < soforlength; f++) {
+                                                SelectAracOptions[f] = {label: aracSoforNAd[f], title: aracSoforNAd[f], value: aracSoforNID[f], disabled: true};
+                                            }
+                                        }
+                                    }
+                                    //hostes multi select
+                                    if (aracHostesID.length > 0) {
+                                        var hostesselectlength = aracHostesID.length;
+                                        for (var h = 0; h < hostesselectlength; h++) {
+                                            SelectHostesOptions[h] = {label: aracHostesAd[h], title: aracHostesAd[h], value: aracHostesID[h], disabled: true, selected: true};
+                                        }
+
+                                        if (aracHostesNID.length > 0) {
+                                            var hosteslength = aracHostesNID.length;
+                                            for (var v = 0; v < hosteslength; v++) {
+                                                SelectHostesOptions[h] = {label: aracHostesNAd[v], title: aracHostesNAd[v], value: aracHostesNID[v], disabled: true};
+                                                h++;
+                                            }
+                                        }
+                                    } else {
+                                        if (aracHostesNID.length > 0) {
+                                            var hosteslength = aracHostesNID.length;
+                                            for (var v = 0; v < hosteslength; v++) {
+                                                SelectHostesOptions[v] = {label: aracHostesNAd[v], title: aracHostesNAd[v], value: aracHostesNID[v], disabled: true};
                                             }
                                         }
                                     }
 
                                     $('#AracDetayBolgeSelect').multiselect('refresh');
                                     $('#AracDetaySurucu').multiselect('refresh');
+                                    $('#AracDetayHostes').multiselect('refresh');
                                     $('#AracDetayBolgeSelect').multiselect('dataprovider', SelectBolgeOptions);
                                     $('#AracDetaySurucu').multiselect('dataprovider', SelectAracOptions);
+                                    $('#AracDetayHostes').multiselect('dataprovider', SelectHostesOptions);
                                     var length = $('tbody#adminAracRow tr').length;
                                     for (var t = 0; t < length; t++) {
                                         var attrValueId = $("tbody#adminAracRow > tr > td > a").eq(t).attr('value');

@@ -112,6 +112,11 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="AracSurucu"><?php echo $data["Hostes"]; ?></label>
+                        <select type="text" class="form-control" id="AracHostes" name="AracHostes" multiple="multiple" style="display: none;">
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="AracDurum"><?php echo $data["Durum"]; ?></label>
                         <select type="text" class="form-control" id="AracDurum" name="AracDurum">
                             <option value="0"><?php echo $data["Pasif"]; ?></option>
@@ -178,6 +183,11 @@
                         <div class="form-group">
                             <label for="AracDetaySurucu"><?php echo $data["Surucu"]; ?></label>
                             <select type="text" class="form-control" id="AracDetaySurucu" name="AracDetaySurucu" multiple="multiple">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="AracDetayHostes"><?php echo $data["Hostes"]; ?></label>
+                            <select type="text" class="form-control" id="AracDetayHostes" name="AracDetayHostes" multiple="multiple">
                             </select>
                         </div>
                         <div class="form-group">

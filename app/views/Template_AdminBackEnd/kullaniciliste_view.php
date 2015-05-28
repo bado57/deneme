@@ -87,7 +87,7 @@
                         </p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-bus"></i>
+                        <i class="fa fa-info"></i>
                     </div>
                 </a>
             </div>

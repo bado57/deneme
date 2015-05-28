@@ -155,7 +155,7 @@ $(document).ready(function () {
         $('#AracDetaySurucu').multiselect('refresh');
         var AracOptions = new Array();
         $.ajax({
-            data: {"hostesID": hostesID, "hostesDetailBolgeID[]": hostesDetailBolgeID, "tip": "HostesDetailMultiSelect"},
+            data: {"hostesID": hostesID, "hostesDetailBolgeID[]": hostesDetailBolgeID, "tip": "hostesDetailMultiSelect"},
             success: function (cevap) {
                 if (cevap.hata) {
                     reset();
@@ -588,7 +588,7 @@ $.AdminIslemler = {
             if (e) {
                 var hostesdetail_id = $("input[name=hostesDetayID]").val();
                 $.ajax({
-                    data: {"hostesDetailSil": hostesDetailSil, "tip": "hostesDetailDelete"},
+                    data: {"hostesdetail_id": hostesdetail_id, "tip": "hostesDetailDelete"},
                     success: function (cevap) {
                         if (cevap.hata) {
                             reset();

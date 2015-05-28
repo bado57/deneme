@@ -147,7 +147,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label for="TurArac"><?php echo $data["Araclar"]; ?></label>
                         <select type="text" class="form-control" id="TurArac" name="TurArac" style="display: none;">
                         </select>
@@ -155,6 +155,11 @@
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label for="TurSofor"><?php echo $data["Sofor"]; ?></label>
                         <select type="text" class="form-control" id="TurSofor" name="TurSofor" style="display: none;">
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <label for="TurHostes"><?php echo $data["Hostes"]; ?></label>
+                        <select type="text" class="form-control" id="TurHostes" name="TurHostes" style="display: none;">
                         </select>
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -276,7 +281,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label for="TurDetayGidisArac"><?php echo $data["Araclar"]; ?></label>
                         <select type="text" class="form-control" id="TurDetayGidisArac" name="TurDetayGidisArac">
                         </select>
@@ -287,6 +292,14 @@
                         <input id="GidisSoforAd" name="GidisSoforAd" type="hidden" value="" />
                         <label for="TurDetayGidisSofor"><?php echo $data["Sofor"]; ?></label>
                         <select type="text" class="form-control" id="TurDetayGidisSofor" name="TurDetayGidisSofor">
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <input id="GidisHostesInput" name="GidisHostesInput" type="hidden" value="" />
+                        <input id="GidisHostesID" name="GidisHostesID" type="hidden" value="" />
+                        <input id="GidisHostesAd" name="GidisHostesAd" type="hidden" value="" />
+                        <label for="TurDetayGidisHostes"><?php echo $data["Hostes"]; ?></label>
+                        <select type="text" class="form-control" id="TurDetayGidisHostes" name="TurDetayGidisHostes">
                         </select>
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -358,7 +371,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label for="TurDetayDonusArac"><?php echo $data["Araclar"]; ?></label>
                         <select type="text" class="form-control" id="TurDetayDonusArac" name="TurDetayDonusArac">
                         </select>
@@ -369,6 +382,14 @@
                         <input id="DonusSoforAd" name="DonusSoforAd" type="hidden" value="" />
                         <label for="TurDetayDonusSofor"><?php echo $data["Sofor"]; ?></label>
                         <select type="text" class="form-control" id="TurDetayDonusSofor" name="TurDetayDonusSofor">
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <input id="DonusHostesInput" name="DonusHostesInput" type="hidden" value="" />
+                        <input id="DonusHostesID" name="DonusHostesID" type="hidden" value="" />
+                        <input id="DonusHostesAd" name="DonusHostesAd" type="hidden" value="" />
+                        <label for="TurDetayDonusHostes"><?php echo $data["Hostes"]; ?></label>
+                        <select type="text" class="form-control" id="TurDetayDonusHostes" name="TurDetayDonusHostes">
                         </select>
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">

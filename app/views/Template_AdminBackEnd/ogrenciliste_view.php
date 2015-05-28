@@ -242,7 +242,7 @@
                         <label for="OgrenciDetayLokasyon"><?php echo $data["Lokasyon"]; ?></label>
                         <div class="input-group">
                             <span class="input-group-btn">
-                                <button data-type="svOpen" data-class="map" class="btn btn-success svToggle dsb" data-islemler="adminSingleMap" type="button" disabled>
+                                <button data-type="svOpen" data-class="map" class="btn btn-success svToggle" data-islemler="adminSingleMap" type="button" disabled>
                                     <i class="fa fa-map-marker"></i>
                                 </button>
                             </span>

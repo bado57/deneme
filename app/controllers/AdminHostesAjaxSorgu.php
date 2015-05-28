@@ -170,8 +170,8 @@ class AdminHostesAjaxSorgu extends Controller {
                                                 $bolgedata[$b] = array(
                                                     'BSHostesID' => $resultHostesID,
                                                     'BSHostesAd' => $hostesAdSoyad,
-                                                    'BSHostesID' => $hostesBolgeID[$b],
-                                                    'BSHostesAdi' => $hostesBolgeAdi[$b]
+                                                    'BSBolgeID' => $hostesBolgeID[$b],
+                                                    'BSBolgeAdi' => $hostesBolgeAdi[$b]
                                                 );
                                             }
                                             $resultBolgeID = $Panel_Model->addNewBolgeHostes($bolgedata);
@@ -197,7 +197,7 @@ class AdminHostesAjaxSorgu extends Controller {
                                                         $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                                                     }
 
-                                                    $sonuc["newSoforID"] = $resultHostesID;
+                                                    $sonuc["newHostesID"] = $resultHostesID;
                                                     $sonuc["insert"] = "Başarıyla Hostes Eklenmiştir.";
                                                 } else {
                                                     $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
@@ -207,7 +207,7 @@ class AdminHostesAjaxSorgu extends Controller {
                                                         $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                                                     }
 
-                                                    $sonuc["newSoforID"] = $resultHostesID;
+                                                    $sonuc["newHostesID"] = $resultHostesID;
                                                     $sonuc["insert"] = "Başarıyla Hostes Eklenmiştir.";
                                                 }
                                             } else {
@@ -644,13 +644,13 @@ class AdminHostesAjaxSorgu extends Controller {
                         }
                     }
 
-                case "HostesDetailMultiSelect":
+                case "hostesDetailMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
                         $hostesDetailBolgeID = $_REQUEST['hostesDetailBolgeID'];
-                        $form->post('soforID', true);
+                        $form->post('hostesID', true);
                         $hostesID = $form->values['hostesID'];
 
                         //hostese ait araçlar
@@ -681,6 +681,7 @@ class AdminHostesAjaxSorgu extends Controller {
                             //ortak ıd ye sahip arac varmı
                             if (count($ortakIDler) > 0) {
                                 //seçili araçlar
+                                error_log(count($ortakIDler));
                                 $secilenIdArac = implode(',', $ortakIDler);
                                 $selectBolgeArac = $Panel_Model->hostesNotSelectArac($secilenIdArac);
                                 $c = 0;
