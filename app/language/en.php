@@ -173,7 +173,12 @@ class en {
             "TurSecim" => "Tour Details",
             "TurGidis" => "Tour Going",
             "TurDonus" => "Tour Return",
-            "OgrenciPersonel" => "Student/Employee"
+            "OgrenciPersonel" => "Student/Employee",
+            "TurKurum" => "Tour Institution",
+            "TurBolge" => "Tour Region",
+            "TurKm" => "Tour Km",
+            "AracKapasite" => "Car Capacity",
+            "TurKisi" => "Tour Person"
         );
         return $endil;
     }

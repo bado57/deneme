@@ -508,6 +508,7 @@ function multipleTurMapping(gelen, index, ayirici, sofor) {
     var infobox;
     var soforDeger = 0;
     var aracKapasite = $('select#TurArac option[value!="-1"]:selected').attr('kapasite');
+    $("#totalKapasite").text(aracKapasite);
     if (navigator.geolocation) {
 
         var icons = [];
@@ -625,6 +626,7 @@ function multipleTurMapping(gelen, index, ayirici, sofor) {
                                     var markerIndex = markerIs.indexOf(this.number);
                                     if (markerIndex != -1) {
                                         artanKapasite--;
+                                        $("#totalKisi").text(artanKapasite);
                                     }
                                     if (artanKapasite < aracKapasite) {
                                         if (markerIs.length == 0) {
@@ -653,6 +655,7 @@ function multipleTurMapping(gelen, index, ayirici, sofor) {
 
                                             markerIs.push(this.number);
                                             artanKapasite++;
+                                            $("#totalKisi").text(artanKapasite);
                                             key = this.number;
                                             var obj = {};
                                             obj[key] = this.getPosition().lat() + ',' + this.getPosition().lng();
@@ -680,6 +683,7 @@ function multipleTurMapping(gelen, index, ayirici, sofor) {
                                                 }
                                                 markerIs.push(this.number);
                                                 artanKapasite++;
+                                                $("#totalKisi").text(artanKapasite);
                                                 if (items.length >= 2) {
                                                     items.pop();
                                                 }
@@ -947,6 +951,7 @@ function multipleHostesTurMapping(gelen, index, ayirici, hostes) {
     var infobox;
     var soforDeger = 0;
     var aracKapasite = $('select#TurArac option[value!="-1"]:selected').attr('kapasite');
+    $("#totalKapasite").text(aracKapasite);
     if (navigator.geolocation) {
         console.log(ayirici);
         console.log(gelen.length);
@@ -1056,6 +1061,7 @@ function multipleHostesTurMapping(gelen, index, ayirici, hostes) {
                                         var markerIndex = markerIs.indexOf(this.number);
                                         if (markerIndex != -1) {
                                             artanKapasite--;
+                                            $("#totalKisi").text(artanKapasite);
                                         }
                                         if (artanKapasite < aracKapasite) {
                                             if (markerIs.length == 0) {
@@ -1084,6 +1090,7 @@ function multipleHostesTurMapping(gelen, index, ayirici, hostes) {
 
                                                 markerIs.push(this.number);
                                                 artanKapasite++;
+                                                $("#totalKisi").text(artanKapasite);
                                                 key = this.number;
                                                 var obj = {};
                                                 obj[key] = this.getPosition().lat() + ',' + this.getPosition().lng();
@@ -1111,6 +1118,7 @@ function multipleHostesTurMapping(gelen, index, ayirici, hostes) {
                                                     }
                                                     markerIs.push(this.number);
                                                     artanKapasite++;
+                                                    $("#totalKisi").text(artanKapasite);
                                                     if (items.length >= 2) {
                                                         items.pop();
                                                     }
@@ -1411,6 +1419,8 @@ function multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, 
     var markerIs = new Array();
     var infobox;
     var map = null;
+    //araç kapasitesini yazdırma
+    $("#totalGidisKapasite").text(turDetayGidisAracKapasite);
     if (navigator.geolocation) {
         //okulu dizinin başına ekliyoruz
         var icons = [];
@@ -1479,6 +1489,7 @@ function multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, 
         var key;
         //başta kullancıılar gelmekte
         var artanKapasite = DetailGidisGelenID.length;
+        $("#totalGidisKisi").text(artanKapasite);
         var kayitSira = 0;
         var interval = setInterval(function () {
             var gelenLocationSplit = '';
@@ -1536,6 +1547,7 @@ function multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, 
                                 var markerIndex = markerIs.indexOf(this.number);
                                 if (markerIndex != -1) {
                                     artanKapasite--;
+                                    $("#totalGidisKisi").text(artanKapasite);
                                 }
                                 if (artanKapasite < turDetayGidisAracKapasite) {
                                     if (markerIs.length == 0) {
@@ -1564,6 +1576,7 @@ function multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, 
 
                                         markerIs.push(this.number);
                                         artanKapasite++;
+                                        $("#totalGidisKisi").text(artanKapasite);
                                         key = this.number;
                                         var obj = {};
                                         obj[key] = this.getPosition().lat() + ',' + this.getPosition().lng();
@@ -1589,6 +1602,7 @@ function multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, 
                                             }
                                             markerIs.push(this.number);
                                             artanKapasite++;
+                                            $("#totalGidisKisi").text(artanKapasite);
                                             if (items.length >= 2) {
                                                 items.pop();
                                             }
@@ -1933,6 +1947,7 @@ function multipleTurHostesDetayMap(kurumAd, kurumID, kurumLocation, soforAd, sof
     var markerIs = new Array();
     var infobox;
     var map = null;
+    $("#totalGidisKapasite").text(turDetayGidisAracKapasite);
     if (navigator.geolocation) {
         //okulu dizinin başına ekliyoruz
         var icons = [];
@@ -2005,6 +2020,7 @@ function multipleTurHostesDetayMap(kurumAd, kurumID, kurumLocation, soforAd, sof
         var key;
         //başta kullancıılar gelmekte
         var artanKapasite = DetailGidisGelenID.length;
+        $("#totalGidisKisi").text(artanKapasite);
         var kayitSira = 0;
         var interval = setInterval(function () {
             var gelenLocationSplit = '';
@@ -2067,6 +2083,7 @@ function multipleTurHostesDetayMap(kurumAd, kurumID, kurumLocation, soforAd, sof
                                     var markerIndex = markerIs.indexOf(this.number);
                                     if (markerIndex != -1) {
                                         artanKapasite--;
+                                        $("#totalGidisKisi").text(artanKapasite);
                                     }
                                     if (artanKapasite < turDetayGidisAracKapasite) {
                                         if (markerIs.length == 0) {
@@ -2095,6 +2112,7 @@ function multipleTurHostesDetayMap(kurumAd, kurumID, kurumLocation, soforAd, sof
 
                                             markerIs.push(this.number);
                                             artanKapasite++;
+                                            $("#totalGidisKisi").text(artanKapasite);
                                             key = this.number;
                                             var obj = {};
                                             obj[key] = this.getPosition().lat() + ',' + this.getPosition().lng();
@@ -2120,6 +2138,7 @@ function multipleTurHostesDetayMap(kurumAd, kurumID, kurumLocation, soforAd, sof
                                                 }
                                                 markerIs.push(this.number);
                                                 artanKapasite++;
+                                                $("#totalGidisKisi").text(artanKapasite);
                                                 if (items.length >= 2) {
                                                     items.pop();
                                                 }
@@ -2461,6 +2480,7 @@ function multipleTurDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, sofo
     var markerIs = new Array();
     var infobox;
     var map = null;
+    $("#totalDonusKapasite").text(turDetayDonusAracKapasite);
     if (navigator.geolocation) {
         //okulu dizinin başına ekliyoruz
         var icons = [];
@@ -2529,6 +2549,7 @@ function multipleTurDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, sofo
         var key;
         //başta kullancıılar gelmekte
         var artanKapasite = DetailDonusGelenID.length;
+        $("#totalDonusKisi").text(artanKapasite);
         var kayitSira = 0;
         var interval = setInterval(function () {
             var gelenLocationSplit = '';
@@ -2586,6 +2607,7 @@ function multipleTurDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, sofo
                                 var markerIndex = markerIs.indexOf(this.number);
                                 if (markerIndex != -1) {
                                     artanKapasite--;
+                                    $("#totalDonusKisi").text(artanKapasite);
                                 }
                                 if (artanKapasite < turDetayDonusAracKapasite) {
                                     if (markerIs.length == 0) {
@@ -2614,6 +2636,7 @@ function multipleTurDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, sofo
 
                                         markerIs.push(this.number);
                                         artanKapasite++;
+                                        $("#totalDonusKisi").text(artanKapasite);
                                         key = this.number;
                                         var obj = {};
                                         obj[key] = this.getPosition().lat() + ',' + this.getPosition().lng();
@@ -2639,6 +2662,7 @@ function multipleTurDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, sofo
                                             }
                                             markerIs.push(this.number);
                                             artanKapasite++;
+                                            $("#totalDonusKisi").text(artanKapasite);
                                             if (items.length >= 2) {
                                                 items.pop();
                                             }
@@ -2967,6 +2991,9 @@ function multipleTurHostesDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd
     gelenKisiAd.push(soforAd);
     gelenKisiID.push(soforID);
     gelenKisiLocation.push(soforLocation);
+    gelenKisiAd.push(hostesAd);
+    gelenKisiID.push(hostesID);
+    gelenKisiLocation.push(hostesLocation);
 
     //gelen dizinin uzunluğu
     var diziGelenLength = gelenKisiLocation.length;
@@ -2980,6 +3007,7 @@ function multipleTurHostesDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd
     var markerIs = new Array();
     var infobox;
     var map = null;
+    $("#totalDonusKapasite").text(turDetayDonusAracKapasite);
     if (navigator.geolocation) {
         //okulu dizinin başına ekliyoruz
         var icons = [];
@@ -3050,6 +3078,7 @@ function multipleTurHostesDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd
         var key;
         //başta kullancıılar gelmekte
         var artanKapasite = DetailDonusGelenID.length;
+        $("#totalDonusKisi").text(artanKapasite);
         var kayitSira = 0;
         var interval = setInterval(function () {
             var gelenLocationSplit = '';
@@ -3107,6 +3136,7 @@ function multipleTurHostesDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd
                                 var markerIndex = markerIs.indexOf(this.number);
                                 if (markerIndex != -1) {
                                     artanKapasite--;
+                                    $("#totalDonusKisi").text(artanKapasite);
                                 }
                                 if (artanKapasite < turDetayDonusAracKapasite) {
                                     if (markerIs.length == 0) {
@@ -3135,6 +3165,7 @@ function multipleTurHostesDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd
 
                                         markerIs.push(this.number);
                                         artanKapasite++;
+                                        $("#totalDonusKisi").text(artanKapasite);
                                         key = this.number;
                                         var obj = {};
                                         obj[key] = this.getPosition().lat() + ',' + this.getPosition().lng();
@@ -3160,6 +3191,7 @@ function multipleTurHostesDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd
                                             }
                                             markerIs.push(this.number);
                                             artanKapasite++;
+                                            $("#totalDonusKisi").text(artanKapasite);
                                             if (items.length >= 2) {
                                                 items.pop();
                                             }

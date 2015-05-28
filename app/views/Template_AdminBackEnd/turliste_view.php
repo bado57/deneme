@@ -178,7 +178,15 @@
                         <button type="button" class="btn btn-success save" data-Saveislem="adminTurKaydet"><?php echo $data["Kaydet"]; ?></button>
                     </div>
                 </div>
-                <div style=""><?php echo $data["ToplamKm"]; ?> : <span id="totalKm" style="font-weight: bold;color:black"></span></div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <div style=""><?php echo $data["ToplamKm"]; ?> : <span id="totalKm" style="font-weight: bold;color:black"></span></div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <div style=""><?php echo $data["AracKapasite"]; ?> : <span id="totalKapasite" style="font-weight: bold;color:black"></span></div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <div style=""><?php echo $data["TurKisi"]; ?> : <span id="totalKisi" style="font-weight: bold;color:black"></span></div>
+                </div>
                 <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12"  id="multiple_tur_map" style="top: 18%; right:10px;border: 2px solid #009933 !important;bottom: 10%">
 
                 </div>
@@ -317,7 +325,15 @@
                         </div>
                     </div>
                 </div>
-                <div style=""><?php echo $data["ToplamKm"]; ?> : <span id="totalGidisKm" style="font-weight: bold;color:black"></span></div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <div style=""><?php echo $data["ToplamKm"]; ?> : <span id="totalGidisKm" style="font-weight: bold;color:black"></span></div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <div style=""><?php echo $data["AracKapasite"]; ?> : <span id="totalGidisKapasite" style="font-weight: bold;color:black"></span></div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <div style=""><?php echo $data["TurKisi"]; ?> : <span id="totalGidisKisi" style="font-weight: bold;color:black"></span></div>
+                </div>
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12"  id="multiple_gidis_map" style="top: 18%; right:10px;border: 2px solid #009933 !important;bottom: 10%">
 
                 </div>
@@ -407,7 +423,15 @@
                         </div>
                     </div>
                 </div>
-                <div style=""><?php echo $data["ToplamKm"]; ?> : <span id="totalDonusKm" style="font-weight: bold;color:black"></span></div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <div style=""><?php echo $data["ToplamKm"]; ?> : <span id="totalDonusKm" style="font-weight: bold;color:black"></span></div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <div style=""><?php echo $data["AracKapasite"]; ?> : <span id="totalDonusKapasite" style="font-weight: bold;color:black"></span></div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                    <div style=""><?php echo $data["TurKisi"]; ?> : <span id="totalDonusKisi" style="font-weight: bold;color:black"></span></div>
+                </div>
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12"  id="multiple_donus_map" style="top: 18%; right:10px;border: 2px solid #009933 !important;bottom: 10%">
 
                 </div>

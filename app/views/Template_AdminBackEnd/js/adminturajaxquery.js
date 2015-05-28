@@ -2293,6 +2293,7 @@ $.AdminIslemler = {
                         multipleTurHostesDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation, hostesAd, hostesID, hostesLocation);
                         google.maps.event.addDomListener(window, 'load', multipleTurHostesDetayDonusMap);
                     } else {
+                        console.log("2");
                         multipleTurDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
                         google.maps.event.addDomListener(window, 'load', multipleTurDetayDonusMap);
                     }

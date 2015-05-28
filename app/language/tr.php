@@ -180,7 +180,9 @@ class tr {
             "AracLokasyon" => "Araç Lokasyon",
             "TurKurum" => "Tur Kurum",
             "TurBolge" => "Tur Bölge",
-            "TurKm" => "Tur Km"
+            "TurKm" => "Tur Km",
+            "AracKapasite" => "Araç Kapasite",
+            "TurKisi" => "Tur Kişi"
         );
         return $trdil;
     }
