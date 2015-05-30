@@ -1172,6 +1172,67 @@ class AdminWeb extends Controller {
         }
     }
 
+    //bildirim ayarları
+    function ayarislem() {
+
+        //session güvenlik kontrolü
+        $form = $this->load->otherClasses('Form');
+        $sessionKey = $form->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+            //memcache model bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
+
+            $formDbConfig = $this->load->otherClasses('DatabaseConfig');
+            $formDbConfig->configDb();
+
+            $language = Session::get("dil");
+            $formlanguage = $this->load->multilanguage($language);
+            $languagedeger = $formlanguage->multilanguage();
+
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/bildirimliste", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL);
+        }
+    }
+
+    function duyuruliste() {
+
+        //session güvenlik kontrolü
+        $form = $this->load->otherClasses('Form');
+        $sessionKey = $form->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+            //memcache model bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
+
+            $formDbConfig = $this->load->otherClasses('DatabaseConfig');
+            $formDbConfig->configDb();
+
+            $language = Session::get("dil");
+            $formlanguage = $this->load->multilanguage($language);
+            $languagedeger = $formlanguage->multilanguage();
+
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/duyuruliste", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL);
+        }
+    }
+
 }
 
 ?>

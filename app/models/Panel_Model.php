@@ -6,6 +6,117 @@ class Panel_Model extends Model {
         parent::__construct();
     }
 
+    //adminin bildirim ayarlarını çekiyorum
+    public function adminBildirimAyar($adminID) {
+        $sql = "SELECT BSAyarTip FROM bsadminbildirimayar Where BSAdminID=" . $adminID;
+        return($this->db->select($sql));
+    }
+
+    //bildirim kaydet
+    public function addNewAdminBildirim($data) {
+        return ($this->db->insert('bsadminbildirim', $data));
+    }
+
+    //bildirim kaydet
+    public function addNewAdminMultiBildirim($data) {
+        return ($this->db->multiInsert('bsadminbildirim', $data));
+    }
+
+    //log kaydet
+    public function addNewAdminLog($data) {
+        return ($this->db->insert('bsadminlog', $data));
+    }
+
+    //admin cihazlar
+    public function adminCihaz() {
+        $sql = 'SELECT bsadmincihazRecID FROM bsadmincihaz Where bsadminID=1';
+        return($this->db->select($sql));
+    }
+
+    //diğer admin cihazlar
+    public function digerAdminCihaz($array = array()) {
+        $sql = 'SELECT bsadmincihazRecID FROM bsadmincihaz Where bsadminID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //işçi cihaz
+    public function isciCihaz($array = array()) {
+        $sql = 'SELECT sbiscicihazRecID FROM sbiscicihaz Where sbisciID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //öğrenci cihaz
+    public function ogrenciCihaz($array = array()) {
+        $sql = 'SELECT bsogrencicihazRecID FROM bsogrencicihaz Where bsogrenciID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //ÖrenciVELİ
+    public function veliOgrenci($array = array()) {
+        $sql = 'SELECT DISTINCT BSVeliID FROM bsveliogrenci Where BSOgrenciID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //veli cihaz
+    public function veliCihaz($array = array()) {
+        $sql = 'SELECT bsvelicihazRecID FROM bsvelicihaz Where bsveliID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //şoför cihaz
+    public function soforCihaz($soforID) {
+        $sql = 'SELECT sbsoforcihazRecID FROM sbsoforcihaz Where sbsoforID=' . $soforID;
+        return($this->db->select($sql));
+    }
+
+    //hostes cihaz
+    public function hostesCihaz($hostesID) {
+        $sql = 'SELECT bshostescihazRecID FROM bshostescihaz Where bshostesID=' . $hostesID;
+        return($this->db->select($sql));
+    }
+
+    //admin bildirim
+    public function adminBildirimler($array = array()) {
+        $sql = 'SELECT BSAdminBildirimID,BSBildirimText,BSBildirimIcon,BSBildirimUrl,BSBildirimRenk,BSBildirimTip,BSOkundu,BSBildirimTarih FROM bsadminbildirim WHERE  BSBildirimTip NOT IN (' . $array . ') ORDER BY BSAdminBildirimID DESC LIMIT 4';
+        return($this->db->select($sql));
+    }
+
+    //admin bildirim Count
+    public function adminBildirimlerCount() {
+        $sql = 'SELECT COUNT(*) FROM bsadminbildirim WHERE BSGoruldu=0';
+        return($this->db->select($sql));
+    }
+
+    //ortak bölgeler
+    public function ortakBolge($adminID) {
+        $sql = 'SELECT BSBolgeID FROM bsadminbolge Where BSAdminID=' . $adminID;
+        return($this->db->select($sql));
+    }
+
+    //ortak bölgeler
+    public function ortakAdminBolge($bolgeID) {
+        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge Where BSBolgeID=' . $bolgeID . ' AND NOT BSAdminID=1';
+        return($this->db->select($sql));
+    }
+
+    //ortak bölgeler
+    public function ortakDigerAdminBolge($array = array()) {
+        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge Where BSBolgeID IN (' . $array . ') AND NOT BSAdminID=1';
+        return($this->db->select($sql));
+    }
+
+    //admin diğer ortak bölgeler
+    public function digerOrtakBolge($array = array(), $array1 = array()) {
+        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge Where BSBolgeID IN (' . $array . ') AND BSAdminID NOT IN (' . $array1 . ')';
+        return($this->db->select($sql));
+    }
+
+    //admin diğer ortak bölgeler
+    public function digerOrtakTekBolge($bolgeID, $array = array()) {
+        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge Where BSBolgeID =' . $bolgeID . ' AND BSAdminID NOT IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
     public function susersLogin($array = array(), $Kadi, $Sifre, $KullaniciID, $tableName) {
         $sql = "SELECT " . $Kadi . "," . $KullaniciID . " FROM " . $tableName . " WHERE " . $Kadi . " = :loginKadi && " . $Sifre . " = :loginSifre LIMIT 1";
         return ($count = $this->db->select($sql, $array));
@@ -42,37 +153,37 @@ class Panel_Model extends Model {
 
     //admin bölgeler listele
     public function rutbeBolgeListele($array = array()) {
-        $sql = 'SELECT SBBolgeAdi,SBBolgeID FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
+        $sql = 'SELECT SBBolgeAdi, SBBolgeID FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
         return($this->db->select($sql));
     }
 
     //admin bölgeler listele
     public function rutbeNotBolgeListele($array = array()) {
-        $sql = 'SELECT SBBolgeAdi,SBBolgeID FROM sbbolgeler Where SBBolgeID NOT IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
+        $sql = 'SELECT SBBolgeAdi, SBBolgeID FROM sbbolgeler Where SBBolgeID NOT IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
         return($this->db->select($sql));
     }
 
     //admin bölgeler kurum count
     public function bolgeKurum_Count($array = array()) {
-        $sql = 'SELECT SBBolgeID FROM sbkurum WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ')';
+        $sql = 'SELECT SBBolgeID FROM sbkurum WHERE SBBolgeID IN (' . implode(', ', array_map('intval', $array)) . ')';
         return($this->db->select($sql));
     }
 
     //admin bölgeler arac count
     public function bolgeArac_Count($array = array()) {
-        $sql = 'SELECT DISTINCT(SBTurAracID), SBBolgeID FROM sbtur WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And SBTurFirmaID=' . $firmaID;
+        $sql = 'SELECT DISTINCT(SBTurAracID), SBBolgeID FROM sbtur WHERE SBBolgeID IN (' . implode(', ', array_map('intval', $array)) . ') And SBTurFirmaID = ' . $firmaID;
         return($this->db->select($sql));
     }
 
     //admin bölgeler öğrenci count
     public function bolgeOgrenci_Count($array = array()) {
-        $sql = 'SELECT BSBolgeID FROM bsogrenci WHERE BSBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And BSFirmaID=' . $firmaID;
+        $sql = 'SELECT BSBolgeID FROM bsogrenci WHERE BSBolgeID IN (' . implode(', ', array_map('intval', $array)) . ') And BSFirmaID = ' . $firmaID;
         return($this->db->select($sql));
     }
 
     //admin bölgeler İŞÇİ count
     public function bolgeIsci_Count($array = array()) {
-        $sql = 'SELECT SBBolgeID FROM sbisci WHERE SBBolgeID IN (' . implode(',', array_map('intval', $array)) . ') And SBFirmaID=' . $firmaID;
+        $sql = 'SELECT SBBolgeID FROM sbisci WHERE SBBolgeID IN (' . implode(', ', array_map('intval', $array)) . ') And SBFirmaID = ' . $firmaID;
         return($this->db->select($sql));
     }
 
@@ -88,13 +199,13 @@ class Panel_Model extends Model {
 
     //admin bölge detail
     public function adminBolgeDetail($adminBolgeDetailID) {
-        $sql = 'SELECT SBBolgeID,SBBolgeAdi,SBBolgeAciklama FROM sbbolgeler WHERE SBBolgeID=' . $adminBolgeDetailID;
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi, SBBolgeAciklama FROM sbbolgeler WHERE SBBolgeID = ' . $adminBolgeDetailID;
         return($this->db->select($sql));
     }
 
     //admin bölge kurum detail
     public function adminBolgeKurumDetail($adminBolgeDetailID) {
-        $sql = 'SELECT SBKurumAdi,SBKurumLokasyon,SBKurumID FROM sbkurum WHERE SBBolgeID=' . $adminBolgeDetailID . ' ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumAdi, SBKurumLokasyon, SBKurumID FROM sbkurum WHERE SBBolgeID = ' . $adminBolgeDetailID . ' ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -138,25 +249,25 @@ class Panel_Model extends Model {
 
     //admin bölgeler kurum count
     public function kurumTur_Count($array = array()) {
-        $sql = 'SELECT SBKurumID FROM sbtur WHERE SBKurumID IN (' . implode(',', array_map('intval', $array)) . ')';
+        $sql = 'SELECT SBKurumID FROM sbtur WHERE SBKurumID IN (' . implode(', ', array_map('intval', $array)) . ')';
         return($this->db->select($sql));
     }
 
     //admin bölgeye öre kurum listele
     public function rutbeKurumBolgeListele($array = array()) {
-        $sql = 'SELECT SBKurumAdi,SBKurumID,SBKurumAciklama,SBBolgeID,SBBolgeAdi,SBKurumTip FROM sbkurum Where SBBolgeID IN (' . $array . ') ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumAdi, SBKurumID, SBKurumAciklama, SBBolgeID, SBBolgeAdi, SBKurumTip FROM sbkurum Where SBBolgeID IN (' . $array . ') ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 
     //admin kurum detail
     public function adminKurumDetail($adminKurumDetailID) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi,SBBolgeAdi,SBBolgeID,SBKurumTip,SBKurumTelefon,SBKurumEmail,SBKurumAdres,SBKurumAciklama,SBKurumLokasyon FROM sbkurum WHERE SBKurumID=' . $adminKurumDetailID;
+        $sql = 'SELECT SBKurumID, SBKurumAdi, SBBolgeAdi, SBBolgeID, SBKurumTip, SBKurumTelefon, SBKurumEmail, SBKurumAdres, SBKurumAciklama, SBKurumLokasyon FROM sbkurum WHERE SBKurumID = ' . $adminKurumDetailID;
         return($this->db->select($sql));
     }
 
     //admin kurum tur detail
     public function adminKurumTurDetail($adminKurumDetailID) {
-        $sql = 'SELECT SBTurID,SBTurAd,SBTurAktiflik,SBTurTip,SBTurAciklama FROM sbtur WHERE SBKurumID=' . $adminKurumDetailID . ' ORDER BY SBTurAd ASC';
+        $sql = 'SELECT SBTurID, SBTurAd, SBTurAktiflik, SBTurTip, SBTurAciklama FROM sbtur WHERE SBKurumID = ' . $adminKurumDetailID . ' ORDER BY SBTurAd ASC';
         return($this->db->select($sql));
     }
 
@@ -184,7 +295,7 @@ class Panel_Model extends Model {
 
     //admin rütbe kurum bölge select listele
     public function adminRutbeKurumBolgeListele($array = array()) {
-        $sql = 'SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -201,13 +312,13 @@ class Panel_Model extends Model {
 
     //admin aktif arac listele
     public function aracListele() {
-        $sql = 'SELECT SBAracID,SBAracPlaka,SBAracMarka,SBAracModelYili,SBAracKapasite,SBAracKm,SBAracDurum FROM sbarac ORDER BY SBAracPlaka ASC';
+        $sql = 'SELECT SBAracID, SBAracPlaka, SBAracMarka, SBAracModelYili, SBAracKapasite, SBAracKm, SBAracDurum FROM sbarac ORDER BY SBAracPlaka ASC';
         return($this->db->select($sql));
     }
 
     //araç ıd listele
     public function aracIDListele() {
-        $sql = 'SELECT BSAracID,BSAracTurTip,BSAracTurID FROM bsaraclokasyon';
+        $sql = 'SELECT BSAracID, BSAracTurTip, BSAracTurID FROM bsaraclokasyon';
         return($this->db->select($sql));
     }
 
@@ -219,13 +330,13 @@ class Panel_Model extends Model {
 
     //araç rutbe ıd listele
     public function aracRutbeIDListele($array = array()) {
-        $sql = 'SELECT BSAracID,BSAracTurTip,BSAracTurID FROM bsaraclokasyon WHERE BSAracID IN (' . $array . ')';
+        $sql = 'SELECT BSAracID, BSAracTurTip, BSAracTurID FROM bsaraclokasyon WHERE BSAracID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
     //tura kayıtlı araçlar
     public function aracAktifTurListele($array = array(), $array1 = array(), $array2 = array()) {
-        $sql = 'SELECT DISTINCT BSTurAracID,BSTurAracPlaka,BSTurSoforID,BSTurSoforAd,BSTurSoforLocation,BSTurKurumID,BSTurKurumAd,BSTurKurumLocation,BSTurBolgeID,BSTurBolgeAd,BSTurID,BSTurTip,BSTurAracKapasite,BSTurKm,BSTurGidisDonus FROM bsturtip WHERE BSTurAracID IN (' . $array . ') AND BSTurGidisDonus IN (' . $array1 . ') AND BSTurID IN (' . $array2 . ') GROUP BY BSTurAracID';
+        $sql = 'SELECT DISTINCT BSTurAracID, BSTurAracPlaka, BSTurSoforID, BSTurSoforAd, BSTurSoforLocation, BSTurKurumID, BSTurKurumAd, BSTurKurumLocation, BSTurBolgeID, BSTurBolgeAd, BSTurID, BSTurTip, BSTurAracKapasite, BSTurKm, BSTurGidisDonus FROM bsturtip WHERE BSTurAracID IN (' . $array . ') AND BSTurGidisDonus IN (' . $array1 . ') AND BSTurID IN (' . $array2 . ') GROUP BY BSTurAracID';
         return($this->db->select($sql));
     }
 
@@ -237,7 +348,7 @@ class Panel_Model extends Model {
 
     //rubee göre araçlar
     public function aracRutbeListele($array = array()) {
-        $sql = 'SELECT SBAracID,SBAracPlaka,SBAracMarka,SBAracModelYili,SBAracKapasite,SBAracKm,SBAracDurum FROM sbarac WHERE SBAracID IN (' . $array . ') ORDER BY SBAracPlaka ASC';
+        $sql = 'SELECT SBAracID, SBAracPlaka, SBAracMarka, SBAracModelYili, SBAracKapasite, SBAracKm, SBAracDurum FROM sbarac WHERE SBAracID IN (' . $array . ') ORDER BY SBAracPlaka ASC';
         return($this->db->select($sql));
     }
 
@@ -267,7 +378,7 @@ class Panel_Model extends Model {
 
     //admin rütbe arac bölge select listele
     public function adminRutbeAracBolgeListele($array = array()) {
-        $sql = 'SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -279,7 +390,7 @@ class Panel_Model extends Model {
 
     //admin rütbe arac bölge select listele
     public function adminRutbeSoforListele($array = array()) {
-        $sql = 'SELECT BSSoforID , BSSoforAd , BSSoforSoyad FROM bssofor Where BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
+        $sql = 'SELECT BSSoforID, BSSoforAd, BSSoforSoyad FROM bssofor Where BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
         return($this->db->select($sql));
     }
 
@@ -320,85 +431,85 @@ class Panel_Model extends Model {
 
     //admin seçili arac bolge listele
     public function adminDetailAracBolge($aracID) {
-        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbaracbolge WHERE SBAracID=' . $aracID;
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbaracbolge WHERE SBAracID = ' . $aracID;
         return($this->db->select($sql));
     }
 
     //admin select dışı bölge listele
     public function adminDetailAracSBolge($array = array()) {
-        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
     //admin seçili arac şoför listele
     public function adminDetailAracSofor($aracID) {
-        $sql = 'SELECT DISTINCT BSSoforID,BSSoforAd FROM bsaracsofor WHERE BSAracID=' . $aracID;
+        $sql = 'SELECT DISTINCT BSSoforID, BSSoforAd FROM bsaracsofor WHERE BSAracID = ' . $aracID;
         return($this->db->select($sql));
     }
 
     //admin seçili arac hostes listele
     public function adminDetailAracHostes($aracID) {
-        $sql = 'SELECT DISTINCT BSHostesID,BSHostesAd FROM bsarachostes WHERE BSAracID=' . $aracID;
+        $sql = 'SELECT DISTINCT BSHostesID, BSHostesAd FROM bsarachostes WHERE BSAracID = ' . $aracID;
         return($this->db->select($sql));
     }
 
     //admin select dışı bölge listele
     public function adminSelectBolgeSofor($arraybolge = array(), $arraysofor = array()) {
-        $sql = 'SELECT DISTINCT BSSoforID,BSSoforAd FROM bssoforbolge WHERE BSBolgeID IN (' . $arraybolge . ') AND BSSoforID NOT IN (' . $arraysofor . ')';
+        $sql = 'SELECT DISTINCT BSSoforID, BSSoforAd FROM bssoforbolge WHERE BSBolgeID IN (' . $arraybolge . ') AND BSSoforID NOT IN (' . $arraysofor . ')';
         return($this->db->select($sql));
     }
 
     //admin select dışı bölge listele
     public function adminSelectBolgeHostes($arraybolge = array(), $arrayhostes = array()) {
-        $sql = 'SELECT DISTINCT BSHostesID,BSHostesAd FROM bshostesbolge WHERE BSBolgeID IN (' . $arraybolge . ') AND BSHostesID NOT IN (' . $arrayhostes . ')';
+        $sql = 'SELECT DISTINCT BSHostesID, BSHostesAd FROM bshostesbolge WHERE BSBolgeID IN (' . $arraybolge . ') AND BSHostesID NOT IN (' . $arrayhostes . ')';
         return($this->db->select($sql));
     }
 
     //admin select dışı bölge listele
     public function adminSelectBolgeSoforr($arraybolge = array()) {
-        $sql = 'SELECT DISTINCT BSSoforID,BSSoforAd FROM bssoforbolge WHERE BSBolgeID IN (' . $arraybolge . ')';
+        $sql = 'SELECT DISTINCT BSSoforID, BSSoforAd FROM bssoforbolge WHERE BSBolgeID IN (' . $arraybolge . ')';
         return($this->db->select($sql));
     }
 
     //admin select dışı bölge listele
     public function adminSelectBolgeHostess($arraybolge = array()) {
-        $sql = 'SELECT DISTINCT BSHostesID,BSHostesAd FROM bshostesbolge WHERE BSBolgeID IN (' . $arraybolge . ')';
+        $sql = 'SELECT DISTINCT BSHostesID, BSHostesAd FROM bshostesbolge WHERE BSBolgeID IN (' . $arraybolge . ')';
         return($this->db->select($sql));
     }
 
     //admin select dışı şoför listele
     public function adminDetailAracSSofor($array = array()) {
-        $sql = 'SELECT DISTINCT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor WHERE BSSoforID NOT IN (' . $array . ')';
+        $sql = 'SELECT DISTINCT BSSoforID, BSSoforAd, BSSoforSoyad FROM bssofor WHERE BSSoforID NOT IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
     //admin select dışı bölge listele
     public function adminDetailAracBolgeSofor($array = array()) {
-        $sql = 'SELECT DISTINCT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor WHERE BSSoforID IN (' . $array . ')';
+        $sql = 'SELECT DISTINCT BSSoforID, BSSoforAd, BSSoforSoyad FROM bssofor WHERE BSSoforID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
     //admin arac detail özellik
     public function adminDetailAracOzellik($aracID) {
-        $sql = 'SELECT SBAracID,SBAracPlaka,SBAracMarka,SBAracModelYili,SBAracKapasite,SBAracKm,SBAracDurum,SBAracAciklama FROM sbarac WHERE SBAracID=' . $aracID . ' ORDER BY SBAracPlaka ASC';
+        $sql = 'SELECT SBAracID, SBAracPlaka, SBAracMarka, SBAracModelYili, SBAracKapasite, SBAracKm, SBAracDurum, SBAracAciklama FROM sbarac WHERE SBAracID = ' . $aracID . ' ORDER BY SBAracPlaka ASC';
         return($this->db->select($sql));
     }
 
     //admin arac detail özellik
     public function adminRutbeDetailAracOzellik($adminID) {
-        $sql = 'SELECT SBAracID,SBAracPlaka,SBAracMarka,SBAracModelYili,SBAracKapasite,SBAracKm,SBAracDurum,SBAracAciklama FROM sbarac WHERE SBAdminID=' . $adminID . ' ORDER BY SBAracPlaka ASC';
+        $sql = 'SELECT SBAracID, SBAracPlaka, SBAracMarka, SBAracModelYili, SBAracKapasite, SBAracKm, SBAracDurum, SBAracAciklama FROM sbarac WHERE SBAdminID = ' . $adminID . ' ORDER BY SBAracPlaka ASC';
         return($this->db->select($sql));
     }
 
     //admin rutbe select dışı bölge listele
     public function adminRutbeDetailAracSBolge($array = array()) {
-        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID IN (' . $array . ')';
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
     //admin rutbe select dışı arac listele
     public function adminRutbeDetailAracSSofor($array = array()) {
-        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor WHERE BSSoforID IN (' . $array . ')';
+        $sql = 'SELECT BSSoforID, BSSoforAd, BSSoforSoyad FROM bssofor WHERE BSSoforID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
@@ -435,25 +546,25 @@ class Panel_Model extends Model {
 
     //admin seçili arac aktif tur listele
     public function adminDetailAracTur($aracID) {
-        $sql = 'SELECT SBTurAktiflik FROM sbtur WHERE SBTurAracID=' . $aracID;
+        $sql = 'SELECT SBTurAktiflik FROM sbtur WHERE SBTurAracID = ' . $aracID;
         return($this->db->select($sql));
     }
 
     //admin rutbe bölgesindeki şoförler
     public function adminDetailRutbeAracTur($array = array(), $aracID) {
-        $sql = 'SELECT SBTurAktiflik FROM sbtur WHERE BSBolgeID IN (' . $array . ') AND SBTurAracID=' . $aracID;
+        $sql = 'SELECT SBTurAktiflik FROM sbtur WHERE BSBolgeID IN (' . $array . ') AND SBTurAracID = ' . $aracID;
         return($this->db->select($sql));
     }
 
     //admin arac detail 
     public function adminAracTurDetail($adminAracDetailID) {
-        $sql = 'SELECT DISTINCT BSTurID FROM bsturtip WHERE BSTurAracID=' . $adminAracDetailID;
+        $sql = 'SELECT DISTINCT BSTurID FROM bsturtip WHERE BSTurAracID = ' . $adminAracDetailID;
         return($this->db->select($sql));
     }
 
     //admin rutbe bölgesindeki şoförler
     public function adminAracDetailTur($array = array()) {
-        $sql = 'SELECT SBTurID,SBTurAd,SBTurAciklama,SBTurAktiflik,SBKurumAd,SBTurTip,SBBolgeAd FROM sbtur WHERE SBTurID IN (' . $array . ')';
+        $sql = 'SELECT SBTurID, SBTurAd, SBTurAciklama, SBTurAktiflik, SBKurumAd, SBTurTip, SBBolgeAd FROM sbtur WHERE SBTurID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
@@ -491,7 +602,7 @@ class Panel_Model extends Model {
 
     //admin listele
     public function adminIDListele($adminID) {
-        $sql = 'SELECT * FROM bsadmin WHERE BSAdminID=' . $adminID . ' ORDER BY BSAdminAd ASC';
+        $sql = 'SELECT * FROM bsadmin WHERE BSAdminID = ' . $adminID . ' ORDER BY BSAdminAd ASC';
         return($this->db->select($sql));
     }
 
@@ -512,13 +623,13 @@ class Panel_Model extends Model {
 
     //admin select dışı bölge listele
     public function adminBolge() {
-        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler';
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbbolgeler';
         return($this->db->select($sql));
     }
 
     //admin select dışı şoför listele
     public function adminAracSofor() {
-        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor';
+        $sql = 'SELECT BSSoforID, BSSoforAd, BSSoforSoyad FROM bssofor';
         return($this->db->select($sql));
     }
 
@@ -572,13 +683,13 @@ class Panel_Model extends Model {
 
     //rutbe şofor listele
     public function rutbeSoforListele($array = array()) {
-        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad,BSSoforPhone,BSSoforEmail,Status,BSSoforAciklama FROM bssofor Where BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
+        $sql = 'SELECT BSSoforID, BSSoforAd, BSSoforSoyad, BSSoforPhone, BSSoforEmail, Status, BSSoforAciklama FROM bssofor Where BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
         return($this->db->select($sql));
     }
 
     //rutbe hostes listele
     public function rutbeHostesListele($array = array()) {
-        $sql = 'SELECT BSHostesID,BSHostesAd,BSHostesSoyad,BSHostesPhone,BSHostesEmail,Status,BSHostesAciklama FROM bshostes Where BSHostesID IN (' . $array . ') ORDER BY BSHostesAd ASC';
+        $sql = 'SELECT BSHostesID, BSHostesAd, BSHostesSoyad, BSHostesPhone, BSHostesEmail, Status, BSHostesAciklama FROM bshostes Where BSHostesID IN (' . $array . ') ORDER BY BSHostesAd ASC';
         return($this->db->select($sql));
     }
 
@@ -590,19 +701,19 @@ class Panel_Model extends Model {
 
     //admin arac bölge select listele
     public function aracMultiSelect($array = array()) {
-        $sql = 'SELECT SBAracID,SBAracPlaka FROM sbarac Where SBAracID IN (' . $array . ') ORDER BY SBAracPlaka ASC';
+        $sql = 'SELECT SBAracID, SBAracPlaka FROM sbarac Where SBAracID IN (' . $array . ') ORDER BY SBAracPlaka ASC';
         return($this->db->select($sql));
     }
 
     //admin arac bölge select listele
     public function soforRutbeBolgeListele($array = array()) {
-        $sql = 'SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
         return($this->db->select($sql));
     }
 
     //admin hostes bölge select listele
     public function hostesRutbeBolgeListele($array = array()) {
-        $sql = 'SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -654,7 +765,7 @@ class Panel_Model extends Model {
 
     //admin arac bölge select listele
     public function soforMultiSelect($array = array()) {
-        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor Where BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
+        $sql = 'SELECT BSSoforID, BSSoforAd, BSSoforSoyad FROM bssofor Where BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
         return($this->db->select($sql));
     }
 
@@ -672,19 +783,19 @@ class Panel_Model extends Model {
 
     //admin arac bölge select listele
     public function soforMultiSelectt($array = array()) {
-        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor Where BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
+        $sql = 'SELECT BSSoforID, BSSoforAd, BSSoforSoyad FROM bssofor Where BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
         return($this->db->select($sql));
     }
 
     //admin arac bölge select listele
     public function hostesMultiSelectt($array = array()) {
-        $sql = 'SELECT BSHostesID,BSHostesAd,BSHostesSoyad FROM bshostes Where BSHostesID IN (' . $array . ') ORDER BY BSHostesAd ASC';
+        $sql = 'SELECT BSHostesID, BSHostesAd, BSHostesSoyad FROM bshostes Where BSHostesID IN (' . $array . ') ORDER BY BSHostesAd ASC';
         return($this->db->select($sql));
     }
 
     //arac seçili şoförler
     public function aracDetailMultiSelectSofor($aracID) {
-        $sql = 'SELECT BSSoforID FROM bsaracsofor WHERE BSAracID=' . $aracID;
+        $sql = 'SELECT BSSoforID FROM bsaracsofor WHERE BSAracID = ' . $aracID;
         return($this->db->select($sql));
     }
 
@@ -696,85 +807,85 @@ class Panel_Model extends Model {
 
     //arac seçili olmayan şoförler
     public function adminDetailAracNotSelectSofor($array = array()) {
-        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad FROM bssofor WHERE BSSoforID IN (' . $array . ')';
+        $sql = 'SELECT BSSoforID, BSSoforAd, BSSoforSoyad FROM bssofor WHERE BSSoforID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
     //seçili şoför bolge listele
     public function soforDetailBolge($soforID) {
-        $sql = 'SELECT BSBolgeID,BSBolgeAdi FROM bssoforbolge WHERE BSSoforID=' . $soforID;
+        $sql = 'SELECT BSBolgeID, BSBolgeAdi FROM bssoforbolge WHERE BSSoforID = ' . $soforID;
         return($this->db->select($sql));
     }
 
     //seçili hostes bolge listele
     public function hostesDetailBolge($hostesID) {
-        $sql = 'SELECT BSBolgeID,BSBolgeAdi FROM bshostesbolge WHERE BSHostesID=' . $hostesID;
+        $sql = 'SELECT BSBolgeID, BSBolgeAdi FROM bshostesbolge WHERE BSHostesID = ' . $hostesID;
         return($this->db->select($sql));
     }
 
     //şoför select dışı bölge listele
     public function soforDetailSBolge($array = array()) {
-        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
     //hostes select dışı bölge listele
     public function hostesDetailSBolge($array = array()) {
-        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
     //seçili şoför arac listele
     public function adminDetailSoforArac($soforID) {
-        $sql = 'SELECT BSAracID,BSAracPlaka FROM bsaracsofor WHERE BSSoforID=' . $soforID;
+        $sql = 'SELECT BSAracID, BSAracPlaka FROM bsaracsofor WHERE BSSoforID = ' . $soforID;
         return($this->db->select($sql));
     }
 
     //seçili hostes arac listele
     public function adminDetailHostesArac($hostesID) {
-        $sql = 'SELECT BSAracID,BSAracPlaka FROM bsarachostes WHERE BSHostesID=' . $hostesID;
+        $sql = 'SELECT BSAracID, BSAracPlaka FROM bsarachostes WHERE BSHostesID = ' . $hostesID;
         return($this->db->select($sql));
     }
 
     //admin select dışı bölge listele
     public function adminSelectSoforBolge($arraybolge = array(), $arrayarac = array()) {
-        $sql = 'SELECT SBAracID,SBAracPlaka FROM sbaracbolge WHERE SBBolgeID IN (' . $arraybolge . ') AND SBAracID NOT IN (' . $arrayarac . ')';
+        $sql = 'SELECT SBAracID, SBAracPlaka FROM sbaracbolge WHERE SBBolgeID IN (' . $arraybolge . ') AND SBAracID NOT IN (' . $arrayarac . ')';
         return($this->db->select($sql));
     }
 
     //admin select dışı bölge listele
     public function adminSelectHostesBolge($arraybolge = array(), $arrayarac = array()) {
-        $sql = 'SELECT SBAracID,SBAracPlaka FROM sbaracbolge WHERE SBBolgeID IN (' . $arraybolge . ') AND SBAracID NOT IN (' . $arrayarac . ')';
+        $sql = 'SELECT SBAracID, SBAracPlaka FROM sbaracbolge WHERE SBBolgeID IN (' . $arraybolge . ') AND SBAracID NOT IN (' . $arrayarac . ')';
         return($this->db->select($sql));
     }
 
     //select dışı bölge listele
     public function adminSelectBolgeArac($arraybolge = array()) {
-        $sql = 'SELECT DISTINCT SBAracID,SBAracPlaka FROM sbaracbolge WHERE SBBolgeID IN (' . $arraybolge . ')';
+        $sql = 'SELECT DISTINCT SBAracID, SBAracPlaka FROM sbaracbolge WHERE SBBolgeID IN (' . $arraybolge . ')';
         return($this->db->select($sql));
     }
 
     //şoför detail özellik
     public function soforDetail($soforID) {
-        $sql = 'SELECT * FROM bssofor WHERE BSSoforID=' . $soforID . ' ORDER BY BSSoforAd ASC';
+        $sql = 'SELECT * FROM bssofor WHERE BSSoforID = ' . $soforID . ' ORDER BY BSSoforAd ASC';
         return($this->db->select($sql));
     }
 
     //hostes detail özellik
     public function hostesDetail($hostesID) {
-        $sql = 'SELECT * FROM bshostes WHERE BSHostesID=' . $hostesID . ' ORDER BY BSHostesAd ASC';
+        $sql = 'SELECT * FROM bshostes WHERE BSHostesID = ' . $hostesID . ' ORDER BY BSHostesAd ASC';
         return($this->db->select($sql));
     }
 
     //seçili şoför bolge listele
     public function adminDetailSoforBolge($soforID) {
-        $sql = 'SELECT BSBolgeID,BSBolgeAdi FROM bssoforbolge WHERE BSSoforID=' . $soforID;
+        $sql = 'SELECT BSBolgeID, BSBolgeAdi FROM bssoforbolge WHERE BSSoforID = ' . $soforID;
         return($this->db->select($sql));
     }
 
     //seçili hostes bolge listele
     public function adminDetailHostesBolge($hostesID) {
-        $sql = 'SELECT BSBolgeID,BSBolgeAdi FROM bshostesbolge WHERE BSHostesID=' . $hostesID;
+        $sql = 'SELECT BSBolgeID, BSBolgeAdi FROM bshostesbolge WHERE BSHostesID = ' . $hostesID;
         return($this->db->select($sql));
     }
 
@@ -860,31 +971,31 @@ class Panel_Model extends Model {
 
     //şoför seçili arac
     public function soforDetailMultiSelectSofor($soforID) {
-        $sql = 'SELECT BSAracID FROM bsaracsofor WHERE BSSoforID=' . $soforID;
+        $sql = 'SELECT BSAracID FROM bsaracsofor WHERE BSSoforID = ' . $soforID;
         return($this->db->select($sql));
     }
 
     //hostes seçili arac
     public function hostesDetailMultiSelectHostes($hostesID) {
-        $sql = 'SELECT BSAracID FROM bsarachostes WHERE BSHostesID=' . $hostesID;
+        $sql = 'SELECT BSAracID FROM bsarachostes WHERE BSHostesID = ' . $hostesID;
         return($this->db->select($sql));
     }
 
     //admin select dışı bölge listele
     public function adminSelectBolgeAracc($arraybolge = array()) {
-        $sql = 'SELECT DISTINCT SBAracID,SBAracPlaka FROM sbaracbolge WHERE SBBolgeID IN (' . $arraybolge . ')';
+        $sql = 'SELECT DISTINCT SBAracID, SBAracPlaka FROM sbaracbolge WHERE SBBolgeID IN (' . $arraybolge . ')';
         return($this->db->select($sql));
     }
 
     //arac seçili olmayan şoförler
     public function soforNotSelectArac($array = array()) {
-        $sql = 'SELECT SBAracID,SBAracPlaka FROM sbarac WHERE SBAracID IN (' . $array . ')';
+        $sql = 'SELECT SBAracID, SBAracPlaka FROM sbarac WHERE SBAracID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
     //arac seçili olmayan hostesler
     public function hostesNotSelectArac($array = array()) {
-        $sql = 'SELECT SBAracID,SBAracPlaka FROM sbarac WHERE SBAracID IN (' . $array . ')';
+        $sql = 'SELECT SBAracID, SBAracPlaka FROM sbarac WHERE SBAracID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
@@ -914,7 +1025,7 @@ class Panel_Model extends Model {
 
     //rutbe işçi listele
     public function rutbeIsciListele($array = array()) {
-        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciSoyad,SBIsciPhone,SBIsciEmail,Status,SBIsciAciklama FROM sbisci Where SBIsciID IN (' . $array . ') ORDER BY SBIsciAd ASC';
+        $sql = 'SELECT SBIsciID, SBIsciAd, SBIsciSoyad, SBIsciPhone, SBIsciEmail, Status, SBIsciAciklama FROM sbisci Where SBIsciID IN (' . $array . ') ORDER BY SBIsciAd ASC';
         return($this->db->select($sql));
     }
 
@@ -926,7 +1037,7 @@ class Panel_Model extends Model {
 
     //admin işçi kurum bölge select listele
     public function isciKurumMultiSelect($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND (SBKurumTip=1 OR SBKurumTip=2) ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumID, SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND (SBKurumTip = 1 OR SBKurumTip = 2) ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -952,37 +1063,37 @@ class Panel_Model extends Model {
 
     //seçili işçi bolge listele
     public function isciDetailBolge($isciID) {
-        $sql = 'SELECT SBBolgeID,SBBolgeAd FROM sbiscibolge WHERE SBIsciID=' . $isciID;
+        $sql = 'SELECT SBBolgeID, SBBolgeAd FROM sbiscibolge WHERE SBIsciID = ' . $isciID;
         return($this->db->select($sql));
     }
 
     //işçi select dışı bölge listele
     public function isciDetailSBolge($array = array()) {
-        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
     //seçili işçi kuurm listele
     public function adminDetailIsciKurum($isciID) {
-        $sql = 'SELECT SBKurumID,SBKurumAd FROM sbiscikurum WHERE SBIsciID=' . $isciID;
+        $sql = 'SELECT SBKurumID, SBKurumAd FROM sbiscikurum WHERE SBIsciID = ' . $isciID;
         return($this->db->select($sql));
     }
 
     //admin select dışı bölge listele
     public function adminSelectIsciBolge($arraybolge = array(), $arraykurum = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ') AND SBKurumID NOT IN (' . $arraykurum . ')';
+        $sql = 'SELECT SBKurumID, SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ') AND SBKurumID NOT IN (' . $arraykurum . ')';
         return($this->db->select($sql));
     }
 
     //select dışı bölge listele
     public function adminSelectBolgeKurum($arraybolge = array()) {
-        $sql = 'SELECT DISTINCT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ')';
+        $sql = 'SELECT DISTINCT SBKurumID, SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ')';
         return($this->db->select($sql));
     }
 
     //işçi detail özellik
     public function isciDetail($isciID) {
-        $sql = 'SELECT * FROM sbisci WHERE SBIsciID=' . $isciID . ' ORDER BY SBIsciAd ASC';
+        $sql = 'SELECT * FROM sbisci WHERE SBIsciID = ' . $isciID . ' ORDER BY SBIsciAd ASC';
         return($this->db->select($sql));
     }
 
@@ -1008,25 +1119,25 @@ class Panel_Model extends Model {
 
     //işçi seçili kurum
     public function isciDetailMultiSelectIsci($isciID) {
-        $sql = 'SELECT SBKurumID FROM sbiscikurum WHERE SBIsciID=' . $isciID;
+        $sql = 'SELECT SBKurumID FROM sbiscikurum WHERE SBIsciID = ' . $isciID;
         return($this->db->select($sql));
     }
 
     //admin select dışı bölge listele
     public function adminSelectBolgeKurumm($arraybolge = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ') AND (SBKurumTip=0 OR SBKurumTip=2)';
+        $sql = 'SELECT SBKurumID, SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ') AND (SBKurumTip = 0 OR SBKurumTip = 2)';
         return($this->db->select($sql));
     }
 
     //admin select dışı bölge listele
     public function adminSelectBolgeIsciKurum($arraybolge = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ') AND (SBKurumTip=1 OR SBKurumTip=2)';
+        $sql = 'SELECT SBKurumID, SBKurumAdi FROM sbkurum WHERE SBBolgeID IN (' . $arraybolge . ') AND (SBKurumTip = 1 OR SBKurumTip = 2)';
         return($this->db->select($sql));
     }
 
     //kurum seçili olmayan işçiler
     public function isciNotSelectKurum($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ' ) AND (SBKurumTip=1 OR SBKurumTip=2)';
+        $sql = 'SELECT SBKurumID, SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ' ) AND (SBKurumTip = 1 OR SBKurumTip = 2)';
         return($this->db->select($sql));
     }
 
@@ -1056,7 +1167,7 @@ class Panel_Model extends Model {
 
     //rutbe işçi listele
     public function rutbeVeliListele($array = array()) {
-        $sql = 'SELECT SBVeliID,SBVeliAd,SBVeliSoyad,SBVeliPhone,SBVeliEmail,Status,SBVeliAciklama FROM sbveli Where SBVeliID IN (' . $array . ') ORDER BY SBVeliAd ASC';
+        $sql = 'SELECT SBVeliID, SBVeliAd, SBVeliSoyad, SBVeliPhone, SBVeliEmail, Status, SBVeliAciklama FROM sbveli Where SBVeliID IN (' . $array . ') ORDER BY SBVeliAd ASC';
         return($this->db->select($sql));
     }
 
@@ -1068,19 +1179,19 @@ class Panel_Model extends Model {
 
     //veli rutbe bölge select listele
     public function veliRutbeBolgeListele($array = array()) {
-        $sql = 'SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
         return($this->db->select($sql));
     }
 
     //admin veli kurum bölge select listele
     public function veliKurumMultiSelect($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND (SBKurumTip=0 OR SBKurumTip=2) ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumID, SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND (SBKurumTip = 0 OR SBKurumTip = 2) ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 
     //admin veli öğrenci bölge select listele
     public function veliOgrenciMultiSelect($array = array()) {
-        $sql = 'SELECT DISTINCT BSOgrenciID,BSOgrenciAd FROM bsogrencikurum Where BSKurumID IN (' . $array . ') ORDER BY BSOgrenciAd ASC';
+        $sql = 'SELECT DISTINCT BSOgrenciID, BSOgrenciAd FROM bsogrencikurum Where BSKurumID IN (' . $array . ') ORDER BY BSOgrenciAd ASC';
         return($this->db->select($sql));
     }
 
@@ -1116,43 +1227,43 @@ class Panel_Model extends Model {
 
     //seçili veli bolge listele
     public function veliDetailBolge($veliID) {
-        $sql = 'SELECT BSBolgeID,BSBolgeAd FROM bsvelibolge WHERE BSVeliID=' . $veliID;
+        $sql = 'SELECT BSBolgeID, BSBolgeAd FROM bsvelibolge WHERE BSVeliID = ' . $veliID;
         return($this->db->select($sql));
     }
 
     //veli select dışı bölge listele
     public function veliDetailSBolge($array = array()) {
-        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
     //seçili veli kurum listele
     public function adminDetailVeliKurum($veliID) {
-        $sql = 'SELECT BSKurumID,BSKurumAd FROM bsvelikurum WHERE BSVeliID=' . $veliID;
+        $sql = 'SELECT BSKurumID, BSKurumAd FROM bsvelikurum WHERE BSVeliID = ' . $veliID;
         return($this->db->select($sql));
     }
 
     //seçili veli öğrenci listele
     public function adminDetailVeliOgrenci($veliID) {
-        $sql = 'SELECT BSOgrenciID,BSOgrenciAd FROM bsveliogrenci WHERE BSVeliID=' . $veliID;
+        $sql = 'SELECT BSOgrenciID, BSOgrenciAd FROM bsveliogrenci WHERE BSVeliID = ' . $veliID;
         return($this->db->select($sql));
     }
 
     //admin select dışı öğrenci listele
     public function adminSelectVeliKurum($arraykurum = array(), $arrayogrenci = array()) {
-        $sql = 'SELECT DISTINCT BSOgrenciID,BSOgrenciAd FROM bsogrencikurum WHERE BSKurumID IN (' . $arraykurum . ') AND BSOgrenciID NOT IN (' . $arrayogrenci . ')';
+        $sql = 'SELECT DISTINCT BSOgrenciID, BSOgrenciAd FROM bsogrencikurum WHERE BSKurumID IN (' . $arraykurum . ') AND BSOgrenciID NOT IN (' . $arrayogrenci . ')';
         return($this->db->select($sql));
     }
 
     //select dışı kurum öğrenci listele
     public function adminSelectKurumOgrenci($arraykurum = array()) {
-        $sql = 'SELECT DISTINCT BSOgrenciID,BSOgrenciAd FROM bsogrencikurum WHERE BSKurumID IN (' . $arraykurum . ')';
+        $sql = 'SELECT DISTINCT BSOgrenciID, BSOgrenciAd FROM bsogrencikurum WHERE BSKurumID IN (' . $arraykurum . ')';
         return($this->db->select($sql));
     }
 
     //veli detail özellik
     public function veliDetail($veliID) {
-        $sql = 'SELECT * FROM sbveli WHERE SBVeliID=' . $veliID . ' ORDER BY SBVeliAd ASC';
+        $sql = 'SELECT * FROM sbveli WHERE SBVeliID = ' . $veliID . ' ORDER BY SBVeliAd ASC';
         return($this->db->select($sql));
     }
 
@@ -1183,31 +1294,31 @@ class Panel_Model extends Model {
 
     //veli seçili kurum
     public function veliDetailMultiSelectVeli($veliID) {
-        $sql = 'SELECT BSKurumID FROM bsvelikurum WHERE BSVeliID=' . $veliID;
+        $sql = 'SELECT BSKurumID FROM bsvelikurum WHERE BSVeliID = ' . $veliID;
         return($this->db->select($sql));
     }
 
     //kurum seçili olmayan veliler
     public function veliNotSelectKurum($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ') AND SBKurumTip=0';
+        $sql = 'SELECT SBKurumID, SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ') AND SBKurumTip = 0';
         return($this->db->select($sql));
     }
 
     //veli seçili öğrenci
     public function veliDetailMultiSelectOgrenci($veliID) {
-        $sql = 'SELECT BSOgrenciID FROM bsveliogrenci WHERE BSVeliID=' . $veliID;
+        $sql = 'SELECT BSOgrenciID FROM bsveliogrenci WHERE BSVeliID = ' . $veliID;
         return($this->db->select($sql));
     }
 
     //admin select dışı öğrenci listele
     public function adminSelectBolgeKurumOgrenci($arraykurum = array()) {
-        $sql = 'SELECT DISTINCT BSOgrenciID,BSOgrenciAd FROM bsogrencikurum WHERE BSKurumID IN (' . $arraykurum . ')';
+        $sql = 'SELECT DISTINCT BSOgrenciID, BSOgrenciAd FROM bsogrencikurum WHERE BSKurumID IN (' . $arraykurum . ')';
         return($this->db->select($sql));
     }
 
     //kurum seçili olmayan öğrenciler
     public function veliNotSelectOgrenci($array = array()) {
-        $sql = 'SELECT BSOgrenciID,BSOgrenciAd FROM bsogrenci WHERE BSOgrenciID IN (' . $array . ')';
+        $sql = 'SELECT BSOgrenciID, BSOgrenciAd FROM bsogrenci WHERE BSOgrenciID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
@@ -1237,7 +1348,7 @@ class Panel_Model extends Model {
 
     //rutbe veli listele
     public function rutbeOgrenciListele($array = array()) {
-        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,BSOgrenciPhone,BSOgrenciEmail,Status,BSOgrenciAciklama FROM bsogrenci Where BSOgrenciID IN (' . $array . ') ORDER BY BSOgrenciAd ASC';
+        $sql = 'SELECT BSOgrenciID, BSOgrenciAd, BSOgrenciSoyad, BSOgrenciPhone, BSOgrenciEmail, Status, BSOgrenciAciklama FROM bsogrenci Where BSOgrenciID IN (' . $array . ') ORDER BY BSOgrenciAd ASC';
         return($this->db->select($sql));
     }
 
@@ -1249,13 +1360,13 @@ class Panel_Model extends Model {
 
     //admin öğrenci kurum bölge select listele
     public function ogrenciKurumMultiSelect($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND (SBKurumTip=0 OR SBKurumTip=2) ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumID, SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') AND (SBKurumTip = 0 OR SBKurumTip = 2) ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 
     //admin  öğrenci veli bölge select listele
     public function ogrenciVeliMultiSelect($array = array()) {
-        $sql = 'SELECT DISTINCT BSVeliID,BSVeliAd FROM bsvelikurum Where BSKurumID IN (' . $array . ') ORDER BY BSVeliAd ASC';
+        $sql = 'SELECT DISTINCT BSVeliID, BSVeliAd FROM bsvelikurum Where BSKurumID IN (' . $array . ') ORDER BY BSVeliAd ASC';
         return($this->db->select($sql));
     }
 
@@ -1286,43 +1397,43 @@ class Panel_Model extends Model {
 
     //seçili öğrenci bolge listele
     public function ogrenciDetailBolge($ogrenciID) {
-        $sql = 'SELECT BSBolgeID,BSBolgeAd FROM bsogrencibolge WHERE BSOgrenciID=' . $ogrenciID;
+        $sql = 'SELECT BSBolgeID, BSBolgeAd FROM bsogrencibolge WHERE BSOgrenciID = ' . $ogrenciID;
         return($this->db->select($sql));
     }
 
     //öğrenci select dışı bölge listele
     public function ogrenciDetailSBolge($array = array()) {
-        $sql = 'SELECT SBBolgeID,SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbbolgeler WHERE SBBolgeID NOT IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
     //seçili öğrenci kurum listele
     public function adminDetailOgrenciKurum($ogrenciID) {
-        $sql = 'SELECT BSKurumID,BSKurumAd FROM bsogrencikurum WHERE BSOgrenciID=' . $ogrenciID;
+        $sql = 'SELECT BSKurumID, BSKurumAd FROM bsogrencikurum WHERE BSOgrenciID = ' . $ogrenciID;
         return($this->db->select($sql));
     }
 
     //seçili  öğrenci veli listele
     public function adminDetailOgrenciVeli($ogrenciID) {
-        $sql = 'SELECT BSVeliID,BSVeliAd FROM bsveliogrenci WHERE BSOgrenciID=' . $ogrenciID;
+        $sql = 'SELECT BSVeliID, BSVeliAd FROM bsveliogrenci WHERE BSOgrenciID = ' . $ogrenciID;
         return($this->db->select($sql));
     }
 
     //admin select dışı veli listele
     public function adminSelectOgrenciKurum($arraykurum = array(), $arrayveli = array()) {
-        $sql = 'SELECT DISTINCT BSVeliID,BSVeliAd FROM bsvelikurum WHERE BSKurumID IN (' . $arraykurum . ') AND BSVeliID NOT IN (' . $arrayveli . ')';
+        $sql = 'SELECT DISTINCT BSVeliID, BSVeliAd FROM bsvelikurum WHERE BSKurumID IN (' . $arraykurum . ') AND BSVeliID NOT IN (' . $arrayveli . ')';
         return($this->db->select($sql));
     }
 
     //select dışı kurum veli listele
     public function adminSelectKurumVeli($arraykurum = array()) {
-        $sql = 'SELECT DISTINCT BSVeliID,BSVeliAd FROM bsvelikurum WHERE BSKurumID IN (' . $arraykurum . ')';
+        $sql = 'SELECT DISTINCT BSVeliID, BSVeliAd FROM bsvelikurum WHERE BSKurumID IN (' . $arraykurum . ')';
         return($this->db->select($sql));
     }
 
     //öğrenci detail özellik
     public function ogrenciDetail($ogrenciID) {
-        $sql = 'SELECT * FROM bsogrenci WHERE BSOgrenciID=' . $ogrenciID . ' ORDER BY BSOgrenciAd ASC';
+        $sql = 'SELECT * FROM bsogrenci WHERE BSOgrenciID = ' . $ogrenciID . ' ORDER BY BSOgrenciAd ASC';
         return($this->db->select($sql));
     }
 
@@ -1353,31 +1464,31 @@ class Panel_Model extends Model {
 
     //öğrenci seçili kurum
     public function ogrenciDetailMultiSelectVeli($ogrenciID) {
-        $sql = 'SELECT BSKurumID FROM bsogrencikurum WHERE BSOgrenciID=' . $ogrenciID;
+        $sql = 'SELECT BSKurumID FROM bsogrencikurum WHERE BSOgrenciID = ' . $ogrenciID;
         return($this->db->select($sql));
     }
 
     //kurum seçili olmayan öğrenciler
     public function ogrenciNotSelectKurum($array = array()) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ') AND (SBKurumTip=0 OR SBKurumTip=2)';
+        $sql = 'SELECT SBKurumID, SBKurumAdi FROM sbkurum WHERE SBKurumID IN (' . $array . ') AND (SBKurumTip = 0 OR SBKurumTip = 2)';
         return($this->db->select($sql));
     }
 
     //öğrenci seçili veli 
     public function ogrenciDetailMultiSelect($ogrenciID) {
-        $sql = 'SELECT BSVeliID FROM bsveliogrenci WHERE BSOgrenciID=' . $ogrenciID;
+        $sql = 'SELECT BSVeliID FROM bsveliogrenci WHERE BSOgrenciID = ' . $ogrenciID;
         return($this->db->select($sql));
     }
 
     //admin select dışı veli listele
     public function adminSelectBolgeKurumVeli($arraykurum = array()) {
-        $sql = 'SELECT DISTINCT BSVeliID,BSVeliAd FROM bsvelikurum WHERE BSKurumID IN (' . $arraykurum . ')';
+        $sql = 'SELECT DISTINCT BSVeliID, BSVeliAd FROM bsvelikurum WHERE BSKurumID IN (' . $arraykurum . ')';
         return($this->db->select($sql));
     }
 
     //kurum seçili olmayan veliler
     public function ogrenciNotSelectVeli($array = array()) {
-        $sql = 'SELECT SBVeliID,SBVeliAd FROM sbveli WHERE SBVeliID IN (' . $array . ')';
+        $sql = 'SELECT SBVeliID, SBVeliAd FROM sbveli WHERE SBVeliID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
@@ -1401,7 +1512,7 @@ class Panel_Model extends Model {
 
     //admin bölgeye göre tur listele
     public function rutbeTurBolgeListele($array = array()) {
-        $sql = 'SELECT SBTurID,SBTurAd,SBTurAktiflik,SBBolgeAd,SBKurumAd,SBTurTip,SBTurAciklama FROM sbtur Where SBBolgeID IN (' . $array . ') ORDER BY SBTurAd ASC';
+        $sql = 'SELECT SBTurID, SBTurAd, SBTurAktiflik, SBBolgeAd, SBKurumAd, SBTurTip, SBTurAciklama FROM sbtur Where SBBolgeID IN (' . $array . ') ORDER BY SBTurAd ASC';
         return($this->db->select($sql));
     }
 
@@ -1419,13 +1530,13 @@ class Panel_Model extends Model {
 
     //admin tur bölge select listele
     public function turRutbeBolgeListele($array = array()) {
-        $sql = 'SELECT SBBolgeID , SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
+        $sql = 'SELECT SBBolgeID, SBBolgeAdi FROM sbbolgeler Where SBBolgeID IN (' . $array . ') ORDER BY SBBolgeAdi ASC';
         return($this->db->select($sql));
     }
 
     //admin veli kurum bölge select listele
     public function turKurumSelect($bolgeID) {
-        $sql = 'SELECT SBKurumID,SBKurumAdi,SBKurumTip,SBKurumLokasyon FROM sbkurum Where SBBolgeID=' . $bolgeID . '  ORDER BY SBKurumAdi ASC';
+        $sql = 'SELECT SBKurumID, SBKurumAdi, SBKurumTip, SBKurumLokasyon FROM sbkurum Where SBBolgeID = ' . $bolgeID . ' ORDER BY SBKurumAdi ASC';
         return($this->db->select($sql));
     }
 
@@ -1437,13 +1548,13 @@ class Panel_Model extends Model {
 
     //tur bölge araç listele
     public function turBolgeAracListele($bolgeID) {
-        $sql = 'SELECT DISTINCT SBAracID FROM sbaracbolge WHERE SBBolgeID=' . $bolgeID;
+        $sql = 'SELECT DISTINCT SBAracID FROM sbaracbolge WHERE SBBolgeID = ' . $bolgeID;
         return($this->db->select($sql));
     }
 
     //tur bölge pasif araç listele
     public function turBolgePasifAracListele($array = array()) {
-        $sql = 'SELECT SBAracID,SBAracPlaka,SBAracKapasite FROM sbarac WHERE SBAracID IN (' . $array . ') ORDER BY SBAracPlaka ASC';
+        $sql = 'SELECT SBAracID, SBAracPlaka, SBAracKapasite FROM sbarac WHERE SBAracID IN (' . $array . ') ORDER BY SBAracPlaka ASC';
         return($this->db->select($sql));
     }
 
@@ -1461,73 +1572,73 @@ class Panel_Model extends Model {
 
     //tur araç şoför listele
     public function turAracSoforListele($aracID) {
-        $sql = 'SELECT DISTINCT BSSoforID FROM bsaracsofor WHERE BSAracID=' . $aracID;
+        $sql = 'SELECT DISTINCT BSSoforID FROM bsaracsofor WHERE BSAracID = ' . $aracID;
         return($this->db->select($sql));
     }
 
     //tur araç hostes listele
     public function turAracHostesListele($aracID) {
-        $sql = 'SELECT DISTINCT BSHostesID FROM bsarachostes WHERE BSAracID=' . $aracID;
+        $sql = 'SELECT DISTINCT BSHostesID FROM bsarachostes WHERE BSAracID = ' . $aracID;
         return($this->db->select($sql));
     }
 
     //tur araç pasif şoför listele
     public function turAracPasifSoforListele($array = array()) {
-        $sql = 'SELECT BSSoforID,BSSoforAd,BSSoforSoyad,BSSoforLocation FROM bssofor WHERE BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
+        $sql = 'SELECT BSSoforID, BSSoforAd, BSSoforSoyad, BSSoforLocation FROM bssofor WHERE BSSoforID IN (' . $array . ') ORDER BY BSSoforAd ASC';
         return($this->db->select($sql));
     }
 
     //tur araç pasif hostes listele
     public function turAracPasifHostesListele($array = array()) {
-        $sql = 'SELECT BSHostesID,BSHostesAd,BSHostesSoyad,BSHostesLocation FROM bshostes WHERE BSHostesID IN (' . $array . ') ORDER BY BSHostesAd ASC';
+        $sql = 'SELECT BSHostesID, BSHostesAd, BSHostesSoyad, BSHostesLocation FROM bshostes WHERE BSHostesID IN (' . $array . ') ORDER BY BSHostesAd ASC';
         return($this->db->select($sql));
     }
 
     //tur kuruma göre kişiler
     public function turKurumOgrenci($kurumID) {
-        $sql = 'SELECT DISTINCT BSOgrenciID FROM bsogrencikurum Where BSKurumID=' . $kurumID;
+        $sql = 'SELECT DISTINCT BSOgrenciID FROM bsogrencikurum Where BSKurumID = ' . $kurumID;
         return($this->db->select($sql));
     }
 
     //tur kurum öğrenci
     public function turKurumOgrencii($array = array()) {
-        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,BSOgrenciLocation FROM bsogrenci Where BSOgrenciID IN (' . $array . ') AND Status=1';
+        $sql = 'SELECT BSOgrenciID, BSOgrenciAd, BSOgrenciSoyad, BSOgrenciLocation FROM bsogrenci Where BSOgrenciID IN (' . $array . ') AND Status = 1';
         return($this->db->select($sql));
     }
 
     //tur kuruma göre kişiler
     public function turKurumIsci($kurumID) {
-        $sql = 'SELECT DISTINCT SBIsciID FROM sbiscikurum Where SBKurumID=' . $kurumID;
+        $sql = 'SELECT DISTINCT SBIsciID FROM sbiscikurum Where SBKurumID = ' . $kurumID;
         return($this->db->select($sql));
     }
 
     //tur kurum işçi
     public function turKurumIscii($array = array()) {
-        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciSoyad,SBIsciLocation FROM sbisci Where SBIsciID IN (' . $array . ') AND Status=1';
+        $sql = 'SELECT SBIsciID, SBIsciAd, SBIsciSoyad, SBIsciLocation FROM sbisci Where SBIsciID IN (' . $array . ') AND Status = 1';
         return($this->db->select($sql));
     }
 
     //kurumda herhangi bi tura kayıtlı öğrenciler
     public function turKurumAitOgrenci($kurumID) {
-        $sql = 'SELECT DISTINCT BSOgrenciID FROM bsogrencitur Where BSKurumID=' . $kurumID;
+        $sql = 'SELECT DISTINCT BSOgrenciID FROM bsogrencitur Where BSKurumID = ' . $kurumID;
         return($this->db->select($sql));
     }
 
     //kurumda herhangi bi tura kayıtlı işçiler
     public function turKurumAitIsci($kurumID) {
-        $sql = 'SELECT DISTINCT SBIsciID FROM sbiscitur Where SBKurumID=' . $kurumID;
+        $sql = 'SELECT DISTINCT SBIsciID FROM sbiscitur Where SBKurumID = ' . $kurumID;
         return($this->db->select($sql));
     }
 
     //kurumda herhangi bi tura kayıtlı personeller
     public function turKurumAitPersonel($kurumID) {
-        $sql = 'SELECT DISTINCT BSOgrenciIsciID FROM bsogrenciiscitur Where BSKullaniciTip=1 AND BSKurumID=' . $kurumID;
+        $sql = 'SELECT DISTINCT BSOgrenciIsciID FROM bsogrenciiscitur Where BSKullaniciTip = 1 AND BSKurumID = ' . $kurumID;
         return($this->db->select($sql));
     }
 
     //kurumda herhangi bi tura kayıtlı öğrenciler
     public function turKurumAitOgrenciler($kurumID) {
-        $sql = 'SELECT DISTINCT BSOgrenciIsciID FROM bsogrenciiscitur Where BSKullaniciTip=0 AND BSKurumID=' . $kurumID;
+        $sql = 'SELECT DISTINCT BSOgrenciIsciID FROM bsogrenciiscitur Where BSKullaniciTip = 0 AND BSKurumID = ' . $kurumID;
         return($this->db->select($sql));
     }
 
@@ -1563,25 +1674,25 @@ class Panel_Model extends Model {
 
     //tur kurum öğrenci
     public function turDetayTip($turID) {
-        $sql = 'SELECT BSTurTipID,BSTurTip,BSTurGidisDonus,BSTurAracID,BSTurAracPlaka,BSTurAracKapasite,BSTurSoforID,BSTurSoforAd,BSTurSoforLocation,BSTurHostesID,BSTurHostesAd,BSTurHostesLocation,BSTurBslngc,BSTurBts,BSTurBolgeID,BSTurBolgeAd,BSTurKurumID,BSTurKurumAd,BSTurKurumLocation FROM bsturtip Where BSTurGidisDonus IN (0,1) AND BSTurID=' . $turID;
+        $sql = 'SELECT BSTurTipID, BSTurTip, BSTurGidisDonus, BSTurAracID, BSTurAracPlaka, BSTurAracKapasite, BSTurSoforID, BSTurSoforAd, BSTurSoforLocation, BSTurHostesID, BSTurHostesAd, BSTurHostesLocation, BSTurBslngc, BSTurBts, BSTurBolgeID, BSTurBolgeAd, BSTurKurumID, BSTurKurumAd, BSTurKurumLocation FROM bsturtip Where BSTurGidisDonus IN (0, 1) AND BSTurID = ' . $turID;
         return($this->db->select($sql));
     }
 
     //tur gidis detay
     public function turDetayGidisIsciOgrenci($turID) {
-        $sql = 'SELECT BSKullaniciTip,BSOgrenciIsciID,BSOgrenciIsciAd,BSOgrenciIsciLocation,SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr FROM bsogrenciiscitur Where BSTurID=' . $turID . ' ORDER BY BSTurSira ASC';
+        $sql = 'SELECT BSKullaniciTip, BSOgrenciIsciID, BSOgrenciIsciAd, BSOgrenciIsciLocation, SBTurPzt, SBTurSli, SBTurCrs, SBTurPrs, SBTurCma, SBTurCmt, SBTurPzr FROM bsogrenciiscitur Where BSTurID = ' . $turID . ' ORDER BY BSTurSira ASC';
         return($this->db->select($sql));
     }
 
     //tur gidis öğrenci detay
     public function turDetayGidisOgrenci($turID) {
-        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciLocation,SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr FROM bsogrencitur Where BSTurID=' . $turID . ' ORDER BY BSTurSira ASC';
+        $sql = 'SELECT BSOgrenciID, BSOgrenciAd, BSOgrenciLocation, SBTurPzt, SBTurSli, SBTurCrs, SBTurPrs, SBTurCma, SBTurCmt, SBTurPzr FROM bsogrencitur Where BSTurID = ' . $turID . ' ORDER BY BSTurSira ASC';
         return($this->db->select($sql));
     }
 
     //tur gidis detay
     public function turDetayGidisIsci($turID) {
-        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciLocation,SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr FROM sbiscitur Where SBTurID=' . $turID . ' ORDER BY SBTurSira ASC';
+        $sql = 'SELECT SBIsciID, SBIsciAd, SBIsciLocation, SBTurPzt, SBTurSli, SBTurCrs, SBTurPrs, SBTurCma, SBTurCmt, SBTurPzr FROM sbiscitur Where SBTurID = ' . $turID . ' ORDER BY SBTurSira ASC';
         return($this->db->select($sql));
     }
 
@@ -1664,151 +1775,151 @@ class Panel_Model extends Model {
 
     //öğrencinin tura göre id listesi
     public function turOgrenciIDListele($turID) {
-        $sql = 'SELECT BSOgrenciID FROM bsogrencitur WHERE BSTurID=' . $turID;
+        $sql = 'SELECT BSOgrenciID FROM bsogrencitur WHERE BSTurID = ' . $turID;
         return($this->db->select($sql));
     }
 
     //öğrencinin tur güne göre idler
     public function turOgrenciGunIDListele($turID, $gun, $turGidisDonus) {
-        $sql = 'SELECT BSOgrenciID FROM bsseferogrenci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=0 AND BSTurTip=' . $turGidisDonus;
+        $sql = 'SELECT BSOgrenciID FROM bsseferogrenci WHERE BSTurID = ' . $turID . ' AND ' . $gun . ' = 0 AND BSTurTip = ' . $turGidisDonus;
         return($this->db->select($sql));
     }
 
     //tura gidişte binenler kimler
     public function turOgrenciBinenIDListele($turID) {
-        $sql = 'SELECT BSKisiID FROM bsturgidis WHERE BSTurID=' . $turID;
+        $sql = 'SELECT BSKisiID FROM bsturgidis WHERE BSTurID = ' . $turID;
         return($this->db->select($sql));
     }
 
     //öğrenci tur gidişte araca binmiş olanlar
     public function turGidisOgrenciBinenListele($turID, $array = array()) {
-        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciLocation FROM bsogrencitur WHERE BSTurID=' . $turID . ' AND BSOgrenciID IN (' . $array . ') ORDER BY BSTurSira ASC';
+        $sql = 'SELECT BSOgrenciID, BSOgrenciAd, BSOgrenciLocation FROM bsogrencitur WHERE BSTurID = ' . $turID . ' AND BSOgrenciID IN (' . $array . ') ORDER BY BSTurSira ASC';
         return($this->db->select($sql));
     }
 
     //öğrenci tur gidişte araca binmemiş olanlar
     public function turGidisOgrenciBinmeyenListele($turID, $array = array()) {
-        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciLocation FROM bsogrencitur WHERE BSTurID=' . $turID . ' AND BSOgrenciID IN (' . $array . ') ORDER BY BSTurSira ASC';
+        $sql = 'SELECT BSOgrenciID, BSOgrenciAd, BSOgrenciLocation FROM bsogrencitur WHERE BSTurID = ' . $turID . ' AND BSOgrenciID IN (' . $array . ') ORDER BY BSTurSira ASC';
         return($this->db->select($sql));
     }
 
     //işçinin tura göre id listesi
     public function turIsciIDListele($turID) {
-        $sql = 'SELECT SBIsciID FROM sbiscitur WHERE SBTurID=' . $turID;
+        $sql = 'SELECT SBIsciID FROM sbiscitur WHERE SBTurID = ' . $turID;
         return($this->db->select($sql));
     }
 
     //işçinin tur güne göre idler
     public function turIsciGunIDListele($turID, $gun, $turGidisDonus) {
-        $sql = 'SELECT BSIsciID FROM bsseferisci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=0 AND BSTurTip=' . $turGidisDonus;
+        $sql = 'SELECT BSIsciID FROM bsseferisci WHERE BSTurID = ' . $turID . ' AND ' . $gun . ' = 0 AND BSTurTip = ' . $turGidisDonus;
         return($this->db->select($sql));
     }
 
     //tura gidişte binenler kimler
     public function turIsciBinenIDListele($turID) {
-        $sql = 'SELECT BSKisiID FROM bsturgidis WHERE BSTurID=' . $turID;
+        $sql = 'SELECT BSKisiID FROM bsturgidis WHERE BSTurID = ' . $turID;
         return($this->db->select($sql));
     }
 
     //işçi tur gidişte araca binmiş olanlar
     public function turGidisIsciBinenListele($turID, $array = array()) {
-        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciLocation FROM sbiscitur WHERE SBTurID=' . $turID . ' AND SBIsciID IN (' . $array . ') ORDER BY SBTurSira ASC';
+        $sql = 'SELECT SBIsciID, SBIsciAd, SBIsciLocation FROM sbiscitur WHERE SBTurID = ' . $turID . ' AND SBIsciID IN (' . $array . ') ORDER BY SBTurSira ASC';
         return($this->db->select($sql));
     }
 
     //işçi tur gidişte araca binmemiş olanlar
     public function turGidisIsciBinmeyenListele($turID, $array = array()) {
-        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciLocation FROM sbiscitur WHERE SBTurID=' . $turID . ' AND SBIsciID IN (' . $array . ') ORDER BY SBTurSira ASC';
+        $sql = 'SELECT SBIsciID, SBIsciAd, SBIsciLocation FROM sbiscitur WHERE SBTurID = ' . $turID . ' AND SBIsciID IN (' . $array . ') ORDER BY SBTurSira ASC';
         return($this->db->select($sql));
     }
 
     //işçi ve öğrenci tura göre id listesi
     public function turIsciOgrenciIDListele($turID) {
-        $sql = 'SELECT BSOgrenciIsciID,BSKullaniciTip FROM bsogrenciiscitur WHERE BSTurID=' . $turID;
+        $sql = 'SELECT BSOgrenciIsciID, BSKullaniciTip FROM bsogrenciiscitur WHERE BSTurID = ' . $turID;
         return($this->db->select($sql));
     }
 
     //öğrenci ve işçinin tur güne göre idler
     public function turIsciOgrenciGunIDListele($turID, $gun, $turGidisDonus) {
-        $sql = 'SELECT BSKisiID,BSKullaniciTip FROM bsseferogrenciisci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=0 AND BSTurTip=' . $turGidisDonus;
+        $sql = 'SELECT BSKisiID, BSKullaniciTip FROM bsseferogrenciisci WHERE BSTurID = ' . $turID . ' AND ' . $gun . ' = 0 AND BSTurTip = ' . $turGidisDonus;
         return($this->db->select($sql));
     }
 
     //tura gidişte binenler kimler
     public function turIsciOgrenciBinenIDListele($turID) {
-        $sql = 'SELECT BSKisiID,BSKisiTip FROM bsturgidis WHERE BSTurID=' . $turID;
+        $sql = 'SELECT BSKisiID, BSKisiTip FROM bsturgidis WHERE BSTurID = ' . $turID;
         return($this->db->select($sql));
     }
 
     //işçi öğrenci tur gidişte araca binmiş olanlar
     public function turGidisIsciOgrenciBinenListele($turID, $array = array(), $array1 = array()) {
-        $sql = 'SELECT BSOgrenciIsciID,BSKullaniciTip,BSOgrenciIsciAd,BSOgrenciIsciLocation FROM bsogrenciiscitur WHERE BSTurID=' . $turID . ' AND BSOgrenciIsciID IN (' . $array . ') AND BSKullaniciTip IN (' . $array1 . ') ORDER BY BSTurSira ASC';
+        $sql = 'SELECT BSOgrenciIsciID, BSKullaniciTip, BSOgrenciIsciAd, BSOgrenciIsciLocation FROM bsogrenciiscitur WHERE BSTurID = ' . $turID . ' AND BSOgrenciIsciID IN (' . $array . ') AND BSKullaniciTip IN (' . $array1 . ') ORDER BY BSTurSira ASC';
         return($this->db->select($sql));
     }
 
     //işçi öğrenci tur gidişte araca binmemiş olanlar
     public function turGidisOgrenciIsciBinmeyenListele($turID, $array = array(), $array1 = array()) {
-        $sql = 'SELECT BSOgrenciIsciID,BSKullaniciTip,BSOgrenciIsciAd,BSOgrenciIsciLocation FROM bsogrenciiscitur WHERE BSTurID=' . $turID . ' AND BSOgrenciIsciID IN (' . $array . ') AND BSKullaniciTip IN (' . $array1 . ') ORDER BY BSTurSira ASC';
+        $sql = 'SELECT BSOgrenciIsciID, BSKullaniciTip, BSOgrenciIsciAd, BSOgrenciIsciLocation FROM bsogrenciiscitur WHERE BSTurID = ' . $turID . ' AND BSOgrenciIsciID IN (' . $array . ') AND BSKullaniciTip IN (' . $array1 . ') ORDER BY BSTurSira ASC';
         return($this->db->select($sql));
     }
 
     //tura dönüşte binenler kimler
     public function turOgrenciInenIDListele($turID) {
-        $sql = 'SELECT BSKisiID FROM bsturdonus WHERE BSTurID=' . $turID;
+        $sql = 'SELECT BSKisiID FROM bsturdonus WHERE BSTurID = ' . $turID;
         return($this->db->select($sql));
     }
 
     //öğrenci tur dönüşte araca binmemiş olanlar
     public function turDonusOgrenciInmeyenListele($turID, $array = array()) {
-        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciLocation FROM bsogrencitur WHERE BSTurID=' . $turID . ' AND BSOgrenciID IN (' . $array . ') ORDER BY BSTurSira ASC';
+        $sql = 'SELECT BSOgrenciID, BSOgrenciAd, BSOgrenciLocation FROM bsogrencitur WHERE BSTurID = ' . $turID . ' AND BSOgrenciID IN (' . $array . ') ORDER BY BSTurSira ASC';
         return($this->db->select($sql));
     }
 
     //öğrenci tur dönüşte araca binmiş olanlar
     public function turDonusOgrenciInenListele($turID, $array = array()) {
-        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciLocation FROM bsogrencitur WHERE BSTurID=' . $turID . ' AND BSOgrenciID IN (' . $array . ') ORDER BY BSTurSira ASC';
+        $sql = 'SELECT BSOgrenciID, BSOgrenciAd, BSOgrenciLocation FROM bsogrencitur WHERE BSTurID = ' . $turID . ' AND BSOgrenciID IN (' . $array . ') ORDER BY BSTurSira ASC';
         return($this->db->select($sql));
     }
 
     //tura dönüşte binenler kimler
     public function turIsciDonenIDListele($turID) {
-        $sql = 'SELECT BSKisiID FROM bsturdonus WHERE BSTurID=' . $turID;
+        $sql = 'SELECT BSKisiID FROM bsturdonus WHERE BSTurID = ' . $turID;
         return($this->db->select($sql));
     }
 
     //işçi tur dönüşte araca binmiş olanlar
     public function turDonusIsciInenListele($turID, $array = array()) {
-        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciLocation FROM sbiscitur WHERE SBTurID=' . $turID . ' AND SBIsciID IN (' . $array . ') ORDER BY SBTurSira ASC';
+        $sql = 'SELECT SBIsciID, SBIsciAd, SBIsciLocation FROM sbiscitur WHERE SBTurID = ' . $turID . ' AND SBIsciID IN (' . $array . ') ORDER BY SBTurSira ASC';
         return($this->db->select($sql));
     }
 
     //işçi tur DÖNÜŞTE araca binmemiş olanlar
     public function turDonusIsciInmeyenListele($turID, $array = array()) {
-        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciLocation FROM sbiscitur WHERE SBTurID=' . $turID . ' AND SBIsciID IN (' . $array . ') ORDER BY SBTurSira ASC';
+        $sql = 'SELECT SBIsciID, SBIsciAd, SBIsciLocation FROM sbiscitur WHERE SBTurID = ' . $turID . ' AND SBIsciID IN (' . $array . ') ORDER BY SBTurSira ASC';
         return($this->db->select($sql));
     }
 
     //tura dönüşte inenler kimler
     public function turIsciOgrenciInenIDListele($turID) {
-        $sql = 'SELECT BSKisiID,BSKisiTip FROM bsturdonus WHERE BSTurID=' . $turID;
+        $sql = 'SELECT BSKisiID, BSKisiTip FROM bsturdonus WHERE BSTurID = ' . $turID;
         return($this->db->select($sql));
     }
 
     //işçi öğrenci tur dönüşte araca binmiş olanlar
     public function turDonusIsciOgrenciInenListele($turID, $array = array(), $array1 = array()) {
-        $sql = 'SELECT BSOgrenciIsciID,BSKullaniciTip,BSOgrenciIsciAd,BSOgrenciIsciLocation FROM bsogrenciiscitur WHERE BSTurID=' . $turID . ' AND BSOgrenciIsciID IN (' . $array . ') AND BSKullaniciTip IN (' . $array1 . ') ORDER BY BSTurSira ASC';
+        $sql = 'SELECT BSOgrenciIsciID, BSKullaniciTip, BSOgrenciIsciAd, BSOgrenciIsciLocation FROM bsogrenciiscitur WHERE BSTurID = ' . $turID . ' AND BSOgrenciIsciID IN (' . $array . ') AND BSKullaniciTip IN (' . $array1 . ') ORDER BY BSTurSira ASC';
         return($this->db->select($sql));
     }
 
     //işçi öğrenci tur dönüşte araca binmemiş olanlar
     public function turDonusOgrenciIsciInmeyenListele($turID, $array = array(), $array1 = array()) {
-        $sql = 'SELECT BSOgrenciIsciID,BSKullaniciTip,BSOgrenciIsciAd,BSOgrenciIsciLocation FROM bsogrenciiscitur WHERE BSTurID=' . $turID . ' AND BSOgrenciIsciID IN (' . $array . ') AND BSKullaniciTip IN (' . $array1 . ') ORDER BY BSTurSira ASC';
+        $sql = 'SELECT BSOgrenciIsciID, BSKullaniciTip, BSOgrenciIsciAd, BSOgrenciIsciLocation FROM bsogrenciiscitur WHERE BSTurID = ' . $turID . ' AND BSOgrenciIsciID IN (' . $array . ') AND BSKullaniciTip IN (' . $array1 . ') ORDER BY BSTurSira ASC';
         return($this->db->select($sql));
     }
 
     //aktif lokasyonu olan araç
     public function aracLokasyon($aracID) {
-        $sql = 'SELECT BSAracLokasyon FROM bsaraclokasyon Where BSAracID=' . $aracID;
+        $sql = 'SELECT BSAracLokasyon FROM bsaraclokasyon Where BSAracID = ' . $aracID;
         return($this->db->select($sql));
     }
 

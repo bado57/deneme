@@ -1815,14 +1815,18 @@ $.AdminIslemler = {
                     DetailGidisGelenLocation = [];
                     DetailGidisGelenTip = [];
                     DetailGidisDigerKisi = [];
-                    for (var gidisID = 0; gidisID < cevap.gidis.KisiID.length; gidisID++) {
-                        DetailGidisGelenAd.push(cevap.gidis.KisiAd[gidisID]);
-                        DetailGidisGelenID.push(cevap.gidis.KisiID[gidisID]);
-                        DetailGidisGelenLocation.push(cevap.gidis.KisiLocation[gidisID]);
-                        DetailGidisGelenTip.push(cevap.gidis.KisiTip[gidisID]);
+                    if (cevap.gidis) {
+                        for (var gidisID = 0; gidisID < cevap.gidis.KisiID.length; gidisID++) {
+                            DetailGidisGelenAd.push(cevap.gidis.KisiAd[gidisID]);
+                            DetailGidisGelenID.push(cevap.gidis.KisiID[gidisID]);
+                            DetailGidisGelenLocation.push(cevap.gidis.KisiLocation[gidisID]);
+                            DetailGidisGelenTip.push(cevap.gidis.KisiTip[gidisID]);
+                        }
                     }
-                    for (var gidisDigerID = 0; gidisDigerID < cevap.gidisDiger.length; gidisDigerID++) {
-                        DetailGidisDigerKisi.push(cevap.gidisDiger[gidisDigerID]);
+                    if (cevap.gidisDiger) {
+                        for (var gidisDigerID = 0; gidisDigerID < cevap.gidisDiger.length; gidisDigerID++) {
+                            DetailGidisDigerKisi.push(cevap.gidisDiger[gidisDigerID]);
+                        }
                     }
                     if (hostesID != 0) {
                         multipleTurHostesDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation, hostesAd, hostesID, hostesLocation);
@@ -2286,8 +2290,10 @@ $.AdminIslemler = {
                         DetailDonusGelenLocation.push(cevap.donus.KisiLocation[donusID]);
                         DetailDonusGelenTip.push(cevap.donus.KisiTip[donusID]);
                     }
-                    for (var donusDigerID = 0; donusDigerID < cevap.donusDiger.length; donusDigerID++) {
-                        DetailDonusDigerKisi.push(cevap.donusDiger[donusDigerID]);
+                    if (cevap.donusDigerID) {
+                        for (var donusDigerID = 0; donusDigerID < cevap.donusDiger.length; donusDigerID++) {
+                            DetailDonusDigerKisi.push(cevap.donusDiger[donusDigerID]);
+                        }
                     }
                     if (hostesID != 0) {
                         multipleTurHostesDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation, hostesAd, hostesID, hostesLocation);

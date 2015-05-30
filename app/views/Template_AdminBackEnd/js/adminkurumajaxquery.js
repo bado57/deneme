@@ -1463,8 +1463,10 @@ $.AdminIslemler = {
         alertify.confirm(jsDil.SilOnay, function (e) {
             if (e) {
                 var kurumdetail_id = $("input[name=adminKurumDetailID]").val();
+                var kurum_adi = $("input[name=KurumDetailAdi]").val();
+                var bolge_id = $("input[name=kurumDetayBolgeID]").val();
                 $.ajax({
-                    data: {"kurumdetail_id": kurumdetail_id, "tip": "adminKurumDetailDelete"},
+                    data: {"kurumdetail_id": kurumdetail_id, "kurum_adi": kurum_adi, "bolge_id": bolge_id, "tip": "adminKurumDetailDelete"},
                     success: function (cevap) {
                         if (cevap.hata) {
                             reset();
@@ -1531,13 +1533,14 @@ $.AdminIslemler = {
         var kurumdetail_adres = $("textarea[name=KurumDetailAdres]").val();
         var kurumdetail_aciklama = $("textarea[name=KurumDetailAciklama]").val();
         var kurumdetail_id = $("input[name=adminKurumDetailID]").val();
+        var bolge_id = $("input[name=kurumDetayBolgeID]").val();
         if (AdminKurumDetailVazgec[0] == kurumdetail_adi && AdminKurumDetailVazgec[1] == kurumdetail_bolge && AdminKurumDetailVazgec[2] == kurumdetail_telefon && AdminKurumDetailVazgec[3] == kurumdetail_email && AdminKurumDetailVazgec[4] == kurumdetail_adres && AdminKurumDetailVazgec[5] == kurumdetail_aciklama && AdminKurumDetailVazgec[6] == kurumdetail_tip) {
             reset();
             alertify.alert(jsDil.Degisiklik);
             return false;
         } else {
             $.ajax({
-                data: {"kurumdetail_id": kurumdetail_id, "kurumdetail_adi": kurumdetail_adi, "kurumdetail_bolge": kurumdetail_bolge, "kurumdetail_telefon": kurumdetail_telefon, "kurumdetail_email": kurumdetail_email, "kurumdetail_adres": kurumdetail_adres, "kurumdetail_aciklama": kurumdetail_aciklama, "kurumdetail_tip": kurumdetail_tip, "tip": "adminKurumDetailDuzenle"},
+                data: {"kurumdetail_id": kurumdetail_id, "bolge_id": bolge_id, "kurumdetail_adi": kurumdetail_adi, "kurumdetail_bolge": kurumdetail_bolge, "kurumdetail_telefon": kurumdetail_telefon, "kurumdetail_email": kurumdetail_email, "kurumdetail_adres": kurumdetail_adres, "kurumdetail_aciklama": kurumdetail_aciklama, "kurumdetail_tip": kurumdetail_tip, "tip": "adminKurumDetailDuzenle"},
                 success: function (cevap) {
                     if (cevap.hata) {
                         reset();
@@ -2036,14 +2039,18 @@ $.AdminIslemler = {
                     DetailGidisGelenLocation = [];
                     DetailGidisGelenTip = [];
                     DetailGidisDigerKisi = [];
-                    for (var gidisID = 0; gidisID < cevap.gidis.KisiID.length; gidisID++) {
-                        DetailGidisGelenAd.push(cevap.gidis.KisiAd[gidisID]);
-                        DetailGidisGelenID.push(cevap.gidis.KisiID[gidisID]);
-                        DetailGidisGelenLocation.push(cevap.gidis.KisiLocation[gidisID]);
-                        DetailGidisGelenTip.push(cevap.gidis.KisiTip[gidisID]);
+                    if (cevap.gidis) {
+                        for (var gidisID = 0; gidisID < cevap.gidis.KisiID.length; gidisID++) {
+                            DetailGidisGelenAd.push(cevap.gidis.KisiAd[gidisID]);
+                            DetailGidisGelenID.push(cevap.gidis.KisiID[gidisID]);
+                            DetailGidisGelenLocation.push(cevap.gidis.KisiLocation[gidisID]);
+                            DetailGidisGelenTip.push(cevap.gidis.KisiTip[gidisID]);
+                        }
                     }
-                    for (var gidisDigerID = 0; gidisDigerID < cevap.gidisDiger.length; gidisDigerID++) {
-                        DetailGidisDigerKisi.push(cevap.gidisDiger[gidisDigerID]);
+                    if (cevap.gidisDiger) {
+                        for (var gidisDigerID = 0; gidisDigerID < cevap.gidisDiger.length; gidisDigerID++) {
+                            DetailGidisDigerKisi.push(cevap.gidisDiger[gidisDigerID]);
+                        }
                     }
                     if (hostesID != 0) {
                         multipleKurumTurHostesDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation, hostesAd, hostesID, hostesLocation);
@@ -2329,8 +2336,13 @@ $.AdminIslemler = {
             if (e) {
                 var turID = $('input[name=adminTurID]').val();
                 var kurumTip = $('input[name=adminTurDetayTip]').val();
+                var bolgeID = $('input[name=TurDetayGidisBolgeID]').val();
+                var soforID = $('select#TurDetayGidisSofor option:selected').val();
+                var hostesID = $('select#TurDetayGidisHostes option:selected').val();
+                var turAd = $('input[name=TurDetayGidisAd]').val();
                 $.ajax({
-                    data: {"turID": turID, "kurumTip": kurumTip, "tip": "turDetailDelete"},
+                    data: {"turID": turID, "turAd": turAd, "bolgeID": bolgeID, "hostesID": hostesID, "turOgrenciID[]": KisiOgrenciID, "turKisiIsciID[]": KisiIsciID,
+                        "soforID": soforID, "kurumTip": kurumTip, "tip": "turDetailDelete"},
                     success: function (cevap) {
                         if (cevap.hata) {
                             reset();
@@ -2512,16 +2524,19 @@ $.AdminIslemler = {
                     DetailDonusGelenLocation = [];
                     DetailDonusGelenTip = [];
                     DetailDonusDigerKisi = [];
-                    for (var donusID = 0; donusID < cevap.donus.KisiID.length; donusID++) {
-                        DetailDonusGelenAd.push(cevap.donus.KisiAd[donusID]);
-                        DetailDonusGelenID.push(cevap.donus.KisiID[donusID]);
-                        DetailDonusGelenLocation.push(cevap.donus.KisiLocation[donusID]);
-                        DetailDonusGelenTip.push(cevap.donus.KisiTip[donusID]);
+                    if (cevap.donus) {
+                        for (var donusID = 0; donusID < cevap.donus.KisiID.length; donusID++) {
+                            DetailDonusGelenAd.push(cevap.donus.KisiAd[donusID]);
+                            DetailDonusGelenID.push(cevap.donus.KisiID[donusID]);
+                            DetailDonusGelenLocation.push(cevap.donus.KisiLocation[donusID]);
+                            DetailDonusGelenTip.push(cevap.donus.KisiTip[donusID]);
+                        }
                     }
-                    for (var donusDigerID = 0; donusDigerID < cevap.donusDiger.length; donusDigerID++) {
-                        DetailDonusDigerKisi.push(cevap.donusDiger[donusDigerID]);
+                    if (cevap.donusDiger) {
+                        for (var donusDigerID = 0; donusDigerID < cevap.donusDiger.length; donusDigerID++) {
+                            DetailDonusDigerKisi.push(cevap.donusDiger[donusDigerID]);
+                        }
                     }
-
                     if (hostesID != 0) {
                         multipleKurumTurHostesDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation, hostesAd, hostesID, hostesLocation);
                         google.maps.event.addDomListener(window, 'load', multipleKurumTurHostesDetayDonusMap);
@@ -2706,8 +2721,13 @@ $.AdminIslemler = {
             if (e) {
                 var turID = $('input[name=adminTurID]').val();
                 var kurumTip = $('input[name=adminTurDetayTip]').val();
+                var bolgeID = $('input[name=TurDetayDonusBolgeID]').val();
+                var soforID = $('select#TurDetayDonusSofor option:selected').val();
+                var hostesID = $('select#TurDetayDonusHostes option:selected').val();
+                var turAd = $('input[name=TurDetayDonusAd]').val();
                 $.ajax({
-                    data: {"turID": turID, "kurumTip": kurumTip, "tip": "turDetailDelete"},
+                    data: {"turID": turID, "turAd": turAd, "bolgeID": bolgeID, "hostesID": hostesID, "turOgrenciID[]": KisiOgrenciID, "turKisiIsciID[]": KisiIsciID,
+                        "soforID": soforID, "kurumTip": kurumTip, "tip": "turDetailDelete"},
                     success: function (cevap) {
                         if (cevap.hata) {
                             reset();

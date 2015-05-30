@@ -14,8 +14,21 @@ class AdminAracAjaxSorgu extends Controller {
         //session güvenlik kontrolü
         $form = $this->load->otherClasses('Form');
         $sessionKey = $form->sessionKontrol();
+        $adSoyad = Session::get("kullaniciad") . ' ' . Session::get("kullanicisoyad");
+        $bolgeIcon = 'fa fa-th';
+        $bolgeUrl = 'bolgeliste';
 
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+            //dil yapılandırılması
+            $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+            if (!Session::get("dil")) {
+                Session::set("dil", $lang);
+                $formm = $this->load->multilanguage($lang);
+                $deger = $formm->multilanguage();
+            } else {
+                $formm = $this->load->multilanguage(Session::get("dil"));
+                $deger = $formm->multilanguage();
+            }
             $sonuc = array();
             //model bağlantısı
             $Panel_Model = $this->load->model("panel_model");
@@ -78,6 +91,7 @@ class AdminAracAjaxSorgu extends Controller {
                     } else {
                         $uniqueKey = Session::get("username");
                         $uniqueKey = $uniqueKey . '_AArac';
+                        $adminRutbe = Session::get("userRutbe");
 
                         $form->post('aracPlaka', true);
                         $form->post('aracMarka', true);
@@ -149,9 +163,81 @@ class AdminAracAjaxSorgu extends Controller {
                                         if ($resultMemcache) {
                                             $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                                         }
-
-                                        $sonuc["newAracID"] = $resultAracID;
-                                        $sonuc["insert"] = "Başarıyla Araç Eklenmiştir.";
+                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracEkleme"];
+                                        $aracRenk = 'success';
+                                        $aracUrl = 'aracliste';
+                                        $aracIcon = 'fa fa-bus';
+                                        //bildirim ayarları
+                                        if ($adminRutbe != 1) {//normal admin
+                                            $adminBolgeler = implode(',', $aracBolgeID);
+                                            $adminIDLer = array(1, $adminID);
+                                            $adminImplodeID = implode(',', $adminIDLer);
+                                            $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
+                                            $adminBolgeCount = count($resultAdminBolgeler);
+                                            if ($adminBolgeCount > 0) {//diğer adminler
+                                                for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
+                                                }
+                                                $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                if ($resultBildirim) {
+                                                    $adminNotfIDLer = array(1, $adminImplodeID);
+                                                    $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                    $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                    if (count($resultAdminCihaz) > 0) {
+                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                        }
+                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                    }
+                                                }
+                                            } else {
+                                                $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 11);
+                                                $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                if ($resultBildirim) {
+                                                    $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                    if (count($resultAdminCihaz) > 0) {
+                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                        }
+                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                    }
+                                                }
+                                            }
+                                        } else {//üst admin
+                                            $adminBolgeler = implode(',', $aracBolgeID);
+                                            $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($adminBolgeler);
+                                            $adminIDCount = count($resultBolgeAdminID);
+                                            if ($adminIDCount > 0) {
+                                                for ($b = 0; $b < $adminIDCount; $b++) {
+                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 11);
+                                                }
+                                                $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                if ($resultBildirim) {
+                                                    $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                    $adminNotfIDLer = array($adminImplodeID);
+                                                    $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                    $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                    if (count($resultAdminCihaz) > 0) {
+                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                        }
+                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        //log ayarları
+                                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
+                                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                        if ($resultLog) {
+                                            $sonuc["newAracID"] = $resultAracID;
+                                            $sonuc["insert"] = "Başarıyla Araç Eklenmiştir.";
+                                        } else {
+                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        }
                                     } else {
                                         //arac şofor kaydedilirken bi hata meydana geldi ise
                                         $deleteresult = $Panel_Model->adminAracDelete($resultAracID);
@@ -199,9 +285,81 @@ class AdminAracAjaxSorgu extends Controller {
                                     if ($resultMemcache) {
                                         $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                                     }
-
-                                    $sonuc["newAracID"] = $resultAracID;
-                                    $sonuc["insert"] = "Başarıyla Araç Eklenmiştir.";
+                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracEkleme"];
+                                    $aracRenk = 'success';
+                                    $aracUrl = 'aracliste';
+                                    $aracIcon = 'fa fa-bus';
+                                    //bildirim ayarları
+                                    if ($adminRutbe != 1) {//normal admin
+                                        $adminBolgeler = implode(',', $aracBolgeID);
+                                        $adminIDLer = array(1, $adminID);
+                                        $adminImplodeID = implode(',', $adminIDLer);
+                                        $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
+                                        $adminBolgeCount = count($resultAdminBolgeler);
+                                        if ($adminBolgeCount > 0) {//diğer adminler
+                                            for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
+                                            }
+                                            $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                            if ($resultBildirim) {
+                                                $adminNotfIDLer = array(1, $adminImplodeID);
+                                                $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                if (count($resultAdminCihaz) > 0) {
+                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                    }
+                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                }
+                                            }
+                                        } else {
+                                            $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 11);
+                                            $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                            if ($resultBildirim) {
+                                                $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                if (count($resultAdminCihaz) > 0) {
+                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                    }
+                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                }
+                                            }
+                                        }
+                                    } else {//üst admin
+                                        $adminBolgeler = implode(',', $aracBolgeID);
+                                        $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($adminBolgeler);
+                                        $adminIDCount = count($resultBolgeAdminID);
+                                        if ($adminIDCount > 0) {
+                                            for ($b = 0; $b < $adminIDCount; $b++) {
+                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 11);
+                                            }
+                                            $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                            if ($resultBildirim) {
+                                                $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                $adminNotfIDLer = array($adminImplodeID);
+                                                $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                if (count($resultAdminCihaz) > 0) {
+                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                    }
+                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    //log ayarları
+                                    $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
+                                    $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                    if ($resultLog) {
+                                        $sonuc["newAracID"] = $resultAracID;
+                                        $sonuc["insert"] = "Başarıyla Araç Eklenmiştir.";
+                                    } else {
+                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    }
                                 } else {
                                     //arac şofor kaydedilirken bi hata meydana geldi ise
                                     $deleteresult = $Panel_Model->adminAracDelete($resultAracID);
@@ -605,14 +763,17 @@ class AdminAracAjaxSorgu extends Controller {
                     } else {
                         $uniqueKey = Session::get("username");
                         $uniqueKey = $uniqueKey . '_AArac';
-
+                        $adminRutbe = Session::get("userRutbe");
 
                         $form->post('aracdetail_id', true);
+                        $form->post('arac_plaka', true);
                         $adminAracDetailID = $form->values['aracdetail_id'];
+                        $aracPlak = $form->values['arac_plaka'];
+                        $aracPlaka = strtoupper($aracPlak);
+                        $aracBolgeID = $_REQUEST['aracBolgeID'];
 
                         $deleteresult = $Panel_Model->adminDetailAracDelete($adminAracDetailID);
                         if ($deleteresult) {
-
                             $deleteresultt = $Panel_Model->adminDetailAracSoforDelete($adminAracDetailID);
                             if ($deleteresultt) {
                                 $deletehostes = $Panel_Model->adminDetailAracHostesDelete($adminAracDetailID);
@@ -623,7 +784,80 @@ class AdminAracAjaxSorgu extends Controller {
                                         if ($resultMemcache) {
                                             $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                                         }
-                                        $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                        $aracRenk = 'danger';
+                                        $aracUrl = 'aracliste';
+                                        $aracIcon = 'fa fa-bus';
+                                        //bildirim ayarları
+                                        if ($adminRutbe != 1) {//normal admin
+                                            $adminBolgeler = implode(',', $aracBolgeID);
+                                            $adminIDLer = array(1, $adminID);
+                                            $adminImplodeID = implode(',', $adminIDLer);
+                                            $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
+                                            $adminBolgeCount = count($resultAdminBolgeler);
+                                            if ($adminBolgeCount > 0) {//diğer adminler
+                                                for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                }
+                                                $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                if ($resultBildirim) {
+                                                    $adminNotfIDLer = array(1, $adminImplodeID);
+                                                    $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                    $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                    if (count($resultAdminCihaz) > 0) {
+                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                        }
+                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                    }
+                                                }
+                                            } else {
+                                                $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
+                                                $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                if ($resultBildirim) {
+                                                    $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                    if (count($resultAdminCihaz) > 0) {
+                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                        }
+                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                    }
+                                                }
+                                            }
+                                        } else {//üst admin
+                                            $adminBolgeler = implode(',', $aracBolgeID);
+                                            $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($adminBolgeler);
+                                            $adminIDCount = count($resultBolgeAdminID);
+                                            if ($adminIDCount > 0) {
+                                                for ($b = 0; $b < $adminIDCount; $b++) {
+                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 31);
+                                                }
+                                                $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                if ($resultBildirim) {
+                                                    $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                    $adminNotfIDLer = array($adminImplodeID);
+                                                    $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                    $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                    if (count($resultAdminCihaz) > 0) {
+                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                        }
+                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        //log ayarları
+                                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
+                                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                        if ($resultLog) {
+                                            $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                        } else {
+                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        }
                                     }
                                 } else {
                                     $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($adminAracDetailID);
@@ -644,7 +878,80 @@ class AdminAracAjaxSorgu extends Controller {
                                         if ($resultMemcache) {
                                             $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                                         }
-                                        $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                        $aracRenk = 'danger';
+                                        $aracUrl = 'aracliste';
+                                        $aracIcon = 'fa fa-bus';
+                                        //bildirim ayarları
+                                        if ($adminRutbe != 1) {//normal admin
+                                            $adminBolgeler = implode(',', $aracBolgeID);
+                                            $adminIDLer = array(1, $adminID);
+                                            $adminImplodeID = implode(',', $adminIDLer);
+                                            $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
+                                            $adminBolgeCount = count($resultAdminBolgeler);
+                                            if ($adminBolgeCount > 0) {//diğer adminler
+                                                for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                }
+                                                $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                if ($resultBildirim) {
+                                                    $adminNotfIDLer = array(1, $adminImplodeID);
+                                                    $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                    $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                    if (count($resultAdminCihaz) > 0) {
+                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                        }
+                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                    }
+                                                }
+                                            } else {
+                                                $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
+                                                $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                if ($resultBildirim) {
+                                                    $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                    if (count($resultAdminCihaz) > 0) {
+                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                        }
+                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                    }
+                                                }
+                                            }
+                                        } else {//üst admin
+                                            $adminBolgeler = implode(',', $aracBolgeID);
+                                            $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($adminBolgeler);
+                                            $adminIDCount = count($resultBolgeAdminID);
+                                            if ($adminIDCount > 0) {
+                                                for ($b = 0; $b < $adminIDCount; $b++) {
+                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 31);
+                                                }
+                                                $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                if ($resultBildirim) {
+                                                    $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                    $adminNotfIDLer = array($adminImplodeID);
+                                                    $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                    $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                    if (count($resultAdminCihaz) > 0) {
+                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                        }
+                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        //log ayarları
+                                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
+                                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                        if ($resultLog) {
+                                            $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                        } else {
+                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        }
                                     }
                                 } else {
                                     $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($adminAracDetailID);
@@ -653,7 +960,80 @@ class AdminAracAjaxSorgu extends Controller {
                                         if ($resultMemcache) {
                                             $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                                         }
-                                        $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                        $aracRenk = 'danger';
+                                        $aracUrl = 'aracliste';
+                                        $aracIcon = 'fa fa-bus';
+                                        //bildirim ayarları
+                                        if ($adminRutbe != 1) {//normal admin
+                                            $adminBolgeler = implode(',', $aracBolgeID);
+                                            $adminIDLer = array(1, $adminID);
+                                            $adminImplodeID = implode(',', $adminIDLer);
+                                            $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
+                                            $adminBolgeCount = count($resultAdminBolgeler);
+                                            if ($adminBolgeCount > 0) {//diğer adminler
+                                                for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                }
+                                                $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                if ($resultBildirim) {
+                                                    $adminNotfIDLer = array(1, $adminImplodeID);
+                                                    $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                    $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                    if (count($resultAdminCihaz) > 0) {
+                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                        }
+                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                    }
+                                                }
+                                            } else {
+                                                $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
+                                                $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                if ($resultBildirim) {
+                                                    $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                    if (count($resultAdminCihaz) > 0) {
+                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                        }
+                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                    }
+                                                }
+                                            }
+                                        } else {//üst admin
+                                            $adminBolgeler = implode(',', $aracBolgeID);
+                                            $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($adminBolgeler);
+                                            $adminIDCount = count($resultBolgeAdminID);
+                                            if ($adminIDCount > 0) {
+                                                for ($b = 0; $b < $adminIDCount; $b++) {
+                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 31);
+                                                }
+                                                $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                if ($resultBildirim) {
+                                                    $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                    $adminNotfIDLer = array($adminImplodeID);
+                                                    $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                    $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                    if (count($resultAdminCihaz) > 0) {
+                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                        }
+                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        //log ayarları
+                                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
+                                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                        if ($resultLog) {
+                                            $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                        } else {
+                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        }
                                     }
                                 }
                             }
@@ -675,6 +1055,7 @@ class AdminAracAjaxSorgu extends Controller {
                     } else {
                         $uniqueKey = Session::get("username");
                         $uniqueKey = $uniqueKey . '_AArac';
+                        $adminRutbe = Session::get("userRutbe");
 
                         $form->post('aracdetail_id', true);
                         $aracID = $form->values['aracdetail_id'];
@@ -694,6 +1075,7 @@ class AdminAracAjaxSorgu extends Controller {
                         $aracHostesAd = $_REQUEST['aracHostesAd'];
                         $aracBolgeAd = $_REQUEST['aracBolgeAd'];
                         $aracBolgeID = $_REQUEST['aracBolgeID'];
+                        $aracEskiBolgeID = $_REQUEST['aracEskiBolgeID'];
 
                         if ($form->submit()) {
                             $data = array(
@@ -752,8 +1134,504 @@ class AdminAracAjaxSorgu extends Controller {
                                                 $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                                             }
 
-                                            $sonuc["newAracID"] = $aracID;
-                                            $sonuc["update"] = "Başarıyla Araç Düzenlenmiştir.";
+                                            //yeni bölge ile eski bölge arasıdnaki farklar
+                                            if (count($aracBolgeID) >= count($aracEskiBolgeID)) {
+                                                $bolgeIDEklenen = array_diff($aracBolgeID, $aracEskiBolgeID);
+                                                if (count($bolgeIDEklenen) > 0) {//fark var
+                                                    //yeni bölge eklenmiş
+                                                    $yeniEklenen = implode(",", $bolgeIDEklenen);
+                                                    //yeni eklenen bölge ayarı
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracEkleme"];
+                                                    $aracRenk = 'success';
+                                                    $aracUrl = 'aracliste';
+                                                    $aracIcon = 'fa fa-bus';
+                                                    //bildirim ayarları
+                                                    if ($adminRutbe != 1) {//normal admin
+                                                        $adminIDLer = array(1, $adminID);
+                                                        $adminImplodeID = implode(',', $adminIDLer);
+                                                        $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniEklenen, $adminImplodeID);
+                                                        $adminBolgeCount = count($resultAdminBolgeler);
+                                                        if ($adminBolgeCount > 0) {//diğer adminler
+                                                            for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
+                                                            }
+                                                            $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                            if ($resultBildirim) {
+                                                                $adminNotfIDLer = array(1, $adminImplodeID);
+                                                                $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                }
+                                                            }
+                                                        } else {
+                                                            $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 11);
+                                                            $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                            if ($resultBildirim) {
+                                                                $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                }
+                                                            }
+                                                        }
+                                                    } else {//üst admin
+                                                        $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($yeniEklenen);
+                                                        $adminIDCount = count($resultBolgeAdminID);
+                                                        if ($adminIDCount > 0) {
+                                                            for ($b = 0; $b < $adminIDCount; $b++) {
+                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 11);
+                                                            }
+                                                            $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                            if ($resultBildirim) {
+                                                                $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                                $adminNotfIDLer = array($adminImplodeID);
+                                                                $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+                                                    $bolgeIDSilinen = array_diff($aracEskiBolgeID, $aracBolgeID);
+                                                    if (count($bolgeIDSilinen) > 0) {
+                                                        $yeniSilinen = implode(",", $bolgeIDSilinen);
+                                                        //bölgeden araç silindi
+                                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                                        $aracRenk = 'danger';
+                                                        $aracUrl = 'aracliste';
+                                                        $aracIcon = 'fa fa-bus';
+                                                        //bildirim ayarları
+                                                        if ($adminRutbe != 1) {//normal admin
+                                                            $adminIDLer = array(1, $adminID);
+                                                            $adminImplodeID = implode(',', $adminIDLer);
+                                                            $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniSilinen, $adminImplodeID);
+                                                            $adminBolgeCount = count($resultAdminBolgeler);
+                                                            if ($adminBolgeCount > 0) {//diğer adminler
+                                                                for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                                }
+                                                                $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                                if ($resultBildirim) {
+                                                                    $adminNotfIDLer = array(1, $adminImplodeID);
+                                                                    $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                    $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                    if (count($resultAdminCihaz) > 0) {
+                                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                        }
+                                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                    }
+                                                                }
+                                                            } else {
+                                                                $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
+                                                                $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                                if ($resultBildirim) {
+                                                                    $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                                    if (count($resultAdminCihaz) > 0) {
+                                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                        }
+                                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                    }
+                                                                }
+                                                            }
+                                                        } else {//üst admin
+                                                            $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($yeniSilinen);
+                                                            $adminIDCount = count($resultBolgeAdminID);
+                                                            if ($adminIDCount > 0) {
+                                                                for ($b = 0; $b < $adminIDCount; $b++) {
+                                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 31);
+                                                                }
+                                                                $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                                if ($resultBildirim) {
+                                                                    $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                                    $adminNotfIDLer = array($adminImplodeID);
+                                                                    $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                    $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                    if (count($resultAdminCihaz) > 0) {
+                                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                        }
+                                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                    $aracRenk = 'warning';
+                                                    $aracUrl = 'aracliste';
+                                                    $aracIcon = 'fa fa-bus';
+                                                    //bildirim ayarları
+                                                    if ($adminRutbe != 1) {//normal admin
+                                                        $adminBolgeler = implode(',', $aracBolgeID);
+                                                        $adminIDLer = array(1, $adminID);
+                                                        $adminImplodeID = implode(',', $adminIDLer);
+                                                        $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
+                                                        $adminBolgeCount = count($resultAdminBolgeler);
+                                                        if ($adminBolgeCount > 0) {//diğer adminler
+                                                            for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 51);
+                                                            }
+                                                            $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                            if ($resultBildirim) {
+                                                                $adminNotfIDLer = array(1, $adminImplodeID);
+                                                                $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                }
+                                                            }
+                                                        } else {
+                                                            $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 51);
+                                                            $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                            if ($resultBildirim) {
+                                                                $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                }
+                                                            }
+                                                        }
+                                                    } else {//üst admin
+                                                        $adminBolgeler = implode(',', $aracBolgeID);
+                                                        $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($adminBolgeler);
+                                                        $adminIDCount = count($resultBolgeAdminID);
+                                                        if ($adminIDCount > 0) {
+                                                            for ($b = 0; $b < $adminIDCount; $b++) {
+                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 51);
+                                                            }
+                                                            $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                            if ($resultBildirim) {
+                                                                $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                                $adminNotfIDLer = array($adminImplodeID);
+                                                                $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                $bolgeIDEklenen = array_diff($aracBolgeID, $aracEskiBolgeID);
+                                                if (count($bolgeIDEklenen) > 0) {//fark var
+                                                    $yeniEklenen = implode(",", $bolgeIDEklenen);
+                                                    //yeni eklenen bölge ayarı
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracEkleme"];
+                                                    $aracRenk = 'success';
+                                                    $aracUrl = 'aracliste';
+                                                    $aracIcon = 'fa fa-bus';
+                                                    //bildirim ayarları
+                                                    if ($adminRutbe != 1) {//normal admin
+                                                        $adminIDLer = array(1, $adminID);
+                                                        $adminImplodeID = implode(',', $adminIDLer);
+                                                        $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniEklenen, $adminImplodeID);
+                                                        $adminBolgeCount = count($resultAdminBolgeler);
+                                                        if ($adminBolgeCount > 0) {//diğer adminler
+                                                            for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
+                                                            }
+                                                            $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                            if ($resultBildirim) {
+                                                                $adminNotfIDLer = array(1, $adminImplodeID);
+                                                                $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                }
+                                                            }
+                                                        } else {
+                                                            $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 11);
+                                                            $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                            if ($resultBildirim) {
+                                                                $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                }
+                                                            }
+                                                        }
+                                                    } else {//üst admin
+                                                        $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($yeniEklenen);
+                                                        $adminIDCount = count($resultBolgeAdminID);
+                                                        if ($adminIDCount > 0) {
+                                                            for ($b = 0; $b < $adminIDCount; $b++) {
+                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 11);
+                                                            }
+                                                            $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                            if ($resultBildirim) {
+                                                                $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                                $adminNotfIDLer = array($adminImplodeID);
+                                                                $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+                                                    $bolgeIDSilinen = array_diff($aracEskiBolgeID, $aracBolgeID);
+                                                    if (count($bolgeIDSilinen) > 0) {
+                                                        $yeniSilinen = implode(",", $bolgeIDSilinen);
+                                                        //bölgeden araç silindi
+                                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                                        $aracRenk = 'danger';
+                                                        $aracUrl = 'aracliste';
+                                                        $aracIcon = 'fa fa-bus';
+                                                        //bildirim ayarları
+                                                        if ($adminRutbe != 1) {//normal admin
+                                                            $adminIDLer = array(1, $adminID);
+                                                            $adminImplodeID = implode(',', $adminIDLer);
+                                                            $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniSilinen, $adminImplodeID);
+                                                            $adminBolgeCount = count($resultAdminBolgeler);
+                                                            if ($adminBolgeCount > 0) {//diğer adminler
+                                                                for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                                }
+                                                                $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                                if ($resultBildirim) {
+                                                                    $adminNotfIDLer = array(1, $adminImplodeID);
+                                                                    $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                    $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                    if (count($resultAdminCihaz) > 0) {
+                                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                        }
+                                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                    }
+                                                                }
+                                                            } else {
+                                                                $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
+                                                                $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                                if ($resultBildirim) {
+                                                                    $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                                    if (count($resultAdminCihaz) > 0) {
+                                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                        }
+                                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                    }
+                                                                }
+                                                            }
+                                                        } else {//üst admin
+                                                            $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($yeniSilinen);
+                                                            $adminIDCount = count($resultBolgeAdminID);
+                                                            if ($adminIDCount > 0) {
+                                                                for ($b = 0; $b < $adminIDCount; $b++) {
+                                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 31);
+                                                                }
+                                                                $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                                if ($resultBildirim) {
+                                                                    $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                                    $adminNotfIDLer = array($adminImplodeID);
+                                                                    $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                    $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                    if (count($resultAdminCihaz) > 0) {
+                                                                        foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                            $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                        }
+                                                                        $adminCihaz = implode(',', $adminCihaz);
+                                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                    $aracRenk = 'warning';
+                                                    $aracUrl = 'aracliste';
+                                                    $aracIcon = 'fa fa-bus';
+                                                    //bildirim ayarları
+                                                    if ($adminRutbe != 1) {//normal admin
+                                                        $adminBolgeler = implode(',', $aracBolgeID);
+                                                        $adminIDLer = array(1, $adminID);
+                                                        $adminImplodeID = implode(',', $adminIDLer);
+                                                        $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
+                                                        $adminBolgeCount = count($resultAdminBolgeler);
+                                                        if ($adminBolgeCount > 0) {//diğer adminler
+                                                            for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 51);
+                                                            }
+                                                            $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                            if ($resultBildirim) {
+                                                                $adminNotfIDLer = array(1, $adminImplodeID);
+                                                                $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                }
+                                                            }
+                                                        } else {
+                                                            $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 51);
+                                                            $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                            if ($resultBildirim) {
+                                                                $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                }
+                                                            }
+                                                        }
+                                                    } else {//üst admin
+                                                        $adminBolgeler = implode(',', $aracBolgeID);
+                                                        $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($adminBolgeler);
+                                                        $adminIDCount = count($resultBolgeAdminID);
+                                                        if ($adminIDCount > 0) {
+                                                            for ($b = 0; $b < $adminIDCount; $b++) {
+                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 51);
+                                                            }
+                                                            $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                            if ($resultBildirim) {
+                                                                $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                                $adminNotfIDLer = array($adminImplodeID);
+                                                                $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            //düzenleme yapılırken ortak bölge id leri için
+                                            $bolgeIDOrtak = array_intersect($aracBolgeID, $aracEskiBolgeID);
+                                            if (count($bolgeIDOrtak) > 0) {
+                                                $yeniOrtakBolge = implode(",", $bolgeIDOrtak);
+                                                //bölgeden araç düzenleme
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                $aracRenk = 'warning';
+                                                $aracUrl = 'aracliste';
+                                                $aracIcon = 'fa fa-bus';
+                                                //bildirim ayarları
+                                                if ($adminRutbe != 1) {//normal admin
+                                                    $adminIDLer = array(1, $adminID);
+                                                    $adminImplodeID = implode(',', $adminIDLer);
+                                                    $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniOrtakBolge, $adminImplodeID);
+                                                    $adminBolgeCount = count($resultAdminBolgeler);
+                                                    if ($adminBolgeCount > 0) {//diğer adminler
+                                                        for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                        }
+                                                        $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                        if ($resultBildirim) {
+                                                            $adminNotfIDLer = array(1, $adminImplodeID);
+                                                            $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                            $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                            }
+                                                        }
+                                                    } else {
+                                                        $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
+                                                        $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                        if ($resultBildirim) {
+                                                            $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                            }
+                                                        }
+                                                    }
+                                                } else {//üst admin
+                                                    $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($yeniOrtakBolge);
+                                                    $adminIDCount = count($resultBolgeAdminID);
+                                                    if ($adminIDCount > 0) {
+                                                        for ($b = 0; $b < $adminIDCount; $b++) {
+                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 31);
+                                                        }
+                                                        $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                        if ($resultBildirim) {
+                                                            $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                            $adminNotfIDLer = array($adminImplodeID);
+                                                            $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                            $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                            //log ayarları
+                                            $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
+                                            $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                            if ($resultLog) {
+                                                $sonuc["newAracID"] = $aracID;
+                                                $sonuc["update"] = "Başarıyla Araç Düzenlenmiştir.";
+                                            } else {
+                                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                            }
                                         } else {
                                             $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
                                         }
@@ -795,9 +1673,504 @@ class AdminAracAjaxSorgu extends Controller {
                                         if ($resultMemcache) {
                                             $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                                         }
+                                        //yeni bölge ile eski bölge arasıdnaki farklar
+                                        if (count($aracBolgeID) >= count($aracEskiBolgeID)) {
+                                            $bolgeIDEklenen = array_diff($aracBolgeID, $aracEskiBolgeID);
+                                            if (count($bolgeIDEklenen) > 0) {//fark var
+                                                //yeni bölge eklenmiş
+                                                $yeniEklenen = implode(",", $bolgeIDEklenen);
+                                                //yeni eklenen bölge ayarı
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracEkleme"];
+                                                $aracRenk = 'success';
+                                                $aracUrl = 'aracliste';
+                                                $aracIcon = 'fa fa-bus';
+                                                //bildirim ayarları
+                                                if ($adminRutbe != 1) {//normal admin
+                                                    $adminIDLer = array(1, $adminID);
+                                                    $adminImplodeID = implode(',', $adminIDLer);
+                                                    $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniEklenen, $adminImplodeID);
+                                                    $adminBolgeCount = count($resultAdminBolgeler);
+                                                    if ($adminBolgeCount > 0) {//diğer adminler
+                                                        for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
+                                                        }
+                                                        $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                        if ($resultBildirim) {
+                                                            $adminNotfIDLer = array(1, $adminImplodeID);
+                                                            $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                            $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                            }
+                                                        }
+                                                    } else {
+                                                        $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 11);
+                                                        $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                        if ($resultBildirim) {
+                                                            $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                            }
+                                                        }
+                                                    }
+                                                } else {//üst admin
+                                                    $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($yeniEklenen);
+                                                    $adminIDCount = count($resultBolgeAdminID);
+                                                    if ($adminIDCount > 0) {
+                                                        for ($b = 0; $b < $adminIDCount; $b++) {
+                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 11);
+                                                        }
+                                                        $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                        if ($resultBildirim) {
+                                                            $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                            $adminNotfIDLer = array($adminImplodeID);
+                                                            $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                            $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                            }
+                                                        }
+                                                    }
+                                                }
 
-                                        $sonuc["newAracID"] = $aracID;
-                                        $sonuc["update"] = "Başarıyla Araç Düzenlenmiştir.";
+                                                $bolgeIDSilinen = array_diff($aracEskiBolgeID, $aracBolgeID);
+                                                if (count($bolgeIDSilinen) > 0) {
+                                                    $yeniSilinen = implode(",", $bolgeIDSilinen);
+                                                    //bölgeden araç silindi
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                                    $aracRenk = 'danger';
+                                                    $aracUrl = 'aracliste';
+                                                    $aracIcon = 'fa fa-bus';
+                                                    //bildirim ayarları
+                                                    if ($adminRutbe != 1) {//normal admin
+                                                        $adminIDLer = array(1, $adminID);
+                                                        $adminImplodeID = implode(',', $adminIDLer);
+                                                        $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniSilinen, $adminImplodeID);
+                                                        $adminBolgeCount = count($resultAdminBolgeler);
+                                                        if ($adminBolgeCount > 0) {//diğer adminler
+                                                            for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                            }
+                                                            $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                            if ($resultBildirim) {
+                                                                $adminNotfIDLer = array(1, $adminImplodeID);
+                                                                $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                }
+                                                            }
+                                                        } else {
+                                                            $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
+                                                            $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                            if ($resultBildirim) {
+                                                                $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                }
+                                                            }
+                                                        }
+                                                    } else {//üst admin
+                                                        $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($yeniSilinen);
+                                                        $adminIDCount = count($resultBolgeAdminID);
+                                                        if ($adminIDCount > 0) {
+                                                            for ($b = 0; $b < $adminIDCount; $b++) {
+                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 31);
+                                                            }
+                                                            $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                            if ($resultBildirim) {
+                                                                $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                                $adminNotfIDLer = array($adminImplodeID);
+                                                                $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                $aracRenk = 'warning';
+                                                $aracUrl = 'aracliste';
+                                                $aracIcon = 'fa fa-bus';
+                                                //bildirim ayarları
+                                                if ($adminRutbe != 1) {//normal admin
+                                                    $adminBolgeler = implode(',', $aracBolgeID);
+                                                    $adminIDLer = array(1, $adminID);
+                                                    $adminImplodeID = implode(',', $adminIDLer);
+                                                    $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
+                                                    $adminBolgeCount = count($resultAdminBolgeler);
+                                                    if ($adminBolgeCount > 0) {//diğer adminler
+                                                        for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 51);
+                                                        }
+                                                        $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                        if ($resultBildirim) {
+                                                            $adminNotfIDLer = array(1, $adminImplodeID);
+                                                            $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                            $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                            }
+                                                        }
+                                                    } else {
+                                                        $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 51);
+                                                        $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                        if ($resultBildirim) {
+                                                            $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                            }
+                                                        }
+                                                    }
+                                                } else {//üst admin
+                                                    $adminBolgeler = implode(',', $aracBolgeID);
+                                                    $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($adminBolgeler);
+                                                    $adminIDCount = count($resultBolgeAdminID);
+                                                    if ($adminIDCount > 0) {
+                                                        for ($b = 0; $b < $adminIDCount; $b++) {
+                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 51);
+                                                        }
+                                                        $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                        if ($resultBildirim) {
+                                                            $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                            $adminNotfIDLer = array($adminImplodeID);
+                                                            $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                            $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            $bolgeIDEklenen = array_diff($aracBolgeID, $aracEskiBolgeID);
+                                            if (count($bolgeIDEklenen) > 0) {//fark var
+                                                $yeniEklenen = implode(",", $bolgeIDEklenen);
+                                                //yeni eklenen bölge ayarı
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracEkleme"];
+                                                $aracRenk = 'success';
+                                                $aracUrl = 'aracliste';
+                                                $aracIcon = 'fa fa-bus';
+                                                //bildirim ayarları
+                                                if ($adminRutbe != 1) {//normal admin
+                                                    $adminIDLer = array(1, $adminID);
+                                                    $adminImplodeID = implode(',', $adminIDLer);
+                                                    $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniEklenen, $adminImplodeID);
+                                                    $adminBolgeCount = count($resultAdminBolgeler);
+                                                    if ($adminBolgeCount > 0) {//diğer adminler
+                                                        for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
+                                                        }
+                                                        $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                        if ($resultBildirim) {
+                                                            $adminNotfIDLer = array(1, $adminImplodeID);
+                                                            $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                            $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                            }
+                                                        }
+                                                    } else {
+                                                        $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 11);
+                                                        $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                        if ($resultBildirim) {
+                                                            $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                            }
+                                                        }
+                                                    }
+                                                } else {//üst admin
+                                                    $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($yeniEklenen);
+                                                    $adminIDCount = count($resultBolgeAdminID);
+                                                    if ($adminIDCount > 0) {
+                                                        for ($b = 0; $b < $adminIDCount; $b++) {
+                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 11);
+                                                        }
+                                                        $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                        if ($resultBildirim) {
+                                                            $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                            $adminNotfIDLer = array($adminImplodeID);
+                                                            $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                            $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                $bolgeIDSilinen = array_diff($aracEskiBolgeID, $aracBolgeID);
+                                                if (count($bolgeIDSilinen) > 0) {
+                                                    $yeniSilinen = implode(",", $bolgeIDSilinen);
+                                                    //bölgeden araç silindi
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                                    $aracRenk = 'danger';
+                                                    $aracUrl = 'aracliste';
+                                                    $aracIcon = 'fa fa-bus';
+                                                    //bildirim ayarları
+                                                    if ($adminRutbe != 1) {//normal admin
+                                                        $adminIDLer = array(1, $adminID);
+                                                        $adminImplodeID = implode(',', $adminIDLer);
+                                                        $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniSilinen, $adminImplodeID);
+                                                        $adminBolgeCount = count($resultAdminBolgeler);
+                                                        if ($adminBolgeCount > 0) {//diğer adminler
+                                                            for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                            }
+                                                            $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                            if ($resultBildirim) {
+                                                                $adminNotfIDLer = array(1, $adminImplodeID);
+                                                                $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                }
+                                                            }
+                                                        } else {
+                                                            $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
+                                                            $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                            if ($resultBildirim) {
+                                                                $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                }
+                                                            }
+                                                        }
+                                                    } else {//üst admin
+                                                        $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($yeniSilinen);
+                                                        $adminIDCount = count($resultBolgeAdminID);
+                                                        if ($adminIDCount > 0) {
+                                                            for ($b = 0; $b < $adminIDCount; $b++) {
+                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 31);
+                                                            }
+                                                            $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                            if ($resultBildirim) {
+                                                                $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                                $adminNotfIDLer = array($adminImplodeID);
+                                                                $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                                if (count($resultAdminCihaz) > 0) {
+                                                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                    }
+                                                                    $adminCihaz = implode(',', $adminCihaz);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                $aracRenk = 'warning';
+                                                $aracUrl = 'aracliste';
+                                                $aracIcon = 'fa fa-bus';
+                                                //bildirim ayarları
+                                                if ($adminRutbe != 1) {//normal admin
+                                                    $adminBolgeler = implode(',', $aracBolgeID);
+                                                    $adminIDLer = array(1, $adminID);
+                                                    $adminImplodeID = implode(',', $adminIDLer);
+                                                    $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
+                                                    $adminBolgeCount = count($resultAdminBolgeler);
+                                                    if ($adminBolgeCount > 0) {//diğer adminler
+                                                        for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 51);
+                                                        }
+                                                        $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                        if ($resultBildirim) {
+                                                            $adminNotfIDLer = array(1, $adminImplodeID);
+                                                            $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                            $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                            }
+                                                        }
+                                                    } else {
+                                                        $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 51);
+                                                        $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                        if ($resultBildirim) {
+                                                            $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                            }
+                                                        }
+                                                    }
+                                                } else {//üst admin
+                                                    $adminBolgeler = implode(',', $aracBolgeID);
+                                                    $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($adminBolgeler);
+                                                    $adminIDCount = count($resultBolgeAdminID);
+                                                    if ($adminIDCount > 0) {
+                                                        for ($b = 0; $b < $adminIDCount; $b++) {
+                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 51);
+                                                        }
+                                                        $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                        if ($resultBildirim) {
+                                                            $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                            $adminNotfIDLer = array($adminImplodeID);
+                                                            $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                            $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                            if (count($resultAdminCihaz) > 0) {
+                                                                foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                    $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                                }
+                                                                $adminCihaz = implode(',', $adminCihaz);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        //düzenleme yapılırken ortak bölge id leri için
+                                        $bolgeIDOrtak = array_intersect($aracBolgeID, $aracEskiBolgeID);
+                                        if (count($bolgeIDOrtak) > 0) {
+                                            $yeniOrtakBolge = implode(",", $bolgeIDOrtak);
+                                            //bölgeden araç düzenleme
+                                            $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                            $aracRenk = 'warning';
+                                            $aracUrl = 'aracliste';
+                                            $aracIcon = 'fa fa-bus';
+                                            //bildirim ayarları
+                                            if ($adminRutbe != 1) {//normal admin
+                                                $adminIDLer = array(1, $adminID);
+                                                $adminImplodeID = implode(',', $adminIDLer);
+                                                $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniOrtakBolge, $adminImplodeID);
+                                                $adminBolgeCount = count($resultAdminBolgeler);
+                                                if ($adminBolgeCount > 0) {//diğer adminler
+                                                    for ($b = 0; $b < $adminBolgeCount; $b++) {
+                                                        $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                    }
+                                                    $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                    if ($resultBildirim) {
+                                                        $adminNotfIDLer = array(1, $adminImplodeID);
+                                                        $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                        $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                        if (count($resultAdminCihaz) > 0) {
+                                                            foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                            }
+                                                            $adminCihaz = implode(',', $adminCihaz);
+                                                            $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                        }
+                                                    }
+                                                } else {
+                                                    $dataBildirim = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
+                                                    $resultBildirim = $Panel_Model->addNewAdminBildirim($dataBildirim);
+                                                    if ($resultBildirim) {
+                                                        $resultAdminCihaz = $Panel_Model->adminCihaz();
+                                                        if (count($resultAdminCihaz) > 0) {
+                                                            foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                            }
+                                                            $adminCihaz = implode(',', $adminCihaz);
+                                                            $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                        }
+                                                    }
+                                                }
+                                            } else {//üst admin
+                                                $resultBolgeAdminID = $Panel_Model->ortakDigerAdminBolge($yeniOrtakBolge);
+                                                $adminIDCount = count($resultBolgeAdminID);
+                                                if ($adminIDCount > 0) {
+                                                    for ($b = 0; $b < $adminIDCount; $b++) {
+                                                        $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultBolgeAdminID[$b]['BSAdminID'], 31);
+                                                    }
+                                                    $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
+                                                    if ($resultBildirim) {
+                                                        $adminImplodeID = implode(',', $resultBolgeAdminID);
+                                                        $adminNotfIDLer = array($adminImplodeID);
+                                                        $adminImplodeNtf = implode(',', $adminNotfIDLer);
+                                                        $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminImplodeNtf);
+                                                        if (count($resultAdminCihaz) > 0) {
+                                                            foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                                                $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                                            }
+                                                            $adminCihaz = implode(',', $adminCihaz);
+                                                            $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                        //log ayarları
+                                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
+                                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                        if ($resultLog) {
+                                            $sonuc["newAracID"] = $aracID;
+                                            $sonuc["update"] = "Başarıyla Araç Düzenlenmiştir.";
+                                        } else {
+                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        }
                                     } else {
                                         $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
                                     }

@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-left">
                 <h3>
-                    <i class="fa fa-th"></i> <?php echo $data["Araclar"]; ?>
+                    <i class="fa fa-bus"></i> <?php echo $data["Araclar"]; ?>
                     <small id="smallArac"><?php if (count($model[0]['AdminAracCount']) > 0) { ?>
                             <?php
                             echo $model[0]['AdminAracCount'];

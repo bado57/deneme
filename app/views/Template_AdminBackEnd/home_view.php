@@ -205,21 +205,21 @@
                 <a href="#" class="small-box bg-green">
                     <div class="inner">
                         <h3>
-                            <?php echo $data["Mesaj"]; ?>
+                            <?php echo $data["HesapIslem"]; ?>
                         </h3>
                         <p>
                             4 <?php echo $data["Okunmamis"]; ?>
                         </p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-envelope"></i>
+                        <i class="fa fa-check-square-o"></i>
                     </div>
                 </a>
             </div>
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Duyurular -->
-                <a href="#" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/adminweb/duyuruliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["Duyuru"]; ?>
@@ -246,7 +246,7 @@
                         </p>
                     </div>
                     <div class="icon">
-                        <i class="fa fa-file-text"></i>
+                        <i class="fa fa-line-chart"></i>
                     </div>
                 </a>
             </div>

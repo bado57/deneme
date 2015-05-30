@@ -67,18 +67,8 @@ function svControl(dtype, dclass, dislemler) {
 //Subview açılıyor
     if (dtype != 'svClose') {
         switch (dislemler) {
-            case 'hostesYeni' :
-                var returnCevap = $.AdminIslemler.hostesYeni();
-                break;
-            case 'adminKurumMap' :
-                isMap = true;
-                isSingle = false;
-                MultipleMapindex = 0;
-                var returnCevap = $.AdminIslemler.adminKurumMap();
-                break;
-            case 'adminSingleMap' :
-                isMap = true;
-                var returnCevap = true;
+            case 'adminDuyuruYeni' :
+                var returnCevap = $.AdminIslemler.adminDuyuruYeni();
                 break;
             default :
                 $("#" + dclass).height(th);
@@ -114,17 +104,23 @@ function svControl(dtype, dclass, dislemler) {
     }//Subview kapanıyor
     else if (dtype != 'svOpen') {
         switch (dislemler) {
+            case 'adminBolgeKayit' :
+                var returnCevap = $.AdminIslemler.adminBolgeKaydet();
+                break;
+            case 'adminBolgeCancel' :
+                var returnCevap = $.AdminIslemler.adminAddBolgeVazgec();
+                break;
+            case 'adminBolgeKurumVazgec' :
+                var returnCevap = $.AdminIslemler.adminBolgeKurumVazgec();
+                break;
+            case 'adminBolgeDetailSil' :
+                var returnCevap = $.AdminIslemler.adminBolgeDetailSil();
+                break;
+            case 'adminBolgeKurumKaydet' :
+                var returnCevap = $.AdminIslemler.adminBolgeKurumKaydet();
+                break;
             case 'adminHaritaKaydet' :
                 var returnCevap = saveMap();
-                break;
-            case 'hostesVazgec' :
-                var returnCevap = $.AdminIslemler.hostesVazgec();
-                break;
-            case 'hostesEkle' :
-                var returnCevap = $.AdminIslemler.hostesEkle();
-                break;
-            case 'hostesDetailSil' :
-                var returnCevap = $.AdminIslemler.hostesDetailSil();
                 break;
             default :
                 $("#" + dclass).height(th);
@@ -178,8 +174,11 @@ function setSvHeight() {
 //Edit Kontrol
 function editControl(edtislemler) {
     switch (edtislemler) {
-        case 'hostesDetailEdit' :
-            $.AdminIslemler.hostesDetailDuzenle();
+        case 'adminBolgeDetailEdit' :
+            $.AdminIslemler.adminBolgeDetailDuzenle();
+            break;
+        case 'adminFirmaDetailEdit' :
+            $.AdminIslemler.adminFirmaDuzenle();
             break;
         default :
             break;
@@ -190,8 +189,11 @@ function editControl(edtislemler) {
 //Vazgeç Kontrol
 function vzgControl(vzgislemler) {
     switch (vzgislemler) {
-        case 'hostesDetailVazgec' :
-            $.AdminIslemler.hostesDetailVazgec();
+        case 'adminBolgeDetailVazgec' :
+            $.AdminIslemler.adminBolgeDetailVazgec();
+            break;
+        case 'adminFirmaDetailVazgec' :
+            $.AdminIslemler.adminFirmaVazgec();
             break;
         default :
             break;
@@ -202,8 +204,11 @@ function vzgControl(vzgislemler) {
 //Kaydet Kontrol
 function saveControl(saveislemler) {
     switch (saveislemler) {
-        case 'hostesDetailKaydet' :
-            $.AdminIslemler.hostesDetailKaydet();
+        case 'adminBolgeDetailKaydet' :
+            $.AdminIslemler.adminBolgeDetailKaydet();
+            break;
+        case 'adminFirmaDetailKaydet' :
+            $.AdminIslemler.adminFirmaOzellik();
             break;
         default :
             break;
@@ -214,8 +219,9 @@ function saveControl(saveislemler) {
 // CheckBox Kontrolü
 function checkIt() {
     $("input[type='checkbox'], input[type='radio']").iCheck({
-        checkboxClass: 'icheckbox_minimal',
-        radioClass: 'iradio_minimal'
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+        increaseArea: '20%' // optional
     });
 }
 // End CheckBox Kontrolü    
@@ -423,3 +429,4 @@ function multipleMapping(gelen, index) {
 }
 
 //End çoklu mapping işlemleri
+

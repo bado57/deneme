@@ -40,13 +40,28 @@ class Panel extends Controller {
         }
 
         if ($loginTip == 1) {
-            //memcache model bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
             //model bağlantısı
             $Panel_Model = $this->load->model("panel_model");
+            //form class bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
+
+            $adminID = Session::get("userId");
+            $uniqueBidirimKey = Session::get("userFirmaKod");
+            $uniqueBidirimKey = $uniqueBidirimKey . '_ABildirimAyar' . $adminID;
+            $resultMemcache = $MemcacheModel->get($uniqueBidirimKey);
+            if ($resultMemcache != false) {
+                $bildirimAyar = $resultMemcache[0];
+            } else {
+                //model bağlantısı
+                $resultBildirim = $Panel_Model->adminBildirimAyar($adminID);
+                foreach ($resultBildirim as $resultBildirimm) {
+                    $adminBildirim[] = $resultBildirimm['BSAyarTip'];
+                }
+                $MemcacheModel->set($uniqueBidirimKey, $adminBildirim, false, 3600);
+                $bildirimAyar = $resultMemcache[0];
+            }
 
             $adminRutbe = Session::get("userRutbe");
-            $adminID = Session::get("userId");
             //super adminse tüm bölgeleri görür
             if ($adminRutbe != 0) {
 
@@ -108,7 +123,7 @@ class Panel extends Controller {
             $this->load->view("Template_AdminBackEnd/home", $deger, $adminBolge);
             $this->load->view("Template_AdminBackEnd/footer", $deger);
         } else {
-            //$this->load->view("Entry/loginForm");
+            $form->yonlendir(SITE_URL_LOGOUT);
         }
     }
 

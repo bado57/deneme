@@ -4,18 +4,6 @@ var MultipleMapArray = new Array();
 var MultipleMapindex;
 
 $(document).ready(function () {
-    // Sayfa Scroll Olayı
-    $("html").niceScroll({
-        scrollspeed: 100,
-        mousescrollstep: 38,
-        cursorwidth: 6,
-        cursorborder: 0,
-        cursorcolor: '#808080',
-        autohidemode: true,
-        zindex: 9999999999,
-        horizrailenabled: false,
-        cursorborderradius: 3,
-    });
 
     // Form Enable / Disable Kontrolleri
     $(document).on("click", "#editForm", function (e) {

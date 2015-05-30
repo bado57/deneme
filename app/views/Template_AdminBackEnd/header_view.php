@@ -26,16 +26,14 @@
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/shuttle.css" rel="stylesheet" type="text/css" />
             <!-- Alert style -->
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/alertify.css" rel="stylesheet" type="text/css" />
-
+            <!-- iCheck style -->
+            <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/iCheck/square/green.css" rel="stylesheet" type="text/css" />
             <!-- jQuery 2.0.2 -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery.min.js"></script>
             <script src="<?php echo SITE_URL_DOM; ?>"></script>
 
             <!-- jQuery UI 1.10.3 -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
-
-            <!-- Page Scroll -->
-            <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery.nicescroll.min.js"></script>
 
             <!-- Bootstrap -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/bootstrap.min.js" type="text/javascript"></script>
@@ -52,6 +50,7 @@
             <script src="<?php echo SITE_JS_LANGUAGE; ?>/<?php echo Session::get("dil"); ?>.js"></script>
             <!--Alert-->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/alertify.js"></script>
+            <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminbildirimajax.js" type="text/javascript"></script>
             <script>
                 function reset() {
                     alertify.set({
@@ -121,124 +120,27 @@
                     </a>
                     <div class="navbar-right">
                         <ul class="nav navbar-nav">
-                            <!-- Messages: style can be found in dropdown.less-->
-                            <li class="dropdown messages-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-envelope"></i>
-                                    <span class="label label-success">4</span>
-                                </a>
-                            </li>
                             <!-- Notifications: style can be found in dropdown.less -->
                             <li class="dropdown notifications-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-warning"></i>
-                                    <span class="label label-warning">10</span>
+                                    <span class="label label-warning" id="bildirimCount"></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="header">You have 10 notifications</li>
+                                    <li class="header"><?php echo $data["Bildirimler"]; ?></li>
                                     <li>
                                         <!-- inner menu: contains the actual data -->
-                                        <ul class="menu">
-                                            <li>
-                                                <a href="#">
-                                                    <i class="ion ion-ios7-people info"></i> 5 new members joined today
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-warning danger"></i> Very long description here that may not fit into the page and may cause design problems
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="fa fa-users warning"></i> 5 new members joined
-                                                </a>
-                                            </li>
-
-                                            <li>
-                                                <a href="#">
-                                                    <i class="ion ion-ios7-cart success"></i> 25 sales made
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <i class="ion ion-ios7-person danger"></i> You changed your username
-                                                </a>
-                                            </li>
+                                        <ul class="menu"  id="bildirim">
                                         </ul>
                                     </li>
-                                    <li class="footer"><a href="#">View all</a></li>
+                                    <li class="footer"><a href="#"><?php echo $data["TumunuGor"]; ?></a></li>
                                 </ul>
                             </li>
                             <!-- Tasks: style can be found in dropdown.less -->
                             <li class="dropdown tasks-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="fa fa-tasks"></i>
-                                    <span class="label label-danger">9</span>
+                                <a href="<?php echo SITE_URL; ?>/adminweb/ayarislem" title="Bildirim Ayarları">
+                                    <i class="fa fa-cog"></i>
                                 </a>
-                                <ul class="dropdown-menu">
-                                    <li class="header">You have 9 tasks</li>
-                                    <li>
-                                        <!-- inner menu: contains the actual data -->
-                                        <ul class="menu">
-                                            <li><!-- Task item -->
-                                                <a href="#">
-                                                    <h3>
-                                                        Design some buttons
-                                                        <small class="pull-right">20%</small>
-                                                    </h3>
-                                                    <div class="progress xs">
-                                                        <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                            <span class="sr-only">20% Complete</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </li><!-- end task item -->
-                                            <li><!-- Task item -->
-                                                <a href="#">
-                                                    <h3>
-                                                        Create a nice theme
-                                                        <small class="pull-right">40%</small>
-                                                    </h3>
-                                                    <div class="progress xs">
-                                                        <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                            <span class="sr-only">40% Complete</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </li><!-- end task item -->
-                                            <li><!-- Task item -->
-                                                <a href="#">
-                                                    <h3>
-                                                        Some task I need to do
-                                                        <small class="pull-right">60%</small>
-                                                    </h3>
-                                                    <div class="progress xs">
-                                                        <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                            <span class="sr-only">60% Complete</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </li><!-- end task item -->
-                                            <li><!-- Task item -->
-                                                <a href="#">
-                                                    <h3>
-                                                        Make beautiful transitions
-                                                        <small class="pull-right">80%</small>
-                                                    </h3>
-                                                    <div class="progress xs">
-                                                        <div class="progress-bar progress-bar-yellow" style="width: 80%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                            <span class="sr-only">80% Complete</span>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </li><!-- end task item -->
-                                        </ul>
-                                    </li>
-                                    <li class="footer">
-                                        <a href="#">View all tasks</a>
-                                    </li>
-                                </ul>
                             </li>
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">

@@ -265,8 +265,10 @@ $.AdminIslemler = {
         alertify.confirm(jsDil.SilOnay, function (e) {
             if (e) {
                 var bolgedetail_id = $("input[name=adminBolgeDetailID]").val();
+                var bolge_adi = $("input[name=BolgeDetailAdi]").val();
+                console.log(bolge_adi);
                 $.ajax({
-                    data: {"bolgedetail_id": bolgedetail_id, "tip": "adminBolgeDetailDelete"},
+                    data: {"bolgedetail_id": bolgedetail_id, "bolge_adi": bolge_adi, "tip": "adminBolgeDetailDelete"},
                     success: function (cevap) {
                         if (cevap.hata) {
                             reset();

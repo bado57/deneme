@@ -4,18 +4,6 @@ var MultipleMapArray = new Array();
 var MultipleMapindex;
 
 $(document).ready(function () {
-    // Sayfa Scroll Olayı
-    $("html").niceScroll({
-        scrollspeed: 100,
-        mousescrollstep: 38,
-        cursorwidth: 6,
-        cursorborder: 0,
-        cursorcolor: '#808080',
-        autohidemode: true,
-        zindex: 9999999999,
-        horizrailenabled: false,
-        cursorborderradius: 3,
-    });
 
     // Form Enable / Disable Kontrolleri
     $(document).on("click", "#editForm", function (e) {
@@ -261,8 +249,8 @@ function saveMap() {
         var value = incomeLocation.results[0].address_components[i].long_name;
         $('input[name="' + key + '"]').val(value);
     }
-    $('input[name="KurumLokasyon"]').val(mapEvent.latLng.k + "," + mapEvent.latLng.D);
-    lastLocation = new google.maps.LatLng(mapEvent.latLng.k, mapEvent.latLng.D);
+    $('input[name="KurumLokasyon"]').val(mapEvent.latLng.lat() + "," + mapEvent.latLng.lng());
+    lastLocation = new google.maps.LatLng(mapEvent.latLng.lat(), mapEvent.latLng.lng());
     return true;
 }
 
@@ -321,7 +309,7 @@ function initialize() {
             }
             $.ajax({
                 type: "get",
-                url: "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + event.latLng.k + "," + event.latLng.D + "&sensor=true",
+                url: "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + event.latLng.lat() + "," + event.latLng.lng() + "&sensor=true",
                 //timeout:3000,
                 dataType: "json",
                 success: function (cevap) {

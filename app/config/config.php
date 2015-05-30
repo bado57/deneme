@@ -42,6 +42,7 @@ define("SITE_PLUGIN", "http://localhost/SProject/plugins");
 define("SITE_PLUGINDATATABLE_JS", "http://localhost/SProject/app/views/assets/js/datatable");
 
 //admin back end
+define("SITE_PLUGINADMIN", "http://localhost/SProject/adminweb/");
 define("SITE_PLUGINADMIN_CSS", "http://localhost/SProject/app/views/assets/css");
 define("SITE_PLUGINADMIN_FONTS", "http://localhost/SProject/app/views/assets/fonts");
 define("SITE_PLUGINADMIN_IMG", "http://localhost/SProject/app/views/assets/img");

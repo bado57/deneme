@@ -228,6 +228,32 @@ class Form {
         return $sonuc;
     }
 
+    function adminBildirimDuzen($alert, $icon, $url, $renk, $gonderenID, $gonderenAdSoyad, $alanKisi, $tip) {
+        $dataBildirim = array(
+            'BSBildirimText' => $alert,
+            'BSBildirimIcon' => $icon,
+            'BSBildirimUrl' => $url,
+            'BSBildirimRenk' => $renk,
+            'BSGonderenID' => $gonderenID,
+            'BSGonderenAdSoyad' => $gonderenAdSoyad,
+            'BSAlanID' => $alanKisi,
+            'BSOkundu' => 0,
+            'BSGoruldu' => 0,
+            'BSBildirimTip' => $tip
+        );
+        return $dataBildirim;
+    }
+
+    function adminLogDuzen($ID, $adSoyad, $tip, $text) {
+        $dataLog = array(
+            'BSEkleyenID' => $ID,
+            'BSEkleyenAdSoyad' => $adSoyad,
+            'BSLogTip' => $tip,
+            'BSLogText' => $text
+        );
+        return $dataLog;
+    }
+
     function turkce_kucult_tr($string) {
         $buyuk = array("A", "B", "C", "Ç", "D", "E", "F", "G", "Ğ", "H", "I", "İ", "J", "K", "L", "M", "N", "O", "Ö", "P", "R", "S", "Ş", "T", "U", "Ü", "V", "Y", "Z", "Q", "W", "X", "ç", "ş", "ğ", "ü", "ö", "ı");
         $kucuk = array("a", "b", "c", "c", "d", "e", "f", "g", "g", "h", "i", "i", "j", "k", "l", "m", "n", "o", "o", "p", "r", "s", "s", "t", "u", "u", "v", "y", "z", "q", "w", "x", "c", "s", "g", "u", "o", "i");

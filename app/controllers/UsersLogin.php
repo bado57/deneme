@@ -78,7 +78,6 @@ class UsersLogin extends Controller {
                 $admin_model = $this->load->model("admin_model");
 
                 $result = $admin_model->userControl($data, $Kadi, $Sifre, $kullaniciID, $tableName);
-                //
                 if ($result[0]['Status'] != 0) {
                     if ($result == false) {
 
@@ -117,7 +116,7 @@ class UsersLogin extends Controller {
                         Session::set("userRutbe", $result[0]["BSSuperAdmin"]);
                         Session::set("userFirmaKod", $SelectdbFirmaKod);
                         Session::set("FirmaId", $loginfirmaID);
-
+                        
                         header("Location:" . SITE_URL_HOME . "/panel");
                     }
                 } else {

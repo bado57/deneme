@@ -113,13 +113,18 @@
                 </li>
                 <li>
                     <a href="#">
-                        <i class="fa fa-envelope"></i> <span><?php echo $data["Mesaj"]; ?></span>
-                        <small class="badge pull-right bg-yellow">12</small>
+                        <i class="fa fa-check-square-o"></i> <span><?php echo $data["HesapIslem"]; ?></span>
+                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
+                    <ul class="treeview-menu">
+                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-right"></i> General Elements</a></li>
+                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-right"></i> Advanced Elements</a></li>
+                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
+                    </ul>
                 </li>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-file-text"></i> <span><?php echo $data["Rapor"]; ?></span>
+                        <i class="fa fa-line-chart"></i> <span><?php echo $data["Rapor"]; ?></span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
