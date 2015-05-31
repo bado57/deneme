@@ -2111,8 +2111,13 @@ $.AdminIslemler = {
             if (e) {
                 var turID = $('input[name=adminTurID]').val();
                 var kurumTip = $('input[name=adminTurDetayTip]').val();
+                var bolgeID = $('input[name=TurDetayGidisBolgeID]').val();
+                var soforID = $('select#TurDetayGidisSofor option:selected').val();
+                var hostesID = $('select#TurDetayGidisHostes option:selected').val();
+                var turAd = $('input[name=TurDetayGidisAd]').val();
                 $.ajax({
-                    data: {"turID": turID, "kurumTip": kurumTip, "tip": "turDetailDelete"},
+                    data: {"turID": turID, "turAd": turAd, "bolgeID": bolgeID, "hostesID": hostesID, "turOgrenciID[]": KisiOgrenciID, "turKisiIsciID[]": KisiIsciID,
+                        "soforID": soforID, "kurumTip": kurumTip, "tip": "turDetailDelete"},
                     success: function (cevap) {
                         if (cevap.hata) {
                             reset();
@@ -2479,8 +2484,13 @@ $.AdminIslemler = {
             if (e) {
                 var turID = $('input[name=adminTurID]').val();
                 var kurumTip = $('input[name=adminTurDetayTip]').val();
+                var bolgeID = $('input[name=TurDetayDonusBolgeID]').val();
+                var soforID = $('select#TurDetayDonusSofor option:selected').val();
+                var hostesID = $('select#TurDetayDonusHostes option:selected').val();
+                var turAd = $('input[name=TurDetayDonusAd]').val();
                 $.ajax({
-                    data: {"turID": turID, "kurumTip": kurumTip, "tip": "turDetailDelete"},
+                    data: {"turID": turID, "turAd": turAd, "bolgeID": bolgeID, "hostesID": hostesID, "turOgrenciID[]": KisiOgrenciID, "turKisiIsciID[]": KisiIsciID,
+                        "soforID": soforID, "kurumTip": kurumTip, "tip": "turDetailDelete"},
                     success: function (cevap) {
                         if (cevap.hata) {
                             reset();
