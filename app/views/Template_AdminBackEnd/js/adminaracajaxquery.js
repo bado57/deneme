@@ -692,8 +692,17 @@ $.AdminIslemler = {
                 $('select#AracDetayBolgeSelect option:selected').each(function () {
                     aracBolgeID.push($(this).val());
                 });
+                var aracSoforID = new Array();
+                $('select#AracDetaySurucu option:selected').each(function () {
+                    aracSoforID.push($(this).val());
+                });
+                var aracHostesID = new Array();
+                $('select#AracDetayHostes option:selected').each(function () {
+                    aracHostesID.push($(this).val());
+                });
                 $.ajax({
-                    data: {"aracdetail_id": aracdetail_id, "arac_plaka": arac_plaka, "aracBolgeID[]": aracBolgeID, "tip": "adminAracDetailDelete"},
+                    data: {"aracdetail_id": aracdetail_id, "arac_plaka": arac_plaka, "aracBolgeID[]": aracBolgeID,
+                        "aracSoforID[]": aracSoforID, "aracHostesID[]": aracHostesID, "tip": "adminAracDetailDelete"},
                     success: function (cevap) {
                         if (cevap.hata) {
                             reset();
@@ -827,6 +836,7 @@ $.AdminIslemler = {
                             data: {"aracdetail_id": aracdetail_id, "aracBolgeID[]": aracBolgeID, "aracBolgeAd[]": aracBolgeAd,
                                 "aracSoforID[]": aracSoforID, "aracSoforAd[]": aracSoforAd, "aracHostesID[]": aracHostesID,
                                 "aracHostesAd[]": aracHostesAd, "aracEskiBolgeID[]": AdminAracDetailVazgec[6],
+                                "aracEskiSoforID[]": AdminAracDetailVazgec[10], "aracEskiHostesID[]": AdminAracDetailVazgec[14],
                                 "aracPlaka": aracPlaka, "aracMarka": aracMarka, "aracModelYil": aracModelYil,
                                 "aracKapasite": aracKapasite, "aracAciklama": aracAciklama, "aracDurum": aracDurum, "tip": "adminAracDetailKaydet"},
                             success: function (cevap) {

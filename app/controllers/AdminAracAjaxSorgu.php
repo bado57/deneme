@@ -163,6 +163,35 @@ class AdminAracAjaxSorgu extends Controller {
                                         if ($resultMemcache) {
                                             $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                                         }
+
+                                        if ($aracSoforID) {
+                                            //şoföre bildirim gönderme
+                                            $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                            $resultSoforCihaz = $Panel_Model->soforCihaz($aracSoforID);
+                                            if (count($resultSoforCihaz) > 0) {
+                                                foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                    $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                                }
+                                                $soforCihazlar = implode(',', $soforCihaz);
+                                                $form->shuttleNotification($soforCihazlar, $alert, $deger["AracAta"]);
+                                            }
+                                        }
+
+                                        //hostes varsa
+                                        if ($aracHostesID) {
+                                            //hostese bildirim gönderme
+                                            $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                            $resultHostesCihaz = $Panel_Model->hostesCihaz($turHostesID);
+                                            if (count($resultHostesCihaz) > 0) {
+                                                foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                    $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                                }
+                                                $hostesCihazlar = implode(',', $hostesCihaz);
+                                                $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracAta"]);
+                                            }
+                                        }
+
+
                                         $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracEkleme"];
                                         $aracRenk = 'success';
                                         $aracUrl = 'aracliste';
@@ -285,6 +314,33 @@ class AdminAracAjaxSorgu extends Controller {
                                     if ($resultMemcache) {
                                         $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                                     }
+                                    if ($aracSoforID) {
+                                        //şoföre bildirim gönderme
+                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                        $resultSoforCihaz = $Panel_Model->soforCihaz($aracSoforID);
+                                        if (count($resultSoforCihaz) > 0) {
+                                            foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                            }
+                                            $soforCihazlar = implode(',', $soforCihaz);
+                                            $form->shuttleNotification($soforCihazlar, $alert, $deger["AracAta"]);
+                                        }
+                                    }
+
+                                    //hostes varsa
+                                    if ($aracHostesID) {
+                                        //hostese bildirim gönderme
+                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                        $resultHostesCihaz = $Panel_Model->hostesCihaz($turHostesID);
+                                        if (count($resultHostesCihaz) > 0) {
+                                            foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                            }
+                                            $hostesCihazlar = implode(',', $hostesCihaz);
+                                            $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracAta"]);
+                                        }
+                                    }
+
                                     $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracEkleme"];
                                     $aracRenk = 'success';
                                     $aracUrl = 'aracliste';
@@ -771,6 +827,8 @@ class AdminAracAjaxSorgu extends Controller {
                         $aracPlak = $form->values['arac_plaka'];
                         $aracPlaka = strtoupper($aracPlak);
                         $aracBolgeID = $_REQUEST['aracBolgeID'];
+                        $aracSoforID = $_REQUEST['aracSoforID'];
+                        $aracHostesID = $_REQUEST['aracHostesID'];
 
                         $deleteresult = $Panel_Model->adminDetailAracDelete($adminAracDetailID);
                         if ($deleteresult) {
@@ -784,6 +842,34 @@ class AdminAracAjaxSorgu extends Controller {
                                         if ($resultMemcache) {
                                             $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                                         }
+                                        if ($aracSoforID) {
+                                            //şoföre bildirim gönderme
+                                            $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                            $resultSoforCihaz = $Panel_Model->soforCihaz($aracSoforID);
+                                            if (count($resultSoforCihaz) > 0) {
+                                                foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                    $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                                }
+                                                $soforCihazlar = implode(',', $soforCihaz);
+                                                $form->shuttleNotification($soforCihazlar, $alert, $deger["AracSil"]);
+                                            }
+                                        }
+
+                                        //hostes varsa
+                                        if ($aracHostesID) {
+                                            //hostese bildirim gönderme
+                                            $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                            $resultHostesCihaz = $Panel_Model->hostesCihaz($turHostesID);
+                                            if (count($resultHostesCihaz) > 0) {
+                                                foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                    $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                                }
+                                                $hostesCihazlar = implode(',', $hostesCihaz);
+                                                $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracSil"]);
+                                            }
+                                        }
+
+
                                         $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
                                         $aracRenk = 'danger';
                                         $aracUrl = 'aracliste';
@@ -1076,6 +1162,8 @@ class AdminAracAjaxSorgu extends Controller {
                         $aracBolgeAd = $_REQUEST['aracBolgeAd'];
                         $aracBolgeID = $_REQUEST['aracBolgeID'];
                         $aracEskiBolgeID = $_REQUEST['aracEskiBolgeID'];
+                        $aracEskiSoforID = $_REQUEST['aracEskiSoforID'];
+                        $aracEskiHostesID = $_REQUEST['aracEskiHostesID'];
 
                         if ($form->submit()) {
                             $data = array(
@@ -1548,6 +1636,175 @@ class AdminAracAjaxSorgu extends Controller {
                                                                 }
                                                             }
                                                         }
+                                                    }
+                                                }
+                                            }
+
+
+                                            //yeni şoför eski şoför farkları varsa
+                                            if (count($aracSoforID) >= count($aracEskiSoforID)) {
+                                                $soforIDEklenen = array_diff($aracSoforID, $aracEskiSoforID);
+                                                if (count($soforIDEklenen) > 0) {//fark var
+                                                    //yeni şoför eklenmiş
+                                                    $yeniEklenen = implode(",", $soforIDEklenen);
+                                                    //şoföre bildirim gönderme
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                    $resultSoforCihaz = $Panel_Model->soforCihaz($yeniEklenen);
+                                                    if (count($resultSoforCihaz) > 0) {
+                                                        foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                            $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                                        }
+                                                        $soforCihazlar = implode(',', $soforCihaz);
+                                                        $form->shuttleNotification($soforCihazlar, $alert, $deger["AracAta"]);
+                                                    }
+
+                                                    $soforIDSilinen = array_diff($aracEskiSoforID, $aracSoforID);
+                                                    if (count($soforIDSilinen) > 0) {
+                                                        $yeniSilinen = implode(",", $soforIDSilinen);
+                                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                        $resultSoforCihaz = $Panel_Model->soforCihaz($yeniSilinen);
+                                                        if (count($resultSoforCihaz) > 0) {
+                                                            foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                                $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                                            }
+                                                            $soforCihazlar = implode(',', $soforCihaz);
+                                                            $form->shuttleNotification($soforCihazlar, $alert, $deger["AracSil"]);
+                                                        }
+                                                    }
+                                                } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
+                                                    $yeniDuzenlenen = implode(",", $aracSoforID);
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                    $resultSoforCihaz = $Panel_Model->soforCihaz($yeniDuzenlenen);
+                                                    if (count($resultSoforCihaz) > 0) {
+                                                        foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                            $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                                        }
+                                                        $soforCihazlar = implode(',', $soforCihaz);
+                                                        $form->shuttleNotification($soforCihazlar, $alert, $deger["AracDuzen"]);
+                                                    }
+                                                }
+                                            } else {
+                                                $soforIDEklenen = array_diff($aracSoforID, $aracEskiSoforID);
+                                                if (count($soforIDEklenen) > 0) {//fark var
+                                                    $yeniEklenen = implode(",", $soforIDEklenen);
+                                                    //şoföre bildirim gönderme
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                    $resultSoforCihaz = $Panel_Model->soforCihaz($yeniEklenen);
+                                                    if (count($resultSoforCihaz) > 0) {
+                                                        foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                            $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                                        }
+                                                        $soforCihazlar = implode(',', $soforCihaz);
+                                                        $form->shuttleNotification($soforCihazlar, $alert, $deger["AracAta"]);
+                                                    }
+
+                                                    $soforIDSilinen = array_diff($aracEskiSoforID, $aracSoforID);
+                                                    if (count($soforIDSilinen) > 0) {
+                                                        $yeniSilinen = implode(",", $soforIDSilinen);
+                                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                        $resultSoforCihaz = $Panel_Model->soforCihaz($yeniSilinen);
+                                                        if (count($resultSoforCihaz) > 0) {
+                                                            foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                                $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                                            }
+                                                            $soforCihazlar = implode(',', $soforCihaz);
+                                                            $form->shuttleNotification($soforCihazlar, $alert, $deger["AracSil"]);
+                                                        }
+                                                    }
+                                                } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
+                                                    $yeniDuzenlenen = implode(",", $aracSoforID);
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                    $resultSoforCihaz = $Panel_Model->soforCihaz($yeniDuzenlenen);
+                                                    if (count($resultSoforCihaz) > 0) {
+                                                        foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                            $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                                        }
+                                                        $soforCihazlar = implode(',', $soforCihaz);
+                                                        $form->shuttleNotification($soforCihazlar, $alert, $deger["AracDuzen"]);
+                                                    }
+                                                }
+                                            }
+
+                                            //yeni hostes eski hostes farkları varsa
+                                            if (count($aracHostesID) >= count($aracEskiHostesID)) {
+                                                $hostesIDEklenen = array_diff($aracHostesID, $aracEskiHostesID);
+                                                if (count($hostesIDEklenen) > 0) {//fark var
+                                                    //yeni hostes eklenmiş
+                                                    $yeniEklenen = implode(",", $hostesIDEklenen);
+                                                    //hostese bildirim gönderme
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                    $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniEklenen);
+                                                    if (count($resultHostesCihaz) > 0) {
+                                                        foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                            $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                                        }
+                                                        $hostesCihazlar = implode(',', $hostesCihaz);
+                                                        $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracAta"]);
+                                                    }
+
+                                                    $hostesIDSilinen = array_diff($aracEskiHostesID, $aracHostesID);
+                                                    if (count($hostesIDSilinen) > 0) {
+                                                        $yeniSilinen = implode(",", $hostesIDSilinen);
+                                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                        $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniSilinen);
+                                                        if (count($resultHostesCihaz) > 0) {
+                                                            foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                                $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                                            }
+                                                            $hostesCihazlar = implode(',', $hostesCihaz);
+                                                            $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracSil"]);
+                                                        }
+                                                    }
+                                                } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
+                                                    $yeniDuzenlenen = implode(",", $aracHostesID);
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                    $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniDuzenlenen);
+                                                    if (count($resultHostesCihaz) > 0) {
+                                                        foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                            $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                                        }
+                                                        $hostesCihazlar = implode(',', $hostesCihaz);
+                                                        $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracDuzen"]);
+                                                    }
+                                                }
+                                            } else {
+                                                $hostesIDEklenen = array_diff($aracHostesID, $aracEskiHostesID);
+                                                if (count($hostesIDEklenen) > 0) {//fark var
+                                                    $yeniEklenen = implode(",", $hostesIDEklenen);
+                                                    //şoföre bildirim gönderme
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                    $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniEklenen);
+                                                    if (count($resultHostesCihaz) > 0) {
+                                                        foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                            $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                                        }
+                                                        $hostesCihazlar = implode(',', $hostesCihaz);
+                                                        $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracAta"]);
+                                                    }
+
+                                                    $hostesIDSilinen = array_diff($aracEskiHostesID, $aracHostesID);
+                                                    if (count($hostesIDSilinen) > 0) {
+                                                        $yeniSilinen = implode(",", $hostesIDSilinen);
+                                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                        $resultHostesCihaz = $Panel_Model->soforCihaz($yeniSilinen);
+                                                        if (count($resultHostesCihaz) > 0) {
+                                                            foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                                $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                                            }
+                                                            $hostesCihazlar = implode(',', $hostesCihaz);
+                                                            $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracSil"]);
+                                                        }
+                                                    }
+                                                } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
+                                                    $yeniDuzenlenen = implode(",", $aracHostesID);
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                    $resultHostesCihaz = $Panel_Model->soforCihaz($yeniDuzenlenen);
+                                                    if (count($resultHostesCihaz) > 0) {
+                                                        foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                            $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                                        }
+                                                        $hostesCihazlar = implode(',', $hostesCihaz);
+                                                        $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracDuzen"]);
                                                     }
                                                 }
                                             }
@@ -2087,6 +2344,174 @@ class AdminAracAjaxSorgu extends Controller {
                                                             }
                                                         }
                                                     }
+                                                }
+                                            }
+                                        }
+
+                                        //yeni şoför eski şoför farkları varsa
+                                        if (count($aracSoforID) >= count($aracEskiSoforID)) {
+                                            $soforIDEklenen = array_diff($aracSoforID, $aracEskiSoforID);
+                                            if (count($soforIDEklenen) > 0) {//fark var
+                                                //yeni şoför eklenmiş
+                                                $yeniEklenen = implode(",", $soforIDEklenen);
+                                                //şoföre bildirim gönderme
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                $resultSoforCihaz = $Panel_Model->soforCihaz($yeniEklenen);
+                                                if (count($resultSoforCihaz) > 0) {
+                                                    foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                        $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                                    }
+                                                    $soforCihazlar = implode(',', $soforCihaz);
+                                                    $form->shuttleNotification($soforCihazlar, $alert, $deger["AracAta"]);
+                                                }
+
+                                                $soforIDSilinen = array_diff($aracEskiSoforID, $aracSoforID);
+                                                if (count($soforIDSilinen) > 0) {
+                                                    $yeniSilinen = implode(",", $soforIDSilinen);
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                    $resultSoforCihaz = $Panel_Model->soforCihaz($yeniSilinen);
+                                                    if (count($resultSoforCihaz) > 0) {
+                                                        foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                            $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                                        }
+                                                        $soforCihazlar = implode(',', $soforCihaz);
+                                                        $form->shuttleNotification($soforCihazlar, $alert, $deger["AracSil"]);
+                                                    }
+                                                }
+                                            } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
+                                                $yeniDuzenlenen = implode(",", $aracSoforID);
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                $resultSoforCihaz = $Panel_Model->soforCihaz($yeniDuzenlenen);
+                                                if (count($resultSoforCihaz) > 0) {
+                                                    foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                        $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                                    }
+                                                    $soforCihazlar = implode(',', $soforCihaz);
+                                                    $form->shuttleNotification($soforCihazlar, $alert, $deger["AracDuzen"]);
+                                                }
+                                            }
+                                        } else {
+                                            $soforIDEklenen = array_diff($aracSoforID, $aracEskiSoforID);
+                                            if (count($soforIDEklenen) > 0) {//fark var
+                                                $yeniEklenen = implode(",", $soforIDEklenen);
+                                                //şoföre bildirim gönderme
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                $resultSoforCihaz = $Panel_Model->soforCihaz($yeniEklenen);
+                                                if (count($resultSoforCihaz) > 0) {
+                                                    foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                        $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                                    }
+                                                    $soforCihazlar = implode(',', $soforCihaz);
+                                                    $form->shuttleNotification($soforCihazlar, $alert, $deger["AracAta"]);
+                                                }
+
+                                                $soforIDSilinen = array_diff($aracEskiSoforID, $aracSoforID);
+                                                if (count($soforIDSilinen) > 0) {
+                                                    $yeniSilinen = implode(",", $soforIDSilinen);
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                    $resultSoforCihaz = $Panel_Model->soforCihaz($yeniSilinen);
+                                                    if (count($resultSoforCihaz) > 0) {
+                                                        foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                            $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                                        }
+                                                        $soforCihazlar = implode(',', $soforCihaz);
+                                                        $form->shuttleNotification($soforCihazlar, $alert, $deger["AracSil"]);
+                                                    }
+                                                }
+                                            } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
+                                                $yeniDuzenlenen = implode(",", $aracSoforID);
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                $resultSoforCihaz = $Panel_Model->soforCihaz($yeniDuzenlenen);
+                                                if (count($resultSoforCihaz) > 0) {
+                                                    foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                                        $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                                    }
+                                                    $soforCihazlar = implode(',', $soforCihaz);
+                                                    $form->shuttleNotification($soforCihazlar, $alert, $deger["AracDuzen"]);
+                                                }
+                                            }
+                                        }
+
+                                        //yeni hostes eski hostes farkları varsa
+                                        if (count($aracHostesID) >= count($aracEskiHostesID)) {
+                                            $hostesIDEklenen = array_diff($aracHostesID, $aracEskiHostesID);
+                                            if (count($hostesIDEklenen) > 0) {//fark var
+                                                //yeni hostes eklenmiş
+                                                $yeniEklenen = implode(",", $hostesIDEklenen);
+                                                //hostese bildirim gönderme
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniEklenen);
+                                                if (count($resultHostesCihaz) > 0) {
+                                                    foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                        $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                                    }
+                                                    $hostesCihazlar = implode(',', $hostesCihaz);
+                                                    $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracAta"]);
+                                                }
+
+                                                $hostesIDSilinen = array_diff($aracEskiHostesID, $aracHostesID);
+                                                if (count($hostesIDSilinen) > 0) {
+                                                    $yeniSilinen = implode(",", $hostesIDSilinen);
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                    $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniSilinen);
+                                                    if (count($resultHostesCihaz) > 0) {
+                                                        foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                            $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                                        }
+                                                        $hostesCihazlar = implode(',', $hostesCihaz);
+                                                        $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracSil"]);
+                                                    }
+                                                }
+                                            } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
+                                                $yeniDuzenlenen = implode(",", $aracHostesID);
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniDuzenlenen);
+                                                if (count($resultHostesCihaz) > 0) {
+                                                    foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                        $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                                    }
+                                                    $hostesCihazlar = implode(',', $hostesCihaz);
+                                                    $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracDuzen"]);
+                                                }
+                                            }
+                                        } else {
+                                            $hostesIDEklenen = array_diff($aracHostesID, $aracEskiHostesID);
+                                            if (count($hostesIDEklenen) > 0) {//fark var
+                                                $yeniEklenen = implode(",", $hostesIDEklenen);
+                                                //şoföre bildirim gönderme
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniEklenen);
+                                                if (count($resultHostesCihaz) > 0) {
+                                                    foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                        $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                                    }
+                                                    $hostesCihazlar = implode(',', $hostesCihaz);
+                                                    $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracAta"]);
+                                                }
+
+                                                $hostesIDSilinen = array_diff($aracEskiHostesID, $aracHostesID);
+                                                if (count($hostesIDSilinen) > 0) {
+                                                    $yeniSilinen = implode(",", $hostesIDSilinen);
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                    $resultHostesCihaz = $Panel_Model->soforCihaz($yeniSilinen);
+                                                    if (count($resultHostesCihaz) > 0) {
+                                                        foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                            $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                                        }
+                                                        $hostesCihazlar = implode(',', $hostesCihaz);
+                                                        $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracSil"]);
+                                                    }
+                                                }
+                                            } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
+                                                $yeniDuzenlenen = implode(",", $aracHostesID);
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                $resultHostesCihaz = $Panel_Model->soforCihaz($yeniDuzenlenen);
+                                                if (count($resultHostesCihaz) > 0) {
+                                                    foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                                        $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                                    }
+                                                    $hostesCihazlar = implode(',', $hostesCihaz);
+                                                    $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracDuzen"]);
                                                 }
                                             }
                                         }
