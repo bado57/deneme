@@ -50,6 +50,7 @@ define("SITE_PLUGINADMIN_JS", "http://localhost/SProject/app/views/assets/js");
 define("SITE_PLUGINADMIN_AjaxJs", "http://localhost/SProject/app/views/Template_AdminBackEnd/js");
 define("SITE_PLUGINADMIN_Kurum", "http://localhost/SProject/adminweb/kurumliste");
 define("SITE_PLUGINADMIN_Tur", "http://localhost/SProject/adminweb/turliste");
+define("SITE_IMG", "http://localhost/SProject/app/views/assets/img");
 
 //admin mobil 
 define("SITE_PLUGINMADMIN_CSS", "http://192.168.1.21/SProject/app/views/Template_AdminBackEnd/MobileAdmin/css");

@@ -27,35 +27,24 @@
                     </a>
                 </li>
 
-                <li class="treeview" id="menu_bolge">
-                    <a href="#">
+                <li id="menu_bolge">
+                    <a href="<?php echo SITE_URL; ?>/adminweb/bolgeliste">
                         <i class="fa fa-th"></i>
                         <span><?php echo $data["BolgeIslem"]; ?></span>
-                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
-                    <ul class="treeview-menu">
-                        <li id="link_bolgeliste"><a href="<?php echo SITE_URL; ?>/adminweb/bolgeliste"><i class="fa fa-angle-right"></i><?php echo $data["BolgeListe"]; ?></a></li>
-                    </ul>
                 </li>
-                <li class="treeview" id="menu_kurum">
-                    <a href="#">
+                <li id="menu_kurum">
+                    <a href="<?php echo SITE_URL; ?>/adminweb/kurumliste">
                         <i class="fa fa-building-o"></i>
                         <span><?php echo $data["Kurumlar"]; ?></span>
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li id="link_kurumliste"><a href="<?php echo SITE_URL; ?>/adminweb/kurumliste"><i class="fa fa-angle-right"></i><?php echo $data["KurumListe"]; ?></a></li>
-                    </ul>
+                    </a>    
                 </li>
-                <li class="treeview" id="menu_arac">
-                    <a href="#">
+
+                <li id="menu_arac">
+                    <a href="<?php echo SITE_URL; ?>/adminweb/aracliste">
                         <i class="fa fa-bus"></i>
                         <span><?php echo $data["AracIslem"]; ?></span>
-                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
-                    <ul class="treeview-menu">
-                        <li id="link_aracliste"><a href="<?php echo SITE_URL; ?>/adminweb/aracliste"><i class="fa fa-angle-right"></i><?php echo $data["AracListe"]; ?></a></li>
-                    </ul>
                 </li>
                 <li class="treeview" id="menu_kullanici">
                     <a href="#">
@@ -71,14 +60,10 @@
                         <li id="link_isciliste"><a href="<?php echo SITE_URL; ?>/adminweb/isciliste"><i class="fa fa-angle-right"></i><?php echo $data["TitleIsci"]; ?></a></li>
                     </ul>
                 </li>
-                <li class="treeview" id="menu_tur">
-                    <a href="#">
+                <li id="menu_tur">
+                    <a href="<?php echo SITE_URL; ?>/adminweb/turliste">
                         <i class="fa fa-refresh"></i> <span><?php echo $data["TurIslem"]; ?></span>
-                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
-                    <ul class="treeview-menu">
-                        <li id="link_turliste"><a href="<?php echo SITE_URL; ?>/adminweb/turliste"><i class="fa fa-angle-right"></i><?php echo $data["TurListe"]; ?></a></li>
-                    </ul>
                 </li>
                 <li class="treeview">
                     <a href="#">
@@ -91,25 +76,15 @@
                         <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
                     </ul>
                 </li>
-                <li class="treeview" id="menu_lokasyon">
-                    <a href="#">
+                <li id="menu_lokasyon">
+                    <a href="<?php echo SITE_URL; ?>/adminweb/lokasyonliste">
                         <i class="fa fa-map-marker"></i> <span><?php echo $data["LokasyonSorgu"]; ?></span>
-                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
-                    <ul class="treeview-menu">
-                        <li id="link_lokasyonliste"><a href="<?php echo SITE_URL; ?>/adminweb/lokasyonliste"><i class="fa fa-angle-right"></i><?php echo $data["AracLokasyon"]; ?></a></li>
-                    </ul>
                 </li>
-                <li class="treeview">
+                <li>
                     <a href="#">
                         <i class="fa fa-bullhorn"></i> <span><?php echo $data["Duyuru"]; ?></span>
-                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
-                    <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-right"></i> General Elements</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-right"></i> Advanced Elements</a></li>
-                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
-                    </ul>
                 </li>
                 <li>
                     <a href="#">

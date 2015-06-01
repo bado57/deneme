@@ -1,6 +1,5 @@
 <script type="text/javascript">
     var activeMenu = "menu_kurum";
-    var activeLink = "link_kurumliste";
 </script>
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminkurumajaxquery.js" type="text/javascript"></script>
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminkurum-web.app.js" type="text/javascript"></script> 

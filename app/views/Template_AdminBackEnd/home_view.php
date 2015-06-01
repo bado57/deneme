@@ -1,6 +1,5 @@
 <script type="text/javascript">
     var activeMenu = "menu_home";
-    var activeLink = "menu_home";
 </script>
 <aside class="right-side hiddenOnSv">
     <!-- Content Header (Page header) -->

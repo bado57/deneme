@@ -1,7 +1,6 @@
 <script type="text/javascript">
 
     var activeMenu = "menu_firma";
-    var activeLink = "link_firmislem";
 
 </script>
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminbolgeajaxquery.js" type="text/javascript"></script> 

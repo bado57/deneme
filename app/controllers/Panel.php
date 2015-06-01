@@ -50,7 +50,7 @@ class Panel extends Controller {
             $uniqueBidirimKey = $uniqueBidirimKey . '_ABildirimAyar' . $adminID;
             $resultMemcache = $MemcacheModel->get($uniqueBidirimKey);
             if ($resultMemcache != false) {
-                $bildirimAyar = $resultMemcache[0];
+                $bildirimAyar = $resultMemcache;
             } else {
                 //model bağlantısı
                 $resultBildirim = $Panel_Model->adminBildirimAyar($adminID);
@@ -58,9 +58,9 @@ class Panel extends Controller {
                     $adminBildirim[] = $resultBildirimm['BSAyarTip'];
                 }
                 $MemcacheModel->set($uniqueBidirimKey, $adminBildirim, false, 3600);
-                $bildirimAyar = $resultMemcache[0];
+                $bildirimAyar = $resultMemcache;
             }
-
+            error_log($bildirimAyar);
             $adminRutbe = Session::get("userRutbe");
             //super adminse tüm bölgeleri görür
             if ($adminRutbe != 0) {

@@ -1,6 +1,5 @@
 <script type="text/javascript">
     var activeMenu = "menu_arac";
-    var activeLink = "link_aracliste";
 </script>
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminaracajaxquery.js" type="text/javascript"></script> 
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminarac-web.app.js" type="text/javascript"></script> 

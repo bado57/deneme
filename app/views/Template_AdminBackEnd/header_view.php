@@ -121,19 +121,21 @@
                     <div class="navbar-right">
                         <ul class="nav navbar-nav">
                             <!-- Notifications: style can be found in dropdown.less -->
-                            <li class="dropdown notifications-menu">
+                            <li class="dropdown notifications-menu" id="bildirimTikla">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-warning"></i>
                                     <span class="label label-warning" id="bildirimCount"></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="header"><?php echo $data["Bildirimler"]; ?></li>
+                                    <li class="header"><?php echo $data["Bildirimler"]; ?><a href="#" id="tumunuOkundu"><?php echo $data["OkunduIsaret"]; ?></a></li>
                                     <li>
                                         <!-- inner menu: contains the actual data -->
                                         <ul class="menu"  id="bildirim">
                                         </ul>
                                     </li>
-                                    <li class="footer"><a href="#"><?php echo $data["TumunuGor"]; ?></a></li>
+                                    <div id="loadmoreajaxloader" style="display:none"><center><img src="<?php echo SITE_IMG; ?>/ajax-loader2.gif" /></center></div>
+                                    <div id="loadmoreajaxloaderText" style="display:none"><center><?php echo $data["BildirimYok"]; ?></center></div>
+                                    <li class="footer"><a href="#" id="tumunuGoster"><?php echo $data["TumunuGor"]; ?></a></li>
                                 </ul>
                             </li>
                             <!-- Tasks: style can be found in dropdown.less -->

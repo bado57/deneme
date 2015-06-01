@@ -12,6 +12,37 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //bildirimler okundu
+    public function adminBildirimOkundu($data, $bildirimID) {
+        return ($this->db->update("bsadminbildirim", $data, "BSAdminBildirimID=" . $bildirimID));
+    }
+
+    //tüm bildirimler okundu
+    public function bildirimTumunuOkundu($data, $adminID) {
+        return ($this->db->update("bsadminbildirim", $data, "BSAlanID=" . $adminID));
+    }
+
+    //bildirimler görüldü
+    public function adminBildirimGoruldu($data, $adminID) {
+        return ($this->db->update("bsadminbildirim", $data, "BSAlanID=" . $adminID));
+    }
+
+    //admin cihazlar
+    public function adminBildirimAyarSelect($adminID) {
+        $sql = 'SELECT BSAdminBildirimAyarID FROM bsadminbildirimayar Where BSAdminID=' . $adminID;
+        return($this->db->select($sql));
+    }
+
+    //bildirimler ayarları düzenleme
+    public function adminBildirimAyarDuzenle($data, $adminID) {
+        return ($this->db->update("bsadminbildirimayar", $data, "BSAdminID=" . $adminID));
+    }
+
+    //bildirim ayar kaydet
+    public function addNewAdminBildirimAyar($data) {
+        return ($this->db->insert('bsadminbildirimayar', $data));
+    }
+
     //bildirim kaydet
     public function addNewAdminBildirim($data) {
         return ($this->db->insert('bsadminbildirim', $data));
@@ -76,14 +107,27 @@ class Panel_Model extends Model {
     }
 
     //admin bildirim
-    public function adminBildirimler($array = array()) {
-        $sql = 'SELECT BSAdminBildirimID,BSBildirimText,BSBildirimIcon,BSBildirimUrl,BSBildirimRenk,BSBildirimTip,BSOkundu,BSBildirimTarih FROM bsadminbildirim WHERE  BSBildirimTip NOT IN (' . $array . ') ORDER BY BSAdminBildirimID DESC LIMIT 4';
+    public function adminBildirimler($array = array(), $adminID) {
+        $sql = 'SELECT BSAdminBildirimID,BSBildirimText,BSBildirimIcon,BSBildirimUrl,BSBildirimRenk,BSBildirimTip,BSOkundu,BSBildirimTarih FROM bsadminbildirim WHERE  BSBildirimTip NOT IN (' . $array . ') AND BSAlanID=' . $adminID . ' ORDER BY BSAdminBildirimID DESC LIMIT 3';
+        error_log($sql);
+        return($this->db->select($sql));
+    }
+
+    //loader bildirim
+    public function loaderBildirimler($array = array(), $adminID, $bildirimID) {
+        $sql = 'SELECT BSAdminBildirimID,BSBildirimText,BSBildirimIcon,BSBildirimUrl,BSBildirimRenk,BSBildirimTip,BSOkundu,BSBildirimTarih FROM bsadminbildirim WHERE  BSBildirimTip NOT IN (' . $array . ') AND BSAlanID=' . $adminID . ' AND BSAdminBildirimID < ' . $bildirimID . '  ORDER BY BSAdminBildirimID DESC LIMIT 3';
+        return($this->db->select($sql));
+    }
+
+    //admin tur listele
+    public function tumbildirimListele($array = array(), $adminID) {
+        $sql = 'SELECT BSAdminBildirimID,BSBildirimText,BSBildirimIcon,BSBildirimUrl,BSBildirimRenk,BSGonderenID,BSGonderenAdSoyad,BSBildirimTarih FROM bsadminbildirim WHERE  BSBildirimTip NOT IN (' . $array . ') AND  BSAlanID=' . $adminID . '  ORDER BY BSBildirimTarih DESC';
         return($this->db->select($sql));
     }
 
     //admin bildirim Count
-    public function adminBildirimlerCount() {
-        $sql = 'SELECT COUNT(*) FROM bsadminbildirim WHERE BSGoruldu=0';
+    public function adminBildirimlerCount($array = array(), $adminID) {
+        $sql = 'SELECT COUNT(*) FROM bsadminbildirim WHERE  BSBildirimTip NOT IN (' . $array . ') AND  BSGoruldu=0 AND BSAlanID=' . $adminID;
         return($this->db->select($sql));
     }
 
@@ -135,7 +179,7 @@ class Panel_Model extends Model {
     }
 
     //admin firma özellikleri düzenleme
-    public function firmaOzelliklerDuzenle($data, $FirmaID) {
+    public function firmaOzelliklerDuzenle($data) {
         return ($this->db->update("bsfirma", $data, "BSFirmaID=1"));
     }
 

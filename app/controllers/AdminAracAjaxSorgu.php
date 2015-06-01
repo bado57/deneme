@@ -204,8 +204,9 @@ class AdminAracAjaxSorgu extends Controller {
                                             $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
                                             $adminBolgeCount = count($resultAdminBolgeler);
                                             if ($adminBolgeCount > 0) {//diğer adminler
+                                                $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 11);
                                                 for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
+                                                    $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
                                                 }
                                                 $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                 if ($resultBildirim) {
@@ -353,8 +354,9 @@ class AdminAracAjaxSorgu extends Controller {
                                         $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
                                         $adminBolgeCount = count($resultAdminBolgeler);
                                         if ($adminBolgeCount > 0) {//diğer adminler
+                                            $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 11);
                                             for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
+                                                $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
                                             }
                                             $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                             if ($resultBildirim) {
@@ -882,8 +884,9 @@ class AdminAracAjaxSorgu extends Controller {
                                             $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
                                             $adminBolgeCount = count($resultAdminBolgeler);
                                             if ($adminBolgeCount > 0) {//diğer adminler
+                                                $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
                                                 for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                    $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
                                                 }
                                                 $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                 if ($resultBildirim) {
@@ -976,8 +979,9 @@ class AdminAracAjaxSorgu extends Controller {
                                             $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
                                             $adminBolgeCount = count($resultAdminBolgeler);
                                             if ($adminBolgeCount > 0) {//diğer adminler
+                                                $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
                                                 for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                    $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
                                                 }
                                                 $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                 if ($resultBildirim) {
@@ -1058,8 +1062,9 @@ class AdminAracAjaxSorgu extends Controller {
                                             $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
                                             $adminBolgeCount = count($resultAdminBolgeler);
                                             if ($adminBolgeCount > 0) {//diğer adminler
+                                                $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
                                                 for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                    $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
                                                 }
                                                 $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                 if ($resultBildirim) {
@@ -1240,8 +1245,9 @@ class AdminAracAjaxSorgu extends Controller {
                                                         $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniEklenen, $adminImplodeID);
                                                         $adminBolgeCount = count($resultAdminBolgeler);
                                                         if ($adminBolgeCount > 0) {//diğer adminler
+                                                            $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 11);
                                                             for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
+                                                                $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
                                                             }
                                                             $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                             if ($resultBildirim) {
@@ -1309,8 +1315,9 @@ class AdminAracAjaxSorgu extends Controller {
                                                             $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniSilinen, $adminImplodeID);
                                                             $adminBolgeCount = count($resultAdminBolgeler);
                                                             if ($adminBolgeCount > 0) {//diğer adminler
+                                                                $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
                                                                 for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                                    $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
                                                                 }
                                                                 $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                                 if ($resultBildirim) {
@@ -1376,8 +1383,9 @@ class AdminAracAjaxSorgu extends Controller {
                                                         $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
                                                         $adminBolgeCount = count($resultAdminBolgeler);
                                                         if ($adminBolgeCount > 0) {//diğer adminler
+                                                            $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 51);
                                                             for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 51);
+                                                                $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 51);
                                                             }
                                                             $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                             if ($resultBildirim) {
@@ -1447,8 +1455,9 @@ class AdminAracAjaxSorgu extends Controller {
                                                         $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniEklenen, $adminImplodeID);
                                                         $adminBolgeCount = count($resultAdminBolgeler);
                                                         if ($adminBolgeCount > 0) {//diğer adminler
+                                                            $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 11);
                                                             for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
+                                                                $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
                                                             }
                                                             $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                             if ($resultBildirim) {
@@ -1516,8 +1525,9 @@ class AdminAracAjaxSorgu extends Controller {
                                                             $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniSilinen, $adminImplodeID);
                                                             $adminBolgeCount = count($resultAdminBolgeler);
                                                             if ($adminBolgeCount > 0) {//diğer adminler
+                                                                $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
                                                                 for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                                    $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                                    $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
                                                                 }
                                                                 $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                                 if ($resultBildirim) {
@@ -1583,8 +1593,9 @@ class AdminAracAjaxSorgu extends Controller {
                                                         $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
                                                         $adminBolgeCount = count($resultAdminBolgeler);
                                                         if ($adminBolgeCount > 0) {//diğer adminler
+                                                            $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 51);
                                                             for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 51);
+                                                                $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 51);
                                                             }
                                                             $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                             if ($resultBildirim) {
@@ -1825,8 +1836,9 @@ class AdminAracAjaxSorgu extends Controller {
                                                     $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniOrtakBolge, $adminImplodeID);
                                                     $adminBolgeCount = count($resultAdminBolgeler);
                                                     if ($adminBolgeCount > 0) {//diğer adminler
+                                                        $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
                                                         for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                            $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
                                                         }
                                                         $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                         if ($resultBildirim) {
@@ -1948,8 +1960,9 @@ class AdminAracAjaxSorgu extends Controller {
                                                     $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniEklenen, $adminImplodeID);
                                                     $adminBolgeCount = count($resultAdminBolgeler);
                                                     if ($adminBolgeCount > 0) {//diğer adminler
+                                                        $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 11);
                                                         for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
+                                                            $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
                                                         }
                                                         $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                         if ($resultBildirim) {
@@ -2017,8 +2030,9 @@ class AdminAracAjaxSorgu extends Controller {
                                                         $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniSilinen, $adminImplodeID);
                                                         $adminBolgeCount = count($resultAdminBolgeler);
                                                         if ($adminBolgeCount > 0) {//diğer adminler
+                                                            $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
                                                             for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                                $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
                                                             }
                                                             $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                             if ($resultBildirim) {
@@ -2084,8 +2098,9 @@ class AdminAracAjaxSorgu extends Controller {
                                                     $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
                                                     $adminBolgeCount = count($resultAdminBolgeler);
                                                     if ($adminBolgeCount > 0) {//diğer adminler
+                                                        $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 51);
                                                         for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 51);
+                                                            $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 51);
                                                         }
                                                         $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                         if ($resultBildirim) {
@@ -2155,8 +2170,9 @@ class AdminAracAjaxSorgu extends Controller {
                                                     $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniEklenen, $adminImplodeID);
                                                     $adminBolgeCount = count($resultAdminBolgeler);
                                                     if ($adminBolgeCount > 0) {//diğer adminler
+                                                        $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 11);
                                                         for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
+                                                            $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 11);
                                                         }
                                                         $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                         if ($resultBildirim) {
@@ -2224,8 +2240,9 @@ class AdminAracAjaxSorgu extends Controller {
                                                         $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniSilinen, $adminImplodeID);
                                                         $adminBolgeCount = count($resultAdminBolgeler);
                                                         if ($adminBolgeCount > 0) {//diğer adminler
+                                                            $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
                                                             for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                                $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                                $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
                                                             }
                                                             $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                             if ($resultBildirim) {
@@ -2291,8 +2308,9 @@ class AdminAracAjaxSorgu extends Controller {
                                                     $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($adminBolgeler, $adminImplodeID);
                                                     $adminBolgeCount = count($resultAdminBolgeler);
                                                     if ($adminBolgeCount > 0) {//diğer adminler
+                                                        $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 51);
                                                         for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                            $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 51);
+                                                            $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 51);
                                                         }
                                                         $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                         if ($resultBildirim) {
@@ -2532,8 +2550,9 @@ class AdminAracAjaxSorgu extends Controller {
                                                 $resultAdminBolgeler = $Panel_Model->digerOrtakBolge($yeniOrtakBolge, $adminImplodeID);
                                                 $adminBolgeCount = count($resultAdminBolgeler);
                                                 if ($adminBolgeCount > 0) {//diğer adminler
+                                                    $multiData[0] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, 1, 31);
                                                     for ($b = 0; $b < $adminBolgeCount; $b++) {
-                                                        $multiData[$b] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
+                                                        $multiData[$b + 1] = $form->adminBildirimDuzen($alert, $aracIcon, $aracUrl, $aracRenk, $adminID, $adSoyad, $resultAdminBolgeler[$b]['BSAdminID'], 31);
                                                     }
                                                     $resultBildirim = $Panel_Model->addNewAdminMultiBildirim($multiData);
                                                     if ($resultBildirim) {

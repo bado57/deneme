@@ -67,5 +67,6 @@ var jsDil = {
     'AracFazlaKapasite': 'Araç Kapasitesinden fazla yolcu eklenemez',
     'DuzenlemeAktif': 'Düzenleme Aktif Değil',
     'KonumYok': 'Konumunuz bulunmadı.',
-    'BildirimYok': 'Gösterilecek Bildirim Yok'
+    'BildirimYok': 'Gösterilecek Bildirim Yok',
+    'BildirimAyarKaydet': 'Bildirim Ayarları Kaydedildi'
 };

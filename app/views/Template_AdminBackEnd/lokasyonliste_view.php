@@ -1,6 +1,5 @@
 <script type="text/javascript">
     var activeMenu = "menu_lokasyon";
-    var activeLink = "link_lokasyonliste";
 </script>
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminlokasyonajaxquery.js" type="text/javascript"></script> 
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminlokasyon-web.app.js" type="text/javascript"></script> 

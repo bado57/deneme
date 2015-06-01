@@ -93,7 +93,6 @@ class Database extends PDO {
         }
         $updateKeys = rtrim($updateKeys, ",");
         $sql = "UPDATE $tableName SET $updateKeys WHERE  $where";
-
         $sth = $this->prepare($sql);
         foreach ($data as $key => $value) {
             $sth->bindValue(":$key", $value);

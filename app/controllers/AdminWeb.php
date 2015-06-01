@@ -577,6 +577,100 @@ class AdminWeb extends Controller {
         }
     }
 
+    function hostesliste() {
+        //session güvenlik kontrolü
+        $formSession = $this->load->otherClasses('Form');
+        //sessionKontrol
+        $sessionKey = $formSession->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+            //memcache model bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+
+
+            $language = Session::get("dil");
+            //lanuage Kontrol
+            $formLanguage = $this->load->multilanguage($language);
+            $languagedeger = $formLanguage->multilanguage();
+
+
+            $adminRutbe = Session::get("userRutbe");
+            $adminID = Session::get("userId");
+            $uniqueKey = Session::get("username");
+            $uniqueKey = $uniqueKey . '_AHostes';
+
+            $resultMemcache = $MemcacheModel->get($uniqueKey);
+            if ($resultMemcache) {
+                $hostesliste = $resultMemcache;
+            } else {
+                //super adminse tüm bölgeleri görür
+                if ($adminRutbe != 0) {
+
+                    $hostesListe = $Panel_Model->hostesListele();
+                    //bölge count için
+                    if (count($hostesListe) != 0) {
+                        $hostesliste[0]['HostesCount'] = count($hostesListe);
+                    }
+
+                    $a = 0;
+                    foreach ($hostesListe as $hostesListee) {
+                        $hostesliste[$a]['HostesID'] = $hostesListee['BSHostesID'];
+                        $hostesliste[$a]['HostesAdi'] = $hostesListee['BSHostesAd'];
+                        $hostesliste[$a]['HostesSoyad'] = $hostesListee['BSHostesSoyad'];
+                        $hostesliste[$a]['HostesTelefon'] = $hostesListee['BSHostesPhone'];
+                        $hostesliste[$a]['HostesEmail'] = $hostesListee['BSHostesEmail'];
+                        $hostesliste[$a]['HostesAciklama'] = $hostesListee['BSHostesAciklama'];
+                        $hostesliste[$a]['HostesDurum'] = $hostesListee['Status'];
+                        $a++;
+                    }
+                } else {
+                    $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
+
+                    foreach ($bolgeListeRutbe as $rutbe) {
+                        $bolgerutbeId[] = $rutbe['BSBolgeID'];
+                    }
+                    $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+
+                    $hostesBolgeListe = $Panel_Model->hostesBolgeListele($rutbebolgedizi);
+                    foreach ($hostesBolgeListe as $hostesBolgeListee) {
+                        $hostesrutbeId[] = $hostesBolgeListee['BSHostesID'];
+                    }
+                    $rutbehostesdizi = implode(',', $hostesrutbeId);
+
+                    $hostesListe = $Panel_Model->rutbeHostesListele($rutbehostesdizi);
+                    //bölge count için
+                    if (count($hostesListe) != 0) {
+                        $hostesliste[0]['HostesCount'] = count($hostesListe);
+                    }
+
+                    $a = 0;
+                    foreach ($hostesListe as $hostesListee) {
+                        $hostesliste[$a]['HostesID'] = $hostesListee['BSHostesID'];
+                        $hostesliste[$a]['HostesAdi'] = $hostesListee['BSHostesAd'];
+                        $hostesliste[$a]['HostesSoyad'] = $hostesListee['BSHostesSoyad'];
+                        $hostesliste[$a]['HostesTelefon'] = $hostesListee['BSHostesPhone'];
+                        $hostesliste[$a]['HostesEmail'] = $hostesListee['BSHostesEmail'];
+                        $hostesliste[$a]['HostesAciklama'] = $hostesListee['BSHostesAciklama'];
+                        $hostesliste[$a]['HostesDurum'] = $hostesListee['Status'];
+                        $a++;
+                    }
+                }
+                //memcache kayıt
+                $result = $MemcacheModel->set($uniqueKey, $hostesliste, false, 5);
+            }
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/hostesliste", $languagedeger, $hostesliste);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL_LOGOUT);
+        }
+    }
+
     function isciliste() {
         //session güvenlik kontrolü
         $formSession = $this->load->otherClasses('Form');
@@ -1078,101 +1172,6 @@ class AdminWeb extends Controller {
         }
     }
 
-    function hostesliste() {
-        //session güvenlik kontrolü
-        $formSession = $this->load->otherClasses('Form');
-        //sessionKontrol
-        $sessionKey = $formSession->sessionKontrol();
-
-        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
-            //memcache model bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
-            //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
-
-
-            $language = Session::get("dil");
-            //lanuage Kontrol
-            $formLanguage = $this->load->multilanguage($language);
-            $languagedeger = $formLanguage->multilanguage();
-
-
-            $adminRutbe = Session::get("userRutbe");
-            $adminID = Session::get("userId");
-            $uniqueKey = Session::get("username");
-            $uniqueKey = $uniqueKey . '_AHostes';
-
-            $resultMemcache = $MemcacheModel->get($uniqueKey);
-            if ($resultMemcache) {
-                $hostesliste = $resultMemcache;
-            } else {
-                //super adminse tüm bölgeleri görür
-                if ($adminRutbe != 0) {
-
-                    $hostesListe = $Panel_Model->hostesListele();
-                    //bölge count için
-                    if (count($hostesListe) != 0) {
-                        $hostesliste[0]['HostesCount'] = count($hostesListe);
-                    }
-
-                    $a = 0;
-                    foreach ($hostesListe as $hostesListee) {
-                        $hostesliste[$a]['HostesID'] = $hostesListee['BSHostesID'];
-                        $hostesliste[$a]['HostesAdi'] = $hostesListee['BSHostesAd'];
-                        $hostesliste[$a]['HostesSoyad'] = $hostesListee['BSHostesSoyad'];
-                        $hostesliste[$a]['HostesTelefon'] = $hostesListee['BSHostesPhone'];
-                        $hostesliste[$a]['HostesEmail'] = $hostesListee['BSHostesEmail'];
-                        $hostesliste[$a]['HostesAciklama'] = $hostesListee['BSHostesAciklama'];
-                        $hostesliste[$a]['HostesDurum'] = $hostesListee['Status'];
-                        $a++;
-                    }
-                } else {
-                    $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
-
-                    foreach ($bolgeListeRutbe as $rutbe) {
-                        $bolgerutbeId[] = $rutbe['BSBolgeID'];
-                    }
-                    $rutbebolgedizi = implode(',', $bolgerutbeId);
-
-
-                    $hostesBolgeListe = $Panel_Model->hostesBolgeListele($rutbebolgedizi);
-                    foreach ($hostesBolgeListe as $hostesBolgeListee) {
-                        $hostesrutbeId[] = $hostesBolgeListee['BSHostesID'];
-                    }
-                    $rutbehostesdizi = implode(',', $hostesrutbeId);
-
-                    $hostesListe = $Panel_Model->rutbeHostesListele($rutbehostesdizi);
-                    //bölge count için
-                    if (count($hostesListe) != 0) {
-                        $hostesliste[0]['HostesCount'] = count($hostesListe);
-                    }
-
-                    $a = 0;
-                    foreach ($hostesListe as $hostesListee) {
-                        $hostesliste[$a]['HostesID'] = $hostesListee['BSHostesID'];
-                        $hostesliste[$a]['HostesAdi'] = $hostesListee['BSHostesAd'];
-                        $hostesliste[$a]['HostesSoyad'] = $hostesListee['BSHostesSoyad'];
-                        $hostesliste[$a]['HostesTelefon'] = $hostesListee['BSHostesPhone'];
-                        $hostesliste[$a]['HostesEmail'] = $hostesListee['BSHostesEmail'];
-                        $hostesliste[$a]['HostesAciklama'] = $hostesListee['BSHostesAciklama'];
-                        $hostesliste[$a]['HostesDurum'] = $hostesListee['Status'];
-                        $a++;
-                    }
-                }
-                //memcache kayıt
-                $result = $MemcacheModel->set($uniqueKey, $hostesliste, false, 5);
-            }
-
-            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
-            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
-            $this->load->view("Template_AdminBackEnd/hostesliste", $languagedeger, $hostesliste);
-            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
-        } else {
-            header("Location:" . SITE_URL_LOGOUT);
-        }
-    }
-
-    //bildirim ayarları
     function ayarislem() {
 
         //session güvenlik kontrolü
@@ -1186,17 +1185,31 @@ class AdminWeb extends Controller {
             //memcache model bağlanısı
             $MemcacheModel = $this->load->model("adminmemcache_model");
 
-            $formDbConfig = $this->load->otherClasses('DatabaseConfig');
-            $formDbConfig->configDb();
-
             $language = Session::get("dil");
             $formlanguage = $this->load->multilanguage($language);
             $languagedeger = $formlanguage->multilanguage();
 
+            $adminID = Session::get("userId");
+            $uniqueBidirimKey = Session::get("userFirmaKod");
+            $uniqueBidirimKey = $uniqueBidirimKey . '_ABildirimAyar' . $adminID;
+            $resultMemcache = $MemcacheModel->get($uniqueBidirimKey);
+            if ($resultMemcache != false) {
+                $bildirimAyar = $resultMemcache[0];
+                error_log("1" . $bildirimAyar);
+            } else {
+                //model bağlantısı
+                $resultBildirim = $Panel_Model->adminBildirimAyar($adminID);
+                foreach ($resultBildirim as $resultBildirimm) {
+                    $adminBildirim[] = $resultBildirimm['BSAyarTip'];
+                }
+                $MemcacheModel->set($uniqueBidirimKey, $adminBildirim, false, 3600);
+                $bildirimAyar = $resultMemcache[0];
+                error_log("2" . $bildirimAyar);
+            }
 
             $this->load->view("Template_AdminBackEnd/header", $languagedeger);
             $this->load->view("Template_AdminBackEnd/left", $languagedeger);
-            $this->load->view("Template_AdminBackEnd/bildirimliste", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/bildirimliste", $languagedeger, $bildirimAyar);
             $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
         } else {
             header("Location:" . SITE_URL);
@@ -1230,6 +1243,70 @@ class AdminWeb extends Controller {
             $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
         } else {
             header("Location:" . SITE_URL);
+        }
+    }
+
+    function tumbildirimliste() {
+        //session güvenlik kontrolü
+        $formSession = $this->load->otherClasses('Form');
+        //sessionKontrol
+        $sessionKey = $formSession->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+            //memcache model bağlanısı
+            $MemcacheModel = $this->load->model("adminmemcache_model");
+
+            $language = Session::get("dil");
+            //lanuage Kontrol
+            $formLanguage = $this->load->multilanguage($language);
+            $languagedeger = $formLanguage->multilanguage();
+
+            $adminID = Session::get("userId");
+            $uniqueBidirimKey = Session::get("userFirmaKod");
+            $uniqueBidirimKey = $uniqueBidirimKey . '_ABildirimAyar' . $adminID;
+            $resultMemcache = $MemcacheModel->get($uniqueBidirimKey);
+            if ($resultMemcache != false) {
+                $bildirimAyar = $resultMemcache[0];
+            } else {
+                //model bağlantısı
+                $resultBildirim = $Panel_Model->adminBildirimAyar($adminID);
+                foreach ($resultBildirim as $resultBildirimm) {
+                    $adminBildirim[] = $resultBildirimm['BSAyarTip'];
+                }
+                $MemcacheModel->set($uniqueBidirimKey, $adminBildirim, false, 3600);
+                $bildirimAyar = $resultMemcache[0];
+            }
+
+            $tumBildirim = $Panel_Model->tumbildirimListele($bildirimAyar, $adminID);
+            if (count($tumBildirim) > 0) {
+                $adminTumBildirim[0]['AdminBildirimCount'] = count($tumBildirim);
+
+                //tur bilgileri
+                $a = 0;
+                foreach ($tumBildirim as $adminTumBildirimm) {
+                    $adminTumBildirim[$a]['BildirimID'] = $adminTumBildirimm['BSAdminBildirimID'];
+                    $adminTumBildirim[$a]['BildirimText'] = $adminTumBildirimm['BSBildirimText'];
+                    $adminTumBildirim[$a]['BildirimIcon'] = $adminTumBildirimm['BSBildirimIcon'];
+                    $adminTumBildirim[$a]['BildirimUrl'] = $adminTumBildirimm['BSBildirimUrl'];
+                    $adminTumBildirim[$a]['BildirimRenk'] = $adminTumBildirimm['BSBildirimRenk'];
+                    $adminTumBildirim[$a]['BildirimGonderenID'] = $adminTumBildirimm['BSGonderenID'];
+                    $adminTumBildirim[$a]['BildirimGonderenAd'] = $adminTumBildirimm['BSGonderenAdSoyad'];
+                    $tarih = explode(" ", $adminTumBildirimm['BSBildirimTarih']);
+                    $digerTarih = explode("-", $tarih[0]);
+                    $yeniTarih = $tarih[1] . '--' . $digerTarih[2] . '/' . $digerTarih[1] . '/' . $digerTarih[0];
+                    $adminTumBildirim[$a]['BildirimTarih'] = $yeniTarih;
+                    $a++;
+                }
+            }
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/tumbildirimliste", $languagedeger, $adminTumBildirim);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL_LOGOUT);
         }
     }
 

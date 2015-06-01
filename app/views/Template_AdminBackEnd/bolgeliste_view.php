@@ -1,6 +1,5 @@
 <script type="text/javascript">
     var activeMenu = "menu_bolge";
-    var activeLink = "link_bolgeliste";
 </script>
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminbolgeajaxquery.js" type="text/javascript"></script> 
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminbolge-web.app.js" type="text/javascript"></script> 

@@ -34,8 +34,8 @@ $(document).ready(function () {
     // Sol Menu Navigasyon Kontrolü   
     $(".sidebar-menu").find(".active").removeClass("active");
     $("#" + activeMenu).find("a").click();
-    $(".sidebar-menu").find(".activeli").removeClass("activeli");
-    $("#" + activeMenu).find("#" + activeLink).addClass("activeli");
+    $(".sidebar-menu").find(".active").removeClass("active");
+    $("#" + activeMenu).addClass("active");
     // End Sol Menu Navigasyon Kontrolü
 
     //subview kontrolü. Class'a Göre

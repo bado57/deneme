@@ -5,7 +5,5 @@
 
 <!-- AdminLTE App -->
 <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/AdminLTE/app.js" type="text/javascript"></script> 
-
-<script src="<?php echo SITE_PLUGINADMIN_JS; ?>/shuttle-web.app.js" type="text/javascript"></script> 
 </body>
 </html>

@@ -219,6 +219,17 @@ class tr {
             "TurDonusAtama" => " Dönüş Turuna Ekledi.",
             "TurGidisDuzenleme" => " Gidiş Turunu Düzenledi.",
             "TurDonusDuzenleme" => " Dönüş Turunu Düzenledi.",
+            "BildirimYok" => "Daha Fazla Gösterilecek Bildirim Yok",
+            "OkunduIsaret" => "Okundu Olarak İşaretle",
+            "BildirimAlan" => "Bildirim Alanları",
+            "Kayıt" => "Kayıt",
+            "Duzenleme" => "Düzenleme",
+            "Silme" => "Silme",
+            "Atama" => "Atama",
+            "TumBildirimler" => "Tüm Bildirimler",
+            "Bildirim" => "Bildirim",
+            "Gonderen" => "Gönderen",
+            "Tarih" => "Tarih"
         );
         return $trdil;
     }

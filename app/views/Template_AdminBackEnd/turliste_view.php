@@ -1,6 +1,5 @@
 <script type="text/javascript">
     var activeMenu = "menu_tur";
-    var activeLink = "link_turliste";
 </script>
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminturajaxquery.js" type="text/javascript"></script>
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/admintur-web.app.js" type="text/javascript"></script> 

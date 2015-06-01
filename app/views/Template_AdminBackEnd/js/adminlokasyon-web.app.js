@@ -11,18 +11,6 @@ var inmeyen = new Array();
 var inen = new Array();
 var MultipleMapindex;
 $(document).ready(function () {
-// Sayfa Scroll Olayı
-    $("html").niceScroll({
-        scrollspeed: 100,
-        mousescrollstep: 38,
-        cursorwidth: 6,
-        cursorborder: 0,
-        cursorcolor: '#808080',
-        autohidemode: true,
-        zindex: 9999999999,
-        horizrailenabled: false,
-        cursorborderradius: 3,
-    });
     // Form Enable / Disable Kontrolleri
     $(document).on("click", "#editForm", function (e) {
         e.preventDefault();
@@ -49,11 +37,11 @@ $(document).ready(function () {
     });
     // End Form Enable / Dissable Kontrolleri
 
-    // Sol Menu Navigasyon Kontrolü   
+   // Sol Menu Navigasyon Kontrolü   
     $(".sidebar-menu").find(".active").removeClass("active");
     $("#" + activeMenu).find("a").click();
-    $(".sidebar-menu").find(".activeli").removeClass("activeli");
-    $("#" + activeMenu).find("#" + activeLink).addClass("activeli");
+    $(".sidebar-menu").find(".active").removeClass("active");
+    $("#" + activeMenu).addClass("active");
     // End Sol Menu Navigasyon Kontrolü
 
     //subview kontrolü. Class'a Göre
