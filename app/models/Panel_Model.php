@@ -172,6 +172,17 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //admin özellikler
+    public function adminProfil($adminID) {
+        $sql = "SELECT * FROM bsadmin Where BSAdminID=" . $adminID;
+        return ($this->db->select($sql));
+    }
+
+    //admin profil düzenleme
+    public function adminProfilDuzenle($data, $adminID) {
+        return ($this->db->update("bsadmin", $data, "BSAdminID=" . $adminID));
+    }
+
     //admin firma özellikleri getirme
     public function firmaOzellikler() {
         $sql = "SELECT * FROM bsfirma Where BSFirmaID=1 LIMIT 1";
@@ -1964,6 +1975,78 @@ class Panel_Model extends Model {
     //aktif lokasyonu olan araç
     public function aracLokasyon($aracID) {
         $sql = 'SELECT BSAracLokasyon FROM bsaraclokasyon Where BSAracID = ' . $aracID;
+        return($this->db->select($sql));
+    }
+
+    //duyruu detail bölge admin
+    public function duyuruBolgeMultiAdmin($array = array()) {
+        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge Where BSBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //aadmin listele
+    public function duyuruAdmin($array = array()) {
+        $sql = 'SELECT BSAdminID, BSAdminAd, BSAdminSoyad FROM bsadmin Where BSAdminID IN (' . $array . ') ORDER BY BSAdminAd ASC';
+        return($this->db->select($sql));
+    }
+
+    //duyruu detail bölge şoför
+    public function duyuruBolgeMultiSofor($array = array()) {
+        $sql = 'SELECT DISTINCT BSSoforID, BSSoforAd FROM bssoforbolge Where BSBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //duyruu detail bölge hostes
+    public function duyuruBolgeMultiHostes($array = array()) {
+        $sql = 'SELECT DISTINCT BSHostesID, BSHostesAd FROM bshostesbolge Where BSBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //duyruu detail bölge veli
+    public function duyuruBolgeMultiVeli($array = array()) {
+        $sql = 'SELECT DISTINCT BSVeliID, BSVeliAd FROM bsvelibolge Where BSBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //duyruu detail bölge öğrenci
+    public function duyuruBolgeMultiOgrenci($array = array()) {
+        $sql = 'SELECT DISTINCT BSOgrenciID, BSOgrenciAd FROM bsogrencibolge Where BSBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //duyruu detail bölge işçi
+    public function duyuruBolgeMultiIsci($array = array()) {
+        $sql = 'SELECT DISTINCT SBIsciID, SBIsciAd FROM sbiscibolge Where SBBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //duyuru bolge kurum listesi
+    public function duyuruKurumMultiSelect($array = array()) {
+        $sql = 'SELECT SBKurumID, SBKurumAdi FROM sbkurum Where SBBolgeID IN (' . $array . ') ORDER BY SBKurumAdi ASC';
+        return($this->db->select($sql));
+    }
+
+    //duyuru kurum Veli
+    public function duyuruKurumVeli($array = array()) {
+        $sql = 'SELECT DISTINCT BSVeliID, BSVeliAd FROM bsvelikurum Where BSKurumID IN (' . $array . ') ORDER BY BSVeliAd ASC';
+        return($this->db->select($sql));
+    }
+
+    //duyuru kurum Öğrenci
+    public function duyuruKurumOgrenci($array = array()) {
+        $sql = 'SELECT DISTINCT BSOgrenciID, BSOgrenciAd FROM bsogrencikurum Where BSKurumID IN (' . $array . ') ORDER BY BSOgrenciAd ASC';
+        return($this->db->select($sql));
+    }
+
+    //duyuru kurum İşçi
+    public function duyuruKurumIsci($array = array()) {
+        $sql = 'SELECT DISTINCT SBIsciID, SBIsciAd FROM sbiscikurum Where SBKurumID IN (' . $array . ') ORDER BY SBIsciAd ASC';
+        return($this->db->select($sql));
+    }
+
+    //duyuru tur listesi
+    public function duyuruTurMultiSelect($array = array()) {
+        $sql = 'SELECT SBTurID, SBTurAd FROM sbtur Where SBKurumID IN (' . $array . ') ORDER BY SBTurAd ASC';
         return($this->db->select($sql));
     }
 

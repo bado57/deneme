@@ -37,7 +37,5 @@ class Session {
     }
 
 }
-
-//Kullanımı:Session::get($key)
 ?>
 

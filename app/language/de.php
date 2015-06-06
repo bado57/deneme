@@ -10,8 +10,8 @@ class de {
         $dedil = array(
             "LoginSelectlanguage" => "Wählen Sie Ihre Sprache",
             "LoginTitle" => "Eingang",
-            "Loginkadi" => "Benutzername",
-            "Loginsifre" => "Passwort",
+            "Kadi" => "Benutzername",
+            "Sifre" => "Passwort",
             "LoginButton" => "Eingang"
             
         );

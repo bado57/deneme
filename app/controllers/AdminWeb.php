@@ -1195,7 +1195,6 @@ class AdminWeb extends Controller {
             $resultMemcache = $MemcacheModel->get($uniqueBidirimKey);
             if ($resultMemcache != false) {
                 $bildirimAyar = $resultMemcache[0];
-                error_log("1" . $bildirimAyar);
             } else {
                 //model bağlantısı
                 $resultBildirim = $Panel_Model->adminBildirimAyar($adminID);
@@ -1204,7 +1203,6 @@ class AdminWeb extends Controller {
                 }
                 $MemcacheModel->set($uniqueBidirimKey, $adminBildirim, false, 3600);
                 $bildirimAyar = $resultMemcache[0];
-                error_log("2" . $bildirimAyar);
             }
 
             $this->load->view("Template_AdminBackEnd/header", $languagedeger);
@@ -1229,12 +1227,10 @@ class AdminWeb extends Controller {
             //memcache model bağlanısı
             $MemcacheModel = $this->load->model("adminmemcache_model");
 
-            $formDbConfig = $this->load->otherClasses('DatabaseConfig');
-            $formDbConfig->configDb();
-
             $language = Session::get("dil");
             $formlanguage = $this->load->multilanguage($language);
             $languagedeger = $formlanguage->multilanguage();
+
 
 
             $this->load->view("Template_AdminBackEnd/header", $languagedeger);
@@ -1307,6 +1303,54 @@ class AdminWeb extends Controller {
             $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
         } else {
             header("Location:" . SITE_URL_LOGOUT);
+        }
+    }
+
+    function profil() {
+
+        //session güvenlik kontrolü
+        $form = $this->load->otherClasses('Form');
+        $sessionKey = $form->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+
+            //model bağlantısı
+            $Panel_Model = $this->load->model("panel_model");
+            $adminID = Session::get("userId");
+
+            $language = Session::get("dil");
+            $formlanguage = $this->load->multilanguage($language);
+            $languagedeger = $formlanguage->multilanguage();
+
+            $adminProfil = $Panel_Model->adminProfil($adminID);
+
+            foreach ($adminProfil as $adminProfill) {
+                $adminlist['ID'] = $adminProfill['BSAdminID'];
+                $adminlist['Ad'] = $adminProfill['BSAdminAd'];
+                $adminlist['Soyad'] = $adminProfill['BSAdminSoyad'];
+                $adminlist['Kadi'] = $adminProfill['BSAdminKadi'];
+                $adminlist['Phone'] = $adminProfill['BSAdminPhone'];
+                $adminlist['Email'] = $adminProfill['BSAdminEmail'];
+                $adminlist['Location'] = $adminProfill['BSAdminLocation'];
+                $adminlist['Ulke'] = $adminProfill['BSAdminUlke'];
+                $adminlist['Il'] = $adminProfill['BSAdminIl'];
+                $adminlist['Ilce'] = $adminProfill['BSAdminIlce'];
+                $adminlist['Semt'] = $adminProfill['BSAdminSemt'];
+                $adminlist['Mahalle'] = $adminProfill['BSAdminMahalle'];
+                $adminlist['Sokak'] = $adminProfill['BSAdminSokak'];
+                $adminlist['PostaKodu'] = $adminProfill['BSAdminPostaKodu'];
+                $adminlist['CaddeNo'] = $adminProfill['BSAdminCaddeNo'];
+                $adminlist['Adres'] = $adminProfill['BSAdminAdres'];
+                $adminlist['Durum'] = $adminProfill['Status'];
+                $adminlist['Aciklama'] = $adminProfill['BSAdminAciklama'];
+            }
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/profil", $languagedeger, $adminlist);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL);
         }
     }
 

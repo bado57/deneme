@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>app/views/Template_AdminBackEnd/js/adminbildirimayarajaxquery.js</url>
+            <bookmark id="1">
+                <name/>
+                <line>44</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/bolgeliste_view.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/bildirimliste_view.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/adminduyuru-web.app.js</file>
             <file>file:/C:/xampp/htdocs/SProject/app/language/tr.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/controllers/Panel.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/bildirimliste_view.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/adminduyuruajaxquery.js</file>
             <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/adminbildirimayar-web.app.js</file>
             <file>file:/C:/xampp/htdocs/SProject/app/controllers/AdminWeb.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/adminbildirimayarajaxquery.js</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/controllers/AdminBildirimAyarAjaxSorgu.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/duyuruliste_view.php</file>
         </group>
     </open-files>
 </project-private>

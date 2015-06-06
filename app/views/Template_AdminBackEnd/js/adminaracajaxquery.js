@@ -177,7 +177,6 @@ $(document).ready(function () {
         });
 
         var SoforOptions = new Array();
-        var HostesOptions = new Array();
         $.ajax({
             data: {"aracID": aracID, "aracDetailBolgeID[]": aracDetailBolgeID, "tip": "AracDetailMultiSelect"},
             success: function (cevap) {
@@ -710,13 +709,13 @@ $.AdminIslemler = {
                             return false;
                         } else {
                             disabledForm();
-                            $("input[name=AracDetayPlaka]").val(' ');
-                            $("input[name=AracDetayMarka]").val(' ');
-                            $("input[name=AracDetayModelYil]").val(' ');
-                            $("input[name=AracDetayKapasite]").val(' ');
-                            $("textarea[name=AracDetayAciklama]").val(' ');
-                            $("#AracDetayDurum option:selected").val(' ');
-                            $("input[name=AracDetayKm]").val(' ');
+                            $("input[name=AracDetayPlaka]").val('');
+                            $("input[name=AracDetayMarka]").val('');
+                            $("input[name=AracDetayModelYil]").val('');
+                            $("input[name=AracDetayKapasite]").val('');
+                            $("textarea[name=AracDetayAciklama]").val('');
+                            $("#AracDetayDurum option:selected").val('');
+                            $("input[name=AracDetayKm]").val('');
                             var aracCount = $('#smallArac').text();
                             aracCount--;
                             $('#smallArac').text(aracCount);

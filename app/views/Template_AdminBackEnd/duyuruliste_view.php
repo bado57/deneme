@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    var activeMenu = "menu_bolge";
+    var activeMenu = "menu_duyuru";
 </script>
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminduyuruajaxquery.js" type="text/javascript"></script>
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminduyuru-web.app.js" type="text/javascript"></script> 
@@ -18,12 +18,12 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-left">
                 <h3>
-                    <i class="fa fa-bullhorn"></i> Duyurular
+                    <i class="fa fa-bullhorn"></i> <?php echo $data["Duyuru"]; ?>
                 </h3>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right" style="text-align:right;">
                 <div class="form-group">
-                    <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svOpen" data-islemler="adminDuyuruYeni" data-class="duyuru"><i class="fa fa-plus-square"></i> Yeni Duyuru</button>
+                    <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svOpen" data-islemler="adminDuyuruYeni" data-class="duyuru"><i class="fa fa-plus-square"></i> <?php echo $data["YeniDuyuru"]; ?></button>
                 </div>
             </div>
         </div>
@@ -31,47 +31,26 @@
     <section class="content">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table class="table table-responsive table-bordered table-hover">
+                <table class="table table-responsive table-bordered table-hover" id="duyuruTable">
                     <thead>
                         <tr>
-                            <th><i class='fa fa-clock-o'></i> Tarih</th>
-                    <th><i class='fa fa-envelope'></i> İçerik</th>
-                    <th><i class='fa fa-users'></i> Hedef</th>
+                            <th><i class='fa fa-clock-o'></i> <?php echo $data["Tarih"]; ?></th>
+                    <th><i class='fa fa-envelope'></i> <?php echo $data["Icerik"]; ?></th>
+                    <th><i class='fa fa-users'></i> <?php echo $data["Duyuru"]; ?></th>
                     </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>23/05/2015</td>
-                            <td>Vakıf Bank İlkokulu giriş saatleri değiştiğinden yarından itibaren servis başlangıç saatleri sabah 07:00'den 07:30'a alınmıştır.</td>
-                            <td>143 Kullanıcı</td>
-                        </tr>
-                        <tr>
-                            <td>22/05/2015</td>
-                            <td>Yarınki hava koşulları nedeniyle okullar tatil olduğundan servis yapılmayacaktır.</td>
-                            <td>265 Kullanıcı</td>
-                        </tr>
-                        <tr>
-                            <td>23/05/2015</td>
-                            <td>Vakıf Bank İlkokulu giriş saatleri değiştiğinden yarından itibaren servis başlangıç saatleri sabah 07:00'den 07:30'a alınmıştır.</td>
-                            <td>143 Kullanıcı</td>
-                        </tr>
-                        <tr>
-                            <td>23/05/2015</td>
-                            <td>Vakıf Bank İlkokulu giriş saatleri değiştiğinden yarından itibaren servis başlangıç saatleri sabah 07:00'den 07:30'a alınmıştır.</td>
-                            <td>143 Kullanıcı</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-
     </section>
 </aside>
 
 <div id="duyuru" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3>Yeni Duyuru <span class="pull-right"><button data-type="svClose" data-class="duyuru"  type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["YeniDuyuru"]; ?> <span class="pull-right"><button data-type="svClose" data-class="duyuru"  type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
                 <!-- Sol Menü Filtreleme -->
@@ -80,98 +59,91 @@
                         <!-- Bölge Filtreleme -->
                         <div class="bolgeFiltre col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <label for="DuyuruBolge">Bölge</label>
-                                <select type="text" class="form-control" id="DuyuruBolge" name="DuyuruBolge" multiple required="required">
-                                    <option value="1">Akdeniz</option>
-                                    <option value="2">Karadeniz</option>
+                                <label for="DuyuruBolge"><?php echo $data["Bolge"]; ?></label>
+                                <select type="text" class="form-control" id="DuyuruBolge" name="DuyuruBolge" multiple>
                                 </select>
                             </div>
                             <div class="bolgeKullanici form-group col-lg-9 col-md-9 col-sm-6 col-xs-12" style="padding-top:24px;">
-                                <label for="bolgeAdmin" class="control-label col-md-2">
-                                    <input id="bolgeAdmin" name="bolgeAdmin" type="checkbox" class="bolgeKullaniciCheck" /> Admin</label>
+                                <label id="labelAdmin" for="bolgeAdmin" class="control-label col-md-2">
+                                    <input id="bolgeAdmin" name="bolgeAdmin" type="checkbox" class="bolgeKullaniciCheck"/> <?php echo $data["Admin"]; ?></label>
                                 <label for="bolgeSofor" class="control-label col-md-2">
-                                    <input id="bolgeSofor" name="bolgeSofor" type="checkbox" class="bolgeKullaniciCheck" /> Şoför</label>
+                                    <input id="bolgeSofor" name="bolgeSofor" type="checkbox" class="bolgeKullaniciCheck"/> <?php echo $data["Sofor"]; ?></label>
                                 <label for="bolgeHostes" class="control-label col-md-2">
-                                    <input id="bolgeHostes" name="bolgeHostes" type="checkbox" class="bolgeKullaniciCheck" /> Hostes</label>
+                                    <input id="bolgeHostes" name="bolgeHostes" type="checkbox" class="bolgeKullaniciCheck"/> <?php echo $data["Hostes"]; ?></label>
                                 <label for="bolgeVeli" class="control-label col-md-2">
-                                    <input id="bolgeVeli" name="bolgeVeli" type="checkbox" class="bolgeKullaniciCheck" /> Veli</label>
+                                    <input id="bolgeVeli" name="bolgeVeli" type="checkbox" class="bolgeKullaniciCheck"/> <?php echo $data["Veli"]; ?></label>
                                 <label for="bolgeOgrenci" class="control-label col-md-2">
-                                    <input id="bolgeOgrenci" name="bolgeOgrenci" type="checkbox" class="bolgeKullaniciCheck" /> Öğrenci</label>
+                                    <input id="bolgeOgrenci" name="bolgeOgrenci" type="checkbox" class="bolgeKullaniciCheck"/> <?php echo $data["Ogrenci"]; ?></label>
                                 <label for="bolgePersonel" class="control-label col-md-2">
-                                    <input id="bolgePersonel" name="bolgePersonel" type="checkbox" class="bolgeKullaniciCheck" /> Personel</label>
+                                    <input id="bolgePersonel" name="bolgePersonel" type="checkbox" class="bolgeKullaniciCheck"/> <?php echo $data["Personel"]; ?></label>
                             </div>
                             <div class="bolgeIslem form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="bolgeDetaylandir btn btn-info">Detaylandır</button>
-                                <button class="duyuruYaz btn btn-success">Duyuru Yaz</button>
+                                <button class="bolgeDetaylandir btn btn-info"><?php echo $data["Detaylandır"]; ?></button>
+                                <button class="duyuruYaz btn btn-success"><?php echo $data["DuyuruYaz"]; ?></button>
                             </div>
                         </div>
                         <!-- Kurum Filtreleme -->
                         <div class="kurumFiltre col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <label for="DuyuruKurum">Kurum</label>
+                                <label for="DuyuruKurum"><?php echo $data["KurumAdi"]; ?></label>
                                 <select type="text" class="form-control" id="DuyuruKurum" name="DuyuruKurum" multiple style="text-align: left;">
-                                    <option value="1">Cumhuriyet İlkokulu</option>
-                                    <option value="2">Denizli Lisesi</option>
                                 </select>
                             </div>
                             <div class="kurumKullanici form-group col-lg-9 col-md-9 col-sm-6 col-xs-12" style="padding-top:24px;">
                                 <label for="kurumAdmin" class="control-label col-md-2">
-                                    <input id="kurumAdmin" name="kurumAdmin" type="checkbox" class="kurumKullaniciCheck" /> Admin</label>
+                                    <input id="kurumAdmin" name="kurumAdmin" type="checkbox" class="kurumKullaniciCheck" /> <?php echo $data["Admin"]; ?></label>
                                 <label for="kurumSofor" class="control-label col-md-2">
-                                    <input id="kurumSofor" name="kurumSofor" type="checkbox" class="kurumKullaniciCheck" /> Şoför</label>
+                                    <input id="kurumSofor" name="kurumSofor" type="checkbox" class="kurumKullaniciCheck" /> <?php echo $data["Sofor"]; ?></label>
                                 <label for="kurumHostes" class="control-label col-md-2">
-                                    <input id="kurumHostes" name="kurumHostes" type="checkbox" class="kurumKullaniciCheck" /> Hostes</label>
+                                    <input id="kurumHostes" name="kurumHostes" type="checkbox" class="kurumKullaniciCheck" /> <?php echo $data["Hostes"]; ?></label>
                                 <label for="kurumVeli" class="control-label col-md-2">
-                                    <input id="kurumVeli" name="kurumVeli" type="checkbox" class="kurumKullaniciCheck" /> Veli</label>
+                                    <input id="kurumVeli" name="kurumVeli" type="checkbox" class="kurumKullaniciCheck" /> <?php echo $data["Veli"]; ?></label>
                                 <label for="kurumOgrenci" class="control-label col-md-2">
-                                    <input id="kurumOgrenci" name="kurumOgrenci" type="checkbox" class="kurumKullaniciCheck" /> Öğrenci</label>
+                                    <input id="kurumOgrenci" name="kurumOgrenci" type="checkbox" class="kurumKullaniciCheck" /> <?php echo $data["Ogrenci"]; ?></label>
                                 <label for="kurumPersonel" class="control-label col-md-2">
-                                    <input id="kurumPersonel" name="kurumPersonel" type="checkbox" class="kurumKullaniciCheck" /> Personel</label>
+                                    <input id="kurumPersonel" name="kurumPersonel" type="checkbox" class="kurumKullaniciCheck" /> <?php echo $data["Personel"]; ?></label>
                             </div>
                             <div class="kurumIslem form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="kurumGizle btn btn-warning"><i class="fa fa-times"></i></button>
-                                <button class="kurumDetaylandir btn btn-info">Detaylandır</button>
-                                <button class="duyuruYaz btn btn-success">Duyuru Yaz</button>
+                                <button class="kurumDetaylandir btn btn-info"><?php echo $data["Detaylandır"]; ?></button>
+                                <button class="duyuruYaz btn btn-success"><?php echo $data["DuyuruYaz"]; ?></button>
                             </div>
                         </div>
                         <!-- Tur Filtreleme -->
                         <div class="turFiltre col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <label for="DuyuruTur">Tur</label>
+                                <label for="DuyuruTur"><?php echo $data["Tur"]; ?></label>
                                 <select type="text" class="form-control" id="DuyuruTur" name="DuyuruTur" multiple style="text-align: left;">
-                                    <option value="1">Cumhuriyet İlkokulu - 1</option>
-                                    <option value="2">Denizli Lisesi - 1</option>
-                                    <option value="3">Denizli Lisesi - 2</option>
                                 </select>
                             </div>
                             <div class="turKullanici form-group col-lg-9 col-md-9 col-sm-6 col-xs-12" style="padding-top:24px;">
                                 <label for="turAdmin" class="control-label col-md-2">
-                                    <input id="turAdmin" name="turAdmin" type="checkbox" class="turKullaniciCheck" /> Admin</label>
+                                    <input id="turAdmin" name="turAdmin" type="checkbox" class="turKullaniciCheck" /> <?php echo $data["Admin"]; ?></label>
                                 <label for="turSofor" class="control-label col-md-2">
-                                    <input id="turSofor" name="turSofor" type="checkbox" class="turKullaniciCheck" /> Şoför</label>
+                                    <input id="turSofor" name="turSofor" type="checkbox" class="turKullaniciCheck" /> <?php echo $data["Sofor"]; ?></label>
                                 <label for="turHostes" class="control-label col-md-2">
-                                    <input id="turHostes" name="turHostes" type="checkbox" class="turKullaniciCheck" /> Hostes</label>
+                                    <input id="turHostes" name="turHostes" type="checkbox" class="turKullaniciCheck" /> <?php echo $data["Hostes"]; ?></label>
                                 <label for="turVeli" class="control-label col-md-2">
-                                    <input id="turVeli" name="turVeli" type="checkbox" class="turKullaniciCheck" /> Veli</label>
+                                    <input id="turVeli" name="turVeli" type="checkbox" class="turKullaniciCheck" /> <?php echo $data["Veli"]; ?></label>
                                 <label for="turOgrenci" class="control-label col-md-2">
-                                    <input id="turOgrenci" name="turOgrenci" type="checkbox" class="turKullaniciCheck" /> Öğrenci</label>
+                                    <input id="turOgrenci" name="turOgrenci" type="checkbox" class="turKullaniciCheck" /> <?php echo $data["Ogrenci"]; ?></label>
                                 <label for="turPersonel" class="control-label col-md-2">
-                                    <input id="turPersonel" name="turPersonel" type="checkbox" class="turKullaniciCheck" /> Personel</label>
+                                    <input id="turPersonel" name="turPersonel" type="checkbox" class="turKullaniciCheck" /> <?php echo $data["Personel"]; ?></label>
                             </div>
                             <div class="turIslem form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="turGizle btn btn-warning"><i class="fa fa-times"></i></button>
-                                <button class="duyuruYaz btn btn-success">Duyuru Yaz</button>
+                                <button class="duyuruYaz btn btn-success"><?php echo $data["DuyuruYaz"]; ?></button>
                             </div>
                         </div>
                         <!-- Duyuru Yazma -->
                         <div class="DuyuruFiltre col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <label for="DuyuruTur">Mesajınız</label>
+                                <label for="DuyuruTur"><?php echo $data["Mesajınız"]; ?></label>
                                 <textarea class="form-control col-lg-12 col-md-12 col-sm-12 col-xs-12" rows="3"></textarea>
                             </div>
                             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="duyuruGizle btn btn-warning"><i class="fa fa-times"></i></button>
-                                <button class="duyuruGonder btn btn-success">Gönder</button>
+                                <button class="duyuruGonder btn btn-success"><?php echo $data["Gonder"]; ?></button>
                             </div>
                         </div>
                     </div>
@@ -183,21 +155,13 @@
                             <div class="panel-heading" role="tab" id="headingOne">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" data-parent="#accordion" href="#useradmin" aria-expanded="true" aria-controls="collapseOne">
-                                        <i class="fa fa-user"></i> Admin (2)
+                                        <i class="fa fa-user"></i> <?php echo $data["Admin"]; ?> <span id="AdminCount"></span>
                                     </a>
                                 </h4>
                             </div>
                             <div id="useradmin" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                                 <div class="panel-body">
-                                    <ul class="list-group">
-                                        <li class="list-group-item">
-                                            <label for="user-1" class="control-label">
-                                                <input id="user-1" name="user-1" type="checkbox" class="" checked /> Ahmet Yılmaz</label>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <label for="user-2" class="control-label">
-                                                <input id="user-2" name="user-2" type="checkbox" class="" checked /> Filiz Yücel</label>
-                                        </li>
+                                    <ul id="userAdmin" class="list-group">
                                     </ul>           
                                 </div>
                             </div>
@@ -205,26 +169,14 @@
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingTwo">
                                 <h4 class="panel-title">
-                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#userSofor" aria-expanded="false" aria-controls="collapseTwo">
-                                        <i class="fa fa-user"></i> Şoför (3)
+                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#usersofor" aria-expanded="false" aria-controls="collapseTwo">
+                                        <i class="fa fa-user"></i> <?php echo $data["Sofor"]; ?> <span id="SoforCount"></span>
                                     </a>
                                 </h4>
                             </div>
-                            <div id="userSofor" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div id="usersofor" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                                 <div class="panel-body">
-                                    <ul class="list-group">
-                                        <li class="list-group-item">
-                                            <label for="user-1" class="control-label">
-                                                <input id="user-1" name="user-1" type="checkbox" class="" checked /> Ahmet Yılmaz</label>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <label for="user-2" class="control-label">
-                                                <input id="user-2" name="user-2" type="checkbox" class="" checked /> Filiz Yücel</label>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <label for="user-3" class="control-label">
-                                                <input id="user-3" name="user-3" type="checkbox" class="" checked /> Hakan Yıldırım</label>
-                                        </li>
+                                    <ul id="userSofor" class="list-group">
                                     </ul> 
                                 </div>
                             </div>
@@ -232,19 +184,60 @@
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingThree">
                                 <h4 class="panel-title">
-                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#userHostes" aria-expanded="false" aria-controls="collapseThree">
-                                        <i class="fa fa-user"></i> Hostes (1)
+                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#userhostes" aria-expanded="false" aria-controls="collapseThree">
+                                        <i class="fa fa-user"></i> <?php echo $data["Hostes"]; ?> <span id="HostesCount"></span>
                                     </a>
                                 </h4>
                             </div>
-                            <div id="userHostes" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                            <div id="userhostes" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                                 <div class="panel-body">
-                                    <ul class="list-group">
-                                        <li class="list-group-item">
-                                            <label for="user-1" class="control-label">
-                                                <input id="user-1" name="user-1" type="checkbox" class="" checked /> Ahmet Yılmaz</label>
-                                        </li>
+                                    <ul id="userHostes" class="list-group">
                                     </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#userveli" aria-expanded="false" aria-controls="collapseTwo">
+                                        <i class="fa fa-user"></i> <?php echo $data["Veli"]; ?> <span id="VeliCount"></span>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="userveli" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="panel-body">
+                                    <ul id="userVeli" class="list-group">
+                                    </ul> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#userogrenci" aria-expanded="false" aria-controls="collapseTwo">
+                                        <i class="fa fa-user"></i> <?php echo $data["Ogrenci"]; ?> <span id="OgrenciCount"></span>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="userogrenci" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="panel-body">
+                                    <ul id="userOgrenci" class="list-group">
+                                    </ul> 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#userpersonel" aria-expanded="false" aria-controls="collapseTwo">
+                                        <i class="fa fa-user"></i> <?php echo $data["Personel"]; ?> <span id="PersonelCount"></span>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="userpersonel" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="panel-body">
+                                    <ul id="userPersonel" class="list-group">
+                                    </ul> 
                                 </div>
                             </div>
                         </div>
@@ -254,90 +247,7 @@
             </div>
         </div>
     </div>
-</div><!-- ./wrapper -->
+</div>
 
-<script type="text/javascript">
-    var bolgeler = new Array();
-    var kurumlar = new Array();
-    var turlar = new Array();
-    $(document).ready(function () {
-        $(document).on("change", "#DuyuruBolge", function () {
-            bolgeler = $(this).val();
-            $(".kurumFiltre").fadeOut();
-            $(".turFiltre").fadeOut();
-            $(".DuyuruFiltre").fadeOut();
-            if (bolgeler) {
-                $(".bolgeKullanici").fadeIn();
-                $(".bolgeIslem").fadeIn();
-            }else {
-                $(".bolgeKullanici").fadeOut();
-                $(".bolgeIslem").fadeOut();
-                $(".bolgeDetaylandir").fadeOut();
-            }
-        });
-        
-        $(document).on("click", ".bolgeDetaylandir", function () {
-            $(".bolgeKullanici").fadeOut();
-            $(".bolgeIslem").fadeOut();
-            $(".kurumFiltre").fadeIn();
-        });
-        
-        $(document).on("change", "#DuyuruKurum", function () {
-            kurumlar = $(this).val();
-            $(".turFiltre").fadeOut();
-            $(".DuyuruFiltre").fadeOut();
-            if (kurumlar) {
-                $(".kurumKullanici").fadeIn();
-                $(".kurumIslem").fadeIn();
-            }else {
-                $(".kurumKullanici").fadeOut();
-                $(".kurumIslem").fadeOut();
-            }
-        });
-        
-        $(document).on("click", ".kurumGizle", function () {
-            $(".kurumFiltre").fadeOut();
-            $(".bolgeKullanici").fadeIn();
-            $(".bolgeIslem").fadeIn();
-        });
-        
-        $(document).on("click", ".kurumDetaylandir", function () {
-            $(".kurumKullanici").fadeOut();
-            $(".kurumIslem").fadeOut();
-            $(".turFiltre").fadeIn();
-        });
-        
-        $(document).on("change", "#DuyuruTur", function () {
-            turlar = $(this).val();
-            $(".DuyuruFiltre").fadeOut();
-            if (turlar) {
-                $(".kurumKullanici").fadeOut();
-                $(".kurumIslem").fadeOut();
-                $(".turKullanici").fadeIn();
-                $(".turIslem").fadeIn();
-            }else {
-                $(".turKullanici").fadeOut();
-                $(".turIslem").fadeOut();
-            }
-        });
-        
-        $(document).on("click", ".turGizle", function () {
-            $(".turFiltre").fadeOut();
-            $(".kurumKullanici").fadeIn();
-            $(".kurumIslem").fadeIn();
-        });
-        
-        $(document).on("click", ".duyuruYaz", function () {
-            $(".DuyuruFiltre").fadeIn();
-            $(".turIslem").fadeOut();
-        });
-        
-        $(document).on("click", ".duyuruGizle", function () {
-            $(".DuyuruFiltre").fadeOut();
-            $(".turKullanici").fadeIn();
-            $(".turIslem").fadeIn();
-        });
-    });
-</script>
 
 

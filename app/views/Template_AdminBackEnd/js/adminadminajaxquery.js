@@ -92,22 +92,22 @@ $(document).ready(function () {
 var AdminDetailVazgec = [];
 $.AdminIslemler = {
     adminYeni: function () {
-        $("input[name=AdminAdi]").val(' ');
-        $("input[name=AdminSoyadi]").val(' ');
+        $("input[name=AdminAdi]").val('');
+        $("input[name=AdminSoyadi]").val('');
         $("#AdminDurum").val("1");
-        $("input[name=KurumLokasyon]").val(' ');
-        $("input[name=AdminTelefon]").val(' ');
-        $("input[name=AdminEmail]").val(' ');
-        $("textarea[name=AdminAdresDetay]").val(' ');
-        $("textarea[name=Aciklama]").val(' ');
-        $("input[name=country]").val(' ');
-        $("input[name=administrative_area_level_1]").val(' ');
-        $("input[name=administrative_area_level_2]").val(' ');
-        $("input[name=locality]").val(' ');
-        $("input[name=neighborhood]").val(' ');
-        $("input[name=route]").val(' ');
-        $("input[name=postal_code]").val(' ');
-        $("input[name=street_number]").val(' ');
+        $("input[name=KurumLokasyon]").val('');
+        $("input[name=AdminTelefon]").val('');
+        $("input[name=AdminEmail]").val('');
+        $("textarea[name=AdminAdresDetay]").val('');
+        $("textarea[name=Aciklama]").val('');
+        $("input[name=country]").val('');
+        $("input[name=administrative_area_level_1]").val('');
+        $("input[name=administrative_area_level_2]").val('');
+        $("input[name=locality]").val('');
+        $("input[name=neighborhood]").val('');
+        $("input[name=route]").val('');
+        $("input[name=postal_code]").val('');
+        $("input[name=street_number]").val('');
         var BolgeOptions = new Array();
         $.ajax({
             data: {"tip": "adminEkleSelect"},

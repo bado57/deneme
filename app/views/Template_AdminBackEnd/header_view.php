@@ -120,6 +120,32 @@
                     </a>
                     <div class="navbar-right">
                         <ul class="nav navbar-nav">
+                            <li class="dropdown tasks-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-bullhorn"></i>
+                                    <span class="label label-warning">9</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="header">You have 9 tasks</li>
+                                    <li>
+                                        <ul class="menu">
+                                            <li><!-- Task item -->
+                                                <a href="#">
+                                                    <h3>
+                                                        Design some buttons
+                                                        <small class="pull-right">20%</small>
+                                                    </h3>
+                                                    <div class="progress xs">
+                                                        <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                            <span class="sr-only">20% Complete</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                        </ul>
+                                    </li>
+                                    <li class="footer"><a href="#" id="tumunuGosterDuyuru"><?php echo $data["TumunuGor"]; ?></a></li>
+                                </ul>
+                            </li>
                             <!-- Notifications: style can be found in dropdown.less -->
                             <li class="dropdown notifications-menu" id="bildirimTikla">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -161,7 +187,7 @@
                                     <!-- Menu Footer-->
                                     <li class="user-footer">
                                         <div class="pull-left">
-                                            <a href="#" class="btn btn-default btn-flat"><?php echo $data["Profil"]; ?></a>
+                                            <a href="<?php echo SITE_URL; ?>/adminweb/profil" class="btn btn-default btn-flat"><?php echo $data["Profil"]; ?></a>
                                         </div>
                                         <div class="pull-right">
                                             <a href="<?php echo SITE_URL_LOGOUT; ?>" class="btn btn-default btn-flat"><?php echo $data["CikisYap"]; ?></a>

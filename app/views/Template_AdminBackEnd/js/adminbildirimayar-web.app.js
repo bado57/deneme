@@ -45,8 +45,7 @@ $(document).ready(function () {
 
     $(document).on("ifClicked", ".alanCheck", function () {
         var val = $(this).prop("checked");
-        //ters çalışıyo
-        if (val == true) { // false olmuş demektir.
+        if (val == true) {
             $(this).parent().parent().parent().find("input[type='checkbox']").prop("checked", false).iCheck({
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',

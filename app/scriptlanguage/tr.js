@@ -6,6 +6,7 @@ var jsDil = {
     'Kapat': 'Kapat',
     'Hata': 'Bir Hata Oluştu! Lüfen Tekrar Deneyiniz',
     'InternetBaglanti': 'Lütfen İnternet Bağlantınızı Kontrol Ediniz',
+    'ProfilDuzenle': 'Bilgileriniz Başarılı Bir Şekilde Düzenlendi',
     'FirmaDuzenle': 'Firma Bilgileri Başarı ile Düzenlendi',
     'BolgeKaydet': 'Yeni Bölge Başarı ile Eklendi',
     'BolgeDuzenle': 'Bölge Bilgileri Başarı ile Düzenlendi',
@@ -68,5 +69,8 @@ var jsDil = {
     'DuzenlemeAktif': 'Düzenleme Aktif Değil',
     'KonumYok': 'Konumunuz bulunmadı.',
     'BildirimYok': 'Gösterilecek Bildirim Yok',
-    'BildirimAyarKaydet': 'Bildirim Ayarları Kaydedildi'
+    'BildirimAyarKaydet': 'Bildirim Ayarları Kaydedildi',
+    'Ogrenci': 'Öğrenci',
+    'Personel': 'Personel',
+    'OgrenciPersonel': 'Öğrenci/Personel'
 };

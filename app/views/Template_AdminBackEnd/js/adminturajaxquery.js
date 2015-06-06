@@ -1442,8 +1442,8 @@ $(document).ready(function () {
 });
 $.AdminIslemler = {
     adminTurYeni: function () {
-        $("input[name=TurAdi]").val(' ');
-        $("textarea[name=Aciklama]").val(' ');
+        $("input[name=TurAdi]").val('');
+        $("textarea[name=Aciklama]").val('');
         var SelectAracOptions = new Array();
         var SelectSaat1Options = new Array();
         var SelectSaat2Options = new Array();

@@ -10,8 +10,8 @@ class ar {
         $ardil = array(
             "LoginSelectlanguage" => "اختر لغتك",
             "LoginTitle" => "مدخل",
-            "Loginkadi" => "اسم المستخدم",
-            "Loginsifre" => "كلمة المرور",
+            "Kadi" => "اسم المستخدم",
+            "Sifre" => "كلمة المرور",
             "LoginButton" => "مدخل"
             
         );

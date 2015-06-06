@@ -101,10 +101,10 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="<?php echo $data["Loginkadi"]; ?>" name="usersloginkadi">
+                            <input type="text" class="form-control" placeholder="<?php echo $data["Kadi"]; ?>" name="usersloginkadi">
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" placeholder="<?php echo $data["Loginsifre"]; ?>"  name="usersloginsifre">
+                            <input type="password" class="form-control" placeholder="<?php echo $data["Sifre"]; ?>"  name="usersloginsifre">
                         </div>
                         <button type="submit" id="loginFrom"><?php echo $data["LoginButton"]; ?></button>
                     </form>

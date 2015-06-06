@@ -68,34 +68,22 @@
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-money"></i> <span><?php echo $data["BakiyeIslem"]; ?></span>
-                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
-                    <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-right"></i> General Elements</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-right"></i> Advanced Elements</a></li>
-                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
-                    </ul>
                 </li>
                 <li id="menu_lokasyon">
                     <a href="<?php echo SITE_URL; ?>/adminweb/lokasyonliste">
                         <i class="fa fa-map-marker"></i> <span><?php echo $data["LokasyonSorgu"]; ?></span>
                     </a>
                 </li>
-                <li>
-                    <a href="#">
+                <li id="menu_duyuru">
+                    <a href="<?php echo SITE_URL; ?>/adminweb/duyuruliste">
                         <i class="fa fa-bullhorn"></i> <span><?php echo $data["Duyuru"]; ?></span>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <i class="fa fa-check-square-o"></i> <span><?php echo $data["HesapIslem"]; ?></span>
-                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
-                    <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-right"></i> General Elements</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-right"></i> Advanced Elements</a></li>
-                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
-                    </ul>
                 </li>
                 <li class="treeview">
                     <a href="#">

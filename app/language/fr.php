@@ -10,8 +10,8 @@ class fr {
         $frdil = array(
             "LoginSelectlanguage" => "Choisissez votre langue",
             "LoginTitle" => "Entrée",
-            "Loginkadi" => "Nom d'utilisateur",
-            "Loginsifre" => "Mot de passe",
+            "Kadi" => "Nom d'utilisateur",
+            "Sifre" => "Mot de passe",
             "LoginButton" => "Entrée"
             
         );

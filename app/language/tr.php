@@ -11,8 +11,8 @@ class tr {
             "FirmaAd" => "Shuttle",
             "LoginSelectlanguage" => "Dil Seçiniz",
             "LoginTitle" => "Giriş",
-            "Loginkadi" => "Kullanıcı Adı",
-            "Loginsifre" => "Şifre",
+            "Kadi" => "Kullanıcı Adı",
+            "Sifre" => "Şifre",
             "Admin" => "Admin",
             "Sofor" => "Şoför",
             "Hostes" => "Hostes",
@@ -229,7 +229,18 @@ class tr {
             "TumBildirimler" => "Tüm Bildirimler",
             "Bildirim" => "Bildirim",
             "Gonderen" => "Gönderen",
-            "Tarih" => "Tarih"
+            "Tarih" => "Tarih",
+            "Icerik" => "İçerik",
+            "Hedef" => "Hedef",
+            "Detaylandır" => "Detaylandır",
+            "DuyuruYaz" => "Duyuru Yaz",
+            "Mesajınız" => "Mesajınız",
+            "Gonder" => "Gönder",
+            "Tur" => "Tur",
+            "Ad" => "Ad",
+            "Soyad" => "Soyad",
+            "ProfilBilgi" => "Profil Bilgileri",
+            "KisiselBilgi" => "Kişisel Bilgiler",
         );
         return $trdil;
     }

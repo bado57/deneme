@@ -1,7 +1,6 @@
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminbildirimayarajaxquery.js" type="text/javascript"></script>
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminbildirimayar-web.app.js" type="text/javascript"></script> 
 <aside class="right-side hiddenOnSv">
-    <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
             <?php echo $data["FirmaAd"]; ?>
@@ -9,9 +8,7 @@
         </h1>
     </section>
     <input id="degerler" style="display:none" value="<?php echo $model; ?>"/>
-    <!-- Main content -->
     <section class="content">
-        <!-- Kutular -->
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <table class="table table-responsive table-bordered table-hover">
@@ -58,7 +55,7 @@
                 </table>
                 <button class="btn btn-success save" data-Saveislem="bildirimKaydet"><?php echo $data["Kaydet"]; ?></button>
             </div>
-        </div><!-- /.row -->
-    </section><!-- /.content -->
-</aside><!-- /.right-side -->
-</div><!-- ./wrapper -->
+        </div>
+    </section>
+</aside>
+</div>

@@ -1446,7 +1446,9 @@ $.AdminIslemler = {
                         $('#smallBolge').text(kurumCount);
                         var addRow = ("<tr style='background-color:#F2F2F2'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
                                 + "<i class='fa fa-search'></i> " + AdminBolgeKaydet[0] + "</a>"
-                                + "</td><td class='hidden-xs'>0</td><td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td></tr>");
+                                + "</td><td class='hidden-xs'>0</td><td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td>"
+                                + "<td class='hidden-xs'>0</td>"
+                                + "<td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td></tr>");
                         NewKurumTable.DataTable().row.add($(addRow)).draw();
                     }
                 }
@@ -1609,6 +1611,14 @@ $.AdminIslemler = {
                             alertify.alert(jsDil.Hata);
                             return false;
                         } else {
+                            var tip;
+                            if (kurumtip == 0) {
+                                tip = jsDil.Ogrenci;
+                            } else if (kurumtip == 1) {
+                                tip = jsDil.Personel;
+                            } else {
+                                tip = jsDil.OgrenciPersonel;
+                            }
                             reset();
                             alertify.success(jsDil.KurumDuzenle);
                             var kurumCount = $('#smallKurum').text();
@@ -1618,7 +1628,9 @@ $.AdminIslemler = {
                                     + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newKurumID + "'>"
                                     + "<i class='fa fa-map-marker'></i> " + kurumadi + "</a></td>"
                                     + "<td class='hidden-xs' value='" + bolgeId + "'>" + bolgead + "</td>"
-                                    + "<td class='hidden-xs'>0</td><td class='hidden-xs'>" + kurumaciklama + "</td></tr>";
+                                    + "<td class='hidden-xs'>0</td>"
+                                    + "<td class='hidden-xs'>" + tip + "</td>"
+                                    + "<td class='hidden-xs'>" + kurumaciklama + "</td></tr>";
                             NewKurumTable.DataTable().row.add($(addRow)).draw();
                         }
                     }
@@ -1648,10 +1660,10 @@ $.AdminIslemler = {
         var turKurumID = $("input[name=adminKurumDetailID]").val();
         var bolgead = $("input[name=KurumDetailBolge]").val();
         var turKurumTip = $('select#KurumDetayTip option:selected').val();
-        $("input[name=TurAdi]").val(' ');
+        $("input[name=TurAdi]").val('');
         $("input[name=KurumTurBolgeAdi]").val(bolgead);
         $("input[name=KurumTurKurumAdi]").val(kurumad);
-        $("textarea[name=Aciklama]").val(' ');
+        $("textarea[name=Aciklama]").val('');
         if (turKurumID) {
             $.ajax({
                 data: {"turKurumID": turKurumID, "turKurumTip": turKurumTip, "tip": "turKurumSelectKisi"},
@@ -1837,11 +1849,11 @@ $.AdminIslemler = {
 
                                                                 var turTurutipi;
                                                                 if (kurumTip == 0) {
-                                                                    turTurutipi = 'Öğrenci';
+                                                                    turTurutipi = jsDil.Ogrenci;
                                                                 } else if (kurumTip == 1) {
-                                                                    turTurutipi = 'İşçi';
+                                                                    turTurutipi = jsDil.Personel;
                                                                 } else {
-                                                                    turTurutipi = 'Öğrenci/Personel';
+                                                                    turTurutipi = jsDil.OgrenciPersonel;
                                                                 }
                                                                 var addRow = "<tr style='background-color:#F2F2F2'><td>"
                                                                         + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.turID + "'>"
