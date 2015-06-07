@@ -23,7 +23,7 @@
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-right" style="text-align:right;">
                 <div class="form-group">
-                    <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svOpen" data-islemler="adminDuyuruYeni" data-class="duyuru"><i class="fa fa-plus-square"></i> <?php echo $data["YeniDuyuru"]; ?></button>
+                    <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svOpen" data-islemler="adminDuyuruYeni" data-class="duyuruPage"><i class="fa fa-plus-square"></i> <?php echo $data["YeniDuyuru"]; ?></button>
                 </div>
             </div>
         </div>
@@ -36,10 +36,21 @@
                         <tr>
                             <th><i class='fa fa-clock-o'></i> <?php echo $data["Tarih"]; ?></th>
                     <th><i class='fa fa-envelope'></i> <?php echo $data["Icerik"]; ?></th>
-                    <th><i class='fa fa-users'></i> <?php echo $data["Duyuru"]; ?></th>
+                    <th><i class='fa fa-users'></i> <?php echo $data["Hedef"]; ?></th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="duyuruRow">
+                        <?php foreach ($model as $adminModel) { ?>
+                            <tr>
+                                <td>
+                                    <a data-toggle="tooltip" data-placement="top" title="<?php echo $data["Detay"]; ?>" value="<?php echo $adminModel['DuyuruID']; ?>">
+                                        <i class="fa fa-bullhorn"></i> <?php echo $adminModel['DuyuruTarih']; ?>
+                                    </a>
+                                </td>
+                                <td class="hidden-xs"><?php echo $adminModel['DuyuruText']; ?></td>
+                                <td class="hidden-xs"><?php echo $adminModel['DuyuruHedef']; ?> <?php echo $data["Kullanici"]; ?></td>
+                            </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -47,10 +58,10 @@
     </section>
 </aside>
 
-<div id="duyuru" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+<div id="duyuruPage" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["YeniDuyuru"]; ?> <span class="pull-right"><button data-type="svClose" data-class="duyuru"  type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["YeniDuyuru"]; ?> <span class="pull-right"><button data-type="svClose" data-class="duyuruPage"  type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
                 <!-- Sol Menü Filtreleme -->
@@ -79,7 +90,7 @@
                             </div>
                             <div class="bolgeIslem form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="bolgeDetaylandir btn btn-info"><?php echo $data["Detaylandır"]; ?></button>
-                                <button class="duyuruYaz btn btn-success"><?php echo $data["DuyuruYaz"]; ?></button>
+                                <button class="duyuruYaz btn btn-success" ><?php echo $data["DuyuruYaz"]; ?></button>
                             </div>
                         </div>
                         <!-- Kurum Filtreleme -->
@@ -132,18 +143,17 @@
                             </div>
                             <div class="turIslem form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="turGizle btn btn-warning"><i class="fa fa-times"></i></button>
-                                <button class="duyuruYaz btn btn-success"><?php echo $data["DuyuruYaz"]; ?></button>
+                                <button class="duyuruYaz btn btn-success" ><?php echo $data["DuyuruYaz"]; ?></button>
                             </div>
                         </div>
-                        <!-- Duyuru Yazma -->
                         <div class="DuyuruFiltre col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <label for="DuyuruTur"><?php echo $data["Mesajınız"]; ?></label>
-                                <textarea class="form-control col-lg-12 col-md-12 col-sm-12 col-xs-12" rows="3"></textarea>
+                                <textarea id="duyuruText" class="form-control col-lg-12 col-md-12 col-sm-12 col-xs-12" rows="3"></textarea>
                             </div>
                             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="duyuruGizle btn btn-warning"><i class="fa fa-times"></i></button>
-                                <button class="duyuruGonder btn btn-success"><?php echo $data["Gonder"]; ?></button>
+                                <button type="button" class="duyuruGonder btn btn-success svToggle" data-type="svClose"  data-class="duyuruPage" data-islemler="adminDuyuruGonder"><?php echo $data["Gonder"]; ?></button>
                             </div>
                         </div>
                     </div>
@@ -242,7 +252,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

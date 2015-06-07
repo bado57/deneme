@@ -366,7 +366,7 @@ $.AdminIslemler = {
                                                                 + "<td class='hidden-xs'>" + hostesSoyad + "</td>"
                                                                 + "<td class='hidden-xs'>" + hostesTelefon + "</td>"
                                                                 + "<td class='hidden-xs'>" + hostesEmail + "</td>"
-                                                                + "<td class='hidden-xs'>" + aciklama + "</td>";
+                                                                + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
                                                         HostesTable.DataTable().row.add($(addRow)).draw();
                                                     } else {
                                                         var addRow = "<tr style='background-color:#F2F2F2'><td>"
@@ -375,7 +375,7 @@ $.AdminIslemler = {
                                                                 + "<td class='hidden-xs'>" + hostesSoyad + "</td>"
                                                                 + "<td class='hidden-xs'>" + hostesTelefon + "</td>"
                                                                 + "<td class='hidden-xs'>" + hostesEmail + "</td>"
-                                                                + "<td class='hidden-xs'>" + aciklama + "</td>";
+                                                                + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
                                                         HostesTable.DataTable().row.add($(addRow)).draw();
                                                     }
                                                     hostesBolgeID = [];

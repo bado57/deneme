@@ -224,7 +224,15 @@
                             <?php echo $data["Duyuru"]; ?>
                         </h3>
                         <p>
-                            5 <?php echo $data["YeniDuyuru"]; ?>
+                            <?php if (count($model['AdminDuyuru']) > 0) { ?>
+                                <?php
+                                echo $model['AdminDuyuru'] . ' ' . $data["Toplam"];
+                            } else {
+                                ?>
+                                <?php
+                                echo '0 ' . $data["Toplam"];
+                            }
+                            ?>
                         </p>
                     </div>
                     <div class="icon">

@@ -414,7 +414,7 @@ $.AdminIslemler = {
                                             + "<td class='hidden-xs'>" + aracModelYil + "</td>"
                                             + "<td class='hidden-xs'>" + aracKapasite + "</td>"
                                             + "<td class='hidden-xs'>0</td>"
-                                            + "<td class='hidden-xs'>" + aracDurumText + "</td>";
+                                            + "<td class='hidden-xs'>" + aracDurumText + "</td></tr>";
                                     NewAracTable.DataTable().row.add($(addRow)).draw();
                                 } else {
                                     var addRow = "<tr style='background-color:#F2F2F2'><td>"
@@ -424,7 +424,7 @@ $.AdminIslemler = {
                                             + "<td class='hidden-xs'>" + aracModelYil + "</td>"
                                             + "<td class='hidden-xs'>" + aracKapasite + "</td>"
                                             + "<td class='hidden-xs'>0</td>"
-                                            + "<td class='hidden-xs'>" + aracDurumText + "</td>";
+                                            + "<td class='hidden-xs'>" + aracDurumText + "</td></tr>";
                                     NewAracTable.DataTable().row.add($(addRow)).draw();
                                 }
                                 aracBolgeID = [];

@@ -19,9 +19,6 @@ $(document).ready(function () {
     //subview kontrolü. Class'a Göre
     $(document).on("click", ".svToggle", function (e) {
         e.preventDefault();
-        if ($(this).attr("data-index") == 'index') {
-            MultipleMapindex = $(this).parent().parent().index();
-        }
         var dtype = $(this).attr("data-type");
         var dclass = $(this).attr("data-class");
         var dislemler = $(this).attr("data-islemler");
@@ -65,8 +62,8 @@ function svControl(dtype, dclass, dislemler) {
     }//Subview kapanıyor
     else if (dtype != 'svOpen') {
         switch (dislemler) {
-            case 'adminBolgeKayit' :
-                var returnCevap = $.AdminIslemler.adminBolgeKaydet();
+            case 'adminDuyuruGonder' :
+                var returnCevap = $.AdminIslemler.adminDuyuruGonder();
                 break;
             default :
                 $("#" + dclass).height(th);
@@ -98,7 +95,6 @@ $(window).resize(function () {
     setSvHeight();
 });
 
-// Subview Yükseklik Ayarlama
 function setSvHeight() {
     if (z > 1) {
         var hh = $(".header").height();
@@ -107,17 +103,6 @@ function setSvHeight() {
 }
 
 
-//Kaydet Kontrol
-function saveControl(saveislemler) {
-    switch (saveislemler) {
-        case 'adminBolgeDetailKaydet' :
-            $.AdminIslemler.adminBolgeDetailKaydet();
-            break;
-        default :
-            break;
-    }
-}
-//End Kaydet Kontrol 
 
 // CheckBox Kontrolü
 function checkIt() {

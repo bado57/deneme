@@ -497,7 +497,7 @@ $.AdminIslemler = {
                                                                         + "<td class='hidden-xs'>" + veliSoyad + "</td>"
                                                                         + "<td class='hidden-xs'>" + veliTelefon + "</td>"
                                                                         + "<td class='hidden-xs'>" + veliEmail + "</td>"
-                                                                        + "<td class='hidden-xs'>" + aciklama + "</td>";
+                                                                        + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
                                                                 VeliTable.DataTable().row.add($(addRow)).draw();
                                                             } else {
                                                                 var addRow = "<tr style='background-color:#F2F2F2'><td>"
@@ -506,7 +506,7 @@ $.AdminIslemler = {
                                                                         + "<td class='hidden-xs'>" + veliSoyad + "</td>"
                                                                         + "<td class='hidden-xs'>" + veliTelefon + "</td>"
                                                                         + "<td class='hidden-xs'>" + veliEmail + "</td>"
-                                                                        + "<td class='hidden-xs'>" + aciklama + "</td>";
+                                                                        + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
                                                                 VeliTable.DataTable().row.add($(addRow)).draw();
                                                             }
                                                         }

@@ -496,7 +496,7 @@ $.AdminIslemler = {
                                                                         + "<td class='hidden-xs'>" + ogrenciSoyad + "</td>"
                                                                         + "<td class='hidden-xs'>" + ogrenciTelefon + "</td>"
                                                                         + "<td class='hidden-xs'>" + ogrenciEmail + "</td>"
-                                                                        + "<td class='hidden-xs'>" + aciklama + "</td>";
+                                                                        + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
                                                                 OgrenciTable.DataTable().row.add($(addRow)).draw();
                                                             } else {
                                                                 var addRow = "<tr style='background-color:#F2F2F2'><td>"
@@ -505,7 +505,7 @@ $.AdminIslemler = {
                                                                         + "<td class='hidden-xs'>" + ogrenciSoyad + "</td>"
                                                                         + "<td class='hidden-xs'>" + ogrenciTelefon + "</td>"
                                                                         + "<td class='hidden-xs'>" + ogrenciEmail + "</td>"
-                                                                        + "<td class='hidden-xs'>" + aciklama + "</td>";
+                                                                        + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
                                                                 OgrenciTable.DataTable().row.add($(addRow)).draw();
                                                             }
                                                         }

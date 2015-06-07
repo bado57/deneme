@@ -60,7 +60,6 @@ class Panel extends Controller {
                 $MemcacheModel->set($uniqueBidirimKey, $adminBildirim, false, 3600);
                 $bildirimAyar = $resultMemcache;
             }
-            error_log($bildirimAyar);
             $adminRutbe = Session::get("userRutbe");
             //super adminse tüm bölgeleri görür
             if ($adminRutbe != 0) {
@@ -70,6 +69,7 @@ class Panel extends Controller {
                 $aracListe = $Panel_Model->aracListeleCount();
                 $turListe = $Panel_Model->turListeleCount();
                 $lokasyonListe = $Panel_Model->lokasyonListeleCount();
+                $adminCount["AdminDuyuru"] = $Panel_Model->duyuruCountListele($adminID);
                 $adminCount["AdminCount"] = $Panel_Model->adminCountListele($adminID);
                 $adminCount["SoforCount"] = $Panel_Model->soforCountListele();
                 $adminCount["HostesCount"] = $Panel_Model->hostesCountListele();
@@ -78,6 +78,7 @@ class Panel extends Controller {
                 $adminCount["OgrenciCount"] = $Panel_Model->ogrenciCountListele();
                 $adminBolge['AdminKullanici'] = $adminCount["AdminCount"][0]['COUNT(*)'] + $adminCount["SoforCount"][0]['COUNT(*)'] + $adminCount["HostesCount"][0]['COUNT(*)'] + $adminCount["IsciCount"][0]['COUNT(*)'] + $adminCount["VeliCount"][0]['COUNT(*)'] + $adminCount["OgrenciCount"][0]['COUNT(*)'];
 
+                $adminBolge['AdminDuyuru'] = $adminCount["AdminDuyuru"][0]['COUNT(*)'];
                 $adminBolge['AdminBolge'] = count($bolgeListe);
                 $adminBolge['AdminKurum'] = count($kurumListe);
                 $adminBolge['AdminArac'] = count($aracListe);
@@ -104,6 +105,7 @@ class Panel extends Controller {
                 $bolgeListe = $Panel_Model->rutbeBolgeListele($rutbebolgedizi);
                 $kurumListe = $Panel_Model->rutbeKurumCount($rutbebolgedizi);
                 $turListe = $Panel_Model->rutbeTurCount($rutbebolgedizi);
+                $adminCount["AdminDuyuru"] = $Panel_Model->duyuruCountListele($adminID);
                 $adminCount["SoforCount"] = $Panel_Model->rutbeSoforCount($rutbebolgedizi);
                 $adminCount["HostesCount"] = $Panel_Model->rutbeHostesCount($rutbebolgedizi);
                 $adminCount["IsciCount"] = $Panel_Model->rutbeIsciCount($rutbebolgedizi);
@@ -111,6 +113,7 @@ class Panel extends Controller {
                 $adminCount["OgrenciCount"] = $Panel_Model->rutbeOgrenciCount($rutbebolgedizi);
                 $adminBolge['AdminKullanici'] = $adminCount["SoforCount"][0]['COUNT(BSSoforID)'] + $adminCount["HostesCount"][0]['COUNT(BSHostesID)'] + $adminCount["IsciCount"][0]['COUNT(SBIsciID)'] + $adminCount["VeliCount"][0]['COUNT(BSVeliID)'] + $adminCount["OgrenciCount"][0]['COUNT(BSOgrenciID)'];
 
+                $adminBolge['AdminDuyuru'] = $adminCount["AdminDuyuru"][0]['COUNT(*)'];
                 $adminBolge['AdminBolge'] = count($bolgeListe);
                 $adminBolge['AdminKurum'] = count($kurumListe);
                 $adminBolge['AdminArac'] = count($aracIDListe);

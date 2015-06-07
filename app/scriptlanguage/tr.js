@@ -72,5 +72,9 @@ var jsDil = {
     'BildirimAyarKaydet': 'Bildirim Ayarları Kaydedildi',
     'Ogrenci': 'Öğrenci',
     'Personel': 'Personel',
-    'OgrenciPersonel': 'Öğrenci/Personel'
+    'OgrenciPersonel': 'Öğrenci/Personel',
+    'HedefKullanici': 'Lütfen Duyuru Göndereceğiniz Kullanıcıları Seçiniz.',
+    'Kullanici': 'Kullanıcı',
+    'DuyuruGonder': 'Duyurunuz başarılı bir şekilde gönderilmiştir.',
+    'DuyuruYok': 'Gösterilecek Duyuru Yok',
 };

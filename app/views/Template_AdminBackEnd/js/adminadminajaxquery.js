@@ -226,7 +226,7 @@ $.AdminIslemler = {
                                                                 + "<td class='hidden-xs'>" + adminSoyad + "</td>"
                                                                 + "<td class='hidden-xs'>" + adminTelefon + "</td>"
                                                                 + "<td class='hidden-xs'>" + adminEmail + "</td>"
-                                                                + "<td class='hidden-xs'>" + aciklama + "</td>";
+                                                                + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
                                                         AdminTable.DataTable().row.add($(addRow)).draw();
                                                     } else {
                                                         var addRow = "<tr style='background-color:#F2F2F2'><td>"
@@ -235,7 +235,7 @@ $.AdminIslemler = {
                                                                 + "<td class='hidden-xs'>" + adminSoyad + "</td>"
                                                                 + "<td class='hidden-xs'>" + adminTelefon + "</td>"
                                                                 + "<td class='hidden-xs'>" + adminEmail + "</td>"
-                                                                + "<td class='hidden-xs'>" + aciklama + "</td>";
+                                                                + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
                                                         AdminTable.DataTable().row.add($(addRow)).draw();
                                                     }
                                                     adminBolgeID = [];

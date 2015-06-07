@@ -87,7 +87,7 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $duyuruBolgeID = $_REQUEST['duyuruBolgeID'];
                         $multiadmindizi = implode(',', $duyuruBolgeID);
 
-                        $adminBolgeListe = $Panel_Model->duyuruBolgeMultiAdmin($multiadmindizi);
+                        $adminBolgeListe = $Panel_Model->duyuruBolgeMultiAdmin($multiadmindizi, $adminID);
                         foreach ($adminBolgeListe as $adminBolgeListee) {
                             $bolgeAdminId[] = $adminBolgeListee['BSAdminID'];
                         }
@@ -294,7 +294,7 @@ class AdminDuyuruAjaxSorgu extends Controller {
                     } else {
                         $duyuruKurumID = $_REQUEST['duyuruKurumID'];
                         $multiturdizi = implode(',', $duyuruKurumID);
-                        
+
                         $turListe = $Panel_Model->duyuruTurMultiSelect($multiturdizi);
 
                         $a = 0;
@@ -304,6 +304,211 @@ class AdminDuyuruAjaxSorgu extends Controller {
                             $a++;
                         }
                         $sonuc["turMultiSelect"] = $turSelect;
+                    }
+                    break;
+
+                case "duyuruGonder":
+                    $adminID = Session::get("userId");
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $admin = $_REQUEST['admin'];
+                        $adminText = $_REQUEST['adminText'];
+                        $sofor = $_REQUEST['sofor'];
+                        $soforText = $_REQUEST['soforText'];
+                        $hostes = $_REQUEST['hostes'];
+                        $hostesText = $_REQUEST['hostesText'];
+                        $veli = $_REQUEST['veli'];
+                        $veliText = $_REQUEST['veliText'];
+                        $ogrenci = $_REQUEST['ogrenci'];
+                        $ogrenciText = $_REQUEST['ogrenciText'];
+                        $isci = $_REQUEST['personel'];
+                        $isciText = $_REQUEST['personelText'];
+                        $ad = Session::get("kullaniciad");
+                        $soyad = Session::get("kullanicisoyad");
+                        $adSoyad = $ad . ' ' . $soyad;
+                        $form->post("duyuruText", true);
+                        $form->post("hedef", true);
+                        $duyuruText = $form->values['duyuruText'];
+                        $hedef = $form->values['hedef'];
+
+                        //admin
+                        if (count($admin) > 0) {
+                            $countAdmin = count($admin);
+                            for ($a = 0; $a < $countAdmin; $a++) {
+                                $admindata[$a] = array(
+                                    'BSDuyuruText' => $duyuruText,
+                                    'BSDuyuruHedef' => $hedef,
+                                    'BSGonderenID' => $adminID,
+                                    'BSGonderenAdSoyad' => $adSoyad,
+                                    'BSAlanID' => $admin[$a],
+                                    'BSAlanAdSoyad' => $adminText[$a],
+                                    'BSOkundu' => 0,
+                                    'BSGoruldu' => 0
+                                );
+                            }
+                            $resultAdminDuyuru = $Panel_Model->addAdminDuyuru($admindata);
+                            if ($resultAdminDuyuru) {
+                                $adminIDler = implode(',', $admin);
+                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminIDler);
+                                if (count($resultAdminCihaz) > 0) {
+                                    foreach ($resultAdminCihaz as $resultAdminCihazz) {
+                                        $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
+                                    }
+                                    $adminCihazlar = implode(',', $adminCihaz);
+                                    $form->shuttleNotification($adminCihazlar, $duyuruText, $deger["YeniDuyuru"]);
+                                }
+                            }
+                        }
+
+                        //şoför
+                        if (count($sofor) > 0) {
+                            $countSofor = count($sofor);
+                            for ($s = 0; $s < $countSofor; $s++) {
+                                $sofordata[$s] = array(
+                                    'BSDuyuruText' => $duyuruText,
+                                    'BSGonderenID' => $adminID,
+                                    'BSGonderenAdSoyad' => $adSoyad,
+                                    'BSAlanID' => $sofor[$s],
+                                    'BSAlanAdSoyad' => $soforText[$s],
+                                    'BSOkundu' => 0,
+                                    'BSGoruldu' => 0
+                                );
+                            }
+                            $resultSoforDuyuru = $Panel_Model->addSoforDuyuru($sofordata);
+                            if ($resultSoforDuyuru) {
+                                $soforIDler = implode(',', $sofor);
+                                $resultSoforCihaz = $Panel_Model->digerSoforCihaz($soforIDler);
+                                if (count($resultSoforCihaz) > 0) {
+                                    foreach ($resultSoforCihaz as $resultSoforCihazz) {
+                                        $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
+                                    }
+                                    $soforCihazlar = implode(',', $soforCihaz);
+                                    $form->shuttleNotification($soforCihazlar, $duyuruText, $deger["YeniDuyuru"]);
+                                }
+                            }
+                        }
+
+                        //hostes
+                        if (count($hostes) > 0) {
+                            $countHostes = count($hostes);
+                            for ($h = 0; $h < $countHostes; $h++) {
+                                $hostesdata[$h] = array(
+                                    'BSDuyuruText' => $duyuruText,
+                                    'BSGonderenID' => $adminID,
+                                    'BSGonderenAdSoyad' => $adSoyad,
+                                    'BSAlanID' => $hostes[$h],
+                                    'BSAlanAdSoyad' => $hostesText[$h],
+                                    'BSOkundu' => 0,
+                                    'BSGoruldu' => 0
+                                );
+                            }
+                            $resultHostesDuyuru = $Panel_Model->addHostesDuyuru($hostesdata);
+                            if ($resultHostesDuyuru) {
+                                $hostesIDler = implode(',', $hostes);
+                                $resultHostesCihaz = $Panel_Model->digerHostesCihaz($hostesIDler);
+                                if (count($resultHostesCihaz) > 0) {
+                                    foreach ($resultHostesCihaz as $resultHostesCihazz) {
+                                        $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
+                                    }
+                                    $hostesCihazlar = implode(',', $hostesCihaz);
+                                    $form->shuttleNotification($hostesCihazlar, $duyuruText, $deger["YeniDuyuru"]);
+                                }
+                            }
+                        }
+
+                        //veli
+                        if (count($veli) > 0) {
+                            $countVeli = count($veli);
+                            for ($v = 0; $v < $countVeli; $v++) {
+                                $velidata[$v] = array(
+                                    'BSDuyuruText' => $duyuruText,
+                                    'BSGonderenID' => $adminID,
+                                    'BSGonderenAdSoyad' => $adSoyad,
+                                    'BSAlanID' => $veli[$v],
+                                    'BSAlanAdSoyad' => $veliText[$v],
+                                    'BSOkundu' => 0,
+                                    'BSGoruldu' => 0
+                                );
+                            }
+                            $resultVeliDuyuru = $Panel_Model->addVeliDuyuru($velidata);
+                            if ($resultVeliDuyuru) {
+                                $veliIDler = implode(',', $veli);
+                                $resultVeliCihaz = $Panel_Model->veliCihaz($veliIDler);
+                                if (count($resultVeliCihaz) > 0) {
+                                    foreach ($resultVeliCihaz as $resultVeliCihazz) {
+                                        $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
+                                    }
+                                    $veliCihazlar = implode(',', $veliCihaz);
+                                    $form->shuttleNotification($veliCihazlar, $duyuruText, $deger["YeniDuyuru"]);
+                                }
+                            }
+                        }
+
+                        //öğrenci
+                        if (count($ogrenci) > 0) {
+                            $countOgrenci = count($ogrenci);
+                            for ($o = 0; $o < $countOgrenci; $o++) {
+                                $ogrencidata[$o] = array(
+                                    'BSDuyuruText' => $duyuruText,
+                                    'BSGonderenID' => $adminID,
+                                    'BSGonderenAdSoyad' => $adSoyad,
+                                    'BSAlanID' => $ogrenci[$o],
+                                    'BSAlanAdSoyad' => $ogrenciText[$o],
+                                    'BSOkundu' => 0,
+                                    'BSGoruldu' => 0
+                                );
+                            }
+                            $resultOgrenciDuyuru = $Panel_Model->addOgrenciDuyuru($ogrencidata);
+                            if ($resultOgrenciDuyuru) {
+                                $ogrenciIDler = implode(',', $ogrenci);
+                                $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciIDler);
+                                if (count($resultOgrenciCihaz) > 0) {
+                                    foreach ($resultOgrenciCihaz as $resultOgrenciCihazz) {
+                                        $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
+                                    }
+                                    $ogrenciCihazlar = implode(',', $ogrenciCihaz);
+                                    $form->shuttleNotification($ogrenciCihazlar, $duyuruText, $deger["YeniDuyuru"]);
+                                }
+                            }
+                        }
+
+                        //işçi
+                        if (count($isci) > 0) {
+                            $countIsci = count($isci);
+                            for ($i = 0; $i < $countIsci; $i++) {
+                                $iscidata[$i] = array(
+                                    'SBDuyuruText' => $duyuruText,
+                                    'SBGonderenID' => $adminID,
+                                    'SBGonderenAdSoyad' => $adSoyad,
+                                    'SBAlanID' => $isci[$i],
+                                    'SBAlanAdSoyad' => $isciText[$i],
+                                    'SBOkundu' => 0,
+                                    'SBGoruldu' => 0
+                                );
+                            }
+                            $resultIsciDuyuru = $Panel_Model->addIsciDuyuru($iscidata);
+                            if ($resultIsciDuyuru) {
+                                $isciIDler = implode(',', $isci);
+                                $resultIsciCihaz = $Panel_Model->isciCihaz($isciIDler);
+                                if (count($resultIsciCihaz) > 0) {
+                                    foreach ($resultIsciCihaz as $resultIsciCihazz) {
+                                        $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
+                                    }
+                                    $isciCihazlar = implode(',', $isciCihaz);
+                                    $form->shuttleNotification($isciCihazlar, $duyuruText, $deger["YeniDuyuru"]);
+                                }
+                            }
+                        }
+
+                        //log ayarları
+                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 1, $duyuruText);
+                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                        if ($resultLog) {
+                            $sonuc["duyuru"] = "Başarıyla Duyurular Gönderilmiştir.";
+                        } else {
+                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                        }
                     }
                     break;
 

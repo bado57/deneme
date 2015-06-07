@@ -1224,18 +1224,33 @@ class AdminWeb extends Controller {
 
             //model bağlantısı
             $Panel_Model = $this->load->model("panel_model");
-            //memcache model bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
 
             $language = Session::get("dil");
             $formlanguage = $this->load->multilanguage($language);
             $languagedeger = $formlanguage->multilanguage();
+            $adminID = Session::get("userId");
 
+            $tumDuyuru = $Panel_Model->tumduyuruListele($adminID);
+            if (count($tumDuyuru) > 0) {
+                $adminTumDuyuru[0]['AdminDuyuruCount'] = count($tumDuyuru);
 
+                //tur bilgileri
+                $a = 0;
+                foreach ($tumDuyuru as $tumDuyuruu) {
+                    $adminTumDuyuru[$a]['DuyuruID'] = $tumDuyuruu['BSAdminDuyuruID'];
+                    $adminTumDuyuru[$a]['DuyuruText'] = $tumDuyuruu['BSDuyuruText'];
+                    $adminTumDuyuru[$a]['DuyuruHedef'] = $tumDuyuruu['BSDuyuruHedef'];
+                    $tarih = explode(" ", $tumDuyuruu['BSDuyuruTarih']);
+                    $digerTarih = explode("-", $tarih[0]);
+                    $yeniTarih = $tarih[1] . '--' . $digerTarih[2] . '/' . $digerTarih[1] . '/' . $digerTarih[0];
+                    $adminTumDuyuru[$a]['DuyuruTarih'] = $yeniTarih;
+                    $a++;
+                }
+            }
 
             $this->load->view("Template_AdminBackEnd/header", $languagedeger);
             $this->load->view("Template_AdminBackEnd/left", $languagedeger);
-            $this->load->view("Template_AdminBackEnd/duyuruliste", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/duyuruliste", $languagedeger, $adminTumDuyuru);
             $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
         } else {
             header("Location:" . SITE_URL);

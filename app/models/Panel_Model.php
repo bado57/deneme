@@ -17,14 +17,29 @@ class Panel_Model extends Model {
         return ($this->db->update("bsadminbildirim", $data, "BSAdminBildirimID=" . $bildirimID));
     }
 
+    //duyurular okundu
+    public function adminDuyuruOkundu($data, $duyuruID) {
+        return ($this->db->update("bsadminduyuru", $data, "BSAdminDuyuruID=" . $duyuruID));
+    }
+
     //tüm bildirimler okundu
     public function bildirimTumunuOkundu($data, $adminID) {
         return ($this->db->update("bsadminbildirim", $data, "BSAlanID=" . $adminID));
     }
 
+    //tüm duyurular okundu
+    public function duyuruTumunuOkundu($data, $adminID) {
+        return ($this->db->update("bsadminduyuru", $data, "BSAlanID=" . $adminID));
+    }
+
     //bildirimler görüldü
     public function adminBildirimGoruldu($data, $adminID) {
         return ($this->db->update("bsadminbildirim", $data, "BSAlanID=" . $adminID));
+    }
+
+    //duyurular görüldü
+    public function adminDuyuruGoruldu($data, $adminID) {
+        return ($this->db->update("bsadminduyuru", $data, "BSAlanID=" . $adminID));
     }
 
     //admin cihazlar
@@ -100,52 +115,93 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //şoför cihazlar
+    public function digerSoforCihaz($array = array()) {
+        $sql = 'SELECT sbsoforcihazRecID FROM sbsoforcihaz Where sbsoforID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
     //hostes cihaz
     public function hostesCihaz($hostesID) {
         $sql = 'SELECT bshostescihazRecID FROM bshostescihaz Where bshostesID=' . $hostesID;
         return($this->db->select($sql));
     }
 
+    //hostes cihazlar
+    public function digerHostesCihaz($array = array()) {
+        $sql = 'SELECT bshostescihazRecID FROM bshostescihaz Where bshostesID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
     //admin bildirim
     public function adminBildirimler($array = array(), $adminID) {
-        $sql = 'SELECT BSAdminBildirimID,BSBildirimText,BSBildirimIcon,BSBildirimUrl,BSBildirimRenk,BSBildirimTip,BSOkundu,BSBildirimTarih FROM bsadminbildirim WHERE  BSBildirimTip NOT IN (' . $array . ') AND BSAlanID=' . $adminID . ' ORDER BY BSAdminBildirimID DESC LIMIT 3';
-        error_log($sql);
+        $sql = 'SELECT BSAdminBildirimID, BSBildirimText, BSBildirimIcon, BSBildirimUrl, BSBildirimRenk, BSBildirimTip, BSOkundu, BSBildirimTarih FROM bsadminbildirim WHERE BSBildirimTip NOT IN (' . $array . ') AND BSAlanID = ' . $adminID . ' ORDER BY BSAdminBildirimID DESC LIMIT 3';
+        return($this->db->select($sql));
+    }
+
+    //admin duyruu
+    public function adminDuyurular($adminID) {
+        $sql = 'SELECT BSAdminDuyuruID, BSDuyuruText, BSOkundu, BSDuyuruTarih FROM bsadminduyuru WHERE BSAlanID = ' . $adminID . ' ORDER BY BSAdminDuyuruID DESC LIMIT 4';
         return($this->db->select($sql));
     }
 
     //loader bildirim
     public function loaderBildirimler($array = array(), $adminID, $bildirimID) {
-        $sql = 'SELECT BSAdminBildirimID,BSBildirimText,BSBildirimIcon,BSBildirimUrl,BSBildirimRenk,BSBildirimTip,BSOkundu,BSBildirimTarih FROM bsadminbildirim WHERE  BSBildirimTip NOT IN (' . $array . ') AND BSAlanID=' . $adminID . ' AND BSAdminBildirimID < ' . $bildirimID . '  ORDER BY BSAdminBildirimID DESC LIMIT 3';
+        $sql = 'SELECT BSAdminBildirimID, BSBildirimText, BSBildirimIcon, BSBildirimUrl, BSBildirimRenk, BSBildirimTip, BSOkundu, BSBildirimTarih FROM bsadminbildirim WHERE BSBildirimTip NOT IN (' . $array . ') AND BSAlanID = ' . $adminID . ' AND BSAdminBildirimID < ' . $bildirimID . ' ORDER BY BSAdminBildirimID DESC LIMIT 3';
         return($this->db->select($sql));
     }
 
-    //admin tur listele
+    //loader duyuru
+    public function loaderDuyurular($adminID, $duyuruID) {
+        $sql = 'SELECT BSAdminDuyuruID, BSDuyuruText,BSOkundu, BSDuyuruTarih FROM bsadminduyuru WHERE  BSAlanID = ' . $adminID . ' AND BSAdminDuyuruID < ' . $duyuruID . ' ORDER BY BSAdminDuyuruID DESC LIMIT 3';
+        return($this->db->select($sql));
+    }
+
+    //admin bildirim listele
     public function tumbildirimListele($array = array(), $adminID) {
-        $sql = 'SELECT BSAdminBildirimID,BSBildirimText,BSBildirimIcon,BSBildirimUrl,BSBildirimRenk,BSGonderenID,BSGonderenAdSoyad,BSBildirimTarih FROM bsadminbildirim WHERE  BSBildirimTip NOT IN (' . $array . ') AND  BSAlanID=' . $adminID . '  ORDER BY BSBildirimTarih DESC';
+        $sql = 'SELECT BSAdminBildirimID, BSBildirimText, BSBildirimIcon, BSBildirimUrl, BSBildirimRenk, BSGonderenID, BSGonderenAdSoyad, BSBildirimTarih FROM bsadminbildirim WHERE BSBildirimTip NOT IN (' . $array . ') AND BSAlanID = ' . $adminID . ' ORDER BY BSBildirimTarih DESC';
         return($this->db->select($sql));
     }
 
     //admin bildirim Count
     public function adminBildirimlerCount($array = array(), $adminID) {
-        $sql = 'SELECT COUNT(*) FROM bsadminbildirim WHERE  BSBildirimTip NOT IN (' . $array . ') AND  BSGoruldu=0 AND BSAlanID=' . $adminID;
+        $sql = 'SELECT COUNT(*) FROM bsadminbildirim WHERE BSBildirimTip NOT IN (' . $array . ') AND BSGoruldu = 0 AND BSAlanID = ' . $adminID;
+        return($this->db->select($sql));
+    }
+
+    //admin duyurular Count
+    public function adminDuyurularCount($adminID) {
+        $sql = 'SELECT COUNT(*) FROM bsadminduyuru WHERE  BSGoruldu = 0 AND BSAlanID = ' . $adminID;
+        return($this->db->select($sql));
+    }
+
+    //admin duyuru listele
+    public function tumduyuruListele($adminID) {
+        $sql = 'SELECT BSAdminDuyuruID,BSDuyuruText,BSDuyuruTarih,BSDuyuruHedef FROM bsadminduyuru WHERE BSAlanID = ' . $adminID . ' ORDER BY BSDuyuruTarih DESC';
+        return($this->db->select($sql));
+    }
+
+    //duyuru count listele
+    public function duyuruCountListele($adminID) {
+        $sql = 'SELECT COUNT(*) FROM bsadminduyuru WHERE BSAlanID=' . $adminID;
         return($this->db->select($sql));
     }
 
     //ortak bölgeler
     public function ortakBolge($adminID) {
-        $sql = 'SELECT BSBolgeID FROM bsadminbolge Where BSAdminID=' . $adminID;
+        $sql = 'SELECT BSBolgeID FROM bsadminbolge Where BSAdminID = ' . $adminID;
         return($this->db->select($sql));
     }
 
     //ortak bölgeler
     public function ortakAdminBolge($bolgeID) {
-        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge Where BSBolgeID=' . $bolgeID . ' AND NOT BSAdminID=1';
+        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge Where BSBolgeID = ' . $bolgeID . ' AND NOT BSAdminID = 1';
         return($this->db->select($sql));
     }
 
     //ortak bölgeler
     public function ortakDigerAdminBolge($array = array()) {
-        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge Where BSBolgeID IN (' . $array . ') AND NOT BSAdminID=1';
+        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge Where BSBolgeID IN (' . $array . ') AND NOT BSAdminID = 1';
         return($this->db->select($sql));
     }
 
@@ -157,7 +213,7 @@ class Panel_Model extends Model {
 
     //admin diğer ortak bölgeler
     public function digerOrtakTekBolge($bolgeID, $array = array()) {
-        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge Where BSBolgeID =' . $bolgeID . ' AND BSAdminID NOT IN (' . $array . ')';
+        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge Where BSBolgeID = ' . $bolgeID . ' AND BSAdminID NOT IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
@@ -1979,8 +2035,8 @@ class Panel_Model extends Model {
     }
 
     //duyruu detail bölge admin
-    public function duyuruBolgeMultiAdmin($array = array()) {
-        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge Where BSBolgeID IN (' . $array . ')';
+    public function duyuruBolgeMultiAdmin($array = array(), $adminID) {
+        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge Where BSBolgeID IN (' . $array . ') AND NOT BSAdminID=' . $adminID;
         return($this->db->select($sql));
     }
 
@@ -2048,6 +2104,36 @@ class Panel_Model extends Model {
     public function duyuruTurMultiSelect($array = array()) {
         $sql = 'SELECT SBTurID, SBTurAd FROM sbtur Where SBKurumID IN (' . $array . ') ORDER BY SBTurAd ASC';
         return($this->db->select($sql));
+    }
+
+    //admin duyuru save
+    public function addAdminDuyuru($data) {
+        return ($this->db->multiInsert('bsadminduyuru', $data));
+    }
+
+    //sofor duyuru save
+    public function addSoforDuyuru($data) {
+        return ($this->db->multiInsert('bssoforduyuru', $data));
+    }
+
+    //hostes duyuru save
+    public function addHostesDuyuru($data) {
+        return ($this->db->multiInsert('bshostesduyuru', $data));
+    }
+
+    //veli duyuru save
+    public function addVeliDuyuru($data) {
+        return ($this->db->multiInsert('bsveliduyuru', $data));
+    }
+
+    //öğrenci duyuru save
+    public function addOgrenciDuyuru($data) {
+        return ($this->db->multiInsert('bsogrenciduyuru', $data));
+    }
+
+    //işçi duyuru save
+    public function addIsciDuyuru($data) {
+        return ($this->db->multiInsert('sbisciduyuru', $data));
     }
 
 }

@@ -1423,43 +1423,6 @@ $.AdminIslemler = {
         $("textarea[name=KurumAciklama]").val('');
         return true;
     },
-    adminKurumKaydet: function () {
-        AdminKurumKaydet = [];
-        var kurum_adi = $("input[name=KurumAdi]").val();
-        var kurum_aciklama = $("textarea[name=KurumAciklama]").val();
-        AdminKurumKaydet.push(kurum_adi);
-        AdminKurumKaydet.push(kurum_adi);
-        if (bolge_adi != '') {
-            $.ajax({
-                data: {"kurum_adi": kurum_adi, "kurum_aciklama": kurum_aciklama, "tip": "adminKurumYeniKaydet"},
-                success: function (cevap) {
-                    if (cevap.hata) {
-                        AdminKurumKaydet = [];
-                        reset();
-                        alertify.alert(jsDil.Hata);
-                        return false;
-                    } else {
-                        reset();
-                        alertify.success(jsDil.KurumKaydet);
-                        var kurumCount = $('#smallBolge').text();
-                        kurumCount++;
-                        $('#smallBolge').text(kurumCount);
-                        var addRow = ("<tr style='background-color:#F2F2F2'><td><a class='svToggle' data-type='svDetail' role='button' data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newBolgeID + "'>"
-                                + "<i class='fa fa-search'></i> " + AdminBolgeKaydet[0] + "</a>"
-                                + "</td><td class='hidden-xs'>0</td><td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td>"
-                                + "<td class='hidden-xs'>0</td>"
-                                + "<td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td></tr>");
-                        NewKurumTable.DataTable().row.add($(addRow)).draw();
-                    }
-                }
-            });
-            return true;
-        } else {
-            reset();
-            alertify.alert(jsDil.KurumAd);
-            return false;
-        }
-    },
     adminKurumDetailSil: function () {
         reset();
         alertify.confirm(jsDil.SilOnay, function (e) {

@@ -19,7 +19,7 @@ $.ajaxSetup({
 });
 $(document).ready(function () {
 
-    duyuruTable = $('#duyuruTable').dataTable({
+    DuyuruTable = $('#duyuruTable').dataTable({
         "paging": true,
         "ordering": true,
         "info": true
@@ -313,7 +313,7 @@ $(document).ready(function () {
                             var adminlength = cevap.duyuruAdmin.AdminID.length;
                             $("#AdminCount").text('(' + adminlength + ')');
                             for (var i = 0; i < adminlength; i++) {
-                                $("ul#userAdmin").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruAdmin.AdminID[i] + '"/>' + ' ' + cevap.duyuruAdmin.AdminAd[i] + ' ' + cevap.duyuruAdmin.AdminSoyad[i] + '</label></li>');
+                                $("ul#userAdmin").append('<li value="' + cevap.duyuruAdmin.AdminID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruAdmin.AdminAd[i] + ' ' + cevap.duyuruAdmin.AdminSoyad[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -349,7 +349,7 @@ $(document).ready(function () {
                             var soforlength = cevap.duyuruSofor.SoforID.length;
                             $("#SoforCount").text('(' + soforlength + ')');
                             for (var i = 0; i < soforlength; i++) {
-                                $("ul#userSofor").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruSofor.SoforID[i] + '"/>' + ' ' + cevap.duyuruSofor.SoforAd[i] + '</label></li>');
+                                $("ul#userSofor").append('<li value="' + cevap.duyuruSofor.SoforID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruSofor.SoforAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -385,7 +385,7 @@ $(document).ready(function () {
                             var hosteslength = cevap.duyuruHostes.HostesID.length;
                             $("#HostesCount").text('(' + hosteslength + ')');
                             for (var i = 0; i < hosteslength; i++) {
-                                $("ul#userHostes").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruHostes.HostesID[i] + '"/>' + ' ' + cevap.duyuruHostes.HostesAd[i] + '</label></li>');
+                                $("ul#userHostes").append('<li value="' + cevap.duyuruHostes.HostesID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruHostes.HostesAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -421,7 +421,7 @@ $(document).ready(function () {
                             var velilength = cevap.duyuruVeli.VeliID.length;
                             $("#VeliCount").text('(' + velilength + ')');
                             for (var i = 0; i < velilength; i++) {
-                                $("ul#userVeli").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruVeli.VeliID[i] + '"/>' + ' ' + cevap.duyuruVeli.VeliAd[i] + '</label></li>');
+                                $("ul#userVeli").append('<li value="' + cevap.duyuruVeli.VeliID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruVeli.VeliAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -457,7 +457,7 @@ $(document).ready(function () {
                             var ogrencilength = cevap.duyuruOgrenci.OgrenciID.length;
                             $("#OgrenciCount").text('(' + ogrencilength + ')');
                             for (var i = 0; i < ogrencilength; i++) {
-                                $("ul#userOgrenci").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruOgrenci.OgrenciID[i] + '"/>' + ' ' + cevap.duyuruOgrenci.OgrenciAd[i] + '</label></li>');
+                                $("ul#userOgrenci").append('<li value="' + cevap.duyuruOgrenci.OgrenciID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruOgrenci.OgrenciAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -493,7 +493,7 @@ $(document).ready(function () {
                             var personellength = cevap.duyuruPersonel.PersonelID.length;
                             $("#PersonelCount").text('(' + personellength + ')');
                             for (var i = 0; i < personellength; i++) {
-                                $("ul#userPersonel").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruPersonel.PersonelID[i] + '"/>' + ' ' + cevap.duyuruPersonel.PersonelAd[i] + '</label></li>');
+                                $("ul#userPersonel").append('<li value="' + cevap.duyuruPersonel.PersonelID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruPersonel.PersonelAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -528,7 +528,7 @@ $(document).ready(function () {
                             var adminlength = cevap.duyuruAdmin.AdminID.length;
                             $("#AdminCount").text('(' + adminlength + ')');
                             for (var i = 0; i < adminlength; i++) {
-                                $("ul#userAdmin").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruAdmin.AdminID[i] + '"/>' + ' ' + cevap.duyuruAdmin.AdminAd[i] + ' ' + cevap.duyuruAdmin.AdminSoyad[i] + '</label></li>');
+                                $("ul#userAdmin").append('<li value="' + cevap.duyuruAdmin.AdminID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruAdmin.AdminAd[i] + ' ' + cevap.duyuruAdmin.AdminSoyad[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -564,7 +564,7 @@ $(document).ready(function () {
                             var soforlength = cevap.duyuruSofor.SoforID.length;
                             $("#SoforCount").text('(' + soforlength + ')');
                             for (var i = 0; i < soforlength; i++) {
-                                $("ul#userSofor").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruSofor.SoforID[i] + '"/>' + ' ' + cevap.duyuruSofor.SoforAd[i] + '</label></li>');
+                                $("ul#userSofor").append('<li value="' + cevap.duyuruSofor.SoforID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruSofor.SoforAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -600,7 +600,7 @@ $(document).ready(function () {
                             var hosteslength = cevap.duyuruHostes.HostesID.length;
                             $("#HostesCount").text('(' + hosteslength + ')');
                             for (var i = 0; i < hosteslength; i++) {
-                                $("ul#userHostes").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruHostes.HostesID[i] + '"/>' + ' ' + cevap.duyuruHostes.HostesAd[i] + '</label></li>');
+                                $("ul#userHostes").append('<li value="' + cevap.duyuruHostes.HostesID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruHostes.HostesAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -636,7 +636,7 @@ $(document).ready(function () {
                             var velilength = cevap.duyuruVeli.VeliID.length;
                             $("#VeliCount").text('(' + velilength + ')');
                             for (var i = 0; i < velilength; i++) {
-                                $("ul#userVeli").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruVeli.VeliID[i] + '"/>' + ' ' + cevap.duyuruVeli.VeliAd[i] + '</label></li>');
+                                $("ul#userVeli").append('<li value="' + cevap.duyuruVeli.VeliID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruVeli.VeliAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -672,7 +672,7 @@ $(document).ready(function () {
                             var ogrencilength = cevap.duyuruOgrenci.OgrenciID.length;
                             $("#OgrenciCount").text('(' + ogrencilength + ')');
                             for (var i = 0; i < ogrencilength; i++) {
-                                $("ul#userOgrenci").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruOgrenci.OgrenciID[i] + '"/>' + ' ' + cevap.duyuruOgrenci.OgrenciAd[i] + '</label></li>');
+                                $("ul#userOgrenci").append('<li value="' + cevap.duyuruOgrenci.OgrenciID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruOgrenci.OgrenciAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -708,7 +708,7 @@ $(document).ready(function () {
                             var personellength = cevap.duyuruPersonel.PersonelID.length;
                             $("#PersonelCount").text('(' + personellength + ')');
                             for (var i = 0; i < personellength; i++) {
-                                $("ul#userPersonel").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruPersonel.PersonelID[i] + '"/>' + ' ' + cevap.duyuruPersonel.PersonelAd[i] + '</label></li>');
+                                $("ul#userPersonel").append('<li value="' + cevap.duyuruPersonel.PersonelID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruPersonel.PersonelAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -743,7 +743,7 @@ $(document).ready(function () {
                             var adminlength = cevap.duyuruAdmin.AdminID.length;
                             $("#AdminCount").text('(' + adminlength + ')');
                             for (var i = 0; i < adminlength; i++) {
-                                $("ul#userAdmin").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruAdmin.AdminID[i] + '"/>' + ' ' + cevap.duyuruAdmin.AdminAd[i] + ' ' + cevap.duyuruAdmin.AdminSoyad[i] + '</label></li>');
+                                $("ul#userAdmin").append('<li value="' + cevap.duyuruAdmin.AdminID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruAdmin.AdminAd[i] + ' ' + cevap.duyuruAdmin.AdminSoyad[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -779,7 +779,7 @@ $(document).ready(function () {
                             var soforlength = cevap.duyuruSofor.SoforID.length;
                             $("#SoforCount").text('(' + soforlength + ')');
                             for (var i = 0; i < soforlength; i++) {
-                                $("ul#userSofor").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruSofor.SoforID[i] + '"/>' + ' ' + cevap.duyuruSofor.SoforAd[i] + '</label></li>');
+                                $("ul#userSofor").append('<li value="' + cevap.duyuruSofor.SoforID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruSofor.SoforAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -815,7 +815,7 @@ $(document).ready(function () {
                             var hosteslength = cevap.duyuruHostes.HostesID.length;
                             $("#HostesCount").text('(' + hosteslength + ')');
                             for (var i = 0; i < hosteslength; i++) {
-                                $("ul#userHostes").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruHostes.HostesID[i] + '"/>' + ' ' + cevap.duyuruHostes.HostesAd[i] + '</label></li>');
+                                $("ul#userHostes").append('<li value="' + cevap.duyuruHostes.HostesID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruHostes.HostesAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -851,7 +851,7 @@ $(document).ready(function () {
                             var velilength = cevap.duyuruVeli.VeliID.length;
                             $("#VeliCount").text('(' + velilength + ')');
                             for (var i = 0; i < velilength; i++) {
-                                $("ul#userVeli").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruVeli.VeliID[i] + '"/>' + ' ' + cevap.duyuruVeli.VeliAd[i] + '</label></li>');
+                                $("ul#userVeli").append('<li value="' + cevap.duyuruVeli.VeliID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruVeli.VeliAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -887,7 +887,7 @@ $(document).ready(function () {
                             var ogrencilength = cevap.duyuruOgrenci.OgrenciID.length;
                             $("#OgrenciCount").text('(' + ogrencilength + ')');
                             for (var i = 0; i < ogrencilength; i++) {
-                                $("ul#userOgrenci").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruOgrenci.OgrenciID[i] + '"/>' + ' ' + cevap.duyuruOgrenci.OgrenciAd[i] + '</label></li>');
+                                $("ul#userOgrenci").append('<li value="' + cevap.duyuruOgrenci.OgrenciID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruOgrenci.OgrenciAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -923,7 +923,7 @@ $(document).ready(function () {
                             var personellength = cevap.duyuruPersonel.PersonelID.length;
                             $("#PersonelCount").text('(' + personellength + ')');
                             for (var i = 0; i < personellength; i++) {
-                                $("ul#userPersonel").append('<li class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked value="' + cevap.duyuruPersonel.PersonelID[i] + '"/>' + ' ' + cevap.duyuruPersonel.PersonelAd[i] + '</label></li>');
+                                $("ul#userPersonel").append('<li value="' + cevap.duyuruPersonel.PersonelID[i] + '" class="list-group-item"><label class="control-label"><input name="kullanici" type="checkbox" class="" checked />' + ' ' + cevap.duyuruPersonel.PersonelAd[i] + '</label></li>');
                             }
                             checkIt();
                         } else {
@@ -969,6 +969,104 @@ $.AdminIslemler = {
             }
         });
         return true;
+    },
+    adminDuyuruGonder: function () {
+        var admin = new Array();
+        var adminText = new Array();
+        var sofor = new Array();
+        var soforText = new Array();
+        var hostes = new Array();
+        var hostesText = new Array();
+        var veli = new Array();
+        var veliText = new Array();
+        var ogrenci = new Array();
+        var ogrenciText = new Array();
+        var personel = new Array();
+        var personelText = new Array();
+        //admin
+        var adminLength = $("#userAdmin>li").length;
+        for (var a = 0; a < adminLength; a++) {
+            if ($("#userAdmin>li:eq(" + a + ")>label>div>input").prop("checked")) {
+                admin.push($("#userAdmin>li:eq(" + a + ")").val());
+                adminText.push($("#userAdmin>li:eq(" + a + ")").text());
+            }
+        }
+        //sofor
+        var soforLength = $("#userSofor>li").length;
+        for (var s = 0; s < soforLength; s++) {
+            if ($("#userSofor>li:eq(" + s + ")>label>div>input").prop("checked")) {
+                sofor.push($("#userSofor>li:eq(" + s + ")").val());
+                soforText.push($("#userSofor>li:eq(" + s + ")").text());
+            }
+        }
+        //hostes
+        var hostesLength = $("#userHostes>li").length;
+        for (var h = 0; h < hostesLength; h++) {
+            if ($("#userHostes>li:eq(" + h + ")>label>div>input").prop("checked")) {
+                hostes.push($("#userHostes>li:eq(" + h + ")").val());
+                hostesText.push($("#userHostes>li:eq(" + h + ")").text());
+            }
+        }
+        //veli
+        var veliLength = $("#userVeli>li").length;
+        for (var v = 0; v < veliLength; v++) {
+            if ($("#userVeli>li:eq(" + v + ")>label>div>input").prop("checked")) {
+                veli.push($("#userVeli>li:eq(" + v + ")").val());
+                veliText.push($("#userVeli>li:eq(" + v + ")").text());
+            }
+        }
+        //öğrenci
+        var ogrenciLength = $("#userOgrenci>li").length;
+        for (var o = 0; o < ogrenciLength; o++) {
+            if ($("#userOgrenci>li:eq(" + o + ")>label>div>input").prop("checked")) {
+                ogrenci.push($("#userOgrenci>li:eq(" + o + ")").val());
+                ogrenciText.push($("#userOgrenci>li:eq(" + o + ")").text());
+            }
+        }
+        //personel
+        var personelLength = $("#userPersonel>li").length;
+        for (var p = 0; p < personelLength; p++) {
+            if ($("#userPersonel>li:eq(" + p + ")>label>div>input").prop("checked")) {
+                personel.push($("#userPersonel>li:eq(" + p + ")").val());
+                personelText.push($("#userPersonel>li:eq(" + p + ")").text());
+            }
+        }
+        var hedef = admin.length + sofor.length + hostes.length + veli.length + ogrenci.length + personel.length;
+        if (hedef == 0) {
+            reset();
+            alertify.alert(jsDil.HedefKullanici);
+            return false;
+        } else {
+            var duyuruText = $("#duyuruText").val();
+            $.ajax({
+                data: {"admin[]": admin, "adminText[]": adminText, "sofor[]": sofor, "soforText[]": soforText,
+                    "hostes[]": hostes, "hostesText[]": hostesText, "veli[]": veli, "veliText[]": veliText,
+                    "ogrenci[]": ogrenci, "ogrenciText[]": ogrenciText, "personel[]": personel,
+                    "personelText[]": personelText, "duyuruText": duyuruText, "hedef": hedef, "tip": "duyuruGonder"},
+                success: function (cevap) {
+                    if (cevap.hata) {
+                        reset();
+                        alertify.alert(jsDil.Hata);
+                        return false;
+                    } else {
+                        if (cevap.duyuru) {
+                            var dt = new Date();
+                            var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+                            var date = dt.getDate() + "/" + dt.getMonth() + "/" + dt.getFullYear();
+                            reset();
+                            alertify.success(jsDil.DuyuruGonder);
+                            var addRow = "<tr><td>"
+                                    + "<a data-toggle='tooltip' data-placement='top'>"
+                                    + "<i class='fa fa-bullhorn'></i>" + ' ' + time + '--' + date + "</a></td>"
+                                    + "<td class='hidden-xs'>" + duyuruText + "</td>"
+                                    + "<td class='hidden-xs'>" + hedef + ' ' + jsDil.Kullanici + "</td></tr>";
+                            DuyuruTable.DataTable().row.add($(addRow)).draw();
+                        }
+                    }
+                }
+            });
+            return true;
+        }
     },
 }
 

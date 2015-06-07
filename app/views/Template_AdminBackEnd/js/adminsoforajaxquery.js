@@ -366,7 +366,7 @@ $.AdminIslemler = {
                                                                 + "<td class='hidden-xs'>" + soforSoyad + "</td>"
                                                                 + "<td class='hidden-xs'>" + soforTelefon + "</td>"
                                                                 + "<td class='hidden-xs'>" + soforEmail + "</td>"
-                                                                + "<td class='hidden-xs'>" + aciklama + "</td>";
+                                                                + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
                                                         SoforTable.DataTable().row.add($(addRow)).draw();
                                                     } else {
                                                         var addRow = "<tr style='background-color:#F2F2F2'><td>"
@@ -375,7 +375,7 @@ $.AdminIslemler = {
                                                                 + "<td class='hidden-xs'>" + soforSoyad + "</td>"
                                                                 + "<td class='hidden-xs'>" + soforTelefon + "</td>"
                                                                 + "<td class='hidden-xs'>" + soforEmail + "</td>"
-                                                                + "<td class='hidden-xs'>" + aciklama + "</td>";
+                                                                + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
                                                         SoforTable.DataTable().row.add($(addRow)).draw();
                                                     }
                                                     soforBolgeID = [];

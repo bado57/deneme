@@ -241,6 +241,8 @@ class tr {
             "Soyad" => "Soyad",
             "ProfilBilgi" => "Profil Bilgileri",
             "KisiselBilgi" => "Kişisel Bilgiler",
+            'Kullanici' => 'Kullanıcı',
+            "DuyuruYok" => "Daha Fazla Gösterilecek Duyuru Yok",
         );
         return $trdil;
     }
