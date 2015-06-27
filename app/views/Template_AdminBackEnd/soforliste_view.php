@@ -194,6 +194,7 @@
             <div class="row" id="getPartialView">
                 <div class="form-vertical addKurumForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <input id="soforDetayID" name="soforDetayID" type="hidden" value="" />
+                    <input id="soforDetayAdres" name="soforDetayAdres" type="hidden" value="" />
                     <div class="form-group">
                         <label for="SoforDetayAdi"><?php echo $data["Adi"]; ?></label>
                         <input type="text" class="form-control dsb" id="SoforDetayAdi" name="SoforDetayAdi" value="" disabled>

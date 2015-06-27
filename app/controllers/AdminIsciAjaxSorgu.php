@@ -121,6 +121,7 @@ class AdminIsciAjaxSorgu extends Controller {
                                     $form->post('sokak', true);
                                     $form->post('postakodu', true);
                                     $form->post('caddeno', true);
+                                    $form->post('detayAdres', true);
 
                                     $isciAd = $form->values['isciAd'];
                                     $isciSoyad = $form->values['isciSoyad'];
@@ -150,6 +151,7 @@ class AdminIsciAjaxSorgu extends Controller {
                                             'SBIsciPostaKodu' => $form->values['postakodu'],
                                             'SBIsciCaddeNo' => $form->values['caddeno'],
                                             'SBIsciAdres' => $form->values['isciAdres'],
+                                            'SBIsciDetayAdres' => $form->values['detayAdres'],
                                             'Status' => $form->values['isciDurum'],
                                             'SBIsciAciklama' => $form->values['aciklama']
                                         );
@@ -328,6 +330,7 @@ class AdminIsciAjaxSorgu extends Controller {
                                 $isciList[$e]['IsciListPostaKodu'] = $isciOzellikk['SBIsciPostaKodu'];
                                 $isciList[$e]['IsciListCaddeNo'] = $isciOzellikk['SBIsciCaddeNo'];
                                 $isciList[$e]['IsciListAdres'] = $isciOzellikk['SBIsciAdres'];
+                                $isciList[$e]['IsciListDetayAdres'] = $isciOzellikk['SBIsciDetayAdres'];
                                 $isciList[$e]['IsciListDurum'] = $isciOzellikk['Status'];
                                 $isciList[$e]['IsciListAciklama'] = $isciOzellikk['SBIsciAciklama'];
                                 $e++;
@@ -435,6 +438,7 @@ class AdminIsciAjaxSorgu extends Controller {
                                 $isciList[$e]['IsciListPostaKodu'] = $isciOzellikk['SBIsciPostaKodu'];
                                 $isciList[$e]['IsciListCaddeNo'] = $isciOzellikk['SBIsciCaddeNo'];
                                 $isciList[$e]['IsciListAdres'] = $isciOzellikk['SBIsciAdres'];
+                                $isciList[$e]['IsciListDetayAdres'] = $isciOzellikk['SBIsciDetayAdres'];
                                 $isciList[$e]['IsciListDurum'] = $isciOzellikk['Status'];
                                 $isciList[$e]['IsciListAciklama'] = $isciOzellikk['SBIsciAciklama'];
                                 $e++;
@@ -529,6 +533,7 @@ class AdminIsciAjaxSorgu extends Controller {
                         $form->post('isciDetaySokak', true);
                         $form->post('isciDetayPostaKodu', true);
                         $form->post('isciDetayCaddeNo', true);
+                        $form->post('detayAdres', true);
 
                         $isciAd = $form->values['isciDetayAd'];
                         $isciSoyad = $form->values['isciDetaySoyad'];
@@ -555,6 +560,7 @@ class AdminIsciAjaxSorgu extends Controller {
                                 'SBIsciPostaKodu' => $form->values['isciDetayPostaKodu'],
                                 'SBIsciCaddeNo' => $form->values['isciDetayCaddeNo'],
                                 'SBIsciAdres' => $form->values['isciDetayAdres'],
+                                'SBIsciDetayAdres' => $form->values['detayAdres'],
                                 'SBIsciAciklama' => $form->values['isciDetayAciklama'],
                                 'Status' => $form->values['isciDetayDurum']
                             );

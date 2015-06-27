@@ -227,6 +227,7 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                     $form->post('sokak', true);
                                     $form->post('postakodu', true);
                                     $form->post('caddeno', true);
+                                    $form->post('detayAdres', true);
 
                                     $ogrenciAd = $form->values['ogrenciAd'];
                                     $ogrenciSoyad = $form->values['ogrenciSoyad'];
@@ -258,6 +259,7 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                             'BSOgrenciPostaKodu' => $form->values['postakodu'],
                                             'BSOgrenciCaddeNo' => $form->values['caddeno'],
                                             'BSOgrenciAdres' => $form->values['ogrenciAdres'],
+                                            'BSOgrenciDetayAdres' => $form->values['detayAdres'],
                                             'Status' => $form->values['ogrenciDurum'],
                                             'BSOgrenciAciklama' => $form->values['aciklama']
                                         );
@@ -496,6 +498,7 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                 $ogrenciList[$e]['OgrenciListPostaKodu'] = $ogrenciOzellikk['BSOgrenciPostaKodu'];
                                 $ogrenciList[$e]['OgrenciListCaddeNo'] = $ogrenciOzellikk['BSOgrenciCaddeNo'];
                                 $ogrenciList[$e]['OgrenciListAdres'] = $ogrenciOzellikk['BSOgrenciAdres'];
+                                $ogrenciList[$e]['OgrenciListDetayAdres'] = $ogrenciOzellikk['BSOgrenciDetayAdres'];
                                 $ogrenciList[$e]['OgrenciListDurum'] = $ogrenciOzellikk['Status'];
                                 $ogrenciList[$e]['OgrenciListAciklama'] = $ogrenciOzellikk['BSOgrenciAciklama'];
                                 $e++;
@@ -633,6 +636,7 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                 $ogrenciList[$e]['OgrenciListPostaKodu'] = $ogrenciOzellikk['BSOgrenciPostaKodu'];
                                 $ogrenciList[$e]['OgrenciListCaddeNo'] = $ogrenciOzellikk['BSOgrenciCaddeNo'];
                                 $ogrenciList[$e]['OgrenciListAdres'] = $ogrenciOzellikk['BSOgrenciAdres'];
+                                $ogrenciList[$e]['OgrenciListDetayAdres'] = $ogrenciOzellikk['BSOgrenciDetayAdres'];
                                 $ogrenciList[$e]['OgrenciListDurum'] = $ogrenciOzellikk['Status'];
                                 $ogrenciList[$e]['OgrenciListAciklama'] = $ogrenciOzellikk['BSOgrenciAciklama'];
                                 $e++;
@@ -720,6 +724,8 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         $form->post('ogrenciDetaySokak', true);
                         $form->post('ogrenciDetayPostaKodu', true);
                         $form->post('ogrenciDetayCaddeNo', true);
+                        $form->post('detayAdres', true);
+
 
                         $ogrenciAd = $form->values['ogrenciDetayAd'];
                         $ogrenciSoyad = $form->values['ogrenciDetaySoyad'];
@@ -748,6 +754,7 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                 'BSOgrenciPostaKodu' => $form->values['ogrenciDetayPostaKodu'],
                                 'BSOgrenciCaddeNo' => $form->values['ogrenciDetayCaddeNo'],
                                 'BSOgrenciAdres' => $form->values['ogrenciDetayAdres'],
+                                'BSOgrenciDetayAdres' => $form->values['detayAdres'],
                                 'BSOgrenciAciklama' => $form->values['ogrenciDetayAciklama'],
                                 'Status' => $form->values['ogrenciDetayDurum']
                             );

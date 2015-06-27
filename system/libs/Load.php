@@ -57,6 +57,12 @@ class Load {
         return new $fileName;
     }
 
+    //mobil language
+    public function mobillanguage($fileName) {
+        include "app/mobillanguage/" . $fileName . ".php";
+        return new $fileName;
+    }
+
     //language
     public function frontmultilanguage($fileName) {
         include "app/frontlanguage/" . $fileName . ".php";

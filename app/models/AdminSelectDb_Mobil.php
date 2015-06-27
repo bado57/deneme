@@ -23,20 +23,19 @@ class AdminSelectDb_Mobil extends ModelMobile {
             return false;
         }
     }
-        
+
     //moıbil taraftan gelen sorgu için firma sayfasına göre
     public function adminFirmMobil($firma_Kod) {
-        $sql = 'SELECT rootfirmaID FROM rootfirma WHERE rootfirmaKodu="'.$firma_Kod.'" LIMIT 1';
+        $sql = 'SELECT rootfirmaID FROM rootfirma WHERE rootfirmaKodu="' . $firma_Kod . '" LIMIT 1';
         $count = $this->db->affectedRows($sql);
         if ($count > 0) {
-            $sql = 'SELECT * FROM rootfirma WHERE rootfirmaKodu="'.$firma_Kod.'" LIMIT 1';
+            $sql = 'SELECT * FROM rootfirma WHERE rootfirmaKodu="' . $firma_Kod . '" LIMIT 1';
             return $this->db->select($sql);
         } else {
             return false;
         }
     }
-    
-    
+
     //mobil tarafaından id ile sorgu
     public function adminFirmMobilID($loginfirmaID) {
         $sql = "SELECT rootfirmaID FROM rootfirma WHERE rootfirmaID=" . $loginfirmaID . ' LIMIT 1';

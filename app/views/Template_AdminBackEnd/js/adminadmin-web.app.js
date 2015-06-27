@@ -310,7 +310,7 @@ function initialize() {
                 //timeout:3000,
                 dataType: "json",
                 success: function (cevap) {
-                    console.log(cevap);
+                    
                     ttl = cevap.results[0].formatted_address;
                     placeMarker(event.latLng);
                     incomeLocation = cevap;

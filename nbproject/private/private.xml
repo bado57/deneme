@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="4">
+        <file>
+            <url>app/views/Template_Sofor/soforprofil_view.php</url>
+            <bookmark id="4">
+                <name/>
+                <line>21</line>
+                <key/>
+            </bookmark>
+        </file>
         <file>
             <url>app/views/Template_AdminBackEnd/js/adminbildirimayarajaxquery.js</url>
             <bookmark id="1">
@@ -12,13 +20,14 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/adminduyuru-web.app.js</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/language/tr.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/bildirimliste_view.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/adminduyuruajaxquery.js</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/adminbildirimayar-web.app.js</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/controllers/AdminWeb.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/duyuruliste_view.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/left_view.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/MobileAdmin/adminbolgemobil_view.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js/adminajax.mobile.js</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_Sofor/soforprofil_view.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_Sofor/js/profilajaxquery.js</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/MobileAdmin/adminfirmamobil_view.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js/shuttle-mobile-app.js</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/controllers/SoforMobilServis.php</file>
         </group>
     </open-files>
 </project-private>

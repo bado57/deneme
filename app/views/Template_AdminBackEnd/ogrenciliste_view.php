@@ -199,6 +199,7 @@
             <div class="row" id="getPartialView">
                 <div class="form-vertical addOgrenciForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <input id="ogrenciDetayID" name="ogrenciDetayID" type="hidden" value="" />
+                    <input id="ogrenciDetayAdres" name="ogrenciDetayAdres" type="hidden" value="" />
                     <div class="form-group">
                         <label for="OgrenciDetayAdi"><?php echo $data["Adi"]; ?></label>
                         <input type="text" class="form-control dsb" id="OgrenciDetayAdi" name="OgrenciDetayAdi" value="" disabled>

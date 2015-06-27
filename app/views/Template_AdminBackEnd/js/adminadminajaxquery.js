@@ -54,6 +54,7 @@ $(document).ready(function () {
                     $("input[name=postal_code]").val(cevap.adminDetail[0].AdminListPostaKodu);
                     $("input[name=street_number]").val(cevap.adminDetail[0].AdminListCaddeNo);
                     $("input[name=adminDetayID]").val(cevap.adminDetail[0].AdminListID);
+                    $("input[name=adminDetayAdres]").val(cevap.adminDetail[0].AdminListDetayAdres);
                     var SelectBolgeOptions = new Array();
                     if (cevap.adminBolge) {
                         var bolgelength = cevap.adminBolge.length;
@@ -142,7 +143,6 @@ $.AdminIslemler = {
         return true;
     },
     adminEkle: function () {
-
         var adminAd = $("input[name=AdminAdi]").val();
         adminAd = adminAd.trim();
         if (adminAd == '') {
@@ -207,7 +207,7 @@ $.AdminIslemler = {
                                                 "adminSoyad": adminSoyad, "adminDurum": adminDurum, "adminLokasyon": adminLokasyon, "adminTelefon": adminTelefon,
                                                 "adminEmail": adminEmail, "adminAdres": adminAdres, "aciklama": aciklama, "ulke": ulke,
                                                 "il": il, "ilce": ilce, "semt": semt, "mahalle": mahalle,
-                                                "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "tip": "adminKaydet"},
+                                                "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "detayAdres": ttl, "tip": "adminKaydet"},
                                             success: function (cevap) {
                                                 if (cevap.hata) {
                                                     reset();
@@ -426,7 +426,9 @@ $.AdminIslemler = {
         });
     },
     adminDetailKaydet: function () {
-
+        if (ttl == '') {
+            ttl = $("input[name=adminDetayAdres]").val();
+        }
         var admindetail_id = $("input[name=adminDetayID]").val();
         var adminAd = $("input[name=AdminDetayAdi]").val();
         var adminSoyad = $("input[name=AdminDetaySoyadi]").val();
@@ -471,81 +473,112 @@ $.AdminIslemler = {
             alertify.alert(jsDil.Degisiklik);
             return false;
         } else {
-            var bolgeselectLength = $('select#AdminDetaySelectBolge option:selected').val();
-            if (bolgeselectLength) {
-                $.ajax({
-                    data: {"admindetail_id": admindetail_id, "adminBolgeID[]": adminBolgeID, "aracBolgeAd[]": adminBolgeAd, "adminAd": adminAd,
-                        "adminSoyad": adminSoyad, "adminDurum": adminDurum, "adminLokasyon": adminLokasyon, "adminTelefon": adminTelefon,
-                        "adminEmail": adminEmail, "adminAdres": adminAdres, "aciklama": aciklama, "ulke": ulke,
-                        "il": il, "ilce": ilce, "semt": semt, "mahalle": mahalle,
-                        "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "tip": "adminDetailKaydet"},
-                    success: function (cevap) {
-                        if (cevap.hata) {
+            if (adminAd.length < 2) {
+                reset();
+                alertify.alert(jsDil.IsimKarekter);
+                return false;
+            } else {
+                adminSoyad = adminSoyad.trim();
+                if (adminSoyad == '') {
+                    reset();
+                    alertify.alert(jsDil.SoyadBos);
+                    return false;
+                } else {
+                    if (adminSoyad.length < 2) {
+                        reset();
+                        alertify.alert(jsDil.SoyadKarekter);
+                        return false;
+                    } else {
+                        if (adminEmail == ' ') {
                             reset();
-                            alertify.alert(jsDil.Hata);
+                            alertify.alert(jsDil.EpostaBos);
                             return false;
                         } else {
-                            disabledForm();
-                            reset();
-                            alertify.success(jsDil.AdminDuzenle);
-                            var SelectBolgeOptions = new Array();
-                            var SelectAracOptions = new Array();
-                            if (adminBolgeID.length > 0) {
-                                var bolgelength = adminBolgeID.length;
-                                for (var b = 0; b < bolgelength; b++) {
-                                    SelectBolgeOptions[b] = {label: adminBolgeAd[b], title: adminBolgeAd[b], value: adminBolgeID[b], disabled: true, selected: true};
-                                }
-
-                                if (adminBolgeNID.length > 0) {
-                                    var adminBolgeLength = adminBolgeNID.length;
-                                    for (var z = 0; z < adminBolgeLength; z++) {
-                                        SelectBolgeOptions[b] = {label: adminBolgeNAd[z], title: adminBolgeNAd[z], value: adminBolgeNID[z], disabled: true};
-                                        b++;
-                                    }
-
-                                }
+                            var result = ValidateEmail(adminEmail);
+                            if (!result) {
+                                reset();
+                                alertify.alert(jsDil.EpostaUygun);
+                                return false;
                             } else {
-                                if (adminBolgeNID.length > 0) {
-                                    var adminBolgeLength = adminBolgeNID.length;
-                                    for (var b = 0; b < adminBolgeLength; b++) {
-                                        SelectBolgeOptions[b] = {label: adminBolgeNAd[b], title: adminBolgeNAd[b], value: adminBolgeNID[b], disabled: true};
-                                    }
+                                var bolgeselectLength = $('select#AdminDetaySelectBolge option:selected').val();
+                                if (bolgeselectLength) {
+                                    $.ajax({
+                                        data: {"admindetail_id": admindetail_id, "adminBolgeID[]": adminBolgeID, "aracBolgeAd[]": adminBolgeAd, "adminAd": adminAd,
+                                            "adminSoyad": adminSoyad, "adminDurum": adminDurum, "adminLokasyon": adminLokasyon, "adminTelefon": adminTelefon,
+                                            "adminEmail": adminEmail, "adminAdres": adminAdres, "aciklama": aciklama, "ulke": ulke,
+                                            "il": il, "ilce": ilce, "semt": semt, "mahalle": mahalle,
+                                            "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "detayAdres": ttl, "tip": "adminDetailKaydet"},
+                                        success: function (cevap) {
+                                            if (cevap.hata) {
+                                                reset();
+                                                alertify.alert(jsDil.Hata);
+                                                return false;
+                                            } else {
+                                                disabledForm();
+                                                reset();
+                                                alertify.success(jsDil.AdminDuzenle);
+                                                var SelectBolgeOptions = new Array();
+                                                var SelectAracOptions = new Array();
+                                                if (adminBolgeID.length > 0) {
+                                                    var bolgelength = adminBolgeID.length;
+                                                    for (var b = 0; b < bolgelength; b++) {
+                                                        SelectBolgeOptions[b] = {label: adminBolgeAd[b], title: adminBolgeAd[b], value: adminBolgeID[b], disabled: true, selected: true};
+                                                    }
+
+                                                    if (adminBolgeNID.length > 0) {
+                                                        var adminBolgeLength = adminBolgeNID.length;
+                                                        for (var z = 0; z < adminBolgeLength; z++) {
+                                                            SelectBolgeOptions[b] = {label: adminBolgeNAd[z], title: adminBolgeNAd[z], value: adminBolgeNID[z], disabled: true};
+                                                            b++;
+                                                        }
+
+                                                    }
+                                                } else {
+                                                    if (adminBolgeNID.length > 0) {
+                                                        var adminBolgeLength = adminBolgeNID.length;
+                                                        for (var b = 0; b < adminBolgeLength; b++) {
+                                                            SelectBolgeOptions[b] = {label: adminBolgeNAd[b], title: adminBolgeNAd[b], value: adminBolgeNID[b], disabled: true};
+                                                        }
+                                                    }
+                                                }
+                                                $('#AdminDetaySelectBolge').multiselect('refresh');
+                                                $('#AdminDetaySelectBolge').multiselect('dataprovider', SelectBolgeOptions);
+                                                var length = $('tbody#adminRow tr').length;
+                                                for (var t = 0; t < length; t++) {
+                                                    var attrValueId = $("tbody#adminRow > tr > td > a").eq(t).attr('value');
+                                                    if (attrValueId == admindetail_id) {
+                                                        if (adminDurum != 0) {
+                                                            $("tbody#adminRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user"></i> ' + adminAd);
+                                                            $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(adminSoyad);
+                                                            $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(adminTelefon);
+                                                            $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(adminEmail);
+                                                            $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(aciklama);
+                                                            $('tbody#adminRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                        } else {
+                                                            $("tbody#adminRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user" style="color:red"></i> ' + adminAd);
+                                                            $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(adminSoyad);
+                                                            $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(adminTelefon);
+                                                            $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(adminEmail);
+                                                            $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(aciklama);
+                                                            $('tbody#adminRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                        }
+                                                    }
+                                                }
+                                                adminBolgeID = [];
+                                                adminBolgeAd = [];
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    reset();
+                                    alertify.alert(jsDil.BolgeSec);
+                                    return false;
                                 }
                             }
-                            $('#AdminDetaySelectBolge').multiselect('refresh');
-                            $('#AdminDetaySelectBolge').multiselect('dataprovider', SelectBolgeOptions);
-                            var length = $('tbody#adminRow tr').length;
-                            for (var t = 0; t < length; t++) {
-                                var attrValueId = $("tbody#adminRow > tr > td > a").eq(t).attr('value');
-                                if (attrValueId == admindetail_id) {
-                                    if (adminDurum != 0) {
-                                        $("tbody#adminRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user"></i> ' + adminAd);
-                                        $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(adminSoyad);
-                                        $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(adminTelefon);
-                                        $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(adminEmail);
-                                        $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(aciklama);
-                                        $('tbody#adminRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
-                                    } else {
-                                        $("tbody#adminRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user" style="color:red"></i> ' + adminAd);
-                                        $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(adminSoyad);
-                                        $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(adminTelefon);
-                                        $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(adminEmail);
-                                        $("tbody#adminRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(aciklama);
-                                        $('tbody#adminRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
-                                    }
-                                }
-                            }
-                            adminBolgeID = [];
-                            adminBolgeAd = [];
                         }
                     }
-                });
-            } else {
-                reset();
-                alertify.alert(jsDil.BolgeSec);
-                return false;
+                }
             }
-
         }
     }
 }

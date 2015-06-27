@@ -128,6 +128,7 @@ class AdminSoforAjaxSorgu extends Controller {
                                     $form->post('sokak', true);
                                     $form->post('postakodu', true);
                                     $form->post('caddeno', true);
+                                    $form->post('detayAdres', true);
 
                                     $soforAd = $form->values['soforAd'];
                                     $soforSoyad = $form->values['soforSoyad'];
@@ -157,6 +158,7 @@ class AdminSoforAjaxSorgu extends Controller {
                                             'BSSoforPostaKodu' => $form->values['postakodu'],
                                             'BSSoforCaddeNo' => $form->values['caddeno'],
                                             'BSSoforAdres' => $form->values['soforAdres'],
+                                            'BSSoforDetayAdres' => $form->values['detayAdres'],
                                             'Status' => $form->values['soforDurum'],
                                             'BSSoforAciklama' => $form->values['aciklama']
                                         );
@@ -336,6 +338,7 @@ class AdminSoforAjaxSorgu extends Controller {
                                 $soforList[$e]['SoforListPostaKodu'] = $soforOzellikk['BSSoforPostaKodu'];
                                 $soforList[$e]['SoforListCaddeNo'] = $soforOzellikk['BSSoforCaddeNo'];
                                 $soforList[$e]['SoforListAdres'] = $soforOzellikk['BSSoforAdres'];
+                                $soforList[$e]['SoforListDetayAdres'] = $soforOzellikk['BSSoforDetayAdres'];
                                 $soforList[$e]['SoforListDurum'] = $soforOzellikk['Status'];
                                 $soforList[$e]['SoforListAciklama'] = $soforOzellikk['BSSoforAciklama'];
                                 $e++;
@@ -444,6 +447,7 @@ class AdminSoforAjaxSorgu extends Controller {
                                 $soforList[$e]['SoforListPostaKodu'] = $soforOzellikk['BSSoforPostaKodu'];
                                 $soforList[$e]['SoforListCaddeNo'] = $soforOzellikk['BSSoforCaddeNo'];
                                 $soforList[$e]['SoforListAdres'] = $soforOzellikk['BSSoforAdres'];
+                                $soforList[$e]['SoforListDetayAdres'] = $soforOzellikk['BSSoforDetayAdres'];
                                 $soforList[$e]['SoforListDurum'] = $soforOzellikk['Status'];
                                 $soforList[$e]['SoforListAciklama'] = $soforOzellikk['BSSoforAciklama'];
                                 $e++;
@@ -538,6 +542,7 @@ class AdminSoforAjaxSorgu extends Controller {
                         $form->post('soforDetaySokak', true);
                         $form->post('soforDetayPostaKodu', true);
                         $form->post('soforDetayCaddeNo', true);
+                        $form->post('detayAdres', true);
 
                         $soforAd = $form->values['soforDetayAd'];
                         $soforSoyad = $form->values['soforDetaySoyad'];
@@ -564,6 +569,7 @@ class AdminSoforAjaxSorgu extends Controller {
                                 'BSSoforPostaKodu' => $form->values['soforDetayPostaKodu'],
                                 'BSSoforCaddeNo' => $form->values['soforDetayCaddeNo'],
                                 'BSSoforAdres' => $form->values['soforDetayAdres'],
+                                'BSSoforDetayAdres' => $form->values['detayAdres'],
                                 'BSSoforAciklama' => $form->values['soforDetayAciklama'],
                                 'Status' => $form->values['soforDetayDurum']
                             );

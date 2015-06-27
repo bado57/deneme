@@ -1,7 +1,8 @@
 <script type="text/javascript">
     var activeMenu = "menu_kullanici";
-    var activeLink = "menu_kullanici";
+    var activeLink = "link_kullaniciliste";
 </script>
+<script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminkullanici-web.app.js" type="text/javascript"></script> 
 <aside class="right-side hiddenOnSv">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -10,7 +11,6 @@
             <small><?php echo $data["KullaniciPanel"]; ?></small>
         </h1>
     </section>
-
     <!-- Main content -->
     <section class="content">
 

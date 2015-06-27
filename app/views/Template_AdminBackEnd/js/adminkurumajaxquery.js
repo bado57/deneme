@@ -1734,13 +1734,13 @@ $.AdminIslemler = {
                                         if (aracID) {
                                             var aracPlaka = $("select#TurArac option:selected").attr('label');
                                             var aracKapasite = $("select#TurArac option:selected").attr('kapasite');
-                                            var soforID = $('select#TurSofor option:selected').val();
+                                            var soforID = $('select#TurSofor option[value!="-1"]:selected').val();
                                             if (soforID) {
-                                                var soforAd = $("select#TurSofor option:selected").attr('label');
-                                                var soforLocation = $("select#TurSofor option:selected").attr('location');
-                                                var hostesID = $("select#TurHostes option:selected").val();
-                                                var hostesAd = $("select#TurHostes option:selected").attr('label');
-                                                var hostesLocation = $("select#TurHostes option:selected").attr('location');
+                                                var soforAd = $("select#TurSofor option[value!='-1']:selected").attr('label');
+                                                var soforLocation = $("select#TurSofor option[value!='-1']:selected").attr('location');
+                                                var hostesID = $("select#TurHostes option[value!='-1']:selected").val();
+                                                var hostesAd = $("select#TurHostes option[value!='-1']:selected").attr('label');
+                                                var hostesLocation = $("select#TurHostes option[value!='-1']:selected").attr('location');
                                                 var turTip = $("select#TurSelectTip option:selected").val();
                                                 var turAciklama = $("textarea[name=TurAciklama]").val();
                                                 var turKm = $("span#totalKm").text();
@@ -1960,39 +1960,39 @@ $.AdminIslemler = {
                     //Gunler
 
                     if (cevap.gidis.Pzt != 0) {
-                        SelectDetayGidisGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt', selected: true};
+                        SelectDetayGidisGunOptions[0] = {label: jsDil.Pazartesi, title: jsDil.Pazartesi, value: 'Pzt', selected: true};
                     } else {
-                        SelectDetayGidisGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt'};
+                        SelectDetayGidisGunOptions[0] = {label: jsDil.Pazartesi, title: jsDil.Pazartesi, value: 'Pzt'};
                     }
                     if (cevap.gidis.Sli != 0) {
-                        SelectDetayGidisGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli', selected: true};
+                        SelectDetayGidisGunOptions[1] = {label: jsDil.Sali, title: jsDil.Sali, value: 'Sli', selected: true};
                     } else {
-                        SelectDetayGidisGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli'};
+                        SelectDetayGidisGunOptions[1] = {label: jsDil.Sali, title: jsDil.Sali, value: 'Sli'};
                     }
                     if (cevap.gidis.Crs != 0) {
-                        SelectDetayGidisGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs', selected: true};
+                        SelectDetayGidisGunOptions[2] = {label: jsDil.Carsamba, title: jsDil.Carsamba, value: 'Crs', selected: true};
                     } else {
-                        SelectDetayGidisGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs'};
+                        SelectDetayGidisGunOptions[2] = {label: jsDil.Carsamba, title: jsDil.Carsamba, value: 'Crs'};
                     }
                     if (cevap.gidis.Prs != 0) {
-                        SelectDetayGidisGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs', selected: true};
+                        SelectDetayGidisGunOptions[3] = {label: jsDil.Persembe, title: jsDil.Persembe, value: 'Prs', selected: true};
                     } else {
-                        SelectDetayGidisGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs'};
+                        SelectDetayGidisGunOptions[3] = {label: jsDil.Persembe, title: jsDil.Persembe, value: 'Prs'};
                     }
                     if (cevap.gidis.Cma != 0) {
-                        SelectDetayGidisGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma', selected: true};
+                        SelectDetayGidisGunOptions[4] = {label: jsDil.Cuma, title: jsDil.Cuma, value: 'Cma', selected: true};
                     } else {
-                        SelectDetayGidisGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma'};
+                        SelectDetayGidisGunOptions[4] = {label: jsDil.Cuma, title: jsDil.Cuma, value: 'Cma'};
                     }
                     if (cevap.gidis.Cmt != 0) {
-                        SelectDetayGidisGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt', selected: true};
+                        SelectDetayGidisGunOptions[5] = {label: jsDil.Cumartesi, title: jsDil.Cumartesi, value: 'Cmt', selected: true};
                     } else {
-                        SelectDetayGidisGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt'};
+                        SelectDetayGidisGunOptions[5] = {label: jsDil.Cumartesi, title: jsDil.Cumartesi, value: 'Cmt'};
                     }
                     if (cevap.gidis.Pzr != 0) {
-                        SelectDetayGidisGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr', selected: true};
+                        SelectDetayGidisGunOptions[6] = {label: jsDil.Pazar, title: jsDil.Pazar, value: 'Pzr', selected: true};
                     } else {
-                        SelectDetayGidisGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr'};
+                        SelectDetayGidisGunOptions[6] = {label: jsDil.Pazar, title: jsDil.Pazar, value: 'Pzr'};
                     }
                     $('#TurDetayGidisGun').multiselect('dataprovider', SelectDetayGidisGunOptions);
                     $('#TurDetayGidisGun').multiselect('refresh');
@@ -2045,10 +2045,10 @@ $.AdminIslemler = {
         var turDetayAciklama = $('textarea[name=TurDetayGidisAciklama]').val();
         var aracID = $('select#TurDetayGidisArac option:selected').val();
         var aracText = $('select#TurDetayGidisArac option:selected').attr('label');
-        var soforID = $('select#TurDetayGidisSofor option:selected').val();
-        var soforText = $('select#TurDetayGidisSofor option:selected').attr('label');
-        var hostesID = $('select#TurDetayGidisHostes option:selected').val();
-        var hostesText = $('select#TurDetayGidisHostes option:selected').attr('label');
+        var soforID = $('select#TurDetayGidisSofor option[value!="-1"]:selected').val();
+        var soforText = $('select#TurDetayGidisSofor option[value!="-1"]:selected').attr('label');
+        var hostesID = $('select#TurDetayGidisHostes option[value!="-1"]:selected').val();
+        var hostesText = $('select#TurDetayGidisHostes option[value!="-1"]:selected').attr('label');
         var saat1 = $('select#TurDetayGidisSaat1 option:selected').val();
         var saat1Text = $('select#TurDetayGidisSaat1 option:selected').attr('label');
         var saat2 = $('select#TurDetayGidisSaat2 option:selected').val();
@@ -2067,39 +2067,39 @@ $.AdminIslemler = {
         turGidisDetailEdt.push(turDetayAd, turDetayAciklama, aracID, aracText, soforID, soforText, saat1, saat1Text, saat2, saat2Text, turGunVal, turGunText, DetailGidisGelenID, hostesID, hostesText);
         //Gün ayarları
         if (turGunVal.indexOf('Pzt') != -1) {
-            SelectDetayGidisGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt', selected: true};
+            SelectDetayGidisGunOptions[0] = {label: jsDil.Pazartesi, title: jsDil.Pazartesi, value: 'Pzt', selected: true};
         } else {
-            SelectDetayGidisGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt'};
+            SelectDetayGidisGunOptions[0] = {label: jsDil.Pazartesi, title: jsDil.Pazartesi, value: 'Pzt'};
         }
         if (turGunVal.indexOf('Sli') != -1) {
-            SelectDetayGidisGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli', selected: true};
+            SelectDetayGidisGunOptions[1] = {label: jsDil.Sali, title: jsDil.Sali, value: 'Sli', selected: true};
         } else {
-            SelectDetayGidisGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli'};
+            SelectDetayGidisGunOptions[1] = {label: jsDil.Sali, title: jsDil.Sali, value: 'Sli'};
         }
         if (turGunVal.indexOf('Crs') != -1) {
-            SelectDetayGidisGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs', selected: true};
+            SelectDetayGidisGunOptions[2] = {label: jsDil.Carsamba, title: jsDil.Carsamba, value: 'Crs', selected: true};
         } else {
-            SelectDetayGidisGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs'};
+            SelectDetayGidisGunOptions[2] = {label: jsDil.Carsamba, title: jsDil.Carsamba, value: 'Crs'};
         }
         if (turGunVal.indexOf('Prs') != -1) {
-            SelectDetayGidisGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs', selected: true};
+            SelectDetayGidisGunOptions[3] = {label: jsDil.Persembe, title: jsDil.Persembe, value: 'Prs', selected: true};
         } else {
-            SelectDetayGidisGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs'};
+            SelectDetayGidisGunOptions[3] = {label: jsDil.Persembe, title: jsDil.Persembe, value: 'Prs'};
         }
         if (turGunVal.indexOf('Cma') != -1) {
-            SelectDetayGidisGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma', selected: true};
+            SelectDetayGidisGunOptions[4] = {label: jsDil.Cuma, title: jsDil.Cuma, value: 'Cma', selected: true};
         } else {
-            SelectDetayGidisGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma'};
+            SelectDetayGidisGunOptions[4] = {label: jsDil.Cuma, title: jsDil.Cuma, value: 'Cma'};
         }
         if (turGunVal.indexOf('Cmt') != -1) {
-            SelectDetayGidisGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt', selected: true};
+            SelectDetayGidisGunOptions[5] = {label: jsDil.Cumartesi, title: jsDil.Cumartesi, value: 'Cmt', selected: true};
         } else {
-            SelectDetayGidisGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt'};
+            SelectDetayGidisGunOptions[5] = {label: jsDil.Cumartesi, title: jsDil.Cumartesi, value: 'Cmt'};
         }
         if (turGunVal.indexOf('Pzr') != -1) {
-            SelectDetayGidisGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr', selected: true};
+            SelectDetayGidisGunOptions[6] = {label: jsDil.Pazar, title: jsDil.Pazar, value: 'Pzr', selected: true};
         } else {
-            SelectDetayGidisGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr'};
+            SelectDetayGidisGunOptions[6] = {label: jsDil.Pazar, title: jsDil.Pazar, value: 'Pzr'};
         }
         $('#TurDetayGidisGun').multiselect('dataprovider', SelectDetayGidisGunOptions);
         $('#TurDetayGidisGun').multiselect('refresh');
@@ -2137,39 +2137,39 @@ $.AdminIslemler = {
 
         //Gün ayarları
         if (turGidisDetailEdt[10].indexOf('Pzt') != -1) {
-            SelectDetayGidisGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt', selected: true};
+            SelectDetayGidisGunOptions[0] = {label: jsDil.Pazartesi, title: jsDil.Pazartesi, value: 'Pzt', selected: true};
         } else {
-            SelectDetayGidisGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt'};
+            SelectDetayGidisGunOptions[0] = {label: jsDil.Pazartesi, title: jsDil.Pazartesi, value: 'Pzt'};
         }
         if (turGidisDetailEdt[10].indexOf('Sli') != -1) {
-            SelectDetayGidisGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli', selected: true};
+            SelectDetayGidisGunOptions[1] = {label: jsDil.Sali, title: jsDil.Sali, value: 'Sli', selected: true};
         } else {
-            SelectDetayGidisGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli'};
+            SelectDetayGidisGunOptions[1] = {label: jsDil.Sali, title: jsDil.Sali, value: 'Sli'};
         }
         if (turGidisDetailEdt[10].indexOf('Crs') != -1) {
-            SelectDetayGidisGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs', selected: true};
+            SelectDetayGidisGunOptions[2] = {label: jsDil.Carsamba, title: jsDil.Carsamba, value: 'Crs', selected: true};
         } else {
-            SelectDetayGidisGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs'};
+            SelectDetayGidisGunOptions[2] = {label: jsDil.Carsamba, title: jsDil.Carsamba, value: 'Crs'};
         }
         if (turGidisDetailEdt[10].indexOf('Prs') != -1) {
-            SelectDetayGidisGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs', selected: true};
+            SelectDetayGidisGunOptions[3] = {label: jsDil.Persembe, title: jsDil.Persembe, value: 'Prs', selected: true};
         } else {
-            SelectDetayGidisGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs'};
+            SelectDetayGidisGunOptions[3] = {label: jsDil.Persembe, title: jsDil.Persembe, value: 'Prs'};
         }
         if (turGidisDetailEdt[10].indexOf('Cma') != -1) {
-            SelectDetayGidisGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma', selected: true};
+            SelectDetayGidisGunOptions[4] = {label: jsDil.Cuma, title: jsDil.Cuma, value: 'Cma', selected: true};
         } else {
-            SelectDetayGidisGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma'};
+            SelectDetayGidisGunOptions[4] = {label: jsDil.Cuma, title: jsDil.Cuma, value: 'Cma'};
         }
         if (turGidisDetailEdt[10].indexOf('Cmt') != -1) {
-            SelectDetayGidisGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt', selected: true};
+            SelectDetayGidisGunOptions[5] = {label: jsDil.Cumartesi, title: jsDil.Cumartesi, value: 'Cmt', selected: true};
         } else {
-            SelectDetayGidisGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt'};
+            SelectDetayGidisGunOptions[5] = {label: jsDil.Cumartesi, title: jsDil.Cumartesi, value: 'Cmt'};
         }
         if (turGidisDetailEdt[10].indexOf('Pzr') != -1) {
-            SelectDetayGidisGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr', selected: true};
+            SelectDetayGidisGunOptions[6] = {label: jsDil.Pazar, title: jsDil.Pazar, value: 'Pzr', selected: true};
         } else {
-            SelectDetayGidisGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr'};
+            SelectDetayGidisGunOptions[6] = {label: jsDil.Pazar, title: jsDil.Pazar, value: 'Pzr'};
         }
         $('#TurDetayGidisGun').multiselect('dataprovider', SelectDetayGidisGunOptions);
         $('#TurDetayGidisGun').multiselect('refresh');
@@ -2220,8 +2220,8 @@ $.AdminIslemler = {
         var kurumTip = $('input[name=adminTurDetayTip]').val();
         var aracID = $('select#TurDetayGidisArac option:selected').val();
         var aracPlaka = $('select#TurDetayGidisArac option:selected').attr('label');
-        var soforID = $('select#TurDetayGidisSofor option:selected').val();
-        var soforAd = $('select#TurDetayGidisSofor option:selected').attr('label');
+        var soforID = $('select#TurDetayGidisSofor option[value!="-1"]:selected').val();
+        var soforAd = $('select#TurDetayGidisSofor option[value!="-1"]:selected').attr('label');
         var soforLocation = $('select#TurDetayGidisSofor option[value!="-1"]:selected').attr('location');
         var hostesID = $('select#TurDetayGidisHostes option[value!="-1"]:selected').val();
         var hostesAd = $('select#TurDetayGidisHostes option[value!="-1"]:selected').attr('label');
@@ -2312,8 +2312,8 @@ $.AdminIslemler = {
                 var turID = $('input[name=adminTurID]').val();
                 var kurumTip = $('input[name=adminTurDetayTip]').val();
                 var bolgeID = $('input[name=TurDetayGidisBolgeID]').val();
-                var soforID = $('select#TurDetayGidisSofor option:selected').val();
-                var hostesID = $('select#TurDetayGidisHostes option:selected').val();
+                var soforID = $('select#TurDetayGidisSofor option[value!="-1"]:selected').val();
+                var hostesID = $('select#TurDetayGidisHostes option[value!="-1"]:selected').val();
                 var turAd = $('input[name=TurDetayGidisAd]').val();
                 $.ajax({
                     data: {"turID": turID, "turAd": turAd, "bolgeID": bolgeID, "hostesID": hostesID, "turOgrenciID[]": KisiOgrenciID, "turKisiIsciID[]": KisiIsciID,
@@ -2443,39 +2443,39 @@ $.AdminIslemler = {
                     //Gunler
 
                     if (cevap.donus.Pzt != 0) {
-                        SelectDetayDonusGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt', selected: true};
+                        SelectDetayDonusGunOptions[0] = {label: jsDil.Pazartesi, title: jsDil.Pazartesi, value: 'Pzt', selected: true};
                     } else {
-                        SelectDetayDonusGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt'};
+                        SelectDetayDonusGunOptions[0] = {label: jsDil.Pazartesi, title: jsDil.Pazartesi, value: 'Pzt'};
                     }
                     if (cevap.donus.Sli != 0) {
-                        SelectDetayDonusGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli', selected: true};
+                        SelectDetayDonusGunOptions[1] = {label: jsDil.Sali, title: jsDil.Sali, value: 'Sli', selected: true};
                     } else {
-                        SelectDetayDonusGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli'};
+                        SelectDetayDonusGunOptions[1] = {label: jsDil.Sali, title: jsDil.Sali, value: 'Sli'};
                     }
                     if (cevap.donus.Crs != 0) {
-                        SelectDetayDonusGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs', selected: true};
+                        SelectDetayDonusGunOptions[2] = {label: jsDil.Carsamba, title: jsDil.Carsamba, value: 'Crs', selected: true};
                     } else {
-                        SelectDetayDonusGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs'};
+                        SelectDetayDonusGunOptions[2] = {label: jsDil.Carsamba, title: jsDil.Carsamba, value: 'Crs'};
                     }
                     if (cevap.donus.Prs != 0) {
-                        SelectDetayDonusGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs', selected: true};
+                        SelectDetayDonusGunOptions[3] = {label: jsDil.Persembe, title: jsDil.Persembe, value: 'Prs', selected: true};
                     } else {
-                        SelectDetayDonusGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs'};
+                        SelectDetayDonusGunOptions[3] = {label: jsDil.Persembe, title: jsDil.Persembe, value: 'Prs'};
                     }
                     if (cevap.donus.Cma != 0) {
-                        SelectDetayDonusGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma', selected: true};
+                        SelectDetayDonusGunOptions[4] = {label: jsDil.Cuma, title: jsDil.Cuma, value: 'Cma', selected: true};
                     } else {
-                        SelectDetayDonusGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma'};
+                        SelectDetayDonusGunOptions[4] = {label: jsDil.Cuma, title: jsDil.Cuma, value: 'Cma'};
                     }
                     if (cevap.donus.Cmt != 0) {
-                        SelectDetayDonusGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt', selected: true};
+                        SelectDetayDonusGunOptions[5] = {label: jsDil.Cumartesi, title: jsDil.Cumartesi, value: 'Cmt', selected: true};
                     } else {
-                        SelectDetayDonusGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt'};
+                        SelectDetayDonusGunOptions[5] = {label: jsDil.Cumartesi, title: jsDil.Cumartesi, value: 'Cmt'};
                     }
                     if (cevap.donus.Pzr != 0) {
-                        SelectDetayDonusGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr', selected: true};
+                        SelectDetayDonusGunOptions[6] = {label: jsDil.Pazar, title: jsDil.Pazar, value: 'Pzr', selected: true};
                     } else {
-                        SelectDetayDonusGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr'};
+                        SelectDetayDonusGunOptions[6] = {label: jsDil.Pazar, title: jsDil.Pazar, value: 'Pzr'};
                     }
                     $('#TurDetayDonusGun').multiselect('dataprovider', SelectDetayDonusGunOptions);
                     $('#TurDetayDonusGun').multiselect('refresh');
@@ -2552,39 +2552,39 @@ $.AdminIslemler = {
         turDonusDetailEdt.push(turDetayAd, turDetayAciklama, aracID, aracText, soforID, soforText, saat1, saat1Text, saat2, saat2Text, turGunVal, turGunText, DetailDonusGelenID, hostesID, hostesText);
         //Gün ayarları
         if (turGunVal.indexOf('Pzt') != -1) {
-            SelectDetayDonusGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt', selected: true};
+            SelectDetayDonusGunOptions[0] = {label: jsDil.Pazartesi, title: jsDil.Pazartesi, value: 'Pzt', selected: true};
         } else {
-            SelectDetayDonusGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt'};
+            SelectDetayDonusGunOptions[0] = {label: jsDil.Pazartesi, title: jsDil.Pazartesi, value: 'Pzt'};
         }
         if (turGunVal.indexOf('Sli') != -1) {
-            SelectDetayDonusGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli', selected: true};
+            SelectDetayDonusGunOptions[1] = {label: jsDil.Sali, title: jsDil.Sali, value: 'Sli', selected: true};
         } else {
-            SelectDetayDonusGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli'};
+            SelectDetayDonusGunOptions[1] = {label: jsDil.Sali, title: jsDil.Sali, value: 'Sli'};
         }
         if (turGunVal.indexOf('Crs') != -1) {
-            SelectDetayDonusGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs', selected: true};
+            SelectDetayDonusGunOptions[2] = {label: jsDil.Carsamba, title: jsDil.Carsamba, value: 'Crs', selected: true};
         } else {
-            SelectDetayDonusGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs'};
+            SelectDetayDonusGunOptions[2] = {label: jsDil.Carsamba, title: jsDil.Carsamba, value: 'Crs'};
         }
         if (turGunVal.indexOf('Prs') != -1) {
-            SelectDetayDonusGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs', selected: true};
+            SelectDetayDonusGunOptions[3] = {label: jsDil.Persembe, title: jsDil.Persembe, value: 'Prs', selected: true};
         } else {
-            SelectDetayDonusGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs'};
+            SelectDetayDonusGunOptions[3] = {label: jsDil.Persembe, title: jsDil.Persembe, value: 'Prs'};
         }
         if (turGunVal.indexOf('Cma') != -1) {
-            SelectDetayDonusGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma', selected: true};
+            SelectDetayDonusGunOptions[4] = {label: jsDil.Cuma, title: jsDil.Cuma, value: 'Cma', selected: true};
         } else {
-            SelectDetayDonusGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma'};
+            SelectDetayDonusGunOptions[4] = {label: jsDil.Cuma, title: jsDil.Cuma, value: 'Cma'};
         }
         if (turGunVal.indexOf('Cmt') != -1) {
-            SelectDetayDonusGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt', selected: true};
+            SelectDetayDonusGunOptions[5] = {label: jsDil.Cumartesi, title: jsDil.Cumartesi, value: 'Cmt', selected: true};
         } else {
-            SelectDetayDonusGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt'};
+            SelectDetayDonusGunOptions[5] = {label: jsDil.Cumartesi, title: jsDil.Cumartesi, value: 'Cmt'};
         }
         if (turGunVal.indexOf('Pzr') != -1) {
-            SelectDetayDonusGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr', selected: true};
+            SelectDetayDonusGunOptions[6] = {label: jsDil.Pazar, title: jsDil.Pazar, value: 'Pzr', selected: true};
         } else {
-            SelectDetayDonusGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr'};
+            SelectDetayDonusGunOptions[6] = {label: jsDil.Pazar, title: jsDil.Pazar, value: 'Pzr'};
         }
         $('#TurDetayDonusGun').multiselect('dataprovider', SelectDetayDonusGunOptions);
         $('#TurDetayDonusGun').multiselect('refresh');
@@ -2622,39 +2622,39 @@ $.AdminIslemler = {
 
         //Gün ayarları
         if (turDonusDetailEdt[10].indexOf('Pzt') != -1) {
-            SelectDetayDonusGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt', selected: true};
+            SelectDetayDonusGunOptions[0] = {label: jsDil.Pazartesi, title: jsDil.Pazartesi, value: 'Pzt', selected: true};
         } else {
-            SelectDetayDonusGunOptions[0] = {label: 'Pazartesi', title: 'Pazartesi', value: 'Pzt'};
+            SelectDetayDonusGunOptions[0] = {label: jsDil.Pazartesi, title: jsDil.Pazartesi, value: 'Pzt'};
         }
         if (turDonusDetailEdt[10].indexOf('Sli') != -1) {
-            SelectDetayDonusGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli', selected: true};
+            SelectDetayDonusGunOptions[1] = {label: jsDil.Sali, title: jsDil.Sali, value: 'Sli', selected: true};
         } else {
-            SelectDetayDonusGunOptions[1] = {label: 'Salı', title: 'Salı', value: 'Sli'};
+            SelectDetayDonusGunOptions[1] = {label: jsDil.Sali, title: jsDil.Sali, value: 'Sli'};
         }
         if (turDonusDetailEdt[10].indexOf('Crs') != -1) {
-            SelectDetayDonusGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs', selected: true};
+            SelectDetayDonusGunOptions[2] = {label: jsDil.Carsamba, title: jsDil.Carsamba, value: 'Crs', selected: true};
         } else {
-            SelectDetayDonusGunOptions[2] = {label: 'Çarşamba', title: 'Çarşamba', value: 'Crs'};
+            SelectDetayDonusGunOptions[2] = {label: jsDil.Carsamba, title: jsDil.Carsamba, value: 'Crs'};
         }
         if (turDonusDetailEdt[10].indexOf('Prs') != -1) {
-            SelectDetayDonusGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs', selected: true};
+            SelectDetayDonusGunOptions[3] = {label: jsDil.Persembe, title: jsDil.Persembe, value: 'Prs', selected: true};
         } else {
-            SelectDetayDonusGunOptions[3] = {label: 'Perşembe', title: 'Perşembe', value: 'Prs'};
+            SelectDetayDonusGunOptions[3] = {label: jsDil.Persembe, title: jsDil.Persembe, value: 'Prs'};
         }
         if (turDonusDetailEdt[10].indexOf('Cma') != -1) {
-            SelectDetayDonusGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma', selected: true};
+            SelectDetayDonusGunOptions[4] = {label: jsDil.Cuma, title: jsDil.Cuma, value: 'Cma', selected: true};
         } else {
-            SelectDetayDonusGunOptions[4] = {label: 'Cuma', title: 'Cuma', value: 'Cma'};
+            SelectDetayDonusGunOptions[4] = {label: jsDil.Cuma, title: jsDil.Cuma, value: 'Cma'};
         }
         if (turDonusDetailEdt[10].indexOf('Cmt') != -1) {
-            SelectDetayDonusGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt', selected: true};
+            SelectDetayDonusGunOptions[5] = {label: jsDil.Cumartesi, title: jsDil.Cumartesi, value: 'Cmt', selected: true};
         } else {
-            SelectDetayDonusGunOptions[5] = {label: 'Cumartesi', title: 'Cumartesi', value: 'Cmt'};
+            SelectDetayDonusGunOptions[5] = {label: jsDil.Cumartesi, title: jsDil.Cumartesi, value: 'Cmt'};
         }
         if (turDonusDetailEdt[10].indexOf('Pzr') != -1) {
-            SelectDetayDonusGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr', selected: true};
+            SelectDetayDonusGunOptions[6] = {label: jsDil.Pazar, title: jsDil.Pazar, value: 'Pzr', selected: true};
         } else {
-            SelectDetayDonusGunOptions[6] = {label: 'Pazar', title: 'Pazar', value: 'Pzr'};
+            SelectDetayDonusGunOptions[6] = {label: jsDil.Pazar, title: jsDil.Pazar, value: 'Pzr'};
         }
         $('#TurDetayDonusGun').multiselect('dataprovider', SelectDetayDonusGunOptions);
         $('#TurDetayDonusGun').multiselect('refresh');
@@ -2758,11 +2758,11 @@ $.AdminIslemler = {
         var kurumTip = $('input[name=adminTurDetayTip]').val();
         var aracID = $('select#TurDetayDonusArac option:selected').val();
         var aracPlaka = $('select#TurDetayDonusArac option:selected').attr('label');
-        var soforID = $('select#TurDetayDonusSofor option:selected').val();
-        var soforAd = $('select#TurDetayDonusSofor option:selected').attr('label');
+        var soforID = $('select#TurDetayDonusSofor option[value!="-1"]:selected').val();
+        var soforAd = $('select#TurDetayDonusSofor option[value!="-1"]:selected').attr('label');
         var soforLocation = $('select#TurDetayDonusSofor option[value!="-1"]:selected').attr('location');
-        var hostesID = $('select#TurDetayDonusHostes option:selected').val();
-        var hostesAd = $('select#TurDetayDonusHostes option:selected').attr('label');
+        var hostesID = $('select#TurDetayDonusHostes option[value!="-1"]:selected').val();
+        var hostesAd = $('select#TurDetayDonusHostes option[value!="-1"]:selected').attr('label');
         var hostesLocation = $('select#TurDetayDonusHostes option[value!="-1"]:selected').attr('location');
         var turSaat1 = $('select#TurDetayDonusSaat1 option:selected').val();
         var turSaat2 = $('select#TurDetayDonusSaat2 option:selected').val();

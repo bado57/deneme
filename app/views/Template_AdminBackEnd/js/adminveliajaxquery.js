@@ -56,6 +56,8 @@ $(document).ready(function () {
                     $("input[name=postal_code]").val(cevap.veliDetail[0].VeliListPostaKodu);
                     $("input[name=street_number]").val(cevap.veliDetail[0].VeliListCaddeNo);
                     $("input[name=veliDetayID]").val(cevap.veliDetail[0].VeliListID);
+                    $("input[name=veliDetayAdres]").val(cevap.veliDetail[0].VeliListDetayAdres);
+
                     var SelectBolgeOptions = new Array();
                     var SelectKurumOptions = new Array();
                     var SelectOgrenciOptions = new Array();
@@ -478,7 +480,7 @@ $.AdminIslemler = {
                                                         "veliSoyad": veliSoyad, "veliDurum": veliDurum, "veliLokasyon": veliLokasyon, "veliTelefon": veliTelefon,
                                                         "veliEmail": veliEmail, "veliAdres": veliAdres, "aciklama": aciklama, "ulke": ulke,
                                                         "il": il, "ilce": ilce, "semt": semt, "mahalle": mahalle,
-                                                        "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "tip": "veliKaydet"},
+                                                        "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "detayAdres": ttl, "tip": "veliKaydet"},
                                                     success: function (cevap) {
                                                         if (cevap.hata) {
                                                             reset();
@@ -844,6 +846,9 @@ $.AdminIslemler = {
         });
     },
     veliDetailKaydet: function () {
+        if (ttl == '') {
+            ttl = $("input[name=veliDetayAdres]").val();
+        }
         var velidetail_id = $("input[name=veliDetayID]").val();
         //Veli İşlemleri Değerleri
         var veliDetayAd = $("input[name=VeliDetayAdi]").val();
@@ -933,138 +938,178 @@ $.AdminIslemler = {
             alertify.alert(jsDil.Degisiklik);
             return false;
         } else {
-            var veliBolgeLength = $('select#VeliDetaySelectBolge option:selected').val();
-            if (veliBolgeLength) {
-                var veliKurumLength = $('select#VeliDetayKurum option:selected').val();
-                if (veliKurumLength) {
-                    $.ajax({
-                        data: {"velidetail_id": velidetail_id, "veliBolgeID[]": veliBolgeID, "veliBolgeAd[]": veliBolgeAd, "veliKurumID[]": veliKurumID, "veliKurumAd[]": veliKurumAd,
-                            "veliOgrenciID[]": veliOgrenciID, "veliOgrenciAd[]": veliOgrenciAd, "veliDetayAd": veliDetayAd,
-                            "veliDetaySoyad": veliDetaySoyad, "veliDetayDurum": veliDetayDurum, "veliDetayLokasyon": veliDetayLokasyon, "veliDetayTelefon": veliDetayTelefon,
-                            "veliDetayEmail": veliDetayEmail, "veliDetayAdres": veliDetayAdres, "veliDetayAciklama": veliDetayAciklama, "veliDetayUlke": veliDetayUlke,
-                            "veliDetayIl": veliDetayIl, "veliDetayIlce": veliDetayIlce, "veliDetaySemt": veliDetaySemt, "veliDetayMahalle": veliDetayMahalle,
-                            "veliDetaySokak": veliDetaySokak, "veliDetayPostaKodu": veliDetayPostaKodu, "veliDetayCaddeNo": veliDetayCaddeNo, "tip": "veliDetailKaydet"},
-                        success: function (cevap) {
-                            if (cevap.hata) {
+            veliDetayAd = veliDetayAd.trim();
+            if (veliDetayAd == '') {
+                reset();
+                alertify.alert(jsDil.IsimBos);
+                return false;
+            } else {
+                if (veliDetayAd.length < 2) {
+                    reset();
+                    alertify.alert(jsDil.IsimKarekter);
+                    return false;
+                } else {
+                    veliDetaySoyad = veliDetaySoyad.trim();
+                    if (veliDetaySoyad == '') {
+                        reset();
+                        alertify.alert(jsDil.SoyadBos);
+                        return false;
+                    } else {
+                        if (veliDetaySoyad.length < 2) {
+                            reset();
+                            alertify.alert(jsDil.SoyadKarekter);
+                            return false;
+                        } else {
+                            if (veliDetayEmail == ' ') {
                                 reset();
-                                alertify.alert(jsDil.Hata);
+                                alertify.alert(jsDil.EpostaBos);
                                 return false;
                             } else {
-                                disabledForm();
-                                reset();
-                                alertify.success(jsDil.VeliDuzenle);
-                                var SelectBolgeOptions = new Array();
-                                var SelectKurumOptions = new Array();
-                                var SelectOgrenciOptions = new Array();
-                                if (veliBolgeID.length > 0) {
-                                    var bolgelength = veliBolgeID.length;
-                                    for (var b = 0; b < bolgelength; b++) {
-                                        SelectBolgeOptions[b] = {label: veliBolgeAd[b], title: veliBolgeAd[b], value: veliBolgeID[b], selected: true, disabled: true};
-                                    }
-
-                                    if (veliBolgeNID.length > 0) {
-                                        var veliBolgeLength = veliBolgeNID.length;
-                                        for (var z = 0; z < veliBolgeLength; z++) {
-                                            SelectBolgeOptions[b] = {label: veliBolgeNAd[z], title: veliBolgeNAd[z], value: veliBolgeNID[z], disabled: true};
-                                            b++;
-                                        }
-
-                                    }
+                                veliDetayEmail = veliDetayEmail.trim();
+                                var result = ValidateEmail(veliDetayEmail);
+                                if (!result) {
+                                    reset();
+                                    alertify.alert(jsDil.EpostaUygun);
+                                    return false;
                                 } else {
-                                    if (veliBolgeNID.length > 0) {
-                                        var veliBolgeLength = veliBolgeNID.length;
-                                        for (var b = 0; b < veliBolgeLength; b++) {
-                                            SelectBolgeOptions[b] = {label: veliBolgeNAd[b], title: veliBolgeNAd[b], value: veliBolgeNID[b], disabled: true};
-                                        }
+                                    var veliBolgeLength = $('select#VeliDetaySelectBolge option:selected').val();
+                                    if (veliBolgeLength) {
+                                        var veliKurumLength = $('select#VeliDetayKurum option:selected').val();
+                                        if (veliKurumLength) {
+                                            $.ajax({
+                                                data: {"velidetail_id": velidetail_id, "veliBolgeID[]": veliBolgeID, "veliBolgeAd[]": veliBolgeAd, "veliKurumID[]": veliKurumID, "veliKurumAd[]": veliKurumAd,
+                                                    "veliOgrenciID[]": veliOgrenciID, "veliOgrenciAd[]": veliOgrenciAd, "veliDetayAd": veliDetayAd,
+                                                    "veliDetaySoyad": veliDetaySoyad, "veliDetayDurum": veliDetayDurum, "veliDetayLokasyon": veliDetayLokasyon, "veliDetayTelefon": veliDetayTelefon,
+                                                    "veliDetayEmail": veliDetayEmail, "veliDetayAdres": veliDetayAdres, "veliDetayAciklama": veliDetayAciklama, "veliDetayUlke": veliDetayUlke,
+                                                    "veliDetayIl": veliDetayIl, "veliDetayIlce": veliDetayIlce, "veliDetaySemt": veliDetaySemt, "veliDetayMahalle": veliDetayMahalle,
+                                                    "veliDetaySokak": veliDetaySokak, "veliDetayPostaKodu": veliDetayPostaKodu, "veliDetayCaddeNo": veliDetayCaddeNo, "detayAdres": ttl, "tip": "veliDetailKaydet"},
+                                                success: function (cevap) {
+                                                    if (cevap.hata) {
+                                                        reset();
+                                                        alertify.alert(jsDil.Hata);
+                                                        return false;
+                                                    } else {
+                                                        disabledForm();
+                                                        reset();
+                                                        alertify.success(jsDil.VeliDuzenle);
+                                                        var SelectBolgeOptions = new Array();
+                                                        var SelectKurumOptions = new Array();
+                                                        var SelectOgrenciOptions = new Array();
+                                                        if (veliBolgeID.length > 0) {
+                                                            var bolgelength = veliBolgeID.length;
+                                                            for (var b = 0; b < bolgelength; b++) {
+                                                                SelectBolgeOptions[b] = {label: veliBolgeAd[b], title: veliBolgeAd[b], value: veliBolgeID[b], selected: true, disabled: true};
+                                                            }
 
-                                    }
-                                }
+                                                            if (veliBolgeNID.length > 0) {
+                                                                var veliBolgeLength = veliBolgeNID.length;
+                                                                for (var z = 0; z < veliBolgeLength; z++) {
+                                                                    SelectBolgeOptions[b] = {label: veliBolgeNAd[z], title: veliBolgeNAd[z], value: veliBolgeNID[z], disabled: true};
+                                                                    b++;
+                                                                }
 
-                                if (veliKurumID.length > 0) {
-                                    var kurumselectlength = veliKurumID.length;
-                                    for (var t = 0; t < kurumselectlength; t++) {
-                                        SelectKurumOptions[t] = {label: veliKurumAd[t], title: veliKurumAd[t], value: veliKurumID[t], selected: true, disabled: true};
-                                    }
+                                                            }
+                                                        } else {
+                                                            if (veliBolgeNID.length > 0) {
+                                                                var veliBolgeLength = veliBolgeNID.length;
+                                                                for (var b = 0; b < veliBolgeLength; b++) {
+                                                                    SelectBolgeOptions[b] = {label: veliBolgeNAd[b], title: veliBolgeNAd[b], value: veliBolgeNID[b], disabled: true};
+                                                                }
 
-                                    if (veliKurumNID.length > 0) {
-                                        var kurumlength = veliKurumNID.length;
-                                        for (var f = 0; f < kurumlength; f++) {
-                                            SelectKurumOptions[t] = {label: veliKurumNAd[f], title: veliKurumNAd[f], value: veliKurumNID[f], disabled: true};
-                                            t++;
-                                        }
-                                    }
+                                                            }
+                                                        }
 
-                                } else {
-                                    if (veliKurumNID.length > 0) {
-                                        var kurumlength = veliKurumNID.length;
-                                        for (var t = 0; t < kurumlength; t++) {
-                                            SelectKurumOptions[t] = {label: veliKurumNAd[t], title: veliKurumNAd[t], value: veliKurumNID[t], disabled: true};
-                                        }
-                                    }
-                                }
+                                                        if (veliKurumID.length > 0) {
+                                                            var kurumselectlength = veliKurumID.length;
+                                                            for (var t = 0; t < kurumselectlength; t++) {
+                                                                SelectKurumOptions[t] = {label: veliKurumAd[t], title: veliKurumAd[t], value: veliKurumID[t], selected: true, disabled: true};
+                                                            }
 
-                                if (veliOgrenciID.length > 0) {
-                                    var ogrenciselectlength = veliOgrenciID.length;
-                                    for (var k = 0; k < ogrenciselectlength; k++) {
-                                        SelectOgrenciOptions[k] = {label: veliOgrenciAd[k], title: veliOgrenciAd[k], value: veliOgrenciID[k], selected: true};
-                                    }
+                                                            if (veliKurumNID.length > 0) {
+                                                                var kurumlength = veliKurumNID.length;
+                                                                for (var f = 0; f < kurumlength; f++) {
+                                                                    SelectKurumOptions[t] = {label: veliKurumNAd[f], title: veliKurumNAd[f], value: veliKurumNID[f], disabled: true};
+                                                                    t++;
+                                                                }
+                                                            }
 
-                                    if (veliOgrenciNID.length > 0) {
-                                        var ogrencilength = veliOgrenciNID.length;
-                                        for (var l = 0; l < ogrencilength; l++) {
-                                            SelectOgrenciOptions[k] = {label: veliOgrenciNAd[l], title: veliOgrenciNAd[l], value: veliOgrenciNID[l], disabled: true};
-                                            k++;
-                                        }
-                                    }
+                                                        } else {
+                                                            if (veliKurumNID.length > 0) {
+                                                                var kurumlength = veliKurumNID.length;
+                                                                for (var t = 0; t < kurumlength; t++) {
+                                                                    SelectKurumOptions[t] = {label: veliKurumNAd[t], title: veliKurumNAd[t], value: veliKurumNID[t], disabled: true};
+                                                                }
+                                                            }
+                                                        }
 
-                                } else {
-                                    if (veliOgrenciNID.length > 0) {
-                                        var ogrencilength = veliOgrenciNID.length;
-                                        for (var k = 0; k < ogrencilength; k++) {
-                                            SelectOgrenciOptions[k] = {label: veliOgrenciNAd[k], title: veliOgrenciNAd[k], value: veliOgrenciNID[k], disabled: true};
-                                        }
-                                    }
-                                }
+                                                        if (veliOgrenciID.length > 0) {
+                                                            var ogrenciselectlength = veliOgrenciID.length;
+                                                            for (var k = 0; k < ogrenciselectlength; k++) {
+                                                                SelectOgrenciOptions[k] = {label: veliOgrenciAd[k], title: veliOgrenciAd[k], value: veliOgrenciID[k], selected: true};
+                                                            }
 
-                                $('#VeliDetaySelectBolge').multiselect('refresh');
-                                $('#VeliDetayKurum').multiselect('refresh');
-                                $('#VeliDetayOgrenciSelect').multiselect('refresh');
-                                $('#VeliDetaySelectBolge').multiselect('dataprovider', SelectBolgeOptions);
-                                $('#VeliDetayKurum').multiselect('dataprovider', SelectKurumOptions);
-                                $('#VeliDetayOgrenciSelect').multiselect('dataprovider', SelectOgrenciOptions);
-                                var length = $('tbody#veliRow tr').length;
-                                for (var t = 0; t < length; t++) {
-                                    var attrValueId = $("tbody#veliRow > tr > td > a").eq(t).attr('value');
-                                    if (attrValueId == velidetail_id) {
-                                        if (veliDetayDurum != 0) {
-                                            $("tbody#veliRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user"></i> ' + veliDetayAd);
-                                            $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(veliDetaySoyad);
-                                            $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(veliDetayTelefon);
-                                            $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(veliDetayEmail);
-                                            $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(veliDetayAciklama);
-                                            $('tbody#veliRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                            if (veliOgrenciNID.length > 0) {
+                                                                var ogrencilength = veliOgrenciNID.length;
+                                                                for (var l = 0; l < ogrencilength; l++) {
+                                                                    SelectOgrenciOptions[k] = {label: veliOgrenciNAd[l], title: veliOgrenciNAd[l], value: veliOgrenciNID[l], disabled: true};
+                                                                    k++;
+                                                                }
+                                                            }
+
+                                                        } else {
+                                                            if (veliOgrenciNID.length > 0) {
+                                                                var ogrencilength = veliOgrenciNID.length;
+                                                                for (var k = 0; k < ogrencilength; k++) {
+                                                                    SelectOgrenciOptions[k] = {label: veliOgrenciNAd[k], title: veliOgrenciNAd[k], value: veliOgrenciNID[k], disabled: true};
+                                                                }
+                                                            }
+                                                        }
+
+                                                        $('#VeliDetaySelectBolge').multiselect('refresh');
+                                                        $('#VeliDetayKurum').multiselect('refresh');
+                                                        $('#VeliDetayOgrenciSelect').multiselect('refresh');
+                                                        $('#VeliDetaySelectBolge').multiselect('dataprovider', SelectBolgeOptions);
+                                                        $('#VeliDetayKurum').multiselect('dataprovider', SelectKurumOptions);
+                                                        $('#VeliDetayOgrenciSelect').multiselect('dataprovider', SelectOgrenciOptions);
+                                                        var length = $('tbody#veliRow tr').length;
+                                                        for (var t = 0; t < length; t++) {
+                                                            var attrValueId = $("tbody#veliRow > tr > td > a").eq(t).attr('value');
+                                                            if (attrValueId == velidetail_id) {
+                                                                if (veliDetayDurum != 0) {
+                                                                    $("tbody#veliRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user"></i> ' + veliDetayAd);
+                                                                    $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(veliDetaySoyad);
+                                                                    $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(veliDetayTelefon);
+                                                                    $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(veliDetayEmail);
+                                                                    $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(veliDetayAciklama);
+                                                                    $('tbody#veliRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                                } else {
+                                                                    $("tbody#veliRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user" style="color:red"></i> ' + veliDetayAd);
+                                                                    $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(veliDetaySoyad);
+                                                                    $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(veliDetayTelefon);
+                                                                    $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(veliDetayEmail);
+                                                                    $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(veliDetayAciklama);
+                                                                    $('tbody#veliRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            });
                                         } else {
-                                            $("tbody#veliRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user" style="color:red"></i> ' + veliDetayAd);
-                                            $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(veliDetaySoyad);
-                                            $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(veliDetayTelefon);
-                                            $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(veliDetayEmail);
-                                            $("tbody#veliRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(veliDetayAciklama);
-                                            $('tbody#veliRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                            reset();
+                                            alertify.alert(jsDil.KurumSec);
+                                            return false;
                                         }
+                                    } else {
+                                        reset();
+                                        alertify.alert(jsDil.BolgeSec);
+                                        return false;
                                     }
                                 }
                             }
                         }
-                    });
-                } else {
-                    reset();
-                    alertify.alert(jsDil.KurumSec);
-                    return false;
+                    }
                 }
-            } else {
-                reset();
-                alertify.alert(jsDil.BolgeSec);
-                return false;
             }
         }
     }

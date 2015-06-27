@@ -23,7 +23,7 @@ class AdminSelectDb_Model extends Model {
             return false;
         }
     }
-    
+
     public function __destruct() {
         //echo 'Name değişken içeriği boşaltıldı.';
         //unset($this->name);

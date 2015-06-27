@@ -89,6 +89,7 @@ class AdminAdminAjaxSorgu extends Controller {
                                     $form->post('sokak', true);
                                     $form->post('postakodu', true);
                                     $form->post('caddeno', true);
+                                    $form->post('detayAdres', true);
 
                                     $adminBolgeID = $_REQUEST['adminBolgeID'];
 
@@ -111,6 +112,7 @@ class AdminAdminAjaxSorgu extends Controller {
                                             'BSAdminPostaKodu' => $form->values['postakodu'],
                                             'BSAdminCaddeNo' => $form->values['caddeno'],
                                             'BSAdminAdres' => $form->values['adminAdres'],
+                                            'BSAdminDetayAdres' => $form->values['detayAdres'],
                                             'Status' => $form->values['adminDurum'],
                                             'BSAdminAciklama' => $form->values['aciklama']
                                         );
@@ -203,6 +205,7 @@ class AdminAdminAjaxSorgu extends Controller {
                                 $adminList[$a]['AdminListPostaKodu'] = $adminListee['BSAdminPostaKodu'];
                                 $adminList[$a]['AdminListCaddeNo'] = $adminListee['BSAdminCaddeNo'];
                                 $adminList[$a]['AdminListAdres'] = $adminListee['BSAdminAdres'];
+                                $adminList[$a]['AdminListDetayAdres'] = $adminListee['BSAdminDetayAdres'];
                                 $adminList[$a]['AdminListDurum'] = $adminListee['Status'];
                                 $adminList[$a]['AdminListAciklama'] = $adminListee['BSAdminAciklama'];
                                 $a++;
@@ -332,6 +335,7 @@ class AdminAdminAjaxSorgu extends Controller {
                         $form->post('sokak', true);
                         $form->post('postakodu', true);
                         $form->post('caddeno', true);
+                        $form->post('detayAdres', true);
 
                         $adminBolgeAd = $_REQUEST['adminBolgeAd'];
                         $adminBolgeID = $_REQUEST['adminBolgeID'];
@@ -352,6 +356,7 @@ class AdminAdminAjaxSorgu extends Controller {
                                 'BSAdminPostaKodu' => $form->values['postakodu'],
                                 'BSAdminCaddeNo' => $form->values['caddeno'],
                                 'BSAdminAdres' => $form->values['adminAdres'],
+                                'BSAdminDetayAdres' => $form->values['detayAdres'],
                                 'Status' => $form->values['adminDurum'],
                                 'BSAdminAciklama' => $form->values['aciklama']
                             );

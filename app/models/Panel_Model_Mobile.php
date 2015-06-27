@@ -72,6 +72,11 @@ class Panel_Model_Mobile extends ModelMobile {
         return ($this->db->insert("sbiscicihaz", $data));
     }
 
+    //hostes cihaz kayıt
+    public function shuttleHostesCihazInsert($data) {
+        return ($this->db->insert("bshostescihaz", $data));
+    }
+
     //admin firma özellikleri düzenleme
     public function MfirmaOzelliklerDuzenle($data, $FirmaID) {
         return ($this->db->update("bsfirma", $data, "BSFirmaID=1"));
@@ -159,6 +164,171 @@ class Panel_Model_Mobile extends ModelMobile {
     //admin yeni bölge-> kurum kaydet
     public function MaddNewAdminBolgeKurum($data) {
         return ($this->db->insert("sbkurum", $data));
+    }
+
+    //şoför profil
+    public function soforProfil($soforID) {
+        $sql = 'SELECT BSSoforAd,BSSoforSoyad,BSSoforKadi,BSSoforPhone,BSSoforEmail,BSSoforDetayAdres,BSSoforLocation FROM bssofor WHERE BSSoforID=' . $soforID;
+        return($this->db->select($sql));
+    }
+
+    //şoför profil düzenle
+    public function soforProfilDuzenle($data, $soforID) {
+        return ($this->db->update("bssofor", $data, "BSSoforID=" . $soforID));
+    }
+
+    //şoför şifre
+    public function soforSifre($soforID) {
+        $sql = 'SELECT BSSoforRSifre FROM bssofor WHERE BSSoforID=' . $soforID;
+        return($this->db->select($sql));
+    }
+
+    //şoför şifre düzenle
+    public function soforSifreDuzenle($data, $soforID) {
+        return ($this->db->update("bssofor", $data, "BSSoforID=" . $soforID));
+    }
+
+    //şoför harita düzenle
+    public function soforMapDuzenle($data, $soforID) {
+        return ($this->db->update("bssofor", $data, "BSSoforID=" . $soforID));
+    }
+
+    //şoför tur ıd
+    public function soforTurKurum($soforID) {
+        $sql = 'SELECT DISTINCT BSTurID FROM bsturtip WHERE BSTurSoforID=' . $soforID;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur kurumlar
+    public function soforTurKurumlar($array = array()) {
+        $sql = 'SELECT DISTINCT SBTurID,SBTurAd FROM sbtur Where SBTurID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //şoför tur detay
+    public function soforTurDetay($turID) {
+        $sql = 'SELECT SBTurAd,SBTurAciklama,SBTurAktiflik,SBKurumID,SBKurumAd,SBKurumLocation,SBBolgeAd,SBBolgeID,SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,SBTurGidis,SBTurDonus,SBTurTip,SBTurKm FROM sbtur WHERE SBTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur gidiş
+    public function soforTurGidis($turID) {
+        $sql = 'SELECT BSTurTipID,BSTurAracID,BSTurAracPlaka,BSTurSoforAd,BSTurSoforID,BSTurHostesAd,BSTurHostesID,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurID=' . $turID . ' AND BSTurGidisDonus=0';
+        return($this->db->select($sql));
+    }
+
+    //şoför tur dönüş
+    public function soforTurDonus($turID) {
+        $sql = 'SELECT BSTurTipID,BSTurAracID,BSTurAracPlaka,BSTurSoforAd,BSTurSoforID,BSTurHostesAd,BSTurHostesID,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurID=' . $turID . ' AND BSTurGidisDonus=1';
+        return($this->db->select($sql));
+    }
+
+    //şoför tur öğrenci yolcu
+    public function soforTurOgrenci($turID) {
+        $sql = 'SELECT BSOgrenciID,BSOgrenciAd FROM bsogrencitur WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur işçi yolcu
+    public function soforTurIsci($turID) {
+        $sql = 'SELECT SBIsciID,SBIsciAd FROM sbiscitur WHERE SBTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur öğrenci işçi yolcu
+    public function soforTurIsciOgrenci($turID) {
+        $sql = 'SELECT BSOgrenciIsciID,BSOgrenciIsciAd,BSKullaniciTip FROM bsogrenciiscitur WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur şoför
+    public function soforTurDiger($turID) {
+        $sql = 'SELECT DISTINCT BSTurSoforID,BSTurSoforAd FROM bsturtip WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur hostes
+    public function soforTurHostes($turID) {
+        $sql = 'SELECT DISTINCT BSTurHostesID,BSTurHostesAd FROM bsturtip WHERE BSTurID=' . $turID . ' AND BSTurHostesID!=0';
+        return($this->db->select($sql));
+    }
+
+    //şoför tur yöneticiler
+    public function soforTurYonetici($bolgeID) {
+        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge  WHERE BSBolgeID=' . $bolgeID;
+        return($this->db->select($sql));
+    }
+
+    //admin select dışı öğrenci listele
+    public function soforTurYoneticiler($array = array()) {
+        $sql = 'SELECT DISTINCT BSAdminID, BSAdminAd, BSAdminSoyad FROM bsadmin WHERE BSAdminID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //şoför yolcu öğrenci detay
+    public function soforOYolcu($kisiID) {
+        $sql = 'SELECT BSOgrenciAd,BSOgrenciSoyad,BSOgrenciPhone,BSOgrenciEmail,BSOgrenciLocation,BSOgrenciDetayAdres FROM bsogrenci WHERE BSOgrenciID=' . $kisiID;
+        return($this->db->select($sql));
+    }
+
+    //şoför yolcu öğrenci-veli id detay
+    public function soforOVIDYolcu($kisiID) {
+        $sql = 'SELECT DISTINCT BSVeliID FROM bsveliogrenci WHERE BSOgrenciID=' . $kisiID;
+        return($this->db->select($sql));
+    }
+
+    //şoför yolcu öğrenci-veli detay
+    public function soforOVYolcu($array = array()) {
+        $sql = 'SELECT SBVeliAd,SBVeliSoyad,SBVeliPhone,SBVeliEmail FROM sbveli  WHERE SBVeliID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //şoför yolcu personel detay
+    public function soforPYolcu($kisiID) {
+        $sql = 'SELECT SBIsciAd,SBIsciSoyad,SBIsciPhone,SBIsciEmail,SBIsciLocation,SBIsciDetayAdres FROM sbisci WHERE SBIsciID=' . $kisiID;
+        return($this->db->select($sql));
+    }
+
+    //şoför yolcu şoför detay
+    public function soforSYolcu($kisiID) {
+        $sql = 'SELECT BSSoforAd,BSSoforSoyad,BSSoforPhone,BSSoforEmail,BSSoforLocation,BSSoforDetayAdres FROM bssofor WHERE BSSoforID=' . $kisiID;
+        return($this->db->select($sql));
+    }
+
+    //şoför yolcu hostes detay
+    public function soforHYolcu($kisiID) {
+        $sql = 'SELECT BSHostesAd,BSHostesSoyad,BSHostesPhone,BSHostesEmail,BSHostesLocation,BSHostesDetayAdres FROM bshostes WHERE BSHostesID=' . $kisiID;
+        return($this->db->select($sql));
+    }
+
+    //şoför yolcu yönetici detay
+    public function soforYYolcu($kisiID) {
+        $sql = 'SELECT BSAdminAd,BSAdminSoyad,BSAdminPhone,BSAdminEmail,BSAdminLocation,BSAdminDetayAdres FROM bsadmin WHERE BSAdminID=' . $kisiID;
+        return($this->db->select($sql));
+    }
+
+    //şoför yolcu arac detay
+    public function soforArac($aracID) {
+        $sql = 'SELECT SBAracMarka,SBAracModelYili,SBAracPlaka,SBAracKapasite,SBAracKm,SBAracAciklama FROM sbarac WHERE SBAracID=' . $aracID;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur harita öğrenci yolcu
+    public function soforHTurOgrenci($turID) {
+        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciLocation FROM bsogrencitur WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur harita işçi yolcu
+    public function soforHTurIsci($turID) {
+        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciLocation FROM sbiscitur WHERE SBTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur harita öğrenci işçi yolcu
+    public function soforHTurIsciOgrenci($turID) {
+        $sql = 'SELECT BSOgrenciIsciID,BSOgrenciIsciAd,BSOgrenciIsciLocation,BSKullaniciTip FROM bsogrenciiscitur WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
     }
 
 }

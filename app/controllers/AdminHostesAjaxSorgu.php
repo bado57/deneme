@@ -128,6 +128,7 @@ class AdminHostesAjaxSorgu extends Controller {
                                     $form->post('sokak', true);
                                     $form->post('postakodu', true);
                                     $form->post('caddeno', true);
+                                    $form->post('detayAdres', true);
 
                                     $hostesAd = $form->values['hostesAd'];
                                     $hostesSoyad = $form->values['hostesSoyad'];
@@ -157,6 +158,7 @@ class AdminHostesAjaxSorgu extends Controller {
                                             'BSHostesPostaKodu' => $form->values['postakodu'],
                                             'BSHostesCaddeNo' => $form->values['caddeno'],
                                             'BSHostesAdres' => $form->values['hostesAdres'],
+                                            'BSHostesDetayAdres' => $form->values['detayAdres'],
                                             'Status' => $form->values['hostesDurum'],
                                             'BSHostesAciklama' => $form->values['aciklama']
                                         );
@@ -336,6 +338,7 @@ class AdminHostesAjaxSorgu extends Controller {
                                 $hostesList[$e]['HostesListPostaKodu'] = $hostesOzellikk['BSHostesPostaKodu'];
                                 $hostesList[$e]['HostesListCaddeNo'] = $hostesOzellikk['BSHostesCaddeNo'];
                                 $hostesList[$e]['HostesListAdres'] = $hostesOzellikk['BSHostesAdres'];
+                                $hostesList[$e]['HostesListDetayAdres'] = $hostesOzellikk['BSHostesDetayAdres'];
                                 $hostesList[$e]['HostesListDurum'] = $hostesOzellikk['Status'];
                                 $hostesList[$e]['HostesListAciklama'] = $hostesOzellikk['BSHostesAciklama'];
                                 $e++;
@@ -444,6 +447,7 @@ class AdminHostesAjaxSorgu extends Controller {
                                 $hostesList[$e]['HostesListPostaKodu'] = $hostesOzellikk['BSHostesPostaKodu'];
                                 $hostesList[$e]['HostesListCaddeNo'] = $hostesOzellikk['BSHostesCaddeNo'];
                                 $hostesList[$e]['HostesListAdres'] = $hostesOzellikk['BSHostesAdres'];
+                                $hostesList[$e]['HostesListDetayAdres'] = $hostesOzellikk['BSHostesDetayAdres'];
                                 $hostesList[$e]['HostesListDurum'] = $hostesOzellikk['Status'];
                                 $hostesList[$e]['HostesListAciklama'] = $hostesOzellikk['BSHostesAciklama'];
                                 $e++;
@@ -536,6 +540,7 @@ class AdminHostesAjaxSorgu extends Controller {
                         $form->post('hostesDetaySokak', true);
                         $form->post('hostesDetayPostaKodu', true);
                         $form->post('hostesDetayCaddeNo', true);
+                        $form->post('detayAdres', true);
 
                         $hostesAd = $form->values['hostesDetayAd'];
                         $hostesSoyad = $form->values['hostesDetaySoyad'];
@@ -562,6 +567,7 @@ class AdminHostesAjaxSorgu extends Controller {
                                 'BSHostesPostaKodu' => $form->values['hostesDetayPostaKodu'],
                                 'BSHostesCaddeNo' => $form->values['hostesDetayCaddeNo'],
                                 'BSHostesAdres' => $form->values['hostesDetayAdres'],
+                                'BSHostesDetayAdres' => $form->values['detayAdres'],
                                 'BSHostesAciklama' => $form->values['hostesDetayAciklama'],
                                 'Status' => $form->values['hostesDetayDurum']
                             );

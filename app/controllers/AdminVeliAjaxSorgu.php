@@ -142,6 +142,7 @@ class AdminVeliAjaxSorgu extends Controller {
                                     $form->post('sokak', true);
                                     $form->post('postakodu', true);
                                     $form->post('caddeno', true);
+                                    $form->post('detayAdres', true);
 
                                     $veliAd = $form->values['veliAd'];
                                     $veliSoyad = $form->values['veliSoyad'];
@@ -173,6 +174,7 @@ class AdminVeliAjaxSorgu extends Controller {
                                             'SBVeliPostaKodu' => $form->values['postakodu'],
                                             'SBVeliCaddeNo' => $form->values['caddeno'],
                                             'SBVeliAdres' => $form->values['veliAdres'],
+                                            'SBVeliDetayAdres' => $form->values['detayAdres'],
                                             'Status' => $form->values['veliDurum'],
                                             'SBVeliAciklama' => $form->values['aciklama']
                                         );
@@ -412,6 +414,7 @@ class AdminVeliAjaxSorgu extends Controller {
                                 $veliList[$e]['VeliListPostaKodu'] = $veliOzellikk['SBVeliPostaKodu'];
                                 $veliList[$e]['VeliListCaddeNo'] = $veliOzellikk['SBVeliCaddeNo'];
                                 $veliList[$e]['VeliListAdres'] = $veliOzellikk['SBVeliAdres'];
+                                $veliList[$e]['VeliListDetayAdres'] = $veliOzellikk['SBVeliDetayAdres'];
                                 $veliList[$e]['VeliListDurum'] = $veliOzellikk['Status'];
                                 $veliList[$e]['VeliListAciklama'] = $veliOzellikk['SBVeliAciklama'];
                                 $e++;
@@ -549,6 +552,7 @@ class AdminVeliAjaxSorgu extends Controller {
                                 $veliList[$e]['VeliListPostaKodu'] = $veliOzellikk['SBVeliPostaKodu'];
                                 $veliList[$e]['VeliListCaddeNo'] = $veliOzellikk['SBVeliCaddeNo'];
                                 $veliList[$e]['VeliListAdres'] = $veliOzellikk['SBVeliAdres'];
+                                $veliList[$e]['VeliListDetayAdres'] = $veliOzellikk['SBVeliDetayAdres'];
                                 $veliList[$e]['VeliListDurum'] = $veliOzellikk['Status'];
                                 $veliList[$e]['VeliListAciklama'] = $veliOzellikk['SBVeliAciklama'];
                                 $e++;
@@ -636,6 +640,7 @@ class AdminVeliAjaxSorgu extends Controller {
                         $form->post('veliDetaySokak', true);
                         $form->post('veliDetayPostaKodu', true);
                         $form->post('veliDetayCaddeNo', true);
+                        $form->post('detayAdres', true);
 
                         $veliAd = $form->values['veliDetayAd'];
                         $veliSoyad = $form->values['veliDetaySoyad'];
@@ -664,6 +669,7 @@ class AdminVeliAjaxSorgu extends Controller {
                                 'SBVeliPostaKodu' => $form->values['veliDetayPostaKodu'],
                                 'SBVeliCaddeNo' => $form->values['veliDetayCaddeNo'],
                                 'SBVeliAdres' => $form->values['veliDetayAdres'],
+                                'SBVeliDetayAdres' => $form->values['detayAdres'],
                                 'SBVeliAciklama' => $form->values['veliDetayAciklama'],
                                 'Status' => $form->values['veliDetayDurum']
                             );

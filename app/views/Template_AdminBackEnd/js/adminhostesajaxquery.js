@@ -56,6 +56,8 @@ $(document).ready(function () {
                     $("input[name=postal_code]").val(cevap.hostesDetail[0].HostesListPostaKodu);
                     $("input[name=street_number]").val(cevap.hostesDetail[0].HostesListCaddeNo);
                     $("input[name=hostesDetayID]").val(cevap.hostesDetail[0].HostesListID);
+                    $("input[name=hostesDetayAdres]").val(cevap.hostesDetail[0].HostesListDetayAdres);
+
                     var SelectBolgeOptions = new Array();
                     var SelectHostesOptions = new Array();
                     if (cevap.hostesSelectBolge) {
@@ -347,7 +349,7 @@ $.AdminIslemler = {
                                                 "hostesSoyad": hostesSoyad, "hostesDurum": hostesDurum, "hostesLokasyon": hostesLokasyon, "hostesTelefon": hostesTelefon,
                                                 "hostesEmail": hostesEmail, "hostesAdres": hostesAdres, "aciklama": aciklama, "ulke": ulke,
                                                 "il": il, "ilce": ilce, "semt": semt, "mahalle": mahalle,
-                                                "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "tip": "hostesKaydet"},
+                                                "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "detayAdres": ttl, "tip": "hostesKaydet"},
                                             success: function (cevap) {
                                                 if (cevap.hata) {
                                                     reset();
@@ -635,6 +637,9 @@ $.AdminIslemler = {
         });
     },
     hostesDetailKaydet: function () {
+        if (ttl == '') {
+            ttl = $("input[name=hostesDetayAdres]").val();
+        }
         var hostesdetail_id = $("input[name=hostesDetayID]").val();
         //Hostes İşlemleri Değerleri
         var hostesDetayAd = $("input[name=HostesDetayAdi]").val();
@@ -702,101 +707,140 @@ $.AdminIslemler = {
             alertify.alert(jsDil.Degisiklik);
             return false;
         } else {
-            var hostesBolgeLength = $('select#HostesDetaySelectBolge option:selected').val();
-            if (hostesBolgeLength) {
-                $.ajax({
-                    data: {"hostesdetail_id": hostesdetail_id, "hostesBolgeID[]": hostesBolgeID, "hostesBolgeAd[]": hostesBolgeAd, "hostesAracID[]": hostesAracID, "hostesAracPlaka[]": hostesAracPlaka, "hostesDetayAd": hostesDetayAd,
-                        "hostesDetaySoyad": hostesDetaySoyad, "hostesDetayDurum": hostesDetayDurum, "hostesDetayLokasyon": hostesDetayLokasyon, "hostesDetayTelefon": hostesDetayTelefon,
-                        "hostesDetayEmail": hostesDetayEmail, "hostesDetayAdres": hostesDetayAdres, "hostesDetayAciklama": hostesDetayAciklama, "hostesDetayUlke": hostesDetayUlke,
-                        "hostesDetayIl": hostesDetayIl, "hostesDetayIlce": hostesDetayIlce, "hostesDetaySemt": hostesDetaySemt, "hostesDetayMahalle": hostesDetayMahalle,
-                        "hostesDetaySokak": hostesDetaySokak, "hostesDetayPostaKodu": hostesDetayPostaKodu, "hostesDetayCaddeNo": hostesDetayCaddeNo, "tip": "hostesDetailKaydet"},
-                    success: function (cevap) {
-                        if (cevap.hata) {
+            if (hostesDetayAd == '') {
+                reset();
+                alertify.alert(jsDil.IsimBos);
+                return false;
+            } else {
+                if (hostesDetayAd.length < 2) {
+                    reset();
+                    alertify.alert(jsDil.IsimKarekter);
+                    return false;
+                } else {
+                    hostesDetaySoyad = hostesDetaySoyad.trim();
+                    if (hostesDetaySoyad == '') {
+                        reset();
+                        alertify.alert(jsDil.SoyadBos);
+                        return false;
+                    } else {
+                        if (hostesDetaySoyad.length < 2) {
                             reset();
-                            alertify.alert(jsDil.Hata);
+                            alertify.alert(jsDil.SoyadKarekter);
                             return false;
                         } else {
-                            disabledForm();
-                            reset();
-                            alertify.success(jsDil.HostesDuzenle);
-                            var SelectBolgeOptions = new Array();
-                            var SelectHostesOptions = new Array();
-                            if (hostesBolgeID.length > 0) {
-                                var bolgelength = hostesBolgeID.length;
-                                for (var b = 0; b < bolgelength; b++) {
-                                    SelectBolgeOptions[b] = {label: hostesBolgeAd[b], title: hostesBolgeAd[b], value: hostesBolgeID[b], disabled: true, selected: true};
-                                }
-
-                                if (hostesBolgeNID.length > 0) {
-                                    var aracBolgeLength = hostesBolgeNID.length;
-                                    for (var z = 0; z < aracBolgeLength; z++) {
-                                        SelectBolgeOptions[b] = {label: hostesBolgeNAd[z], title: hostesBolgeNAd[z], value: hostesBolgeNID[z], disabled: true};
-                                        b++;
-                                    }
-                                }
+                            if (hostesDetayEmail == ' ') {
+                                reset();
+                                alertify.alert(jsDil.EpostaBos);
+                                return false;
                             } else {
-                                if (hostesBolgeNID.length > 0) {
-                                    var aracBolgeLength = hostesBolgeNID.length;
-                                    for (var b = 0; b < aracBolgeLength; b++) {
-                                        SelectBolgeOptions[b] = {label: hostesBolgeNAd[b], title: hostesBolgeNAd[b], value: hostesBolgeNID[b], disabled: true};
-                                    }
-                                }
-                            }
+                                hostesDetayEmail = hostesDetayEmail.trim();
+                                var result = ValidateEmail(hostesDetayEmail);
+                                if (!result) {
+                                    reset();
+                                    alertify.alert(jsDil.EpostaUygun);
+                                    return false;
+                                } else {
+                                    var hostesBolgeLength = $('select#HostesDetaySelectBolge option:selected').val();
+                                    if (hostesBolgeLength) {
+                                        $.ajax({
+                                            data: {"hostesdetail_id": hostesdetail_id, "hostesBolgeID[]": hostesBolgeID, "hostesBolgeAd[]": hostesBolgeAd, "hostesAracID[]": hostesAracID, "hostesAracPlaka[]": hostesAracPlaka, "hostesDetayAd": hostesDetayAd,
+                                                "hostesDetaySoyad": hostesDetaySoyad, "hostesDetayDurum": hostesDetayDurum, "hostesDetayLokasyon": hostesDetayLokasyon, "hostesDetayTelefon": hostesDetayTelefon,
+                                                "hostesDetayEmail": hostesDetayEmail, "hostesDetayAdres": hostesDetayAdres, "hostesDetayAciklama": hostesDetayAciklama, "hostesDetayUlke": hostesDetayUlke,
+                                                "hostesDetayIl": hostesDetayIl, "hostesDetayIlce": hostesDetayIlce, "hostesDetaySemt": hostesDetaySemt, "hostesDetayMahalle": hostesDetayMahalle,
+                                                "hostesDetaySokak": hostesDetaySokak, "hostesDetayPostaKodu": hostesDetayPostaKodu, "hostesDetayCaddeNo": hostesDetayCaddeNo, "detayAdres": ttl, "tip": "hostesDetailKaydet"},
+                                            success: function (cevap) {
+                                                if (cevap.hata) {
+                                                    reset();
+                                                    alertify.alert(jsDil.Hata);
+                                                    return false;
+                                                } else {
+                                                    disabledForm();
+                                                    reset();
+                                                    alertify.success(jsDil.HostesDuzenle);
+                                                    var SelectBolgeOptions = new Array();
+                                                    var SelectHostesOptions = new Array();
+                                                    if (hostesBolgeID.length > 0) {
+                                                        var bolgelength = hostesBolgeID.length;
+                                                        for (var b = 0; b < bolgelength; b++) {
+                                                            SelectBolgeOptions[b] = {label: hostesBolgeAd[b], title: hostesBolgeAd[b], value: hostesBolgeID[b], disabled: true, selected: true};
+                                                        }
 
-                            if (hostesAracID.length > 0) {
-                                var hostesselectlength = hostesAracID.length;
-                                for (var t = 0; t < hostesselectlength; t++) {
-                                    SelectHostesOptions[t] = {label: hostesAracPlaka[t], title: hostesAracPlaka[t], value: hostesAracID[t], disabled: true, selected: true};
-                                }
+                                                        if (hostesBolgeNID.length > 0) {
+                                                            var aracBolgeLength = hostesBolgeNID.length;
+                                                            for (var z = 0; z < aracBolgeLength; z++) {
+                                                                SelectBolgeOptions[b] = {label: hostesBolgeNAd[z], title: hostesBolgeNAd[z], value: hostesBolgeNID[z], disabled: true};
+                                                                b++;
+                                                            }
+                                                        }
+                                                    } else {
+                                                        if (hostesBolgeNID.length > 0) {
+                                                            var aracBolgeLength = hostesBolgeNID.length;
+                                                            for (var b = 0; b < aracBolgeLength; b++) {
+                                                                SelectBolgeOptions[b] = {label: hostesBolgeNAd[b], title: hostesBolgeNAd[b], value: hostesBolgeNID[b], disabled: true};
+                                                            }
+                                                        }
+                                                    }
 
-                                if (hostesAracNID.length > 0) {
-                                    var hosteslength = hostesAracNID.length;
-                                    for (var f = 0; f < hosteslength; f++) {
-                                        SelectHostesOptions[t] = {label: hostesAracNAd[f], title: hostesAracNAd[f], value: hostesAracNID[f], disabled: true};
-                                        t++;
-                                    }
-                                }
-                            } else {
-                                if (hostesAracNID.length > 0) {
-                                    var hosteslength = hostesAracNID.length;
-                                    for (var t = 0; f < hosteslength; t++) {
-                                        SelectHostesOptions[t] = {label: hostesAracNAd[t], title: hostesAracNAd[t], value: hostesAracNID[t], disabled: true};
-                                    }
-                                }
-                            }
+                                                    if (hostesAracID.length > 0) {
+                                                        var hostesselectlength = hostesAracID.length;
+                                                        for (var t = 0; t < hostesselectlength; t++) {
+                                                            SelectHostesOptions[t] = {label: hostesAracPlaka[t], title: hostesAracPlaka[t], value: hostesAracID[t], disabled: true, selected: true};
+                                                        }
 
-                            $('#HostesDetaySelectBolge').multiselect('refresh');
-                            $('#HostesDetayArac').multiselect('refresh');
-                            $('#HostesDetaySelectBolge').multiselect('dataprovider', SelectBolgeOptions);
-                            $('#HostesDetayArac').multiselect('dataprovider', SelectHostesOptions);
-                            var length = $('tbody#hostesRow tr').length;
-                            for (var t = 0; t < length; t++) {
-                                var attrValueId = $("tbody#hostesRow > tr > td > a").eq(t).attr('value');
-                                if (attrValueId == hostesdetail_id) {
-                                    if (hostesDetayDurum != 0) {
-                                        $("tbody#hostesRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user"></i> ' + hostesDetayAd);
-                                        $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(hostesDetaySoyad);
-                                        $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(hostesDetayTelefon);
-                                        $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(hostesDetayEmail);
-                                        $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(hostesDetayAciklama);
-                                        $('tbody#hostesRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                        if (hostesAracNID.length > 0) {
+                                                            var hosteslength = hostesAracNID.length;
+                                                            for (var f = 0; f < hosteslength; f++) {
+                                                                SelectHostesOptions[t] = {label: hostesAracNAd[f], title: hostesAracNAd[f], value: hostesAracNID[f], disabled: true};
+                                                                t++;
+                                                            }
+                                                        }
+                                                    } else {
+                                                        if (hostesAracNID.length > 0) {
+                                                            var hosteslength = hostesAracNID.length;
+                                                            for (var t = 0; f < hosteslength; t++) {
+                                                                SelectHostesOptions[t] = {label: hostesAracNAd[t], title: hostesAracNAd[t], value: hostesAracNID[t], disabled: true};
+                                                            }
+                                                        }
+                                                    }
+
+                                                    $('#HostesDetaySelectBolge').multiselect('refresh');
+                                                    $('#HostesDetayArac').multiselect('refresh');
+                                                    $('#HostesDetaySelectBolge').multiselect('dataprovider', SelectBolgeOptions);
+                                                    $('#HostesDetayArac').multiselect('dataprovider', SelectHostesOptions);
+                                                    var length = $('tbody#hostesRow tr').length;
+                                                    for (var t = 0; t < length; t++) {
+                                                        var attrValueId = $("tbody#hostesRow > tr > td > a").eq(t).attr('value');
+                                                        if (attrValueId == hostesdetail_id) {
+                                                            if (hostesDetayDurum != 0) {
+                                                                $("tbody#hostesRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user"></i> ' + hostesDetayAd);
+                                                                $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(hostesDetaySoyad);
+                                                                $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(hostesDetayTelefon);
+                                                                $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(hostesDetayEmail);
+                                                                $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(hostesDetayAciklama);
+                                                                $('tbody#hostesRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                            } else {
+                                                                $("tbody#hostesRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user" style="color:red"></i> ' + hostesDetayAd);
+                                                                $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(hostesDetaySoyad);
+                                                                $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(hostesDetayTelefon);
+                                                                $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(hostesDetayEmail);
+                                                                $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(hostesDetayAciklama);
+                                                                $('tbody#hostesRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        });
                                     } else {
-                                        $("tbody#hostesRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user" style="color:red"></i> ' + hostesDetayAd);
-                                        $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(hostesDetaySoyad);
-                                        $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(hostesDetayTelefon);
-                                        $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(hostesDetayEmail);
-                                        $("tbody#hostesRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(hostesDetayAciklama);
-                                        $('tbody#hostesRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                        reset();
+                                        alertify.alert(jsDil.BolgeSec);
+                                        return false;
                                     }
                                 }
                             }
                         }
                     }
-                });
-            } else {
-                reset();
-                alertify.alert(jsDil.BolgeSec);
-                return false;
+                }
             }
         }
     }
