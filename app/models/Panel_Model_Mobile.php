@@ -379,6 +379,24 @@ class Panel_Model_Mobile extends ModelMobile {
         return($this->db->select($sql));
     }
 
+    //araç takvim özellikleri
+    public function soforAracTakvim($aracID) {
+        $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurAracID = ' . $aracID;
+        return($this->db->select($sql));
+    }
+
+    //şoför takvim özellikleri
+    public function soforTakvim($soforID) {
+        $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurSoforID = ' . $soforID;
+        return($this->db->select($sql));
+    }
+    
+    //hostes takvim özellikleri
+    public function hostesTakvim($hostesID) {
+        $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurHostesID = ' . $hostesID;
+        return($this->db->select($sql));
+    }
+
 }
 
 ?>

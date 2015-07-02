@@ -44,6 +44,7 @@ class tr {
             "HostesBilgi" => "Hostes Bilgileri",
             "AracBilgi" => "Araç Bilgileri",
             "AracListe" => "Araç Listesi",
+            "Takvim" => "Takvim",
         );
         return $trdil;
     }

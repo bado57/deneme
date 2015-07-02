@@ -2,6 +2,8 @@
 <html>
     <head>
         <meta charset="utf-8">
+    <link href="<?php echo SITE_MPLUGIN_CSS; ?>/calendar/fullcalendar.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo SITE_MPLUGIN_CSS; ?>/calendar/cal_custom.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="<?php echo SITE_PLUGINMSOFOR_CSS ?>/onsenui.css">
         <link rel="stylesheet" type="text/css" href="<?php echo SITE_PLUGINMSOFOR_CSS ?>/font_awesome/css/font-awesome.min.css">
             <link rel="stylesheet" type="text/css" href="<?php echo SITE_PLUGINMSOFOR_CSS ?>/onsen-css-components-blue-basic-theme.css">
@@ -12,6 +14,9 @@
                         <script src="<?php echo SITE_PLUGINMSOFOR_JS ?>/jquery-2.1.4.min.js"></script>
                         <script src="<?php echo SITE_PLUGINMSOFOR_JS ?>/onsenui.js"></script>
                         <script src="<?php echo SITE_PLUGINMSOFOR_JS ?>/turajaxquery.js"></script>
+                        <script src="<?php echo SITE_MPLUGIN_JS; ?>/calendar/moment.min.js"></script>
+                        <script src="<?php echo SITE_MPLUGIN_JS; ?>/calendar/fullcalendar.js"></script>
+                        <script src="<?php echo SITE_MPLUGIN_JS; ?>/calendar/lang-all.js"></script>
                         <script src="<?php echo MLANGUAGE_JS . $model[0]['dil']; ?>.js"></script>
                         <script src="<?php echo SITE_MPLUGIN_JS; ?>/validation.js"></script>
                         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
@@ -328,6 +333,7 @@
                                                 </ons-col>
                                                 <ons-col class="coldty">
                                                     <b><span id="sofordetayAd"></span></b>
+                                                    <input type="hidden" name="soforDetayID" value=""></input>
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>
@@ -359,6 +365,16 @@
                                                 <ons-col class="coldty adressbar">
                                                     <span id="sofordetayadres"></span>
                                                     <input type="hidden" name="sofordetaylocation" value=""></input>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>
+                                        <ons-list-item modifier="chevron" onclick="turNavigator.pushPage('sofortakvim.html', {animation: 'slide'})">
+                                            <ons-row>
+                                                <ons-col width="40px">
+                                                    <i class="fa fa-calendar"></i> 
+                                                </ons-col>
+                                                <ons-col class="coldty">
+                                                    <?php echo $data["Takvim"]; ?>
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>
@@ -396,6 +412,27 @@
                                 </ons-page>
                             </ons-template>
 
+                            <ons-template id="sofortakvim.html">
+                                <ons-page id="sofortakvim">
+                                    <ons-toolbar>
+                                        <div class="left"><ons-button class="back" modifier="quiet" onclick="turNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
+                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-calendar"></i></div>
+                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="turNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
+                                    </ons-toolbar>
+                                    <br />
+                                    <div id="aracTakvim" class="settings-header col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">
+                                            <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div style="margin-bottom: 10px"><?php echo $data["Takvim"]; ?> (<b><span id="takvimSofor"></span></b>)</div>
+                                                <div class="row" id="getPartialView">
+                                                    <div id="calendar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ons-page>
+                            </ons-template>
+
                             <ons-template id="hostesdetay.html">
                                 <ons-page class="profileMain" name="pMain" id="hostesdetay">
                                     <ons-toolbar>
@@ -414,6 +451,7 @@
                                                 </ons-col>
                                                 <ons-col class="coldty">
                                                     <b><span id="hostesdetayAd"></span></b>
+                                                    <input type="hidden" name="hostesDetayID" value=""></input>
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>
@@ -448,6 +486,16 @@
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>
+                                        <ons-list-item modifier="chevron" onclick="turNavigator.pushPage('hostestakvim.html', {animation: 'slide'})">
+                                            <ons-row>
+                                                <ons-col width="40px">
+                                                    <i class="fa fa-calendar"></i> 
+                                                </ons-col>
+                                                <ons-col class="coldty">
+                                                    <?php echo $data["Takvim"]; ?>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>
                                     </ons-list>
                                     <br />
                                 </ons-page>
@@ -478,6 +526,27 @@
                                         <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="console.log(turNavigator.resetToPage(0, {animation: 'slide'}))"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                     </ons-toolbar>
                                     <div class="google-maps" id="sofor_map">
+                                    </div>
+                                </ons-page>
+                            </ons-template>
+
+                            <ons-template id="hostestakvim.html">
+                                <ons-page id="hostestakvim">
+                                    <ons-toolbar>
+                                        <div class="left"><ons-button class="back" modifier="quiet" onclick="turNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
+                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-calendar"></i></div>
+                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="turNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
+                                    </ons-toolbar>
+                                    <br />
+                                    <div id="aracTakvim" class="settings-header col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">
+                                            <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div style="margin-bottom: 10px"><?php echo $data["Takvim"]; ?> (<b><span id="takvimHostes"></span></b>)</div>
+                                                <div class="row" id="getPartialView">
+                                                    <div id="calendar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </ons-page>
                             </ons-template>
@@ -557,7 +626,7 @@
                                 <ons-page class="profileMain" name="pMain" id="aracdetay">
                                     <ons-toolbar>
                                         <div class="left"><ons-button class="back" modifier="quiet" onclick="turNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
-                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-user"></i></div>
+                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-bus"></i></div>
                                         <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="turNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                     </ons-toolbar>
                                     <br />
@@ -571,6 +640,7 @@
                                                 </ons-col>
                                                 <ons-col class="coldty">
                                                     <b><span id="aracPlaka"></span></b>
+                                                    <input type="hidden" name="aracDetayID" value=""></input>
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>
@@ -624,6 +694,16 @@
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>
+                                        <ons-list-item modifier="chevron" onclick="turNavigator.pushPage('aractakvim.html', {animation: 'slide'})">
+                                            <ons-row>
+                                                <ons-col width="40px">
+                                                    <i class="fa fa-calendar"></i> 
+                                                </ons-col>
+                                                <ons-col class="coldty">
+                                                    <?php echo $data["Takvim"]; ?>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>
                                     </ons-list>
                                     <br />
                                 </ons-page>
@@ -654,6 +734,27 @@
                                         <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="console.log(turNavigator.resetToPage(0, {animation: 'slide'}))"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                     </ons-toolbar>
                                     <div class="google-maps" id="multiple_lokasyon_map">
+                                    </div>
+                                </ons-page>
+                            </ons-template>
+
+                            <ons-template id="aractakvim.html">
+                                <ons-page id="aractakvim">
+                                    <ons-toolbar>
+                                        <div class="left"><ons-button class="back" modifier="quiet" onclick="turNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
+                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-calendar"></i></div>
+                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="turNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
+                                    </ons-toolbar>
+                                    <br />
+                                    <div id="aracTakvim" class="settings-header col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">
+                                            <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div style="margin-bottom: 10px"><?php echo $data["Takvim"]; ?> (<b><span id="takvimArac"></span></b>)</div>
+                                                <div class="row" id="getPartialView">
+                                                    <div id="calendar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </ons-page>
                             </ons-template>

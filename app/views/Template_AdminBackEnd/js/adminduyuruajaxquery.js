@@ -29,38 +29,52 @@ $(document).ready(function () {
     var bolgeler = new Array();
     var kurumlar = new Array();
     var turlar = new Array();
-    $(document).on("change", "#DuyuruBolge", function () {
-        bolgeler = $(this).val();
-        $(".kurumFiltre").fadeOut();
-        $(".turFiltre").fadeOut();
-        $(".DuyuruFiltre").fadeOut();
 
-        if (bolgeler) {
-            $(".bolgeKullanici").fadeIn();
-            $(".bolgeIslem").fadeIn();
-        } else {
-            $(".bolgeKullanici").fadeOut();
-            $(".bolgeIslem").fadeOut();
-            $(".bolgeDetaylandir").fadeOut();
+    $('#DuyuruBolge').multiselect({
+        onDropdownShow: function (event) {
+            var bolgeLength = $('select#DuyuruBolge option').length;
+            if (bolgeLength) {
+                $('#DuyuruBolge').multiselect('refresh');
+            } else {
+                reset();
+                alertify.alert(jsDil.BolgeOlustur);
+                return false;
+            }
+        },
+        onChange: function (option, checked, select) {
+            bolgeler = $('select#DuyuruBolge option[value!="-1"]:selected').val();
+            $(".kurumFiltre").fadeOut();
+            $(".turFiltre").fadeOut();
+            $(".DuyuruFiltre").fadeOut();
+
+            if (bolgeler) {
+                $(".bolgeKullanici").fadeIn();
+                $(".bolgeIslem").fadeIn();
+                $(".bolgeDetaylandir").fadeIn();
+            } else {
+                $(".bolgeKullanici").fadeOut();
+                $(".bolgeIslem").fadeOut();
+                $(".bolgeDetaylandir").fadeOut();
+            }
+            $('input[name=bolgeAdmin]').iCheck('uncheck');
+            $('input[name=bolgeSofor]').iCheck('uncheck');
+            $('input[name=bolgeHostes]').iCheck('uncheck');
+            $('input[name=bolgeVeli]').iCheck('uncheck');
+            $('input[name=bolgeOgrenci]').iCheck('uncheck');
+            $('input[name=bolgePersonel]').iCheck('uncheck');
+            $("ul#userAdmin").empty();
+            $("ul#userSofor").empty();
+            $("ul#userHostes").empty();
+            $("ul#userVeli").empty();
+            $("ul#userOgrenci").empty();
+            $("ul#userPersonel").empty();
+            $("#AdminCount").text('');
+            $("#SoforCount").text('');
+            $("#HostesCount").text('');
+            $("#VeliCount").text('');
+            $("#OgrenciCount").text('');
+            $("#PersonelCount").text('');
         }
-        $('input[name=bolgeAdmin]').iCheck('uncheck');
-        $('input[name=bolgeSofor]').iCheck('uncheck');
-        $('input[name=bolgeHostes]').iCheck('uncheck');
-        $('input[name=bolgeVeli]').iCheck('uncheck');
-        $('input[name=bolgeOgrenci]').iCheck('uncheck');
-        $('input[name=bolgePersonel]').iCheck('uncheck');
-        $("ul#userAdmin").empty();
-        $("ul#userSofor").empty();
-        $("ul#userHostes").empty();
-        $("ul#userVeli").empty();
-        $("ul#userOgrenci").empty();
-        $("ul#userPersonel").empty();
-        $("#AdminCount").text('');
-        $("#SoforCount").text('');
-        $("#HostesCount").text('');
-        $("#VeliCount").text('');
-        $("#OgrenciCount").text('');
-        $("#PersonelCount").text('');
     });
 
     $(document).on("click", ".bolgeDetaylandir", function () {
@@ -115,35 +129,47 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on("change", "#DuyuruKurum", function () {
-        kurumlar = $(this).val();
-        $(".turFiltre").fadeOut();
-        $(".DuyuruFiltre").fadeOut();
-        if (kurumlar) {
-            $(".kurumKullanici").fadeIn();
-            $(".kurumIslem").fadeIn();
-        } else {
-            $(".kurumKullanici").fadeOut();
-            $(".kurumIslem").fadeOut();
+    $('#DuyuruKurum').multiselect({
+        onDropdownShow: function (event) {
+            var kurumLength = $('select#DuyuruKurum option').length;
+            if (kurumLength) {
+                $('#DuyuruKurum').multiselect('refresh');
+            } else {
+                reset();
+                alertify.alert(jsDil.BolgeKurumYok);
+                return false;
+            }
+        },
+        onChange: function (option, checked, select) {
+            kurumlar = $('select#DuyuruKurum option[value!="-1"]:selected').val();
+            $(".turFiltre").fadeOut();
+            $(".DuyuruFiltre").fadeOut();
+            if (kurumlar) {
+                $(".kurumKullanici").fadeIn();
+                $(".kurumIslem").fadeIn();
+            } else {
+                $(".kurumKullanici").fadeOut();
+                $(".kurumIslem").fadeOut();
+            }
+            $('input[name=kurumAdmin]').iCheck('uncheck');
+            $('input[name=kurumSofor]').iCheck('uncheck');
+            $('input[name=kurumHostes]').iCheck('uncheck');
+            $('input[name=kurumVeli]').iCheck('uncheck');
+            $('input[name=kurumOgrenci]').iCheck('uncheck');
+            $('input[name=kurumPersonel]').iCheck('uncheck');
+            $("ul#userAdmin").empty();
+            $("ul#userSofor").empty();
+            $("ul#userHostes").empty();
+            $("ul#userVeli").empty();
+            $("ul#userOgrenci").empty();
+            $("ul#userPersonel").empty();
+            $("#AdminCount").text('');
+            $("#SoforCount").text('');
+            $("#HostesCount").text('');
+            $("#VeliCount").text('');
+            $("#OgrenciCount").text('');
+            $("#PersonelCount").text('');
         }
-        $('input[name=kurumAdmin]').iCheck('uncheck');
-        $('input[name=kurumSofor]').iCheck('uncheck');
-        $('input[name=kurumHostes]').iCheck('uncheck');
-        $('input[name=kurumVeli]').iCheck('uncheck');
-        $('input[name=kurumOgrenci]').iCheck('uncheck');
-        $('input[name=kurumPersonel]').iCheck('uncheck');
-        $("ul#userAdmin").empty();
-        $("ul#userSofor").empty();
-        $("ul#userHostes").empty();
-        $("ul#userVeli").empty();
-        $("ul#userOgrenci").empty();
-        $("ul#userPersonel").empty();
-        $("#AdminCount").text('');
-        $("#SoforCount").text('');
-        $("#HostesCount").text('');
-        $("#VeliCount").text('');
-        $("#OgrenciCount").text('');
-        $("#PersonelCount").text('');
     });
 
     $(document).on("click", ".kurumGizle", function () {
@@ -224,36 +250,48 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on("change", "#DuyuruTur", function () {
-        turlar = $(this).val();
-        $(".DuyuruFiltre").fadeOut();
-        if (turlar) {
-            $(".kurumKullanici").fadeOut();
-            $(".kurumIslem").fadeOut();
-            $(".turKullanici").fadeIn();
-            $(".turIslem").fadeIn();
-        } else {
-            $(".turKullanici").fadeOut();
-            $(".turIslem").fadeOut();
+    $('#DuyuruTur').multiselect({
+        onDropdownShow: function (event) {
+            var turLength = $('select#DuyuruTur option').length;
+            if (turLength) {
+                $('#DuyuruTur').multiselect('refresh');
+            } else {
+                reset();
+                alertify.alert(jsDil.TurYok);
+                return false;
+            }
+        },
+        onChange: function (option, checked, select) {
+            turlar = $('select#DuyuruTur option[value!="-1"]:selected').val();
+            $(".DuyuruFiltre").fadeOut();
+            if (turlar) {
+                $(".kurumKullanici").fadeOut();
+                $(".kurumIslem").fadeOut();
+                $(".turKullanici").fadeIn();
+                $(".turIslem").fadeIn();
+            } else {
+                $(".turKullanici").fadeOut();
+                $(".turIslem").fadeOut();
+            }
+            $('input[name=turAdmin]').iCheck('uncheck');
+            $('input[name=turSofor]').iCheck('uncheck');
+            $('input[name=turHostes]').iCheck('uncheck');
+            $('input[name=turVeli]').iCheck('uncheck');
+            $('input[name=turOgrenci]').iCheck('uncheck');
+            $('input[name=turPersonel]').iCheck('uncheck');
+            $("ul#userAdmin").empty();
+            $("ul#userSofor").empty();
+            $("ul#userHostes").empty();
+            $("ul#userVeli").empty();
+            $("ul#userOgrenci").empty();
+            $("ul#userPersonel").empty();
+            $("#AdminCount").text('');
+            $("#SoforCount").text('');
+            $("#HostesCount").text('');
+            $("#VeliCount").text('');
+            $("#OgrenciCount").text('');
+            $("#PersonelCount").text('');
         }
-        $('input[name=turAdmin]').iCheck('uncheck');
-        $('input[name=turSofor]').iCheck('uncheck');
-        $('input[name=turHostes]').iCheck('uncheck');
-        $('input[name=turVeli]').iCheck('uncheck');
-        $('input[name=turOgrenci]').iCheck('uncheck');
-        $('input[name=turPersonel]').iCheck('uncheck');
-        $("ul#userAdmin").empty();
-        $("ul#userSofor").empty();
-        $("ul#userHostes").empty();
-        $("ul#userVeli").empty();
-        $("ul#userOgrenci").empty();
-        $("ul#userPersonel").empty();
-        $("#AdminCount").text('');
-        $("#SoforCount").text('');
-        $("#HostesCount").text('');
-        $("#VeliCount").text('');
-        $("#OgrenciCount").text('');
-        $("#PersonelCount").text('');
     });
 
     $(document).on("click", ".turGizle", function () {

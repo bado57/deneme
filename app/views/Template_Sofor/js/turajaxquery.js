@@ -384,6 +384,7 @@ ons.ready(function () {
                     return false;
                 } else {
                     $("#sofordetayAd").text(cevap.Detay.Ad + ' ' + cevap.Detay.Soyad);
+                    $("input[name=soforDetayID]").val(kisiid);
                     if (cevap.Detay.Tel) {
                         $("#sofordetayTel").text(cevap.Detay.Tel);
                         $("a#sofordetayTel").attr("href", "tel:" + cevap.Detay.Tel);
@@ -430,6 +431,7 @@ ons.ready(function () {
                     return false;
                 } else {
                     $("#hostesdetayAd").text(cevap.Detay.Ad + ' ' + cevap.Detay.Soyad);
+                    $("input[name=hostesDetayID]").val(kisiid);
                     if (cevap.Detay.Tel) {
                         $("#hostesdetayTel").text(cevap.Detay.Tel);
                         $("a#hostesdetayTel").attr("href", "tel:" + cevap.Detay.Tel);
@@ -487,6 +489,7 @@ ons.ready(function () {
                     return false;
                 } else {
                     $("#aracPlaka").text(cevap.Detay.Plaka);
+                    $("input[name=aracDetayID]").val(aracid);
                     if (cevap.Detay.Marka) {
                         $("#aracMarka").text(cevap.Detay.Marka);
                     } else {
@@ -542,6 +545,168 @@ ons.ready(function () {
                 }
             }
         });
+    });
+    $(document).on('pageinit', '#sofortakvim', function () {
+        var currentLangCode = $("input[name=lang]").val();
+        $("#takvimSofor").text($("#sofordetayAd").text());
+        $('#calendar').fullCalendar('refetchEvents');
+        $('#calendar').fullCalendar('refresh');
+        $('#calendar').fullCalendar({
+            header: {
+                right: ''
+            },
+            defaultDate: '2015-03-02',
+            defaultView: 'agendaWeek',
+            weekNumbers: false,
+            editable: false,
+            weekdaysShort: true,
+            height: 'auto',
+            lang: currentLangCode,
+            allDaySlot: true,
+            slotDuration: "00:15:01",
+            axisFormat: 'HH:mm',
+            timeFormat: {
+                agenda: 'HH:mm'
+            },
+            events: function (start, end, timezone, callback) {
+                $.ajax({
+                    data: {start: '2015-03-02', end: '2015-03-09', "id": GetCustomValue(),
+                        "firma_id": GetCustomFValue, "tip": "soforTakvim"},
+                    success: function (doc) {
+                        callback(doc);
+                        modal.hide();
+                    }
+                });
+            },
+            eventColor: '#009933',
+            loading: function (bool) {
+                modal.show();
+            }
+        });
+        function GetCustomValue()
+        {
+            return $("input[name=soforDetayID]").val();
+        }
+        function GetCustomFValue()
+        {
+            return $("input[name=firmaId]").val();
+        }
+        for (var i = 0; i < 7; i++) {
+            var days = $(".fc-day-header").eq(i).text();
+            var kelime = days.substr(0, days.indexOf(' '));
+            if (kelime) {
+                //var sonkelime=kelime.replace(/,\s*$/, "");
+                $(".fc-day-header").eq(i).text(kelime);
+            }
+        }
+    });
+    $(document).on('pageinit', '#hostestakvim', function () {
+        var currentLangCode = $("input[name=lang]").val();
+        $("#takvimHostes").text($("#hostesdetayAd").text());
+        $('#calendar').fullCalendar('refetchEvents');
+        $('#calendar').fullCalendar('refresh');
+        $('#calendar').fullCalendar({
+            header: {
+                right: ''
+            },
+            defaultDate: '2015-03-02',
+            defaultView: 'agendaWeek',
+            weekNumbers: false,
+            editable: false,
+            weekdaysShort: true,
+            height: 'auto',
+            lang: currentLangCode,
+            allDaySlot: true,
+            slotDuration: "00:15:01",
+            axisFormat: 'HH:mm',
+            timeFormat: {
+                agenda: 'HH:mm'
+            },
+            events: function (start, end, timezone, callback) {
+                $.ajax({
+                    data: {start: '2015-03-02', end: '2015-03-09', "id": GetCustomValue(),
+                        "firma_id": GetCustomFValue, "tip": "hostesTakvim"},
+                    success: function (doc) {
+                        callback(doc);
+                        modal.hide();
+                    }
+                });
+            },
+            eventColor: '#009933',
+            loading: function (bool) {
+                modal.show();
+            }
+        });
+        function GetCustomValue()
+        {
+            return $("input[name=hostesDetayID]").val();
+        }
+        function GetCustomFValue()
+        {
+            return $("input[name=firmaId]").val();
+        }
+        for (var i = 0; i < 7; i++) {
+            var days = $(".fc-day-header").eq(i).text();
+            var kelime = days.substr(0, days.indexOf(' '));
+            if (kelime) {
+                //var sonkelime=kelime.replace(/,\s*$/, "");
+                $(".fc-day-header").eq(i).text(kelime);
+            }
+        }
+    });
+    $(document).on('pageinit', '#aractakvim', function () {
+        var currentLangCode = $("input[name=lang]").val();
+        $("#takvimArac").text($("#aracPlaka").text());
+        $('#calendar').fullCalendar('refetchEvents');
+        $('#calendar').fullCalendar('refresh');
+        $('#calendar').fullCalendar({
+            header: {
+                right: ''
+            },
+            defaultDate: '2015-03-02',
+            defaultView: 'agendaWeek',
+            weekNumbers: false,
+            editable: false,
+            weekdaysShort: true,
+            height: 'auto',
+            lang: currentLangCode,
+            allDaySlot: true,
+            slotDuration: "00:15:01",
+            axisFormat: 'HH:mm',
+            timeFormat: {
+                agenda: 'HH:mm'
+            },
+            events: function (start, end, timezone, callback) {
+                $.ajax({
+                    data: {start: '2015-03-02', end: '2015-03-09', "id": GetCustomValue(),
+                        "firma_id": GetCustomFValue, "tip": "soforAracTakvim"},
+                    success: function (doc) {
+                        callback(doc);
+                        modal.hide();
+                    }
+                });
+            },
+            eventColor: '#009933',
+            loading: function (bool) {
+                modal.show();
+            }
+        });
+        function GetCustomValue()
+        {
+            return $("input[name=aracDetayID]").val();
+        }
+        function GetCustomFValue()
+        {
+            return $("input[name=firmaId]").val();
+        }
+        for (var i = 0; i < 7; i++) {
+            var days = $(".fc-day-header").eq(i).text();
+            var kelime = days.substr(0, days.indexOf(' '));
+            if (kelime) {
+                //var sonkelime=kelime.replace(/,\s*$/, "");
+                $(".fc-day-header").eq(i).text(kelime);
+            }
+        }
     });
 });
 $.SoforIslemler = {

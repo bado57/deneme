@@ -61,6 +61,7 @@ define("SITE_PLUGINM_JS", "http://192.168.1.26/SProject/app/views/assets/js");
 define("MLANGUAGE_JS", "http://192.168.1.26/SProject/app/mobilscriptlanguage/");
 define("SITE_PLUGINMADMIN_AjaxJs", "http://192.168.1.26/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js");
 define("SITE_MPLUGIN_JS", "http://192.168.1.26/SProject/app/views/assets/js");
+define("SITE_MPLUGIN_CSS", "http://192.168.1.26/SProject/app/views/assets/css");
 //veli back end
 //öğrenci back end
 //şoför back end

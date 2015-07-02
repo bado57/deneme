@@ -303,6 +303,7 @@
 </div>
 
 <div id="hostesTakvim" class="svClose col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+    <input name="takvimLang" type="hidden" value="<?php echo Session::get("dil"); ?>" />
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h3><?php echo $data["Takvim"]; ?> (<span id="takvimHostes"></span>)<span class="pull-right"><button data-type="svClose" data-class="hostesTakvim" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>

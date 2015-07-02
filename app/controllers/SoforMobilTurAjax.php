@@ -413,6 +413,159 @@ class SoforMobilTurAjax extends Controller {
                     }
 
                     break;
+
+                case "soforTakvim":
+                    $calendar = $this->load->otherClasses('Calendar');
+                    // Short-circuit if the client did not give us a date range.
+                    if (!isset($_POST['start']) || !isset($_POST['end'])) {
+                        error_log("die");
+                        die("Please provide a date range.");
+                    }
+                    // Parse the start/end parameters.
+                    // These are assumed to be ISO8601 strings with no time nor timezone, like "2013-12-29".
+                    // Since no timezone will be present, they will parsed as UTC.
+                    $range_start = parseDateTime($_POST['start']);
+                    $range_end = parseDateTime($_POST['end']);
+                    // Parse the timezone parameter if it is present.
+                    $timezone = null;
+                    if (isset($_POST['timezone'])) {
+                        $timezone = new DateTimeZone($_POST['timezone']);
+                    }
+
+                    $form->post("id", true);
+                    $id = $form->values['id'];
+                    $soforTakvim = $Panel_Model->soforTakvim($id);
+                    $a = 0;
+                    foreach ($soforTakvim as $soforTakvimm) {
+                        $soforTkvim[$a]['Pzt'] = $soforTakvimm['SBTurPzt'];
+                        $soforTkvim[$a]['Sli'] = $soforTakvimm['SBTurSli'];
+                        $soforTkvim[$a]['Crs'] = $soforTakvimm['SBTurCrs'];
+                        $soforTkvim[$a]['Prs'] = $soforTakvimm['SBTurPrs'];
+                        $soforTkvim[$a]['Cma'] = $soforTakvimm['SBTurCma'];
+                        $soforTkvim[$a]['Cmt'] = $soforTakvimm['SBTurCmt'];
+                        $soforTkvim[$a]['Pzr'] = $soforTakvimm['SBTurPzr'];
+                        $soforTkvim[$a]['Bslngc'] = $soforTakvimm['BSTurBslngc'];
+                        $soforTkvim[$a]['Bts'] = $soforTakvimm['BSTurBts'];
+                        $a++;
+                    }
+                    $input_arrays = [];
+                    $input_arrays = $form->calendar($soforTkvim);
+
+                    // Accumulate an output array of event data arrays.
+//                    foreach ($input_arrays as $array) {
+//
+//                        // Convert the input array into a useful Event object
+//                        $event = new Calendar($array, $timezone);
+//
+//                        // If the event is in-bounds, add it to the output
+//                        if ($event->isWithinDayRange($range_start, $range_end)) {
+//                            //$sonuc[] = $event->toArray();
+//                        }
+//                    }
+                    $sonuc = $input_arrays;
+                    break;
+
+                case "hostesTakvim":
+                    $calendar = $this->load->otherClasses('Calendar');
+                    // Short-circuit if the client did not give us a date range.
+                    if (!isset($_POST['start']) || !isset($_POST['end'])) {
+                        error_log("die");
+                        die("Please provide a date range.");
+                    }
+                    // Parse the start/end parameters.
+                    // These are assumed to be ISO8601 strings with no time nor timezone, like "2013-12-29".
+                    // Since no timezone will be present, they will parsed as UTC.
+                    $range_start = parseDateTime($_POST['start']);
+                    $range_end = parseDateTime($_POST['end']);
+                    // Parse the timezone parameter if it is present.
+                    $timezone = null;
+                    if (isset($_POST['timezone'])) {
+                        $timezone = new DateTimeZone($_POST['timezone']);
+                    }
+
+                    $form->post("id", true);
+                    $id = $form->values['id'];
+                    $hostesTakvim = $Panel_Model->hostesTakvim($id);
+                    $a = 0;
+                    foreach ($hostesTakvim as $hostesTakvimm) {
+                        $hostesTkvim[$a]['Pzt'] = $hostesTakvimm['SBTurPzt'];
+                        $hostesTkvim[$a]['Sli'] = $hostesTakvimm['SBTurSli'];
+                        $hostesTkvim[$a]['Crs'] = $hostesTakvimm['SBTurCrs'];
+                        $hostesTkvim[$a]['Prs'] = $hostesTakvimm['SBTurPrs'];
+                        $hostesTkvim[$a]['Cma'] = $hostesTakvimm['SBTurCma'];
+                        $hostesTkvim[$a]['Cmt'] = $hostesTakvimm['SBTurCmt'];
+                        $hostesTkvim[$a]['Pzr'] = $hostesTakvimm['SBTurPzr'];
+                        $hostesTkvim[$a]['Bslngc'] = $hostesTakvimm['BSTurBslngc'];
+                        $hostesTkvim[$a]['Bts'] = $hostesTakvimm['BSTurBts'];
+                        $a++;
+                    }
+                    $input_arrays = [];
+                    $input_arrays = $form->calendar($hostesTkvim);
+
+                    // Accumulate an output array of event data arrays.
+//                    foreach ($input_arrays as $array) {
+//
+//                        // Convert the input array into a useful Event object
+//                        $event = new Calendar($array, $timezone);
+//
+//                        // If the event is in-bounds, add it to the output
+//                        if ($event->isWithinDayRange($range_start, $range_end)) {
+//                            //$sonuc[] = $event->toArray();
+//                        }
+//                    }
+                    $sonuc = $input_arrays;
+                    break;
+
+                case "aracTakvim":
+                    $calendar = $this->load->otherClasses('Calendar');
+                    // Short-circuit if the client did not give us a date range.
+                    if (!isset($_POST['start']) || !isset($_POST['end'])) {
+                        error_log("die");
+                        die("Please provide a date range.");
+                    }
+                    // Parse the start/end parameters.
+                    // These are assumed to be ISO8601 strings with no time nor timezone, like "2013-12-29".
+                    // Since no timezone will be present, they will parsed as UTC.
+                    $range_start = parseDateTime($_POST['start']);
+                    $range_end = parseDateTime($_POST['end']);
+                    // Parse the timezone parameter if it is present.
+                    $timezone = null;
+                    if (isset($_POST['timezone'])) {
+                        $timezone = new DateTimeZone($_POST['timezone']);
+                    }
+
+                    $form->post("id", true);
+                    $id = $form->values['id'];
+                    $hostesTakvim = $Panel_Model->hostesTakvim($id);
+                    $a = 0;
+                    foreach ($hostesTakvim as $hostesTakvimm) {
+                        $hostesTkvim[$a]['Pzt'] = $hostesTakvimm['SBTurPzt'];
+                        $hostesTkvim[$a]['Sli'] = $hostesTakvimm['SBTurSli'];
+                        $hostesTkvim[$a]['Crs'] = $hostesTakvimm['SBTurCrs'];
+                        $hostesTkvim[$a]['Prs'] = $hostesTakvimm['SBTurPrs'];
+                        $hostesTkvim[$a]['Cma'] = $hostesTakvimm['SBTurCma'];
+                        $hostesTkvim[$a]['Cmt'] = $hostesTakvimm['SBTurCmt'];
+                        $hostesTkvim[$a]['Pzr'] = $hostesTakvimm['SBTurPzr'];
+                        $hostesTkvim[$a]['Bslngc'] = $hostesTakvimm['BSTurBslngc'];
+                        $hostesTkvim[$a]['Bts'] = $hostesTakvimm['BSTurBts'];
+                        $a++;
+                    }
+                    $input_arrays = [];
+                    $input_arrays = $form->calendar($hostesTkvim);
+
+                    // Accumulate an output array of event data arrays.
+//                    foreach ($input_arrays as $array) {
+//
+//                        // Convert the input array into a useful Event object
+//                        $event = new Calendar($array, $timezone);
+//
+//                        // If the event is in-bounds, add it to the output
+//                        if ($event->isWithinDayRange($range_start, $range_end)) {
+//                            //$sonuc[] = $event->toArray();
+//                        }
+//                    }
+                    $sonuc = $input_arrays;
+                    break;
             }
             echo json_encode($sonuc);
         } else {

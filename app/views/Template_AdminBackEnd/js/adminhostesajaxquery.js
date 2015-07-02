@@ -845,7 +845,7 @@ $.AdminIslemler = {
         }
     },
     adminHostesTakvim: function () {
-        var currentLangCode = 'tr';
+        var currentLangCode = $("input[name=takvimLang]").val();
         var hostesDetayAd = $("input[name=HostesDetayAdi]").val();
         var hostesDetaySoyad = $("input[name=HostesDetaySoyadi]").val();
         $("#takvimHostes").text(hostesDetayAd + ' ' + hostesDetaySoyad);

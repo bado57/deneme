@@ -2,6 +2,8 @@
 <html>
     <head>
         <meta charset="utf-8">
+    <link href="<?php echo SITE_MPLUGIN_CSS; ?>/calendar/fullcalendar.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo SITE_MPLUGIN_CSS; ?>/calendar/cal_custom.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="<?php echo SITE_PLUGINMSOFOR_CSS ?>/onsenui.css">
         <link rel="stylesheet" type="text/css" href="<?php echo SITE_PLUGINMSOFOR_CSS ?>/font_awesome/css/font-awesome.min.css">
             <link rel="stylesheet" type="text/css" href="<?php echo SITE_PLUGINMSOFOR_CSS ?>/onsen-css-components-blue-basic-theme.css">
@@ -12,6 +14,9 @@
                         <script src="<?php echo SITE_PLUGINMSOFOR_JS ?>/jquery-2.1.4.min.js"></script>
                         <script src="<?php echo SITE_PLUGINMSOFOR_JS ?>/onsenui.js"></script>
                         <script src="<?php echo SITE_PLUGINMSOFOR_JS ?>/aracajaxquery.js"></script>
+                        <script src="<?php echo SITE_MPLUGIN_JS; ?>/calendar/moment.min.js"></script>
+                        <script src="<?php echo SITE_MPLUGIN_JS; ?>/calendar/fullcalendar.js"></script>
+                        <script src="<?php echo SITE_MPLUGIN_JS; ?>/calendar/lang-all.js"></script>
                         <script src="<?php echo MLANGUAGE_JS . $model[0]['dil']; ?>.js"></script>
                         <script src="<?php echo SITE_MPLUGIN_JS; ?>/validation.js"></script>
                         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
@@ -55,7 +60,7 @@
                                 <ons-page class="profileMain" name="pMain" id="aracdetay">
                                     <ons-toolbar>
                                         <div class="left"><ons-button class="back" modifier="quiet" onclick="aracNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
-                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-user"></i></div>
+                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-bus"></i></div>
                                         <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="aracNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                     </ons-toolbar>
                                     <br />
@@ -153,6 +158,16 @@
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>
+                                        <ons-list-item modifier="chevron" onclick="aracNavigator.pushPage('aractakvim.html', {animation: 'slide'})">
+                                            <ons-row>
+                                                <ons-col width="40px">
+                                                    <i class="fa fa-calendar"></i>
+                                                </ons-col>
+                                                <ons-col class="coldty">
+                                                    <?php echo $data["Takvim"]; ?>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>
                                     </ons-list>
                                     <br />
                                     <div class="settings-header" id="aracTurSoforHeader"><?php echo $data["Tur"]; ?> (<span id="turToplam"></span>)</div>
@@ -185,13 +200,34 @@
                                 <ons-page id="aracyonetici">
                                     <ons-toolbar>
                                         <div class="left"><ons-button class="back" modifier="quiet" onclick="aracNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
-                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-users"></i></div>
+                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-sitemap"></i></div>
                                         <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="aracNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                     </ons-toolbar>
                                     <br />
                                     <div class="settings-header" id="aracSYoneticiHeader"><?php echo $data["Yonetici"]; ?> (<span id="yoneticiToplam"></span>)</div>
                                     <ons-list modifier="" class="yonetici-list" id="aracYoneticiList">
                                     </ons-list>
+                                </ons-page>
+                            </ons-template>
+
+                            <ons-template id="aractakvim.html">
+                                <ons-page id="aractakvim">
+                                    <ons-toolbar>
+                                        <div class="left"><ons-button class="back" modifier="quiet" onclick="aracNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
+                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-calendar"></i></div>
+                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="aracNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
+                                    </ons-toolbar>
+                                    <br />
+                                    <div id="aracTakvim" class="settings-header col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">
+                                            <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div style="margin-bottom: 10px"><?php echo $data["Takvim"]; ?> (<b><span id="takvimPlaka"></span></b>)</div>
+                                                <div class="row" id="getPartialView">
+                                                    <div id="calendar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </ons-page>
                             </ons-template>
 

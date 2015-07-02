@@ -999,7 +999,7 @@ $.AdminIslemler = {
         return true;
     },
     adminAracTakvim: function () {
-        var currentLangCode = 'tr';
+        var currentLangCode = $("input[name=takvimLang]").val();
         var aracPlaka = $("input[name=AracDetayPlaka]").val();
         $("#takvimPlaka").text(aracPlaka);
         $('#calendar').fullCalendar('refetchEvents');
