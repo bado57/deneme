@@ -737,6 +737,47 @@ class AdminHostesAjaxSorgu extends Controller {
                     }
                     break;
 
+                case "adminHostesTakvim":
+
+                    $calendar = $this->load->otherClasses('Calendar');
+                    // Short-circuit if the client did not give us a date range.
+                    if (!isset($_POST['start']) || !isset($_POST['end'])) {
+                        error_log("die");
+                        die("Please provide a date range.");
+                    }
+                    // Parse the start/end parameters.
+                    // These are assumed to be ISO8601 strings with no time nor timezone, like "2013-12-29".
+                    // Since no timezone will be present, they will parsed as UTC.
+                    $range_start = parseDateTime($_POST['start']);
+                    $range_end = parseDateTime($_POST['end']);
+                    // Parse the timezone parameter if it is present.
+                    $timezone = null;
+                    if (isset($_POST['timezone'])) {
+                        $timezone = new DateTimeZone($_POST['timezone']);
+                    }
+
+                    $form->post("id", true);
+                    $id = $form->values['id'];
+                    $adminHostesTakvim = $Panel_Model->adminHostesTakvim($id);
+                    $a = 0;
+                    foreach ($adminHostesTakvim as $adminHostesTakvimm) {
+                        $hostesTkvim[$a]['Pzt'] = $adminHostesTakvimm['SBTurPzt'];
+                        $hostesTkvim[$a]['Sli'] = $adminHostesTakvimm['SBTurSli'];
+                        $hostesTkvim[$a]['Crs'] = $adminHostesTakvimm['SBTurCrs'];
+                        $hostesTkvim[$a]['Prs'] = $adminHostesTakvimm['SBTurPrs'];
+                        $hostesTkvim[$a]['Cma'] = $adminHostesTakvimm['SBTurCma'];
+                        $hostesTkvim[$a]['Cmt'] = $adminHostesTakvimm['SBTurCmt'];
+                        $hostesTkvim[$a]['Pzr'] = $adminHostesTakvimm['SBTurPzr'];
+                        $hostesTkvim[$a]['Bslngc'] = $adminHostesTakvimm['BSTurBslngc'];
+                        $hostesTkvim[$a]['Bts'] = $adminHostesTakvimm['BSTurBts'];
+                        $a++;
+                    }
+                    $input_arrays = [];
+                    $input_arrays = $form->calendar($hostesTkvim);
+
+                    $sonuc = $input_arrays;
+                    break;
+
                 default :
                     header("Location:" . SITE_URL_LOGOUT);
                     break;

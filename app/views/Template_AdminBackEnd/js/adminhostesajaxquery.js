@@ -843,7 +843,58 @@ $.AdminIslemler = {
                 }
             }
         }
-    }
+    },
+    adminHostesTakvim: function () {
+        var currentLangCode = 'tr';
+        var hostesDetayAd = $("input[name=HostesDetayAdi]").val();
+        var hostesDetaySoyad = $("input[name=HostesDetaySoyadi]").val();
+        $("#takvimHostes").text(hostesDetayAd + ' ' + hostesDetaySoyad);
+        $('#calendar').fullCalendar('refetchEvents');
+        $('#calendar').fullCalendar('refresh');
+        $('#calendar').fullCalendar({
+            header: {
+                right: ''
+            },
+            defaultDate: '2015-03-02',
+            defaultView: 'agendaWeek',
+            weekNumbers: false,
+            editable: false,
+            weekdaysShort: true,
+            height: 'auto',
+            lang: currentLangCode,
+            allDaySlot: true,
+            slotDuration: "00:15:01",
+            axisFormat: 'HH:mm',
+            timeFormat: {
+                agenda: 'HH:mm'
+            },
+            events: function (start, end, timezone, callback) {
+                $.ajax({
+                    data: {start: '2015-03-02', end: '2015-03-09', "id": GetCustomValue(), "tip": "adminHostesTakvim"},
+                    success: function (doc) {
+                        callback(doc);
+                    }
+                });
+            },
+            eventColor: '#009933',
+            loading: function (bool) {
+                $('#loading').toggle(bool);
+            }
+        });
+        function GetCustomValue()
+        {
+            return $("input[name=hostesDetayID]").val();
+        }
+        for (var i = 0; i < 7; i++) {
+            var days = $(".fc-day-header").eq(i).text();
+            var kelime = days.substr(0, days.indexOf(' '));
+            if (kelime) {
+                //var sonkelime=kelime.replace(/,\s*$/, "");
+                $(".fc-day-header").eq(i).text(kelime);
+            }
+        }
+        return true;
+    },
 }
 
 

@@ -33,4 +33,11 @@ var jsDil = {
     'Hostes': 'Hostes',
     'Yonetici': 'Yönetici',
     'VeliBilgi': 'Veli Bilgileri',
+    'Pzt': 'Pzt',
+    'Sli': 'Sli',
+    'Crs': 'Crs',
+    'Prs': 'Prs',
+    'Cma': 'Cma',
+    'Cmt': 'Cmt',
+    'Pzr': 'Pzr',
 };

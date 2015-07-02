@@ -2,8 +2,13 @@
     var activeMenu = "menu_kullanici";
     var activeLink = "link_soforliste";
 </script>
+<link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/calendar/fullcalendar.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/calendar/cal_custom.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminsoforajaxquery.js" type="text/javascript"></script> 
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminsofor-web.app.js" type="text/javascript"></script>
+<script src="<?php echo SITE_PLUGINADMIN_JS; ?>/calendar/moment.min.js"></script>
+<script src="<?php echo SITE_PLUGINADMIN_JS; ?>/calendar/fullcalendar.js"></script>
+<script src="<?php echo SITE_PLUGINADMIN_JS; ?>/calendar/lang-all.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
 
 <aside class="right-side">
@@ -189,7 +194,7 @@
 <div id="soforDetay" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["SoforDetay"]; ?> <span class="pull-right"><button data-type="svClose" data-class="soforDetay" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["SoforDetay"]; ?> <span class="pull-right"><button id="addNew" type="button" class="svToggle btn btn-success addNewButton mr10" data-type="svOpen" data-class="soforTakvim" data-islemler="adminSoforTakvim"><i class="fa fa-calendar"></i> <?php echo $data["Takvim"]; ?></button><button data-type="svClose" data-class="soforDetay" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
                 <div class="form-vertical addKurumForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -292,6 +297,19 @@
                         <input type="text" class="form-control dsb" id="street_number" name="street_number" value="" disabled>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="soforTakvim" class="svClose col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+    <div class="row">
+        <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h3><?php echo $data["Takvim"]; ?> (<span id="takvimSofor"></span>)<span class="pull-right"><button data-type="svClose" data-class="soforTakvim" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <hr/>
+            <div class="row" id="getPartialView">
+                <div id='loading'><?php echo $data["Yukle"]; ?>...</div>
+                <div id="calendar"></div>
             </div>
         </div>
     </div>

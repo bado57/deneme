@@ -1,8 +1,13 @@
 <script type="text/javascript">
     var activeMenu = "menu_arac";
 </script>
+<link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/calendar/fullcalendar.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/calendar/cal_custom.css" rel="stylesheet" type="text/css" />
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminaracajaxquery.js" type="text/javascript"></script> 
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminarac-web.app.js" type="text/javascript"></script> 
+<script src="<?php echo SITE_PLUGINADMIN_JS; ?>/calendar/moment.min.js"></script>
+<script src="<?php echo SITE_PLUGINADMIN_JS; ?>/calendar/fullcalendar.js"></script>
+<script src="<?php echo SITE_PLUGINADMIN_JS; ?>/calendar/lang-all.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
 
 <aside class="right-side">
@@ -131,7 +136,8 @@
 <div id="aracDetay" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["AracDetay"]; ?> <span class="pull-right"><button id="addNew" type="button" class="svToggle btn btn-success addNewButton mr10" data-type="svOpen" data-class="aracDetayTur" data-islemler="adminAracDetailTur"><i class="fa fa-refresh"></i> <?php echo $data["Turlar"]; ?></button><button data-type="svClose" data-class="aracDetay" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+
+            <h3><?php echo $data["AracDetay"]; ?> <span class="pull-right"><button id="addNew" type="button" class="svToggle btn btn-success addNewButton mr10" data-type="svOpen" data-class="aracTakvim" data-islemler="adminAracTakvim"><i class="fa fa-calendar"></i> <?php echo $data["Takvim"]; ?></button><button id="addNew" type="button" class="svToggle btn btn-success addNewButton mr10" data-type="svOpen" data-class="aracDetayTur" data-islemler="adminAracDetailTur"><i class="fa fa-refresh"></i> <?php echo $data["Turlar"]; ?></button><button data-type="svClose" data-class="aracDetay" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -238,6 +244,19 @@
 </div>
 
 
+<div id="aracTakvim" class="svClose col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+    <div class="row">
+        <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h3><?php echo $data["Takvim"]; ?> (<span id="takvimPlaka"></span>)<span class="pull-right"><button data-type="svClose" data-class="aracTakvim" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <hr/>
+            <div class="row" id="getPartialView">
+                <div id='loading'><?php echo $data["Yukle"]; ?>...</div>
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="map" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div id="mapHeader">
         <h3><b id="singleMapBaslik"><?php echo $data["LokasyonTanimlama"]; ?> </b><b id="multiMapBaslik"></b>
@@ -247,7 +266,7 @@
         <hr/>
     </div>
     <div id="multiple_map" style="width:100% !important;"></div>
-</div><!-- ./wrapper -->
+</div>
 
 
 

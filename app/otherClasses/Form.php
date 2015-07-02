@@ -975,6 +975,68 @@ class Form {
         return $yeniGun;
     }
 
+    function calendar($deger = array()) {
+
+        $length = count($deger);
+        $b = 0;
+        $myarray = [];
+        for ($i = 0; $i < $length; $i++) {
+            //saat1 için
+            $baslangic;
+            if (strlen((string) $deger[$i]['Bslngc']) == 1) {
+                $baslangic = '00:00';
+            } else if (strlen((string) $deger[$i]['Bslngc']) == 2) {
+                $baslangic = '00:' . $deger[$i]['Bslngc'];
+            } else if (strlen((string) $deger[$i]['Bslngc']) == 3) {
+                $ilkHarf1 = substr($deger[$i]['Bslngc'], 0, 1);
+                $sondaikiHarf1 = substr($deger[$i]['Bslngc'], 1, 3);
+                $baslangic = '0' . $ilkHarf1 . ':' . $sondaikiHarf1;
+            } else {
+                $ilkikiHarf1 = substr($deger[$i]['Bslngc'], 0, 2);
+                $sondaikiHarf1 = substr($deger[$i]['Bslngc'], 2, 4);
+                $baslangic = $ilkikiHarf1 . ':' . $sondaikiHarf1;
+            }
+
+            $bitis;
+            if (strlen((string) $deger[$i]['Bts']) == 1) {
+                $bitis = '00:00';
+            } else if (strlen((string) $deger[$i]['Bts']) == 2) {
+                $bitis = '00:' . $deger[$i]['Bts'];
+            } else if (strlen((string) $deger[$i]['Bts']) == 3) {
+                $ilkHarf1 = substr($deger[$i]['Bts'], 0, 1);
+                $sondaikiHarf1 = substr($deger[$i]['Bts'], 1, 3);
+                $bitis = '0' . $ilkHarf1 . ':' . $sondaikiHarf1;
+            } else {
+                $ilkikiHarf1 = substr($deger[$i]['Bts'], 0, 2);
+                $sondaikiHarf1 = substr($deger[$i]['Bts'], 2, 4);
+                $bitis = $ilkikiHarf1 . ':' . $sondaikiHarf1;
+            }
+
+            if ($deger[$i]['Pzt'] != 0) {//0 sa
+                array_push($myarray, array('title' => '', 'start' => '2015-03-02T' . $baslangic, 'end' => '2015-03-02T' . $bitis));
+            }
+            if ($deger[$i]['Sli'] != 0) {//0 sa
+                array_push($myarray, array('title' => '', 'start' => '2015-03-03T' . $baslangic, 'end' => '2015-03-03T' . $bitis));
+            }
+            if ($deger[$i]['Crs'] != 0) {//0 sa
+                array_push($myarray, array('title' => '', 'start' => '2015-03-04T' . $baslangic, 'end' => '2015-03-04T' . $bitis));
+            }
+            if ($deger[$i]['Prs'] != 0) {//0 sa
+                array_push($myarray, array('title' => '', 'start' => '2015-03-05T' . $baslangic, 'end' => '2015-03-05T' . $bitis));
+            }
+            if ($deger[$i]['Cma'] != 0) {//0 sa
+                array_push($myarray, array('title' => '', 'start' => '2015-03-06T' . $baslangic, 'end' => '2015-03-06T' . $bitis));
+            }
+            if ($deger[$i]['Cmt'] != 0) {//0 sa
+                array_push($myarray, array('title' => '', 'start' => '2015-03-07T' . $baslangic, 'end' => '2015-03-07T' . $bitis));
+            }
+            if ($deger[$i]['Pzr'] != 0) {//0 sas
+                array_push($myarray, array('title' => '', 'start' => '2015-03-08T' . $baslangic, 'end' => '2015-03-08T' . $bitis));
+            }
+        }
+        return $myarray;
+    }
+
 }
 
 ?>

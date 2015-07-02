@@ -36,11 +36,14 @@ class tr {
             "Sofor" => "Şoförler",
             "Hostes" => "Hostesler",
             "Yonetici" => "Yöneticiler",
+            "YoneticiBilgi" => "Yönetici Bilgileri",
+            "Tur" => "Turlar",
             "KullaniciBilgi" => "Kullanıcı Bilgileri",
             "VeliBilgi" => "Veli Bilgileri",
             "SoforBilgi" => "Şoför Bilgileri",
             "HostesBilgi" => "Hostes Bilgileri",
             "AracBilgi" => "Araç Bilgileri",
+            "AracListe" => "Araç Listesi",
         );
         return $trdil;
     }

@@ -243,6 +243,8 @@ class tr {
             "KisiselBilgi" => "Kişisel Bilgiler",
             'Kullanici' => 'Kullanıcı',
             "DuyuruYok" => "Daha Fazla Gösterilecek Duyuru Yok",
+            "Takvim" => "Takvim",
+            "Yukle" => "Yükleniyor",
         );
         return $trdil;
     }

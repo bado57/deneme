@@ -673,6 +673,12 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //araç takvim özellikleri
+    public function adminAracTakvim($aracID) {
+        $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurAracID = ' . $aracID;
+        return($this->db->select($sql));
+    }
+
     //admin rutbe bölgesindeki şoförler
     public function adminAracDetailTur($array = array()) {
         $sql = 'SELECT SBTurID, SBTurAd, SBTurAciklama, SBTurAktiflik, SBKurumAd, SBTurTip, SBBolgeAd FROM sbtur WHERE SBTurID IN (' . $array . ')';
@@ -994,9 +1000,21 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //şoför takvim özellikleri
+    public function adminSoforTakvim($soforID) {
+        $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurSoforID = ' . $soforID;
+        return($this->db->select($sql));
+    }
+
     //seçili hostes bolge listele
     public function adminDetailHostesBolge($hostesID) {
         $sql = 'SELECT BSBolgeID, BSBolgeAdi FROM bshostesbolge WHERE BSHostesID = ' . $hostesID;
+        return($this->db->select($sql));
+    }
+    
+    //hostes takvim özellikleri
+    public function adminHostesTakvim($soforID) {
+        $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurHostesID = ' . $soforID;
         return($this->db->select($sql));
     }
 

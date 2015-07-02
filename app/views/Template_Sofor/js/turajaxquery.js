@@ -62,25 +62,25 @@ ons.ready(function () {
                     $("#detayKm").text(cevap.Detay.Km);
                     var gunText = "";
                     if (cevap.Detay.Pzt != 0) {
-                        gunText += 'Pzt-';
+                        gunText += jsDil.Pzt + '-';
                     }
                     if (cevap.Detay.Sli != 0) {
-                        gunText += 'Salı-';
+                        gunText += jsDil.Sli + '-';
                     }
                     if (cevap.Detay.Crs != 0) {
-                        gunText += 'Crs-';
+                        gunText += jsDil.Crs + '-';
                     }
                     if (cevap.Detay.Prs != 0) {
-                        gunText += 'Prs-';
+                        gunText += jsDil.Prs + '-';
                     }
                     if (cevap.Detay.Cma != 0) {
-                        gunText += 'Cma-';
+                        gunText += jsDil.Cma + '-';
                     }
                     if (cevap.Detay.Cmt != 0) {
-                        gunText += 'Cmt-';
+                        gunText += jsDil.Cmt + '-';
                     }
                     if (cevap.Detay.Pzr != 0) {
-                        gunText += 'Pzr-';
+                        gunText += jsDil.Pzr + '-';
                     }
                     //var gunTextt = gunText.substring(0, gunText.Length - 1);
                     $("#detayGunler").text(gunText.slice(0, -1));

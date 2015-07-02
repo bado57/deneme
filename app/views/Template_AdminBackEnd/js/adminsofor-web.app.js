@@ -70,6 +70,15 @@ function svControl(dtype, dclass, dislemler) {
             case 'soforYeni' :
                 var returnCevap = $.AdminIslemler.soforYeni();
                 break;
+            case 'adminSoforTakvim' :
+                $("#" + dclass).height(th);
+                $("#" + dclass).css("z-index", z);
+                $("#" + dclass).attr("data-z", z);
+                $('[data-z="' + (z - 1) + '"]').css("display", "none");
+                $('#' + dclass).toggle(effect, options, duration);
+                z++;
+                $.AdminIslemler.adminSoforTakvim();
+                break;
             case 'adminKurumMap' :
                 isMap = true;
                 isSingle = false;

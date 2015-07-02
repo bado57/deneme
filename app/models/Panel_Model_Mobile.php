@@ -309,7 +309,7 @@ class Panel_Model_Mobile extends ModelMobile {
 
     //şoför yolcu arac detay
     public function soforArac($aracID) {
-        $sql = 'SELECT SBAracMarka,SBAracModelYili,SBAracPlaka,SBAracKapasite,SBAracKm,SBAracAciklama FROM sbarac WHERE SBAracID=' . $aracID;
+        $sql = 'SELECT SBAracMarka,SBAracModelYili,SBAracPlaka,SBAracKapasite,SBAracKm,SBAracDurum,SBAracAciklama FROM sbarac WHERE SBAracID=' . $aracID;
         return($this->db->select($sql));
     }
 
@@ -328,6 +328,54 @@ class Panel_Model_Mobile extends ModelMobile {
     //şoför tur harita öğrenci işçi yolcu
     public function soforHTurIsciOgrenci($turID) {
         $sql = 'SELECT BSOgrenciIsciID,BSOgrenciIsciAd,BSOgrenciIsciLocation,BSKullaniciTip FROM bsogrenciiscitur WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //şoför araçlar
+    public function soforAraclar($soforID) {
+        $sql = 'SELECT DISTINCT BSAracID,BSAracPlaka FROM bsaracsofor WHERE BSSoforID=' . $soforID;
+        return($this->db->select($sql));
+    }
+
+    //şoför aracın dahil olduğu turlar
+    public function soforAracTur($aracID) {
+        $sql = 'SELECT DISTINCT BSTurID FROM bsturtip WHERE BSTurAracID=' . $aracID;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur kurumlar
+    public function soforAracTurlar($array = array()) {
+        $sql = 'SELECT DISTINCT SBTurID,SBTurAd FROM sbtur Where SBTurID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //şoför araçlar-şoförler
+    public function soforAraclarS($aracID) {
+        $sql = 'SELECT DISTINCT BSSoforID,BSSoforAd FROM bsaracsofor WHERE BSAracID=' . $aracID;
+        return($this->db->select($sql));
+    }
+
+    //şoför araçlar-hostesler
+    public function soforAraclarH($aracID) {
+        $sql = 'SELECT DISTINCT BSHostesID,BSHostesAd FROM bsarachostes WHERE BSAracID=' . $aracID;
+        return($this->db->select($sql));
+    }
+
+    //şoför araçlar-yoneticiler
+    public function soforAracY($aracID) {
+        $sql = 'SELECT DISTINCT SBBolgeID FROM sbaracbolge WHERE SBAracID=' . $aracID;
+        return($this->db->select($sql));
+    }
+
+    //arac bölge admin
+    public function soforAracYoneticiler($array = array()) {
+        $sql = 'SELECT DISTINCT BSAdminID FROM bsadminbolge WHERE BSBolgeID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //arac adminler
+    public function soforYoneticiler($array = array()) {
+        $sql = 'SELECT DISTINCT BSAdminID,BSAdminAd,BSAdminSoyad FROM bsadmin WHERE BSAdminID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 

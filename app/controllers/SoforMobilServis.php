@@ -132,6 +132,55 @@ class SoforMobilServis extends Controller {
 
 
                         break;
+
+                    case "aracislem":
+                        $form->post("id", true);
+                        $kid = $form->values['id'];
+
+                        $form->post("enlem", true);
+                        $enlem = $form->values['enlem'];
+
+                        $form->post("boylam", true);
+                        $boylam = $form->values['boylam'];
+
+                        $formDbConfig = $this->load->otherClasses('DatabaseConfig');
+                        $usersselect_model = $this->load->model("adminselectdb_mobil");
+
+                        $loginfirmaID = $form->substrEnd($loginKadi, 8);
+                        //return database results
+                        $UserSelectDb = $usersselect_model->MkullaniciSelectDb($loginfirmaID);
+                        $SelectdbName = $UserSelectDb[0]['rootFirmaDbName'];
+                        $SelectdbIp = $UserSelectDb[0]['rootFirmaDbIp'];
+                        $SelectdbUser = $UserSelectDb[0]['rootFirmaDbUser'];
+                        $SelectdbPassword = $UserSelectDb[0]['rootFirmaDbSifre'];
+                        $SelectdbFirmaKod = $UserSelectDb[0]['rootfirmaKodu'];
+
+                        $formDbConfig->configDb($SelectdbName, $SelectdbIp, $SelectdbUser, $SelectdbPassword);
+                        //model bağlantısı
+                        $Panel_Model = $this->load->model("panel_model_mobile");
+
+                        //bölge html ye username i gönderiyorum
+                        $arac[0]['Username'] = $loginKadi;
+                        $arac[0]['id'] = $kid;
+                        $arac[0]['FirmaId'] = $loginfirmaID;
+                        $arac[0]['enlem'] = $enlem;
+                        $arac[0]['boylam'] = $boylam;
+                        $arac[0]['dil'] = $lang;
+
+
+                        $result = $Panel_Model->soforAraclar($kid);
+                        if (count($result) > 0) {
+                            $a = 0;
+                            foreach ($result as $resultt) {
+                                $arac[$a]['ID'] = $resultt['BSAracID'];
+                                $arac[$a]['Plaka'] = $resultt['BSAracPlaka'];
+                                $a++;
+                            }
+                        }
+                        $this->load->view("Template_Sofor/soforarac", $language, $arac);
+
+
+                        break;
                 }
             } else {
                 echo 'Are you Hacking?';
