@@ -31,6 +31,7 @@ ons.ready(function () {
         var parcalama = adSoyad.split(" ");
         var telefon = $("#genelTelefon").text();
         var email = $("#genelEmail").text();
+        SoforProfil = [];
         SoforProfil.push(parcalama, telefon, email);
         $("input[name=editAd]").val(parcalama[0]);
         $("input[name=editSoyad]").val(parcalama[1]);
@@ -67,6 +68,8 @@ $.SoforIslemler = {
         var soyad = $("input[name=editSoyad]").val().trim();
         var telefon = $("input[name=editTelefon]").val().trim();
         var email = $("input[name=editEmail]").val().trim();
+        var eskiAd = SoforProfil[0][0].trim();
+        var eskiSoyad = SoforProfil[0][1].trim();
         if (SoforProfil[0][0].trim() == ad && SoforProfil[0][1].trim() == soyad && SoforProfil[1].trim() == telefon && SoforProfil[2].trim() == email) {
             ons.notification.alert({message: jsDil.DegisiklikYok});
             return false;
@@ -81,7 +84,8 @@ $.SoforIslemler = {
                                 return false;
                             } else {
                                 $.ajax({
-                                    data: {"firma_id": firma_id, "ad": ad, "soyad": soyad, "telefon": telefon,
+                                    data: {"firma_id": firma_id, "eskiAd": eskiAd, "eskiSoyad": eskiSoyad,
+                                        "ad": ad, "soyad": soyad, "telefon": telefon,
                                         "email": email, "sofor_id": sofor_id, "tip": "soforProfilKaydet"},
                                     success: function (cevap) {
                                         if (cevap.hata) {
@@ -120,7 +124,7 @@ $.SoforIslemler = {
         var sofor_id = $("input[name=id]").val();
         var language = $("input[name=lang]").val();
         var firma_id = $("input[name=firmaId]").val();
-        var kadi = $("input[name=genelKadi]").val();
+        var kadi = $("#genelKadi").text();
         var eskisifre = $("input[name=eskiSifre]").val().replace(/\s+/g, '');
         var yenisifre = $("input[name=yeniSifre]").val().replace(/\s+/g, '');
         var yenisifretkrar = $("input[name=yeniSifreTekrar]").val().replace(/\s+/g, '');

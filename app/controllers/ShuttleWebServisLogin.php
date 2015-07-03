@@ -58,7 +58,6 @@ class ShuttleWebServisLogin extends Controller {
                         $loginTipp = $loginTip + 1;
 
                         $sifresonuc = $form->userSifreOlustur($loginKadi, $loginSifre, $loginTipp);
-
                         if ($form->submit()) {
                             $data = array(
                                 ':loginKadi' => $loginKadi,

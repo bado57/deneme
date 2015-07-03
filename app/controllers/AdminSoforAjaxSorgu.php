@@ -544,6 +544,12 @@ class AdminSoforAjaxSorgu extends Controller {
                         $form->post('soforDetayCaddeNo', true);
                         $form->post('detayAdres', true);
 
+                        $form->post('eskiAd', true);
+                        $form->post('eskiSoyad', true);
+                        $eskiAd = $form->values['eskiAd'];
+                        $eskiSoyad = $form->values['eskiSoyad'];
+
+
                         $soforAd = $form->values['soforDetayAd'];
                         $soforSoyad = $form->values['soforDetaySoyad'];
                         $soforAdSoyad = $soforAd . ' ' . $soforSoyad;
@@ -574,6 +580,22 @@ class AdminSoforAjaxSorgu extends Controller {
                                 'Status' => $form->values['soforDetayDurum']
                             );
                         }
+                        if ($ad != $eskiAd || $soyad != $eskiSoyad) {
+                            $dataTur = array(
+                                'BSTurSoforAd' => $adSoyad,
+                            );
+                            $dataBolge = array(
+                                'BSSoforAd' => $adSoyad,
+                            );
+                            $dataArac = array(
+                                'BSSoforAd' => $adSoyad,
+                            );
+
+                            $resultupdate1 = $Panel_Model->soforOzelliklerDuzenle1($dataTur, $soforID);
+                            $resultupdate2 = $Panel_Model->soforOzelliklerDuzenle2($dataBolge, $soforID);
+                            $resultupdate3 = $Panel_Model->soforOzelliklerDuzenle3($dataArac, $soforID);
+                        }
+
                         $resultSoforUpdate = $Panel_Model->soforOzelliklerDuzenle($data, $soforID);
                         if ($resultSoforUpdate) {
                             $aracID = count($soforAracID);
@@ -775,7 +797,7 @@ class AdminSoforAjaxSorgu extends Controller {
                     }
                     $input_arrays = [];
                     $input_arrays = $form->calendar($soforTkvim);
-                    
+
                     $sonuc = $input_arrays;
                     break;
 

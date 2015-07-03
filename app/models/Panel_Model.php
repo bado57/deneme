@@ -1011,7 +1011,7 @@ class Panel_Model extends Model {
         $sql = 'SELECT BSBolgeID, BSBolgeAdi FROM bshostesbolge WHERE BSHostesID = ' . $hostesID;
         return($this->db->select($sql));
     }
-    
+
     //hostes takvim özellikleri
     public function adminHostesTakvim($soforID) {
         $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurHostesID = ' . $soforID;
@@ -1051,6 +1051,21 @@ class Panel_Model extends Model {
     //admin şoför özellikleri düzenleme
     public function soforOzelliklerDuzenle($data, $soforID) {
         return ($this->db->update("bssofor", $data, "BSSoforID=" . $soforID));
+    }
+
+    //şoför profil düzenle1
+    public function soforOzelliklerDuzenle1($data, $soforID) {
+        return ($this->db->update("bsturtip", $data, "BSTurSoforID=" . $soforID));
+    }
+
+    //şoför profil düzenle2
+    public function soforOzelliklerDuzenle2($data, $soforID) {
+        return ($this->db->update("bssoforbolge", $data, "BSSoforID=" . $soforID));
+    }
+
+    //şoför profil düzenle3
+    public function soforOzelliklerDuzenle3($data, $soforID) {
+        return ($this->db->update("bsaracsofor", $data, "BSSoforID=" . $soforID));
     }
 
     //admin hostes özellikleri düzenleme

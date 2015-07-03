@@ -177,6 +177,21 @@ class Panel_Model_Mobile extends ModelMobile {
         return ($this->db->update("bssofor", $data, "BSSoforID=" . $soforID));
     }
 
+    //şoför profil düzenle1
+    public function soforProfilDuzenle1($data, $soforID) {
+        return ($this->db->update("bsturtip", $data, "BSTurSoforID=" . $soforID));
+    }
+
+    //şoför profil düzenle2
+    public function soforProfilDuzenle2($data, $soforID) {
+        return ($this->db->update("bssoforbolge", $data, "BSSoforID=" . $soforID));
+    }
+
+    //şoför profil düzenle3
+    public function soforProfilDuzenle3($data, $soforID) {
+        return ($this->db->update("bsaracsofor", $data, "BSSoforID=" . $soforID));
+    }
+
     //şoför şifre
     public function soforSifre($soforID) {
         $sql = 'SELECT BSSoforRSifre FROM bssofor WHERE BSSoforID=' . $soforID;
@@ -390,7 +405,7 @@ class Panel_Model_Mobile extends ModelMobile {
         $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurSoforID = ' . $soforID;
         return($this->db->select($sql));
     }
-    
+
     //hostes takvim özellikleri
     public function hostesTakvim($hostesID) {
         $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurHostesID = ' . $hostesID;

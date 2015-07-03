@@ -700,6 +700,8 @@ $.AdminIslemler = {
         var farkbolgelength = farkbolge.length;
         var farksofor = farkArray(SoforDetailVazgec[20], soforAracID);
         var farksoforlength = farksofor.length;
+        var eskiAd = SoforDetailVazgec[0];
+        var eskiSoyad = SoforDetailVazgec[1];
         if (SoforDetailVazgec[0] == soforDetayAd && SoforDetailVazgec[1] == soforDetaySoyad && SoforDetailVazgec[2] == soforDetayDurum && SoforDetailVazgec[3] == soforDetayLokasyon && SoforDetailVazgec[4] == soforDetayTelefon && SoforDetailVazgec[5] == soforDetayEmail && SoforDetailVazgec[6] == soforDetayAdres && SoforDetailVazgec[7] == soforDetayAciklama && SoforDetailVazgec[8] == soforDetayUlke && SoforDetailVazgec[9] == soforDetayIl && SoforDetailVazgec[10] == soforDetayIlce && SoforDetailVazgec[11] == soforDetaySemt && SoforDetailVazgec[12] == soforDetayMahalle && SoforDetailVazgec[13] == soforDetaySokak && SoforDetailVazgec[14] == soforDetayPostaKodu && SoforDetailVazgec[15] == soforDetayCaddeNo && farkbolgelength == 0 && farksoforlength == 0) {
             reset();
             alertify.alert(jsDil.Degisiklik);
@@ -740,7 +742,7 @@ $.AdminIslemler = {
                                     var soforBolgeLength = $('select#SoforDetaySelectBolge option:selected').val();
                                     if (soforBolgeLength) {
                                         $.ajax({
-                                            data: {"sofordetail_id": sofordetail_id, "soforBolgeID[]": soforBolgeID, "soforBolgeAd[]": soforBolgeAd, "soforAracID[]": soforAracID, "soforAracPlaka[]": soforAracPlaka, "soforDetayAd": soforDetayAd,
+                                            data: {"eskiAd": eskiAd, "eskiSoyad": eskiSoyad, "sofordetail_id": sofordetail_id, "soforBolgeID[]": soforBolgeID, "soforBolgeAd[]": soforBolgeAd, "soforAracID[]": soforAracID, "soforAracPlaka[]": soforAracPlaka, "soforDetayAd": soforDetayAd,
                                                 "soforDetaySoyad": soforDetaySoyad, "soforDetayDurum": soforDetayDurum, "soforDetayLokasyon": soforDetayLokasyon, "soforDetayTelefon": soforDetayTelefon,
                                                 "soforDetayEmail": soforDetayEmail, "soforDetayAdres": soforDetayAdres, "soforDetayAciklama": soforDetayAciklama, "soforDetayUlke": soforDetayUlke,
                                                 "soforDetayIl": soforDetayIl, "soforDetayIlce": soforDetayIlce, "soforDetaySemt": soforDetaySemt, "soforDetayMahalle": soforDetayMahalle,

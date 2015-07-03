@@ -57,15 +57,38 @@ class SoforMobilProfilAjax extends Controller {
                         $form->post('soyad', true);
                         $form->post('telefon', true);
                         $form->post('email', true);
+                        $form->post('eskiAd', true);
+                        $form->post('eskiSoyad', true);
+                        $ad = $form->values['ad'];
+                        $soyad = $form->values['soyad'];
+                        $eskiAd = $form->values['eskiAd'];
+                        $eskiSoyad = $form->values['eskiSoyad'];
+                        $adSoyad = $ad . ' ' . $soyad;
 
                         if ($form->submit()) {
                             $data = array(
-                                'BSSoforAd' => $form->values['ad'],
-                                'BSSoforSoyad' => $form->values['soyad'],
+                                'BSSoforAd' => $ad,
+                                'BSSoforSoyad' => $soyad,
                                 'BSSoforPhone' => $form->values['telefon'],
                                 'BSSoforEmail' => $form->values['email']
                             );
                         }
+                        if ($ad != $eskiAd || $soyad != $eskiSoyad) {
+                            $dataTur = array(
+                                'BSTurSoforAd' => $adSoyad,
+                            );
+                            $dataBolge = array(
+                                'BSSoforAd' => $adSoyad,
+                            );
+                            $dataArac = array(
+                                'BSSoforAd' => $adSoyad,
+                            );
+
+                            $resultupdate1 = $Panel_Model->soforProfilDuzenle1($dataTur, $soforID);
+                            $resultupdate2 = $Panel_Model->soforProfilDuzenle2($dataBolge, $soforID);
+                            $resultupdate3 = $Panel_Model->soforProfilDuzenle3($dataArac, $soforID);
+                        }
+
 
                         $resultupdate = $Panel_Model->soforProfilDuzenle($data, $soforID);
                         if ($resultupdate) {
