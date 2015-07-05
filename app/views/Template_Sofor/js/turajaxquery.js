@@ -195,6 +195,8 @@ ons.ready(function () {
                     return false;
                 } else {
                     if (turtip == 0) {
+                        $("#turYolcuHeader").show();
+                        $("#turYolcuList").show();
                         var yolculength = cevap.TurYolcu.length;
                         var onsList = $("#turYolcuList");
                         $("#yolcuToplam").text(yolculength);
@@ -206,6 +208,8 @@ ons.ready(function () {
                             ons.compile(elm[0]);
                         }
                     } else if (turtip == 1) {
+                        $("#turYolcuHeader").show();
+                        $("#turYolcuList").show();
                         var yolculength = cevap.TurYolcu.length;
                         var onsList = $("#turYolcuList");
                         $("#yolcuToplam").text(yolculength);
@@ -217,6 +221,8 @@ ons.ready(function () {
                             ons.compile(elm[0]);
                         }
                     } else {
+                        $("#turYolcuHeader").show();
+                        $("#turYolcuList").show();
                         var yolculength = cevap.TurYolcu.length;
                         var onsList = $("#turYolcuList");
                         $("#yolcuToplam").text(yolculength);
@@ -238,6 +244,8 @@ ons.ready(function () {
 
                     var soforlength = cevap.TurSofor.length;
                     var onsListS = $("#turSoforList");
+                    $("#turSoforHeader").show();
+                    $("#turSoforList").show();
                     $("#soforToplam").text(soforlength);
                     for (var b = 0; b < soforlength; b++) {
                         var elms = $('<ons-list-item modifier="chevron" onclick="$.SoforIslemler.soforYolcuList(' + cevap.TurSofor[b].Id + ',2)">'
@@ -248,6 +256,8 @@ ons.ready(function () {
                     }
 
                     if (cevap.TurHostes) {
+                        $("#turHostesHeader").show();
+                        $("#turHostesList").show();
                         var hosteslength = cevap.TurHostes.length;
                         var onsListH = $("#turHostesList");
                         $("#hostesToplam").text(hosteslength);
@@ -258,14 +268,13 @@ ons.ready(function () {
                             elmh.appendTo(onsListH);
                             ons.compile(elmh[0]);
                         }
-                    } else {
-                        $("#turHostesHeader").hide();
-                        $("#turHostesList").hide();
                     }
 
 
                     var yoneticilength = cevap.TurYonet.length;
                     var onsListY = $("#turYoneticiList");
+                    $("#turYoneticiHeader").show();
+                    $("#turYoneticiList").show();
                     $("#yoneticiToplam").text(yoneticilength);
                     for (var c = 0; c < yoneticilength; c++) {
                         var elmy = $('<ons-list-item modifier="chevron" onclick="$.SoforIslemler.soforYolcuList(' + cevap.TurYonet[c].Id + ',3)">'
@@ -292,10 +301,12 @@ ons.ready(function () {
                     ons.notification.alert({message: jsDil.Hata});
                     return false;
                 } else {
+                    $("input[name=yolcuid]").val(kisiid);
                     if (kisitip == 0) {
                         $("#kdetayAd").text(cevap.Detay.Ad + ' ' + cevap.Detay.Soyad);
                         $("#kdetaytur").text(jsDil.Ogrenci);
                         $("#kdetayIcon").addClass("fa fa-mortar-board");
+                        $("#yolcuDetayTakvim").hide();
                         if (cevap.Detay.Tel) {
                             $("#kdetayTel").text(cevap.Detay.Tel);
                             $("a#kdetayTel").attr("href", "tel:" + cevap.Detay.Tel);
@@ -311,6 +322,8 @@ ons.ready(function () {
                         }
 
                         if (cevap.DetayVeli) {
+                            $("#vdetayheader").show();
+                            $("#vdetaylist").show();
                             var velilength = cevap.DetayVeli.length;
                             var onsListV = $("#vdetaylist");
                             for (var c = 0; c < velilength; c++) {
@@ -326,27 +339,28 @@ ons.ready(function () {
                                 }
                                 ons.compile(elmv[2]);
                             }
-                        } else {
-                            $("#vdetayheader").hide();
-                            $("#vdetaylist").hide();
                         }
 
                     } else {
-                        $("#vdetayheader").hide();
-                        $("#vdetaylist").hide();
                         $("#kdetayAd").text(cevap.Detay.Ad + ' ' + cevap.Detay.Soyad);
                         if (kisitip == 1) {
                             $("#kdetaytur").text(jsDil.Personel);
                             $("#kdetayIcon").addClass("fa fa-briefcase");
+                            $("input[name=inputtur]").val("");
+                            $("#yolcuDetayTakvim").hide();
                         } else if (kisitip == 2) {
                             $("#kdetaytur").text(jsDil.Sofor);
                             $("#kdetayIcon").addClass("fa fa-bus");
+                            $("input[name=inputtur]").val(0);
                         } else if (kisitip == 3) {
                             $("#kdetaytur").text(jsDil.Yonetici);
                             $("#kdetayIcon").addClass("fa fa-sitemap");
+                            $("input[name=inputtur]").val("");
+                            $("#yolcuDetayTakvim").hide();
                         } else {
                             $("#kdetaytur").text(jsDil.Hostes);
                             $("#kdetayIcon").addClass("fa fa-info");
+                            $("input[name=inputtur]").val(1);
                         }
                         if (cevap.Detay.Tel) {
                             $("#kdetayTel").text(cevap.Detay.Tel);
@@ -698,6 +712,64 @@ ons.ready(function () {
         function GetCustomFValue()
         {
             return $("input[name=firmaId]").val();
+        }
+        for (var i = 0; i < 7; i++) {
+            var days = $(".fc-day-header").eq(i).text();
+            var kelime = days.substr(0, days.indexOf(' '));
+            if (kelime) {
+                //var sonkelime=kelime.replace(/,\s*$/, "");
+                $(".fc-day-header").eq(i).text(kelime);
+            }
+        }
+    });
+    $(document).on('pageinit', '#yolcutakvim', function () {
+        var currentLangCode = $("input[name=lang]").val();
+        $("#takvimYolcu").text($("#kdetayAd").text());
+        $('#calendar').fullCalendar('refetchEvents');
+        $('#calendar').fullCalendar('refresh');
+        $('#calendar').fullCalendar({
+            header: {
+                right: ''
+            },
+            defaultDate: '2015-03-02',
+            defaultView: 'agendaWeek',
+            weekNumbers: false,
+            editable: false,
+            weekdaysShort: true,
+            height: 'auto',
+            lang: currentLangCode,
+            allDaySlot: true,
+            slotDuration: "00:15:01",
+            axisFormat: 'HH:mm',
+            timeFormat: {
+                agenda: 'HH:mm'
+            },
+            events: function (start, end, timezone, callback) {
+                $.ajax({
+                    data: {start: '2015-03-02', end: '2015-03-09', "id": GetCustomValue(),
+                        "yolcutip": getCustomTip, "firma_id": GetCustomFValue, "tip": "yolcuTakvim"},
+                    success: function (doc) {
+                        callback(doc);
+                        modal.hide();
+                    }
+                });
+            },
+            eventColor: '#009933',
+            loading: function (bool) {
+                modal.show();
+            }
+        });
+        function GetCustomValue()
+        {
+            return $("input[name=yolcuid]").val();
+        }
+        function GetCustomFValue()
+        {
+            return $("input[name=firmaId]").val();
+        }
+        function getCustomTip()
+        {
+            return $("input[name=inputtur]").val();
         }
         for (var i = 0; i < 7; i++) {
             var days = $(".fc-day-header").eq(i).text();

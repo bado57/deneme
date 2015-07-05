@@ -60,6 +60,8 @@ ons.ready(function () {
                     }
 
                     if (cevap.Tur) {
+                        $("#aracTurSoforHeader").show();
+                        $("#aracTurSoforList").show();
                         var turlength = cevap.Tur.length;
                         var onsList = $("#aracTurSoforList");
                         $("#turToplam").text(turlength);
@@ -70,9 +72,6 @@ ons.ready(function () {
                             elm.appendTo(onsList);
                             ons.compile(elm[0]);
                         }
-                    } else {
-                        $("#aracTurSoforHeader").hide();
-                        $("#aracTurSoforList").hide();
                     }
                     modal.hide();
                 }
@@ -89,7 +88,8 @@ ons.ready(function () {
                     ons.notification.alert({message: jsDil.Hata});
                     return false;
                 } else {
-
+                    $("#aracSoforList").show();
+                    $("#aracSoforHeader").show();
                     var soforlength = cevap.Sofor.length;
                     var onsListS = $("#aracSoforList");
                     $("#soforToplam").text(soforlength);
@@ -102,6 +102,8 @@ ons.ready(function () {
                     }
 
                     if (cevap.TurHostes) {
+                        $("#aracHostesHeader").show();
+                        $("#aracHostesList").show();
                         var hosteslength = cevap.TurHostes.length;
                         var onsListH = $("#aracHostesList");
                         $("#hostesToplam").text(hosteslength);
@@ -112,9 +114,6 @@ ons.ready(function () {
                             elmh.appendTo(onsListH);
                             ons.compile(elmh[0]);
                         }
-                    } else {
-                        $("#aracHostesHeader").hide();
-                        $("#aracHostesList").hide();
                     }
                     modal.hide();
                 }
@@ -131,6 +130,8 @@ ons.ready(function () {
                     ons.notification.alert({message: jsDil.Hata});
                     return false;
                 } else {
+                    $("#aracSYoneticiHeader").show();
+                    $("#aracYoneticiList").show();
                     var yoneticilength = cevap.Yonetici.length;
                     var onsListY = $("#aracYoneticiList");
                     $("#yoneticiToplam").text(yoneticilength);

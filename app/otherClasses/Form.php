@@ -975,7 +975,7 @@ class Form {
         return $yeniGun;
     }
 
-    function calendar($deger = array()) {
+    function calendar($deger = array(), $title = array()) {
 
         $length = count($deger);
         $b = 0;
@@ -1013,25 +1013,25 @@ class Form {
             }
 
             if ($deger[$i]['Pzt'] != 0) {//0 sa
-                array_push($myarray, array('title' => '', 'start' => '2015-03-02T' . $baslangic, 'end' => '2015-03-02T' . $bitis));
+                array_push($myarray, array('title' => $title[$i], 'start' => '2015-03-02T' . $baslangic, 'end' => '2015-03-02T' . $bitis));
             }
             if ($deger[$i]['Sli'] != 0) {//0 sa
-                array_push($myarray, array('title' => '', 'start' => '2015-03-03T' . $baslangic, 'end' => '2015-03-03T' . $bitis));
+                array_push($myarray, array('title' => $title[$i], 'start' => '2015-03-03T' . $baslangic, 'end' => '2015-03-03T' . $bitis));
             }
             if ($deger[$i]['Crs'] != 0) {//0 sa
-                array_push($myarray, array('title' => '', 'start' => '2015-03-04T' . $baslangic, 'end' => '2015-03-04T' . $bitis));
+                array_push($myarray, array('title' => $title[$i], 'start' => '2015-03-04T' . $baslangic, 'end' => '2015-03-04T' . $bitis));
             }
             if ($deger[$i]['Prs'] != 0) {//0 sa
-                array_push($myarray, array('title' => '', 'start' => '2015-03-05T' . $baslangic, 'end' => '2015-03-05T' . $bitis));
+                array_push($myarray, array('title' => $title[$i], 'start' => '2015-03-05T' . $baslangic, 'end' => '2015-03-05T' . $bitis));
             }
             if ($deger[$i]['Cma'] != 0) {//0 sa
-                array_push($myarray, array('title' => '', 'start' => '2015-03-06T' . $baslangic, 'end' => '2015-03-06T' . $bitis));
+                array_push($myarray, array('title' => $title[$i], 'start' => '2015-03-06T' . $baslangic, 'end' => '2015-03-06T' . $bitis));
             }
             if ($deger[$i]['Cmt'] != 0) {//0 sa
-                array_push($myarray, array('title' => '', 'start' => '2015-03-07T' . $baslangic, 'end' => '2015-03-07T' . $bitis));
+                array_push($myarray, array('title' => $title[$i], 'start' => '2015-03-07T' . $baslangic, 'end' => '2015-03-07T' . $bitis));
             }
             if ($deger[$i]['Pzr'] != 0) {//0 sas
-                array_push($myarray, array('title' => '', 'start' => '2015-03-08T' . $baslangic, 'end' => '2015-03-08T' . $bitis));
+                array_push($myarray, array('title' => $title[$i], 'start' => '2015-03-08T' . $baslangic, 'end' => '2015-03-08T' . $bitis));
             }
         }
         return $myarray;

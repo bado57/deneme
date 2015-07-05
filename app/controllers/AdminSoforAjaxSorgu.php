@@ -784,6 +784,7 @@ class AdminSoforAjaxSorgu extends Controller {
                     $adminSoforTakvim = $Panel_Model->adminSoforTakvim($id);
                     $a = 0;
                     foreach ($adminSoforTakvim as $adminSoforTakvimm) {
+                        $tkvimID[$a] = $adminSoforTakvimm['BSTurID'];
                         $soforTkvim[$a]['Pzt'] = $adminSoforTakvimm['SBTurPzt'];
                         $soforTkvim[$a]['Sli'] = $adminSoforTakvimm['SBTurSli'];
                         $soforTkvim[$a]['Crs'] = $adminSoforTakvimm['SBTurCrs'];
@@ -795,8 +796,23 @@ class AdminSoforAjaxSorgu extends Controller {
                         $soforTkvim[$a]['Bts'] = $adminSoforTakvimm['BSTurBts'];
                         $a++;
                     }
+
+                    $count = count($tkvimID);
+                    foreach ($tkvimID as $value) {
+                        $sql .= 'SELECT SBTurAd FROM sbtur WHERE SBTurID=' . $value . ' UNION ALL ';
+                    }
+                    $uzunluk = strlen($sql);
+                    $uzunluk = $uzunluk - 10;
+                    $sqlTitle = substr($sql, 0, $uzunluk);
+                    $takvimTitle = $Panel_Model->takvimTitle($sqlTitle);
+                    $c = 0;
+                    foreach ($takvimTitle as $takvimTitlee) {
+                        $title[$c] = $takvimTitlee['SBTurAd'];
+                        $c++;
+                    }
+
                     $input_arrays = [];
-                    $input_arrays = $form->calendar($soforTkvim);
+                    $input_arrays = $form->calendar($soforTkvim, $title);
 
                     $sonuc = $input_arrays;
                     break;

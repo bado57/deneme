@@ -437,6 +437,7 @@ class SoforMobilTurAjax extends Controller {
                     $soforTakvim = $Panel_Model->soforTakvim($id);
                     $a = 0;
                     foreach ($soforTakvim as $soforTakvimm) {
+                        $tkvimID[$a] = $soforTakvimm['BSTurID'];
                         $soforTkvim[$a]['Pzt'] = $soforTakvimm['SBTurPzt'];
                         $soforTkvim[$a]['Sli'] = $soforTakvimm['SBTurSli'];
                         $soforTkvim[$a]['Crs'] = $soforTakvimm['SBTurCrs'];
@@ -448,8 +449,23 @@ class SoforMobilTurAjax extends Controller {
                         $soforTkvim[$a]['Bts'] = $soforTakvimm['BSTurBts'];
                         $a++;
                     }
+
+                    $count = count($tkvimID);
+                    foreach ($tkvimID as $value) {
+                        $sql .= 'SELECT SBTurAd FROM sbtur WHERE SBTurID=' . $value . ' UNION ALL ';
+                    }
+                    $uzunluk = strlen($sql);
+                    $uzunluk = $uzunluk - 10;
+                    $sqlTitle = substr($sql, 0, $uzunluk);
+                    $takvimTitle = $Panel_Model->takvimTitle($sqlTitle);
+                    $c = 0;
+                    foreach ($takvimTitle as $takvimTitlee) {
+                        $title[$c] = $takvimTitlee['SBTurAd'];
+                        $c++;
+                    }
+
                     $input_arrays = [];
-                    $input_arrays = $form->calendar($soforTkvim);
+                    $input_arrays = $form->calendar($soforTkvim, $title);
 
                     // Accumulate an output array of event data arrays.
 //                    foreach ($input_arrays as $array) {
@@ -488,6 +504,7 @@ class SoforMobilTurAjax extends Controller {
                     $hostesTakvim = $Panel_Model->hostesTakvim($id);
                     $a = 0;
                     foreach ($hostesTakvim as $hostesTakvimm) {
+                        $tkvimID[$a] = $hostesTakvimm['BSTurID'];
                         $hostesTkvim[$a]['Pzt'] = $hostesTakvimm['SBTurPzt'];
                         $hostesTkvim[$a]['Sli'] = $hostesTakvimm['SBTurSli'];
                         $hostesTkvim[$a]['Crs'] = $hostesTakvimm['SBTurCrs'];
@@ -499,8 +516,23 @@ class SoforMobilTurAjax extends Controller {
                         $hostesTkvim[$a]['Bts'] = $hostesTakvimm['BSTurBts'];
                         $a++;
                     }
+
+                    $count = count($tkvimID);
+                    foreach ($tkvimID as $value) {
+                        $sql .= 'SELECT SBTurAd FROM sbtur WHERE SBTurID=' . $value . ' UNION ALL ';
+                    }
+                    $uzunluk = strlen($sql);
+                    $uzunluk = $uzunluk - 10;
+                    $sqlTitle = substr($sql, 0, $uzunluk);
+                    $takvimTitle = $Panel_Model->takvimTitle($sqlTitle);
+                    $c = 0;
+                    foreach ($takvimTitle as $takvimTitlee) {
+                        $title[$c] = $takvimTitlee['SBTurAd'];
+                        $c++;
+                    }
+
                     $input_arrays = [];
-                    $input_arrays = $form->calendar($hostesTkvim);
+                    $input_arrays = $form->calendar($hostesTkvim, $title);
 
                     // Accumulate an output array of event data arrays.
 //                    foreach ($input_arrays as $array) {
@@ -536,22 +568,113 @@ class SoforMobilTurAjax extends Controller {
 
                     $form->post("id", true);
                     $id = $form->values['id'];
-                    $hostesTakvim = $Panel_Model->hostesTakvim($id);
+                    $aracTakvim = $Panel_Model->hostesTakvim($id);
                     $a = 0;
-                    foreach ($hostesTakvim as $hostesTakvimm) {
-                        $hostesTkvim[$a]['Pzt'] = $hostesTakvimm['SBTurPzt'];
-                        $hostesTkvim[$a]['Sli'] = $hostesTakvimm['SBTurSli'];
-                        $hostesTkvim[$a]['Crs'] = $hostesTakvimm['SBTurCrs'];
-                        $hostesTkvim[$a]['Prs'] = $hostesTakvimm['SBTurPrs'];
-                        $hostesTkvim[$a]['Cma'] = $hostesTakvimm['SBTurCma'];
-                        $hostesTkvim[$a]['Cmt'] = $hostesTakvimm['SBTurCmt'];
-                        $hostesTkvim[$a]['Pzr'] = $hostesTakvimm['SBTurPzr'];
-                        $hostesTkvim[$a]['Bslngc'] = $hostesTakvimm['BSTurBslngc'];
-                        $hostesTkvim[$a]['Bts'] = $hostesTakvimm['BSTurBts'];
+                    foreach ($aracTakvim as $aracTakvimm) {
+                        $tkvimID[$a] = $aracTakvimm['BSTurID'];
+                        $aracTkvim[$a]['Pzt'] = $aracTakvimm['SBTurPzt'];
+                        $aracTkvim[$a]['Sli'] = $aracTakvimm['SBTurSli'];
+                        $aracTkvim[$a]['Crs'] = $aracTakvimm['SBTurCrs'];
+                        $aracTkvim[$a]['Prs'] = $aracTakvimm['SBTurPrs'];
+                        $aracTkvim[$a]['Cma'] = $aracTakvimm['SBTurCma'];
+                        $aracTkvim[$a]['Cmt'] = $aracTakvimm['SBTurCmt'];
+                        $aracTkvim[$a]['Pzr'] = $aracTakvimm['SBTurPzr'];
+                        $aracTkvim[$a]['Bslngc'] = $aracTakvimm['BSTurBslngc'];
+                        $aracTkvim[$a]['Bts'] = $aracTakvimm['BSTurBts'];
                         $a++;
                     }
+
+                    $count = count($tkvimID);
+                    foreach ($tkvimID as $value) {
+                        $sql .= 'SELECT SBTurAd FROM sbtur WHERE SBTurID=' . $value . ' UNION ALL ';
+                    }
+                    $uzunluk = strlen($sql);
+                    $uzunluk = $uzunluk - 10;
+                    $sqlTitle = substr($sql, 0, $uzunluk);
+                    $takvimTitle = $Panel_Model->takvimTitle($sqlTitle);
+                    $c = 0;
+                    foreach ($takvimTitle as $takvimTitlee) {
+                        $title[$c] = $takvimTitlee['SBTurAd'];
+                        $c++;
+                    }
+
                     $input_arrays = [];
-                    $input_arrays = $form->calendar($hostesTkvim);
+                    $input_arrays = $form->calendar($aracTkvim, $title);
+
+                    // Accumulate an output array of event data arrays.
+//                    foreach ($input_arrays as $array) {
+//
+//                        // Convert the input array into a useful Event object
+//                        $event = new Calendar($array, $timezone);
+//
+//                        // If the event is in-bounds, add it to the output
+//                        if ($event->isWithinDayRange($range_start, $range_end)) {
+//                            //$sonuc[] = $event->toArray();
+//                        }
+//                    }
+                    $sonuc = $input_arrays;
+                    break;
+
+                case "yolcuTakvim":
+                    $calendar = $this->load->otherClasses('Calendar');
+                    // Short-circuit if the client did not give us a date range.
+                    if (!isset($_POST['start']) || !isset($_POST['end'])) {
+                        error_log("die");
+                        die("Please provide a date range.");
+                    }
+                    // Parse the start/end parameters.
+                    // These are assumed to be ISO8601 strings with no time nor timezone, like "2013-12-29".
+                    // Since no timezone will be present, they will parsed as UTC.
+                    $range_start = parseDateTime($_POST['start']);
+                    $range_end = parseDateTime($_POST['end']);
+                    // Parse the timezone parameter if it is present.
+                    $timezone = null;
+                    if (isset($_POST['timezone'])) {
+                        $timezone = new DateTimeZone($_POST['timezone']);
+                    }
+
+                    $form->post("id", true);
+                    $form->post("yolcutip", true);
+                    $id = $form->values['id'];
+                    $yolcuTip = $form->values['yolcutip'];
+                    error_log($yolcuTip);
+                    if ($yolcuTip == 0) {//şoför
+                        $aracTakvim = $Panel_Model->soforTakvim($id);
+                    } else if ($yolcuTip == 1) {//hostes
+                        $aracTakvim = $Panel_Model->hostesTakvim($id);
+                    }
+
+                    $a = 0;
+                    foreach ($aracTakvim as $aracTakvimm) {
+                        $tkvimID[$a] = $aracTakvimm['BSTurID'];
+                        $aracTkvim[$a]['Pzt'] = $aracTakvimm['SBTurPzt'];
+                        $aracTkvim[$a]['Sli'] = $aracTakvimm['SBTurSli'];
+                        $aracTkvim[$a]['Crs'] = $aracTakvimm['SBTurCrs'];
+                        $aracTkvim[$a]['Prs'] = $aracTakvimm['SBTurPrs'];
+                        $aracTkvim[$a]['Cma'] = $aracTakvimm['SBTurCma'];
+                        $aracTkvim[$a]['Cmt'] = $aracTakvimm['SBTurCmt'];
+                        $aracTkvim[$a]['Pzr'] = $aracTakvimm['SBTurPzr'];
+                        $aracTkvim[$a]['Bslngc'] = $aracTakvimm['BSTurBslngc'];
+                        $aracTkvim[$a]['Bts'] = $aracTakvimm['BSTurBts'];
+                        $a++;
+                    }
+
+                    $count = count($tkvimID);
+                    foreach ($tkvimID as $value) {
+                        $sql .= 'SELECT SBTurAd FROM sbtur WHERE SBTurID=' . $value . ' UNION ALL ';
+                    }
+                    $uzunluk = strlen($sql);
+                    $uzunluk = $uzunluk - 10;
+                    $sqlTitle = substr($sql, 0, $uzunluk);
+                    $takvimTitle = $Panel_Model->takvimTitle($sqlTitle);
+                    $c = 0;
+                    foreach ($takvimTitle as $takvimTitlee) {
+                        $title[$c] = $takvimTitlee['SBTurAd'];
+                        $c++;
+                    }
+
+                    $input_arrays = [];
+                    $input_arrays = $form->calendar($aracTkvim, $title);
 
                     // Accumulate an output array of event data arrays.
 //                    foreach ($input_arrays as $array) {

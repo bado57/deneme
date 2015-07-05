@@ -40,4 +40,9 @@ var jsDil = {
     'Cma': 'Cma',
     'Cmt': 'Cmt',
     'Pzr': 'Pzr',
+    'Kisi': 'Kişi',
+    'KisiSec': 'Lütfen kişi seçiniz',
+    'BosMesaj': 'Lütfen mesajınızı giriniz',
+    'DuyuruGonder': 'Duyuru gönderilmiştir',
+    'DuyuruYok': 'Gösterielcek duyuru yok',
 };

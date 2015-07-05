@@ -116,8 +116,8 @@
                     </a>
                     <div class="navbar-right">
                         <ul class="nav navbar-nav">
-                            <li class="dropdown notifications-menu" id="duyuruTikla">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <li class="dropdown notifications-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="duyuruTikla">
                                     <i class="fa fa-bullhorn"></i>
                                     <span class="label label-warning" id="duyuruCount"></span>
                                 </a>
@@ -132,8 +132,8 @@
                                     <li class="footer"><a href="#" id="tumunuGosterDuyuru"><?php echo $data["TumunuGor"]; ?></a></li>
                                 </ul>
                             </li>
-                            <li class="dropdown notifications-menu" id="bildirimTikla">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <li class="dropdown notifications-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="bildirimTikla">
                                     <i class="fa fa-warning"></i>
                                     <span class="label label-warning" id="bildirimCount"></span>
                                 </a>

@@ -341,6 +341,7 @@ class AdminDuyuruAjaxSorgu extends Controller {
                                     'BSDuyuruHedef' => $hedef,
                                     'BSGonderenID' => $adminID,
                                     'BSGonderenAdSoyad' => $adSoyad,
+                                    'BSGonderenTip' => 5,
                                     'BSAlanID' => $admin[$a],
                                     'BSAlanAdSoyad' => $adminText[$a],
                                     'BSOkundu' => 0,
@@ -367,8 +368,10 @@ class AdminDuyuruAjaxSorgu extends Controller {
                             for ($s = 0; $s < $countSofor; $s++) {
                                 $sofordata[$s] = array(
                                     'BSDuyuruText' => $duyuruText,
+                                    'BSDuyuruHedef' => $hedef,
                                     'BSGonderenID' => $adminID,
                                     'BSGonderenAdSoyad' => $adSoyad,
+                                    'BSGonderenTip' => 5,
                                     'BSAlanID' => $sofor[$s],
                                     'BSAlanAdSoyad' => $soforText[$s],
                                     'BSOkundu' => 0,
@@ -395,8 +398,10 @@ class AdminDuyuruAjaxSorgu extends Controller {
                             for ($h = 0; $h < $countHostes; $h++) {
                                 $hostesdata[$h] = array(
                                     'BSDuyuruText' => $duyuruText,
+                                    'BSDuyuruHedef' => $hedef,
                                     'BSGonderenID' => $adminID,
                                     'BSGonderenAdSoyad' => $adSoyad,
+                                    'BSGonderenTip' => 5,
                                     'BSAlanID' => $hostes[$h],
                                     'BSAlanAdSoyad' => $hostesText[$h],
                                     'BSOkundu' => 0,
@@ -423,8 +428,10 @@ class AdminDuyuruAjaxSorgu extends Controller {
                             for ($v = 0; $v < $countVeli; $v++) {
                                 $velidata[$v] = array(
                                     'BSDuyuruText' => $duyuruText,
+                                    'BSDuyuruHedef' => $hedef,
                                     'BSGonderenID' => $adminID,
                                     'BSGonderenAdSoyad' => $adSoyad,
+                                    'BSGonderenTip' => 5,
                                     'BSAlanID' => $veli[$v],
                                     'BSAlanAdSoyad' => $veliText[$v],
                                     'BSOkundu' => 0,
@@ -451,8 +458,10 @@ class AdminDuyuruAjaxSorgu extends Controller {
                             for ($o = 0; $o < $countOgrenci; $o++) {
                                 $ogrencidata[$o] = array(
                                     'BSDuyuruText' => $duyuruText,
+                                    'BSDuyuruHedef' => $hedef,
                                     'BSGonderenID' => $adminID,
                                     'BSGonderenAdSoyad' => $adSoyad,
+                                    'BSGonderenTip' => 5,
                                     'BSAlanID' => $ogrenci[$o],
                                     'BSAlanAdSoyad' => $ogrenciText[$o],
                                     'BSOkundu' => 0,
@@ -479,8 +488,10 @@ class AdminDuyuruAjaxSorgu extends Controller {
                             for ($i = 0; $i < $countIsci; $i++) {
                                 $iscidata[$i] = array(
                                     'SBDuyuruText' => $duyuruText,
+                                    'SBDuyuruHedef' => $hedef,
                                     'SBGonderenID' => $adminID,
                                     'SBGonderenAdSoyad' => $adSoyad,
+                                    'SBGonderenTip' => 5,
                                     'SBAlanID' => $isci[$i],
                                     'SBAlanAdSoyad' => $isciText[$i],
                                     'SBOkundu' => 0,

@@ -34,6 +34,7 @@ class tr {
             "Donus" => "Dönüş",
             "Yolcu" => "Yolcular",
             "Sofor" => "Şoförler",
+            "Veli" => "Veliler",
             "Hostes" => "Hostesler",
             "Yonetici" => "Yöneticiler",
             "YoneticiBilgi" => "Yönetici Bilgileri",
@@ -45,6 +46,13 @@ class tr {
             "AracBilgi" => "Araç Bilgileri",
             "AracListe" => "Araç Listesi",
             "Takvim" => "Takvim",
+            "DuyuruIslem" => "Duyuru İşlemleri",
+            "DuyuruGecmis" => "Duyuru Geçmişi",
+            "DuyuruGonder" => "Duyuru Gönder",
+            "Mesaj" => "Mesajınız",
+            "YeniDuyuru" => "Yeni Duyuru",
+            "GonDuyuru" => "Gönderilen Duyuru",
+            "GelDuyuru" => "Gelen Duyuru",
         );
         return $trdil;
     }

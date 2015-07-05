@@ -234,6 +234,7 @@ class SoforMobilAracAjax extends Controller {
                     $soforAracTakvim = $Panel_Model->soforAracTakvim($id);
                     $a = 0;
                     foreach ($soforAracTakvim as $soforAracTakvimm) {
+                        $tkvimID[$a] = $soforAracTakvimm['BSTurID'];
                         $soforTkvim[$a]['Pzt'] = $soforAracTakvimm['SBTurPzt'];
                         $soforTkvim[$a]['Sli'] = $soforAracTakvimm['SBTurSli'];
                         $soforTkvim[$a]['Crs'] = $soforAracTakvimm['SBTurCrs'];
@@ -245,8 +246,23 @@ class SoforMobilAracAjax extends Controller {
                         $soforTkvim[$a]['Bts'] = $soforAracTakvimm['BSTurBts'];
                         $a++;
                     }
+
+                    $count = count($tkvimID);
+                    foreach ($tkvimID as $value) {
+                        $sql .= 'SELECT SBTurAd FROM sbtur WHERE SBTurID=' . $value . ' UNION ALL ';
+                    }
+                    $uzunluk = strlen($sql);
+                    $uzunluk = $uzunluk - 10;
+                    $sqlTitle = substr($sql, 0, $uzunluk);
+                    $takvimTitle = $Panel_Model->takvimTitle($sqlTitle);
+                    $c = 0;
+                    foreach ($takvimTitle as $takvimTitlee) {
+                        $title[$c] = $takvimTitlee['SBTurAd'];
+                        $c++;
+                    }
+
                     $input_arrays = [];
-                    $input_arrays = $form->calendar($soforTkvim);
+                    $input_arrays = $form->calendar($soforTkvim, $title);
 
                     // Accumulate an output array of event data arrays.
 //                    foreach ($input_arrays as $array) {

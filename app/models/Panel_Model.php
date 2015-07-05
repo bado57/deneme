@@ -675,7 +675,12 @@ class Panel_Model extends Model {
 
     //araç takvim özellikleri
     public function adminAracTakvim($aracID) {
-        $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurAracID = ' . $aracID;
+        $sql = 'SELECT BSTurID,SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurAracID = ' . $aracID;
+        return($this->db->select($sql));
+    }
+
+    //araç takvim özellikleri
+    public function takvimTitle($sql) {
         return($this->db->select($sql));
     }
 
@@ -1002,7 +1007,7 @@ class Panel_Model extends Model {
 
     //şoför takvim özellikleri
     public function adminSoforTakvim($soforID) {
-        $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurSoforID = ' . $soforID;
+        $sql = 'SELECT BSTurID,SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurSoforID = ' . $soforID;
         return($this->db->select($sql));
     }
 
@@ -1014,7 +1019,7 @@ class Panel_Model extends Model {
 
     //hostes takvim özellikleri
     public function adminHostesTakvim($soforID) {
-        $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurHostesID = ' . $soforID;
+        $sql = 'SELECT BSTurID,SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurHostesID = ' . $soforID;
         return($this->db->select($sql));
     }
 

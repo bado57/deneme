@@ -31,7 +31,6 @@ $.AdminIslemler = {
                 }
             }
         }
-        console.log(notTickArray);
         $.ajax({
             data: {"notTickArray[]": notTickArray, "tip": "bildirimTick"},
             success: function (cevap) {

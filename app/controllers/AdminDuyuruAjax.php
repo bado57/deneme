@@ -87,7 +87,6 @@ class AdminDuyuruAjax extends Controller {
                     break;
 
                 case "tumunuOkundu":
-
                     if ($form->submit()) {
                         $data = array(
                             'BSOkundu' => 1

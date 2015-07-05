@@ -216,7 +216,7 @@ class Panel_Model_Mobile extends ModelMobile {
 
     //şoför tur kurumlar
     public function soforTurKurumlar($array = array()) {
-        $sql = 'SELECT DISTINCT SBTurID,SBTurAd FROM sbtur Where SBTurID IN (' . $array . ')';
+        $sql = 'SELECT DISTINCT SBTurID,SBTurAd,SBTurTip,SBBolgeID FROM sbtur Where SBTurID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
@@ -241,6 +241,12 @@ class Panel_Model_Mobile extends ModelMobile {
     //şoför tur öğrenci yolcu
     public function soforTurOgrenci($turID) {
         $sql = 'SELECT BSOgrenciID,BSOgrenciAd FROM bsogrencitur WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur öğrenci yolcu
+    public function soforTurVeli($array = array()) {
+        $sql = 'SELECT DISTINCT BSVeliID,BSVeliAd FROM bsveliogrenci WHERE BSOgrenciID IN (' . $array . ')';
         return($this->db->select($sql));
     }
 
@@ -396,19 +402,107 @@ class Panel_Model_Mobile extends ModelMobile {
 
     //araç takvim özellikleri
     public function soforAracTakvim($aracID) {
-        $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurAracID = ' . $aracID;
+        $sql = 'SELECT BSTurID,SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurAracID = ' . $aracID;
+        return($this->db->select($sql));
+    }
+
+    //araç takvim özellikleri
+    public function takvimTitle($sql) {
         return($this->db->select($sql));
     }
 
     //şoför takvim özellikleri
     public function soforTakvim($soforID) {
-        $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurSoforID = ' . $soforID;
+        $sql = 'SELECT BSTurID,SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurSoforID = ' . $soforID;
         return($this->db->select($sql));
     }
 
     //hostes takvim özellikleri
     public function hostesTakvim($hostesID) {
-        $sql = 'SELECT SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurHostesID = ' . $hostesID;
+        $sql = 'SELECT BSTurID,SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurHostesID = ' . $hostesID;
+        return($this->db->select($sql));
+    }
+
+    //admin duyuru save
+    public function addAdminDuyuru($data) {
+        return ($this->db->multiInsert('bsadminduyuru', $data));
+    }
+
+    //diğer admin cihazlar
+    public function digerAdminCihaz($array = array()) {
+        $sql = 'SELECT bsadmincihazRecID FROM bsadmincihaz Where bsadminID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //sofor duyuru save
+    public function addSoforDuyuru($data) {
+        return ($this->db->multiInsert('bssoforduyuru', $data));
+    }
+
+    //şoför cihazlar
+    public function digerSoforCihaz($array = array()) {
+        $sql = 'SELECT sbsoforcihazRecID FROM sbsoforcihaz Where sbsoforID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //hostes duyuru save
+    public function addHostesDuyuru($data) {
+        return ($this->db->multiInsert('bshostesduyuru', $data));
+    }
+
+    //hostes cihazlar
+    public function digerHostesCihaz($array = array()) {
+        $sql = 'SELECT bshostescihazRecID FROM bshostescihaz Where bshostesID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //veli duyuru save
+    public function addVeliDuyuru($data) {
+        return ($this->db->multiInsert('bsveliduyuru', $data));
+    }
+
+    //veli cihaz
+    public function veliCihaz($array = array()) {
+        $sql = 'SELECT bsvelicihazRecID FROM bsvelicihaz Where bsveliID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //öğrenci duyuru save
+    public function addOgrenciDuyuru($data) {
+        return ($this->db->multiInsert('bsogrenciduyuru', $data));
+    }
+
+    //öğrenci cihaz
+    public function ogrenciCihaz($array = array()) {
+        $sql = 'SELECT bsogrencicihazRecID FROM bsogrencicihaz Where bsogrenciID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //işçi duyuru save
+    public function addIsciDuyuru($data) {
+        return ($this->db->multiInsert('sbisciduyuru', $data));
+    }
+
+    //işçi cihaz
+    public function isciCihaz($array = array()) {
+        $sql = 'SELECT sbiscicihazRecID FROM sbiscicihaz Where sbisciID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //şoför gelen duyurular
+    public function soforGelenDuyuru($soforID) {
+        $sql = 'SELECT BSDuyuruText,BSSoforDuyuruID,BSGonderenAdSoyad,BSGonderenTip,BSOkundu,BSDuyuruTarih FROM bssoforduyuru Where BSAlanID=' . $soforID . ' ORDER BY BSDuyuruTarih DESC';
+        return($this->db->select($sql));
+    }
+
+    //duyurular okundu
+    public function soforGelenOkundu($data, $duyuruID) {
+        return ($this->db->update("bssoforduyuru", $data, "BSSoforDuyuruID=" . $duyuruID));
+    }
+
+    //şoför önderilen duyurular
+    public function soforGonderilenDuyuru($soforID) {
+        $sql = 'SELECT BSSoforDuyuruID,BSDuyuruText,BSDuyuruHedef,BSDuyuruTarih FROM bssoforduyuru Where BSGonderenID=' . $soforID . ' ORDER BY BSDuyuruTarih DESC';
         return($this->db->select($sql));
     }
 

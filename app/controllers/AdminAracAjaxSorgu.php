@@ -2833,6 +2833,7 @@ class AdminAracAjaxSorgu extends Controller {
                     $adminAracTakvim = $Panel_Model->adminAracTakvim($id);
                     $a = 0;
                     foreach ($adminAracTakvim as $adminAracTakvimm) {
+                        $tkvimID[$a] = $adminAracTakvimm['BSTurID'];
                         $aracTkvim[$a]['Pzt'] = $adminAracTakvimm['SBTurPzt'];
                         $aracTkvim[$a]['Sli'] = $adminAracTakvimm['SBTurSli'];
                         $aracTkvim[$a]['Crs'] = $adminAracTakvimm['SBTurCrs'];
@@ -2844,8 +2845,23 @@ class AdminAracAjaxSorgu extends Controller {
                         $aracTkvim[$a]['Bts'] = $adminAracTakvimm['BSTurBts'];
                         $a++;
                     }
+
+                    $count = count($tkvimID);
+                    foreach ($tkvimID as $value) {
+                        $sql .= 'SELECT SBTurAd FROM sbtur WHERE SBTurID=' . $value . ' UNION ALL ';
+                    }
+                    $uzunluk = strlen($sql);
+                    $uzunluk = $uzunluk - 10;
+                    $sqlTitle = substr($sql, 0, $uzunluk);
+                    $takvimTitle = $Panel_Model->takvimTitle($sqlTitle);
+                    $c = 0;
+                    foreach ($takvimTitle as $takvimTitlee) {
+                        $title[$c] = $takvimTitlee['SBTurAd'];
+                        $c++;
+                    }
+
                     $input_arrays = [];
-                    $input_arrays = $form->calendar($aracTkvim);
+                    $input_arrays = $form->calendar($aracTkvim, $title);
 
                     // Accumulate an output array of event data arrays.
 //                    foreach ($input_arrays as $array) {

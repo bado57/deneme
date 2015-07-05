@@ -170,8 +170,8 @@
                                         </ons-list-item>
                                     </ons-list>
                                     <br />
-                                    <div class="settings-header" id="aracTurSoforHeader"><?php echo $data["Tur"]; ?> (<span id="turToplam"></span>)</div>
-                                    <ons-list modifier="" class="yolcu-list" id="aracTurSoforList">
+                                    <div class="settings-header" id="aracTurSoforHeader" style="display:none"><?php echo $data["Tur"]; ?> (<span id="turToplam"></span>)</div>
+                                    <ons-list modifier="" class="yolcu-list" id="aracTurSoforList" style="display:none">
                                     </ons-list>
                                     <br />
                                 </ons-page>
@@ -185,12 +185,12 @@
                                         <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="aracNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                     </ons-toolbar>
                                     <br />
-                                    <div class="settings-header" id="aracSoforHeader"><?php echo $data["Sofor"]; ?> (<span id="soforToplam"></span>)</div>
-                                    <ons-list modifier="" class="yolcu-list" id="aracSoforList">
+                                    <div class="settings-header" id="aracSoforHeader" style="display:none"><?php echo $data["Sofor"]; ?> (<span id="soforToplam"></span>)</div>
+                                    <ons-list modifier="" class="yolcu-list" id="aracSoforList" style="display:none">
                                     </ons-list>
                                     <br />
-                                    <div class="settings-header" id="aracHostesHeader"><?php echo $data["Hostes"]; ?> (<span id="hostesToplam"></span>)</div>
-                                    <ons-list modifier="" class="yolcu-list" id="aracHostesList">
+                                    <div class="settings-header" id="aracHostesHeader" style="display:none"><?php echo $data["Hostes"]; ?> (<span id="hostesToplam"></span>)</div>
+                                    <ons-list modifier="" class="yolcu-list" id="aracHostesList" style="display:none">
                                     </ons-list>
                                     <br />
                                 </ons-page>
@@ -204,8 +204,8 @@
                                         <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="aracNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                     </ons-toolbar>
                                     <br />
-                                    <div class="settings-header" id="aracSYoneticiHeader"><?php echo $data["Yonetici"]; ?> (<span id="yoneticiToplam"></span>)</div>
-                                    <ons-list modifier="" class="yonetici-list" id="aracYoneticiList">
+                                    <div class="settings-header" id="aracSYoneticiHeader" style="display:none"><?php echo $data["Yonetici"]; ?> (<span id="yoneticiToplam"></span>)</div>
+                                    <ons-list modifier="" class="yonetici-list" id="aracYoneticiList" style="display:none">
                                     </ons-list>
                                 </ons-page>
                             </ons-template>

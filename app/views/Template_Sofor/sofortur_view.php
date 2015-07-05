@@ -295,20 +295,20 @@
                                         <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="turNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                     </ons-toolbar>
                                     <br />
-                                    <div class="settings-header"><?php echo $data["Yolcu"]; ?> (<span id="yolcuToplam"></span>)</div>
-                                    <ons-list modifier="" class="person-list" id="turYolcuList">
+                                    <div class="settings-header" id="turYolcuHeader" style="display:none"><?php echo $data["Yolcu"]; ?> (<span id="yolcuToplam"></span>)</div>
+                                    <ons-list modifier="" class="person-list" id="turYolcuList" style="display:none">
                                     </ons-list>
                                     <br />
-                                    <div class="settings-header" id="turSoforHeader"><?php echo $data["Sofor"]; ?> (<span id="soforToplam"></span>)</div>
-                                    <ons-list modifier="" class="yolcu-list" id="turSoforList">
+                                    <div class="settings-header" id="turSoforHeader" style="display:none"><?php echo $data["Sofor"]; ?> (<span id="soforToplam"></span>)</div>
+                                    <ons-list modifier="" class="yolcu-list" id="turSoforList" style="display:none">
                                     </ons-list>
                                     <br />
-                                    <div class="settings-header" id="turHostesHeader"><?php echo $data["Hostes"]; ?> (<span id="hostesToplam"></span>)</div>
-                                    <ons-list modifier="" class="yolcu-list" id="turHostesList">
+                                    <div class="settings-header" id="turHostesHeader" style="display:none"><?php echo $data["Hostes"]; ?> (<span id="hostesToplam"></span>)</div>
+                                    <ons-list modifier="" class="yolcu-list" id="turHostesList" style="display:none">
                                     </ons-list>
                                     <br />
-                                    <div class="settings-header" id="turYoneticiHeader"><?php echo $data["Yonetici"]; ?> (<span id="yoneticiToplam"></span>)</div>
-                                    <ons-list modifier="" class="yolcu-list" id="turYoneticiList">
+                                    <div class="settings-header" id="turYoneticiHeader" style="display:none"><?php echo $data["Yonetici"]; ?> (<span id="yoneticiToplam"></span>)</div>
+                                    <ons-list modifier="" class="yolcu-list" id="turYoneticiList" style="display:none">
                                     </ons-list>
                                     <br />
                                     <br />
@@ -569,6 +569,7 @@
                                                 </ons-col>
                                                 <ons-col class="coldty">
                                                     <b><span id="kdetayAd"></span></b>
+                                                    <input type="hidden" name="yolcuid" value=""></input>
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>
@@ -579,6 +580,7 @@
                                                 </ons-col>
                                                 <ons-col class="coldty">
                                                     <span id="kdetaytur"></span>
+                                                    <input type="hidden" name="inputtur" value=""></input>
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>
@@ -613,12 +615,43 @@
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>
+                                        <ons-list-item modifier="chevron" onclick="turNavigator.pushPage('yolcutakvim.html', {animation: 'slide'})" id="yolcuDetayTakvim">
+                                            <ons-row>
+                                                <ons-col width="40px">
+                                                    <i class="fa fa-calendar"></i> 
+                                                </ons-col>
+                                                <ons-col class="coldty">
+                                                    <?php echo $data["Takvim"]; ?>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>
                                     </ons-list>
                                     <br />
-                                    <div class="settings-header" id="vdetayheader"><?php echo $data["VeliBilgi"]; ?></div>
-                                    <ons-list modifier="" class="settings-list" id="vdetaylist">
+                                    <div class="settings-header" id="vdetayheader" style="display:none"><?php echo $data["VeliBilgi"]; ?></div>
+                                    <ons-list modifier="" class="settings-list" id="vdetaylist" style="display:none">
                                     </ons-list>
                                     <br />
+                                </ons-page>
+                            </ons-template>
+
+                            <ons-template id="yolcutakvim.html">
+                                <ons-page id="yolcutakvim">
+                                    <ons-toolbar>
+                                        <div class="left"><ons-button class="back" modifier="quiet" onclick="turNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
+                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-calendar"></i></div>
+                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="turNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
+                                    </ons-toolbar>
+                                    <br />
+                                    <div id="aracTakvim" class="settings-header col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">
+                                            <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div style="margin-bottom: 10px"><?php echo $data["Takvim"]; ?> (<b><span id="takvimYolcu"></span></b>)</div>
+                                                <div class="row" id="getPartialView">
+                                                    <div id="calendar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </ons-page>
                             </ons-template>
 
