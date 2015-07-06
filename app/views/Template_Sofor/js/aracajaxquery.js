@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://192.168.1.26/SProject/SoforMobilAracAjax",
+    url: "http://192.168.1.23/SProject/SoforMobilAracAjax",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -161,6 +161,8 @@ ons.ready(function () {
                     return false;
                 } else {
                     if (kisitip == 0) {
+                        $("input[name=inputtur]").val(0);
+                        $("input[name=yolcuid]").val(kisiid);
                         $("#kdetayAd").text(cevap.Detay.Ad + ' ' + cevap.Detay.Soyad);
                         $("#kdetayIcon").addClass("fa fa-bus");
                         if (cevap.Detay.Tel) {
@@ -177,6 +179,8 @@ ons.ready(function () {
                             $("#kdetayListAdres").hide();
                         }
                     } else {
+                        $("input[name=inputtur]").val(1);
+                        $("input[name=yolcuid]").val(kisiid);
                         $("#kdetayAd").text(cevap.Detay.Ad + ' ' + cevap.Detay.Soyad);
                         $("#kdetayIcon").addClass("fa fa-info");
                         if (cevap.Detay.Tel) {
@@ -304,6 +308,64 @@ ons.ready(function () {
             }
         }
     });
+    $(document).on('pageinit', '#kullanicitakvim', function () {
+        var currentLangCode = $("input[name=lang]").val();
+        $("#takvimKullanici").text($("#kdetayAd").text());
+        $('#calendar').fullCalendar('refetchEvents');
+        $('#calendar').fullCalendar('refresh');
+        $('#calendar').fullCalendar({
+            header: {
+                right: ''
+            },
+            defaultDate: '2015-03-02',
+            defaultView: 'agendaWeek',
+            weekNumbers: false,
+            editable: false,
+            weekdaysShort: true,
+            height: 'auto',
+            lang: currentLangCode,
+            allDaySlot: true,
+            slotDuration: "00:15:01",
+            axisFormat: 'HH:mm',
+            timeFormat: {
+                agenda: 'HH:mm'
+            },
+            events: function (start, end, timezone, callback) {
+                $.ajax({
+                    data: {start: '2015-03-02', end: '2015-03-09', "id": GetCustomValue(),
+                        "yolcutip": getCustomTip, "firma_id": GetCustomFValue, "tip": "yolcuTakvim"},
+                    success: function (doc) {
+                        callback(doc);
+                        modal.hide();
+                    }
+                });
+            },
+            eventColor: '#009933',
+            loading: function (bool) {
+                modal.show();
+            }
+        });
+        function GetCustomValue()
+        {
+            return $("input[name=yolcuid]").val();
+        }
+        function GetCustomFValue()
+        {
+            return $("input[name=firmaId]").val();
+        }
+        function getCustomTip()
+        {
+            return $("input[name=inputtur]").val();
+        }
+        for (var i = 0; i < 7; i++) {
+            var days = $(".fc-day-header").eq(i).text();
+            var kelime = days.substr(0, days.indexOf(' '));
+            if (kelime) {
+                //var sonkelime=kelime.replace(/,\s*$/, "");
+                $(".fc-day-header").eq(i).text(kelime);
+            }
+        }
+    });
 });
 $.SoforIslemler = {
     soforYolcuList: function (deger, tip) {
@@ -380,18 +442,18 @@ function turLokasyon() {
         if (inmeyenLength > 0) {
             for (var inmeyenicon = 0; inmeyenicon < inmeyenLength; inmeyenicon++) {
                 if (turList[inmeyenicon][4] != 1) {//öğrenci
-                    icons.push('http://192.168.1.26/SProject/Plugins/mapView/green_student.png');
+                    icons.push('http://192.168.1.23/SProject/Plugins/mapView/green_student.png');
                     lokasyonlar.push([turList[inmeyenicon][1], turList[inmeyenicon][2]]);
                     title.push(turList[inmeyenicon][0]);
                     idler.push(turList[inmeyenicon][3]);
                 } else {//personel
-                    icons.push('http://192.168.1.26/SProject/Plugins/mapView/employee_green.png');
+                    icons.push('http://192.168.1.23/SProject/Plugins/mapView/employee_green.png');
                     lokasyonlar.push([turList[inmeyenicon][1], turList[inmeyenicon][2]]);
                     title.push(turList[inmeyenicon][0]);
                     idler.push(turList[inmeyenicon][3]);
                 }
             }
-            icons.push('http://192.168.1.26/SProject/Plugins/mapView/build.png');
+            icons.push('http://192.168.1.23/SProject/Plugins/mapView/build.png');
             lokasyonlar.push([kurum[2], kurum[3]]);
             title.push(kurum[0]);
             idler.push(kurum[1]);

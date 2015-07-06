@@ -219,6 +219,44 @@ class SoforMobilServis extends Controller {
                         $this->load->view("Template_Sofor/soforduyuru", $language, $duyuru);
 
                         break;
+
+                    case "duyuruislem":
+                        $form->post("id", true);
+                        $kid = $form->values['id'];
+
+                        $form->post("enlem", true);
+                        $enlem = $form->values['enlem'];
+
+                        $form->post("boylam", true);
+                        $boylam = $form->values['boylam'];
+
+                        $formDbConfig = $this->load->otherClasses('DatabaseConfig');
+                        $usersselect_model = $this->load->model("adminselectdb_mobil");
+
+                        $loginfirmaID = $form->substrEnd($loginKadi, 8);
+                        //return database results
+                        $UserSelectDb = $usersselect_model->MkullaniciSelectDb($loginfirmaID);
+                        $SelectdbName = $UserSelectDb[0]['rootFirmaDbName'];
+                        $SelectdbIp = $UserSelectDb[0]['rootFirmaDbIp'];
+                        $SelectdbUser = $UserSelectDb[0]['rootFirmaDbUser'];
+                        $SelectdbPassword = $UserSelectDb[0]['rootFirmaDbSifre'];
+                        $SelectdbFirmaKod = $UserSelectDb[0]['rootfirmaKodu'];
+
+                        $formDbConfig->configDb($SelectdbName, $SelectdbIp, $SelectdbUser, $SelectdbPassword);
+                        //model bağlantısı
+                        $Panel_Model = $this->load->model("panel_model_mobile");
+
+                        //bölge html ye username i gönderiyorum
+                        $duyuru['Username'] = $loginKadi;
+                        $duyuru['id'] = $kid;
+                        $duyuru['FirmaId'] = $loginfirmaID;
+                        $duyuru['enlem'] = $enlem;
+                        $duyuru['boylam'] = $boylam;
+                        $duyuru['dil'] = $lang;
+
+                        $this->load->view("Template_Sofor/soforduyuru", $language, $duyuru);
+
+                        break;
                 }
             } else {
                 echo 'Are you Hacking?';

@@ -637,7 +637,6 @@ class SoforMobilTurAjax extends Controller {
                     $form->post("yolcutip", true);
                     $id = $form->values['id'];
                     $yolcuTip = $form->values['yolcutip'];
-                    error_log($yolcuTip);
                     if ($yolcuTip == 0) {//şoför
                         $aracTakvim = $Panel_Model->soforTakvim($id);
                     } else if ($yolcuTip == 1) {//hostes

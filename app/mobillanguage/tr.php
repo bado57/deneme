@@ -53,6 +53,7 @@ class tr {
             "YeniDuyuru" => "Yeni Duyuru",
             "GonDuyuru" => "Gönderilen Duyuru",
             "GelDuyuru" => "Gelen Duyuru",
+            "DuyuruYaz" => "Duyuru Yaz",
         );
         return $trdil;
     }

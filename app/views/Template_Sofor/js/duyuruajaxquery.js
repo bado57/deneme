@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://192.168.1.26/SProject/SoforMobilDuyuruAjax",
+    url: "http://192.168.1.23/SProject/SoforMobilDuyuruAjax",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -228,6 +228,8 @@ ons.ready(function () {
                         elmy.appendTo(onsListY);
                         ons.compile(elmy[0]);
                     }
+
+                    $("#duyuruYzbtn").show()
                     modal.hide();
                 }
             }
@@ -262,7 +264,7 @@ ons.ready(function () {
                             var newDate = myDate1[2] + '/' + myDate1[1] + '/' + myDate1[0];
                             if (cevap.GelenDuyuru[d].Okundu != 1) {//Okunmadı
                                 var elmy = $('<ons-list-item class="timeline-li" modifier="tappable" style="background-color:#ddd" id="gelenDuyuruItem" data-id="' + cevap.GelenDuyuru[d].ID + '">'
-                                        + '<ons-row><ons-col width="50px"><img src="http://192.168.1.26/SProject/Plugins/mapView/' + cevap.GelenDuyuru[d].Tip + '.png" class="timeline-image"></ons-col>'
+                                        + '<ons-row><ons-col width="50px"><img src="http://192.168.1.23/SProject/Plugins/mapView/' + cevap.GelenDuyuru[d].Tip + '.png" class="timeline-image"></ons-col>'
                                         + '<ons-col><div class="timeline-date">' + newDate + '--' + myDate[1] + '</div><div class="timline-from"><span class="timeline-name">' + cevap.GelenDuyuru[d].Ad + '</span>'
                                         + '</div><div class="timeline-message">' + cevap.GelenDuyuru[d].Text + '</div>'
                                         + '</ons-col></ons-row></ons-list-item>');
@@ -270,7 +272,7 @@ ons.ready(function () {
                                 ons.compile(elmy[0]);
                             } else {
                                 var elmy = $('<ons-list-item class="timeline-li" modifier="tappable" id="gelenDuyuruItem" data-id="' + cevap.GelenDuyuru[d].ID + '">'
-                                        + '<ons-row><ons-col width="50px"><img src="http://192.168.1.26/SProject/Plugins/mapView/' + cevap.GelenDuyuru[d].Tip + '.png" class="timeline-image"></ons-col>'
+                                        + '<ons-row><ons-col width="50px"><img src="http://192.168.1.23/SProject/Plugins/mapView/' + cevap.GelenDuyuru[d].Tip + '.png" class="timeline-image"></ons-col>'
                                         + '<ons-col><div class="timeline-date">' + newDate + '--' + myDate[1] + '</div><div class="timline-from"><span class="timeline-name">' + cevap.GelenDuyuru[d].Ad + '</span>'
                                         + '</div><div class="timeline-message">' + cevap.GelenDuyuru[d].Text + '</div>'
                                         + '</ons-col></ons-row></ons-list-item>');
@@ -281,7 +283,7 @@ ons.ready(function () {
                         modal.hide();
                     } else {
                         var elmy = $('<ons-list-item class="timeline-li" modifier="tappable">'
-                                + '<ons-row><ons-col width="50px"><img src="http://192.168.1.26/SProject/Plugins/mapView/3.png" class="timeline-image"></ons-col>'
+                                + '<ons-row><ons-col width="50px"><img src="http://192.168.1.23/SProject/Plugins/mapView/3.png" class="timeline-image"></ons-col>'
                                 + '<ons-col><div class="timline-from"><span class="timeline-name">' + jsDil.DuyuruYok + '</span></div>'
                                 + '</ons-col></ons-row></ons-list-item>');
                         elmy.appendTo(onsListD);
@@ -311,7 +313,7 @@ ons.ready(function () {
                             var myDate1 = myDate[0].split("-");
                             var newDate = myDate1[2] + '/' + myDate1[1] + '/' + myDate1[0];
                             var elmy = $('<ons-list-item class="timeline-li" modifier="tappable" id="gelenDuyuruItem" data-id="' + cevap.GonderilenDuyuru[d].ID + '">'
-                                    + '<ons-row><ons-col width="50px"><img src="http://192.168.1.26/SProject/Plugins/mapView/3.png" class="timeline-image"></ons-col>'
+                                    + '<ons-row><ons-col width="50px"><img src="http://192.168.1.23/SProject/Plugins/mapView/3.png" class="timeline-image"></ons-col>'
                                     + '<ons-col><div class="timeline-date">' + newDate + '--' + myDate[1] + '</div><div class="timline-from"><span class="timeline-name">' + cevap.GonderilenDuyuru[d].Hedef + ' ' + jsDil.Kisi + '</span>'
                                     + '</div><div class="timeline-message">' + cevap.GonderilenDuyuru[d].Text + '</div>'
                                     + '</ons-col></ons-row></ons-list-item>');
@@ -321,7 +323,7 @@ ons.ready(function () {
                         modal.hide();
                     } else {
                         var elmy = $('<ons-list-item class="timeline-li" modifier="tappable">'
-                                + '<ons-row><ons-col width="50px"><img src="http://192.168.1.26/SProject/Plugins/mapView/3.png" class="timeline-image"></ons-col>'
+                                + '<ons-row><ons-col width="50px"><img src="http://192.168.1.23/SProject/Plugins/mapView/3.png" class="timeline-image"></ons-col>'
                                 + '<ons-col><div class="timline-from"><span class="timeline-name">' + jsDil.DuyuruYok + '</span></div>'
                                 + '</ons-col></ons-row></ons-list-item>');
                         elmy.appendTo(onsListD);

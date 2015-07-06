@@ -1,7 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+    <title>Shuttle</title>
+    <meta charset="utf-8">
     <link href="<?php echo SITE_MPLUGIN_CSS; ?>/calendar/fullcalendar.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo SITE_MPLUGIN_CSS; ?>/calendar/cal_custom.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="<?php echo SITE_PLUGINMSOFOR_CSS ?>/onsenui.css">

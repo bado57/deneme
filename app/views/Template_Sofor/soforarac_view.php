@@ -1,7 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+    <title>Shuttle</title>
+    <meta charset="utf-8">
     <link href="<?php echo SITE_MPLUGIN_CSS; ?>/calendar/fullcalendar.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo SITE_MPLUGIN_CSS; ?>/calendar/cal_custom.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="<?php echo SITE_PLUGINMSOFOR_CSS ?>/onsenui.css">
@@ -249,6 +250,8 @@
                                                 </ons-col>
                                                 <ons-col class="coldty">
                                                     <b><span id="kdetayAd"></span></b>
+                                                    <input type="hidden" name="yolcuid" value=""></input>
+                                                    <input type="hidden" name="inputtur" value=""></input>
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>
@@ -283,7 +286,38 @@
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>
+                                        <ons-list-item modifier="chevron" onclick="aracNavigator.pushPage('kullanicitakvim.html', {animation: 'slide'})">
+                                            <ons-row>
+                                                <ons-col width="40px">
+                                                    <i class="fa fa-calendar"></i> 
+                                                </ons-col>
+                                                <ons-col class="coldty">
+                                                    <?php echo $data["Takvim"]; ?>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>
                                     </ons-list>
+                                </ons-page>
+                            </ons-template>
+
+                            <ons-template id="kullanicitakvim.html">
+                                <ons-page id="kullanicitakvim">
+                                    <ons-toolbar>
+                                        <div class="left"><ons-button class="back" modifier="quiet" onclick="aracNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
+                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-calendar"></i></div>
+                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="aracNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
+                                    </ons-toolbar>
+                                    <br />
+                                    <div id="aracTakvim" class="settings-header col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="row">
+                                            <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div style="margin-bottom: 10px"><?php echo $data["Takvim"]; ?> (<b><span id="takvimKullanici"></span></b>)</div>
+                                                <div class="row" id="getPartialView">
+                                                    <div id="calendar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </ons-page>
                             </ons-template>
 

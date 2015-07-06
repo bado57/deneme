@@ -1,7 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
+    <title>Shuttle</title>
+    <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="<?php echo SITE_PLUGINMSOFOR_CSS ?>/onsenui.css">
         <link rel="stylesheet" type="text/css" href="<?php echo SITE_PLUGINMSOFOR_CSS ?>/font_awesome/css/font-awesome.min.css">
             <link rel="stylesheet" type="text/css" href="<?php echo SITE_PLUGINMSOFOR_CSS ?>/onsen-css-components-blue-basic-theme.css">
@@ -76,9 +77,7 @@
                                                 <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-users"></i></div>
                                                 <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="duyuruNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                             </ons-toolbar>
-                                            <div class="right"><ons-button class="back" modifier="quiet" onclick="$.SoforIslemler.soforDuyuruSec()"><i class="top-icon fa fa-paper-plane"></i></ons-button></div>
                                             <br/>
-                                            <br />
                                             <div class="settings-header" id="turYolcuHeader" style="display:none"><?php echo $data["Yolcu"]; ?> (<span id="yolcuToplam"></span>)</div><label class="checkbox" id="yolcuChechk" style="display:none"><input type="checkbox" checked="checked" id="yolcuSign"><div class="checkbox__checkmark"></div></label>
                                             <ons-list id="turYolcuList" style="display:none">
                                             </ons-list>
@@ -99,6 +98,11 @@
                                             <ons-list id="turYoneticiList" style="display:none">
                                             </ons-list>
                                             <br />
+                                            <div style="padding: 10px 9px; display: none" id="duyuruYzbtn">
+                                                <ons-button modifier="large" style="margin: 0 auto;" onclick="$.SoforIslemler.soforDuyuruSec()">
+                                                    <?php echo $data["DuyuruYaz"]; ?>
+                                                </ons-button>
+                                            </div>
                                         </ons-page>
                                     </ons-template>
 

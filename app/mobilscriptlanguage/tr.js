@@ -45,4 +45,5 @@ var jsDil = {
     'BosMesaj': 'Lütfen mesajınızı giriniz',
     'DuyuruGonder': 'Duyuru gönderilmiştir',
     'DuyuruYok': 'Gösterielcek duyuru yok',
+    'DuyuruYaz': 'Duyuru Yaz',
 };
