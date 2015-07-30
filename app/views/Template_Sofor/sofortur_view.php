@@ -42,12 +42,23 @@
                                 </ons-toolbar>
                                 <br />
                                 <ons-list modifier="" class="person-list" var="listnavigator">
-                                    <?php foreach ($model as $turModel) { ?>
-                                        <ons-list-item class="person" modifier="chevron" onclick="turNavigator.pushPage('turdetay.html', {animation: 'slide', turID: <?php echo $turModel['ID']; ?>})">
+                                    <?php if (count($model) > 0) { ?>
+                                        <?php foreach ($model as $turModel) { ?>
+                                            <ons-list-item class="person" modifier="chevron" onclick="turNavigator.pushPage('turdetay.html', {animation: 'slide', turID: <?php echo $turModel['ID']; ?>})">
+                                                <ons-row>
+                                                    <ons-col width="20px"></ons-col>
+                                                    <ons-col class="person-name">
+                                                        <?php echo $turModel['Ad']; ?>
+                                                    </ons-col>
+                                                </ons-row>
+                                            </ons-list-item>
+                                        <?php } ?>
+                                    <?php } else { ?>
+                                        <ons-list-item class="person">
                                             <ons-row>
                                                 <ons-col width="20px"></ons-col>
                                                 <ons-col class="person-name">
-                                                    <?php echo $turModel['Ad']; ?>
+                                                    <?php echo $data['TurYok']; ?>
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>

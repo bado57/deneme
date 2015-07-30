@@ -220,6 +220,74 @@ class Panel_Model_Mobile extends ModelMobile {
         return($this->db->select($sql));
     }
 
+    //şoför tur başla tur ıdler
+    public function soforTurID($soforID, $gun) {
+        $sql = 'SELECT DISTINCT BSTurID,BSTurAracPlaka FROM bsturtip WHERE BSTurSoforID=' . $soforID . ' AND ' . $gun . '=1 ORDER BY BSTurBslngc ASC';
+        return($this->db->select($sql));
+    }
+
+    //şoför tur başlat turlar
+    public function soforTurBaslat($array = array()) {
+        $sql = 'SELECT DISTINCT SBTurID,SBTurAd,SBKurumAd,SBTurTip FROM sbtur Where SBTurID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //şoför tur başla detay tur gidiş ve dönüşler
+    public function soforTurBaslatDetay($turID, $gun) {
+        $sql = 'SELECT BSTurID,BSTurTip,BSTurAracPlaka,BSTurBslngc,BSTurBts,BSTurGidisDonus FROM bsturtip WHERE BSTurID=' . $turID . ' AND ' . $gun . '=1 ORDER BY BSTurBslngc ASC';
+        return($this->db->select($sql));
+    }
+
+    //şoför tur başlat tura göre öğrenci idler 
+    public function soforTurBaslatOgrenciID($turID) {
+        $sql = 'SELECT DISTINCT BSOgrenciID FROM bsogrencitur WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur başlat tura göre gelemyen öğrenci idler 
+    public function soforTurBaslatOgrenciGID($turID, $gun, $turTip) {
+        $sql = 'SELECT DISTINCT BSOgrenciID FROM bsseferogrenci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=1' . ' AND BSTurTip=' . $turTip;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur öğrenci idl ye göre işlemler
+    public function soforTurBaslatOgrenciIID($array = array()) {
+        $sql = 'SELECT DISTINCT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,BSOgrenciPhone FROM bsogrenci Where BSOgrenciID IN (' . $array . ')';
+        error_log($sql);
+        return($this->db->select($sql));
+    }
+
+    //şoför tur başlat tura göre işçi idler 
+    public function soforTurBaslatIsciID($turID) {
+        $sql = 'SELECT DISTINCT SBIsciID FROM sbiscitur WHERE SBTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur başlat tura göre gelemyen işçi idler 
+    public function soforTurBaslatIsciGID($turID, $gun, $turTip) {
+        $sql = 'SELECT DISTINCT BSIsciID FROM bsseferisci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=1' . ' AND BSTurTip=' . $turTip;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur işçi     idl ye göre işlemler
+    public function soforTurBaslatIsciIID($array = array()) {
+        $sql = 'SELECT DISTINCT SBIsciID,SBIsciAd,SBIsciSoyad,SBIsciPhone FROM sbisci Where SBIsciID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //şoför tur başlat tura göre öğrenci ve işçi idler 
+    public function soforTurBaslatOgrenciIsciID($turID) {
+        $sql = 'SELECT DISTINCT BSOgrenciIsciID,BSKullaniciTip FROM bsogrenciiscitur WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur başlat tura göre gelemyen öğrenci ve işçi idler 
+    public function soforTurBaslatOgrenciIsciGID($turID, $gun, $turTip) {
+        $sql = 'SELECT DISTINCT BSKisiID,BSKullaniciTip FROM bsseferogrenciisci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=1' . ' AND BSTurTip=' . $turTip;
+        error_log($sql);
+        return($this->db->select($sql));
+    }
+
     //şoför tur detay
     public function soforTurDetay($turID) {
         $sql = 'SELECT SBTurAd,SBTurAciklama,SBTurAktiflik,SBKurumID,SBKurumAd,SBKurumLocation,SBBolgeAd,SBBolgeID,SBTurPzt,SBTurSli,SBTurCrs,SBTurPrs,SBTurCma,SBTurCmt,SBTurPzr,SBTurGidis,SBTurDonus,SBTurTip,SBTurKm FROM sbtur WHERE SBTurID=' . $turID;
@@ -439,6 +507,11 @@ class Panel_Model_Mobile extends ModelMobile {
         return ($this->db->multiInsert('bssoforduyuru', $data));
     }
 
+    //sofor log duyuru save
+    public function addSoforLogDuyuru($data) {
+        return ($this->db->insert('bssoforduyurulog', $data));
+    }
+
     //şoför cihazlar
     public function digerSoforCihaz($array = array()) {
         $sql = 'SELECT sbsoforcihazRecID FROM sbsoforcihaz Where sbsoforID IN (' . $array . ')';
@@ -502,7 +575,7 @@ class Panel_Model_Mobile extends ModelMobile {
 
     //şoför önderilen duyurular
     public function soforGonderilenDuyuru($soforID) {
-        $sql = 'SELECT BSSoforDuyuruID,BSDuyuruText,BSDuyuruHedef,BSDuyuruTarih FROM bssoforduyuru Where BSGonderenID=' . $soforID . ' ORDER BY BSDuyuruTarih DESC';
+        $sql = 'SELECT BSSoforLogID,BSLogText,BSLogHedef,BsLogTarih FROM  bssoforduyurulog Where BSEkleyenID=' . $soforID . ' ORDER BY BsLogTarih DESC';
         return($this->db->select($sql));
     }
 

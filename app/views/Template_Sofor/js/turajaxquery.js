@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://192.168.1.23/SProject/SoforMobilTurAjax",
+    url: "http://192.168.1.26/SProject/SoforMobilTurAjax",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -857,18 +857,18 @@ function turLokasyon() {
         if (inmeyenLength > 0) {
             for (var inmeyenicon = 0; inmeyenicon < inmeyenLength; inmeyenicon++) {
                 if (turList[inmeyenicon][4] != 1) {//öğrenci
-                    icons.push('http://192.168.1.23/SProject/Plugins/mapView/green_student.png');
+                    icons.push('http://192.168.1.22/SProject/Plugins/mapView/green_student.png');
                     lokasyonlar.push([turList[inmeyenicon][1], turList[inmeyenicon][2]]);
                     title.push(turList[inmeyenicon][0]);
                     idler.push(turList[inmeyenicon][3]);
                 } else {//personel
-                    icons.push('http://192.168.1.23/SProject/Plugins/mapView/employee_green.png');
+                    icons.push('http://192.168.1.22/SProject/Plugins/mapView/employee_green.png');
                     lokasyonlar.push([turList[inmeyenicon][1], turList[inmeyenicon][2]]);
                     title.push(turList[inmeyenicon][0]);
                     idler.push(turList[inmeyenicon][3]);
                 }
             }
-            icons.push('http://192.168.1.23/SProject/Plugins/mapView/build.png');
+            icons.push('http://192.168.1.22/SProject/Plugins/mapView/build.png');
             lokasyonlar.push([kurum[2], kurum[3]]);
             title.push(kurum[0]);
             idler.push(kurum[1]);

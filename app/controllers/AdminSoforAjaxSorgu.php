@@ -353,10 +353,9 @@ class AdminSoforAjaxSorgu extends Controller {
                             $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
 
                             //bölge idler
-                            $r = 0;
+                            $bolgerutbeId = [];
                             foreach ($bolgeListeRutbe as $bolgeListeRutbee) {
                                 $bolgerutbeId[] = $bolgeListeRutbee['BSBolgeID'];
-                                $r++;
                             }
                             $rutbebolgedizi = implode(',', $bolgerutbeId);
 
@@ -364,6 +363,7 @@ class AdminSoforAjaxSorgu extends Controller {
 
                             //arac bölge idler
                             //arac bölge idler
+                            $soforbolgeId = [];
                             $a = 0;
                             foreach ($soforBolge as $soforBolgee) {
                                 $selectSoforBolge[$a]['SelectSoforBolgeID'] = $soforBolgee['BSBolgeID'];
@@ -686,10 +686,9 @@ class AdminSoforAjaxSorgu extends Controller {
                         //şoföre ait araçlar
                         $adminSoforArac = $Panel_Model->soforDetailMultiSelectSofor($soforID);
                         if (count($adminSoforArac) > 0) {
-                            $a = 0;
+                            $soforaracId = [];
                             foreach ($adminSoforArac as $adminSoforAracc) {
                                 $soforaracId[] = $adminSoforAracc['BSAracID'];
-                                $a++;
                             }
                             //şoföre ait araçlar
                             $soforbolgearac = implode(',', $soforaracId);
@@ -697,10 +696,9 @@ class AdminSoforAjaxSorgu extends Controller {
                             $soforbolgedizim = implode(',', $soforDetailBolgeID);
                             //seçilen bölgedeki araçlar
                             $SoforBolgeArac = $Panel_Model->adminSelectBolgeAracc($soforbolgedizim);
-                            $b = 0;
+                            $soforDigerAracId = [];
                             foreach ($SoforBolgeArac as $SoforBolgeAracc) {
                                 $soforDigerAracId[] = $SoforBolgeAracc['SBAracID'];
-                                $b++;
                             }
                             //gelen arac ıdlerinde aynı olan idler, seçili araçlardır.
                             $ortakIDler = array_intersect($soforaracId, $soforDigerAracId);

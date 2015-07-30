@@ -39,10 +39,9 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         //Veliye ait öğrenciler
                         $adminVeliOgrencim = $Panel_Model->veliDetailMultiSelectOgrenci($veliID);
                         if (count($adminVeliOgrencim) > 0) {
-                            $a = 0;
+                            $veliogrenciId = [];
                             foreach ($adminVeliOgrencim as $adminVeliOgrencimm) {
                                 $veliogrenciId[] = $adminVeliOgrencimm['BSOgrenciID'];
-                                $a++;
                             }
                             //veliye ait öğrenciler
                             $velibolgeogrenci = implode(',', $veliogrenciId);
@@ -50,10 +49,9 @@ class AdminOgrenciAjaxSorgu extends Controller {
                             $velikurumdizim = implode(',', $veliDetailKurumID);
                             //seçilen kurumdaki öğrenciler
                             $VeliKurumOgrenci = $Panel_Model->adminSelectBolgeKurumOgrenci($velikurumdizim);
-                            $b = 0;
+                            $veliDigerOgrenciId = [];
                             foreach ($VeliKurumOgrenci as $VeliKurumOgrencii) {
                                 $veliDigerOgrenciId[] = $VeliKurumOgrencii['BSOgrenciID'];
-                                $b++;
                             }
                             //gelen öğrenci ıdlerinde aynı olan idler, seçili öğrenciler.
                             $ortakIDler = array_intersect($veliogrenciId, $veliDigerOgrenciId);
@@ -513,15 +511,15 @@ class AdminOgrenciAjaxSorgu extends Controller {
                             $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
 
                             //bölge idler
-                            $r = 0;
+                            $bolgerutbeId = [];
                             foreach ($bolgeListeRutbe as $bolgeListeRutbee) {
                                 $bolgerutbeId[] = $bolgeListeRutbee['BSBolgeID'];
-                                $r++;
                             }
                             $rutbebolgedizi = implode(',', $bolgerutbeId);
 
                             $ogrenciBolge = $Panel_Model->ogrenciDetailBolge($ogrenciDetailID);
                             //öğrenci bölge idler
+                            $ogrencibolgeId = [];
                             $a = 0;
                             foreach ($ogrenciBolge as $ogrenciBolgee) {
                                 $selectOgrenciBolge[$a]['SelectOgrenciBolgeID'] = $ogrenciBolgee['BSBolgeID'];
@@ -882,10 +880,9 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         //Öğrenciye ait kurumlar
                         $adminOgrenciKurum = $Panel_Model->ogrenciDetailMultiSelectVeli($ogrenciID);
                         if (count($adminOgrenciKurum) > 0) {
-                            $a = 0;
+                            $ogrencikurumId = [];
                             foreach ($adminOgrenciKurum as $adminOgrenciKurumm) {
                                 $ogrencikurumId[] = $adminOgrenciKurumm['BSKurumID'];
-                                $a++;
                             }
                             //öğrenciye ait kurumlar
                             $ogrencibolgekurum = implode(',', $ogrencikurumId);
@@ -893,10 +890,9 @@ class AdminOgrenciAjaxSorgu extends Controller {
                             $ogrencibolgedizim = implode(',', $ogrenciDetailBolgeID);
                             //seçilen bölgedeki kurumlar
                             $ogrenciBolgeKurum = $Panel_Model->adminSelectBolgeKurumm($ogrencibolgedizim);
-                            $b = 0;
+                            $ogrenciDigerKurumId = [];
                             foreach ($ogrenciBolgeKurum as $ogrenciBolgeKurumm) {
                                 $ogrenciDigerKurumId[] = $ogrenciBolgeKurumm['SBKurumID'];
-                                $b++;
                             }
                             //gelen kurum ıdlerinde aynı olan idler, seçili kurumlardır.
                             $ortakIDler = array_intersect($ogrencikurumId, $ogrenciDigerKurumId);
@@ -967,10 +963,9 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         //Öğrenciye ait veliler
                         $adminOgrenciVelim = $Panel_Model->ogrenciDetailMultiSelect($ogrenciID);
                         if (count($adminOgrenciVelim) > 0) {
-                            $a = 0;
+                            $ogrenciveliId = [];
                             foreach ($adminOgrenciVelim as $adminOgrenciVelimm) {
                                 $ogrenciveliId[] = $adminOgrenciVelimm['BSVeliID'];
-                                $a++;
                             }
                             //öğrenciler ait veliler
                             $ogrencibolgeveli = implode(',', $ogrenciveliId);
@@ -978,10 +973,9 @@ class AdminOgrenciAjaxSorgu extends Controller {
                             $ogrencikurumdizim = implode(',', $ogrenciDetailKurumID);
                             //seçilen kurumdaki öğrenciler
                             $ogrenciKurumVeli = $Panel_Model->adminSelectBolgeKurumVeli($ogrencikurumdizim);
-                            $b = 0;
+                            $OgrenciDigerveliId = [];
                             foreach ($ogrenciKurumVeli as $OgrenciKurumVelii) {
                                 $OgrenciDigerveliId[] = $OgrenciKurumVelii['BSVeliID'];
-                                $b++;
                             }
                             //gelen veli ıdlerinde aynı olan idler, seçili veliler.
                             $ortakIDler = array_intersect($ogrenciveliId, $OgrenciDigerveliId);

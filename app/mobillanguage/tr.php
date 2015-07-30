@@ -54,6 +54,8 @@ class tr {
             "GonDuyuru" => "Gönderilen Duyuru",
             "GelDuyuru" => "Gelen Duyuru",
             "DuyuruYaz" => "Duyuru Yaz",
+            "TurYok" => "Gösterilecek kayıtlı tur bulunmamaktadır",
+            "AracYok" => "Gösterilecek kayıtlı araç bulunmamaktadır",
         );
         return $trdil;
     }

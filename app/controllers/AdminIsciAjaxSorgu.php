@@ -345,10 +345,9 @@ class AdminIsciAjaxSorgu extends Controller {
                             $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
 
                             //bölge idler
-                            $r = 0;
+                            $bolgerutbeId = [];
                             foreach ($bolgeListeRutbe as $bolgeListeRutbee) {
                                 $bolgerutbeId[] = $bolgeListeRutbee['BSBolgeID'];
-                                $r++;
                             }
                             $rutbebolgedizi = implode(',', $bolgerutbeId);
 
@@ -356,6 +355,7 @@ class AdminIsciAjaxSorgu extends Controller {
                             $isciBolge = $Panel_Model->isciDetailBolge($isciDetailID);
 
                             //işçi bölge idler
+                            $iscibolgeId = [];
                             $a = 0;
                             foreach ($isciBolge as $isciBolgee) {
                                 $selectIsciBolge[$a]['SelectIsciBolgeID'] = $isciBolgee['SBBolgeID'];
@@ -655,10 +655,9 @@ class AdminIsciAjaxSorgu extends Controller {
                         //işçiye ait kurumlar
                         $adminIsciKurum = $Panel_Model->isciDetailMultiSelectIsci($isciID);
                         if (count($adminIsciKurum) > 0) {
-                            $a = 0;
+                            $iscikurumId = [];
                             foreach ($adminIsciKurum as $adminIsciKurumm) {
                                 $iscikurumId[] = $adminIsciKurumm['SBKurumID'];
-                                $a++;
                             }
                             //işçiye ait kurumlar
                             $iscibolgekurum = implode(',', $iscikurumId);
@@ -666,10 +665,9 @@ class AdminIsciAjaxSorgu extends Controller {
                             $iscibolgedizim = implode(',', $isciDetailBolgeID);
                             //seçilen bölgedeki kurumlar
                             $IsciBolgeKurum = $Panel_Model->adminSelectBolgeIsciKurum($iscibolgedizim);
-                            $b = 0;
+                            $isciDigerKurumId = [];
                             foreach ($IsciBolgeKurum as $IsciBolgeKurumm) {
                                 $isciDigerKurumId[] = $IsciBolgeKurumm['SBKurumID'];
-                                $b++;
                             }
                             //gelen kurum ıdlerinde aynı olan idler, seçili kurumlardır.
                             $ortakIDler = array_intersect($iscikurumId, $isciDigerKurumId);

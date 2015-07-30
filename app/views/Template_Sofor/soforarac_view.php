@@ -42,14 +42,25 @@
                                 </ons-toolbar>
                                 <br />
                                 <ons-list modifier="" class="person-list" var="listnavigator">
-                                    <?php foreach ($model as $aracModel) { ?>
-                                        <ons-list-item class="person" modifier="chevron" onclick="aracNavigator.pushPage('aracdetay.html', {animation: 'slide', aracID: <?php echo $aracModel['ID']; ?>})">
+                                    <?php if (count($model) > 0) { ?>
+                                        <?php foreach ($model as $aracModel) { ?>
+                                            <ons-list-item class="person" modifier="chevron" onclick="aracNavigator.pushPage('aracdetay.html', {animation: 'slide', aracID: <?php echo $aracModel['ID']; ?>})">
+                                                <ons-row>
+                                                    <ons-col width="40px">
+                                                        <i class="fa fa-bus"></i>
+                                                    </ons-col>
+                                                    <ons-col class="person-name">
+                                                        <?php echo $aracModel['Plaka']; ?>
+                                                    </ons-col>
+                                                </ons-row>
+                                            </ons-list-item>
+                                        <?php } ?>
+                                    <?php } else { ?>
+                                        <ons-list-item class="person">
                                             <ons-row>
-                                                <ons-col width="40px">
-                                                    <i class="fa fa-bus"></i>
-                                                </ons-col>
+                                                <ons-col width="20px"></ons-col>
                                                 <ons-col class="person-name">
-                                                    <?php echo $aracModel['Plaka']; ?>
+                                                    <?php echo $data['AracYok']; ?>
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>
@@ -182,7 +193,7 @@
                                 <ons-page id="aracyolcu">
                                     <ons-toolbar>
                                         <div class="left"><ons-button class="back" modifier="quiet" onclick="aracNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
-                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-users"></i></div>
+                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-reorder"></i></div>
                                         <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="aracNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                     </ons-toolbar>
                                     <br />
@@ -201,7 +212,7 @@
                                 <ons-page id="aracyonetici">
                                     <ons-toolbar>
                                         <div class="left"><ons-button class="back" modifier="quiet" onclick="aracNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
-                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-sitemap"></i></div>
+                                        <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-reorder"></i></div>
                                         <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="aracNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                     </ons-toolbar>
                                     <br />

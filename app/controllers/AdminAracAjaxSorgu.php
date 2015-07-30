@@ -629,10 +629,9 @@ class AdminAracAjaxSorgu extends Controller {
                             $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
 
                             //bölge idler
-                            $r = 0;
+                            $bolgerutbeId = [];
                             foreach ($bolgeListeRutbe as $bolgeListeRutbee) {
                                 $bolgerutbeId[] = $bolgeListeRutbee['BSBolgeID'];
-                                $r++;
                             }
                             $rutbebolgedizi = implode(',', $bolgerutbeId);
 
@@ -647,6 +646,7 @@ class AdminAracAjaxSorgu extends Controller {
                             $adminAracBolge = $Panel_Model->adminDetailAracBolge($adminAracDetailID);
 
                             //arac bölge idler
+                            $aracbolgeId = [];
                             $a = 0;
                             foreach ($adminAracBolge as $adminAracBolgee) {
                                 $selectAracBolge[$a]['SelectAracBolgeID'] = $adminAracBolgee['SBBolgeID'];

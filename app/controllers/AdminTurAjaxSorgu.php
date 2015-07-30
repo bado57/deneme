@@ -117,21 +117,18 @@ class AdminTurAjaxSorgu extends Controller {
                         $turGunler = $_REQUEST['turGunID'];
                         $gunSaatSql = $form->sqlGunSaat($turBolgeID, $turSaat1ID, $turSaat2ID, $turGunler);
                         $turAracListe = $Panel_Model->turAracSelect($gunSaatSql);
-
-                        $a = 0;
+                        $turAktifAracId = [];
                         foreach ($turAracListe as $turAracListee) {
                             $turAktifAracId[] = $turAracListee['BSTurAracID'];
-                            $a++;
                         }
 
                         $turBolgeAracListe = $Panel_Model->turBolgeAracListele($turBolgeID);
 
                         if (count($turBolgeAracListe) > 0) {
                             //bölgede araç varsa
-                            $b = 0;
+                            $turBolgeArac = [];
                             foreach ($turBolgeAracListe as $turBolgeAracListee) {
                                 $turBolgeArac[] = $turBolgeAracListee['SBAracID'];
-                                $b++;
                             }
 
                             if (count($turAracListe) > 0) {//aktif araç varsa
@@ -183,20 +180,18 @@ class AdminTurAjaxSorgu extends Controller {
 
                         $turSoforListe = $Panel_Model->turSoforSelect($gunSaatSoforSql);
 
-                        $a = 0;
+                        $turAktifSoforId = [];
                         foreach ($turSoforListe as $turSoforListee) {
                             $turAktifSoforId[] = $turSoforListee['BSTurSoforID'];
-                            $a++;
                         }
 
                         $turAracSoforListe = $Panel_Model->turAracSoforListele($turAracID);
 
                         if (count($turAracSoforListe) > 0) {
                             //araça ait şoför varsa
-                            $b = 0;
+                            $turAracSofor = [];
                             foreach ($turAracSoforListe as $turAracSoforListee) {
                                 $turAracSofor[] = $turAracSoforListee['BSSoforID'];
-                                $b++;
                             }
 
                             if (count($turSoforListe) > 0) {//aktif şoför varsa
@@ -252,20 +247,18 @@ class AdminTurAjaxSorgu extends Controller {
 
                         $turHostesListe = $Panel_Model->turHostesSelect($gunSaatHostesSql);
 
-                        $a = 0;
+                        $turAktifHostesId = [];
                         foreach ($turHostesListe as $turHostesListee) {
                             $turAktifHostesId[] = $turHostesListee['BSTurHostesID'];
-                            $a++;
                         }
 
                         $turAracHostesListe = $Panel_Model->turAracHostesListele($turAracID);
 
                         if (count($turAracHostesListe) > 0) {
                             //araça ait hostes varsa
-                            $b = 0;
+                            $turAracHostes = [];
                             foreach ($turAracHostesListe as $turAracHostesListee) {
                                 $turAracHostes[] = $turAracHostesListee['BSHostesID'];
-                                $b++;
                             }
 
                             if (count($turHostesListe) > 0) {//aktif hostes varsa
@@ -312,17 +305,15 @@ class AdminTurAjaxSorgu extends Controller {
 
                         if ($turKurumTip == 0) {//Öğrenci
                             $kurumOgrenciListe = $Panel_Model->turKurumOgrenci($turKurumID);
-                            $a = 0;
+                            $turKurumOgrenci = [];
                             foreach ($kurumOgrenciListe as $kurumOgrenciListee) {
                                 $turKurumOgrenci[] = $kurumOgrenciListee['BSOgrenciID'];
-                                $a++;
                             }
                             //herhangi bir tura kayıtlı öğrenciler
                             $kurumTurAitOgrenci = $Panel_Model->turKurumAitOgrenci($turKurumID);
-                            $f = 0;
+                            $turKurumAitOgrenci = [];
                             foreach ($kurumTurAitOgrenci as $kurumTurAitOgrencii) {
                                 $turKurumAitOgrenci[] = $kurumTurAitOgrencii['BSOgrenciID'];
-                                $f++;
                             }
                             $turKurumNotTurOgrenci = array_diff($turKurumOgrenci, $turKurumAitOgrenci);
 
@@ -338,17 +329,15 @@ class AdminTurAjaxSorgu extends Controller {
                             }
                         } else if ($turKurumTip == 1) {//işçi
                             $kurumIsciListe = $Panel_Model->turKurumIsci($turKurumID);
-                            $a = 0;
+                            $turKurumIsci = [];
                             foreach ($kurumIsciListe as $kurumIsciListee) {
                                 $turKurumIsci[] = $kurumIsciListee['SBIsciID'];
-                                $a++;
                             }
                             //herhangi bir tura kayıtlı işçiler
                             $kurumTurAitIsci = $Panel_Model->turKurumAitIsci($turKurumID);
-                            $f = 0;
+                            $turKurumAitIsci = [];
                             foreach ($kurumTurAitIsci as $kurumTurAitIscii) {
                                 $turKurumAitIsci[] = $kurumTurAitIscii['SBIsciID'];
-                                $f++;
                             }
                             $turKurumNotTurIsci = array_diff($turKurumIsci, $turKurumAitIsci);
                             $kurumIsci = implode(',', $turKurumNotTurIsci);
@@ -364,18 +353,16 @@ class AdminTurAjaxSorgu extends Controller {
                         } else {//hem öğrenci hem de personel
                             $kurumIsciListe = $Panel_Model->turKurumIsci($turKurumID);
                             if (count($kurumIsciListe) > 0) {//hem öğrenci hem de personel
-                                $a = 0;
+                                $turKurumIsci = [];
                                 foreach ($kurumIsciListe as $kurumIsciListee) {
                                     $turKurumIsci[] = $kurumIsciListee['SBIsciID'];
-                                    $a++;
                                 }
                                 //herhangi bir tura kayıtlı işçiler
                                 $kurumTurAitPersonel = $Panel_Model->turKurumAitPersonel($turKurumID);
                                 if (count($kurumTurAitPersonel) > 0) {
-                                    $f = 0;
+                                    $turKurumAitPersonel = [];
                                     foreach ($kurumTurAitPersonel as $kurumTurAitPersonell) {
                                         $turKurumAitPersonel[] = $kurumTurAitPersonell['BSOgrenciIsciID'];
-                                        $f++;
                                     }
                                     $turKurumNotTurPersonel = array_diff($turKurumIsci, $turKurumAitPersonel);
                                     $kurumIsci = implode(',', $turKurumNotTurPersonel);
@@ -394,19 +381,17 @@ class AdminTurAjaxSorgu extends Controller {
                                 }
 
                                 $kurumOgrenciListe = $Panel_Model->turKurumOgrenci($turKurumID);
-                                $c = 0;
+                                $turKurumOgrenci = [];
                                 foreach ($kurumOgrenciListe as $kurumOgrenciListee) {
                                     $turKurumOgrenci[] = $kurumOgrenciListee['BSOgrenciID'];
-                                    $c++;
                                 }
 
                                 //herhangi bir tura kayıtlı öğrenciler
                                 $kurumTurAitOgrenciler = $Panel_Model->turKurumAitOgrenciler($turKurumID);
                                 if (count($kurumTurAitOgrenciler) > 0) {
-                                    $g = 0;
+                                    $turKurumAitOgrenciler = [];
                                     foreach ($kurumTurAitOgrenciler as $kurumTurAitOgrencilerr) {
                                         $turKurumAitOgrenciler[] = $kurumTurAitOgrencilerr['BSOgrenciIsciID'];
-                                        $g++;
                                     }
                                     $turKurumNotTurOgrenciler = array_diff($turKurumOgrenci, $turKurumAitOgrenciler);
 
@@ -426,17 +411,15 @@ class AdminTurAjaxSorgu extends Controller {
                                 }
                             } else {//sadece öğrenci
                                 $kurumOgrenciListe = $Panel_Model->turKurumOgrenci($turKurumID);
-                                $c = 0;
+                                $turKurumOgrenci = [];
                                 foreach ($kurumOgrenciListe as $kurumOgrenciListee) {
                                     $turKurumOgrenci[] = $kurumOgrenciListee['BSOgrenciID'];
-                                    $c++;
                                 }
                                 //herhangi bir tura kayıtlı öğrenciler
                                 $kurumTurAitOgrenciler = $Panel_Model->turKurumAitOgrenciler($turKurumID);
-                                $g = 0;
+                                $turKurumAitOgrenciler = [];
                                 foreach ($kurumTurAitOgrenciler as $kurumTurAitOgrencilerr) {
                                     $turKurumAitOgrenciler[] = $kurumTurAitOgrencilerr['BSOgrenciIsciID'];
-                                    $g++;
                                 }
                                 $turKurumNotTurOgrenciler = array_diff($turKurumOgrenci, $turKurumAitOgrenciler);
 
@@ -1337,17 +1320,15 @@ class AdminTurAjaxSorgu extends Controller {
 
                         if ($gidisTip == 0) { //öğrenci
                             $kurumOgrenciListe = $Panel_Model->turKurumOgrenci($turKurumID);
-                            $c = 0;
+                            $turKurumOgrenci = [];
                             foreach ($kurumOgrenciListe as $kurumOgrenciListee) {
                                 $turKurumOgrenci[] = $kurumOgrenciListee['BSOgrenciID'];
-                                $c++;
                             }
                             //herhangi bir tura kayıtlı öğrenciler
                             $kurumTurAitOgrenci = $Panel_Model->turKurumAitOgrenci($turKurumID);
-                            $f = 0;
+                            $turKurumAitOgrenci = [];
                             foreach ($kurumTurAitOgrenci as $kurumTurAitOgrencii) {
                                 $turKurumAitOgrenci[] = $kurumTurAitOgrencii['BSOgrenciID'];
-                                $f++;
                             }
                             $turKurumNotTurOgrenci = array_diff($turKurumOgrenci, $turKurumAitOgrenci);
 
@@ -1381,17 +1362,15 @@ class AdminTurAjaxSorgu extends Controller {
                             }
                         } else if ($gidisTip == 1) {//işçi
                             $kurumIsciListe = $Panel_Model->turKurumIsci($turKurumID);
-                            $c = 0;
+                            $turKurumIsci = [];
                             foreach ($kurumIsciListe as $kurumIsciListee) {
                                 $turKurumIsci[] = $kurumIsciListee['SBIsciID'];
-                                $c++;
                             }
                             //herhangi bir tura kayıtlı işçiler
                             $kurumTurAitIsci = $Panel_Model->turKurumAitIsci($turKurumID);
-                            $f = 0;
+                            $turKurumAitIsci = [];
                             foreach ($kurumTurAitIsci as $kurumTurAitIscii) {
                                 $turKurumAitIsci[] = $kurumTurAitIscii['SBIsciID'];
-                                $f++;
                             }
                             $turKurumNotTurIsci = array_diff($turKurumIsci, $turKurumAitIsci);
                             $kurumIsci = implode(',', $turKurumNotTurIsci);
@@ -1426,18 +1405,16 @@ class AdminTurAjaxSorgu extends Controller {
                         } else {//öğrenci ve işçi
                             $kurumIsciListe = $Panel_Model->turKurumIsci($turKurumID);
                             if (count($kurumIsciListe) > 0) {//hem öğrenci hem de personel
-                                $z = 0;
+                                $turKurumIsci = [];
                                 foreach ($kurumIsciListe as $kurumIsciListee) {
                                     $turKurumIsci[] = $kurumIsciListee['SBIsciID'];
-                                    $z++;
                                 }
                                 //herhangi bir tura kayıtlı işçiler
                                 $kurumTurAitPersonel = $Panel_Model->turKurumAitPersonel($turKurumID);
                                 if (count($kurumTurAitPersonel) > 0) {
-                                    $f = 0;
+                                    $turKurumAitPersonel = [];
                                     foreach ($kurumTurAitPersonel as $kurumTurAitPersonell) {
                                         $turKurumAitPersonel[] = $kurumTurAitPersonell['BSOgrenciIsciID'];
-                                        $f++;
                                     }
                                     $turKurumNotTurPersonel = array_diff($turKurumIsci, $turKurumAitPersonel);
                                     $kurumIsci = implode(',', $turKurumNotTurPersonel);
@@ -1457,19 +1434,17 @@ class AdminTurAjaxSorgu extends Controller {
                                 }
 
                                 $kurumOgrenciListe = $Panel_Model->turKurumOgrenci($turKurumID);
-                                $c = 0;
+                                $turKurumOgrenci = [];
                                 foreach ($kurumOgrenciListe as $kurumOgrenciListee) {
                                     $turKurumOgrenci[] = $kurumOgrenciListee['BSOgrenciID'];
-                                    $c++;
                                 }
 
                                 //herhangi bir tura kayıtlı öğrenciler
                                 $kurumTurAitOgrenciler = $Panel_Model->turKurumAitOgrenciler($turKurumID);
                                 if (count($kurumTurAitOgrenciler) > 0) {
-                                    $g = 0;
+                                    $turKurumAitOgrenciler = [];
                                     foreach ($kurumTurAitOgrenciler as $kurumTurAitOgrencilerr) {
                                         $turKurumAitOgrenciler[] = $kurumTurAitOgrencilerr['BSOgrenciIsciID'];
-                                        $g++;
                                     }
                                     $turKurumNotTurOgrenciler = array_diff($turKurumOgrenci, $turKurumAitOgrenciler);
 
@@ -1490,17 +1465,15 @@ class AdminTurAjaxSorgu extends Controller {
                                 }
                             } else {//sadece öğrenci
                                 $kurumOgrenciListe = $Panel_Model->turKurumOgrenci($turKurumID);
-                                $c = 0;
+                                $turKurumOgrenci = [];
                                 foreach ($kurumOgrenciListe as $kurumOgrenciListee) {
                                     $turKurumOgrenci[] = $kurumOgrenciListee['BSOgrenciID'];
-                                    $c++;
                                 }
                                 //herhangi bir tura kayıtlı öğrenciler
                                 $kurumTurAitOgrenciler = $Panel_Model->turKurumAitOgrenciler($turKurumID);
-                                $g = 0;
+                                $turKurumAitOgrenciler = [];
                                 foreach ($kurumTurAitOgrenciler as $kurumTurAitOgrencilerr) {
                                     $turKurumAitOgrenciler[] = $kurumTurAitOgrencilerr['BSOgrenciIsciID'];
-                                    $g++;
                                 }
                                 $turKurumNotTurOgrenciler = array_diff($turKurumOgrenci, $turKurumAitOgrenciler);
 
@@ -1556,20 +1529,18 @@ class AdminTurAjaxSorgu extends Controller {
                         $gunSaatSql = $form->sqlGunSaat($turBolgeID, $turSaat1ID, $turSaat2ID, $turGunler);
                         $turAracListe = $Panel_Model->turAracSelect($gunSaatSql);
 
-                        $a = 0;
+                        $turAktifAracId = [];
                         foreach ($turAracListe as $turAracListee) {
                             $turAktifAracId[] = $turAracListee['BSTurAracID'];
-                            $a++;
                         }
 
                         $turBolgeAracListe = $Panel_Model->turBolgeAracListele($turBolgeID);
 
                         if (count($turBolgeAracListe) > 0) {
                             //bölgede araç varsa
-                            $b = 0;
+                            $turBolgeArac = [];
                             foreach ($turBolgeAracListe as $turBolgeAracListee) {
                                 $turBolgeArac[] = $turBolgeAracListee['SBAracID'];
-                                $b++;
                             }
 
                             if (count($turAracListe) > 0) {//aktif araç varsa
@@ -1621,20 +1592,18 @@ class AdminTurAjaxSorgu extends Controller {
 
                         $turSoforListe = $Panel_Model->turSoforSelect($gunSaatSoforSql);
 
-                        $a = 0;
+                        $turAktifSoforId = [];
                         foreach ($turSoforListe as $turSoforListee) {
                             $turAktifSoforId[] = $turSoforListee['BSTurSoforID'];
-                            $a++;
                         }
 
                         $turAracSoforListe = $Panel_Model->turAracSoforListele($turAracID);
 
                         if (count($turAracSoforListe) > 0) {
                             //araça ait şoför varsa
-                            $b = 0;
+                            $turAracSofor = [];
                             foreach ($turAracSoforListe as $turAracSoforListee) {
                                 $turAracSofor[] = $turAracSoforListee['BSSoforID'];
-                                $b++;
                             }
 
                             if (count($turSoforListe) > 0) {//aktif şoför varsa
@@ -1690,20 +1659,18 @@ class AdminTurAjaxSorgu extends Controller {
 
                         $turHostesListe = $Panel_Model->turHostesSelect($gunSaatHostesSql);
 
-                        $a = 0;
+                        $turAktifHostesId = [];
                         foreach ($turHostesListe as $turHostesListee) {
                             $turAktifHostesId[] = $turHostesListee['BSTurHostesID'];
-                            $a++;
                         }
 
                         $turAracHostesListe = $Panel_Model->turAracHostesListele($turAracID);
 
                         if (count($turAracHostesListe) > 0) {
                             //araça ait hostes varsa
-                            $b = 0;
+                            $turAracHostes = [];
                             foreach ($turAracHostesListe as $turAracHostesListee) {
                                 $turAracHostes[] = $turAracHostesListee['BSHostesID'];
-                                $b++;
                             }
 
                             if (count($turHostesListe) > 0) {//aktif hostes varsa
@@ -2795,17 +2762,15 @@ class AdminTurAjaxSorgu extends Controller {
 
                         if ($gidisTip == 0) { //öğrenci
                             $kurumOgrenciListe = $Panel_Model->turKurumOgrenci($turKurumID);
-                            $c = 0;
+                            $turKurumOgrenci = [];
                             foreach ($kurumOgrenciListe as $kurumOgrenciListee) {
                                 $turKurumOgrenci[] = $kurumOgrenciListee['BSOgrenciID'];
-                                $c++;
                             }
                             //herhangi bir tura kayıtlı öğrenciler
                             $kurumTurAitOgrenci = $Panel_Model->turKurumAitOgrenci($turKurumID);
-                            $f = 0;
+                            $turKurumAitOgrenci = [];
                             foreach ($kurumTurAitOgrenci as $kurumTurAitOgrencii) {
                                 $turKurumAitOgrenci[] = $kurumTurAitOgrencii['BSOgrenciID'];
-                                $f++;
                             }
                             $turKurumNotTurOgrenci = array_diff($turKurumOgrenci, $turKurumAitOgrenci);
 
@@ -2839,17 +2804,15 @@ class AdminTurAjaxSorgu extends Controller {
                             }
                         } else if ($gidisTip == 1) {//işçi
                             $kurumIsciListe = $Panel_Model->turKurumIsci($turKurumID);
-                            $c = 0;
+                            $turKurumIsci = [];
                             foreach ($kurumIsciListe as $kurumIsciListee) {
                                 $turKurumIsci[] = $kurumIsciListee['SBIsciID'];
-                                $c++;
                             }
                             //herhangi bir tura kayıtlı işçiler
                             $kurumTurAitIsci = $Panel_Model->turKurumAitIsci($turKurumID);
-                            $f = 0;
+                            $turKurumAitIsci = [];
                             foreach ($kurumTurAitIsci as $kurumTurAitIscii) {
                                 $turKurumAitIsci[] = $kurumTurAitIscii['SBIsciID'];
-                                $f++;
                             }
                             $turKurumNotTurIsci = array_diff($turKurumIsci, $turKurumAitIsci);
                             $kurumIsci = implode(',', $turKurumNotTurIsci);
@@ -2884,18 +2847,16 @@ class AdminTurAjaxSorgu extends Controller {
                         } else {//öğrenci ve işçi
                             $kurumIsciListe = $Panel_Model->turKurumIsci($turKurumID);
                             if (count($kurumIsciListe) > 0) {//hem öğrenci hem de personel
-                                $z = 0;
+                                $turKurumIsci = [];
                                 foreach ($kurumIsciListe as $kurumIsciListee) {
                                     $turKurumIsci[] = $kurumIsciListee['SBIsciID'];
-                                    $z++;
                                 }
                                 //herhangi bir tura kayıtlı işçiler
                                 $kurumTurAitPersonel = $Panel_Model->turKurumAitPersonel($turKurumID);
                                 if (count($kurumTurAitPersonel) > 0) {
-                                    $f = 0;
+                                    $turKurumAitPersonel = [];
                                     foreach ($kurumTurAitPersonel as $kurumTurAitPersonell) {
                                         $turKurumAitPersonel[] = $kurumTurAitPersonell['BSOgrenciIsciID'];
-                                        $f++;
                                     }
                                     $turKurumNotTurPersonel = array_diff($turKurumIsci, $turKurumAitPersonel);
                                     $kurumIsci = implode(',', $turKurumNotTurPersonel);
@@ -2915,19 +2876,17 @@ class AdminTurAjaxSorgu extends Controller {
                                 }
 
                                 $kurumOgrenciListe = $Panel_Model->turKurumOgrenci($turKurumID);
-                                $c = 0;
+                                $turKurumOgrenci = [];
                                 foreach ($kurumOgrenciListe as $kurumOgrenciListee) {
                                     $turKurumOgrenci[] = $kurumOgrenciListee['BSOgrenciID'];
-                                    $c++;
                                 }
 
                                 //herhangi bir tura kayıtlı öğrenciler
                                 $kurumTurAitOgrenciler = $Panel_Model->turKurumAitOgrenciler($turKurumID);
                                 if (count($kurumTurAitOgrenciler) > 0) {
-                                    $g = 0;
+                                    $turKurumAitOgrenciler = [];
                                     foreach ($kurumTurAitOgrenciler as $kurumTurAitOgrencilerr) {
                                         $turKurumAitOgrenciler[] = $kurumTurAitOgrencilerr['BSOgrenciIsciID'];
-                                        $g++;
                                     }
                                     $turKurumNotTurOgrenciler = array_diff($turKurumOgrenci, $turKurumAitOgrenciler);
 
@@ -2948,17 +2907,15 @@ class AdminTurAjaxSorgu extends Controller {
                                 }
                             } else {//sadece öğrenci
                                 $kurumOgrenciListe = $Panel_Model->turKurumOgrenci($turKurumID);
-                                $c = 0;
+                                $turKurumOgrenci = [];
                                 foreach ($kurumOgrenciListe as $kurumOgrenciListee) {
                                     $turKurumOgrenci[] = $kurumOgrenciListee['BSOgrenciID'];
-                                    $c++;
                                 }
                                 //herhangi bir tura kayıtlı öğrenciler
                                 $kurumTurAitOgrenciler = $Panel_Model->turKurumAitOgrenciler($turKurumID);
-                                $g = 0;
+                                $turKurumAitOgrenciler = [];
                                 foreach ($kurumTurAitOgrenciler as $kurumTurAitOgrencilerr) {
                                     $turKurumAitOgrenciler[] = $kurumTurAitOgrencilerr['BSOgrenciIsciID'];
-                                    $g++;
                                 }
                                 $turKurumNotTurOgrenciler = array_diff($turKurumOgrenci, $turKurumAitOgrenciler);
 
@@ -3014,20 +2971,18 @@ class AdminTurAjaxSorgu extends Controller {
                         $gunSaatSql = $form->sqlGunSaat($turBolgeID, $turSaat1ID, $turSaat2ID, $turGunler);
                         $turAracListe = $Panel_Model->turAracSelect($gunSaatSql);
 
-                        $a = 0;
+                        $turAktifAracId = [];
                         foreach ($turAracListe as $turAracListee) {
                             $turAktifAracId[] = $turAracListee['BSTurAracID'];
-                            $a++;
                         }
 
                         $turBolgeAracListe = $Panel_Model->turBolgeAracListele($turBolgeID);
 
                         if (count($turBolgeAracListe) > 0) {
                             //bölgede araç varsa
-                            $b = 0;
+                            $turBolgeArac = [];
                             foreach ($turBolgeAracListe as $turBolgeAracListee) {
                                 $turBolgeArac[] = $turBolgeAracListee['SBAracID'];
-                                $b++;
                             }
 
                             if (count($turAracListe) > 0) {//aktif araç varsa
@@ -3079,20 +3034,18 @@ class AdminTurAjaxSorgu extends Controller {
 
                         $turSoforListe = $Panel_Model->turSoforSelect($gunSaatSoforSql);
 
-                        $a = 0;
+                        $turAktifSoforId = [];
                         foreach ($turSoforListe as $turSoforListee) {
                             $turAktifSoforId[] = $turSoforListee['BSTurSoforID'];
-                            $a++;
                         }
 
                         $turAracSoforListe = $Panel_Model->turAracSoforListele($turAracID);
 
                         if (count($turAracSoforListe) > 0) {
                             //araça ait şoför varsa
-                            $b = 0;
+                            $turAracSofor = [];
                             foreach ($turAracSoforListe as $turAracSoforListee) {
                                 $turAracSofor[] = $turAracSoforListee['BSSoforID'];
-                                $b++;
                             }
 
                             if (count($turSoforListe) > 0) {//aktif şoför varsa
@@ -3148,20 +3101,18 @@ class AdminTurAjaxSorgu extends Controller {
 
                         $turHostesListe = $Panel_Model->turHostesSelect($gunSaatHostesSql);
 
-                        $a = 0;
+                        $turAktifHostesId = [];
                         foreach ($turHostesListe as $turHostesListee) {
                             $turAktifHostesId[] = $turHostesListee['BSTurHostesID'];
-                            $a++;
                         }
 
                         $turAracHostesListe = $Panel_Model->turAracHostesListele($turAracID);
 
                         if (count($turAracHostesListe) > 0) {
                             //araça ait hostes varsa
-                            $b = 0;
+                            $turAracHostes = [];
                             foreach ($turAracHostesListe as $turAracHostesListee) {
                                 $turAracHostes[] = $turAracHostesListee['BSHostesID'];
-                                $b++;
                             }
 
                             if (count($turHostesListe) > 0) {//aktif hostes varsa

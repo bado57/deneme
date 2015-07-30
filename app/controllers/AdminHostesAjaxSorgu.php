@@ -353,10 +353,9 @@ class AdminHostesAjaxSorgu extends Controller {
                             $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
 
                             //bölge idler
-                            $r = 0;
+                            $bolgerutbeId = [];
                             foreach ($bolgeListeRutbe as $bolgeListeRutbee) {
                                 $bolgerutbeId[] = $bolgeListeRutbee['BSBolgeID'];
-                                $r++;
                             }
                             $rutbebolgedizi = implode(',', $bolgerutbeId);
 
@@ -364,6 +363,7 @@ class AdminHostesAjaxSorgu extends Controller {
 
                             //arac bölge idler
                             //arac bölge idler
+                            $hostesbolgeId = [];
                             $a = 0;
                             foreach ($hostesBolge as $hostesBolgee) {
                                 $selectHostesBolge[$a]['SelectHostesBolgeID'] = $hostesBolgee['BSBolgeID'];
@@ -662,10 +662,9 @@ class AdminHostesAjaxSorgu extends Controller {
                         //hostese ait araçlar
                         $adminHostesArac = $Panel_Model->hostesDetailMultiSelectHostes($hostesID);
                         if (count($adminHostesArac) > 0) {
-                            $a = 0;
+                            $hostesaracId = [];
                             foreach ($adminHostesArac as $adminHostesAracc) {
                                 $hostesaracId[] = $adminHostesAracc['BSAracID'];
-                                $a++;
                             }
                             //hostese ait araçlar
                             $hostesbolgearac = implode(',', $hostesaracId);
@@ -673,10 +672,9 @@ class AdminHostesAjaxSorgu extends Controller {
                             $hostesbolgedizim = implode(',', $hostesDetailBolgeID);
                             //seçilen bölgedeki araçlar
                             $HostesBolgeArac = $Panel_Model->adminSelectBolgeAracc($hostesbolgedizim);
-                            $b = 0;
+                            $hostesDigerAracId = [];
                             foreach ($HostesBolgeArac as $HostesBolgeAracc) {
                                 $hostesDigerAracId[] = $HostesBolgeAracc['SBAracID'];
-                                $b++;
                             }
                             //gelen arac ıdlerinde aynı olan idler, seçili araçlardır.
                             $ortakIDler = array_intersect($hostesaracId, $hostesDigerAracId);
@@ -687,7 +685,6 @@ class AdminHostesAjaxSorgu extends Controller {
                             //ortak ıd ye sahip arac varmı
                             if (count($ortakIDler) > 0) {
                                 //seçili araçlar
-                                error_log(count($ortakIDler));
                                 $secilenIdArac = implode(',', $ortakIDler);
                                 $selectBolgeArac = $Panel_Model->hostesNotSelectArac($secilenIdArac);
                                 $c = 0;

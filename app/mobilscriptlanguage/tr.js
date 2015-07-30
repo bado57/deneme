@@ -44,6 +44,7 @@ var jsDil = {
     'KisiSec': 'Lütfen kişi seçiniz',
     'BosMesaj': 'Lütfen mesajınızı giriniz',
     'DuyuruGonder': 'Duyuru gönderilmiştir',
-    'DuyuruYok': 'Gösterielcek duyuru yok',
+    'DuyuruYok': 'Gösterilecek duyuru yok',
     'DuyuruYaz': 'Duyuru Yaz',
+    'TurYok': 'Gösterilecek kayıtlı tur bulunmamaktadır',
 };

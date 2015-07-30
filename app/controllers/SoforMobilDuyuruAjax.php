@@ -396,6 +396,15 @@ class SoforMobilDuyuruAjax extends Controller {
                             }
                         }
 
+                        $soforlog = array(
+                            'BSEkleyenID' => $soforid,
+                            'BSEkleyenAdSoyad' => $soforAd,
+                            'BSLogText' => $text,
+                            'BSLogHedef' => $hedef
+                        );
+
+                        $resultLogDuyuru = $Panel_Model->addSoforLogDuyuru($soforlog);
+
                         $sonuc["TurDuyuru"] = $duyuru;
                     }
 
@@ -452,10 +461,10 @@ class SoforMobilDuyuruAjax extends Controller {
                         if (count($result) > 0) {
                             $a = 0;
                             foreach ($result as $resultt) {
-                                $gonderilen[$a]['Text'] = $resultt['BSDuyuruText'];
-                                $gonderilen[$a]['ID'] = $resultt['BSSoforDuyuruID'];
-                                $gonderilen[$a]['Hedef'] = $resultt['BSDuyuruHedef'];
-                                $gonderilen[$a]['Tarih'] = $resultt['BSDuyuruTarih'];
+                                $gonderilen[$a]['Text'] = $resultt['BSLogText'];
+                                $gonderilen[$a]['ID'] = $resultt['BSSoforLogID'];
+                                $gonderilen[$a]['Hedef'] = $resultt['BSLogHedef'];
+                                $gonderilen[$a]['Tarih'] = $resultt['BsLogTarih'];
                                 $a++;
                             }
                         }
