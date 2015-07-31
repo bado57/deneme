@@ -253,7 +253,6 @@ class Panel_Model_Mobile extends ModelMobile {
     //şoför tur öğrenci idl ye göre işlemler
     public function soforTurBaslatOgrenciIID($array = array()) {
         $sql = 'SELECT DISTINCT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,BSOgrenciPhone FROM bsogrenci Where BSOgrenciID IN (' . $array . ')';
-        error_log($sql);
         return($this->db->select($sql));
     }
 
@@ -284,7 +283,30 @@ class Panel_Model_Mobile extends ModelMobile {
     //şoför tur başlat tura göre gelemyen öğrenci ve işçi idler 
     public function soforTurBaslatOgrenciIsciGID($turID, $gun, $turTip) {
         $sql = 'SELECT DISTINCT BSKisiID,BSKullaniciTip FROM bsseferogrenciisci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=1' . ' AND BSTurTip=' . $turTip;
-        error_log($sql);
+        return($this->db->select($sql));
+    }
+
+    //şoför tur başlat öğrenci detay
+    public function soforTurBaslatKOgrenciDetay($kid) {
+        $sql = 'SELECT DISTINCT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,BSOgrenciPhone FROM bsogrenci Where BSOgrenciID=' . $kid;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur başlat öğrenci-veli id
+    public function soforTurBaslatKOgrVeliID($kid) {
+        $sql = 'SELECT DISTINCT BSVeliID FROM bsveliogrenci Where BSOgrenciID=' . $kid;
+        return($this->db->select($sql));
+    }
+
+    //şoför tur başlat öğrenci detay
+    public function soforTurBaslatKVeliDetay($array = array()) {
+        $sql = 'SELECT DISTINCT SBVeliID,SBVeliAd,SBVeliSoyad,SBVeliPhone FROM sbveli Where SBVeliID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //şoför tur başlat işçi detay
+    public function soforTurBaslatKIsciDetay($kid) {
+        $sql = 'SELECT DISTINCT SBIsciID,SBIsciAd,SBIsciSoyad,SBIsciPhone FROM sbisci Where SBIsciID=' . $kid;
         return($this->db->select($sql));
     }
 

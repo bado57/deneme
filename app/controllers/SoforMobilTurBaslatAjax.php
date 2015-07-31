@@ -572,6 +572,68 @@ class SoforMobilTurBaslatAjax extends Controller {
                     }
 
                     break;
+
+                case "turkisidetay":
+
+                    if (!$loginfirmaID) {
+                        $sonuc["hata"] = "Hacking?";
+                    } else {
+                        $form->post("kisiID", true);
+                        $form->post("kisiTip", true);
+                        $kisiID = $form->values['kisiID'];
+                        $kisiTip = $form->values['kisiTip'];
+
+                        $turKisiDetay = [];
+                        if ($kisiTip != 1) {//öğrenci
+                            $resultOgrenci = $Panel_Model->soforTurBaslatKOgrenciDetay($kisiID);
+                            if (count($resultOgrenci) > 0) {
+                                $o = 0;
+                                foreach ($resultOgrenci as $resultOgrencii) {
+                                    $turKisiDetay[$o]['ID'] = $resultOgrencii['BSOgrenciID'];
+                                    $turKisiDetay[$o]['Ad'] = $resultOgrencii['BSOgrenciAd'];
+                                    $turKisiDetay[$o]['Soyad'] = $resultOgrencii['BSOgrenciSoyad'];
+                                    $turKisiDetay[$o]['Telefon'] = $resultOgrencii['BSOgrenciPhone'];
+                                    $turKisiDetay[$o]['Tip'] = 0;
+                                    $o++;
+                                }
+
+                                $resultVeliID = $Panel_Model->soforTurBaslatKOgrVeliID($kisiID); //veli
+                                if (count($resultVeliID) > 0) {
+                                    $ogrenciVeliID = [];
+                                    foreach ($resultVeliID as $resultVeliID) {
+                                        $ogrenciVeliID[] = $resultVeliID['BSVeliID'];
+                                    }
+
+                                    $ogrenciVeli = implode(',', $ogrenciVeliID);
+
+                                    $resultVeli = $Panel_Model->soforTurBaslatKVeliDetay($ogrenciVeli); //veli
+                                    foreach ($resultVeli as $resultVelii) {
+                                        $turKisiDetay[$o]['ID'] = $resultVelii['SBVeliID'];
+                                        $turKisiDetay[$o]['Ad'] = $resultVelii['SBVeliAd'];
+                                        $turKisiDetay[$o]['Soyad'] = $resultVelii['SBVeliSoyad'];
+                                        $turKisiDetay[$o]['Telefon'] = $resultVelii['SBVeliPhone'];
+                                        $turKisiDetay[$o]['Tip'] = 2;
+                                        $o++;
+                                    }
+                                }
+                            }
+                        } else {//öğrenci-işçi
+                            $resultIsci = $Panel_Model->soforTurBaslatKIsciDetay($kisiID);
+                            if (count($resultIsci) > 0) {
+                                $i = 0;
+                                foreach ($resultIsci as $resultIscii) {
+                                    $turKisiDetay[$i]['ID'] = $resultIscii['SBIsciID'];
+                                    $turKisiDetay[$i]['Ad'] = $resultIscii['SBIsciAd'];
+                                    $turKisiDetay[$i]['Soyad'] = $resultIscii['SBIsciSoyad'];
+                                    $turKisiDetay[$i]['Telefon'] = $resultIscii['SBIsciPhone'];
+                                    $turKisiDetay[$i]['Tip'] = 1;
+                                    $i++;
+                                }
+                            }
+                        }
+                        $sonuc = $turKisiDetay;
+                    }
+                    break;
             }
             echo json_encode($sonuc);
         } else {
