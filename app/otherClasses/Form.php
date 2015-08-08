@@ -1037,6 +1037,17 @@ class Form {
         return $myarray;
     }
 
+    //iki zaman arasıdnaki fark time=12:15
+    function get_time_difference($time1, $time2) {
+        $time1 = strtotime("1980-01-01 $time1");
+        $time2 = strtotime("1980-01-01 $time2");
+
+        if ($time2 < $time1) {
+            $time2 += 86400;
+        }
+        return date("H:i", strtotime("1980-01-01 00:00") + ($time2 - $time1));
+    }
+
 }
 
 ?>

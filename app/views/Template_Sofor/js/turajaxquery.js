@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://192.168.1.26/SProject/SoforMobilTurAjax",
+    url: "http://192.168.1.22/SProject/SoforMobilTurAjax",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {

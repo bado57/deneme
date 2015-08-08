@@ -220,6 +220,18 @@ class Panel_Model_Mobile extends ModelMobile {
         return($this->db->select($sql));
     }
 
+    //şoför tur başlat tur ıdler
+    public function soforTurBaslatID($soforID, $gun) {
+        $sql = 'SELECT BSTurID,BSTurGidisDonus,BsTurBitis,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurSoforID=' . $soforID . ' AND ' . $gun . '=1 ORDER BY BSTurBslngc ASC';
+        return($this->db->select($sql));
+    }
+
+    //şoför tur başla detay tur gidiş ve dönüşler
+    public function soforTurBaslatIlk($turID) {
+        $sql = 'SELECT SBTurID,SBTurAd,SBTurTip,SBTurKm FROM sbtur WHERE SBTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
     //şoför tur başla tur ıdler
     public function soforTurID($soforID, $gun) {
         $sql = 'SELECT DISTINCT BSTurID,BSTurAracPlaka FROM bsturtip WHERE BSTurSoforID=' . $soforID . ' AND ' . $gun . '=1 ORDER BY BSTurBslngc ASC';
@@ -240,49 +252,68 @@ class Panel_Model_Mobile extends ModelMobile {
 
     //şoför tur başlat tura göre öğrenci idler 
     public function soforTurBaslatOgrenciID($turID) {
-        $sql = 'SELECT DISTINCT BSOgrenciID FROM bsogrencitur WHERE BSTurID=' . $turID;
+        $sql = 'SELECT DISTINCT BSOgrenciID,BSKurumID,BSKurumAd,BSKurumLocation FROM bsogrencitur WHERE BSTurID=' . $turID . ' ORDER BY BSTurSira ASC';
         return($this->db->select($sql));
     }
 
     //şoför tur başlat tura göre gelemyen öğrenci idler 
-    public function soforTurBaslatOgrenciGID($turID, $gun, $turTip) {
-        $sql = 'SELECT DISTINCT BSOgrenciID FROM bsseferogrenci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=1' . ' AND BSTurTip=' . $turTip;
+    public function soforTurBaslatOgrenciGID($turID, $gun, $turTur) {
+        $sql = 'SELECT DISTINCT BSOgrenciID FROM bsseferogrenci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=1' . ' AND BSTurTip=' . $turTur;
+        return($this->db->select($sql));
+    }
+
+    //şoför turu için hostes var sa sorgu gelmektedir
+    public function soforTurBaslatHostes($turID, $turTur) {
+        $sql = 'SELECT BSTurHostesID,BSTurHostesAd,BSTurHostesLocation FROM bsturtip WHERE BSTurID=' . $turID . ' AND BSTurGidisDonus=' . $turTur;
         return($this->db->select($sql));
     }
 
     //şoför tur öğrenci idl ye göre işlemler
     public function soforTurBaslatOgrenciIID($array = array()) {
-        $sql = 'SELECT DISTINCT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,BSOgrenciPhone FROM bsogrenci Where BSOgrenciID IN (' . $array . ')';
+        $sql = 'SELECT DISTINCT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,BSOgrenciPhone FROM bsogrenci Where BSOgrenciID IN (' . $array . ') ORDER BY field(BSOgrenciID,' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //şoför tur öğrenci idl ye göre işlemler
+    public function soforTBMapsOgrenciIID($array = array()) {
+        $sql = 'SELECT DISTINCT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,BSOgrenciPhone,BSOgrenciLocation FROM bsogrenci Where BSOgrenciID IN (' . $array . ') ORDER BY field(BSOgrenciID,' . $array . ')';
+        error_log($sql);
         return($this->db->select($sql));
     }
 
     //şoför tur başlat tura göre işçi idler 
     public function soforTurBaslatIsciID($turID) {
-        $sql = 'SELECT DISTINCT SBIsciID FROM sbiscitur WHERE SBTurID=' . $turID;
+        $sql = 'SELECT DISTINCT SBIsciID,SBKurumID,SBKurumAd,SBKurumLocation FROM sbiscitur WHERE SBTurID=' . $turID . ' ORDER BY BSTurSira ASC';
         return($this->db->select($sql));
     }
 
     //şoför tur başlat tura göre gelemyen işçi idler 
-    public function soforTurBaslatIsciGID($turID, $gun, $turTip) {
-        $sql = 'SELECT DISTINCT BSIsciID FROM bsseferisci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=1' . ' AND BSTurTip=' . $turTip;
+    public function soforTurBaslatIsciGID($turID, $gun, $turTur) {
+        $sql = 'SELECT DISTINCT BSIsciID FROM bsseferisci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=1' . ' AND BSTurTip=' . $turTur;
         return($this->db->select($sql));
     }
 
     //şoför tur işçi     idl ye göre işlemler
     public function soforTurBaslatIsciIID($array = array()) {
-        $sql = 'SELECT DISTINCT SBIsciID,SBIsciAd,SBIsciSoyad,SBIsciPhone FROM sbisci Where SBIsciID IN (' . $array . ')';
+        $sql = 'SELECT DISTINCT SBIsciID,SBIsciAd,SBIsciSoyad,SBIsciPhone FROM sbisci Where SBIsciID IN (' . $array . ') ORDER BY field(SBIsciID,' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //şoför tur işçi     idl ye göre işlemler
+    public function soforTBMapsIsciIID($array = array()) {
+        $sql = 'SELECT DISTINCT SBIsciID,SBIsciAd,SBIsciSoyad,SBIsciPhone,SBIsciLocation FROM sbisci Where SBIsciID IN (' . $array . ') ORDER BY field(SBIsciID,' . $array . ')';
         return($this->db->select($sql));
     }
 
     //şoför tur başlat tura göre öğrenci ve işçi idler 
     public function soforTurBaslatOgrenciIsciID($turID) {
-        $sql = 'SELECT DISTINCT BSOgrenciIsciID,BSKullaniciTip FROM bsogrenciiscitur WHERE BSTurID=' . $turID;
+        $sql = 'SELECT DISTINCT BSOgrenciIsciID,BSKullaniciTip,BSKurumID,BSKurumAd,BSKurumLocation FROM bsogrenciiscitur WHERE BSTurID=' . $turID . ' ORDER BY BSTurSira ASC';
         return($this->db->select($sql));
     }
 
     //şoför tur başlat tura göre gelemyen öğrenci ve işçi idler 
-    public function soforTurBaslatOgrenciIsciGID($turID, $gun, $turTip) {
-        $sql = 'SELECT DISTINCT BSKisiID,BSKullaniciTip FROM bsseferogrenciisci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=1' . ' AND BSTurTip=' . $turTip;
+    public function soforTurBaslatOgrenciIsciGID($turID, $gun, $turTur) {
+        $sql = 'SELECT DISTINCT BSKisiID,BSKullaniciTip,BSKurumID,BSKurumAd,BSKurumLocation FROM bsseferogrenciisci WHERE BSTurID=' . $turID . ' AND ' . $gun . '=1' . ' AND BSTurTip=' . $turTur;
         return($this->db->select($sql));
     }
 
