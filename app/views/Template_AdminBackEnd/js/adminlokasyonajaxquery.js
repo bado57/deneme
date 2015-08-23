@@ -51,68 +51,70 @@ $(document).ready(function () {
                         alertify.alert(jsDil.Hata);
                         return false;
                     } else {
-                        //gidiş değerleri
-                        binen = [];
-                        binmeyen = [];
-                        //dönüş değerleri
-                        inen = [];
-                        inmeyen = [];
-                        //ortak değerler
-                        kurum = [];
-                        arac = [];
-                        var kurumLoc = kurumLocation.split(",");
-                        kurum = Array(kurumAd, kurumID, kurumLoc[0], kurumLoc[1]);
-                        var aracLokasyon = cevap.aracLokasyon[0].BSAracLokasyon;
-                        var aracLoc = aracLokasyon.split(",");
-                        var aracTrim = aracPlaka.trim();
-                        arac = Array(aracTrim, aracLoc[0], aracLoc[1], aracID);
-                        if (cevap.turBinemeyen) {//gidiş işlemleri
-                            var length = cevap.turBinemeyen.TurBinmeyenAd.length;
-                            for (var a = 0; a < length; a++) {
-                                var kisiAd = cevap.turBinemeyen.TurBinmeyenAd[a];
-                                var kisiLoc = cevap.turBinemeyen.TurBinmeyenLocation[a].split(",");
-                                var kisiID = cevap.turBinemeyen.TurBinmeyenID[a];
-                                var kisiTip = cevap.turBinemeyen.TurBinmeyenTip[a];
-                                binmeyen[a] = Array(kisiAd, kisiLoc[0], kisiLoc[1], kisiID, kisiTip);
-                            }
-                            if (cevap.turBinen) {
-                                var length1 = cevap.turBinen.TurBinenAd.length;
-                                for (var b = 0; b < length1; b++) {
-                                    var kisiBinenAd = cevap.turBinen.TurBinenAd[b];
-                                    var kisiBinenLoc = cevap.turBinen.TurBinenLocation[b].split(",");
-                                    var kisiBinenID = cevap.turBinen.TurBinenID[b];
-                                    var kisiBinenTip = cevap.turBinen.TurBinenTip[b];
-                                    binen[b] = Array(kisiBinenAd, kisiBinenLoc[0], kisiBinenLoc[1], kisiBinenID, kisiBinenTip);
+                        if (cevap) {
+                            //gidiş değerleri
+                            binen = [];
+                            binmeyen = [];
+                            //dönüş değerleri
+                            inen = [];
+                            inmeyen = [];
+                            //ortak değerler
+                            kurum = [];
+                            arac = [];
+                            var kurumLoc = kurumLocation.split(",");
+                            kurum = Array(kurumAd, kurumID, kurumLoc[0], kurumLoc[1]);
+                            var aracLokasyon = cevap.aracLokasyon[0].aracLokasyon;
+                            var aracLoc = aracLokasyon.split(",");
+                            var aracTrim = aracPlaka.trim();
+                            arac = Array(aracTrim, aracLoc[0], aracLoc[1], aracID);
+                            if (cevap.turBinemeyen) {//gidiş işlemleri
+                                var length = cevap.turBinemeyen.TurBinmeyenAd.length;
+                                for (var a = 0; a < length; a++) {
+                                    var kisiAd = cevap.turBinemeyen.TurBinmeyenAd[a];
+                                    var kisiLoc = cevap.turBinemeyen.TurBinmeyenLocation[a].split(",");
+                                    var kisiID = cevap.turBinemeyen.TurBinmeyenID[a];
+                                    var kisiTip = cevap.turBinemeyen.TurBinmeyenTip[a];
+                                    binmeyen[a] = Array(kisiAd, kisiLoc[0], kisiLoc[1], kisiID, kisiTip);
                                 }
-                            }
-                            if (haritadeger == 0) {
-                                haritadeger++;
-                                aracLokasyonGidisMapping();
-                                google.maps.event.addDomListener(window, 'load', aracLokasyonGidisMapping);
-                            }
-                        } else if (cevap.turInemeyen) {//dönüş işlemleri
-                            var length = cevap.turInemeyen.TurInmeyenAd.length;
-                            for (var a = 0; a < length; a++) {
-                                var kisiAd = cevap.turInemeyen.TurInmeyenAd[a];
-                                var kisiLoc = cevap.turInemeyen.TurInmeyenLocation[a].split(",");
-                                var kisiID = cevap.turInemeyen.TurInmeyenID[a];
-                                var kisiTip = cevap.turInemeyen.TurInmeyenTip[a];
-                                inmeyen[a] = Array(kisiAd, kisiLoc[0], kisiLoc[1], kisiID, kisiTip);
-                            }
-                            if (cevap.turInen) {
-                                var length1 = cevap.turInen.TurInenAd.length;
-                                for (var b = 0; b < length1; b++) {
-                                    var kisiInenAd = cevap.turInen.TurInenAd[b];
-                                    var kisiInenLoc = cevap.turInen.TurInenLocation[b].split(",");
-                                    var kisiInenID = cevap.turInen.TurInenID[b];
-                                    var kisiInenTip = cevap.turInen.TurInenTip[b];
-                                    inen[b] = Array(kisiInenAd, kisiInenLoc[0], kisiInenLoc[1], kisiInenID, kisiInenTip);
+                                if (cevap.turBinen) {
+                                    var length1 = cevap.turBinen.TurBinenAd.length;
+                                    for (var b = 0; b < length1; b++) {
+                                        var kisiBinenAd = cevap.turBinen.TurBinenAd[b];
+                                        var kisiBinenLoc = cevap.turBinen.TurBinenLocation[b].split(",");
+                                        var kisiBinenID = cevap.turBinen.TurBinenID[b];
+                                        var kisiBinenTip = cevap.turBinen.TurBinenTip[b];
+                                        binen[b] = Array(kisiBinenAd, kisiBinenLoc[0], kisiBinenLoc[1], kisiBinenID, kisiBinenTip);
+                                    }
                                 }
-                            }
-                            if (haritadeger == 0) {
-                                haritadeger++;
-                                aracLokasyonDonusMapping();
-                                google.maps.event.addDomListener(window, 'load', aracLokasyonDonusMapping);
+                                if (haritadeger == 0) {
+                                    haritadeger++;
+                                    aracLokasyonGidisMapping();
+                                    google.maps.event.addDomListener(window, 'load', aracLokasyonGidisMapping);
+                                }
+                            } else if (cevap.turInemeyen) {//dönüş işlemleri
+                                var length = cevap.turInemeyen.TurInmeyenAd.length;
+                                for (var a = 0; a < length; a++) {
+                                    var kisiAd = cevap.turInemeyen.TurInmeyenAd[a];
+                                    var kisiLoc = cevap.turInemeyen.TurInmeyenLocation[a].split(",");
+                                    var kisiID = cevap.turInemeyen.TurInmeyenID[a];
+                                    var kisiTip = cevap.turInemeyen.TurInmeyenTip[a];
+                                    inmeyen[a] = Array(kisiAd, kisiLoc[0], kisiLoc[1], kisiID, kisiTip);
+                                }
+                                if (cevap.turInen) {
+                                    var length1 = cevap.turInen.TurInenAd.length;
+                                    for (var b = 0; b < length1; b++) {
+                                        var kisiInenAd = cevap.turInen.TurInenAd[b];
+                                        var kisiInenLoc = cevap.turInen.TurInenLocation[b].split(",");
+                                        var kisiInenID = cevap.turInen.TurInenID[b];
+                                        var kisiInenTip = cevap.turInen.TurInenTip[b];
+                                        inen[b] = Array(kisiInenAd, kisiInenLoc[0], kisiInenLoc[1], kisiInenID, kisiInenTip);
+                                    }
+                                }
+                                if (haritadeger == 0) {
+                                    haritadeger++;
+                                    aracLokasyonDonusMapping();
+                                    google.maps.event.addDomListener(window, 'load', aracLokasyonDonusMapping);
+                                }
                             }
                         }
                     }

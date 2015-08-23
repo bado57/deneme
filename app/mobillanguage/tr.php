@@ -56,6 +56,19 @@ class tr {
             "DuyuruYaz" => "Duyuru Yaz",
             "TurYok" => "Gösterilecek kayıtlı tur bulunmamaktadır",
             "AracYok" => "Gösterilecek kayıtlı araç bulunmamaktadır",
+            "OgrenciBindi" => "adlı öğrenciniz servise binmiştir.",
+            "OgrenciBinmedi" => "adlı öğrenciniz servise binmemiştir.",
+            "ServiseBinmeTitle" => "Servise Binme",
+            "ServisYaklasti" => "Servisiniz yaklaşmıştır bilginiz olsun.",
+            "ServisYaklastiTitle" => "Servis Yaklaştı",
+            "OgrenciIndi" => "adlı öğrenciniz servisten inmiştir.",
+            "OgrenciInmedi" => "adlı öğrenciniz servisten inmemiştir.",
+            "ServiseInmeTitle" => "Servisten İnme",
+            "TurBaslat" => "adlı turunuz başlamıştır.",
+            "TurBaslatTitle" => "Tur Başladı.",
+            "ServisBitisTitle" => "Tur Bitti",
+            "ServisBitisGidis" => "Servis kuruma varmıştır.",
+            "ServisBitisDonus" => "Servis tamamlanmıştır.",
         );
         return $trdil;
     }

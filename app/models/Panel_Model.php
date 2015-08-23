@@ -1936,7 +1936,7 @@ class Panel_Model extends Model {
 
     //tura gidişte binenler kimler
     public function turOgrenciBinenIDListele($turID) {
-        $sql = 'SELECT BSKisiID FROM bsturgidis WHERE BSTurID = ' . $turID;
+        $sql = 'SELECT BSKisiID FROM bsturgidis WHERE BSTurID = ' . $turID . ' AND BSKisiDurum=1';
         return($this->db->select($sql));
     }
 
@@ -1966,7 +1966,7 @@ class Panel_Model extends Model {
 
     //tura gidişte binenler kimler
     public function turIsciBinenIDListele($turID) {
-        $sql = 'SELECT BSKisiID FROM bsturgidis WHERE BSTurID = ' . $turID;
+        $sql = 'SELECT BSKisiID FROM bsturgidis WHERE BSTurID = ' . $turID . ' AND BSKisiDurum=1';
         return($this->db->select($sql));
     }
 
@@ -1996,7 +1996,7 @@ class Panel_Model extends Model {
 
     //tura gidişte binenler kimler
     public function turIsciOgrenciBinenIDListele($turID) {
-        $sql = 'SELECT BSKisiID, BSKisiTip FROM bsturgidis WHERE BSTurID = ' . $turID;
+        $sql = 'SELECT BSKisiID, BSKisiTip FROM bsturgidis WHERE BSTurID = ' . $turID . ' AND BSKisiDurum=1';
         return($this->db->select($sql));
     }
 
@@ -2014,7 +2014,7 @@ class Panel_Model extends Model {
 
     //tura dönüşte binenler kimler
     public function turOgrenciInenIDListele($turID) {
-        $sql = 'SELECT BSKisiID FROM bsturdonus WHERE BSTurID = ' . $turID;
+        $sql = 'SELECT BSKisiID FROM bsturdonus WHERE BSTurID = ' . $turID . ' AND BSKisiDurum=1';
         return($this->db->select($sql));
     }
 
@@ -2032,7 +2032,7 @@ class Panel_Model extends Model {
 
     //tura dönüşte binenler kimler
     public function turIsciDonenIDListele($turID) {
-        $sql = 'SELECT BSKisiID FROM bsturdonus WHERE BSTurID = ' . $turID;
+        $sql = 'SELECT BSKisiID FROM bsturdonus WHERE BSTurID = ' . $turID . ' AND BSKisiDurum=1';
         return($this->db->select($sql));
     }
 
@@ -2050,7 +2050,7 @@ class Panel_Model extends Model {
 
     //tura dönüşte inenler kimler
     public function turIsciOgrenciInenIDListele($turID) {
-        $sql = 'SELECT BSKisiID, BSKisiTip FROM bsturdonus WHERE BSTurID = ' . $turID;
+        $sql = 'SELECT BSKisiID, BSKisiTip FROM bsturdonus WHERE BSTurID = ' . $turID . ' AND BSKisiDurum=1';
         return($this->db->select($sql));
     }
 

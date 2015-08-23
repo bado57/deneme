@@ -222,7 +222,7 @@ class Panel_Model_Mobile extends ModelMobile {
 
     //şoför tur başlat tur ıdler
     public function soforTurBaslatID($soforID, $gun) {
-        $sql = 'SELECT BSTurID,BSTurGidisDonus,BsTurBitis,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurSoforID=' . $soforID . ' AND ' . $gun . '=1 ORDER BY BSTurBslngc ASC';
+        $sql = 'SELECT BSTurID,BSTurAracID,BSTurGidisDonus,BsTurBitis,BSTurBslngc,BSTurBts FROM bsturtip WHERE BSTurSoforID=' . $soforID . ' AND ' . $gun . '=1 ORDER BY BSTurBslngc ASC';
         return($this->db->select($sql));
     }
 
@@ -262,6 +262,18 @@ class Panel_Model_Mobile extends ModelMobile {
         return($this->db->select($sql));
     }
 
+    //tura binenler
+    public function soforTurOgrGidisBinen($turID) {
+        $sql = 'SELECT DISTINCT BSKisiSira FROM bsturgidis WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //turdan inenler
+    public function soforTurOgrDonusInen($turID) {
+        $sql = 'SELECT DISTINCT BSKisiSira FROM bsturdonus WHERE BSTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
     //şoför turu için hostes var sa sorgu gelmektedir
     public function soforTurBaslatHostes($turID, $turTur) {
         $sql = 'SELECT BSTurHostesID,BSTurHostesAd,BSTurHostesLocation FROM bsturtip WHERE BSTurID=' . $turID . ' AND BSTurGidisDonus=' . $turTur;
@@ -277,7 +289,6 @@ class Panel_Model_Mobile extends ModelMobile {
     //şoför tur öğrenci idl ye göre işlemler
     public function soforTBMapsOgrenciIID($array = array()) {
         $sql = 'SELECT DISTINCT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,BSOgrenciPhone,BSOgrenciLocation FROM bsogrenci Where BSOgrenciID IN (' . $array . ') ORDER BY field(BSOgrenciID,' . $array . ')';
-        error_log($sql);
         return($this->db->select($sql));
     }
 
@@ -630,6 +641,158 @@ class Panel_Model_Mobile extends ModelMobile {
     public function soforGonderilenDuyuru($soforID) {
         $sql = 'SELECT BSSoforLogID,BSLogText,BSLogHedef,BsLogTarih FROM  bssoforduyurulog Where BSEkleyenID=' . $soforID . ' ORDER BY BsLogTarih DESC';
         return($this->db->select($sql));
+    }
+
+    //öğrencinin velileri
+    public function ogrenciTurVeli($ogrID) {
+        $sql = 'SELECT DISTINCT BSVeliID FROM bsveliogrenci Where BSOgrenciID=' . $ogrID;
+        return($this->db->select($sql));
+    }
+
+    //öğrencinin velileri
+    public function ogrenciTurVeliler($array = array()) {
+        $sql = 'SELECT DISTINCT BSVeliID FROM bsveliogrenci Where BSOgrenciID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //öğrenciye gönderilecek tur bildirimi-veli cihaz
+    public function ogrenciVeliIDler($array = array()) {
+        $sql = 'SELECT DISTINCT BSVeliID FROM  bsveliogrenci Where BSOgrenciID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //öğrenciye gönderilecek tur bildirimi-veli cihaz
+    public function ogrenciVeliTurCihaz($array = array()) {
+        $sql = 'SELECT DISTINCT bsvelicihazRecID FROM  bsvelicihaz Where bsveliID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //öğrenciye gönderilecek tur bildirim  cihaz
+    public function ogrenciTumTurCihaz($array = array()) {
+        $sql = 'SELECT DISTINCT bsogrencicihazRecID FROM  bsogrencicihaz Where bsogrenciID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //öğrenciye gönderilecek tur bildirim  cihaz
+    public function isciTumTurCihaz($array = array()) {
+        $sql = 'SELECT DISTINCT sbiscicihazRecID FROM  sbiscicihaz Where sbisciID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //öğrenciye gönderilecek tur bildirimi-öğrenci cihaz
+    public function ogrenciTurCihaz($ogrID) {
+        $sql = 'SELECT bsogrencicihazRecID FROM bsogrencicihaz Where bsogrenciID=' . $ogrID;
+        return($this->db->select($sql));
+    }
+
+    //öğrenciye gönderilecek tur bildirimi-öğrenci cihazlar
+    public function ogrenciTurCihazlar($array = array()) {
+        $sql = 'SELECT bsogrencicihazRecID FROM bsogrencicihaz Where bsogrenciID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //işçiye gönderilecek tur bildirimi-işçi cihaz
+    public function isciTurCihaz($isciID) {
+        $sql = 'SELECT sbiscicihazRecID FROM sbiscicihaz Where sbisciID=' . $isciID;
+        return($this->db->select($sql));
+    }
+
+    //işçiye gönderilecek tur bildirimi-işçi cihazlar
+    public function isciTurCihazlar($array = array()) {
+        $sql = 'SELECT sbiscicihazRecID FROM sbiscicihaz Where sbisciID IN (' . $array . ')';
+        return($this->db->select($sql));
+    }
+
+    //turdaki binenleri kaydetme alanı
+    public function addNewBinisTur($data) {
+        return ($this->db->insert("bsturgidis", $data));
+    }
+
+    //turdaki inenleri kaydetme alanı
+    public function addNewInisTur($data) {
+        return ($this->db->insert("bsturdonus", $data));
+    }
+
+    //tur başlat
+    public function soforTurBaslatUpdate($data, $turID) {
+        return ($this->db->update("sbtur", $data, "SBTurID=" . $turID));
+    }
+
+    //tur tip başlat
+    public function soforTurTipUpdate($data, $turID) {
+        return ($this->db->update("bsturtip", $data, "BSTurID=" . $turID));
+    }
+
+    //turtip tablosundaki bilgiler
+    public function turTipOzellik($turID, $turGidisDonus) {
+        $sql = 'SELECT BSTurTip,BSTurKurumID,BSTurKurumAd,BSTurKurumLocation,BSTurAracID,BSTurAracPlaka,BSTurSoforID,BSTurHostesID,BSTurKm FROM  bsturtip Where BSTurID=' . $turID . ' AND BSTurGidisDonus=' . $turGidisDonus;
+        return($this->db->select($sql));
+    }
+
+    //tur bitiş bilgilerini kaydetme
+    public function addNewTurBitis($data) {
+        return ($this->db->insert("bsturlog", $data));
+    }
+
+    //tur gidiş öğrenci kayıt log
+    public function addGidisOgrenciLog($data) {
+        return ($this->db->insert("bsogrenciturgidislog", $data));
+    }
+
+    //tur dönüş öğrenci kayıt log
+    public function addDonusOgrenciLog($data) {
+        return ($this->db->insert("bsogrenciturdonuslog", $data));
+    }
+
+    //tur gidiş işçi kayıt log
+    public function addGidisIsciLog($data) {
+        return ($this->db->insert("bsisciturgidislog", $data));
+    }
+
+    //tur dönüş işçi kayıt log
+    public function addDonusIsciLog($data) {
+        return ($this->db->insert("bsisciturdonuslog", $data));
+    }
+
+    //tur gidiş öğrenci kayıt log
+    public function addGidisOgrenciIsciLog($data) {
+        return ($this->db->insert("bsogrenciisciturgidislog", $data));
+    }
+
+    //tur dönüş öğrenci kayıt log
+    public function addDonusOgrenciIsciLog($data) {
+        return ($this->db->insert("bsogrenciisciturdonuslog", $data));
+    }
+
+    //tur gidiş delete
+    public function turGidisDelete($turID) {
+        return($this->db->delete("bsturgidis", "BSTurID=$turID"));
+    }
+
+    //tur dönüş delete
+    public function turDonusDelete($turID) {
+        return($this->db->delete("bsturdonus", "BSTurID=$turID"));
+    }
+
+    //tur dönüş delete
+    public function aracAnlikLocDel($turID) {
+        return($this->db->delete("bsaraclokasyon", "BSAracTurID=$turID"));
+    }
+
+    //aracın kayıtı varsa o anda
+    public function aracAnlikLoc($aracID, $turID) {
+        $sql = 'SELECT BSAracLokasyonID FROM bsaraclokasyon Where BSAracID=' . $aracID . ' AND BSAracTurID=' . $turID;
+        return($this->db->select($sql));
+    }
+
+    //araç anlık loaksyon güncelleme 
+    public function aracAnlikUpdate($data, $turID) {
+        return ($this->db->update("sbtur", $data, "SBTurID=" . $turID));
+    }
+
+    //araç anlık lokasyon kaydetme
+    public function addNewAnlikLoc($data) {
+        return ($this->db->insert("bsaraclokasyon", $data));
     }
 
 }

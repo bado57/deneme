@@ -1067,38 +1067,43 @@ class AdminWeb extends Controller {
                 $aracTipDizi = implode(',', $aracTip);
                 $aracTurDizi = implode(',', $aracTurID);
 
-                //tur adlar
-                $aracTurAdListe = $Panel_Model->aracTurAdListele($aracTurDizi);
-                $a = 0;
-                foreach ($aracTurAdListe as $aracTurAdListee) {
-                    $adminArac[$a]['aktifTurAd'] = $aracTurAdListee['SBTurAd'];
-                    $a++;
-                }
-
                 //aktif tur araçları
                 $aktifAracListe = $Panel_Model->aracAktifTurListele($aracLokasyonDizi, $aracTipDizi, $aracTurDizi);
-                $b = 0;
-                foreach ($aktifAracListe as $aktifAracListee) {
-                    $aktifaracId[] = $aktifAracListee['BSTurAracID'];
-                    $adminArac[$b]['aktifAracID'] = $aktifAracListee['BSTurAracID'];
-                    $adminArac[$b]['aktifAracPlaka'] = $aktifAracListee['BSTurAracPlaka'];
-                    $adminArac[$b]['aktifTurID'] = $aktifAracListee['BSTurID'];
-                    $adminArac[$b]['aktifTurTip'] = $aktifAracListee['BSTurTip'];
-                    $adminArac[$b]['aktifAracBolgeID'] = $aktifAracListee['BSTurBolgeID'];
-                    $adminArac[$b]['aktifAracBolgeAd'] = $aktifAracListee['BSTurBolgeAd'];
-                    $adminArac[$b]['aktifAracKurumID'] = $aktifAracListee['BSTurKurumID'];
-                    $adminArac[$b]['aktifAracKurumAd'] = $aktifAracListee['BSTurKurumAd'];
-                    $adminArac[$b]['aktifAracKurumLocation'] = $aktifAracListee['BSTurKurumLocation'];
-                    $adminArac[$b]['aktifAracSoforID'] = $aktifAracListee['BSTurSoforID'];
-                    $adminArac[$b]['aktifAracSoforAd'] = $aktifAracListee['BSTurSoforAd'];
-                    $adminArac[$b]['aktifAracSoforLocation'] = $aktifAracListee['BSTurSoforLocation'];
-                    $adminArac[$b]['aktifAracKapasite'] = $aktifAracListee['BSTurAracKapasite'];
-                    $adminArac[$b]['aktifAracTurKm'] = $aktifAracListee['BSTurKm'];
-                    $adminArac[$b]['aktifAracTip'] = $aktifAracListee['BSTurGidisDonus'];
-                    $b++;
-                }
-                if (count($aktifaracId) > 0) {
-                    $adminArac[0]['AdminAracCount'] = count($aktifaracId);
+                if (count($aktifAracListe) > 0) {
+                    //tur adlar
+                    $adminArac = [];
+                    $aracTurAdListe = $Panel_Model->aracTurAdListele($aracTurDizi);
+                    if (count($aracTurAdListe) > 0) {
+                        $a = 0;
+                        foreach ($aracTurAdListe as $aracTurAdListee) {
+                            $adminArac[$a]['aktifTurAd'] = $aracTurAdListee['SBTurAd'];
+                            $a++;
+                        }
+                    }
+
+                    $b = 0;
+                    foreach ($aktifAracListe as $aktifAracListee) {
+                        $aktifaracId[] = $aktifAracListee['BSTurAracID'];
+                        $adminArac[$b]['aktifAracID'] = $aktifAracListee['BSTurAracID'];
+                        $adminArac[$b]['aktifAracPlaka'] = $aktifAracListee['BSTurAracPlaka'];
+                        $adminArac[$b]['aktifTurID'] = $aktifAracListee['BSTurID'];
+                        $adminArac[$b]['aktifTurTip'] = $aktifAracListee['BSTurTip'];
+                        $adminArac[$b]['aktifAracBolgeID'] = $aktifAracListee['BSTurBolgeID'];
+                        $adminArac[$b]['aktifAracBolgeAd'] = $aktifAracListee['BSTurBolgeAd'];
+                        $adminArac[$b]['aktifAracKurumID'] = $aktifAracListee['BSTurKurumID'];
+                        $adminArac[$b]['aktifAracKurumAd'] = $aktifAracListee['BSTurKurumAd'];
+                        $adminArac[$b]['aktifAracKurumLocation'] = $aktifAracListee['BSTurKurumLocation'];
+                        $adminArac[$b]['aktifAracSoforID'] = $aktifAracListee['BSTurSoforID'];
+                        $adminArac[$b]['aktifAracSoforAd'] = $aktifAracListee['BSTurSoforAd'];
+                        $adminArac[$b]['aktifAracSoforLocation'] = $aktifAracListee['BSTurSoforLocation'];
+                        $adminArac[$b]['aktifAracKapasite'] = $aktifAracListee['BSTurAracKapasite'];
+                        $adminArac[$b]['aktifAracTurKm'] = $aktifAracListee['BSTurKm'];
+                        $adminArac[$b]['aktifAracTip'] = $aktifAracListee['BSTurGidisDonus'];
+                        $b++;
+                    }
+                    if (count($aktifaracId) > 0) {
+                        $adminArac[0]['AdminAracCount'] = count($aktifaracId);
+                    }
                 }
             } else {//değilse admin ıd ye göre kurum görür
                 $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
@@ -1129,37 +1134,43 @@ class AdminWeb extends Controller {
                 $aracLokasyonDizi = implode(',', $aracId);
                 $aracTipDizi = implode(',', $aracTip);
                 $aracTurDizi = implode(',', $aracTurID);
-                //tur adlar
-                $aracTurAdListe = $Panel_Model->aracTurAdListele($aracTurDizi);
-                $a = 0;
-                foreach ($aracTurAdListe as $aracTurAdListee) {
-                    $adminArac[$a]['aktifTurAd'] = $aracTurAdListee['SBTurAd'];
-                    $a++;
-                }
+
                 //aktif tur araçları
                 $aktifAracListe = $Panel_Model->aracAktifTurListele($aracLokasyonDizi, $aracTipDizi, $aracTurDizi);
-                $b = 0;
-                foreach ($aktifAracListe as $aktifAracListee) {
-                    $aktifaracId[] = $aktifAracListee['BSTurAracID'];
-                    $adminArac[$b]['aktifAracID'] = $aktifAracListee['BSTurAracID'];
-                    $adminArac[$b]['aktifAracPlaka'] = $aktifAracListee['BSTurAracPlaka'];
-                    $adminArac[$b]['aktifArac'] = $aktifAracListee['BSTurID'];
-                    $adminArac[$b]['aktifAracTip'] = $aktifAracListee['BSTurTip'];
-                    $adminArac[$b]['aktifAracBolgeID'] = $aktifAracListee['BSTurBolgeID'];
-                    $adminArac[$b]['aktifAracBolgeAd'] = $aktifAracListee['BSTurBolgeAd'];
-                    $adminArac[$b]['aktifAracKurumID'] = $aktifAracListee['BSTurKurumID'];
-                    $adminArac[$b]['aktifAracKurumAd'] = $aktifAracListee['BSTurKurumAd'];
-                    $adminArac[$b]['aktifAracKurumLocation'] = $aktifAracListee['BSTurKurumLocation'];
-                    $adminArac[$b]['aktifAracSoforID'] = $aktifAracListee['BSTurSoforID'];
-                    $adminArac[$b]['aktifAracSoforAd'] = $aktifAracListee['BSTurSoforAd'];
-                    $adminArac[$b]['aktifAracSoforLocation'] = $aktifAracListee['BSTurSoforLocation'];
-                    $adminArac[$b]['aktifAracKapasite'] = $aktifAracListee['BSTurAracKapasite'];
-                    $adminArac[$b]['aktifAracTurKm'] = $aktifAracListee['BSTurKm'];
-                    $adminArac[$b]['aktifAracTip'] = $aktifAracListee['BSTurGidisDonus'];
-                    $b++;
-                }
-                if (count($aktifaracId) > 0) {
-                    $adminArac[0]['AdminAracCount'] = count($aktifaracId);
+                if (count($aktifAracListe)) {
+                    //tur adlar
+                    $aracTurAdListe = $Panel_Model->aracTurAdListele($aracTurDizi);
+                    if (count($aracTurAdListe) > 0) {
+                        $a = 0;
+                        foreach ($aracTurAdListe as $aracTurAdListee) {
+                            $adminArac[$a]['aktifTurAd'] = $aracTurAdListee['SBTurAd'];
+                            $a++;
+                        }
+                    }
+
+                    $b = 0;
+                    foreach ($aktifAracListe as $aktifAracListee) {
+                        $aktifaracId[] = $aktifAracListee['BSTurAracID'];
+                        $adminArac[$b]['aktifAracID'] = $aktifAracListee['BSTurAracID'];
+                        $adminArac[$b]['aktifAracPlaka'] = $aktifAracListee['BSTurAracPlaka'];
+                        $adminArac[$b]['aktifArac'] = $aktifAracListee['BSTurID'];
+                        $adminArac[$b]['aktifAracTip'] = $aktifAracListee['BSTurTip'];
+                        $adminArac[$b]['aktifAracBolgeID'] = $aktifAracListee['BSTurBolgeID'];
+                        $adminArac[$b]['aktifAracBolgeAd'] = $aktifAracListee['BSTurBolgeAd'];
+                        $adminArac[$b]['aktifAracKurumID'] = $aktifAracListee['BSTurKurumID'];
+                        $adminArac[$b]['aktifAracKurumAd'] = $aktifAracListee['BSTurKurumAd'];
+                        $adminArac[$b]['aktifAracKurumLocation'] = $aktifAracListee['BSTurKurumLocation'];
+                        $adminArac[$b]['aktifAracSoforID'] = $aktifAracListee['BSTurSoforID'];
+                        $adminArac[$b]['aktifAracSoforAd'] = $aktifAracListee['BSTurSoforAd'];
+                        $adminArac[$b]['aktifAracSoforLocation'] = $aktifAracListee['BSTurSoforLocation'];
+                        $adminArac[$b]['aktifAracKapasite'] = $aktifAracListee['BSTurAracKapasite'];
+                        $adminArac[$b]['aktifAracTurKm'] = $aktifAracListee['BSTurKm'];
+                        $adminArac[$b]['aktifAracTip'] = $aktifAracListee['BSTurGidisDonus'];
+                        $b++;
+                    }
+                    if (count($aktifaracId) > 0) {
+                        $adminArac[0]['AdminAracCount'] = count($aktifaracId);
+                    }
                 }
             }
 

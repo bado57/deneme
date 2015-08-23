@@ -704,6 +704,8 @@ class AdminKurumAjaxSorgu extends Controller {
                                         'SBTurDonus' => 0,
                                         'SBTurTip' => $kurumTip,
                                         'SBTurKm' => $turKm,
+                                        'SBTurBasSaat' => 0,
+                                        'SBTurBitSaat' => 0,
                                     );
                                     $turData = array_merge($data, $turGunReturn);
                                 }
