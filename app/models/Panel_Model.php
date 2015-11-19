@@ -367,6 +367,7 @@ class Panel_Model extends Model {
     //admin bölgeye öre kurum listele
     public function rutbeKurumBolgeListele($array = array()) {
         $sql = 'SELECT SBKurumAdi, SBKurumID, SBKurumAciklama, SBBolgeID, SBBolgeAdi, SBKurumTip FROM sbkurum Where SBBolgeID IN (' . $array . ') ORDER BY SBKurumAdi ASC';
+        error_log($sql);
         return($this->db->select($sql));
     }
 

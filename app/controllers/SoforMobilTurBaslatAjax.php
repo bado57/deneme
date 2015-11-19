@@ -16,7 +16,6 @@ class SoforMobilTurBaslatAjax extends Controller {
             $sonuc = array();
 
             $form = $this->load->otherClasses('Form');
-
             $form->post("tip", true);
             $tip = $form->values['tip'];
 
@@ -123,7 +122,7 @@ class SoforMobilTurBaslatAjax extends Controller {
                         //zaman planlaması
                         $newTime = explode(':', trim($time));
                         $sonTime = '';
-                        if ($newTime[0][0] != 1) {//ilki 0 ise
+                        if ($newTime[0][0] == 0) {//ilki 0 ise
                             if ($newTime[0][1] == 0) {//ikinci 0 ise
                                 if ($newTime[1][0] == 0) {//üçüncü 0 ise
                                     if ($newTime[1][1] == 0) {//dördüncü 0 ise
@@ -190,7 +189,7 @@ class SoforMobilTurBaslatAjax extends Controller {
                                         $turID = $resultTurBaslatt['BSTurID'];
                                         //tur yapılmamış olsa bile normal saati geçip geçmediğini kontrol ediyoruz
                                         if ($sonTime < $resultTurBaslatt['BSTurBslngc']) {//tur saati geçmemiş
-                                            $turBaslat[0]['ZamanKontrol'] = 1;
+                                            $turBaslat[0]['ZamanKontrol'] = 0;
                                         } else if ($sonTime > $resultTurBaslatt['BSTurBslngc']) {//tur saati geçmiş ama yapılmamış daha
                                             $turBaslat[0]['ZamanKontrol'] = 1;
                                         } else {//şimdi tur başlamalı
@@ -1159,7 +1158,7 @@ class SoforMobilTurBaslatAjax extends Controller {
                         $sonuc["Sira"] = $opislem;
                     }
 
-                    //aaktif olan tudaki son durum
+                    //aaktif olan turdaki son durum,kimler binmiş kimler binmemiş
                     $kisidurum = 0;
                     $turKisiDurum = [];
                     if ($turGidisDonus != 1) {//gidiş turu

@@ -265,7 +265,12 @@ function disabledForm() {
     checkIt();
 }
 // End form disable işlemleri
-
+function nondisabledForm() {
+    $(document).find(".dsb").prop("disabled", false);
+    $(document).find(".submit-group").css("display", "block");
+    //$(document).find(".edit-group").fadeIn();
+    //checkIt();
+}
 // Lokasyon Seçme İşlemleri
 var map;
 var markers = [];
@@ -315,7 +320,7 @@ function initialize() {
             var infowindow = new google.maps.InfoWindow({
                 map: map,
                 position: pos,
-                content: 'Sizin Konumunuz'
+                content: jsDil.Konumunuz
             });
             map.setCenter(pos);
         }, function () {
@@ -633,7 +638,7 @@ function multipleTurMapping(gelen, index, ayirici, sofor) {
                                                 KisiOgrenciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
                                                 marker.setIcon('../Plugins/mapView/green_student.png');
                                             } else {
-                                                KisiIsciSira(kayitSira++);
+                                                KisiIsciSira.push(kayitSira++);
                                                 KisiIsciID.push(this.id);
                                                 KisiIsciAd.push(this.title);
                                                 KisiIsciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
@@ -1068,7 +1073,7 @@ function multipleHostesTurMapping(gelen, index, ayirici, hostes) {
                                                     KisiOgrenciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
                                                     marker.setIcon('../Plugins/mapView/green_student.png');
                                                 } else {
-                                                    KisiIsciSira(kayitSira++);
+                                                    KisiIsciSira.push(kayitSira++);
                                                     KisiIsciID.push(this.id);
                                                     KisiIsciAd.push(this.title);
                                                     KisiIsciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
@@ -1554,7 +1559,7 @@ function multipleTurDetayMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, 
                                             KisiOgrenciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
                                             marker.setIcon('../Plugins/mapView/green_student.png');
                                         } else {
-                                            KisiIsciSira(kayitSira++);
+                                            KisiIsciSira.push(kayitSira++);
                                             KisiIsciID.push(this.id);
                                             KisiIsciAd.push(this.title);
                                             KisiIsciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
@@ -2090,7 +2095,7 @@ function multipleTurHostesDetayMap(kurumAd, kurumID, kurumLocation, soforAd, sof
                                                 KisiOgrenciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
                                                 marker.setIcon('../Plugins/mapView/green_student.png');
                                             } else {
-                                                KisiIsciSira(kayitSira++);
+                                                KisiIsciSira.push(kayitSira++);
                                                 KisiIsciID.push(this.id);
                                                 KisiIsciAd.push(this.title);
                                                 KisiIsciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
@@ -2614,7 +2619,7 @@ function multipleTurDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, sofo
                                             KisiOgrenciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
                                             marker.setIcon('../Plugins/mapView/green_student.png');
                                         } else {
-                                            KisiIsciSira(kayitSira++);
+                                            KisiIsciSira.push(kayitSira++);
                                             KisiIsciID.push(this.id);
                                             KisiIsciAd.push(this.title);
                                             KisiIsciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
@@ -3143,7 +3148,7 @@ function multipleTurHostesDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd
                                             KisiOgrenciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());
                                             marker.setIcon('../Plugins/mapView/green_student.png');
                                         } else {
-                                            KisiIsciSira(kayitSira++);
+                                            KisiIsciSira.push(kayitSira++);
                                             KisiIsciID.push(this.id);
                                             KisiIsciAd.push(this.title);
                                             KisiIsciLocation.push(this.getPosition().lat() + ',' + this.getPosition().lng());

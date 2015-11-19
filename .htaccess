@@ -3,17 +3,24 @@ php_value error_reporting 9999
 
 RewriteEngine On
 RewriteBase /SProject/
-
+<FilesMatch "\.(ttf|otf|eot|woff|php|css|js)$">
+  <IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+  </IfModule>
+</FilesMatch>
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-l
+##RewriteCond %{HTTP_HOST} !^www.turkiyefloracicek.com
+##RewriteCond %{HTTP_HOST} ^([^.]+).turkiyefloracicek.com
+
 
 RewriteRule ^([0-9a-zA-Z-_/]+)$(/?) index.php?url=$1 [QSA,L]
 #app dosyası yönlendirme
 RewriteRule ^([^/]+)/$ http://localhost/SProject/app/$1 [R=301,L]
 #session ve cookie süresi ayarlama
-php_value session.cookie_lifetime 10000
-php_value session.gc_maxlifetime 10000
+##php_value session.cookie_lifetime 10000
+##php_value session.gc_maxlifetime 10000
 
 #Hata Yönlendirmeler
 # Error Pages

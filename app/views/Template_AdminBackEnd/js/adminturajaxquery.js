@@ -1468,6 +1468,7 @@ $.AdminIslemler = {
                             $("#TurSelectBolge").append('<option value="' + cevap.adminTurBolgee[i] + '">' + cevap.adminTurBolge[i] + '</option>');
                         }
                     }
+                    nondisabledForm();
                     $('#TurSelectGun').multiselect('refresh');
                     $('#TurSelectTip').multiselect('refresh');
                     $('#TurSaat1').multiselect();
@@ -2295,7 +2296,7 @@ $.AdminIslemler = {
                         DetailDonusGelenLocation.push(cevap.donus.KisiLocation[donusID]);
                         DetailDonusGelenTip.push(cevap.donus.KisiTip[donusID]);
                     }
-                    if (cevap.donusDigerID) {
+                    if (cevap.donusDiger) {
                         for (var donusDigerID = 0; donusDigerID < cevap.donusDiger.length; donusDigerID++) {
                             DetailDonusDigerKisi.push(cevap.donusDiger[donusDigerID]);
                         }
@@ -2304,7 +2305,6 @@ $.AdminIslemler = {
                         multipleTurHostesDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation, hostesAd, hostesID, hostesLocation);
                         google.maps.event.addDomListener(window, 'load', multipleTurHostesDetayDonusMap);
                     } else {
-                        console.log("2");
                         multipleTurDetayDonusMap(kurumAd, kurumID, kurumLocation, soforAd, soforID, soforLocation);
                         google.maps.event.addDomListener(window, 'load', multipleTurDetayDonusMap);
                     }

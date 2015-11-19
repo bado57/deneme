@@ -179,7 +179,7 @@ class en {
             "TurKm" => "Tour Km",
             "AracKapasite" => "Car Capacity",
             "TurKisi" => "Tour Person",
-            "HesapIslem" => "Hesap İşlemleri",
+            "HesapIslem" => "Account Process",
             "Bildirimler" => "Bildirimler",
             "TumunuGor" => "Tümünü Göster",
             "BolgeEkle" => "Bölge Ekleme",

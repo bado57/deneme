@@ -46,5 +46,5 @@ var jsDil = {
     'DuyuruGonder': 'Duyuru gönderilmiştir',
     'DuyuruYok': 'Gösterilecek duyuru yok',
     'DuyuruYaz': 'Duyuru Yaz',
-    'TurYok': 'Gösterilecek kayıtlı tur bulunmamaktadır',
+    'TurYok': 'Gösterilecek kayıtlı tur bulunmamaktadır'
 };

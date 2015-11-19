@@ -81,7 +81,7 @@
             </script>
             <div class="container" style="text-align:center; padding-top:100px;">
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-1"></div>
-                <a class="col-lg-4 col-md-4 col-sm-6 col-xs-10" href="#">
+                <a class="col-lg-4 col-md-4 col-sm-6 col-xs-10" href="<?php echo SITE_URL; ?>">
                     <img style="margin:0px auto; max-width:100%;" src="<?php echo SITE_USERFRONT_IMG; ?>/eco/logo.png" alt="Shuttle Logo" class="logo">
                 </a>
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-1"></div>

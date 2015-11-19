@@ -278,7 +278,7 @@ function initialize() {
             var infowindow = new google.maps.InfoWindow({
                 map: map,
                 position: pos,
-                content: 'Sizin Konumunuz'
+                content: jsDil.Konumunuz
             });
             map.setCenter(pos);
         }, function () {

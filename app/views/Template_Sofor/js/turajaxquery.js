@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://192.168.1.24/SProject/SoforMobilTurAjax",
+    url: "http://192.168.1.198/SProject/SoforMobilTurAjax",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -84,7 +84,7 @@ ons.ready(function () {
                     }
                     //var gunTextt = gunText.substring(0, gunText.Length - 1);
                     $("#detayGunler").text(gunText.slice(0, -1));
-                    if (cevap.Gidis.ID > 0) {
+                    if (cevap.Gidis > 0) {
                         $("#gidisPlaka").text(cevap.Gidis.Plaka);
                         $("input[name=aracGDetayID]").val(cevap.Gidis.PlakaID);
                         $("#gidisSofor").text(cevap.Gidis.Sofor);
@@ -130,7 +130,7 @@ ons.ready(function () {
                         $("#GidisDetay").css({"display": "none"});
                     }
 
-                    if (cevap.Donus.ID > 0) {
+                    if (cevap.Donus > 0) {
                         $("#donusPlaka").text(cevap.Donus.Plaka);
                         $("input[name=aracDDetayID]").val(cevap.Donus.PlakaID);
                         $("#donusSofor").text(cevap.Donus.Sofor);

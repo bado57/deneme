@@ -51,7 +51,7 @@
                                 <tr>
                                     <td>
                                         <a data-toggle="tooltip" data-placement="top" title="<?php echo $data["Detay"]; ?>" value="<?php echo $turModel['AdminTurID']; ?>">
-                                            <i class="glyphicon glyphicon-refresh"></i> <?php echo $turModel['AdminTur']; ?>
+                                            <i class="glyphicon glyphicon-refresh" style="color:green"></i> <?php echo $turModel['AdminTur']; ?>
                                         </a>
                                     </td>
                                     <td class="hidden-xs"><?php echo $turModel['AdminTurBolgeAd']; ?></td>
@@ -172,7 +172,7 @@
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
                         <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
                     </div>
-                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 submit-group" style="display:block !important">
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <button data-type="svClose"  data-class="tur" type="button" data-islemler="adminTurVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
                         <button type="button" class="btn btn-success save" data-Saveislem="adminTurKaydet"><?php echo $data["Kaydet"]; ?></button>
                     </div>

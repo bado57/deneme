@@ -785,9 +785,9 @@ class Panel_Model_Mobile extends ModelMobile {
         return($this->db->select($sql));
     }
 
-    //araç anlık loaksyon güncelleme 
-    public function aracAnlikUpdate($data, $turID) {
-        return ($this->db->update("sbtur", $data, "SBTurID=" . $turID));
+    //araç anlık lokasyon güncelleme 
+    public function aracAnlikUpdate($data, $aracID) {
+        return ($this->db->update("bsaraclokasyon", $data, "BSAracLokasyonID=" . $aracID));
     }
 
     //araç anlık lokasyon kaydetme

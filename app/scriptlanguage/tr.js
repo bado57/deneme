@@ -86,5 +86,6 @@ var jsDil = {
     'Pazar': 'Pazar',
     'TurYok': 'Tur Bulunamadı',
     'BolgeKurumYok': 'Bölgeye Ait Kurum Bulunamadı',
+    'Konumunuz': 'Sizin Konumunuz',
     
 };

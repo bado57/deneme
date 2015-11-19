@@ -109,8 +109,8 @@
                     <div class="form-group">
                         <label for="OgrenciDurum"><?php echo $data["Durum"]; ?></label>
                         <select type="text" class="form-control" id="OgrenciDurum" name="OgrenciDurum">
-                            <option value="0">Pasif</option>
-                            <option value="1">Aktif</option>
+                            <option value="0"><?php echo $data["Pasif"]; ?></option>
+                            <option value="1"><?php echo $data["Aktif"]; ?></option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -221,8 +221,8 @@
                     <div class="form-group">
                         <label for="OgrenciDetayDurum"><?php echo $data["Durum"]; ?></label>
                         <select type="text" class="form-control dsb" id="OgrenciDetayDurum" name="OgrenciDetayDurum" disabled>
-                            <option value="0">Pasif</option>
-                            <option value="1">Aktif</option>
+                            <option value="0"><?php echo $data["Pasif"]; ?></option>
+                            <option value="1"><?php echo $data["Aktif"]; ?></option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -243,7 +243,7 @@
                         <label for="OgrenciDetayLokasyon"><?php echo $data["Lokasyon"]; ?></label>
                         <div class="input-group">
                             <span class="input-group-btn">
-                                <button data-type="svOpen" data-class="map" class="btn btn-success svToggle" data-islemler="adminSingleMap" type="button" disabled>
+                                <button data-type="svOpen" data-class="map" class="btn btn-success svToggle dsb" data-islemler="adminSingleMap" type="button" disabled>
                                     <i class="fa fa-map-marker"></i>
                                 </button>
                             </span>

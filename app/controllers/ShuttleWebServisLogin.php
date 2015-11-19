@@ -21,7 +21,6 @@ class ShuttleWebServisLogin extends Controller {
             Switch ($tip) {
 
                 case "shuttleLogin":
-                    error_log("buradair");
                     $formDbConfig = $this->load->otherClasses('DatabaseConfig');
                     $usersselect_model = $this->load->model("adminselectdb_mobil");
 

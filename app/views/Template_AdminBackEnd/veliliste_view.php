@@ -109,8 +109,8 @@
                     <div class="form-group">
                         <label for="VeliDurum"><?php echo $data["Durum"]; ?></label>
                         <select type="text" class="form-control" id="VeliDurum" name="VeliDurum">
-                            <option value="0">Pasif</option>
-                            <option value="1">Aktif</option>
+                            <option value="0"><?php echo $data["Pasif"]; ?></option>
+                            <option value="1"><?php echo $data["Aktif"]; ?></option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -221,8 +221,8 @@
                     <div class="form-group">
                         <label for="VeliDetayDurum"><?php echo $data["Durum"]; ?></label>
                         <select type="text" class="form-control dsb" id="VeliDetayDurum" name="VeliDetayDurum" disabled>
-                            <option value="0">Pasif</option>
-                            <option value="1">Aktif</option>
+                            <option value="0"><?php echo $data["Pasif"]; ?></option>
+                            <option value="1"><?php echo $data["Aktif"]; ?></option>
                         </select>
                     </div>
                     <div class="form-group">

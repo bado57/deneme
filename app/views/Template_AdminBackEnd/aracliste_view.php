@@ -61,7 +61,7 @@
                                 <td class="hidden-xs"><?php echo $aracModel['AdminAracYil']; ?></td>
                                 <td class="hidden-xs"><?php echo $aracModel['AdminAracKapasite']; ?></td>
                                 <td class="hidden-xs"><?php echo $aracModel['AdminAracKm']; ?></td>
-                                <td class="hidden-xs"><?php echo $aracModel['AdminAracDurum'] == 1 ? 'Aktif' : 'Pasif'; ?></td>
+                                <td class="hidden-xs"><?php echo $aracModel['AdminAracDurum'] == 1 ? $data["Aktif"] : $data["Pasif"]; ?></td>
                             </tr>
                         <?php } ?>
                     </tbody>

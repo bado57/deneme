@@ -326,13 +326,13 @@ class AdminWeb extends Controller {
 
                     $a = 0;
                     foreach ($bolgeKurumListe as $kurum) {
-                        $adminKurum[$a]['AdminKurum'] = $kurum[$a]['SBKurumAdi'];
-                        $adminKurum[$a]['AdminKurumID'] = $kurum[$a]['SBKurumID'];
-                        $adminKurum[$a]['AdminKurumAciklama'] = $kurum[$a]['SBKurumAciklama'];
-                        $adminKurum[$a]['AdminKurumBolge'] = $kurum[$a]['SBBolgeAdi'];
-                        $adminKurum[$a]['AdminKurumBolgeID'] = $kurum[$a]['SBBolgeID'];
+                        $adminKurum[$a]['AdminKurum'] = $kurum['SBKurumAdi'];
+                        $adminKurum[$a]['AdminKurumID'] = $kurum['SBKurumID'];
+                        $adminKurum[$a]['AdminKurumAciklama'] = $kurum['SBKurumAciklama'];
+                        $adminKurum[$a]['AdminKurumBolge'] = $kurum['SBBolgeAdi'];
+                        $adminKurum[$a]['AdminKurumBolgeID'] = $kurum['SBBolgeID'];
                         $adminKurum[$a]['AdminKurumTip'] = $kurum['SBKurumTip'];
-                        $kurumID[] = $kurum[$a]['SBKurumID'];
+                        $kurumID[] = $kurum['SBKurumID'];
                         $a++;
                     }
 

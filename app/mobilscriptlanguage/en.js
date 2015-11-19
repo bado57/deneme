@@ -53,5 +53,5 @@ var jsDil = {
     'AracKapasite': 'Araç Kapasitesi 2 den küçük olamaz',
     'AracKaydet': 'Araç Başarı ile Eklendi',
     'AracDuzenle': 'Araç Bilgileri Başarı ile Düzenlendi',
-    'Seciniz': 'Seçiniz',
+    'Seciniz': 'Seçiniz'
 };
