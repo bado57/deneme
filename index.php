@@ -1,0 +1,3 @@
+<?php 
+echo "Yakinda hizmetteyiz!";
+?>
