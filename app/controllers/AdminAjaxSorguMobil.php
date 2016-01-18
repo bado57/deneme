@@ -43,7 +43,7 @@ class AdminAjaxSorguMobil extends Controller {
 
 
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model_mobile");
+            $Panel_Model = $this->load->model("Panel_Model_mobile");
 
             Switch ($tip) {
 

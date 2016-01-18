@@ -35,6 +35,7 @@
                     <thead>
                         <tr>
                             <th><i class='fa fa-clock-o'></i> <?php echo $data["Tarih"]; ?></th>
+                    <th><i class='fa fa-clock-o'></i> <?php echo $data["Gonderen"]; ?></th>
                     <th><i class='fa fa-envelope'></i> <?php echo $data["Icerik"]; ?></th>
                     <th><i class='fa fa-users'></i> <?php echo $data["Hedef"]; ?></th>
                     </tr>
@@ -47,6 +48,7 @@
                                         <i class="fa fa-bullhorn"></i> <?php echo $adminModel['DuyuruTarih']; ?>
                                     </a>
                                 </td>
+                                <td class="hidden-xs"><?php echo $adminModel['DuyuruGAdSyd'] . ' (' . $adminModel['DuyuruGTip'] . ')'; ?></td>
                                 <td class="hidden-xs"><?php echo $adminModel['DuyuruText']; ?></td>
                                 <td class="hidden-xs"><?php echo $adminModel['DuyuruHedef']; ?> <?php echo $data["Kullanici"]; ?></td>
                             </tr>
@@ -149,7 +151,7 @@
                         <div class="DuyuruFiltre col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <label for="DuyuruTur"><?php echo $data["Mesajınız"]; ?></label>
-                                <textarea id="duyuruText" class="form-control col-lg-12 col-md-12 col-sm-12 col-xs-12" rows="3"></textarea>
+                                <textarea id="duyuruText" class="form-control col-lg-12 col-md-12 col-sm-12 col-xs-12" rows="3" style="resize:none"></textarea>
                             </div>
                             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="duyuruGizle btn btn-warning"><i class="fa fa-times"></i></button>

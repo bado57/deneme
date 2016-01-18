@@ -5,7 +5,7 @@ class Session {
     public static function init() {//başlangıç
         session_start();
         //session oturum idisini tekraradan oluşturuyor.
-        session_regenerate_id();
+        //session_regenerate_id();
     }
 
     //get ve set session değişkeni tanımlama ve tanımladığım değişkeni alma şeklinde

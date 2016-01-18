@@ -25,7 +25,7 @@ class SoforMobilTurAjax extends Controller {
             $firmId = $form->values['firma_id'];
 
             $formDbConfig = $this->load->otherClasses('DatabaseConfig');
-            $usersselect_model = $this->load->model("adminselectdb_mobil");
+            $usersselect_model = $this->load->model("AdminSelectDb_Mobil");
 
             //return database results
             $UserSelectDb = $usersselect_model->adminFirmMobilID($firmId);
@@ -35,12 +35,10 @@ class SoforMobilTurAjax extends Controller {
             $SelectdbUser = $UserSelectDb[0]['rootFirmaDbUser'];
             $SelectdbPassword = $UserSelectDb[0]['rootFirmaDbSifre'];
 
-
             $formDbConfig->configDb($SelectdbName, $SelectdbIp, $SelectdbUser, $SelectdbPassword);
 
-
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model_mobile");
+            $Panel_Model = $this->load->model("Panel_Model_Mobile");
 
             Switch ($tip) {
 
@@ -115,7 +113,6 @@ class SoforMobilTurAjax extends Controller {
                     }
 
                     break;
-
                 case "soforTurYolcu":
 
                     if (!$firmId) {
@@ -197,7 +194,6 @@ class SoforMobilTurAjax extends Controller {
                     }
 
                     break;
-
                 case "soforYolcuDetay":
 
                     if (!$firmId) {
@@ -293,7 +289,6 @@ class SoforMobilTurAjax extends Controller {
                     }
 
                     break;
-
                 case "soforDetay":
 
                     if (!$firmId) {
@@ -316,7 +311,6 @@ class SoforMobilTurAjax extends Controller {
                     }
 
                     break;
-
                 case "hostesDetay":
 
                     if (!$firmId) {
@@ -339,7 +333,6 @@ class SoforMobilTurAjax extends Controller {
                     }
 
                     break;
-
                 case "aracDetay":
 
                     if (!$firmId) {
@@ -362,7 +355,6 @@ class SoforMobilTurAjax extends Controller {
                     }
 
                     break;
-
                 case "turDetay":
 
                     if (!$firmId) {
@@ -413,7 +405,6 @@ class SoforMobilTurAjax extends Controller {
                     }
 
                     break;
-
                 case "soforTakvim":
                     $calendar = $this->load->otherClasses('Calendar');
                     // Short-circuit if the client did not give us a date range.
@@ -480,7 +471,6 @@ class SoforMobilTurAjax extends Controller {
 //                    }
                     $sonuc = $input_arrays;
                     break;
-
                 case "hostesTakvim":
                     $calendar = $this->load->otherClasses('Calendar');
                     // Short-circuit if the client did not give us a date range.
@@ -547,7 +537,6 @@ class SoforMobilTurAjax extends Controller {
 //                    }
                     $sonuc = $input_arrays;
                     break;
-
                 case "aracTakvim":
                     $calendar = $this->load->otherClasses('Calendar');
                     // Short-circuit if the client did not give us a date range.
@@ -614,7 +603,6 @@ class SoforMobilTurAjax extends Controller {
 //                    }
                     $sonuc = $input_arrays;
                     break;
-
                 case "yolcuTakvim":
                     $calendar = $this->load->otherClasses('Calendar');
                     // Short-circuit if the client did not give us a date range.

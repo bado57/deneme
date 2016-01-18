@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/AdminOgrenciAjaxSorgu",
+    url: SITE_URL + "AdminOgrenciAjaxSorgu",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -17,8 +17,15 @@ $.ajaxSetup({
         }
     }
 });
+var gidisBildAyar = new Array();
+var donusBildAyar = new Array();
 $(document).ready(function () {
     OgrenciTable = $('#ogrenciTable').dataTable({
+        "paging": true,
+        "ordering": true,
+        "info": true
+    });
+    OgrenciTurTable = $('#adminOgrenciTurTable').dataTable({
         "paging": true,
         "ordering": true,
         "info": true
@@ -37,7 +44,6 @@ $(document).ready(function () {
                     alertify.alert(jsDil.Hata);
                     return false;
                 } else {
-
                     $("input[name=OgrenciDetayAdi]").val(cevap.ogrenciDetail[0].OgrenciListAd);
                     $("input[name=OgrenciDetaySoyadi]").val(cevap.ogrenciDetail[0].OgrenciListSoyad);
                     $("#OgrenciDetayDurum").val(cevap.ogrenciDetail[0].OgrenciListDurum);
@@ -56,6 +62,18 @@ $(document).ready(function () {
                     $("input[name=street_number]").val(cevap.ogrenciDetail[0].OgrenciListCaddeNo);
                     $("input[name=ogrenciDetayID]").val(cevap.ogrenciDetail[0].OgrenciListID);
                     $("input[name=ogrenciDetayAdres]").val(cevap.ogrenciDetail[0].OgrenciListDetayAdres);
+                    var SelectBilGidis = new Array();
+                    gidisBildAyar = cevap.ogrenciDetail[0].OgrenciGBild;
+                    SelectBilGidis[0] = {label: cevap.ogrenciDetail[0].OgrenciGBild + " m", title: cevap.ogrenciDetail[0].OgrenciGBild + " m", value: cevap.ogrenciDetail[0].OgrenciGBild, disabled: true};
+                    $('#OgrDetGdsMAyarSelect').multiselect('dataprovider', SelectBilGidis);
+                    $('#OgrDetGdsMAyarSelect').multiselect('disable');
+                    $('#OgrDetGdsMAyarSelect').multiselect('refresh');
+                    var SelectBilDonus = new Array();
+                    donusBildAyar = cevap.ogrenciDetail[0].OgrenciDBild;
+                    SelectBilDonus[0] = {label: cevap.ogrenciDetail[0].OgrenciDBild + " m", title: cevap.ogrenciDetail[0].OgrenciDBild + " m", value: cevap.ogrenciDetail[0].OgrenciDBild, disabled: true};
+                    $('#OgrDetDnsMAyarSelect').multiselect('dataprovider', SelectBilDonus);
+                    $('#OgrDetDnsMAyarSelect').multiselect('disable');
+                    $('#OgrDetDnsMAyarSelect').multiselect('refresh');
 
                     var SelectBolgeOptions = new Array();
                     var SelectKurumOptions = new Array();
@@ -321,6 +339,50 @@ $(document).ready(function () {
             $('#OgrenciDetayVeliSelect').hide();
         }
     });
+    $('#OgrDetGdsMAyarSelect').multiselect({
+        onDropdownShow: function (event) {
+            var SelectGidisOptions = new Array();
+            var SelectGidisValue = new Array(200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000,
+                    2200, 2400, 2600, 2800, 3000);
+            var SelectGidisText = new Array('200 m', '400 m', '600 m', '800 m', '1000 m', '1200 m', '1400 m',
+                    '1600 m', '1800 m', '2000 m', '2200 m', '2400 m', '2600 m', '2800 m', '3000 m');
+            var saat2Length = SelectGidisValue.length;
+            for (var b = 0; b < saat2Length; b++) {
+                if (SelectGidisValue[b] == gidisBildAyar) {
+                    SelectGidisOptions[b] = {label: SelectGidisText[b], title: SelectGidisText[b], value: SelectGidisValue[b], selected: true};
+                } else {
+                    SelectGidisOptions[b] = {label: SelectGidisText[b], title: SelectGidisText[b], value: SelectGidisValue[b]};
+                }
+            }
+            $('#OgrDetGdsMAyarSelect').multiselect('refresh');
+            $('#OgrDetGdsMAyarSelect').multiselect('dataprovider', SelectGidisOptions);
+        },
+        onChange: function (option, checked, select) {
+            gidisBildAyar = $('select#OgrDetGdsMAyarSelect option:selected').val();
+        }
+    });
+    $('#OgrDetDnsMAyarSelect').multiselect({
+        onDropdownShow: function (event) {
+            var SelectDonusOptions = new Array();
+            var SelectDonusValue = new Array(200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000,
+                    2200, 2400, 2600, 2800, 3000);
+            var SelectDonusText = new Array('200 m', '400 m', '600 m', '800 m', '1000 m', '1200 m', '1400 m',
+                    '1600 m', '1800 m', '2000 m', '2200 m', '2400 m', '2600 m', '2800 m', '3000 m');
+            var saat2Length = SelectDonusValue.length;
+            for (var b = 0; b < saat2Length; b++) {
+                if (SelectDonusValue[b] == donusBildAyar) {
+                    SelectDonusOptions[b] = {label: SelectDonusText[b], title: SelectDonusText[b], value: SelectDonusValue[b], selected: true};
+                } else {
+                    SelectDonusOptions[b] = {label: SelectDonusText[b], title: SelectDonusText[b], value: SelectDonusValue[b]};
+                }
+            }
+            $('#OgrDetDnsMAyarSelect').multiselect('refresh');
+            $('#OgrDetDnsMAyarSelect').multiselect('dataprovider', SelectDonusOptions);
+        },
+        onChange: function (option, checked, select) {
+            donusBildAyar = $('select#OgrDetDnsMAyarSelect option:selected').val();
+        }
+    });
 });
 var OgrenciDetailVazgec = [];
 $.AdminIslemler = {
@@ -359,9 +421,13 @@ $.AdminIslemler = {
                         }
                         $('#OgrenciSelectBolge').multiselect('refresh');
                         $('#OgrenciSelectBolge').multiselect('dataprovider', BolgeOptions);
+                        $('#OgrGdsMAyarSelect').multiselect('refresh');
+                        $('#OgrDnsMAyarSelect').multiselect('refresh');
                     } else {
                         $('#OgrenciSelectBolge').multiselect('refresh');
                         $('#OgrenciSelectBolge').multiselect('dataprovider', BolgeOptions);
+                        $('#OgrGdsMAyarSelect').multiselect('refresh');
+                        $('#OgrDnsMAyarSelect').multiselect('refresh');
                     }
 
                     $('#OgrenciKurumSelect').multiselect('refresh');
@@ -383,7 +449,6 @@ $.AdminIslemler = {
         return true;
     },
     ogrenciEkle: function () {
-
         var ogrenciAd = $("input[name=OgrenciAdi]").val();
         ogrenciAd = ogrenciAd.trim();
         if (ogrenciAd == '') {
@@ -409,7 +474,7 @@ $.AdminIslemler = {
                         return false;
                     } else {
                         var ogrenciEmail = $("input[name=OgrenciEmail]").val();
-                        if (ogrenciEmail == ' ') {
+                        if (ogrenciEmail == '') {
                             reset();
                             alertify.alert(jsDil.EpostaBos);
                             return false;
@@ -429,7 +494,6 @@ $.AdminIslemler = {
                                         if (selectKurumLength) {
                                             var selectKurum = $('select#OgrenciKurumSelect option:selected').val();
                                             if (selectKurum) {
-
                                                 var ogrenciDurum = $("#OgrenciDurum option:selected").val();
                                                 var ogrenciLokasyon = $("input[name=KurumLokasyon]").val();
                                                 var ogrenciTelefon = $("input[name=OgrenciTelefon]").val();
@@ -443,6 +507,8 @@ $.AdminIslemler = {
                                                 var sokak = $("input[name=route]").val();
                                                 var postakodu = $("input[name=postal_code]").val();
                                                 var caddeno = $("input[name=street_number]").val();
+                                                var gdsbildirim = $('select#OgrGdsMAyarSelect option:selected').val();
+                                                var dnsbildirim = $('select#OgrDnsMAyarSelect option:selected').val();
                                                 //ogrenci Bölge ID
                                                 var ogrenciBolgeID = new Array();
                                                 $('select#OgrenciSelectBolge option:selected').each(function () {
@@ -479,15 +545,16 @@ $.AdminIslemler = {
                                                         "ogrenciSoyad": ogrenciSoyad, "ogrenciDurum": ogrenciDurum, "ogrenciLokasyon": ogrenciLokasyon, "ogrenciTelefon": ogrenciTelefon,
                                                         "ogrenciEmail": ogrenciEmail, "ogrenciAdres": ogrenciAdres, "aciklama": aciklama, "ulke": ulke,
                                                         "il": il, "ilce": ilce, "semt": semt, "mahalle": mahalle,
-                                                        "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "detayAdres": ttl, "tip": "ogrenciKaydet"},
+                                                        "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno,
+                                                        "gdsbildirim": gdsbildirim, "dnsbildirim": dnsbildirim, "detayAdres": ttl, "tip": "ogrenciKaydet"},
                                                     success: function (cevap) {
                                                         if (cevap.hata) {
                                                             reset();
-                                                            alertify.alert(jsDil.Hata);
+                                                            alertify.alert(cevap.hata);
                                                             return false;
                                                         } else {
                                                             reset();
-                                                            alertify.success(jsDil.OgrenciKaydet);
+                                                            alertify.success(cevap.insert);
                                                             var ogrenciCount = $('#smallOgrenci').text();
                                                             ogrenciCount++;
                                                             $('#smallOgrenci').text(ogrenciCount);
@@ -510,10 +577,10 @@ $.AdminIslemler = {
                                                                         + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
                                                                 OgrenciTable.DataTable().row.add($(addRow)).draw();
                                                             }
+                                                            return true;
                                                         }
                                                     }
                                                 });
-                                                return true;
                                             } else {
                                                 reset();
                                                 alertify.alert(jsDil.KurumSec);
@@ -619,6 +686,16 @@ $.AdminIslemler = {
         $('select#OgrenciDetayVeliSelect option:not(:selected)').each(function () {
             ogrenciVeliNAd.push($(this).attr('title'));
         });
+
+        $('#OgrDetGdsMAyarSelect').multiselect('enable');
+        $('#OgrDetGdsMAyarSelect').multiselect('refresh');
+        $('#OgrDetDnsMAyarSelect').multiselect('enable');
+        $('#OgrDetDnsMAyarSelect').multiselect('refresh');
+        var gdsbildirim = $('select#OgrDetGdsMAyarSelect option:selected').val();
+        var gdsbildirimtext = $('select#OgrDetGdsMAyarSelect option:selected').attr('title');
+        var dnsbildirim = $('select#OgrDetDnsMAyarSelect option:selected').val();
+        var dnsbildirimtext = $('select#OgrDetDnsMAyarSelect option:selected').attr('title');
+
         var SelectBolgeOptions = new Array();
         var SelectKurumOptions = new Array();
         var SelectVeliOptions = new Array();
@@ -699,7 +776,10 @@ $.AdminIslemler = {
         $('#OgrenciDetayKurum').multiselect('dataprovider', SelectKurumOptions);
         $('#OgrenciDetayVeliSelect').multiselect('dataprovider', SelectVeliOptions);
         OgrenciDetailVazgec = [];
-        OgrenciDetailVazgec.push(ogrenciDetayAd, ogrenciDetaySoyad, ogrenciDetayDurum, ogrenciDetayLokasyon, ogrenciDetayTelefon, ogrenciDetayEmail, ogrenciDetayAdres, ogrenciDetayAciklama, ogrenciDetayUlke, ogrenciDetayIl, ogrenciDetayIlce, ogrenciDetaySemt, ogrenciDetayMahalle, ogrenciDetaySokak, ogrenciDetayPostaKodu, ogrenciDetayCaddeNo, ogrenciBolgeID, ogrenciBolgeAd, ogrenciBolgeNID, ogrenciBolgeNAd, ogrenciKurumID, ogrenciKurumAd, ogrenciKurumNID, ogrenciKurumNAd, ogrenciVeliID, ogrenciVeliAd, ogrenciVeliNID, ogrenciVeliNAd);
+        OgrenciDetailVazgec.push(ogrenciDetayAd, ogrenciDetaySoyad, ogrenciDetayDurum, ogrenciDetayLokasyon, ogrenciDetayTelefon, ogrenciDetayEmail, ogrenciDetayAdres,
+                ogrenciDetayAciklama, ogrenciDetayUlke, ogrenciDetayIl, ogrenciDetayIlce, ogrenciDetaySemt, ogrenciDetayMahalle, ogrenciDetaySokak, ogrenciDetayPostaKodu,
+                ogrenciDetayCaddeNo, ogrenciBolgeID, ogrenciBolgeAd, ogrenciBolgeNID, ogrenciBolgeNAd, ogrenciKurumID, ogrenciKurumAd, ogrenciKurumNID, ogrenciKurumNAd,
+                ogrenciVeliID, ogrenciVeliAd, ogrenciVeliNID, ogrenciVeliNAd, gdsbildirim, gdsbildirimtext, dnsbildirim, dnsbildirimtext);
     },
     ogrenciDetailVazgec: function () {
         $("input[name=OgrenciDetayAdi]").val(OgrenciDetailVazgec[0]);
@@ -785,6 +865,17 @@ $.AdminIslemler = {
             }
         }
 
+        var SelectBilGidis = new Array();
+        SelectBilGidis[0] = {label: OgrenciDetailVazgec[29], title: OgrenciDetailVazgec[29], value: OgrenciDetailVazgec[28], disabled: true};
+        $('#OgrDetGdsMAyarSelect').multiselect('dataprovider', SelectBilGidis);
+        $('#OgrDetGdsMAyarSelect').multiselect('disable');
+        $('#OgrDetGdsMAyarSelect').multiselect('refresh');
+        var SelectBilDonus = new Array();
+        SelectBilDonus[0] = {label: OgrenciDetailVazgec[31], title: OgrenciDetailVazgec[31], value: OgrenciDetailVazgec[30], disabled: true};
+        $('#OgrDetDnsMAyarSelect').multiselect('dataprovider', SelectBilDonus);
+        $('#OgrDetDnsMAyarSelect').multiselect('disable');
+        $('#OgrDetDnsMAyarSelect').multiselect('refresh');
+
         $('#OgrenciDetaySelectBolge').multiselect('refresh');
         $('#OgrenciDetayKurum').multiselect('refresh');
         $('#OgrenciDetayVeliSelect').multiselect('refresh');
@@ -866,6 +957,8 @@ $.AdminIslemler = {
         var ogrenciDetaySokak = $("input[name=route]").val();
         var ogrenciDetayPostaKodu = $("input[name=postal_code]").val();
         var ogrenciDetayCaddeNo = $("input[name=street_number]").val();
+        var gdsbildirim = $('select#OgrDetGdsMAyarSelect option:selected').val();
+        var dnsbildirim = $('select#OgrDetDnsMAyarSelect option:selected').val();
         //öğrenci Bölge ID
         var ogrenciBolgeID = new Array();
         $('select#OgrenciDetaySelectBolge option:selected').each(function () {
@@ -932,7 +1025,7 @@ $.AdminIslemler = {
         var farkkurumlength = farkkurum.length;
         var farkogrenci = farkArray(OgrenciDetailVazgec[24], ogrenciVeliID);
         var farkogrencilength = farkogrenci.length;
-        if (OgrenciDetailVazgec[0] == ogrenciDetayAd && OgrenciDetailVazgec[1] == ogrenciDetaySoyad && OgrenciDetailVazgec[2] == ogrenciDetayDurum && OgrenciDetailVazgec[3] == ogrenciDetayLokasyon && OgrenciDetailVazgec[4] == ogrenciDetayTelefon && OgrenciDetailVazgec[5] == ogrenciDetayEmail && OgrenciDetailVazgec[6] == ogrenciDetayAdres && OgrenciDetailVazgec[7] == ogrenciDetayAciklama && OgrenciDetailVazgec[8] == ogrenciDetayUlke && OgrenciDetailVazgec[9] == ogrenciDetayIl && OgrenciDetailVazgec[10] == ogrenciDetayIlce && OgrenciDetailVazgec[11] == ogrenciDetaySemt && OgrenciDetailVazgec[12] == ogrenciDetayMahalle && OgrenciDetailVazgec[13] == ogrenciDetaySokak && OgrenciDetailVazgec[14] == ogrenciDetayPostaKodu && OgrenciDetailVazgec[15] == ogrenciDetayCaddeNo && farkbolgelength == 0 && farkkurumlength == 0 && farkogrencilength == 0) {
+        if (OgrenciDetailVazgec[0] == ogrenciDetayAd && OgrenciDetailVazgec[1] == ogrenciDetaySoyad && OgrenciDetailVazgec[2] == ogrenciDetayDurum && OgrenciDetailVazgec[3] == ogrenciDetayLokasyon && OgrenciDetailVazgec[4] == ogrenciDetayTelefon && OgrenciDetailVazgec[5] == ogrenciDetayEmail && OgrenciDetailVazgec[6] == ogrenciDetayAdres && OgrenciDetailVazgec[7] == ogrenciDetayAciklama && OgrenciDetailVazgec[8] == ogrenciDetayUlke && OgrenciDetailVazgec[9] == ogrenciDetayIl && OgrenciDetailVazgec[10] == ogrenciDetayIlce && OgrenciDetailVazgec[11] == ogrenciDetaySemt && OgrenciDetailVazgec[12] == ogrenciDetayMahalle && OgrenciDetailVazgec[13] == ogrenciDetaySokak && OgrenciDetailVazgec[14] == ogrenciDetayPostaKodu && OgrenciDetailVazgec[15] == ogrenciDetayCaddeNo && farkbolgelength == 0 && farkkurumlength == 0 && farkogrencilength == 0 && OgrenciDetailVazgec[28] == gdsbildirim && OgrenciDetailVazgec[30] == dnsbildirim) {
             reset();
             alertify.alert(jsDil.Degisiklik);
             return false;
@@ -958,7 +1051,7 @@ $.AdminIslemler = {
                             alertify.alert(jsDil.SoyadKarekter);
                             return false;
                         } else {
-                            if (ogrenciDetayEmail == ' ') {
+                            if (ogrenciDetayEmail == '') {
                                 reset();
                                 alertify.alert(jsDil.EpostaBos);
                                 return false;
@@ -980,16 +1073,17 @@ $.AdminIslemler = {
                                                     "ogrenciDetaySoyad": ogrenciDetaySoyad, "ogrenciDetayDurum": ogrenciDetayDurum, "ogrenciDetayLokasyon": ogrenciDetayLokasyon, "ogrenciDetayTelefon": ogrenciDetayTelefon,
                                                     "ogrenciDetayEmail": ogrenciDetayEmail, "ogrenciDetayAdres": ogrenciDetayAdres, "ogrenciDetayAciklama": ogrenciDetayAciklama, "ogrenciDetayUlke": ogrenciDetayUlke,
                                                     "ogrenciDetayIl": ogrenciDetayIl, "ogrenciDetayIlce": ogrenciDetayIlce, "ogrenciDetaySemt": ogrenciDetaySemt, "ogrenciDetayMahalle": ogrenciDetayMahalle,
-                                                    "ogrenciDetaySokak": ogrenciDetaySokak, "ogrenciDetayPostaKodu": ogrenciDetayPostaKodu, "ogrenciDetayCaddeNo": ogrenciDetayCaddeNo, "detayAdres": ttl, "tip": "ogrenciDetailKaydet"},
+                                                    "ogrenciDetaySokak": ogrenciDetaySokak, "ogrenciDetayPostaKodu": ogrenciDetayPostaKodu, "ogrenciDetayCaddeNo": ogrenciDetayCaddeNo,
+                                                    "gdsbildirim": gdsbildirim, "dnsbildirim": dnsbildirim, "detayAdres": ttl, "tip": "ogrenciDetailKaydet"},
                                                 success: function (cevap) {
                                                     if (cevap.hata) {
                                                         reset();
-                                                        alertify.alert(jsDil.Hata);
+                                                        alertify.alert(cevap.hata);
                                                         return false;
                                                     } else {
                                                         disabledForm();
                                                         reset();
-                                                        alertify.success(jsDil.OgrenciDuzenle);
+                                                        alertify.success(cevap.update);
                                                         var SelectBolgeOptions = new Array();
                                                         var SelectKurumOptions = new Array();
                                                         var SelectVeliOptions = new Array();
@@ -1110,6 +1204,53 @@ $.AdminIslemler = {
                 }
             }
         }
+    },
+    adminOgrenciDetailTur: function () {
+        OgrenciTurTable.DataTable().clear().draw();
+        var ogrenciID = $("input[name=ogrenciDetayID]").val();
+        $.ajax({
+            data: {"ogrenciID": ogrenciID, "tip": "adminOgrenciDetailTur"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
+                } else {
+                    if (cevap.ogrenciDetailTur) {
+                        var turCount = cevap.ogrenciDetailTur.length;
+                        for (var i = 0; i < turCount; i++) {
+                            if (cevap.ogrenciDetailTur[i].TurTip == 0) {
+                                TurTip = jsDil.Ogrenci;
+                            } else if (cevap.ogrenciDetailTur[i].TurTip == 1) {
+                                TurTip = jsDil.Personel;
+                            } else {
+                                TurTip = jsDil.OgrenciPersonel;
+                            }
+                            if (cevap.ogrenciDetailTur[i].TurAktiflik != 0) {
+                                var addRow = "<tr><td>"
+                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.ogrenciDetailTur[i].TurID + "'>"
+                                        + "<i class='fa fa-map-marker'></i> " + cevap.ogrenciDetailTur[i].TurAd + "</a></td>"
+                                        + "<td class='hidden-xs' >" + TurTip + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.ogrenciDetailTur[i].TurAciklama + "</td>"
+                                        + "<td class='hidden-xs'>" + cevap.ogrenciDetailTur[i].TurKurum + "</td>"
+                                        + "<td class='hidden-xs'>" + cevap.ogrenciDetailTur[i].TurBolge + "</td></tr>";
+                                OgrenciTurTable.DataTable().row.add($(addRow)).draw();
+                            } else {
+                                var addRow = "<tr><td>"
+                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.ogrenciDetailTur[i].TurID + "'>"
+                                        + "<i class='fa fa-map-marker' style='color:red'></i> " + cevap.ogrenciDetailTur[i].TurAd + "</a></td>"
+                                        + "<td class='hidden-xs' >" + TurTip + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.ogrenciDetailTur[i].TurAciklama + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.ogrenciDetailTur[i].TurKurum + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.ogrenciDetailTur[i].TurBolge + "</td></tr>";
+                                OgrenciTurTable.DataTable().row.add($(addRow)).draw();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        return true;
     },
 }
 

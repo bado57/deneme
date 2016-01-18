@@ -2,17 +2,42 @@
     <!--<![endif]-->
     <head>
         <meta charset="UTF-8">
-    <title><?php echo $data["LoginTitle"]; ?>|Shuttle</title>
+    <title><?php echo $data["LoginTitle"]; ?> | Shuttle</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <link rel="shortcut icon" href="favicon.png">
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
             <link rel="stylesheet" href="<?php echo SITE_USERFRONT_CSS; ?>/bootstrap.css"  type="text/css"/>
+            <!-- Alert style -->
+            <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/alertify.css" rel="stylesheet" type="text/css" />
             <!--[if lt IE 9]>
               <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
               <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
             <![endif]-->
+            <script src="<?php echo SITE_USERFRONT_JS; ?>/jquery-1.11.1.min.js"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+            <script src="<?php echo SITE_URL_DOM; ?>"></script>
+            <!--Alert-->
 
+            <script src="<?php echo SITE_USERFRONT_JS; ?>/bootstrap.min.js"></script>
+            <script src="<?php echo SITE_USERFRONT_JS; ?>/jquery.validate.js"></script>
+            <script>
+                var SITE_URL = "http://localhost/SProject/";
+                function reset() {
+                    alertify.set({
+                        labels: {
+                            ok: jsDil.Tamam,
+                            cancel: jsDil.Kapat
+                        },
+                        delay: 3000,
+                        buttonReverse: false,
+                        buttonFocus: "ok"
+                    });
+                }
+            </script>
+            <script src="<?php echo SITE_JS_LANGUAGE; ?>/<?php echo Session::get("dil"); ?>.js"></script>
+            <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/alertify.js"></script>
+            <script src="<?php echo SITE_URL_LOGINJS; ?>/userslogin.js"></script>
             <style type="text/css">
                 body{background-color: #009933;}
                 form .form-control{padding:0px 15px;
@@ -39,7 +64,6 @@
                 }
 
             </style>
-
             </head>
             <body>
             <script>
@@ -87,9 +111,10 @@
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-1"></div>
             </div>
             <div class="container" style="padding-top:100px;" style="text-align:center;">
+                <input type="hidden" id="sonucDeger" value="<?php echo $model[0]["Result"]; ?>" />
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-1"></div>
                 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-10">
-                    <form role="form" action="<?php echo SITE_URL; ?>/userslogin" method="POST"  id="loginForm"> 
+                    <form role="form" action="<?php echo SITE_URL; ?>/UsersLogin" method="POST"  id="loginForm"> 
                         <div class="form-group">
                             <select id="kullaniciLanguage" class="form-control" name="loginselected" required>                                   
                                 <option value="ar" <?php echo Session::get('dil') == 'ar' ? 'selected' : ''; ?>>Arabic</option>
@@ -111,15 +136,6 @@
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-3 col-xs-1"></div>
             </div>
-
-
             <!-- Button trigger modal -->
-
-            <script src="<?php echo SITE_USERFRONT_JS; ?>/jquery-1.11.1.min.js"></script>
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-            <script src="<?php echo SITE_URL_DOM; ?>"></script>
-            <script src="<?php echo SITE_USERFRONT_JS; ?>/bootstrap.min.js"></script>
-            <script src="<?php echo SITE_USERFRONT_JS; ?>/jquery.validate.js"></script>
-            <script src="<?php echo SITE_URL_LOGINJS; ?>/userslogin.js"></script>
             </body>
             </html>

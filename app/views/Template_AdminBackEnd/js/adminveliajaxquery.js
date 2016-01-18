@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/AdminVeliAjaxSorgu",
+    url: SITE_URL + "AdminVeliAjaxSorgu",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -410,7 +410,7 @@ $.AdminIslemler = {
                         return false;
                     } else {
                         var veliEmail = $("input[name=VeliEmail]").val();
-                        if (veliEmail == ' ') {
+                        if (veliEmail == '') {
                             reset();
                             alertify.alert(jsDil.EpostaBos);
                             return false;
@@ -484,11 +484,11 @@ $.AdminIslemler = {
                                                     success: function (cevap) {
                                                         if (cevap.hata) {
                                                             reset();
-                                                            alertify.alert(jsDil.Hata);
+                                                            alertify.alert(cevap.hata);
                                                             return false;
                                                         } else {
                                                             reset();
-                                                            alertify.success(jsDil.VeliKaydet);
+                                                            alertify.success(cevap.insert);
                                                             var veliCount = $('#smallVeli').text();
                                                             veliCount++;
                                                             $('#smallVeli').text(veliCount);
@@ -511,10 +511,10 @@ $.AdminIslemler = {
                                                                         + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
                                                                 VeliTable.DataTable().row.add($(addRow)).draw();
                                                             }
+                                                            return true;
                                                         }
                                                     }
                                                 });
-                                                return true;
                                             } else {
                                                 reset();
                                                 alertify.alert(jsDil.KurumSec);
@@ -933,6 +933,8 @@ $.AdminIslemler = {
         var farkkurumlength = farkkurum.length;
         var farkogrenci = farkArray(VeliDetailVazgec[24], veliOgrenciID);
         var farkogrencilength = farkogrenci.length;
+        var eskiAd = VeliDetailVazgec[0];
+        var eskiSoyad = VeliDetailVazgec[1];
         if (VeliDetailVazgec[0] == veliDetayAd && VeliDetailVazgec[1] == veliDetaySoyad && VeliDetailVazgec[2] == veliDetayDurum && VeliDetailVazgec[3] == veliDetayLokasyon && VeliDetailVazgec[4] == veliDetayTelefon && VeliDetailVazgec[5] == veliDetayEmail && VeliDetailVazgec[6] == veliDetayAdres && VeliDetailVazgec[7] == veliDetayAciklama && VeliDetailVazgec[8] == veliDetayUlke && VeliDetailVazgec[9] == veliDetayIl && VeliDetailVazgec[10] == veliDetayIlce && VeliDetailVazgec[11] == veliDetaySemt && VeliDetailVazgec[12] == veliDetayMahalle && VeliDetailVazgec[13] == veliDetaySokak && VeliDetailVazgec[14] == veliDetayPostaKodu && VeliDetailVazgec[15] == veliDetayCaddeNo && farkbolgelength == 0 && farkkurumlength == 0 && farkogrencilength == 0) {
             reset();
             alertify.alert(jsDil.Degisiklik);
@@ -960,7 +962,7 @@ $.AdminIslemler = {
                             alertify.alert(jsDil.SoyadKarekter);
                             return false;
                         } else {
-                            if (veliDetayEmail == ' ') {
+                            if (veliDetayEmail == '') {
                                 reset();
                                 alertify.alert(jsDil.EpostaBos);
                                 return false;
@@ -977,7 +979,8 @@ $.AdminIslemler = {
                                         var veliKurumLength = $('select#VeliDetayKurum option:selected').val();
                                         if (veliKurumLength) {
                                             $.ajax({
-                                                data: {"velidetail_id": velidetail_id, "veliBolgeID[]": veliBolgeID, "veliBolgeAd[]": veliBolgeAd, "veliKurumID[]": veliKurumID, "veliKurumAd[]": veliKurumAd,
+                                                data: {"eskiAd": eskiAd, "eskiSoyad": eskiSoyad, "velidetail_id": velidetail_id, "veliBolgeID[]": veliBolgeID,
+                                                    "veliBolgeAd[]": veliBolgeAd, "veliKurumID[]": veliKurumID, "veliKurumAd[]": veliKurumAd,
                                                     "veliOgrenciID[]": veliOgrenciID, "veliOgrenciAd[]": veliOgrenciAd, "veliDetayAd": veliDetayAd,
                                                     "veliDetaySoyad": veliDetaySoyad, "veliDetayDurum": veliDetayDurum, "veliDetayLokasyon": veliDetayLokasyon, "veliDetayTelefon": veliDetayTelefon,
                                                     "veliDetayEmail": veliDetayEmail, "veliDetayAdres": veliDetayAdres, "veliDetayAciklama": veliDetayAciklama, "veliDetayUlke": veliDetayUlke,
@@ -986,12 +989,12 @@ $.AdminIslemler = {
                                                 success: function (cevap) {
                                                     if (cevap.hata) {
                                                         reset();
-                                                        alertify.alert(jsDil.Hata);
+                                                        alertify.alert(cevap.hata);
                                                         return false;
                                                     } else {
                                                         disabledForm();
                                                         reset();
-                                                        alertify.success(jsDil.VeliDuzenle);
+                                                        alertify.success(cevap.update);
                                                         var SelectBolgeOptions = new Array();
                                                         var SelectKurumOptions = new Array();
                                                         var SelectOgrenciOptions = new Array();

@@ -57,6 +57,12 @@ class Load {
         return new $fileName;
     }
 
+    //ajax language
+    public function ajaxlanguage($fileName) {
+        include "app/ajaxlanguage/" . $fileName . ".php";
+        return new $fileName;
+    }
+
     //mobil language
     public function mobillanguage($fileName) {
         include "app/mobillanguage/" . $fileName . ".php";

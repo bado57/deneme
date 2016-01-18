@@ -29,8 +29,8 @@ class Panel extends Controller {
     public function home() {
 
         $loginTip = Session::get("userTip");
-        $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
         if (!Session::get("dil")) {
+            $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
             Session::set("dil", $lang);
             $form = $this->load->multilanguage($lang);
             $deger = $form->multilanguage();
@@ -41,9 +41,9 @@ class Panel extends Controller {
 
         if ($loginTip == 1) {
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
+            $Panel_Model = $this->load->model("Panel_Model");
             //form class bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
+            $MemcacheModel = $this->load->model("AdminMemcache_Model");
 
             $adminID = Session::get("userId");
             $uniqueBidirimKey = Session::get("userFirmaKod");
@@ -63,7 +63,6 @@ class Panel extends Controller {
             $adminRutbe = Session::get("userRutbe");
             //super adminse tüm bölgeleri görür
             if ($adminRutbe != 0) {
-
                 $bolgeListe = $Panel_Model->bolgeListele();
                 $kurumListe = $Panel_Model->kurumListeleCount();
                 $aracListe = $Panel_Model->aracListeleCount();

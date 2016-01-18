@@ -15,7 +15,6 @@ class Language extends Controller {
             $sonuc = array();
 
             $form = $this->load->otherClasses('Form');
-            Session::init();
 
             $form->post("lang", true);
             $dil = $form->values['lang'];

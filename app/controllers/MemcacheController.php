@@ -12,7 +12,7 @@
     //insert example
     public function get() {
 
-        $model = $this->load->model("memcachedeneme_model");
+        $model = $this->load->model("MemcacheDeneme_Model");
         $result = $model->get('deneme');
         if($result){
             echo $result;
@@ -24,7 +24,7 @@
     //insert example
     public function set() {
 
-        $model = $this->load->model("memcachedeneme_model");
+        $model = $this->load->model("MemcacheDeneme_Model");
         $result = $model->set('deneme','memcachecontroller',false,120);
         if($result){
             echo "kayıt işlemi tamam";
@@ -36,7 +36,7 @@
     //replace example
     public function replace() {
 
-        $model = $this->load->model("memcachedeneme_model");
+        $model = $this->load->model("MemcacheDeneme_Model");
         $result = $model->replace('deneme','yeni deneme değer',false,120);
         if($result){
             echo "değiştirme işlemi tamam";
@@ -48,7 +48,7 @@
     //replace example
     public function deleteKey() {
 
-        $model = $this->load->model("memcachedeneme_model");
+        $model = $this->load->model("MemcacheDeneme_Model");
         $result = $model->deleteKey('deneme');
         if($result){
             echo "key değerine sahip değerin silme işlemi tamam";
@@ -60,7 +60,7 @@
     //deleteAllKey example
     public function deleteAllKey() {
 
-        $model = $this->load->model("memcachedeneme_model");
+        $model = $this->load->model("MemcacheDeneme_Model");
         $result = $model->deleteAllKey();
         if($result){
             echo "Tüm key değerlerine sahip değerlerin silme işlemi tamam";
@@ -72,7 +72,7 @@
      //replace example
     public function serverStatus() {
 
-        $model = $this->load->model("memcachedeneme_model");
+        $model = $this->load->model("MemcacheDeneme_Model");
         $result = $model->serverStatus();
         if($result){
             echo $result;

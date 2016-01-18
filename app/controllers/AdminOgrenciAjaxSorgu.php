@@ -18,9 +18,11 @@ class AdminOgrenciAjaxSorgu extends Controller {
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
             $sonuc = array();
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
-            //form class bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
+            $Panel_Model = $this->load->model("Panel_Model");
+            //language 
+            $lang = Session::get("dil");
+            $formlanguage = $this->load->ajaxlanguage($lang);
+            $languagedeger = $formlanguage->ajaxlanguage();
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -109,7 +111,6 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         $sonuc["adminVeliOgrenci"] = $digerVeliOgrenci;
                     }
                     break;
-
                 case "ogrenciEkleSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -148,7 +149,6 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         $sonuc["adminBolge"] = $adminBolge;
                     }
                     break;
-
                 case "ogrenciKurumMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -168,7 +168,6 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         $sonuc["kurumMultiSelect"] = $ogrenciKurumSelect;
                     }
                     break;
-
                 case "ogrenciVeliMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -188,14 +187,12 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         $sonuc["veliMultiSelect"] = $ogrenciKurumSelect;
                     }
                     break;
-
                 case "ogrenciKaydet":
-
                     $adminID = Session::get("userId");
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-                        $userTip = 4;
+                        $userTip = 5;
 
                         $firmaID = Session::get("FirmaId");
 
@@ -205,10 +202,6 @@ class AdminOgrenciAjaxSorgu extends Controller {
                             if ($realSifre) {
                                 $adminSifre = $form->userSifreOlustur($userKadi, $realSifre, $userTip);
                                 if ($adminSifre) {
-
-                                    $uniqueKey = Session::get("username");
-                                    $uniqueKey = $uniqueKey . '_AOgrenci';
-
                                     $form->post('ogrenciAd', true);
                                     $form->post('ogrenciSoyad', true);
                                     $form->post('ogrenciEmail', true);
@@ -226,10 +219,13 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                     $form->post('postakodu', true);
                                     $form->post('caddeno', true);
                                     $form->post('detayAdres', true);
+                                    $form->post('gdsbildirim', true);
+                                    $form->post('dnsbildirim', true);
 
                                     $ogrenciAd = $form->values['ogrenciAd'];
                                     $ogrenciSoyad = $form->values['ogrenciSoyad'];
                                     $ogrenciAdSoyad = $ogrenciAd . ' ' . $ogrenciSoyad;
+                                    $ogrenciEmail = $form->values['ogrenciEmail'];
 
                                     $ogrenciBolgeID = $_REQUEST['ogrenciBolgeID'];
                                     $ogrenciBolgeAdi = $_REQUEST['ogrenciBolgeAdi'];
@@ -238,138 +234,146 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                     $veliOgrenciID = $_REQUEST['ogrenciVeliID'];
                                     $veliOgrenciAd = $_REQUEST['ogrenciVeliAd'];
 
-                                    if ($form->submit()) {
-                                        $data = array(
-                                            'BSOgrenciAd' => $ogrenciAd,
-                                            'BSOgrenciSoyad' => $ogrenciSoyad,
-                                            'BSOgrenciKadi' => $userKadi,
-                                            'BSOgrenciSifre' => $adminSifre,
-                                            'BSOgrenciRSifre' => $realSifre,
-                                            'BSOgrenciPhone' => $form->values['ogrenciTelefon'],
-                                            'BSOgrenciEmail' => $form->values['ogrenciEmail'],
-                                            'BSOgrenciLocation' => $form->values['ogrenciLokasyon'],
-                                            'BSOgrenciUlke' => $form->values['ulke'],
-                                            'BSOgrenciIl' => $form->values['il'],
-                                            'BSOgrenciIlce' => $form->values['ilce'],
-                                            'BSOgrenciSemt' => $form->values['semt'],
-                                            'BSOgrenciMahalle' => $form->values['mahalle'],
-                                            'BSOgrenciSokak' => $form->values['sokak'],
-                                            'BSOgrenciPostaKodu' => $form->values['postakodu'],
-                                            'BSOgrenciCaddeNo' => $form->values['caddeno'],
-                                            'BSOgrenciAdres' => $form->values['ogrenciAdres'],
-                                            'BSOgrenciDetayAdres' => $form->values['detayAdres'],
-                                            'Status' => $form->values['ogrenciDurum'],
-                                            'BSOgrenciAciklama' => $form->values['aciklama']
-                                        );
-                                    }
-                                    $resultOgrenciID = $Panel_Model->addNewOgrenci($data);
-                                    if ($resultOgrenciID != 'unique') {
-                                        $bolgeID = count($ogrenciBolgeID);
-                                        if ($bolgeID > 0) {
-                                            for ($b = 0; $b < $bolgeID; $b++) {
-                                                $bolgedata[$b] = array(
-                                                    'BSOgrenciID' => $resultOgrenciID,
-                                                    'BSOgrenciAd' => $ogrenciAdSoyad,
-                                                    'BSBolgeID' => $ogrenciBolgeID[$b],
-                                                    'BSBolgeAd' => $ogrenciBolgeAdi[$b]
-                                                );
-                                            }
-                                            $resultBolgeID = $Panel_Model->addNewBolgeOgrenci($bolgedata);
-                                            if ($resultBolgeID) {
-                                                //öğrenciye kurum seçildi ise
-                                                $kurumID = count($ogrenciKurumID);
-                                                if ($kurumID > 0) {
-                                                    for ($c = 0; $c < $kurumID; $c++) {
-                                                        $kurumdata[$c] = array(
-                                                            'BSKurumID' => $ogrenciKurumID[$c],
-                                                            'BSKurumAd' => $ogrenciKurumAd[$c],
-                                                            'BSOgrenciID' => $resultOgrenciID,
-                                                            'BSOgrenciAd' => $ogrenciAdSoyad
-                                                        );
-                                                    }
-                                                    $resultKurumID = $Panel_Model->addNewOgrenciKurum($kurumdata);
-                                                    if ($resultKurumID) {
-                                                        $ogrenciID = count($veliOgrenciID);
-                                                        if ($ogrenciID > 0) {
-                                                            for ($d = 0; $d < $ogrenciID; $d++) {
-                                                                $ogrencidata[$d] = array(
-                                                                    'BSVeliID' => $veliOgrenciID[$d],
-                                                                    'BSVeliAd' => $veliOgrenciAd[$d],
-                                                                    'BSOgrenciID' => $resultOgrenciID,
-                                                                    'BSOgrenciAd' => $ogrenciAdSoyad
-                                                                );
-                                                            }
-                                                            $resultOgrenciID = $Panel_Model->addNewVeliOgrenci($ogrencidata);
-                                                            $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                                            $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                                            $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                            if ($resultMemcache) {
-                                                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                                            }
+                                    if (!filter_var($ogrenciEmail, FILTER_VALIDATE_EMAIL) === false) {
+                                        $emailValidate = $form->mailControl1($ogrenciEmail);
+                                        if ($emailValidate == 1) {
+                                            $kullaniciliste = $Panel_Model->ogrenciEmailDbKontrol($ogrenciEmail);
+                                            if (count($kullaniciliste) <= 0) {
+                                                if ($form->submit()) {
+                                                    $data = array(
+                                                        'BSOgrenciAd' => $ogrenciAd,
+                                                        'BSOgrenciSoyad' => $ogrenciSoyad,
+                                                        'BSOgrenciKadi' => $userKadi,
+                                                        'BSOgrenciSifre' => $adminSifre,
+                                                        'BSOgrenciRSifre' => $realSifre,
+                                                        'BSOgrenciPhone' => $form->values['ogrenciTelefon'],
+                                                        'BSOgrenciEmail' => $ogrenciEmail,
+                                                        'BSOgrenciLocation' => $form->values['ogrenciLokasyon'],
+                                                        'BSOgrenciUlke' => $form->values['ulke'],
+                                                        'BSOgrenciIl' => $form->values['il'],
+                                                        'BSOgrenciIlce' => $form->values['ilce'],
+                                                        'BSOgrenciSemt' => $form->values['semt'],
+                                                        'BSOgrenciMahalle' => $form->values['mahalle'],
+                                                        'BSOgrenciSokak' => $form->values['sokak'],
+                                                        'BSOgrenciPostaKodu' => $form->values['postakodu'],
+                                                        'BSOgrenciCaddeNo' => $form->values['caddeno'],
+                                                        'BSOgrenciAdres' => $form->values['ogrenciAdres'],
+                                                        'BSOgrenciDetayAdres' => $form->values['detayAdres'],
+                                                        'Status' => $form->values['ogrenciDurum'],
+                                                        'BSOgrenciAciklama' => $form->values['aciklama'],
+                                                        'BildirimMesafeGidis' => $form->values['gdsbildirim'],
+                                                        'BildirimMesafeDonus' => $form->values['dnsbildirim']
+                                                    );
+                                                }
+                                                $resultOgrenciID = $Panel_Model->addNewOgrenci($data);
+                                                if ($resultOgrenciID != 'unique') {
+                                                    $bolgeID = count($ogrenciBolgeID);
+                                                    if ($bolgeID > 0) {
+                                                        for ($b = 0; $b < $bolgeID; $b++) {
+                                                            $bolgedata[$b] = array(
+                                                                'BSOgrenciID' => $resultOgrenciID,
+                                                                'BSOgrenciAd' => $ogrenciAdSoyad,
+                                                                'BSBolgeID' => $ogrenciBolgeID[$b],
+                                                                'BSBolgeAd' => $ogrenciBolgeAdi[$b]
+                                                            );
+                                                        }
+                                                        $resultBolgeID = $Panel_Model->addNewBolgeOgrenci($bolgedata);
+                                                        if ($resultBolgeID) {
+                                                            //öğrenciye kurum seçildi ise
+                                                            $kurumID = count($ogrenciKurumID);
+                                                            if ($kurumID > 0) {
+                                                                for ($c = 0; $c < $kurumID; $c++) {
+                                                                    $kurumdata[$c] = array(
+                                                                        'BSKurumID' => $ogrenciKurumID[$c],
+                                                                        'BSKurumAd' => $ogrenciKurumAd[$c],
+                                                                        'BSOgrenciID' => $resultOgrenciID,
+                                                                        'BSOgrenciAd' => $ogrenciAdSoyad
+                                                                    );
+                                                                }
+                                                                $resultKurumID = $Panel_Model->addNewOgrenciKurum($kurumdata);
+                                                                if ($resultKurumID) {
+                                                                    //kullanıcıya gerekli giriş mail yazısı
+                                                                    $setTitle = $languagedeger['UyelikBilgi'];
+                                                                    $subject = $languagedeger['SHtrltMail'];
+                                                                    $body = $languagedeger['Merhaba'] . ' ' . $ogrenciAdSoyad . '!<br/>' . $languagedeger['KullaniciAdi'] . ' = ' . $userKadi . '<br/>'
+                                                                            . $languagedeger['KullaniciSifre'] . ' = ' . $realSifre . '<br/>'
+                                                                            . $languagedeger['IyiGunler'];
+                                                                    $ogrenciID = count($veliOgrenciID);
+                                                                    if ($ogrenciID > 0) {
+                                                                        for ($d = 0; $d < $ogrenciID; $d++) {
+                                                                            $ogrencidata[$d] = array(
+                                                                                'BSVeliID' => $veliOgrenciID[$d],
+                                                                                'BSVeliAd' => $veliOgrenciAd[$d],
+                                                                                'BSOgrenciID' => $resultOgrenciID,
+                                                                                'BSOgrenciAd' => $ogrenciAdSoyad
+                                                                            );
+                                                                        }
+                                                                        $resultOgrenciID = $Panel_Model->addNewVeliOgrenci($ogrencidata);
+                                                                        //kullanıcıya gerekli giriş bilgileri gönderiliyor.
+                                                                        $resultMail = $form->sifreHatirlatMail($ogrenciEmail, $setTitle, $ogrenciAdSoyad, $subject, $body);
+                                                                        $sonuc["newOgrenciID"] = $resultOgrenciID;
+                                                                        $sonuc["insert"] = $languagedeger['OgrenciEkle'];
+                                                                    } else {
+                                                                        //kullanıcıya gerekli giriş bilgileri gönderiliyor.
+                                                                        $resultMail = $form->sifreHatirlatMail($ogrenciEmail, $setTitle, $ogrenciAdSoyad, $subject, $body);
+                                                                        $sonuc["newOgrenciID"] = $resultOgrenciID;
+                                                                        $sonuc["insert"] = $languagedeger['OgrenciEkle'];
+                                                                    }
+                                                                } else {
+                                                                    //bölge kaydedilirken hata geldi ise
+                                                                    $deleteresult = $Panel_Model->ogrenciDelete($resultOgrenciID);
+                                                                    $deleteresultt = $Panel_Model->ogrenciBolgeDelete($resultOgrenciID);
+                                                                    if ($deleteresultt) {
+                                                                        $sonuc["hata"] = $languagedeger['KurumSec'];
+                                                                    }
+                                                                }
+                                                            } else {
+                                                                //bölge kaydedilirken hata geldi ise
+                                                                $deleteresult = $Panel_Model->ogrenciDelete($resultOgrenciID);
+                                                                $deleteresultt = $Panel_Model->ogrenciBolgeDelete($resultOgrenciID);
 
-                                                            $sonuc["newOgrenciID"] = $resultOgrenciID;
-                                                            $sonuc["insert"] = "Başarıyla Öğrenci Eklenmiştir.";
+                                                                if ($deleteresultt) {
+                                                                    $sonuc["hata"] = $languagedeger['KurumSec'];
+                                                                }
+                                                            }
                                                         } else {
-                                                            $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                                            $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                                            $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                            if ($resultMemcache) {
-                                                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                                            }
+                                                            //bölge kaydedilirken hata geldi ise
+                                                            $deleteresult = $Panel_Model->ogrenciDelete($resultOgrenciID);
+                                                            $deleteresultt = $Panel_Model->ogrenciBolgeDelete($resultOgrenciID);
 
-                                                            $sonuc["newOgrenciID"] = $resultOgrenciID;
-                                                            $sonuc["insert"] = "Başarıyla Öğrenci Eklenmiştir.";
+                                                            if ($deleteresultt) {
+                                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                                            }
                                                         }
                                                     } else {
-                                                        //bölge kaydedilirken hata geldi ise
+                                                        //eğer öğrencinin bölgesi yoksa
                                                         $deleteresult = $Panel_Model->ogrenciDelete($resultOgrenciID);
-                                                        $deleteresultt = $Panel_Model->ogrenciBolgeDelete($resultOgrenciID);
-
-                                                        if ($deleteresultt) {
-                                                            $sonuc["hata"] = "Lütfen Kurum Seçmeyi Unutmayınız.";
-                                                        }
+                                                        $sonuc["hata"] = $languagedeger['BolgeSec'];
                                                     }
                                                 } else {
-                                                    //bölge kaydedilirken hata geldi ise
-                                                    $deleteresult = $Panel_Model->ogrenciDelete($resultOgrenciID);
-                                                    $deleteresultt = $Panel_Model->ogrenciBolgeDelete($resultOgrenciID);
-
-                                                    if ($deleteresultt) {
-                                                        $sonuc["hata"] = "Lütfen Kurum Seçmeyi Unutmayınız.";
-                                                    }
+                                                    $sonuc["hata"] = $languagedeger['GecersizKullanici'];
                                                 }
                                             } else {
-                                                //bölge kaydedilirken hata geldi ise
-                                                $deleteresult = $Panel_Model->ogrenciDelete($resultOgrenciID);
-                                                $deleteresultt = $Panel_Model->ogrenciBolgeDelete($resultOgrenciID);
-
-                                                if ($deleteresultt) {
-                                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                                }
+                                                $sonuc["hata"] = $languagedeger['KullanilmisEmail'];
                                             }
                                         } else {
-                                            //eğer öğrencinin bölgesi yoksa
-                                            $deleteresult = $Panel_Model->ogrenciDelete($resultOgrenciID);
-                                            $sonuc["hata"] = "Lütfen Bölge Seçmeyi Unutmayınız.";
+                                            $sonuc["hata"] = $languagedeger['BaskaEmail'];
                                         }
                                     } else {
-                                        $sonuc["hata"] = "Lütfen Yeni Bir Kullanıcı Adı yada Şifre Giriniz.";
+                                        $sonuc["hata"] = $languagedeger['GecerliEmail'];
                                     }
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $languagedeger['Hata'];
                                 }
                             } else {
-                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                $sonuc["hata"] = $languagedeger['Hata'];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['Hata'];
                         }
                     }
-
                 case "ogrenciDetail":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
@@ -499,6 +503,8 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                 $ogrenciList[$e]['OgrenciListDetayAdres'] = $ogrenciOzellikk['BSOgrenciDetayAdres'];
                                 $ogrenciList[$e]['OgrenciListDurum'] = $ogrenciOzellikk['Status'];
                                 $ogrenciList[$e]['OgrenciListAciklama'] = $ogrenciOzellikk['BSOgrenciAciklama'];
+                                $ogrenciList[$e]['OgrenciGBild'] = $ogrenciOzellikk['BildirimMesafeGidis'];
+                                $ogrenciList[$e]['OgrenciDBild'] = $ogrenciOzellikk['BildirimMesafeDonus'];
                                 $e++;
                             }
                         } else {
@@ -637,6 +643,8 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                 $ogrenciList[$e]['OgrenciListDetayAdres'] = $ogrenciOzellikk['BSOgrenciDetayAdres'];
                                 $ogrenciList[$e]['OgrenciListDurum'] = $ogrenciOzellikk['Status'];
                                 $ogrenciList[$e]['OgrenciListAciklama'] = $ogrenciOzellikk['BSOgrenciAciklama'];
+                                $ogrenciList[$e]['OgrenciGBild'] = $ogrenciOzellikk['BildirimMesafeGidis'];
+                                $ogrenciList[$e]['OgrenciDBild'] = $ogrenciOzellikk['BildirimMesafeDonus'];
                                 $e++;
                             }
                         }
@@ -651,18 +659,11 @@ class AdminOgrenciAjaxSorgu extends Controller {
                     }
 
                     break;
-
                 case "ogrenciDetailDelete":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_AOgrenci';
-
-
                         $form->post('ogrencidetail_id', true);
                         $ogrenciDetailID = $form->values['ogrencidetail_id'];
 
@@ -674,38 +675,25 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                 if ($deleteresulttt) {
                                     $deleteresultttt = $Panel_Model->detailOgrenciVeliDelete($ogrenciDetailID);
                                     if ($deleteresultttt) {
-                                        $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                        $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                        if ($resultMemcache) {
-                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                        }
-                                        $sonuc["delete"] = "Öğrenci kaydı başarıyla silinmiştir.";
+                                        $sonuc["delete"] = $languagedeger['OgrenciSil'];
                                     }
                                 }
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['Hata'];
                         }
                     }
 
                     $sonuc["ogrenciDetail"] = $data["ogrenciDetail"];
 
                     break;
-
                 case "ogrenciDetailKaydet":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
                         $form->post('ogrencidetail_id', true);
                         $ogrenciID = $form->values['ogrencidetail_id'];
-
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_AOgrenci';
-
                         $form->post('ogrenciDetayAd', true);
                         $form->post('ogrenciDetaySoyad', true);
                         $form->post('ogrenciDetayEmail', true);
@@ -723,11 +711,14 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         $form->post('ogrenciDetayPostaKodu', true);
                         $form->post('ogrenciDetayCaddeNo', true);
                         $form->post('detayAdres', true);
+                        $form->post('gdsbildirim', true);
+                        $form->post('dnsbildirim', true);
 
 
                         $ogrenciAd = $form->values['ogrenciDetayAd'];
                         $ogrenciSoyad = $form->values['ogrenciDetaySoyad'];
                         $ogrenciAdSoyad = $ogrenciAd . ' ' . $ogrenciSoyad;
+                        $ogrenciEmail = $form->values['ogrenciDetayEmail'];
 
                         $ogrenciBolgeID = $_REQUEST['ogrenciBolgeID'];
                         $ogrenciBolgeAdi = $_REQUEST['ogrenciBolgeAd'];
@@ -736,138 +727,184 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         $ogrenciVeliID = $_REQUEST['ogrenciVeliID'];
                         $ogrenciVeliAd = $_REQUEST['ogrenciVeliAd'];
 
-                        if ($form->submit()) {
-                            $data = array(
-                                'BSOgrenciAd' => $ogrenciAd,
-                                'BSOgrenciSoyad' => $ogrenciSoyad,
-                                'BSOgrenciPhone' => $form->values['ogrenciDetayTelefon'],
-                                'BSOgrenciEmail' => $form->values['ogrenciDetayEmail'],
-                                'BSOgrenciLocation' => $form->values['ogrenciDetayLokasyon'],
-                                'BSOgrenciUlke' => $form->values['ogrenciDetayUlke'],
-                                'BSOgrenciIl' => $form->values['ogrenciDetayIl'],
-                                'BSOgrenciIlce' => $form->values['ogrenciDetayIlce'],
-                                'BSOgrenciSemt' => $form->values['ogrenciDetaySemt'],
-                                'BSOgrenciMahalle' => $form->values['ogrenciDetayMahalle'],
-                                'BSOgrenciSokak' => $form->values['ogrenciDetaySokak'],
-                                'BSOgrenciPostaKodu' => $form->values['ogrenciDetayPostaKodu'],
-                                'BSOgrenciCaddeNo' => $form->values['ogrenciDetayCaddeNo'],
-                                'BSOgrenciAdres' => $form->values['ogrenciDetayAdres'],
-                                'BSOgrenciDetayAdres' => $form->values['detayAdres'],
-                                'BSOgrenciAciklama' => $form->values['ogrenciDetayAciklama'],
-                                'Status' => $form->values['ogrenciDetayDurum']
-                            );
-                        }
-                        $resultOgrenciUpdate = $Panel_Model->ogrenciOzelliklerDuzenle($data, $ogrenciID);
-                        if ($resultOgrenciUpdate) {
-                            $veliOgrenciCount = count($ogrenciVeliID);
-                            if ($veliOgrenciCount > 0) {
-                                $deleteVeliOgrenci = $Panel_Model->detailOgrenciVeliDelete($ogrenciID);
-                                if ($deleteVeliOgrenci) {
-                                    for ($d = 0; $d < $veliOgrenciCount; $d++) {
-                                        $ogrencidata[$d] = array(
-                                            'BSOgrenciID' => $ogrenciID,
-                                            'BSOgrenciAd' => $ogrenciAdSoyad,
-                                            'BSVeliID' => $ogrenciVeliID[$d],
-                                            'BSVeliAd' => $ogrenciVeliAd[$d]
+                        if (!filter_var($ogrenciEmail, FILTER_VALIDATE_EMAIL) === false) {
+                            $emailValidate = $form->mailControl1($ogrenciEmail);
+                            if ($emailValidate == 1) {
+                                $kullaniciliste = $Panel_Model->ogrenciEmailDbKontrol($ogrenciEmail);
+                                if (count($kullaniciliste) <= 0) {
+                                    if ($form->submit()) {
+                                        $data = array(
+                                            'BSOgrenciAd' => $ogrenciAd,
+                                            'BSOgrenciSoyad' => $ogrenciSoyad,
+                                            'BSOgrenciPhone' => $form->values['ogrenciDetayTelefon'],
+                                            'BSOgrenciEmail' => $ogrenciEmail,
+                                            'BSOgrenciLocation' => $form->values['ogrenciDetayLokasyon'],
+                                            'BSOgrenciUlke' => $form->values['ogrenciDetayUlke'],
+                                            'BSOgrenciIl' => $form->values['ogrenciDetayIl'],
+                                            'BSOgrenciIlce' => $form->values['ogrenciDetayIlce'],
+                                            'BSOgrenciSemt' => $form->values['ogrenciDetaySemt'],
+                                            'BSOgrenciMahalle' => $form->values['ogrenciDetayMahalle'],
+                                            'BSOgrenciSokak' => $form->values['ogrenciDetaySokak'],
+                                            'BSOgrenciPostaKodu' => $form->values['ogrenciDetayPostaKodu'],
+                                            'BSOgrenciCaddeNo' => $form->values['ogrenciDetayCaddeNo'],
+                                            'BSOgrenciAdres' => $form->values['ogrenciDetayAdres'],
+                                            'BSOgrenciDetayAdres' => $form->values['detayAdres'],
+                                            'BSOgrenciAciklama' => $form->values['ogrenciDetayAciklama'],
+                                            'Status' => $form->values['ogrenciDetayDurum'],
+                                            'BildirimMesafeGidis' => $form->values['gdsbildirim'],
+                                            'BildirimMesafeDonus' => $form->values['dnsbildirim']
                                         );
                                     }
-                                    $resultOgrenciID = $Panel_Model->addNewVeliOgrenci($ogrencidata);
-                                    if ($resultOgrenciID) {
-                                        $deleteresultt = $Panel_Model->detailOgrenciKurumDelete($ogrenciID);
-                                        if ($deleteresultt) {
-                                            $ogrenciKurumCount = count($ogrenciKurumID);
-                                            for ($c = 0; $c < $ogrenciKurumCount; $c++) {
-                                                $kurumdata[$c] = array(
-                                                    'BSKurumID' => $ogrenciKurumID[$c],
-                                                    'BSKurumAd' => $ogrenciKurumAd[$c],
-                                                    'BSOgrenciID' => $ogrenciID,
-                                                    'BSOgrenciAd' => $ogrenciAdSoyad
-                                                );
-                                            }
-                                            $resultKurumID = $Panel_Model->addNewOgrenciKurum($kurumdata);
-                                            if ($resultKurumID) {
-                                                $bolgeID = count($ogrenciBolgeID);
-                                                $deleteresulttt = $Panel_Model->detailOgrenciBolgeDelete($ogrenciID);
-                                                if ($deleteresulttt) {
-                                                    for ($b = 0; $b < $bolgeID; $b++) {
-                                                        $bolgedata[$b] = array(
-                                                            'BSOgrenciID' => $ogrenciID,
-                                                            'BSOgrenciAd' => $ogrenciAdSoyad,
-                                                            'BSBolgeID' => $ogrenciBolgeID[$b],
-                                                            'BSBolgeAd' => $ogrenciBolgeAdi[$b]
-                                                        );
-                                                    }
-                                                    $resultBolgeID = $Panel_Model->addNewBolgeOgrenci($bolgedata);
-                                                    if ($resultBolgeID) {
-                                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                        if ($resultMemcache) {
-                                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                    $resultOgrenciUpdate = $Panel_Model->ogrenciOzelliklerDuzenle($data, $ogrenciID);
+                                    if ($resultOgrenciUpdate) {
+                                        $veliOgrenciCount = count($ogrenciVeliID);
+                                        if ($veliOgrenciCount > 0) {
+                                            $deleteVeliOgrenci = $Panel_Model->detailOgrenciVeliDelete($ogrenciID);
+                                            if ($deleteVeliOgrenci) {
+                                                for ($d = 0; $d < $veliOgrenciCount; $d++) {
+                                                    $ogrencidata[$d] = array(
+                                                        'BSOgrenciID' => $ogrenciID,
+                                                        'BSOgrenciAd' => $ogrenciAdSoyad,
+                                                        'BSVeliID' => $ogrenciVeliID[$d],
+                                                        'BSVeliAd' => $ogrenciVeliAd[$d]
+                                                    );
+                                                }
+                                                $resultOgrenciID = $Panel_Model->addNewVeliOgrenci($ogrencidata);
+                                                if ($resultOgrenciID) {
+                                                    $deleteresultt = $Panel_Model->detailOgrenciKurumDelete($ogrenciID);
+                                                    if ($deleteresultt) {
+                                                        $ogrenciKurumCount = count($ogrenciKurumID);
+                                                        for ($c = 0; $c < $ogrenciKurumCount; $c++) {
+                                                            $kurumdata[$c] = array(
+                                                                'BSKurumID' => $ogrenciKurumID[$c],
+                                                                'BSKurumAd' => $ogrenciKurumAd[$c],
+                                                                'BSOgrenciID' => $ogrenciID,
+                                                                'BSOgrenciAd' => $ogrenciAdSoyad
+                                                            );
                                                         }
-
-                                                        $sonuc["newOgrenciID"] = $ogrenciID;
-                                                        $sonuc["update"] = "Başarıyla Öğrenci Düzenlenmiştir.";
-                                                    } else {
-                                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                                        $resultKurumID = $Panel_Model->addNewOgrenciKurum($kurumdata);
+                                                        if ($resultKurumID) {
+                                                            $bolgeID = count($ogrenciBolgeID);
+                                                            $deleteresulttt = $Panel_Model->detailOgrenciBolgeDelete($ogrenciID);
+                                                            if ($deleteresulttt) {
+                                                                for ($b = 0; $b < $bolgeID; $b++) {
+                                                                    $bolgedata[$b] = array(
+                                                                        'BSOgrenciID' => $ogrenciID,
+                                                                        'BSOgrenciAd' => $ogrenciAdSoyad,
+                                                                        'BSBolgeID' => $ogrenciBolgeID[$b],
+                                                                        'BSBolgeAd' => $ogrenciBolgeAdi[$b]
+                                                                    );
+                                                                }
+                                                                $resultBolgeID = $Panel_Model->addNewBolgeOgrenci($bolgedata);
+                                                                if ($resultBolgeID) {
+                                                                    $sonuc["newOgrenciID"] = $ogrenciID;
+                                                                    $sonuc["update"] = $languagedeger['OgrenciDuzenle'];
+                                                                } else {
+                                                                    $sonuc["hata"] = $languagedeger['Hata'];
+                                                                }
+                                                            } else {
+                                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                                            }
+                                                        } else {
+                                                            $sonuc["hata"] = $languagedeger['Hata'];
+                                                        }
                                                     }
-                                                } else {
-                                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
                                                 }
-                                            } else {
-                                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                $deleteresultt = $Panel_Model->detailOgrenciKurumDelete($ogrenciID);
-                                if ($deleteresultt) {
-                                    $ogrenciKurumCount = count($ogrenciKurumID);
-                                    for ($c = 0; $c < $ogrenciKurumCount; $c++) {
-                                        $kurumdata[$c] = array(
-                                            'BSKurumID' => $ogrenciKurumID[$c],
-                                            'BSKurumAd' => $ogrenciKurumAd[$c],
-                                            'BSOgrenciID' => $ogrenciID,
-                                            'BSOgrenciAd' => $ogrenciAdSoyad
-                                        );
-                                    }
-                                    $resultKurumID = $Panel_Model->addNewOgrenciKurum($kurumdata);
-                                    if ($resultKurumID) {
-                                        $bolgeID = count($ogrenciBolgeID);
-                                        $deleteresulttt = $Panel_Model->detailOgrenciBolgeDelete($ogrenciID);
-                                        if ($deleteresulttt) {
-                                            for ($b = 0; $b < $bolgeID; $b++) {
-                                                $bolgedata[$b] = array(
-                                                    'BSOgrenciID' => $ogrenciID,
-                                                    'BSOgrenciAd' => $ogrenciAdSoyad,
-                                                    'BSBolgeID' => $ogrenciBolgeID[$b],
-                                                    'BSBolgeAd' => $ogrenciBolgeAdi[$b]
-                                                );
-                                            }
-                                            $resultBolgeID = $Panel_Model->addNewBolgeOgrenci($bolgedata);
-                                            if ($resultBolgeID) {
-                                                $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                if ($resultMemcache) {
-                                                    $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                                }
-
-                                                $sonuc["newOgrenciID"] = $ogrenciID;
-                                                $sonuc["update"] = "Başarıyla Öğrenci Düzenlenmiştir.";
-                                            } else {
-                                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
                                             }
                                         } else {
-                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                            $deleteresultt = $Panel_Model->detailOgrenciKurumDelete($ogrenciID);
+                                            if ($deleteresultt) {
+                                                $ogrenciKurumCount = count($ogrenciKurumID);
+                                                for ($c = 0; $c < $ogrenciKurumCount; $c++) {
+                                                    $kurumdata[$c] = array(
+                                                        'BSKurumID' => $ogrenciKurumID[$c],
+                                                        'BSKurumAd' => $ogrenciKurumAd[$c],
+                                                        'BSOgrenciID' => $ogrenciID,
+                                                        'BSOgrenciAd' => $ogrenciAdSoyad
+                                                    );
+                                                }
+                                                $resultKurumID = $Panel_Model->addNewOgrenciKurum($kurumdata);
+                                                if ($resultKurumID) {
+                                                    $bolgeID = count($ogrenciBolgeID);
+                                                    $deleteresulttt = $Panel_Model->detailOgrenciBolgeDelete($ogrenciID);
+                                                    if ($deleteresulttt) {
+                                                        for ($b = 0; $b < $bolgeID; $b++) {
+                                                            $bolgedata[$b] = array(
+                                                                'BSOgrenciID' => $ogrenciID,
+                                                                'BSOgrenciAd' => $ogrenciAdSoyad,
+                                                                'BSBolgeID' => $ogrenciBolgeID[$b],
+                                                                'BSBolgeAd' => $ogrenciBolgeAdi[$b]
+                                                            );
+                                                        }
+                                                        $resultBolgeID = $Panel_Model->addNewBolgeOgrenci($bolgedata);
+                                                        if ($resultBolgeID) {
+                                                            $sonuc["newOgrenciID"] = $ogrenciID;
+                                                            $sonuc["update"] = $languagedeger['OgrenciDuzenle'];
+                                                        } else {
+                                                            $sonuc["hata"] = $languagedeger['Hata'];
+                                                        }
+                                                    } else {
+                                                        $sonuc["hata"] = $languagedeger['Hata'];
+                                                    }
+                                                } else {
+                                                    $sonuc["hata"] = $languagedeger['Hata'];
+                                                }
+                                            }
                                         }
                                     } else {
-                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        $sonuc["hata"] = $languagedeger['Hata'];
                                     }
+                                } else {
+                                    $sonuc["hata"] = $languagedeger['KullanilmisEmail'];
                                 }
+                            } else {
+                                $sonuc["hata"] = $languagedeger['BaskaEmail'];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['GecerliEmail'];
                         }
                     }
+                case "adminOgrenciDetailTur":
+                    $adminID = Session::get("userId");
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $form->post('ogrenciID', true);
+                        $adminOgrDetailID = $form->values['ogrenciID'];
+                        //öğrenci tur tablosu için
+                        $ogrTurDetail = $Panel_Model->adminOgrenciTurDetail($adminOgrDetailID);
+                        $ogrturId = array();
+                        $a = 0;
+                        foreach ($ogrTurDetail as $ogrTurDetaill) {
+                            $ogrturId[] = $ogrTurDetaill['BSTurID'];
+                            $a++;
+                        }
+                        //öğrenciişçi tur tablosu için
+                        $ogrTurDetailler = $Panel_Model->adminOgrenciTurDetail2($adminOgrDetailID);
+                        $ogrisciturId = array();
+                        $a = 0;
+                        foreach ($ogrTurDetailler as $ogrTurDetaillerr) {
+                            $ogrisciturId[] = $ogrTurDetaillerr['BSTurID'];
+                            $a++;
+                        }
+                        $yeni_dizi = array_merge($ogrturId, $ogrisciturId);
+                        $turId = implode(',', $yeni_dizi);
 
+                        $ogrTur = $Panel_Model->ogrenciDetailTur($turId);
+                        $b = 0;
+                        foreach ($ogrTur as $ogrTurr) {
+                            $ogrenciDetailTur[$b]['TurID'] = $ogrTurr['SBTurID'];
+                            $ogrenciDetailTur[$b]['TurAd'] = $ogrTurr['SBTurAd'];
+                            $ogrenciDetailTur[$b]['TurAciklama'] = $ogrTurr['SBTurAciklama'];
+                            $ogrenciDetailTur[$b]['TurAktiflik'] = $ogrTurr['SBTurAktiflik'];
+                            $ogrenciDetailTur[$b]['TurKurum'] = $ogrTurr['SBKurumAd'];
+                            $ogrenciDetailTur[$b]['TurTip'] = $ogrTurr['SBTurTip'];
+                            $ogrenciDetailTur[$b]['TurBolge'] = $ogrTurr['SBBolgeAd'];
+                            $b++;
+                        }
+                        $sonuc["ogrenciDetailTur"] = $ogrenciDetailTur;
+                    }
+                    break;
                 case "OgrenciBolgeDetailMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -950,7 +987,6 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         $sonuc["adminOgrenciKurum"] = $digerOgrenciKurum;
                     }
                     break;
-
                 case "OgrenciVeliDetailMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -1033,7 +1069,6 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         $sonuc["adminOgrenciVeli"] = $digerOgrenciVeli;
                     }
                     break;
-
                 default :
                     header("Location:" . SITE_URL_LOGOUT);
                     break;

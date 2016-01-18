@@ -21,16 +21,18 @@ class AdminBolgeAjaxSorgu extends Controller {
             $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
             if (!Session::get("dil")) {
                 Session::set("dil", $lang);
-                $formm = $this->load->multilanguage($lang);
-                $deger = $formm->multilanguage();
+                $formm = $this->load->ajaxlanguage($lang);
+                $deger = $formm->ajaxlanguage();
+                $degerbildirim = $formm->bildirimlanguage();
             } else {
-                $formm = $this->load->multilanguage(Session::get("dil"));
-                $deger = $formm->multilanguage();
+                $formm = $this->load->ajaxlanguage(Session::get("dil"));
+                $deger = $formm->ajaxlanguage();
+                $degerbildirim = $formm->bildirimlanguage();
             }
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
+            $Panel_Model = $this->load->model("Panel_Model");
             //form class bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
+            $MemcacheModel = $this->load->model("AdminMemcache_Model");
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -41,11 +43,9 @@ class AdminBolgeAjaxSorgu extends Controller {
 
                 case "adminfirmaislem":
                     $adminRutbe = Session::get("userRutbe");
-
                     if ($adminRutbe != 1) {
                         $form->yonlendir("Location:" . SITE_URL_LOGOUT);
                     } else {
-
                         $data = $form->post('usersloginadi', true);
                         $data = $form->post('usersloginsifre', true);
                         $data = $form->post('usersloginselect', true);
@@ -60,18 +60,11 @@ class AdminBolgeAjaxSorgu extends Controller {
                         $sonuc["usersLogin"] = $data["UsersLogin"];
                     }
                     break;
-
                 case "adminFirmaIslemlerKaydet":
-
                     $adminRutbe = Session::get("userRutbe");
-
                     if ($adminRutbe != 1) {
                         $form->yonlendir("Location:" . SITE_URL_LOGOUT);
                     } else {
-
-                        $uniqueKey = Session::get("userFirmaKod");
-                        $uniqueKey = $uniqueKey . '_AFirma';
-
                         $form->post('firma_adi', true);
                         $form->post('firma_aciklama', true);
                         $form->post('ogrenci_chechkbox', true);
@@ -131,29 +124,16 @@ class AdminBolgeAjaxSorgu extends Controller {
 
 
                         if ($resultupdate) {
-                            $resultMemcache = $MemcacheModel->get($uniqueKey);
-
-                            if ($resultMemcache) {
-                                $MemcacheModel->replace($uniqueKey, $returnFormdata['FirmaOzellikler'], false, 10);
-                            } else {
-                                $result = $MemcacheModel->set($uniqueKey, $returnFormdata['FirmaOzellikler'], false, 10);
-                            }
-                            $sonuc["update"] = "Başarıyla güncellenmiştir";
+                            $sonuc["update"] = $deger["FirmaDuzenle"];
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $deger["Hata"];
                         }
                     }
 
                     break;
-
                 case "adminBolgeYeniKaydet":
-
                     $adminID = Session::get("userId");
                     $adminRutbe = Session::get("userRutbe");
-                    error_log("adminRutbe" . $adminRutbe);
-                    $uniqueKey = Session::get("username");
-                    $uniqueKey = $uniqueKey . '_ABolge';
-
                     if (!$adminID) {
                         $form->yonlendir(SITE_URL_LOGOUT);
                     } else {
@@ -177,11 +157,7 @@ class AdminBolgeAjaxSorgu extends Controller {
                             );
                             $resultIDD = $Panel_Model->addAdminBolge($dataID);
                             if ($resultIDD) {
-                                $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                if ($resultMemcache) {
-                                    $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                }
-                                $alert = $adSoyad . ' ' . $bolgeAdi . $deger["BolgeEkleme"];
+                                $alert = $adSoyad . ' ' . $bolgeAdi . $degerbildirim["BolgeEkleme"];
                                 //bildirim ayarları
                                 if ($adminRutbe != 1) {
                                     $bolgeRenk = 'success';
@@ -194,7 +170,7 @@ class AdminBolgeAjaxSorgu extends Controller {
                                                 $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                             }
                                             $adminCihaz = implode(',', $adminCihaz);
-                                            $form->shuttleNotification($adminCihaz, $alert, $deger["BolgeEkle"]);
+                                            $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["BolgeEkle"]);
                                         }
                                     }
                                 }
@@ -203,24 +179,21 @@ class AdminBolgeAjaxSorgu extends Controller {
                                 $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                                 if ($resultLog) {
                                     $sonuc["newBolgeID"] = $resultIDD;
-                                    $sonuc["insert"] = "Başarıyla Yeni bölge Eklenmiştir.";
+                                    $sonuc["insert"] = $deger["BolgeKaydet"];
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $deger["Hata"];
                                 }
                             } else {
-                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                $sonuc["hata"] = $deger["Hata"];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $deger["Hata"];
                         }
                     }
 
                     break;
-
                 case "adminBolgeDetail":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
@@ -253,24 +226,19 @@ class AdminBolgeAjaxSorgu extends Controller {
                     }
 
                     break;
-
                 case "adminBolgeDetailDuzenle":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_ABolge';
                         $adminRutbe = Session::get("userRutbe");
-
                         $form->post('bolgedetail_adi', true);
                         $form->post('bolgedetail_aciklama', true);
                         $form->post('bolgedetail_id', true);
+                        $form->post('eskibolge_ad', true);
                         $adminBolgeDetailID = $form->values['bolgedetail_id'];
                         $bolgeAdi = $form->values['bolgedetail_adi'];
+                        $eskiBolgeAdi = $form->values['eskibolge_ad'];
 
                         if ($form->submit()) {
                             $data = array(
@@ -281,11 +249,37 @@ class AdminBolgeAjaxSorgu extends Controller {
 
                         $resultupdate = $Panel_Model->adminBolgeOzelliklerDuzenle($data, $adminBolgeDetailID);
                         if ($resultupdate) {
-                            $resultMemcache = $MemcacheModel->get($uniqueKey);
-                            if ($resultMemcache) {
-                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                            //başka tablolardaki verilerin böle adını değiştiriyorum
+                            if ($eskiBolgeAdi != $bolgeAdi) {
+                                $dataGuncelle = array(
+                                    'BSBolgeAdi' => $bolgeAdi
+                                );
+                                $updatehostes = $Panel_Model->bolgeAdDuzenle($dataGuncelle, $adminBolgeDetailID);
+                                $updatesofor = $Panel_Model->bolgeAdDuzenle2($dataGuncelle, $adminBolgeDetailID);
+                                $dataGuncelle1 = array(
+                                    'BSBolgeAd' => $bolgeAdi
+                                );
+                                $updateogrenci = $Panel_Model->bolgeAdDuzenle1($dataGuncelle1, $adminBolgeDetailID);
+                                $updateveli = $Panel_Model->bolgeAdDuzenle3($dataGuncelle1, $adminBolgeDetailID);
+                                $updateogriscitur = $Panel_Model->bolgeAdDuzenle8($dataGuncelle1, $adminBolgeDetailID);
+                                $updateogrtur = $Panel_Model->bolgeAdDuzenle9($dataGuncelle1, $adminBolgeDetailID);
+                                $dataGuncelle2 = array(
+                                    'SBBolgeAdi' => $bolgeAdi
+                                );
+                                $updatearac = $Panel_Model->bolgeAdDuzenle4($dataGuncelle2, $adminBolgeDetailID);
+                                $dataGuncelle3 = array(
+                                    'SBBolgeAd' => $bolgeAdi
+                                );
+                                $updateisci = $Panel_Model->bolgeAdDuzenle5($dataGuncelle3, $adminBolgeDetailID);
+                                $updatetur = $Panel_Model->bolgeAdDuzenle6($dataGuncelle3, $adminBolgeDetailID);
+                                $updateiscitur = $Panel_Model->bolgeAdDuzenle10($dataGuncelle3, $adminBolgeDetailID);
+                                $dataGuncelle4 = array(
+                                    'BSTurBolgeAd' => $bolgeAdi
+                                );
+                                $updateturtip = $Panel_Model->bolgeAdDuzenle7($dataGuncelle4, $adminBolgeDetailID);
                             }
-                            $alert = $adSoyad . ' ' . $bolgeAdi . $deger["BolgeDuzenleme"];
+                            //ilgili kişinin yaptuığı değişikliğin bildirim ve logunu tutuyorum
+                            $alert = $adSoyad . ' ' . $bolgeAdi . $degerbildirim["BolgeDuzenleme"];
                             $bolgeRenk = 'warning';
                             //bildirim ayarları
                             if ($adminRutbe != 1) {//normal admin
@@ -313,7 +307,7 @@ class AdminBolgeAjaxSorgu extends Controller {
                                                 $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                             }
                                             $adminCihaz = implode(',', $adminCihaz);
-                                            $form->shuttleNotification($adminCihaz, $alert, $deger["BolgeDuzen"]);
+                                            $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["BolgeDuzen"]);
                                         }
                                     }
                                 } else {
@@ -326,7 +320,7 @@ class AdminBolgeAjaxSorgu extends Controller {
                                                 $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                             }
                                             $adminCihaz = implode(',', $adminCihaz);
-                                            $form->shuttleNotification($adminCihaz, $alert, $deger["BolgeDuzen"]);
+                                            $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["BolgeDuzen"]);
                                         }
                                     }
                                 }
@@ -348,7 +342,7 @@ class AdminBolgeAjaxSorgu extends Controller {
                                                 $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                             }
                                             $adminCihaz = implode(',', $adminCihaz);
-                                            $form->shuttleNotification($adminCihaz, $alert, $deger["BolgeDuzen"]);
+                                            $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["BolgeDuzen"]);
                                         }
                                     }
                                 }
@@ -357,26 +351,21 @@ class AdminBolgeAjaxSorgu extends Controller {
                             $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
                             $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                             if ($resultLog) {
-                                $sonuc["update"] = "Başarıyla Bölgeniz Güncellenmiştir.";
+                                $sonuc["update"] = $deger["BolgeDuzenle"];
                             } else {
-                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                $sonuc["hata"] = $deger["Hata"];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $deger["Hata"];
                         }
                     }
 
                     break;
-
                 case "adminBolgeDetailDelete":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_ABolge';
                         $adminRutbe = Session::get("userRutbe");
 
                         $form->post('bolgedetail_id', true);
@@ -387,12 +376,22 @@ class AdminBolgeAjaxSorgu extends Controller {
                         $deleteresult = $Panel_Model->adminBolgeDelete($adminBolgeDetailID);
                         if ($deleteresult) {
                             $resultdelete = $Panel_Model->adminBolgeIDDelete($adminBolgeDetailID);
+
                             if ($resultdelete) {
-                                $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                if ($resultMemcache) {
-                                    $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                }
-                                $alert = $adSoyad . ' ' . $bolgeAdi . $deger["BolgeSilme"];
+                                $deletehostes = $Panel_Model->bolgedelete($adminBolgeDetailID);
+                                $deleteogrenci = $Panel_Model->bolgedelete1($adminBolgeDetailID);
+                                $deletesofor = $Panel_Model->bolgedelete2($adminBolgeDetailID);
+                                $deleteveli = $Panel_Model->bolgedelete3($adminBolgeDetailID);
+                                $deletearac = $Panel_Model->bolgedelete4($adminBolgeDetailID);
+                                $deleteisci = $Panel_Model->bolgedelete5($adminBolgeDetailID);
+                                $deletetur = $Panel_Model->bolgedelete6($adminBolgeDetailID);
+                                $deleteturtip = $Panel_Model->bolgedelete7($adminBolgeDetailID);
+                                $deleteogriscitur = $Panel_Model->bolgedelete8($adminBolgeDetailID);
+                                $deleteogrtur = $Panel_Model->bolgedelete9($adminBolgeDetailID);
+                                $deleteiscitur = $Panel_Model->bolgedelete10($adminBolgeDetailID);
+
+                                //gerekli log kayıtları ve bildirimler burada oluşturulmaktadır.
+                                $alert = $adSoyad . ' ' . $bolgeAdi . $degerbildirim["BolgeSilme"];
                                 $bolgeRenk = 'danger';
                                 //bildirim ayarları
                                 if ($adminRutbe != 1) {//normal admin
@@ -420,7 +419,7 @@ class AdminBolgeAjaxSorgu extends Controller {
                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                 }
                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                $form->shuttleNotification($adminCihaz, $alert, $deger["BolgeSil"]);
+                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["BolgeSil"]);
                                             }
                                         }
                                     } else {
@@ -433,7 +432,7 @@ class AdminBolgeAjaxSorgu extends Controller {
                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                 }
                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                $form->shuttleNotification($adminCihaz, $alert, $deger["BolgeSil"]);
+                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["BolgeSil"]);
                                             }
                                         }
                                     }
@@ -455,7 +454,7 @@ class AdminBolgeAjaxSorgu extends Controller {
                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                 }
                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                $form->shuttleNotification($adminCihaz, $alert, $deger["BolgeSil"]);
+                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["BolgeSil"]);
                                             }
                                         }
                                     }
@@ -464,27 +463,22 @@ class AdminBolgeAjaxSorgu extends Controller {
                                 $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
                                 $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                                 if ($resultLog) {
-                                    $sonuc["delete"] = "Bölge kaydı başarıyla silinmiştir.";
+                                    $sonuc["delete"] = $deger["BolgeSilme"];
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $deger["Hata"];
                                 }
                             } else {
-                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                $sonuc["hata"] = $deger["Hata"];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $deger["Hata"];
                         }
-
-
                         $sonuc["adminBolgeDetail"] = $data["adminBolgeDetail"];
                     }
 
                     break;
-
                 case "adminBolgeKurumKaydet":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
@@ -541,7 +535,7 @@ class AdminBolgeAjaxSorgu extends Controller {
                             if ($resultMemcache) {
                                 $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
                             }
-                            $alert = $adSoyad . ' ' . $kurumAd . $deger["KurumEkleme"];
+                            $alert = $adSoyad . ' ' . $kurumAd . $degerbildirim["KurumEkleme"];
                             $kurumRenk = 'success';
                             $kurumUrl = 'kurumliste';
                             $kurumIcon = 'fa fa-building-o';
@@ -571,7 +565,7 @@ class AdminBolgeAjaxSorgu extends Controller {
                                                 $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                             }
                                             $adminCihaz = implode(',', $adminCihaz);
-                                            $form->shuttleNotification($adminCihaz, $alert, $deger["KurumEkle"]);
+                                            $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["KurumEkle"]);
                                         }
                                     }
                                 } else {
@@ -584,7 +578,7 @@ class AdminBolgeAjaxSorgu extends Controller {
                                                 $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                             }
                                             $adminCihaz = implode(',', $adminCihaz);
-                                            $form->shuttleNotification($adminCihaz, $alert, $deger["KurumEkle"]);
+                                            $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["KurumEkle"]);
                                         }
                                     }
                                 }
@@ -606,7 +600,7 @@ class AdminBolgeAjaxSorgu extends Controller {
                                                 $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                             }
                                             $adminCihaz = implode(',', $adminCihaz);
-                                            $form->shuttleNotification($adminCihaz, $alert, $deger["KurumEkle"]);
+                                            $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["KurumEkle"]);
                                         }
                                     }
                                 }
@@ -616,17 +610,16 @@ class AdminBolgeAjaxSorgu extends Controller {
                             $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                             if ($resultLog) {
                                 $sonuc["newBolgeKurumID"] = $resultKurumID;
-                                $sonuc["insert"] = "Başarıyla Bölgenize yeni Kurum Eklenmiştir.";
+                                $sonuc["insert"] = $deger["KurumKaydet"];
                             } else {
-                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                $sonuc["hata"] = $deger["Hata"];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $deger["Hata"];
                         }
                     }
 
                     break;
-
                 default :
                     header("Location:" . SITE_URL_LOGOUT);
                     break;

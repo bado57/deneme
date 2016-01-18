@@ -1,0 +1,370 @@
+﻿/* Renkler */
+
+@ustmenuback: #f7f7f7;
+@ustmenuborder: #a7a7aa;
+@bodyrenk: #efeff4;
+@listborder: #c8c7cc;
+@griyazi: #8e8e93;
+@chevronrenk: #c7c7cc;
+@iconrenk: #cccccc;
+@mavi: #007aff;
+@yesil: #63da38;
+@koyuyesil: #009933;
+@mor: #cc73e1;
+@sari: #eabb00;
+@kahve: #a2845e;
+@pembe: #ff2968;
+@kirmizi: #ff3b30;
+@turuncu: #ff9500;
+
+
+/* End Renkler */
+body {
+    background-color: @bodyrenk !important;
+    font-family: Arial !important;
+
+    .navigation-bar {
+        background-color: @ustmenuback !important;
+        border-bottom: 1px solid @listborder !important;
+        /*height: 60px !important;*/
+        .navigation-bar__left {
+            padding-top: 12px;
+            padding-left: 12px;
+
+            .back {
+                background: transparent !important;
+                margin-top: -10px;
+                color: #000 !important;
+            }
+        }
+
+        .navigation-bar__right {
+            padding-top: 12px;
+            padding-right: 12px;
+
+            .resetpage {
+                background: transparent !important;
+                color: #000 !important;
+                margin-top: -10px;
+            }
+        }
+
+        .navigation-bar__center {
+            /*padding-top: 8px;*/
+            color: @koyuyesil !important;
+        }
+    }
+
+    .page {
+
+        .page__background {
+            background-color: @bodyrenk !important;
+        }
+
+        .page__content {
+
+            .settings-header {
+                font-weight: 500;
+                font-size: 14px;
+                opacity: 0.6;
+                padding: 10px 0 0 10px;
+                margin-bottom: 6px;
+
+                .listHeaderButton {
+                    padding: 0 10px !important;
+                    color: @koyuyesil !important;
+                    float:right;
+                    position:relative;
+                    display:inline-block;
+                }
+            }
+
+            .person-list{
+                .list__item {
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                    border: none !important;
+
+                    .ons-row-inner {
+                        border: none !important;
+
+                        .col:first-child {
+                            background-color: #fff !important;
+                            color: @griyazi !important;
+                            text-align: center;
+                        }
+
+                        .person-name {
+                            padding-left: 10px;
+                            padding-right: 12px;
+                            border-bottom: 1px solid @bodyrenk;
+                        }
+                    }
+                }
+            }
+
+            .settings-list {
+
+                .list__header {
+                    font-size: 14px;
+                    background-color: transparent !important;
+                    border: none !important;
+                    background: @ustmenuback !important;
+                    padding: 6px 10px !important;
+
+                    .ons-row-inner {
+                        .colhdr {
+                            padding-top: 6px;
+                            opacity: 0.8;
+                        }
+
+                        .colislem {
+                            text-align: center;
+                            color: @griyazi !important;
+                            font-size: 20px;
+
+                            .listHeaderButton {
+                                padding: 0 10px !important;
+                                color: @koyuyesil !important;
+                            }
+                        }
+                    }
+                }
+
+                .list__item {
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                    border: none !important;
+
+                    .ons-row-inner {
+                        border: none !important;
+
+                        .col:first-child {
+                            background-color: #fff !important;
+                            color: @griyazi !important;
+                            text-align: center;
+                        }
+
+                        .coldty {
+                            padding-left: 15px;
+                            padding-right: 12px;
+                            border-bottom: 1px solid @bodyrenk;
+
+                            .username {
+                                font-size: 15px;
+                                opacity: 0.5;
+                                height: auto;
+                                line-height: 12px;
+                                padding-bottom: 14px;
+                            }
+                        }
+
+                        .adressbar {
+                            line-height: 20px !important;
+                            padding-bottom: 10px;
+                            padding-top: 10px;
+                        }
+
+                        .colformdty {
+                            text-align: left !important;
+
+                            input[type=text] {
+                                width: 100% !important;
+                            }
+                        }
+                    }
+                }
+
+                .list__item:last-child .ons-row-inner .coldty {
+                    border-bottom: none !important;
+                }
+            }
+
+            .edit-list {
+                border: none !important;
+
+                .list__header {
+                    font-size: 17px;
+                    background-color: transparent !important;
+                    border: none !important;
+                    padding: 10px !important;
+
+                    .ons-row-inner {
+                        .colhdr {
+                            padding: 10px 0 10px 10px !important;
+                        }
+                    }
+                }
+
+                .list__item {
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                    border: none !important;
+
+                    .ons-row-inner {
+                        border: none !important;
+
+                        .col:first-child {
+                            background-color: #fff !important;
+                            color: @griyazi !important;
+                            text-align: center;
+                        }
+
+                        .coldty {
+                            padding-left: 15px;
+                            padding-right: 12px;
+                            border-bottom: 1px solid @bodyrenk;
+                        }
+                    }
+                }
+
+                .list__item:last-child .ons-row-inner .coldty {
+                    border-bottom: none !important;
+                }
+            }
+
+            .login-form {
+                text-align: center;
+                width: 80%;
+                margin: 60px auto 0;
+
+                .ons-row-inner {
+                    .colform {
+                        text-align: left !important;
+                        padding-left: 10px !important;
+                        padding-top: 8px !important;
+                        border-bottom: 1px solid #d5d5d5;
+                        opacity: 0.6;
+                    }
+
+                    .colblank {
+                        text-align: center !important;
+                        padding-top: 8px !important;
+                        opacity: 0.6;
+                    }
+
+                    .colformdty {
+                        text-align: left !important;
+
+                        input[type=text] {
+                            width: 100% !important;
+                        }
+                    }
+                }
+
+                input[type=password] {
+                    display: block;
+                    width: 100%;
+                    margin: 0 auto;
+                    outline: none;
+                    padding-top: 24px;
+                    padding-bottom: 24px;
+                }
+
+                .accessButton {
+                    background-color: @koyuyesil !important;
+                }
+            }
+        }
+
+        .bottom-bar {
+            background-color: @koyuyesil !important;
+            height: 60px;
+
+            .ons-row-inner {
+                height: 100% !important;
+
+                .ons-col-inner {
+                    .button {
+                        line-height: 51px;
+                        font-size: 22px;
+                        background-color: transparent !important;
+                        border: none !important;
+                        border-radius: 0 !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+/*----- Loading -----*/
+.load {
+    margin: 0 auto;
+    width: 72px;
+    height: 60px;
+    padding-top: 12px;
+    text-align: center;
+    font-size: 22px;
+    color: #009933;
+    background: transparent url("shuttle-loading.png") no-repeat center center;
+}
+/*----- End Loading -----*/
+
+/*----- Alert -----*/
+.alert-dialog {
+    border-radius: 8px !important;
+}
+
+.alert-dialog-title {
+    text-align: center !important;
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+}
+
+.alert-dialog-content {
+    text-align: center !important;
+    padding-bottom: 10px !important;
+}
+/*----- End Alert -----*/
+
+/*----- Dialog -----*/
+
+.dialog {
+    .navigation-bar {
+        height: 40px !important;
+
+        .navigation-bar__center, .navigation-bar__title {
+            padding: 0 !important;
+        }
+    }
+
+    .dialogContent {
+        padding: 10px;
+
+        .dialogDetay {
+            font-weight: 500;
+            font-size: 14px;
+            opacity: 0.6;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        textarea {
+            width: 97% !important;
+            border: 1px solid @bodyrenk !important;
+            margin-bottom: 10px;
+            border-radius: 5px !important;
+            padding: 5px;
+        }
+
+        .dialogCancelButton {
+            background-color: @koyuyesil !important;
+            width: 49% !important;
+            float: left;
+            margin-bottom: 10px;
+            text-align: center !important;
+        }
+
+        .dialogAccessButton {
+            background-color: @koyuyesil !important;
+            width: 49% !important;
+            float: right;
+            margin-bottom: 10px;
+            text-align: center !important;
+        }
+    }
+}
+
+/*----- End Dialog -----*/

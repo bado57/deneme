@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/AdminKurumAjaxSorgu",
+    url: SITE_URL + "AdminKurumAjaxSorgu",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -69,7 +69,6 @@ $(document).ready(function () {
                     alertify.alert(jsDil.Hata);
                     return false;
                 } else {
-
                     $("input[name=KurumDetailAdi]").val(cevap.adminKurumDetail['2065df742f65c58446e8796c751fcd15']);
                     $("input[name=KurumDetailBolge]").val(cevap.adminKurumDetail['5dff8e4f44d1afe5716832b74770e3fe']);
                     $("input[name=KurumDetailTelefon]").val(cevap.adminKurumDetail['1ca4e7d1e05313c9c9ea295bd91eee63']);
@@ -1435,7 +1434,7 @@ $.AdminIslemler = {
                     success: function (cevap) {
                         if (cevap.hata) {
                             reset();
-                            alertify.alert(jsDil.Hata);
+                            alertify.alert(cevap.hata);
                             return false;
                         } else {
                             disabledForm();
@@ -1505,16 +1504,21 @@ $.AdminIslemler = {
             return false;
         } else {
             $.ajax({
-                data: {"kurumdetail_id": kurumdetail_id, "bolge_id": bolge_id, "kurumdetail_adi": kurumdetail_adi, "kurumdetail_bolge": kurumdetail_bolge, "kurumdetail_telefon": kurumdetail_telefon, "kurumdetail_email": kurumdetail_email, "kurumdetail_adres": kurumdetail_adres, "kurumdetail_aciklama": kurumdetail_aciklama, "kurumdetail_tip": kurumdetail_tip, "tip": "adminKurumDetailDuzenle"},
+                data: {"kurumdetail_id": kurumdetail_id, "bolge_id": bolge_id, "kurumdetail_adi": kurumdetail_adi,
+                    "kurumeski_ad": AdminKurumDetailVazgec[0],
+                    "kurumdetail_bolge": kurumdetail_bolge, "kurumdetail_telefon": kurumdetail_telefon,
+                    "kurumdetail_email": kurumdetail_email, "kurumdetail_adres": kurumdetail_adres,
+                    "kurumdetail_aciklama": kurumdetail_aciklama, "kurumdetail_tip": kurumdetail_tip,
+                    "tip": "adminKurumDetailDuzenle"},
                 success: function (cevap) {
                     if (cevap.hata) {
                         reset();
-                        alertify.alert(jsDil.Hata);
+                        alertify.alert(cevap.hata);
                         return false;
                     } else {
                         disabledForm();
                         reset();
-                        alertify.success(jsDil.KurumDuzenle);
+                        alertify.success(cevap.update);
                         var length = $('tbody#adminKurumRow tr').length;
                         for (var t = 0; t < length; t++) {
                             var attrValueId = $("tbody#adminKurumRow > tr > td > a").eq(t).attr('value');
@@ -1567,11 +1571,11 @@ $.AdminIslemler = {
                         "kurumwebsite": kurumwebsite, "kurumadrsDty": kurumadrsDty, "kurumaciklama": kurumaciklama,
                         "kurumulke": kurumulke, "kurumil": kurumil, "kurumilce": kurumilce, "kurumsemt": kurumsemt,
                         "kurummahalle": kurummahalle, "kurumsokak": kurumsokak, "kurumpostakodu": kurumpostakodu,
-                        "kurumcaddeno": kurumcaddeno, "tip": "adminKurumKaydet"},
+                        "kurumcaddeno": kurumcaddeno, "detayAdres": ttl, "tip": "adminKurumKaydet"},
                     success: function (cevap) {
                         if (cevap.hata) {
                             reset();
-                            alertify.alert(jsDil.Hata);
+                            alertify.alert(cevap.hata);
                             return false;
                         } else {
                             var tip;
@@ -1583,7 +1587,7 @@ $.AdminIslemler = {
                                 tip = jsDil.OgrenciPersonel;
                             }
                             reset();
-                            alertify.success(jsDil.KurumDuzenle);
+                            alertify.success(cevap.insert);
                             var kurumCount = $('#smallKurum').text();
                             kurumCount++;
                             $('#smallKurum').text(kurumCount);
@@ -1755,13 +1759,13 @@ $.AdminIslemler = {
                                                     success: function (cevap) {
                                                         if (cevap.hata) {
                                                             reset();
-                                                            alertify.alert(jsDil.Hata);
+                                                            alertify.alert(cevap.hata);
                                                             return false;
                                                         } else {
                                                             kayitDeger = 1;
                                                             if (cevap.turGidis) {
                                                                 reset();
-                                                                alertify.success(jsDil.GidisTur);
+                                                                alertify.success(cevap.turGidisReply);
                                                                 $("input[name=TurGidis]").val(cevap.turGidis);
                                                                 $('#TurSelectTip').multiselect('deselect', '0', true);
                                                                 var dropdown = $('#TurSelectTip').siblings('.multiselect-container');
@@ -1774,7 +1778,7 @@ $.AdminIslemler = {
                                                             }
                                                             if (cevap.turDonus) {
                                                                 reset();
-                                                                alertify.success(jsDil.DonusTur);
+                                                                alertify.success(cevap.turDonusReply);
                                                                 $("input[name=TurDonus]").val(cevap.turDonus);
                                                                 $('#TurSelectTip').multiselect('deselect', '1', true);
                                                                 var dropdown = $('#TurSelectTip').siblings('.multiselect-container');
@@ -2262,13 +2266,13 @@ $.AdminIslemler = {
                         success: function (cevap) {
                             if (cevap.hata) {
                                 reset();
-                                alertify.alert(jsDil.Hata);
+                                alertify.alert(cevap.hata);
                                 return false;
                             } else {
                                 kayitDegerGidis = 1;
                                 disabledForm();
                                 reset();
-                                alertify.success(jsDil.GidisTurDuzenle);
+                                alertify.success(cevap.update);
                                 $('input[name=adminTurDetayGds]').val(cevap.turGidisID);
                                 $('#TurDetayGidisGun').multiselect('disable');
                                 //saat1
@@ -2321,7 +2325,7 @@ $.AdminIslemler = {
                     success: function (cevap) {
                         if (cevap.hata) {
                             reset();
-                            alertify.alert(jsDil.Hata);
+                            alertify.alert(cevap.hata);
                             return false;
                         } else {
                             disabledForm();
@@ -2800,13 +2804,13 @@ $.AdminIslemler = {
                         success: function (cevap) {
                             if (cevap.hata) {
                                 reset();
-                                alertify.alert(jsDil.Hata);
+                                alertify.alert(cevap.hata);
                                 return false;
                             } else {
                                 kayitDegerDonus = 1;
                                 disabledForm();
                                 reset();
-                                alertify.success(jsDil.DonusTurDuzenle);
+                                alertify.success(cevap.turDonusReply);
                                 $('input[name=adminTurDetayDns]').val(cevap.turDonusID);
                                 $('#TurDetayDonusGun').multiselect('disable');
                                 //saat1

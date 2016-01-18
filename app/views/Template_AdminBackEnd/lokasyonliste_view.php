@@ -71,7 +71,7 @@
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div id="hd">
-                <h3><?php echo $data["AracLokasyon"]; ?> <span id="turTipSubView"></span> (<span id="totalKm" style="font-weight: bold;color:black"></span>)<span class="pull-right"><button data-type="svClose" data-class="aracDetay" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+                <h3><?php echo $data["AracLokasyon"]; ?> <span id="turTipSubView"></span> (<span id="totalKm" style="font-weight: bold;color:black"></span>)<span class="pull-right"><button data-type="svClose" data-islemler="adminAracLoc" data-class="aracDetay" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
                 <hr/>
             </div>
             <div id="lokasyonForm">

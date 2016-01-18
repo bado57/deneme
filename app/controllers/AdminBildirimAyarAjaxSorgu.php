@@ -17,10 +17,12 @@ class AdminBildirimAyarAjaxSorgu extends Controller {
 
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
 
+            $formm = $this->load->ajaxlanguage(Session::get("dil"));
+            $deger = $formm->ajaxlanguage();
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
+            $Panel_Model = $this->load->model("Panel_Model");
             //form class bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
+            $MemcacheModel = $this->load->model("AdminMemcache_Model");
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -60,7 +62,7 @@ class AdminBildirimAyarAjaxSorgu extends Controller {
                                     }
                                 }
                             } else {
-                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                $sonuc["hata"] = $deger["Hata"];
                             }
                         } else {//insert
                             $insertData = array(
@@ -85,8 +87,9 @@ class AdminBildirimAyarAjaxSorgu extends Controller {
                                         $sonuc["ayarDuzen"] = $newArray;
                                     }
                                 }
+                                $sonuc["update"] = $deger["BildirimAyarKaydet"];
                             } else {
-                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                $sonuc["hata"] = $deger["Hata"];
                             }
                         }
                     }

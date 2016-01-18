@@ -98,7 +98,7 @@
                     </div>
                     <div class="form-group">
                         <label for="AracAciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="AracAciklama" class="form-control" rows="3"></textarea>
+                        <textarea name="AracAciklama" class="form-control" rows="3" style="resize: none"></textarea>
                     </div>
                     <div class="form-group">
                         <button data-type="svClose"  data-class="arac" type="button" data-islemler="adminAracVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
@@ -107,8 +107,8 @@
                 </div>
                 <div class="form-vertical col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <div class="form-group">
-                        <label for="AracKapasite"><?php echo $data["Kapasite"]; ?></label>
-                        <input type="text" class="form-control" id="AracKapasite" name="AracKapasite" value="">
+                        <label for="AracKm"><?php echo $data["AracKm"]; ?></label>
+                        <input type="number" min="0" class="form-control" id="AracKm" name="AracKm" value="">
                     </div>
                     <div class="form-group">
                         <label for="AracSurucu"><?php echo $data["Surucu"]; ?></label>
@@ -116,9 +116,13 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="AracSurucu"><?php echo $data["Hostes"]; ?></label>
+                        <label for="AracHostes"><?php echo $data["Hostes"]; ?></label>
                         <select type="text" class="form-control" id="AracHostes" name="AracHostes" multiple="multiple" style="display: none;">
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="AracKapasite"><?php echo $data["Kapasite"]; ?></label>
+                        <input type="text" class="form-control" id="AracKapasite" name="AracKapasite" value="">
                     </div>
                     <div class="form-group">
                         <label for="AracDurum"><?php echo $data["Durum"]; ?></label>
@@ -169,7 +173,7 @@
                         </div>
                         <div class="form-group">
                             <label for="AracDetayAciklama"><?php echo $data["Aciklama"]; ?></label>
-                            <textarea name="AracDetayAciklama" class="form-control dsb" rows="3" disabled></textarea>
+                            <textarea name="AracDetayAciklama" class="form-control dsb" rows="3" disabled style="resize: none"></textarea>
                         </div>
                         <div class="form-group submit-group">
                             <button data-type="svClose" type="button" class="btn btn-default vzg" data-Vzgislem="adminAracDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
@@ -242,7 +246,6 @@
         </div>
     </div>
 </div>
-
 
 <div id="aracTakvim" class="svClose col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <input name="takvimLang" type="hidden" value="<?php echo Session::get("dil"); ?>" />

@@ -1,6 +1,7 @@
+var SITE_URL = "http://192.168.1.30/SProject/";
 $.ajaxSetup({
     type: "post",
-    url: "http://192.168.1.198/SProject/SoforMobilProfilAjax",
+    url: SITE_URL + "SoforMobilProfilAjax",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -15,13 +16,6 @@ $.ajaxSetup({
         }
     }
 });
-var lastindex; // Önceki tabın indexi
-var currentindex; // Mevcut tabın indexi
-var lastpage = "info.html"; // Hangi sayfadan geldi ?
-var currentpage = "info.html"; // Şu an hangi sayfada ?
-var currentpageindex; // Şu an hangi sayfanın indexi
-var lastpageindex; // Önceki sayfanın indexi
-
 ons.ready(function () {
     profileNavigator.on('prepush', function (event) {
         modal.show();
@@ -71,6 +65,7 @@ $.SoforIslemler = {
         var eskiAd = SoforProfil[0][0].trim();
         var eskiSoyad = SoforProfil[0][1].trim();
         if (SoforProfil[0][0].trim() == ad && SoforProfil[0][1].trim() == soyad && SoforProfil[1].trim() == telefon && SoforProfil[2].trim() == email) {
+            modal.hide();
             ons.notification.alert({message: jsDil.DegisiklikYok});
             return false;
         } else {
@@ -78,41 +73,44 @@ $.SoforIslemler = {
                 if (soyad != '') {
                     if (telefon != '') {
                         if (email != '') {
-                            var result = ValidateEmail(email);
-                            if (!result) {
-                                ons.notification.alert({message: jsDil.FormatEmail});
-                                return false;
-                            } else {
-                                $.ajax({
-                                    data: {"firma_id": firma_id, "eskiAd": eskiAd, "eskiSoyad": eskiSoyad,
-                                        "ad": ad, "soyad": soyad, "telefon": telefon,
-                                        "email": email, "sofor_id": sofor_id, "tip": "soforProfilKaydet"},
-                                    success: function (cevap) {
-                                        if (cevap.hata) {
-                                            ons.notification.alert({message: jsDil.Hata});
-                                        } else {
-                                            $("#genelAd").text(ad + ' ' + soyad);
-                                            $("#genelTelefon").text(telefon);
-                                            $("#genelEmail").text(email);
-                                        }
+                            var lang = $("input[name=lang]").val();
+                            $.ajax({
+                                data: {"firma_id": firma_id, "eskiAd": eskiAd, "eskiSoyad": eskiSoyad,
+                                    "ad": ad, "soyad": soyad, "telefon": telefon,
+                                    "email": email, "lang": lang, "sofor_id": sofor_id, "tip": "soforProfilKaydet"},
+                                success: function (cevap) {
+                                    if (cevap.hata) {
                                         modal.hide();
-                                        profileNavigator.popPage();
+                                        ons.notification.alert({message: cevap.hata});
+                                        return false;
+                                    } else {
+                                        $("#genelAd").text(ad + ' ' + soyad);
+                                        $("#genelTelefon").text(telefon);
+                                        $("#genelEmail").text(email);
+                                        $("#emailUnut").val(email);
                                     }
-                                });
-                            }
+                                    modal.hide();
+                                    ons.notification.alert({message: cevap.update});
+                                    profileNavigator.popPage();
+                                }
+                            });
                         } else {
+                            modal.hide();
                             ons.notification.alert({message: jsDil.BosEmail});
                             return false;
                         }
                     } else {
-                        ons.notification.alert({message: jsDil.BosEmail});
+                        modal.hide();
+                        ons.notification.alert({message: jsDil.BosTelefon});
                         return false;
                     }
                 } else {
+                    modal.hide();
                     ons.notification.alert({message: jsDil.BosSoyad});
                     return false;
                 }
             } else {
+                modal.hide();
                 ons.notification.alert({message: jsDil.BosAd});
                 return false;
             }
@@ -122,7 +120,7 @@ $.SoforIslemler = {
     soforSfreEkle: function () {
         modal.show();
         var sofor_id = $("input[name=id]").val();
-        var language = $("input[name=lang]").val();
+        var lang = $("input[name=lang]").val();
         var firma_id = $("input[name=firmaId]").val();
         var kadi = $("#genelKadi").text();
         var eskisifre = $("input[name=eskiSifre]").val().replace(/\s+/g, '');
@@ -137,16 +135,17 @@ $.SoforIslemler = {
                                 $.ajax({
                                     data: {"firma_id": firma_id, "eskisifre": eskisifre, "yenisifre": yenisifre,
                                         "yenisifretkrar": yenisifretkrar, "sofor_id": sofor_id,
-                                        "language": language, "kadi": kadi, "tip": "soforSifreKaydet"},
+                                        "lang": lang, "kadi": kadi, "tip": "soforSifreKaydet"},
                                     success: function (cevap) {
                                         if (cevap.hata) {
+                                            modal.hide();
                                             ons.notification.alert({message: cevap.hata});
                                             return false;
                                         } else {
-                                            ons.notification.alert({message: jsDil.SifreDegis});
+                                            ons.notification.alert({message: cevap.update});
+                                            modal.hide();
+                                            profileNavigator.popPage();
                                         }
-                                        modal.hide();
-                                        profileNavigator.popPage();
                                     }
                                 });
                             } else {
@@ -191,18 +190,20 @@ $.SoforIslemler = {
                             modal.show();
                             var sofor_id = $("input[name=id]").val();
                             var firma_id = $("input[name=firmaId]").val();
+                            var lang = $("input[name=lang]").val();
+                            var adSoyad = $("#genelAd").text();
                             $.ajax({
                                 data: {"firma_id": firma_id, "sofor_id": sofor_id,
-                                    "email": email, "tip": "soforSifreUnuttum"},
+                                    "email": email, "lang": lang, "adSoyad": adSoyad, "tip": "soforSifreUnuttum"},
                                 success: function (cevap) {
                                     if (cevap.hata) {
-                                        ons.notification.alert({message: jsDil.Hata});
+                                        ons.notification.alert({message: cevap.hata});
                                         return false;
                                     } else {
-                                        ons.notification.alert({message: jsDil.SifreGonderme});
+                                        ons.notification.alert({message: cevap.sifregonder});
+                                        modal.hide();
+                                        profileNavigator.popPage();
                                     }
-                                    modal.hide();
-                                    profileNavigator.popPage();
                                 }
                             });
                             break;
@@ -210,6 +211,7 @@ $.SoforIslemler = {
                 }
             });
         } else {
+            modal.hide();
             ons.notification.alert({message: jsDil.MailYok});
             return false;
         }
@@ -228,25 +230,29 @@ $.SoforIslemler = {
             var postakodu = $("input[name=postal_code]").val();
             var caddeno = $("input[name=street_number]").val();
             var lokasyon = $("input[name=soforLokasyon]").val();
+            var lang = $("input[name=lang]").val();
             if (lokasyon) {
                 $.ajax({
                     data: {"firma_id": firma_id, "ulke": ulke, "il": il, "ilce": ilce, "mahalle": mahalle,
                         "sokak": sokak, "postakodu": postakodu,
                         "semt": semt, "caddeno": caddeno, "lokasyon": lokasyon, "detayAdres": ttl,
-                        "id": id, "tip": "soforHaritaKaydet"},
+                        "id": id, "lang": lang, "tip": "soforHaritaKaydet"},
                     success: function (cevap) {
                         if (cevap.hata) {
-                            ons.notification.alert({message: jsDil.Hata});
+                            modal.hide();
+                            ons.notification.alert({message: cevap.hata});
                             return false;
                         } else {
                             $("input[name=location]").val(lokasyon);
                             $("#genelAdres").text(ttl);
                             modal.hide();
+                            ons.notification.alert({message: cevap.update});
                             profileNavigator.popPage();
                         }
                     }
                 });
             } else {
+                modal.hide();
                 ons.notification.alert({message: jsDil.HaritaIsaret});
                 return false;
             }
@@ -278,7 +284,21 @@ function saveMap() {
 function Mobileinitialize(Mobileenlem, Mobileboylam) {
 
     var mapOptions = {
-        zoom: 16
+        zoom: 12,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.TOP_CENTER
+        },
+        zoomControl: true,
+        zoomControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_CENTER
+        },
+        scaleControl: true,
+        streetViewControl: true,
+        streetViewControlOptions: {
+            position: google.maps.ControlPosition.LEFT_TOP
+        }
     };
 
     var map = new google.maps.Map(document.getElementById('sofor_map'),

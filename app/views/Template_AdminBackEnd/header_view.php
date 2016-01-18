@@ -52,6 +52,7 @@
             <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminbildirimajax.js" type="text/javascript"></script>
             <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminduyuruajax.js" type="text/javascript"></script>
             <script>
+                var SITE_URL = "http://localhost/SProject/";
                 function reset() {
                     alertify.set({
                         labels: {
@@ -149,7 +150,7 @@
                                 </ul>
                             </li>
                             <li class="dropdown tasks-menu">
-                                <a href="<?php echo SITE_URL; ?>/adminweb/ayarislem" title="Bildirim Ayarları">
+                                <a href="<?php echo SITE_URL; ?>/AdminWeb/ayarislem" title="Bildirim Ayarları">
                                     <i class="fa fa-cog"></i>
                                 </a>
                             </li>
@@ -167,7 +168,7 @@
                                     </li>
                                     <li class="user-footer">
                                         <div class="pull-left">
-                                            <a href="<?php echo SITE_URL; ?>/adminweb/profil" class="btn btn-default btn-flat"><?php echo $data["Profil"]; ?></a>
+                                            <a href="<?php echo SITE_URL; ?>/AdminWeb/profil" class="btn btn-default btn-flat"><?php echo $data["Profil"]; ?></a>
                                         </div>
                                         <div class="pull-right">
                                             <a href="<?php echo SITE_URL_LOGOUT; ?>" class="btn btn-default btn-flat"><?php echo $data["CikisYap"]; ?></a>

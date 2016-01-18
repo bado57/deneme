@@ -33,7 +33,7 @@ $(document).ready(function () {
 
     // Sol Menu Navigasyon Kontrolü   
     $(".sidebar-menu").find(".active").removeClass("active");
-    $("#" + activeMenu).find("a").click();
+    $("#" + activeMenu).addClass("active");
     $(".sidebar-menu").find(".activeli").removeClass("activeli");
     $("#" + activeMenu).find("#" + activeLink).addClass("activeli");
     // End Sol Menu Navigasyon Kontrolü
@@ -310,7 +310,7 @@ function initialize() {
                 //timeout:3000,
                 dataType: "json",
                 success: function (cevap) {
-                    
+
                     ttl = cevap.results[0].formatted_address;
                     placeMarker(event.latLng);
                     incomeLocation = cevap;

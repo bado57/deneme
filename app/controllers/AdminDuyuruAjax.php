@@ -18,7 +18,7 @@ class AdminDuyuruAjax extends Controller {
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
             $sonuc = array();
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
+            $Panel_Model = $this->load->model("Panel_Model");
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -44,7 +44,6 @@ class AdminDuyuruAjax extends Controller {
 
                     $sonuc["Duyur"] = $adminDuyuru;
                     break;
-
                 case "loaderDocument":
                     $form->post('sonDeger', true);
                     $sonDeger = $form->values['sonDeger'];
@@ -65,7 +64,6 @@ class AdminDuyuruAjax extends Controller {
 
                     $sonuc["Duyur"] = $adminDuyuru;
                     break;
-
                 case "adminOkundu":
                     $form->post('ID', true);
                     $duyuruID = $form->values['ID'];
@@ -76,7 +74,6 @@ class AdminDuyuruAjax extends Controller {
                     }
                     $resultDuyuru = $Panel_Model->adminDuyuruOkundu($data, $duyuruID);
                     break;
-
                 case "adminGoruldu":
                     if ($form->submit()) {
                         $data = array(
@@ -85,7 +82,6 @@ class AdminDuyuruAjax extends Controller {
                     }
                     $resultDuyuru = $Panel_Model->adminDuyuruGoruldu($data, $adminID);
                     break;
-
                 case "tumunuOkundu":
                     if ($form->submit()) {
                         $data = array(
@@ -94,7 +90,6 @@ class AdminDuyuruAjax extends Controller {
                     }
                     $resultDuyuru = $Panel_Model->duyuruTumunuOkundu($data, $adminID);
                     break;
-
                 default :
                     header("Location:" . SITE_URL_LOGOUT);
                     break;

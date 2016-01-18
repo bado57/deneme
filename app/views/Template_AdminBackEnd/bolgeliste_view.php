@@ -4,7 +4,6 @@
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminbolgeajaxquery.js" type="text/javascript"></script> 
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminbolge-web.app.js" type="text/javascript"></script> 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
-
 <aside class="right-side">
     <section class="content-header">
         <div class="row">
@@ -40,7 +39,6 @@
                             <th class="hidden-xs"><?php echo $data["Aciklama"]; ?></th>
                         </tr>
                     </thead>
-
                     <tbody id="adminBolgeRow">
                         <?php foreach ($model as $bolgeModel) { ?>
                             <tr>
@@ -58,7 +56,6 @@
                 </table>
             </div>
         </div>
-
     </section>
 </aside>
 
@@ -75,13 +72,12 @@
                     </div>
                     <div class="form-group">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="BolgeAciklama" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="BolgeAciklama" class="form-control dsb" rows="3" style="resize:none"></textarea>
                     </div>
                     <div class="form-group">
                         <button data-type="svClose"  data-class="bolge" type="button" data-islemler="adminBolgeCancel" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
                         <button type="button" data-type="svClose"  data-islemler="adminBolgeKayit" data-class="bolge" class="svToggle btn btn-success"><?php echo $data["Kaydet"]; ?></button>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -125,11 +121,11 @@
                     </div>
                     <div class="form-group">
                         <label for="KurumAdresDetay"><?php echo $data["AdresDetay"]; ?></label>
-                        <textarea name="KurumAdresDetay" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="KurumAdresDetay" class="form-control dsb" rows="3" style="resize:none"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="Aciklama" class="form-control dsb" rows="3" style="resize:none"></textarea>
                     </div>
                     <div class="form-group">
                         <button data-type="svClose"  data-class="kurum" type="button" data-islemler="adminBolgeKurumVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
@@ -192,7 +188,7 @@
                         </div>
                         <div class="form-group">
                             <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                            <textarea name="BolgeDetailAciklama" class="form-control dsb" rows="3" disabled=""></textarea>
+                            <textarea name="BolgeDetailAciklama" class="form-control dsb" rows="3" disabled="" style="resize:none"></textarea>
                         </div>
                         <div class="form-group submit-group">
                             <button type="button" class="btn btn-default vzg" data-Vzgislem="adminBolgeDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
@@ -234,7 +230,7 @@
         <hr/>
     </div>
     <div id="multiple_map" style="width:100% !important;"></div>
-</div><!-- ./wrapper -->
+</div>
 
 
 

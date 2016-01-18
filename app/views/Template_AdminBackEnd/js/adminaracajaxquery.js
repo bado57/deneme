@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/AdminAracAjaxSorgu",
+    url: SITE_URL + "AdminAracAjaxSorgu",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -176,6 +176,7 @@ $(document).ready(function () {
             aracDetailBolgeID.push($(this).val());
         });
         var SoforOptions = new Array();
+        var HostesOptions = new Array();
         $.ajax({
             data: {"aracID": aracID, "aracDetailBolgeID[]": aracDetailBolgeID, "tip": "AracDetailMultiSelect"},
             success: function (cevap) {
@@ -205,28 +206,30 @@ $(document).ready(function () {
                         }
                     }
 
-                    if (cevap.adminAracSelectSofor) {
-                        var soforselectlength = cevap.adminAracSelectSofor.length;
-                        for (var t = 0; t < soforselectlength; t++) {
-                            SoforOptions[t] = {label: cevap.adminAracSelectSofor[t].SelectAracSoforAd + ' ' + cevap.adminAracSelectSofor[t].SelectAracSoforSoyad, title: cevap.adminAracSelectSofor[t].SelectAracSoforAd + ' ' + cevap.adminAracSelectSofor[t].SelectAracSoforSoyad, value: cevap.adminAracSelectSofor[t].SelectAracSoforID, selected: true};
+                    if (cevap.adminAracSelectHostes) {
+                        var hostesselectlength = cevap.adminAracSelectHostes.length;
+                        for (var t = 0; t < hostesselectlength; t++) {
+                            HostesOptions[t] = {label: cevap.adminAracSelectHostes[t].SelectAracHostesAd + ' ' + cevap.adminAracSelectHostes[t].SelectAracHostesSoyad, title: cevap.adminAracSelectHostes[t].SelectAracHostesAd + ' ' + cevap.adminAracSelectHostes[t].SelectAracHostesSoyad, value: cevap.adminAracSelectHostes[t].SelectAracHostesID, selected: true};
                         }
-                        if (cevap.adminAracSofor) {
-                            var soforlength = cevap.adminAracSofor.length;
-                            for (var f = 0; f < soforlength; f++) {
-                                SoforOptions[t] = {label: cevap.adminAracSofor[f].DigerAracSoforAdi + ' ' + cevap.adminAracSofor[f].DigerAracSoforSoyad, title: cevap.adminAracSofor[f].DigerAracSoforAdi + ' ' + cevap.adminAracSofor[f].DigerAracSoforSoyad, value: cevap.adminAracSofor[f].DigerAracSoforID};
+                        if (cevap.adminAracHostes) {
+                            var hosteslength = cevap.adminAracHostes.length;
+                            for (var f = 0; f < hosteslength; f++) {
+                                HostesOptions[t] = {label: cevap.adminAracHostes[f].DigerAracHostesAdi + ' ' + cevap.adminAracHostes[f].DigerAracHostesSoyad, title: cevap.adminAracHostes[f].DigerAracHostesAdi + ' ' + cevap.adminAracHostes[f].DigerAracHostesSoyad, value: cevap.adminAracHostes[f].DigerAracHostesID};
                                 t++;
                             }
                         }
                     } else {
-                        if (cevap.adminAracSofor) {
-                            var soforlength = cevap.adminAracSofor.length;
-                            for (var t = 0; t < soforlength; t++) {
-                                SoforOptions[t] = {label: cevap.adminAracSofor[t].DigerAracSoforAdi + ' ' + cevap.adminAracSofor[t].DigerAracSoforSoyad, title: cevap.adminAracSofor[t].DigerAracSoforAdi + ' ' + cevap.adminAracSofor[t].DigerAracSoforSoyad, value: cevap.adminAracSofor[t].DigerAracSoforID};
+                        if (cevap.adminAracHostes) {
+                            var hosteslength = cevap.adminAracHostes.length;
+                            for (var t = 0; t < hosteslength; t++) {
+                                HostesOptions[t] = {label: cevap.adminAracHostes[t].DigerAracHostesAdi + ' ' + cevap.adminAracHostes[t].DigerAracHostesSoyad, title: cevap.adminAracHostes[t].DigerAracHostesAdi + ' ' + cevap.adminAracHostes[t].DigerAracHostesSoyad, value: cevap.adminAracHostes[t].DigerAracHostesID};
                             }
                         }
                     }
                     $('#AracDetaySurucu').multiselect('refresh');
+                    $('#AracDetayHostes').multiselect('refresh');
                     $('#AracDetaySurucu').multiselect('dataprovider', SoforOptions);
+                    $('#AracDetayHostes').multiselect('dataprovider', HostesOptions);
                 }
             }
         });
@@ -307,6 +310,7 @@ $.AdminIslemler = {
         $("input[name=AracYil]").val('');
         $("textarea[name=AracAciklama]").val('');
         $("input[name=AracKapasite]").val('');
+        $("input[name=AracKm]").val('');
         var BolgeOptions = new Array();
         $.ajax({
             data: {"tip": "adminAracEkleSelect"},
@@ -348,93 +352,100 @@ $.AdminIslemler = {
         } else {
             var select = $('select#AracBolgeSelect option:selected').val();
             if (select) {
-                var aracKapasite = $("input[name=AracKapasite]").val();
-                if (aracKapasite < 2) {
+                var aracKm = $("input[name=AracKm]").val();
+                if (aracKm == "" || aracKm < 0) {
                     reset();
-                    alertify.alert(jsDil.AracKapasite);
+                    alertify.alert(jsDil.AracKm);
                     return false;
                 } else {
-                    var aracMarka = $("input[name=AracMarka]").val();
-                    var aracModelYil = $("input[name=AracYil]").val();
-                    var aracAciklama = $("textarea[name=AracAciklama]").val();
-                    var aracDurum = $("#AracDurum option:selected").val();
-                    var aracDurumText = $("#AracDurum option:selected").text();
-                    //araç Bölge ID
-                    var aracBolgeID = new Array();
-                    $('select#AracBolgeSelect option:selected').each(function () {
-                        aracBolgeID.push($(this).val());
-                    });
-                    //araç Bölge Ad
-                    var aracBolgeAd = new Array();
-                    $('select#AracBolgeSelect option:selected').each(function () {
-                        aracBolgeAd.push($(this).attr('title'));
-                    });
-                    //araç Şoför Id
-                    var aracSoforID = new Array();
-                    $('select#AracSurucu option:selected').each(function () {
-                        aracSoforID.push($(this).val());
-                    });
-                    //araç Şoför Ad
-                    var aracSoforAd = new Array();
-                    $('select#AracSurucu option:selected').each(function () {
-                        aracSoforAd.push($(this).attr('title'));
-                    });
-                    //araç Hostes Id
-                    var aracHostesID = new Array();
-                    $('select#AracHostes option:selected').each(function () {
-                        aracHostesID.push($(this).val());
-                    });
-                    //araç Hostes Ad
-                    var aracHostesAd = new Array();
-                    $('select#AracHostes option:selected').each(function () {
-                        aracHostesAd.push($(this).attr('title'));
-                    });
-                    $.ajax({
-                        data: {"aracBolgeID[]": aracBolgeID, "aracBolgeAd[]": aracBolgeAd, "aracSoforID[]": aracSoforID, "aracSoforAd[]": aracSoforAd,
-                            "aracHostesID[]": aracHostesID, "aracHostesAd[]": aracHostesAd, "aracPlaka": aracPlaka, "aracMarka": aracMarka, "aracModelYil": aracModelYil,
-                            "aracKapasite": aracKapasite, "aracAciklama": aracAciklama, "aracDurum": aracDurum, "tip": "adminAracKaydet"},
-                        success: function (cevap) {
-                            if (cevap.hata) {
-                                reset();
-                                alertify.alert(jsDil.Hata);
-                                return false;
-                            } else {
-                                reset();
-                                alertify.success(jsDil.AracKaydet);
-                                var aracCount = $('#smallArac').text();
-                                aracCount++;
-                                $('#smallArac').text(aracCount);
-                                if (aracDurum != 0) {
-                                    var addRow = "<tr style='background-color:#F2F2F2'><td>"
-                                            + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newAracID + "'>"
-                                            + "<i class='fa fa-bus' style='color:green;'></i> " + aracPlaka + "</a></td>"
-                                            + "<td class='hidden-xs'>" + aracMarka + "</td>"
-                                            + "<td class='hidden-xs'>" + aracModelYil + "</td>"
-                                            + "<td class='hidden-xs'>" + aracKapasite + "</td>"
-                                            + "<td class='hidden-xs'>0</td>"
-                                            + "<td class='hidden-xs'>" + aracDurumText + "</td></tr>";
-                                    NewAracTable.DataTable().row.add($(addRow)).draw();
+                    var aracKapasite = $("input[name=AracKapasite]").val();
+                    if (aracKapasite < 2) {
+                        reset();
+                        alertify.alert(jsDil.AracKapasite);
+                        return false;
+                    } else {
+                        var aracMarka = $("input[name=AracMarka]").val();
+                        var aracModelYil = $("input[name=AracYil]").val();
+                        var aracAciklama = $("textarea[name=AracAciklama]").val();
+                        var aracDurum = $("#AracDurum option:selected").val();
+                        var aracDurumText = $("#AracDurum option:selected").text();
+                        //araç Bölge ID
+                        var aracBolgeID = new Array();
+                        $('select#AracBolgeSelect option:selected').each(function () {
+                            aracBolgeID.push($(this).val());
+                        });
+                        //araç Bölge Ad
+                        var aracBolgeAd = new Array();
+                        $('select#AracBolgeSelect option:selected').each(function () {
+                            aracBolgeAd.push($(this).attr('title'));
+                        });
+                        //araç Şoför Id
+                        var aracSoforID = new Array();
+                        $('select#AracSurucu option:selected').each(function () {
+                            aracSoforID.push($(this).val());
+                        });
+                        //araç Şoför Ad
+                        var aracSoforAd = new Array();
+                        $('select#AracSurucu option:selected').each(function () {
+                            aracSoforAd.push($(this).attr('title'));
+                        });
+                        //araç Hostes Id
+                        var aracHostesID = new Array();
+                        $('select#AracHostes option:selected').each(function () {
+                            aracHostesID.push($(this).val());
+                        });
+                        //araç Hostes Ad
+                        var aracHostesAd = new Array();
+                        $('select#AracHostes option:selected').each(function () {
+                            aracHostesAd.push($(this).attr('title'));
+                        });
+                        $.ajax({
+                            data: {"aracBolgeID[]": aracBolgeID, "aracBolgeAd[]": aracBolgeAd, "aracSoforID[]": aracSoforID, "aracSoforAd[]": aracSoforAd,
+                                "aracHostesID[]": aracHostesID, "aracHostesAd[]": aracHostesAd, "aracPlaka": aracPlaka, "aracMarka": aracMarka, "aracModelYil": aracModelYil,
+                                "aracKm": aracKm, "aracKapasite": aracKapasite, "aracAciklama": aracAciklama, "aracDurum": aracDurum, "tip": "adminAracKaydet"},
+                            success: function (cevap) {
+                                if (cevap.hata) {
+                                    reset();
+                                    alertify.alert(cevap.hata);
+                                    return false;
                                 } else {
-                                    var addRow = "<tr style='background-color:#F2F2F2'><td>"
-                                            + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newAracID + "'>"
-                                            + "<i class='fa fa-bus' style='color:red;'></i> " + aracPlaka + "</a></td>"
-                                            + "<td class='hidden-xs'>" + aracMarka + "</td>"
-                                            + "<td class='hidden-xs'>" + aracModelYil + "</td>"
-                                            + "<td class='hidden-xs'>" + aracKapasite + "</td>"
-                                            + "<td class='hidden-xs'>0</td>"
-                                            + "<td class='hidden-xs'>" + aracDurumText + "</td></tr>";
-                                    NewAracTable.DataTable().row.add($(addRow)).draw();
+                                    reset();
+                                    alertify.success(cevap.insert);
+                                    var aracCount = $('#smallArac').text();
+                                    aracCount++;
+                                    $('#smallArac').text(aracCount);
+                                    if (aracDurum != 0) {
+                                        var addRow = "<tr style='background-color:#F2F2F2'><td>"
+                                                + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newAracID + "'>"
+                                                + "<i class='fa fa-bus' style='color:green;'></i> " + aracPlaka + "</a></td>"
+                                                + "<td class='hidden-xs'>" + aracMarka + "</td>"
+                                                + "<td class='hidden-xs'>" + aracModelYil + "</td>"
+                                                + "<td class='hidden-xs'>" + aracKapasite + "</td>"
+                                                + "<td class='hidden-xs'>0</td>"
+                                                + "<td class='hidden-xs'>" + aracDurumText + "</td></tr>";
+                                        NewAracTable.DataTable().row.add($(addRow)).draw();
+                                    } else {
+                                        var addRow = "<tr style='background-color:#F2F2F2'><td>"
+                                                + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newAracID + "'>"
+                                                + "<i class='fa fa-bus' style='color:red;'></i> " + aracPlaka + "</a></td>"
+                                                + "<td class='hidden-xs'>" + aracMarka + "</td>"
+                                                + "<td class='hidden-xs'>" + aracModelYil + "</td>"
+                                                + "<td class='hidden-xs'>" + aracKapasite + "</td>"
+                                                + "<td class='hidden-xs'>0</td>"
+                                                + "<td class='hidden-xs'>" + aracDurumText + "</td></tr>";
+                                        NewAracTable.DataTable().row.add($(addRow)).draw();
+                                    }
+                                    aracBolgeID = [];
+                                    aracBolgeAd = [];
+                                    aracSoforID = [];
+                                    aracSoforAd = [];
+                                    aracHostesID = [];
+                                    aracHostesAd = [];
                                 }
-                                aracBolgeID = [];
-                                aracBolgeAd = [];
-                                aracSoforID = [];
-                                aracSoforAd = [];
-                                aracHostesID = [];
-                                aracHostesAd = [];
                             }
-                        }
-                    });
-                    return true;
+                        });
+                        return true;
+                    }
                 }
             } else {
                 reset();
@@ -703,7 +714,7 @@ $.AdminIslemler = {
                     success: function (cevap) {
                         if (cevap.hata) {
                             reset();
-                            alertify.alert(jsDil.Hata);
+                            alertify.alert(cevap.hata);
                             return false;
                         } else {
                             disabledForm();
@@ -737,7 +748,6 @@ $.AdminIslemler = {
         });
     },
     adminAracDetailKaydet: function () {
-
         var aracdetail_id = $("input[name=adminAracDetailDeger]").val();
         var aracPlaka = $("input[name=AracDetayPlaka]").val().toUpperCase();
         var aracMarka = $("input[name=AracDetayMarka]").val();
@@ -839,12 +849,12 @@ $.AdminIslemler = {
                             success: function (cevap) {
                                 if (cevap.hata) {
                                     reset();
-                                    alertify.alert(jsDil.Hata);
+                                    alertify.alert(cevap.hata);
                                     return false;
                                 } else {
                                     disabledForm();
                                     reset();
-                                    alertify.success(jsDil.AracDuzenle);
+                                    alertify.success(cevap.update);
                                     var SelectBolgeOptions = new Array();
                                     var SelectAracOptions = new Array();
                                     var SelectHostesOptions = new Array();
@@ -966,11 +976,11 @@ $.AdminIslemler = {
                         var turCount = cevap.aracDetailTur.length;
                         for (var i = 0; i < turCount; i++) {
                             if (cevap.aracDetailTur[i].TurTip == 0) {
-                                TurTip = 'Öğrenci';
+                                TurTip = jsDil.Ogrenci;
                             } else if (cevap.aracDetailTur[i].TurTip == 1) {
-                                TurTip = 'Personel';
+                                TurTip = jsDil.Personel;
                             } else {
-                                TurTip = 'Öğrenci/Personel';
+                                TurTip = jsDil.OgrenciPersonel;
                             }
                             if (cevap.aracDetailTur[i].TurAktiflik != 0) {
                                 var addRow = "<tr><td>"

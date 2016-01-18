@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/AdminAjaxSorgu",
+    url: SITE_URL + "AdminAjaxSorgu",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {

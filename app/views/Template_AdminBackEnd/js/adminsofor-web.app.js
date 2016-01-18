@@ -33,7 +33,7 @@ $(document).ready(function () {
 
     // Sol Menu Navigasyon Kontrolü   
     $(".sidebar-menu").find(".active").removeClass("active");
-    $("#" + activeMenu).find("a").click();
+    $("#" + activeMenu).addClass("active");
     $(".sidebar-menu").find(".activeli").removeClass("activeli");
     $("#" + activeMenu).find("#" + activeLink).addClass("activeli");
     // End Sol Menu Navigasyon Kontrolü
@@ -69,6 +69,9 @@ function svControl(dtype, dclass, dislemler) {
         switch (dislemler) {
             case 'soforYeni' :
                 var returnCevap = $.AdminIslemler.soforYeni();
+                break;
+            case 'soforDetailTur' :
+                var returnCevap = $.AdminIslemler.soforDetailTur();
                 break;
             case 'adminSoforTakvim' :
                 $("#" + dclass).height(th);

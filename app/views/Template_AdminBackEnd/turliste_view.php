@@ -170,7 +170,7 @@
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="Aciklama" class="form-control dsb" rows="3" style="resize: none"></textarea>
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <button data-type="svClose"  data-class="tur" type="button" data-islemler="adminTurVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
@@ -311,7 +311,7 @@
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="TurDetayGidisAciklama" class="form-control dsb" rows="3" disabled></textarea>
+                        <textarea name="TurDetayGidisAciklama" class="form-control dsb" rows="3" disabled style="resize: none"></textarea>
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group submit-group">
@@ -409,7 +409,7 @@
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="TurDetayDonusAciklama" class="form-control dsb" rows="3" disabled></textarea>
+                        <textarea name="TurDetayDonusAciklama" class="form-control dsb" rows="3" disabled style="resize: none"></textarea>
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group submit-group">

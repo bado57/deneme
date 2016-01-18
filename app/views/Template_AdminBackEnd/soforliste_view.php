@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-left">
                 <h3>
-                    <i class="fa fa-th"></i> <?php echo $data["Sofor"]; ?>
+                    <i class="fa fa-bus"></i> <?php echo $data["Sofor"]; ?>
                     <small id="smallSofor"><?php if (count($model[0]['SoforCount']) > 0) { ?>
                             <?php
                             echo $model[0]['SoforCount'];
@@ -115,7 +115,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="Aciklama" class="form-control dsb" rows="3" style="resize: none"></textarea>
                     </div>
                     <div class="form-group">
                         <button data-type="svClose"  data-class="sofor" type="button" data-islemler="soforVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
@@ -149,7 +149,7 @@
                     </div>
                     <div class="form-group">
                         <label for="SoforAdresDetay"><?php echo $data["AdresDetay"]; ?></label>
-                        <textarea name="SoforAdresDetay" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="SoforAdresDetay" class="form-control dsb" rows="3" style="resize: none"></textarea>
                     </div>
                 </div>
                 <div class="form-vertical AdminAdresForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -194,7 +194,7 @@
 <div id="soforDetay" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["SoforDetay"]; ?> <span class="pull-right"><button id="addNew" type="button" class="svToggle btn btn-success addNewButton mr10" data-type="svOpen" data-class="soforTakvim" data-islemler="adminSoforTakvim"><i class="fa fa-calendar"></i> <?php echo $data["Takvim"]; ?></button><button data-type="svClose" data-class="soforDetay" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["SoforDetay"]; ?> <span class="pull-right"><button id="addNew" type="button" class="svToggle btn btn-success addNewButton mr10" data-type="svOpen" data-class="soforTakvim" data-islemler="adminSoforTakvim"><i class="fa fa-calendar"></i> <?php echo $data["Takvim"]; ?></button><button id="addNew" type="button" class="svToggle btn btn-success addNewButton mr10" data-type="svOpen" data-class="soforDetayTur" data-islemler="soforDetailTur"><i class="fa fa-refresh"></i> <?php echo $data["Turlar"]; ?></button><button data-type="svClose" data-class="soforDetay" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
                 <div class="form-vertical addKurumForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -222,7 +222,7 @@
                     </div>
                     <div class="form-group">
                         <label for="DetayAciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="DetayAciklama" class="form-control dsb" rows="3" disabled></textarea>
+                        <textarea name="DetayAciklama" class="form-control dsb" rows="3" disabled style="resize: none"></textarea>
                     </div>
                     <div class="form-group submit-group">
                         <button data-type="svClose" type="button" class="btn btn-default vzg" data-Vzgislem="soforDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
@@ -260,7 +260,7 @@
                     </div>
                     <div class="form-group">
                         <label for="SoforDetayAdresDetay"><?php echo $data["AdresDetay"]; ?></label>
-                        <textarea name="SoforDetayAdresDetay" class="form-control dsb" rows="3" disabled></textarea>
+                        <textarea name="SoforDetayAdresDetay" class="form-control dsb" rows="3" disabled style="resize: none"></textarea>
                     </div>
                 </div>
                 <div class="form-vertical SoforDetailAdresForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -295,6 +295,36 @@
                     <div class="form-group">
                         <label for="street_number"><?php echo $data["CaddeNo"]; ?></label>
                         <input type="text" class="form-control dsb" id="street_number" name="street_number" value="" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="soforDetayTur" class="svClose col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+    <div class="row">
+        <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h3><?php echo $data["TurListe"]; ?> <span class="pull-right"><button class="btn btn-success mr10 seeAllButton" onclick="location.href = '<?php echo SITE_PLUGINADMIN_Tur; ?>'"><?php echo $data["TumunuGor"]; ?></button> <button data-type="svClose" data-class="soforDetayTur" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <hr/>
+            <div class="row" id="getPartialView">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="generalInfo col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <table class="table table-responsive table-bordered table-hover table-condensed" id="soforTurTable">
+                                    <thead>
+                                        <tr >
+                                            <th><?php echo $data["TurAdi"]; ?></th>
+                                            <th><?php echo $data["Tür"]; ?></th>
+                                            <th><?php echo $data["Aciklama"]; ?></th>
+                                            <th><?php echo $data["Kurum"]; ?></th>
+                                            <th><?php echo $data["Bolge"]; ?></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-lg-3 col-xs-12">
                 <!-- Firma İşlemleri -->
-                <a href="<?php echo SITE_URL; ?>/adminweb/firmislem" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/firmislem" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["FirmaIslem"]; ?>
@@ -34,7 +34,7 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Kullanıcı İşlemleri -->
-                <a href="<?php echo SITE_URL; ?>/adminweb/bolgeliste" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/bolgeliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["BolgeIslem"]; ?>
@@ -59,7 +59,7 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Kullanıcı İşlemleri -->
-                <a href="<?php echo SITE_URL; ?>/adminweb/kurumliste" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/kurumliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["KurumIslem"]; ?>
@@ -84,7 +84,7 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Kullanıcı İşlemleri -->
-                <a href="<?php echo SITE_URL; ?>/adminweb/kullaniciListe" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/kullaniciListe" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["KullaniciIslem"]; ?>
@@ -109,7 +109,7 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Araç İşlemleri -->
-                <a href="<?php echo SITE_URL; ?>/adminweb/aracliste" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/aracliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["AracIslem"]; ?>
@@ -134,7 +134,7 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Tur İşlemleri -->
-                <a href="<?php echo SITE_URL; ?>/adminweb/turliste" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/turliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["TurIslem"]; ?>
@@ -176,7 +176,7 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Lokasyon Sorgusu -->
-                <a href="<?php echo SITE_URL; ?>/adminweb/lokasyonliste" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/lokasyonliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["LokasyonSorgu"]; ?>
@@ -218,7 +218,7 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Duyurular -->
-                <a href="<?php echo SITE_URL; ?>/adminweb/duyuruliste" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/duyuruliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["Duyuru"]; ?>

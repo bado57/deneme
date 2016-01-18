@@ -1,8 +1,7 @@
 $(document).ready(function () {
-
     $.ajax({
         type: "post",
-        url: "http://localhost/SProject/AdminBildirimAjax",
+        url: SITE_URL + "AdminBildirimAjax",
         //timeout:3000,
         dataType: "json",
         data: {"tip": "adminBildirim"},
@@ -30,9 +29,9 @@ $(document).ready(function () {
                         var newDate = myDate1[2] + '/' + myDate1[1] + '/' + myDate1[0];
                         if (cevap.Bildir.ID[i] > ilkDeger) {
                             if (cevap.Bildir.Okundu[i] != 1) {//okunmadı
-                                $("#bildirim").append('<li style="background-color: #ddd"><a id="bildirimIsaret" data-id="' + cevap.Bildir.ID[i] + '" data-href="' + cevap.Bildir.Url[i] + '" href="http://localhost/SProject/adminweb/' + cevap.Bildir.Url[i] + '"><div class="notify-icon notify-icon-' + cevap.Bildir.Renk[i] + ' col-md-2"> <i class="' + cevap.Bildir.Icon[i] + '"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Bildir.Text[i] + '</p></div></a></li>');
+                                $("#bildirim").append('<li style="background-color: #ddd"><a id="bildirimIsaret" data-id="' + cevap.Bildir.ID[i] + '" data-href="' + cevap.Bildir.Url[i] + '" href="' + SITE_URL + '"AdminWeb/' + cevap.Bildir.Url[i] + '"><div class="notify-icon notify-icon-' + cevap.Bildir.Renk[i] + ' col-md-2"> <i class="' + cevap.Bildir.Icon[i] + '"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Bildir.Text[i] + '</p></div></a></li>');
                             } else {
-                                $("#bildirim").append('<li><a id="bildirimIsaret" data-id="' + cevap.Bildir.ID[i] + '" data-href="' + cevap.Bildir.Url[i] + '" href="http://localhost/SProject/adminweb/' + cevap.Bildir.Url[i] + '"><div class="notify-icon notify-icon-' + cevap.Bildir.Renk[i] + ' col-md-2"> <i class="' + cevap.Bildir.Icon[i] + '"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Bildir.Text[i] + '</p></div></a></li>');
+                                $("#bildirim").append('<li><a id="bildirimIsaret" data-id="' + cevap.Bildir.ID[i] + '" data-href="' + cevap.Bildir.Url[i] + '" href=""' + SITE_URL + '"AdminWeb/' + cevap.Bildir.Url[i] + '"><div class="notify-icon notify-icon-' + cevap.Bildir.Renk[i] + ' col-md-2"> <i class="' + cevap.Bildir.Icon[i] + '"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Bildir.Text[i] + '</p></div></a></li>');
                             }
                         }
                     }
@@ -52,7 +51,7 @@ $(document).ready(function () {
     setInterval(function () {
         $.ajax({
             type: "post",
-            url: "http://localhost/SProject/AdminBildirimAjax",
+            url: SITE_URL + "AdminBildirimAjax",
             //timeout:3000,
             dataType: "json",
             data: {"tip": "adminBildirim"},
@@ -81,9 +80,9 @@ $(document).ready(function () {
                             var newDate = myDate1[2] + '/' + myDate1[1] + '/' + myDate1[0];
                             if (cevap.Bildir.ID[i] < ilkDeger) {
                                 if (cevap.Bildir.Okundu[i] != 1) {//okunmadı
-                                    $("#bildirim").append('<li style="background-color: #ddd"><a id="bildirimIsaret" data-href="' + cevap.Bildir.Url[i] + '" data-id="' + cevap.Bildir.ID[i] + '" href="http://localhost/SProject/adminweb/' + cevap.Bildir.Url[i] + '"><div class="notify-icon notify-icon-' + cevap.Bildir.Renk[i] + ' col-md-2"> <i class="' + cevap.Bildir.Icon[i] + '"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Bildir.Text[i] + '</p></div></a></li>');
+                                    $("#bildirim").append('<li style="background-color: #ddd"><a id="bildirimIsaret" data-href="' + cevap.Bildir.Url[i] + '" data-id="' + cevap.Bildir.ID[i] + '" href=""' + SITE_URL + '"AdminWeb/' + cevap.Bildir.Url[i] + '"><div class="notify-icon notify-icon-' + cevap.Bildir.Renk[i] + ' col-md-2"> <i class="' + cevap.Bildir.Icon[i] + '"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Bildir.Text[i] + '</p></div></a></li>');
                                 } else {
-                                    $("#bildirim").append('<li><a id="bildirimIsaret" data-id="' + cevap.Bildir.ID[i] + '" data-href="' + cevap.Bildir.Url[i] + '"  href="http://localhost/SProject/adminweb/' + cevap.Bildir.Url[i] + '"><div class="notify-icon notify-icon-' + cevap.Bildir.Renk[i] + ' col-md-2"> <i class="' + cevap.Bildir.Icon[i] + '"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Bildir.Text[i] + '</p></div></a></li>');
+                                    $("#bildirim").append('<li><a id="bildirimIsaret" data-id="' + cevap.Bildir.ID[i] + '" data-href="' + cevap.Bildir.Url[i] + '"  href=""' + SITE_URL + '"AdminWeb/' + cevap.Bildir.Url[i] + '"><div class="notify-icon notify-icon-' + cevap.Bildir.Renk[i] + ' col-md-2"> <i class="' + cevap.Bildir.Icon[i] + '"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Bildir.Text[i] + '</p></div></a></li>');
                                 }
                             }
                         }
@@ -106,7 +105,7 @@ $(document).ready(function () {
         var ID = $(this).attr("data-id");
         $.ajax({
             type: "post",
-            url: "http://localhost/SProject/AdminBildirimAjax",
+            url: SITE_URL + "AdminBildirimAjax",
             //timeout:3000,
             dataType: "json",
             data: {"ID": ID, "tip": "adminOkundu"},
@@ -125,7 +124,7 @@ $(document).ready(function () {
                             href = $("ul#bildirim >li > a").eq(t).attr('data-href');
                         }
                     }
-                    window.location.href = ('http://localhost/SProject/adminweb/' + href);
+                    window.location.href = (SITE_URL + 'AdminWeb/' + href);
                 }
             }
         });
@@ -135,7 +134,7 @@ $(document).ready(function () {
         e.preventDefault();
         $.ajax({
             type: "post",
-            url: "http://localhost/SProject/AdminBildirimAjax",
+            url: SITE_URL + "AdminBildirimAjax",
             //timeout:3000,
             dataType: "json",
             data: {"tip": "adminGoruldu"},
@@ -155,7 +154,7 @@ $(document).ready(function () {
         e.preventDefault();
         $.ajax({
             type: "post",
-            url: "http://localhost/SProject/AdminBildirimAjax",
+            url: SITE_URL + "AdminBildirimAjax",
             //timeout:3000,
             dataType: "json",
             data: {"tip": "tumunuOkundu"},
@@ -176,7 +175,7 @@ $(document).ready(function () {
 
     $(document).on("click", "#tumunuGoster", function (e) {
         e.preventDefault();
-        window.location.href = ('http://localhost/SProject/adminweb/tumbildirimliste');
+        window.location.href = (SITE_URL + 'AdminWeb/tumbildirimliste');
     });
 
     $("#bildirim").scroll(function () {
@@ -186,7 +185,7 @@ $(document).ready(function () {
         if ($("#bildirim").scrollTop() + $("#bildirim").height() == $("#bildirim")[0].scrollHeight) {
             $.ajax({
                 type: "post",
-                url: "http://localhost/SProject/AdminBildirimAjax",
+                url: SITE_URL + "AdminBildirimAjax",
                 //timeout:3000,
                 dataType: "json",
                 data: {"sonDeger": sonDeger, "tip": "loaderDocument"},
@@ -203,9 +202,9 @@ $(document).ready(function () {
                                 var myDate1 = myDate[0].split("-");
                                 var newDate = myDate1[2] + '/' + myDate1[1] + '/' + myDate1[0];
                                 if (cevap.Bildir.Okundu[i] != 1) {//okunmadı
-                                    $("#bildirim").append('<li style="background-color: #ddd"><a id="bildirimIsaret" data-id="' + cevap.Bildir.ID[i] + '" data-href="' + cevap.Bildir.Url[i] + '" href="http://localhost/SProject/adminweb/' + cevap.Bildir.Url[i] + '"><div class="notify-icon notify-icon-' + cevap.Bildir.Renk[i] + ' col-md-2"> <i class="' + cevap.Bildir.Icon[i] + '"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Bildir.Text[i] + '</p></div></a></li>');
+                                    $("#bildirim").append('<li style="background-color: #ddd"><a id="bildirimIsaret" data-id="' + cevap.Bildir.ID[i] + '" data-href="' + cevap.Bildir.Url[i] + '" href="' + SITE_URL + '"AdminWeb/' + cevap.Bildir.Url[i] + '"><div class="notify-icon notify-icon-' + cevap.Bildir.Renk[i] + ' col-md-2"> <i class="' + cevap.Bildir.Icon[i] + '"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Bildir.Text[i] + '</p></div></a></li>');
                                 } else {
-                                    $("#bildirim").append('<li><a id="bildirimIsaret" data-id="' + cevap.Bildir.ID[i] + '" data-href="' + cevap.Bildir.Url[i] + '" href="http://localhost/SProject/adminweb/' + cevap.Bildir.Url[i] + '"><div class="notify-icon notify-icon-' + cevap.Bildir.Renk[i] + ' col-md-2"> <i class="' + cevap.Bildir.Icon[i] + '"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Bildir.Text[i] + '</p></div></a></li>');
+                                    $("#bildirim").append('<li><a id="bildirimIsaret" data-id="' + cevap.Bildir.ID[i] + '" data-href="' + cevap.Bildir.Url[i] + '" href="' + SITE_URL + '"AdminWeb/' + cevap.Bildir.Url[i] + '"><div class="notify-icon notify-icon-' + cevap.Bildir.Renk[i] + ' col-md-2"> <i class="' + cevap.Bildir.Icon[i] + '"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Bildir.Text[i] + '</p></div></a></li>');
                                 }
                             }
                             $('div#loadmoreajaxloader').hide();

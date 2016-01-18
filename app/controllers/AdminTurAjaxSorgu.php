@@ -20,17 +20,19 @@ class AdminTurAjaxSorgu extends Controller {
             $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
             if (!Session::get("dil")) {
                 Session::set("dil", $lang);
-                $formm = $this->load->multilanguage($lang);
-                $deger = $formm->multilanguage();
+                $formm = $this->load->ajaxlanguage($lang);
+                $deger = $formm->ajaxlanguage();
+                $degerbildirim = $formm->bildirimlanguage();
             } else {
-                $formm = $this->load->multilanguage(Session::get("dil"));
-                $deger = $formm->multilanguage();
+                $formm = $this->load->ajaxlanguage(Session::get("dil"));
+                $deger = $formm->ajaxlanguage();
+                $degerbildirim = $formm->bildirimlanguage();
             }
             $sonuc = array();
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
+            $Panel_Model = $this->load->model("Panel_Model");
             //form class bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
+            $MemcacheModel = $this->load->model("AdminMemcache_Model");
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -78,7 +80,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["adminTurBolgee"] = $adminBolge['AdminBolgeID'];
                     }
                     break;
-
                 case "turKurumSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -100,7 +101,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["kurumSelect"] = $turKurumSelect;
                     }
                     break;
-
                 case "turAracSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -158,7 +158,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["pasifArac"] = $turArac;
                     }
                     break;
-
                 case "turSoforSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -225,7 +224,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["pasifSofor"] = $turSofor;
                     }
                     break;
-
                 case "turHostesSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -292,7 +290,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["pasifHostes"] = $turHostes;
                     }
                     break;
-
                 case "turKurumSelectKisi":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -440,7 +437,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["kurumPKisi"] = $turPKisi;
                     }
                     break;
-
                 case "turKaydet":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -560,6 +556,7 @@ class AdminTurAjaxSorgu extends Controller {
                                     }
                                 }
                                 $sonuc["turDonus"] = 1;
+                                $sonuc["turDonusReply"] = $deger["DonusTur"];
                             } else {//dönüş kayıt olmuş gidişi kaydedeceğiz
                                 //tur tablosundaki dönüşü 0 dan 1 yapacağız
                                 $turGidisUpdate = array(
@@ -612,6 +609,7 @@ class AdminTurAjaxSorgu extends Controller {
                                     $resultGidisUpdate = $Panel_Model->turTipGidisOgrenciIsciDuzenle($turGidisOgrenciIsciUpdate, $turID);
                                 }
                                 $sonuc["turGidis"] = 1;
+                                $sonuc["turGidisReply"] = $deger["GidisTur"];
                             }
                         } else {//tur eklenmedi ise
                             if ($turTip == 0) {//Gidiş
@@ -665,26 +663,26 @@ class AdminTurAjaxSorgu extends Controller {
                                 $turGidisID = $Panel_Model->addNewTurTip($turDatam);
 
                                 //şoföre bildirim gönderme
-                                $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisAtama"];
+                                $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisAtama"];
                                 $resultSoforCihaz = $Panel_Model->soforCihaz($turSoforID);
                                 if (count($resultSoforCihaz) > 0) {
                                     foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                         $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                     }
                                     $soforCihazlar = implode(',', $soforCihaz);
-                                    $form->shuttleNotification($soforCihazlar, $alert, $deger["TurAta"]);
+                                    $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["TurAta"]);
                                 }
                                 //hostes varsa
                                 if ($turHostesID) {
                                     //hostese bildirim gönderme
-                                    $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisAtama"];
+                                    $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisAtama"];
                                     $resultHostesCihaz = $Panel_Model->hostesCihaz($turHostesID);
                                     if (count($resultHostesCihaz) > 0) {
                                         foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                             $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                         }
                                         $hostesCihazlar = implode(',', $hostesCihaz);
-                                        $form->shuttleNotification($hostesCihazlar, $alert, $deger["TurAta"]);
+                                        $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["TurAta"]);
                                     }
                                 }
                                 if ($kurumTip == 0) {//öğrenci
@@ -712,7 +710,7 @@ class AdminTurAjaxSorgu extends Controller {
                                     $Panel_Model->addNewTurOgrenci($turDataOgrenci);
 
                                     //öğrenciye bildirim gönderme
-                                    $alert = $adSoyad . ' ' . $turAdi . $deger["TurAtama"];
+                                    $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurAtama"];
                                     $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                     $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                     if (count($resultOgrenciCihaz) > 0) {
@@ -720,7 +718,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                         }
                                         $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                        $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurAta"]);
+                                        $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurAta"]);
                                     }
 
                                     //veliye bildirim gönderme
@@ -735,7 +733,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                         }
                                         $veliCihazlar = implode(',', $veliCihaz);
-                                        $form->shuttleNotification($veliCihazlar, $alert, $deger["TurAta"]);
+                                        $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurAta"]);
                                     }
                                 } else if ($kurumTip == 1) {//işçi
                                     for ($i = 0; $i < count($turIsciID); $i++) {
@@ -762,7 +760,7 @@ class AdminTurAjaxSorgu extends Controller {
                                     $Panel_Model->addNewTurIsci($turDataIsci);
 
                                     //işçiye bildirim gönderme
-                                    $alert = $adSoyad . ' ' . $turAdi . $deger["TurAtama"];
+                                    $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurAtama"];
                                     $isciBildirimID = implode(",", $turIsciBildirim);
                                     $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                     if (count($resultIsciCihaz) > 0) {
@@ -770,7 +768,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                         }
                                         $isciCihazlar = implode(',', $isciCihaz);
-                                        $form->shuttleNotification($isciCihazlar, $alert, $deger["TurAta"]);
+                                        $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurAta"]);
                                     }
                                 } else {//öğrenci ve işçi
                                     //öğrenci için
@@ -799,7 +797,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $Panel_Model->addNewTurIsciOgrenci($turDataOgrenci);
 
                                         //öğrenciye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurAtama"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurAtama"];
                                         $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                         $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                         if (count($resultOgrenciCihaz) > 0) {
@@ -807,7 +805,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                             }
                                             $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurAta"]);
+                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurAta"]);
                                         }
 
                                         //veliye bildirim gönderme
@@ -822,7 +820,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                             }
                                             $veliCihazlar = implode(',', $veliCihaz);
-                                            $form->shuttleNotification($veliCihazlar, $alert, $deger["TurAta"]);
+                                            $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurAta"]);
                                         }
                                     }
                                     //işçi için
@@ -852,7 +850,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $Panel_Model->addNewTurIsciOgrenci($turDataIsci);
 
                                         //işçiye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurAtama"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurAtama"];
                                         $isciBildirimID = implode(",", $turIsciBildirim);
                                         $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                         if (count($resultIsciCihaz) > 0) {
@@ -860,12 +858,12 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                             }
                                             $isciCihazlar = implode(',', $isciCihaz);
-                                            $form->shuttleNotification($isciCihazlar, $alert, $deger["TurAta"]);
+                                            $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurAta"]);
                                         }
                                     }
                                 }
 
-                                $alert = $adSoyad . ' ' . $turAdi . $deger["TurEkleme"];
+                                $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurEkleme"];
                                 $kurumRenk = 'success';
                                 $kurumUrl = 'turliste';
                                 $kurumIcon = 'fa fa-refresh';
@@ -890,7 +888,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                 }
                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                $form->shuttleNotification($adminCihaz, $alert, $deger["TurEkle"]);
+                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurEkle"]);
                                             }
                                         }
                                     } else {
@@ -903,7 +901,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                 }
                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                $form->shuttleNotification($adminCihaz, $alert, $deger["TurEkle"]);
+                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurEkle"]);
                                             }
                                         }
                                     }
@@ -925,7 +923,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                 }
                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                $form->shuttleNotification($adminCihaz, $alert, $deger["TurEkle"]);
+                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurEkle"]);
                                             }
                                         }
                                     }
@@ -935,8 +933,9 @@ class AdminTurAjaxSorgu extends Controller {
                                 $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                                 if ($resultLog) {
                                     $sonuc["turGidis"] = 1;
+                                    $sonuc["turGidisReply"] = $deger["GidisTur"];
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $deger["Hata"];
                                 }
                             } else {//Dönüş
                                 if ($form->submit()) {
@@ -988,26 +987,26 @@ class AdminTurAjaxSorgu extends Controller {
                                 $turDonusID = $Panel_Model->addNewTurTip($turDatam);
 
                                 //şoföre bildirim gönderme
-                                $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusAtama"];
+                                $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusAtama"];
                                 $resultSoforCihaz = $Panel_Model->soforCihaz($turSoforID);
                                 if (count($resultSoforCihaz) > 0) {
                                     foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                         $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                     }
                                     $soforCihazlar = implode(',', $soforCihaz);
-                                    $form->shuttleNotification($soforCihazlar, $alert, $deger["TurAta"]);
+                                    $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["TurAta"]);
                                 }
                                 //hostes varsa
                                 if ($turHostesID) {
                                     //hostese bildirim gönderme
-                                    $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusAtama"];
+                                    $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusAtama"];
                                     $resultHostesCihaz = $Panel_Model->hostesCihaz($turHostesID);
                                     if (count($resultHostesCihaz) > 0) {
                                         foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                             $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                         }
                                         $hostesCihazlar = implode(',', $hostesCihaz);
-                                        $form->shuttleNotification($hostesCihazlar, $alert, $deger["TurAta"]);
+                                        $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["TurAta"]);
                                     }
                                 }
 
@@ -1036,7 +1035,7 @@ class AdminTurAjaxSorgu extends Controller {
                                     $Panel_Model->addNewTurOgrenci($turDataOgrenci);
 
                                     //öğrenciye bildirim gönderme
-                                    $alert = $adSoyad . ' ' . $turAdi . $deger["TurAtama"];
+                                    $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurAtama"];
                                     $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                     $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                     if (count($resultOgrenciCihaz) > 0) {
@@ -1044,7 +1043,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                         }
                                         $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                        $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurAta"]);
+                                        $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurAta"]);
                                     }
 
                                     //veliye bildirim gönderme
@@ -1059,7 +1058,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                         }
                                         $veliCihazlar = implode(',', $veliCihaz);
-                                        $form->shuttleNotification($veliCihazlar, $alert, $deger["TurAta"]);
+                                        $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurAta"]);
                                     }
                                 } else if ($kurumTip == 1) {//işçi
                                     for ($o = 0; $o < count($turIsciID); $o++) {
@@ -1085,7 +1084,7 @@ class AdminTurAjaxSorgu extends Controller {
                                     $Panel_Model->addNewTurIsci($turDataIsci);
 
                                     //işçiye bildirim gönderme
-                                    $alert = $adSoyad . ' ' . $turAdi . $deger["TurAtama"];
+                                    $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurAtama"];
                                     $isciBildirimID = implode(",", $turIsciBildirim);
                                     $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                     if (count($resultIsciCihaz) > 0) {
@@ -1093,7 +1092,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                         }
                                         $isciCihazlar = implode(',', $isciCihaz);
-                                        $form->shuttleNotification($isciCihazlar, $alert, $deger["TurAta"]);
+                                        $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurAta"]);
                                     }
                                 } else {//öğrenci ve işçi
                                     //öğrenci için
@@ -1122,7 +1121,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         }
                                         $Panel_Model->addNewTurIsciOgrenci($turDataOgrenci);
                                         //öğrenciye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurAtama"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurAtama"];
                                         $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                         $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                         if (count($resultOgrenciCihaz) > 0) {
@@ -1130,7 +1129,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                             }
                                             $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurAta"]);
+                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurAta"]);
                                         }
 
                                         //veliye bildirim gönderme
@@ -1145,7 +1144,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                             }
                                             $veliCihazlar = implode(',', $veliCihaz);
-                                            $form->shuttleNotification($veliCihazlar, $alert, $deger["TurAta"]);
+                                            $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurAta"]);
                                         }
                                     }
                                     //işçi için
@@ -1175,7 +1174,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $Panel_Model->addNewTurIsciOgrenci($turDataIsci);
 
                                         //işçiye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurAtama"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurAtama"];
                                         $isciBildirimID = implode(",", $turIsciBildirim);
                                         $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                         if (count($resultIsciCihaz) > 0) {
@@ -1183,12 +1182,12 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                             }
                                             $isciCihazlar = implode(',', $isciCihaz);
-                                            $form->shuttleNotification($isciCihazlar, $alert, $deger["TurAta"]);
+                                            $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurAta"]);
                                         }
                                     }
                                 }
 
-                                $alert = $adSoyad . ' ' . $turAdi . $deger["TurEkleme"];
+                                $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurEkleme"];
                                 $kurumRenk = 'success';
                                 $kurumUrl = 'turliste';
                                 $kurumIcon = 'fa fa-refresh';
@@ -1213,7 +1212,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                 }
                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                $form->shuttleNotification($adminCihaz, $alert, $deger["TurEkle"]);
+                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurEkle"]);
                                             }
                                         }
                                     } else {
@@ -1226,7 +1225,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                 }
                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                $form->shuttleNotification($adminCihaz, $alert, $deger["TurEkle"]);
+                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurEkle"]);
                                             }
                                         }
                                     }
@@ -1248,7 +1247,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                 }
                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                $form->shuttleNotification($adminCihaz, $alert, $deger["TurEkle"]);
+                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurEkle"]);
                                             }
                                         }
                                     }
@@ -1258,8 +1257,9 @@ class AdminTurAjaxSorgu extends Controller {
                                 $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                                 if ($resultLog) {
                                     $sonuc["turDonus"] = 1;
+                                    $sonuc["turDonusReply"] = $deger["DonusTur"];
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $deger["Hata"];
                                 }
                             }
                         }
@@ -1270,7 +1270,6 @@ class AdminTurAjaxSorgu extends Controller {
                         }
                     }
                     break;
-
                 case "adminTurDetaySecim":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -1305,7 +1304,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["turTipDetay"] = $turTipDetay;
                     }
                     break;
-
                 case "adminTurDetayGidis":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -1513,7 +1511,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["gidisDiger"] = $turDigerKisi;
                     }
                     break;
-
                 case "turGidisAracSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -1572,7 +1569,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["pasifArac"] = $turArac;
                     }
                     break;
-
                 case "turGidisSoforSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -1639,7 +1635,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["pasifSofor"] = $turSofor;
                     }
                     break;
-
                 case "turGidisHostesSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -1706,7 +1701,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["pasifHostes"] = $turHostes;
                     }
                     break;
-
                 case "turGidisDKaydet":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -1807,26 +1801,26 @@ class AdminTurAjaxSorgu extends Controller {
                             $resultTurTip = $Panel_Model->turTipGidisDuzenle($turTipGidisDatam, $turTipGidisID);
 
                             //şoföre bildirim gönderme
-                            $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                            $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                             $resultSoforCihaz = $Panel_Model->soforCihaz($turSoforID);
                             if (count($resultSoforCihaz) > 0) {
                                 foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                     $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                 }
                                 $soforCihazlar = implode(',', $soforCihaz);
-                                $form->shuttleNotification($soforCihazlar, $alert, $deger["TurDuzen"]);
+                                $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["TurDuzen"]);
                             }
                             //hostes varsa
                             if ($turHostesID) {
                                 //hostese bildirim gönderme
-                                $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                                $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                                 $resultHostesCihaz = $Panel_Model->hostesCihaz($turHostesID);
                                 if (count($resultHostesCihaz) > 0) {
                                     foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                         $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                     }
                                     $hostesCihazlar = implode(',', $hostesCihaz);
-                                    $form->shuttleNotification($hostesCihazlar, $alert, $deger["TurDuzen"]);
+                                    $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                 }
                             }
                             //dönüşü varmı kontrolü
@@ -1859,7 +1853,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $Panel_Model->addNewTurOgrenci($turDataOgrenci[$o]);
 
                                         //öğrenciye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                                         $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                         $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                         if (count($resultOgrenciCihaz) > 0) {
@@ -1867,7 +1861,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                             }
                                             $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
 
                                         //veliye bildirim gönderme
@@ -1882,7 +1876,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                             }
                                             $veliCihazlar = implode(',', $veliCihaz);
-                                            $form->shuttleNotification($veliCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
                                     }
                                 } else if ($kurumTip == 1) {//işçi
@@ -1912,7 +1906,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $Panel_Model->addNewTurIsci($turDataIsci);
 
                                         //işçiye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                                         $isciBildirimID = implode(",", $turIsciBildirim);
                                         $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                         if (count($resultIsciCihaz) > 0) {
@@ -1920,7 +1914,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                             }
                                             $isciCihazlar = implode(',', $isciCihaz);
-                                            $form->shuttleNotification($isciCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
                                     }
                                 } else {//öğrenci ve işçi
@@ -1952,7 +1946,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             }
                                             $Panel_Model->addNewTurIsciOgrenci($turUpdateDataOgrenci);
                                             //öğrenciye bildirim gönderme
-                                            $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                                            $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                                             $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                             $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                             if (count($resultOgrenciCihaz) > 0) {
@@ -1960,7 +1954,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                                 }
                                                 $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                                $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurDuzen"]);
+                                                $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                             }
 
                                             //veliye bildirim gönderme
@@ -1975,7 +1969,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                                 }
                                                 $veliCihazlar = implode(',', $veliCihaz);
-                                                $form->shuttleNotification($veliCihazlar, $alert, $deger["TurDuzen"]);
+                                                $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                             }
                                         }
                                         //işçi için
@@ -2005,7 +1999,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $Panel_Model->addNewTurIsciOgrenci($turUpdateDataIsci);
 
                                             //işçiye bildirim gönderme
-                                            $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                                            $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                                             $isciBildirimID = implode(",", $turIsciBildirim);
                                             $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                             if (count($resultIsciCihaz) > 0) {
@@ -2013,7 +2007,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                                 }
                                                 $isciCihazlar = implode(',', $isciCihaz);
-                                                $form->shuttleNotification($isciCihazlar, $alert, $deger["TurDuzen"]);
+                                                $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                             }
                                         }
                                     }
@@ -2047,7 +2041,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $Panel_Model->addNewTurOgrenci($turDataOgrenci[$o]);
 
                                         //öğrenciye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                                         $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                         $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                         if (count($resultOgrenciCihaz) > 0) {
@@ -2055,7 +2049,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                             }
                                             $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
 
                                         //veliye bildirim gönderme
@@ -2070,7 +2064,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                             }
                                             $veliCihazlar = implode(',', $veliCihaz);
-                                            $form->shuttleNotification($veliCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
                                     }
                                 } else if ($kurumTip == 1) {//işçi
@@ -2101,7 +2095,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $Panel_Model->addNewTurIsci($turDataIsci);
 
                                         //işçiye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                                         $isciBildirimID = implode(",", $turIsciBildirim);
                                         $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                         if (count($resultIsciCihaz) > 0) {
@@ -2109,7 +2103,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                             }
                                             $isciCihazlar = implode(',', $isciCihaz);
-                                            $form->shuttleNotification($isciCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
                                     }
                                 } else {//öğrenci ve işçi
@@ -2143,7 +2137,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $Panel_Model->addNewTurIsciOgrenci($turUpdateDataOgrenci);
 
                                             //öğrenciye bildirim gönderme
-                                            $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                                            $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                                             $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                             $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                             if (count($resultOgrenciCihaz) > 0) {
@@ -2151,7 +2145,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                                 }
                                                 $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                                $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurDuzen"]);
+                                                $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                             }
 
                                             //veliye bildirim gönderme
@@ -2166,7 +2160,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                                 }
                                                 $veliCihazlar = implode(',', $veliCihaz);
-                                                $form->shuttleNotification($veliCihazlar, $alert, $deger["TurDuzen"]);
+                                                $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                             }
                                         }
                                         //işçi için
@@ -2196,7 +2190,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $Panel_Model->addNewTurIsciOgrenci($turUpdateDataIsci);
 
                                             //işçiye bildirim gönderme
-                                            $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                                            $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                                             $isciBildirimID = implode(",", $turIsciBildirim);
                                             $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                             if (count($resultIsciCihaz) > 0) {
@@ -2204,7 +2198,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                                 }
                                                 $isciCihazlar = implode(',', $isciCihaz);
-                                                $form->shuttleNotification($isciCihazlar, $alert, $deger["TurDuzen"]);
+                                                $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                             }
                                         }
                                     }
@@ -2239,26 +2233,26 @@ class AdminTurAjaxSorgu extends Controller {
                             $resultTurTip = $Panel_Model->addNewTurTip($turUpdateDatam);
 
                             //şoföre bildirim gönderme
-                            $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisAtama"];
+                            $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisAtama"];
                             $resultSoforCihaz = $Panel_Model->soforCihaz($turSoforID);
                             if (count($resultSoforCihaz) > 0) {
                                 foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                     $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                 }
                                 $soforCihazlar = implode(',', $soforCihaz);
-                                $form->shuttleNotification($soforCihazlar, $alert, $deger["TurAta"]);
+                                $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["TurAta"]);
                             }
                             //hostes varsa
                             if ($turHostesID) {
                                 //hostese bildirim gönderme
-                                $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisAtama"];
+                                $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisAtama"];
                                 $resultHostesCihaz = $Panel_Model->hostesCihaz($turHostesID);
                                 if (count($resultHostesCihaz) > 0) {
                                     foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                         $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                     }
                                     $hostesCihazlar = implode(',', $hostesCihaz);
-                                    $form->shuttleNotification($hostesCihazlar, $alert, $deger["TurAta"]);
+                                    $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["TurAta"]);
                                 }
                             }
                             //eğer bu ilk defa ekleniyorsa dönüşe ait bilgiler mevcuttur
@@ -2289,7 +2283,7 @@ class AdminTurAjaxSorgu extends Controller {
                                     $Panel_Model->addNewTurOgrenci($turDataOgrenci[$o]);
 
                                     //öğrenciye bildirim gönderme
-                                    $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                                    $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                                     $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                     $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                     if (count($resultOgrenciCihaz) > 0) {
@@ -2297,7 +2291,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                         }
                                         $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                        $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurDuzen"]);
+                                        $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                     }
 
                                     //veliye bildirim gönderme
@@ -2312,7 +2306,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                         }
                                         $veliCihazlar = implode(',', $veliCihaz);
-                                        $form->shuttleNotification($veliCihazlar, $alert, $deger["TurDuzen"]);
+                                        $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                     }
                                 }
                             } else if ($kurumTip == 1) {//işçi
@@ -2343,7 +2337,7 @@ class AdminTurAjaxSorgu extends Controller {
                                     $Panel_Model->addNewTurIsci($turDataIsci);
 
                                     //işçiye bildirim gönderme
-                                    $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                                    $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                                     $isciBildirimID = implode(",", $turIsciBildirim);
                                     $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                     if (count($resultIsciCihaz) > 0) {
@@ -2351,7 +2345,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                         }
                                         $isciCihazlar = implode(',', $isciCihaz);
-                                        $form->shuttleNotification($isciCihazlar, $alert, $deger["TurDuzen"]);
+                                        $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                     }
                                 }
                             } else {//öğrenci ve işçi
@@ -2385,7 +2379,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $Panel_Model->addNewTurIsciOgrenci($turUpdateDataOgrenci);
 
                                         //öğrenciye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                                         $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                         $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                         if (count($resultOgrenciCihaz) > 0) {
@@ -2393,7 +2387,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                             }
                                             $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
 
                                         //veliye bildirim gönderme
@@ -2408,7 +2402,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                             }
                                             $veliCihazlar = implode(',', $veliCihaz);
-                                            $form->shuttleNotification($veliCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
                                     }
                                     //işçi için
@@ -2438,7 +2432,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $Panel_Model->addNewTurIsciOgrenci($turUpdateDataIsci);
 
                                         //işçiye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                                         $isciBildirimID = implode(",", $turIsciBildirim);
                                         $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                         if (count($resultIsciCihaz) > 0) {
@@ -2446,13 +2440,13 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                             }
                                             $isciCihazlar = implode(',', $isciCihaz);
-                                            $form->shuttleNotification($isciCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
                                     }
                                 }
                             }
                         }
-                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurGidisDuzenleme"];
+                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurGidisDuzenleme"];
                         $kurumRenk = 'warning';
                         $kurumUrl = 'turliste';
                         $kurumIcon = 'fa fa-refresh';
@@ -2477,7 +2471,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                         }
                                         $adminCihaz = implode(',', $adminCihaz);
-                                        $form->shuttleNotification($adminCihaz, $alert, $deger["TurDuzen"]);
+                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurDuzen"]);
                                     }
                                 }
                             } else {
@@ -2490,7 +2484,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                         }
                                         $adminCihaz = implode(',', $adminCihaz);
-                                        $form->shuttleNotification($adminCihaz, $alert, $deger["TurDuzen"]);
+                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurDuzen"]);
                                     }
                                 }
                             }
@@ -2512,7 +2506,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                         }
                                         $adminCihaz = implode(',', $adminCihaz);
-                                        $form->shuttleNotification($adminCihaz, $alert, $deger["TurDuzen"]);
+                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurDuzen"]);
                                     }
                                 }
                             }
@@ -2522,16 +2516,14 @@ class AdminTurAjaxSorgu extends Controller {
                         $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                         if ($resultLog) {
                             $sonuc["turGidisID"] = $resultTurTip;
+                            $sonuc["update"] = $deger["GidisTurDuzenle"];
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $deger["Hata"];
                         }
                     }
                     break;
-
                 case "turDetailDelete":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
@@ -2559,7 +2551,7 @@ class AdminTurAjaxSorgu extends Controller {
                                     $ogrencidelete = $Panel_Model->detailGidisOgrenciDelete($turID);
 
                                     //öğrenciye bildirim gönderme
-                                    $alert = $adSoyad . ' ' . $turAdi . $deger["TurSilme"];
+                                    $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurSilme"];
                                     $ogrenciBildirimID = implode(",", $turOgrenciID);
                                     $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                     if (count($resultOgrenciCihaz) > 0) {
@@ -2567,7 +2559,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                         }
                                         $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                        $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurSil"]);
+                                        $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurSil"]);
                                     }
 
                                     //veliye bildirim gönderme
@@ -2582,12 +2574,12 @@ class AdminTurAjaxSorgu extends Controller {
                                             $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                         }
                                         $veliCihazlar = implode(',', $veliCihaz);
-                                        $form->shuttleNotification($veliCihazlar, $alert, $deger["TurSil"]);
+                                        $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurSil"]);
                                     }
                                 } else if ($kurumTip == 1) {//işçi
                                     $iscidelete = $Panel_Model->detailGidisIsciDelete($turID);
                                     //işçiye bildirim gönderme
-                                    $alert = $adSoyad . ' ' . $turAdi . $deger["TurSilme"];
+                                    $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurSilme"];
                                     $isciBildirimID = implode(",", $turIsciID);
                                     $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                     if (count($resultIsciCihaz) > 0) {
@@ -2595,14 +2587,14 @@ class AdminTurAjaxSorgu extends Controller {
                                             $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                         }
                                         $isciCihazlar = implode(',', $isciCihaz);
-                                        $form->shuttleNotification($isciCihazlar, $alert, $deger["TurSil"]);
+                                        $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurSil"]);
                                     }
                                 } else {//öğrenci ve işçi
                                     $isciogrencidelete = $Panel_Model->detailGidisOgrenciIsciDelete($turID);
 
                                     if (count($turOgrenciID) > 0) {
                                         //öğrenciye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurSilme"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurSilme"];
                                         $ogrenciBildirimID = implode(",", $turOgrenciID);
                                         $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                         if (count($resultOgrenciCihaz) > 0) {
@@ -2610,7 +2602,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                             }
                                             $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurSil"]);
+                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurSil"]);
                                         }
 
                                         //veliye bildirim gönderme
@@ -2625,13 +2617,13 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                             }
                                             $veliCihazlar = implode(',', $veliCihaz);
-                                            $form->shuttleNotification($veliCihazlar, $alert, $deger["TurSil"]);
+                                            $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurSil"]);
                                         }
                                     }
 
                                     if (count($turIsciID) > 0) {
                                         //işçiye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurSilme"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurSilme"];
                                         $isciBildirimID = implode(",", $turIsciID);
                                         $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                         if (count($resultIsciCihaz) > 0) {
@@ -2639,37 +2631,37 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                             }
                                             $isciCihazlar = implode(',', $isciCihaz);
-                                            $form->shuttleNotification($isciCihazlar, $alert, $deger["TurSil"]);
+                                            $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurSil"]);
                                         }
                                     }
                                 }
                             }
 
                             //şoföre bildirim gönderme
-                            $alert = $adSoyad . ' ' . $turAdi . $deger["TurSilme"];
+                            $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurSilme"];
                             $resultSoforCihaz = $Panel_Model->soforCihaz($turSoforID);
                             if (count($resultSoforCihaz) > 0) {
                                 foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                     $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                 }
                                 $soforCihazlar = implode(',', $soforCihaz);
-                                $form->shuttleNotification($soforCihazlar, $alert, $deger["TurSil"]);
+                                $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["TurSil"]);
                             }
                             //hostes varsa
                             if ($turHostesID) {
                                 //hostese bildirim gönderme
-                                $alert = $adSoyad . ' ' . $turAdi . $deger["TurSilme"];
+                                $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurSilme"];
                                 $resultHostesCihaz = $Panel_Model->hostesCihaz($turHostesID);
                                 if (count($resultHostesCihaz) > 0) {
                                     foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                         $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                     }
                                     $hostesCihazlar = implode(',', $hostesCihaz);
-                                    $form->shuttleNotification($hostesCihazlar, $alert, $deger["TurSil"]);
+                                    $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["TurSil"]);
                                 }
                             }
 
-                            $alert = $adSoyad . ' ' . $turAdi . $deger["TurSilme"];
+                            $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurSilme"];
                             $kurumRenk = 'danger';
                             $kurumUrl = 'turliste';
                             $kurumIcon = 'fa fa-refresh';
@@ -2693,7 +2685,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                             }
                                             $adminCihaz = implode(',', $adminCihaz);
-                                            $form->shuttleNotification($adminCihaz, $alert, $deger["TurSil"]);
+                                            $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurSil"]);
                                         }
                                     }
                                 } else {
@@ -2706,7 +2698,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                             }
                                             $adminCihaz = implode(',', $adminCihaz);
-                                            $form->shuttleNotification($adminCihaz, $alert, $deger["TurSil"]);
+                                            $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurSil"]);
                                         }
                                     }
                                 }
@@ -2728,7 +2720,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                             }
                                             $adminCihaz = implode(',', $adminCihaz);
-                                            $form->shuttleNotification($adminCihaz, $alert, $deger["TurSil"]);
+                                            $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurSil"]);
                                         }
                                     }
                                 }
@@ -2738,16 +2730,15 @@ class AdminTurAjaxSorgu extends Controller {
                             $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
                             $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                             if ($resultLog) {
-                                $sonuc["Sil"] = "Silme İşlemi Başarılı Şekilde Gerçekleşmiştir.";
+                                $sonuc["delete"] = $deger["TurSilme"];
                             } else {
-                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                $sonuc["hata"] = $deger["Hata"];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $deger["Hata"];
                         }
                     }
                     break;
-
                 case "adminTurDetayDonus":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -2955,7 +2946,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["donusDiger"] = $turDigerKisi;
                     }
                     break;
-
                 case "turDonusAracSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -3014,7 +3004,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["pasifArac"] = $turArac;
                     }
                     break;
-
                 case "turDonusSoforSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -3081,7 +3070,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["pasifSofor"] = $turSofor;
                     }
                     break;
-
                 case "turDonusHostesSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -3148,7 +3136,6 @@ class AdminTurAjaxSorgu extends Controller {
                         $sonuc["pasifHostes"] = $turHostes;
                     }
                     break;
-
                 case "turDonusKaydet":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -3248,26 +3235,26 @@ class AdminTurAjaxSorgu extends Controller {
                             }
                             $resultTurTip = $Panel_Model->turTipDonusDuzenle($turTipGidisDatam, $turTipDonusID);
                             //şoföre bildirim gönderme
-                            $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                            $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                             $resultSoforCihaz = $Panel_Model->soforCihaz($turSoforID);
                             if (count($resultSoforCihaz) > 0) {
                                 foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                     $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                 }
                                 $soforCihazlar = implode(',', $soforCihaz);
-                                $form->shuttleNotification($soforCihazlar, $alert, $deger["TurDuzen"]);
+                                $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["TurDuzen"]);
                             }
                             //hostes varsa
                             if ($turHostesID) {
                                 //hostese bildirim gönderme
-                                $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                                $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                                 $resultHostesCihaz = $Panel_Model->hostesCihaz($turHostesID);
                                 if (count($resultHostesCihaz) > 0) {
                                     foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                         $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                     }
                                     $hostesCihazlar = implode(',', $hostesCihaz);
-                                    $form->shuttleNotification($hostesCihazlar, $alert, $deger["TurDuzen"]);
+                                    $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                 }
                             }
                             //gidişi varmı kontrolü
@@ -3299,7 +3286,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $Panel_Model->addNewTurOgrenci($turDataOgrenci[$o]);
 
                                         //öğrenciye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                                         $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                         $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                         if (count($resultOgrenciCihaz) > 0) {
@@ -3307,7 +3294,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                             }
                                             $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
 
                                         //veliye bildirim gönderme
@@ -3322,7 +3309,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                             }
                                             $veliCihazlar = implode(',', $veliCihaz);
-                                            $form->shuttleNotification($veliCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
                                     }
                                 } else if ($kurumTip == 1) {//işçi
@@ -3352,7 +3339,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $Panel_Model->addNewTurIsci($turDataIsci);
 
                                         //işçiye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                                         $isciBildirimID = implode(",", $turIsciBildirim);
                                         $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                         if (count($resultIsciCihaz) > 0) {
@@ -3360,7 +3347,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                             }
                                             $isciCihazlar = implode(',', $isciCihaz);
-                                            $form->shuttleNotification($isciCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
                                     }
                                 } else {//öğrenci ve işçi
@@ -3392,7 +3379,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             }
                                             $Panel_Model->addNewTurIsciOgrenci($turUpdateDataOgrenci);
                                             //öğrenciye bildirim gönderme
-                                            $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                                            $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                                             $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                             $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                             if (count($resultOgrenciCihaz) > 0) {
@@ -3400,7 +3387,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                                 }
                                                 $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                                $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurDuzen"]);
+                                                $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                             }
 
                                             //veliye bildirim gönderme
@@ -3415,7 +3402,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                                 }
                                                 $veliCihazlar = implode(',', $veliCihaz);
-                                                $form->shuttleNotification($veliCihazlar, $alert, $deger["TurDuzen"]);
+                                                $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                             }
                                         }
                                         //işçi için
@@ -3445,7 +3432,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $Panel_Model->addNewTurIsciOgrenci($turUpdateDataIsci);
 
                                             //işçiye bildirim gönderme
-                                            $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                                            $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                                             $isciBildirimID = implode(",", $turIsciBildirim);
                                             $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                             if (count($resultIsciCihaz) > 0) {
@@ -3453,7 +3440,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                                 }
                                                 $isciCihazlar = implode(',', $isciCihaz);
-                                                $form->shuttleNotification($isciCihazlar, $alert, $deger["TurDuzen"]);
+                                                $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                             }
                                         }
                                     }
@@ -3486,7 +3473,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $Panel_Model->addNewTurOgrenci($turDataOgrenci[$o]);
 
                                         //öğrenciye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                                         $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                         $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                         if (count($resultOgrenciCihaz) > 0) {
@@ -3494,7 +3481,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                             }
                                             $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
 
                                         //veliye bildirim gönderme
@@ -3509,7 +3496,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                             }
                                             $veliCihazlar = implode(',', $veliCihaz);
-                                            $form->shuttleNotification($veliCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
                                     }
                                 } else if ($kurumTip == 1) {//işçi
@@ -3539,7 +3526,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $Panel_Model->addNewTurIsci($turDataIsci);
 
                                         //işçiye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                                         $isciBildirimID = implode(",", $turIsciBildirim);
                                         $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                         if (count($resultIsciCihaz) > 0) {
@@ -3547,7 +3534,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                             }
                                             $isciCihazlar = implode(',', $isciCihaz);
-                                            $form->shuttleNotification($isciCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
                                     }
                                 } else {//öğrenci ve işçi
@@ -3580,7 +3567,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $Panel_Model->addNewTurIsciOgrenci($turUpdateDataOgrenci);
 
                                             //öğrenciye bildirim gönderme
-                                            $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                                            $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                                             $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                             $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                             if (count($resultOgrenciCihaz) > 0) {
@@ -3588,7 +3575,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                                 }
                                                 $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                                $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurDuzen"]);
+                                                $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                             }
 
                                             //veliye bildirim gönderme
@@ -3603,7 +3590,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                                 }
                                                 $veliCihazlar = implode(',', $veliCihaz);
-                                                $form->shuttleNotification($veliCihazlar, $alert, $deger["TurDuzen"]);
+                                                $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                             }
                                         }
                                         //işçi için
@@ -3632,7 +3619,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $Panel_Model->addNewTurIsciOgrenci($turUpdateDataIsci);
 
                                             //işçiye bildirim gönderme
-                                            $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                                            $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                                             $isciBildirimID = implode(",", $turIsciBildirim);
                                             $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                             if (count($resultIsciCihaz) > 0) {
@@ -3640,7 +3627,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                     $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                                 }
                                                 $isciCihazlar = implode(',', $isciCihaz);
-                                                $form->shuttleNotification($isciCihazlar, $alert, $deger["TurDuzen"]);
+                                                $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                             }
                                         }
                                     }
@@ -3675,26 +3662,26 @@ class AdminTurAjaxSorgu extends Controller {
                             $resultTurTip = $Panel_Model->addNewTurTip($turUpdateDatam);
 
                             //şoföre bildirim gönderme
-                            $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusAtama"];
+                            $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusAtama"];
                             $resultSoforCihaz = $Panel_Model->soforCihaz($turSoforID);
                             if (count($resultSoforCihaz) > 0) {
                                 foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                     $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                 }
                                 $soforCihazlar = implode(',', $soforCihaz);
-                                $form->shuttleNotification($soforCihazlar, $alert, $deger["TurAta"]);
+                                $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["TurAta"]);
                             }
                             //hostes varsa
                             if ($turHostesID) {
                                 //hostese bildirim gönderme
-                                $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusAtama"];
+                                $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusAtama"];
                                 $resultHostesCihaz = $Panel_Model->hostesCihaz($turHostesID);
                                 if (count($resultHostesCihaz) > 0) {
                                     foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                         $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                     }
                                     $hostesCihazlar = implode(',', $hostesCihaz);
-                                    $form->shuttleNotification($hostesCihazlar, $alert, $deger["TurAta"]);
+                                    $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["TurAta"]);
                                 }
                             }
                             //eğer bu ilk defa ekleniyorsa gidişe ait bilgiler mevcuttur
@@ -3724,7 +3711,7 @@ class AdminTurAjaxSorgu extends Controller {
                                     }
                                     $Panel_Model->addNewTurOgrenci($turDataOgrenci[$o]);
                                     //öğrenciye bildirim gönderme
-                                    $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                                    $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                                     $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                     $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                     if (count($resultOgrenciCihaz) > 0) {
@@ -3732,7 +3719,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                         }
                                         $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                        $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurDuzen"]);
+                                        $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                     }
                                     //veliye bildirim gönderme
                                     $resultVeliOgrenci = $Panel_Model->veliOgrenci($ogrenciBildirimID);
@@ -3746,7 +3733,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $veliCihaz[] = $resultVeliCihazz ['bsvelicihazRecID'];
                                         }
                                         $veliCihazlar = implode(',', $veliCihaz);
-                                        $form->shuttleNotification($veliCihazlar, $alert, $deger["TurDuzen"]);
+                                        $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                     }
                                 }
                             } else if ($kurumTip == 1) {//işçi
@@ -3776,7 +3763,7 @@ class AdminTurAjaxSorgu extends Controller {
                                     }
                                     $Panel_Model->addNewTurIsci($turDataIsci);
                                     //işçiye bildirim gönderme
-                                    $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                                    $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                                     $isciBildirimID = implode(",", $turIsciBildirim);
                                     $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                     if (count($resultIsciCihaz) > 0) {
@@ -3784,7 +3771,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                         }
                                         $isciCihazlar = implode(',', $isciCihaz);
-                                        $form->shuttleNotification($isciCihazlar, $alert, $deger["TurDuzen"]);
+                                        $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                     }
                                 }
                             } else {//öğrenci ve işçi
@@ -3817,7 +3804,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         $Panel_Model->addNewTurIsciOgrenci($turUpdateDataOgrenci);
 
                                         //öğrenciye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                                         $ogrenciBildirimID = implode(",", $turOgrenciBildirim);
                                         $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciBildirimID);
                                         if (count($resultOgrenciCihaz) > 0) {
@@ -3825,7 +3812,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                             }
                                             $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
                                         //veliye bildirim gönderme
                                         $resultVeliOgrenci = $Panel_Model->veliOgrenci($ogrenciBildirimID);
@@ -3839,7 +3826,7 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $veliCihaz[] = $resultVeliCihazz ['bsvelicihazRecID'];
                                             }
                                             $veliCihazlar = implode(',', $veliCihaz);
-                                            $form->shuttleNotification($veliCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
                                     }
                                     //işçi için
@@ -3867,7 +3854,7 @@ class AdminTurAjaxSorgu extends Controller {
                                         }
                                         $Panel_Model->addNewTurIsciOgrenci($turUpdateDataIsci);
                                         //işçiye bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                                         $isciBildirimID = implode(",", $turIsciBildirim);
                                         $resultIsciCihaz = $Panel_Model->isciCihaz($isciBildirimID);
                                         if (count($resultIsciCihaz) > 0) {
@@ -3875,13 +3862,13 @@ class AdminTurAjaxSorgu extends Controller {
                                                 $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                             }
                                             $isciCihazlar = implode(',', $isciCihaz);
-                                            $form->shuttleNotification($isciCihazlar, $alert, $deger["TurDuzen"]);
+                                            $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["TurDuzen"]);
                                         }
                                     }
                                 }
                             }
                         }
-                        $alert = $adSoyad . ' ' . $turAdi . $deger["TurDonusDuzenleme"];
+                        $alert = $adSoyad . ' ' . $turAdi . $degerbildirim["TurDonusDuzenleme"];
                         $kurumRenk = 'info';
                         $kurumUrl = 'turliste';
                         $kurumIcon = 'fa fa-refresh';
@@ -3905,7 +3892,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                         }
                                         $adminCihaz = implode(',', $adminCihaz);
-                                        $form->shuttleNotification($adminCihaz, $alert, $deger["TurDuzen"]);
+                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurDuzen"]);
                                     }
                                 }
                             } else {
@@ -3918,7 +3905,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                         }
                                         $adminCihaz = implode(',', $adminCihaz);
-                                        $form->shuttleNotification($adminCihaz, $alert, $deger["TurDuzen"]);
+                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurDuzen"]);
                                     }
                                 }
                             }
@@ -3940,7 +3927,7 @@ class AdminTurAjaxSorgu extends Controller {
                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                         }
                                         $adminCihaz = implode(',', $adminCihaz);
-                                        $form->shuttleNotification($adminCihaz, $alert, $deger["TurDuzen"]);
+                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["TurDuzen"]);
                                     }
                                 }
                             }
@@ -3951,12 +3938,12 @@ class AdminTurAjaxSorgu extends Controller {
                         $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                         if ($resultLog) {
                             $sonuc["turDonusID"] = $resultTurTip;
+                            $sonuc["turDonusReply"] = $deger["DonusTurDuzenle"];
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $deger["Hata"];
                         }
                     }
                     break;
-
                 default :
                     header("Location:" . SITE_URL_LOGOUT);
                     break;

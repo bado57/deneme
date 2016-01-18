@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-left">
                 <h3>
-                    <i class="fa fa-th"></i> <?php echo $data["Veli"]; ?>
+                    <i class="fa fa-home"></i> <?php echo $data["Veli"]; ?>
                     <small id="smallVeli"><?php if (count($model[0]['VeliCount']) > 0) { ?>
                             <?php
                             echo $model[0]['VeliCount'];
@@ -115,7 +115,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="Aciklama" class="form-control dsb" rows="3" style="resize: none"></textarea>
                     </div>
                     <div class="form-group">
                         <button data-type="svClose"  data-class="veli" type="button" data-islemler="veliVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
@@ -149,7 +149,7 @@
                     </div>
                     <div class="form-group">
                         <label for="VeliAdresDetay"><?php echo $data["AdresDetay"]; ?></label>
-                        <textarea name="VeliAdresDetay" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="VeliAdresDetay" class="form-control dsb" rows="3" style="resize: none"></textarea>
                     </div>
                 </div>
                 <div class="form-vertical VeliAdresForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -227,7 +227,7 @@
                     </div>
                     <div class="form-group">
                         <label for="DetayAciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="DetayAciklama" class="form-control dsb" rows="3" disabled></textarea>
+                        <textarea name="DetayAciklama" class="form-control dsb" rows="3" disabled style="resize: none"></textarea>
                     </div>
                     <div class="form-group submit-group">
                         <button data-type="svClose" type="button" class="btn btn-default vzg" data-Vzgislem="veliDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
@@ -265,7 +265,7 @@
                     </div>
                     <div class="form-group">
                         <label for="VeliDetayAdresDetay"><?php echo $data["AdresDetay"]; ?></label>
-                        <textarea name="VeliDetayAdresDetay" class="form-control dsb" rows="3" disabled></textarea>
+                        <textarea name="VeliDetayAdresDetay" class="form-control dsb" rows="3" disabled style="resize: none"></textarea>
                     </div>
                 </div>
                 <div class="form-vertical IsciDetailAdresForm col-lg-4 col-md-4 col-sm-12 col-xs-12">

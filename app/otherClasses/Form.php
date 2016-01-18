@@ -372,6 +372,15 @@ class Form {
         return $userKadi;
     }
 
+    function myip() {
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
+    }
+
     function userSifreOlustur($loginKadi, $loginSifre, $loginTip) {
         $loginDeger = "bs";
         $sifreilkeleman = $loginDeger . $loginKadi . $loginTip;
@@ -1046,6 +1055,163 @@ class Form {
             $time2 += 86400;
         }
         return date("H:i", strtotime("1980-01-01 00:00") + ($time2 - $time1));
+    }
+
+    //smtp ile tekli mail controlü yapma
+    function mailControl1($validemail) {
+        require_once('smtp_validateEmail.class.php');
+        // sorgu atacak email. //noreply@floracicek.com
+        $sender = 'noreply@shuttleoperator.com';
+
+        $SMTP_Validator = new SMTP_validateEmail();
+        $SMTP_Validator->debug = true;
+        // valdiation
+        $results = $SMTP_Validator->validate(array($validemail), $sender);
+        // sonuç
+        //echo $email . ' is ' . ($results[$email] ? 'valid' : 'invalid') . "\n";
+        // send email? 
+        if ($results[$validemail]) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    //smtp ile ikili mail controlü yapma
+    function mailControl2($validemail) {
+        require_once('smtp_validateEmail.class.php');
+
+        // doğrulanacak email
+        $emails = array('user@example.com', 'user2@example.com');
+        // sorgu atacak email. //noreply@floracicek.com
+        $sender = 'noreply@turkiyefloracicek.com';
+
+        $SMTP_Validator = new SMTP_validateEmail();
+        $SMTP_Validator->debug = true;
+        // valdiation
+        $results = $SMTP_Validator->validate(array($emails), $sender);
+        // sonuç
+        foreach ($results as $email => $result) {
+            // send email? 
+            if ($result) {
+                //mail($email, 'Confirm Email', 'Please reply to this email to confirm', 'From:'.$sender."\r\n"); // send email
+            } else {
+                echo 'The email address ' . $email . ' is not valid';
+            }
+        }
+    }
+
+    //smtp ile mail gönderme işlemi
+    function sifreHatirlatMail($email, $setTitle, $isim, $subject, $body) {
+        require "Plugins/PHPMailer/PHPMailerAutoload.php";
+        $mail = new PHPMailer;
+
+        //$mail->SMTPDebug = 2;                               // Enable verbose debug output
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->SMTPAuth = true;         // Enable SMTP authentication
+
+        $mail->Host = 'ns1.shuttleoperator.com';  // Specify main and backup SMTP servers
+        $mail->Username = 'noreply@shuttleoperator.com';                 // SMTP username
+        $mail->Password = '478965Shuttle';                           // SMTP password
+        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 587;                                    // TCP port to connect to(ssl ise port 465)
+
+        $mail->setFrom('noreply@turkiyefloracicek.com', $setTitle);
+        $mail->addAddress($email, $isim);     // Add a recipient
+        $mail->CharSet = 'UTF-8';
+        $mail->isHTML(true);                                  // Set email format to HTML
+
+        $mail->Subject = $subject;
+        $mail->Body = $body;
+
+        if (!$mail->send()) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    //smtp ile mail gönderme işlemi
+    function sSiparisMailGonder($email, $isim, $siparisNo) {
+        require "Plugins/PHPMailer/PHPMailerAutoload.php";
+        $mail = new PHPMailer;
+
+        //$mail->SMTPDebug = 2;                               // Enable verbose debug output
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->SMTPAuth = true;         // Enable SMTP authentication
+
+        $mail->Host = 'ns1.turkiyefloracicek.com';  // Specify main and backup SMTP servers
+        $mail->Username = 'siparis@turkiyefloracicek.com';                 // SMTP username
+        $mail->Password = '478965Siparis';                           // SMTP password
+        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 587;                                    // TCP port to connect to(ssl ise port 465)
+        // keeps the current $mail settings and creates new object
+        $mail2 = clone $mail;
+        $mail->setFrom('siparis@turkiyefloracicek.com', 'Sipariş Sonucu');
+        $mail->addAddress($email, $isim);     // Add a recipient
+        $mail->CharSet = 'UTF-8';
+        $mail->isHTML(true);                                  // Set email format to HTML
+
+        $mail->Subject = 'Türkiye Flora Çiçek - Sipariş';
+        $mailBodyKullanici = 'Merhaba ' . $isim . '!<br/> Siparişiniz alınmıştır. Aşağıda verilen sipariş kodu ile <a href="https://www.turkiyefloracicek.com">Türkiye Flora Çiçek</a> adresinden siparişinizin son durumu hakkında bilgi alabilirsiniz.'
+                . '<br/><br/>Sipariş Kodunuz : ' . $siparisNo . ' Geri dönmek için aşağıdaki linke tıklayınız.'
+                . '<br/><br/>Bir sonraki çiçek gönderiminizde tekrar görüşmek dileğiyle.'
+                . '<br/><a href="https://www.turkiyefloracicek.com">Türkiye Flora Çiçek</a>';
+        $mail->Body = $mailBodyKullanici;
+        if (!$mail->Send()) {
+            return 0;
+        } else {
+            // now send to user.
+            $mail2->setFrom('siparis@turkiyefloracicek.com', 'Sipariş Sonucu');
+            $mail2->AddAddress("info@turkiyefloracicek.com", $isim);
+            $mail2->CharSet = 'UTF-8';
+            $mail2->isHTML(true);
+            $mail2->Subject = 'Türkiye Flora Çiçek - Yeni Sipariş';
+            $mailBodyAdmin = 'Yeni bir sipariş aldınız. <br/>Detayları görmek için aşağıdaki linke tıklayınız. '
+                    . '<a href="https://www.turkiyefloracicek.com/Admin/BekleyenSiparis">Türkiye Flora Çiçek Yönetim Paneli</a>';
+            $mail2->Body = $mailBodyAdmin;
+
+            if (!$mail2->Send()) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
+    //smtp backup önderme işlemi
+    function backupDatabase($file) {
+        require "Plugins/PHPMailer/PHPMailerAutoload.php";
+        $mail = new PHPMailer;
+        //$mail->SMTPDebug = 2;                               // Enable verbose debug output
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->SMTPAuth = true;         // Enable SMTP authentication
+
+        $mail->Host = 'ns1.turkiyefloracicek.com';  // Specify main and backup SMTP servers
+        $mail->Username = 'noreply@turkiyefloracicek.com';                 // SMTP username
+        $mail->Password = '478965Flora';                           // SMTP password
+        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = 587;                                    // TCP port to connect to(ssl ise port 465)
+        date_default_timezone_set('Europe/Istanbul');
+        $mail->setFrom('noreply@turkiyefloracicek.com', 'Flora Database Yedek');
+        $mail->addAddress('info@turkiyefloracicek.com', 'Flora Sql/' . date('d.m.Y H:i:s'));     // Add a recipient
+        $mail->addAttachment($file);
+        $mail->CharSet = 'UTF-8';
+        $mail->isHTML(true);                                  // Set email format to HTML
+        $mail->AddEmbeddedImage("vitrin/logo.png", "logo", "vitrin/logo.png");
+        $mail->Subject = 'Türkiye Flora Çiçek - Flora Database Yedek';
+        $mail->Body = 'Geri dönmek için aşağıdaki linke tıklayınız.'
+                . '<br/><br/><a href="https://www.turkiyefloracicek.com">Türkiye Flora Çiçek</a>'
+                . '<br/><br/><br/><img src="cid:logo" alt="Türkiye Flora Çiçek" >';
+
+        if (!$mail->send()) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 
 }

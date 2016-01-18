@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/AdminDuyuruAjaxSorgu",
+    url: SITE_URL + "AdminDuyuruAjaxSorgu",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -1084,15 +1084,15 @@ $.AdminIslemler = {
                 success: function (cevap) {
                     if (cevap.hata) {
                         reset();
-                        alertify.alert(jsDil.Hata);
+                        alertify.alert(cevap.hata);
                         return false;
                     } else {
-                        if (cevap.duyuru) {
+                        if (cevap.duyuru != "") {
                             var dt = new Date();
                             var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
                             var date = dt.getDate() + "/" + dt.getMonth() + "/" + dt.getFullYear();
                             reset();
-                            alertify.success(jsDil.DuyuruGonder);
+                            alertify.success(cevap.duyuru);
                             var addRow = "<tr><td>"
                                     + "<a data-toggle='tooltip' data-placement='top'>"
                                     + "<i class='fa fa-bullhorn'></i>" + ' ' + time + '--' + date + "</a></td>"

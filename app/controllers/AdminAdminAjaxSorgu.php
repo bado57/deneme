@@ -17,10 +17,13 @@ class AdminAdminAjaxSorgu extends Controller {
 
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
             $sonuc = array();
+
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
-            //form class bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
+            $Panel_Model = $this->load->model("Panel_Model");
+            //language 
+            $lang = Session::get("dil");
+            $formlanguage = $this->load->ajaxlanguage($lang);
+            $languagedeger = $formlanguage->ajaxlanguage();
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -51,9 +54,7 @@ class AdminAdminAjaxSorgu extends Controller {
                     break;
 
                     break;
-
                 case "adminKaydet":
-
                     $adminRutbe = Session::get("userRutbe");
 
                     if ($adminRutbe != 1) {
@@ -66,12 +67,9 @@ class AdminAdminAjaxSorgu extends Controller {
                         $userKadi = $form->kadiOlustur($firmaID);
                         if ($userKadi) {
                             $realSifre = $form->sifreOlustur();
-                            if ($realSifre) {//$loginKadi, $loginSifre, $loginTip
+                            if ($realSifre) {
                                 $adminSifre = $form->userSifreOlustur($userKadi, $realSifre, $userTip);
                                 if ($adminSifre) {
-
-                                    $uniqueKey = Session::get("username");
-                                    $uniqueKey = $uniqueKey . '_AAdmin';
 
                                     $form->post('adminAd', true);
                                     $form->post('adminSoyad', true);
@@ -90,89 +88,99 @@ class AdminAdminAjaxSorgu extends Controller {
                                     $form->post('postakodu', true);
                                     $form->post('caddeno', true);
                                     $form->post('detayAdres', true);
+                                    $adminEmail = $form->values['adminEmail'];
+                                    $adminAd = $form->values['adminAd'];
+                                    $adminSoyad = $form->values['adminSoyad'];
+                                    $adminAdSoyad = $adminAd . ' ' . $adminSoyad;
 
                                     $adminBolgeID = $_REQUEST['adminBolgeID'];
-
-                                    if ($form->submit()) {
-                                        $data = array(
-                                            'BSAdminAd' => $form->values['adminAd'],
-                                            'BSAdminSoyad' => $form->values['adminSoyad'],
-                                            'BSAdminKadi' => $userKadi,
-                                            'BSAdminSifre' => $adminSifre,
-                                            'BSAdminRSifre' => $realSifre,
-                                            'BSAdminPhone' => $form->values['adminTelefon'],
-                                            'BSAdminEmail' => $form->values['adminEmail'],
-                                            'BSAdminLocation' => $form->values['adminLokasyon'],
-                                            'BSAdminUlke' => $form->values['ulke'],
-                                            'BSAdminIl' => $form->values['il'],
-                                            'BSAdminIlce' => $form->values['ilce'],
-                                            'BSAdminSemt' => $form->values['semt'],
-                                            'BSAdminMahalle' => $form->values['mahalle'],
-                                            'BSAdminSokak' => $form->values['sokak'],
-                                            'BSAdminPostaKodu' => $form->values['postakodu'],
-                                            'BSAdminCaddeNo' => $form->values['caddeno'],
-                                            'BSAdminAdres' => $form->values['adminAdres'],
-                                            'BSAdminDetayAdres' => $form->values['detayAdres'],
-                                            'Status' => $form->values['adminDurum'],
-                                            'BSAdminAciklama' => $form->values['aciklama']
-                                        );
-                                    }
-                                    $resultAdminID = $Panel_Model->addNewAdmin($data);
-
-                                    if ($resultAdminID != 'unique') {
-                                        $bolgeID = count($adminBolgeID);
-                                        if ($bolgeID > 0) {
-                                            for ($b = 0; $b < $bolgeID; $b++) {
-                                                $bolgedata[$b] = array(
-                                                    'BSAdminID' => $resultAdminID,
-                                                    'BSBolgeID' => $adminBolgeID[$b]
-                                                );
-                                            }
-                                            $resultBolgeID = $Panel_Model->addNewBolgeAdmin($bolgedata);
-                                            if ($resultBolgeID) {
-                                                $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . Session::get("userId");
-                                                $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                                $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                if ($resultMemcache) {
-                                                    $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                    if (!filter_var($adminEmail, FILTER_VALIDATE_EMAIL) === false) {
+                                        $emailValidate = $form->mailControl1($adminEmail);
+                                        if ($emailValidate == 1) {
+                                            $kullaniciliste = $Panel_Model->adminEmailDbKontrol($adminEmail);
+                                            if (count($kullaniciliste) <= 0) {
+                                                if ($form->submit()) {
+                                                    $data = array(
+                                                        'BSAdminAd' => $adminAd,
+                                                        'BSAdminSoyad' => $adminSoyad,
+                                                        'BSAdminKadi' => $userKadi,
+                                                        'BSAdminSifre' => $adminSifre,
+                                                        'BSAdminRSifre' => $realSifre,
+                                                        'BSAdminPhone' => $form->values['adminTelefon'],
+                                                        'BSAdminEmail' => $adminEmail,
+                                                        'BSAdminLocation' => $form->values['adminLokasyon'],
+                                                        'BSAdminUlke' => $form->values['ulke'],
+                                                        'BSAdminIl' => $form->values['il'],
+                                                        'BSAdminIlce' => $form->values['ilce'],
+                                                        'BSAdminSemt' => $form->values['semt'],
+                                                        'BSAdminMahalle' => $form->values['mahalle'],
+                                                        'BSAdminSokak' => $form->values['sokak'],
+                                                        'BSAdminPostaKodu' => $form->values['postakodu'],
+                                                        'BSAdminCaddeNo' => $form->values['caddeno'],
+                                                        'BSAdminAdres' => $form->values['adminAdres'],
+                                                        'BSAdminDetayAdres' => $form->values['detayAdres'],
+                                                        'Status' => $form->values['adminDurum'],
+                                                        'BSAdminAciklama' => $form->values['aciklama']
+                                                    );
                                                 }
+                                                $resultAdminID = $Panel_Model->addNewAdmin($data);
 
-                                                $sonuc["newAdminID"] = $resultAdminID;
-                                                $sonuc["insert"] = "Başarıyla Admin Eklenmiştir.";
+                                                if ($resultAdminID != 'unique') {
+                                                    $bolgeID = count($adminBolgeID);
+                                                    if ($bolgeID > 0) {
+                                                        for ($b = 0; $b < $bolgeID; $b++) {
+                                                            $bolgedata[$b] = array(
+                                                                'BSAdminID' => $resultAdminID,
+                                                                'BSBolgeID' => $adminBolgeID[$b]
+                                                            );
+                                                        }
+                                                        $resultBolgeID = $Panel_Model->addNewBolgeAdmin($bolgedata);
+                                                        if ($resultBolgeID) {
+                                                            //kullanıcıya gerekli giriş mail yazısı
+                                                            $setTitle = $languagedeger['UyelikBilgi'];
+                                                            $subject = $languagedeger['SHtrltMail'];
+                                                            $body = $languagedeger['Merhaba'] . ' ' . $adminAdSoyad . '!<br/>' . $languagedeger['KullaniciAdi'] . ' = ' . $userKadi . '<br/>'
+                                                                    . $languagedeger['KullaniciSifre'] . ' = ' . $realSifre . '<br/>'
+                                                                    . $languagedeger['IyiGunler'];
+                                                            //kullanıcıya gerekli giriş bilgileri gönderiliyor.
+                                                            $resultMail = $form->sifreHatirlatMail($adminEmail, $setTitle, $adminAdSoyad, $subject, $body);
+                                                            $sonuc["newAdminID"] = $resultAdminID;
+                                                            $sonuc["insert"] = $languagedeger['AdminEkle'];
+                                                        } else {
+                                                            //admin kaydedilirken hata geldi ise
+                                                            $deleteresult = $Panel_Model->adminDelete($resultAdminID);
+
+                                                            $deleteresultt = $Panel_Model->adminMultiBolgeDelete($resultAdminID);
+                                                            if ($deleteresultt) {
+                                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                                            }
+                                                        }
+                                                    } else {
+                                                        $sonuc["newAdminID"] = $resultAdminID;
+                                                        $sonuc["hata"] = $languagedeger['BolgeSec'];
+                                                    }
+                                                } else {
+                                                    $sonuc["hata"] = $languagedeger['GecersizKullanici'];
+                                                }
                                             } else {
-                                                //admin kaydedilirken hata geldi ise
-                                                $deleteresult = $Panel_Model->adminDelete($resultAdminID);
-
-                                                $deleteresultt = $Panel_Model->adminMultiBolgeDelete($resultAdminID);
-                                                if ($deleteresultt) {
-                                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                                }
+                                                $sonuc["hata"] = $languagedeger['KullanilmisEmail'];
                                             }
                                         } else {
-                                            $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . Session::get("userId");
-                                            $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                            $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                            if ($resultMemcache) {
-                                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                            }
-
-                                            $sonuc["newAdminID"] = $resultAdminID;
-                                            $sonuc["insert"] = "Başarıyla Admin Eklenmiştir.";
+                                            $sonuc["hata"] = $languagedeger['BaskaEmail'];
                                         }
                                     } else {
-                                        $sonuc["hata"] = "Lütfen Yeni Bir Kullanıcı Adı yada Şifre Giriniz.";
+                                        $sonuc["hata"] = $languagedeger['GecerliEmail'];
                                     }
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $languagedeger['Hata'];
                                 }
                             } else {
-                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                $sonuc["hata"] = $languagedeger['Hata'];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['Hata'];
                         }
                     }
-
                 case "adminDetail":
 
                     $adminRutbe = Session::get("userRutbe");
@@ -272,17 +280,11 @@ class AdminAdminAjaxSorgu extends Controller {
                     }
 
                     break;
-
                 case "adminDetailDelete":
-
                     $adminRutbe = Session::get("userRutbe");
                     if ($adminRutbe != 1) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_AAdmin';
-
-
                         $form->post('admindetail_id', true);
                         $adminDetailID = $form->values['admindetail_id'];
 
@@ -290,32 +292,22 @@ class AdminAdminAjaxSorgu extends Controller {
                         if ($deleteresult) {
                             $deleteresulttt = $Panel_Model->adminDetailBolgeDelete($adminDetailID);
                             if ($deleteresulttt) {
-                                $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . Session::get("userId");
-                                $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                if ($resultMemcache) {
-                                    $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                }
-                                $sonuc["delete"] = "Admin kaydı başarıyla silinmiştir.";
+                                $sonuc["delete"] = $languagedeger['AdminSil'];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['Hata'];
                         }
                     }
 
                     $sonuc["adminDetail"] = $data["adminDetail"];
 
                     break;
-
                 case "adminDetailKaydet":
 
                     $adminRutbe = Session::get("userRutbe");
                     if ($adminRutbe != 1) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_AAdmin';
-
                         $form->post('admindetail_id', true);
                         $adminID = $form->values['admindetail_id'];
 
@@ -336,57 +328,67 @@ class AdminAdminAjaxSorgu extends Controller {
                         $form->post('postakodu', true);
                         $form->post('caddeno', true);
                         $form->post('detayAdres', true);
+                        $adminEmail = $form->values['adminEmail'];
 
                         $adminBolgeAd = $_REQUEST['adminBolgeAd'];
                         $adminBolgeID = $_REQUEST['adminBolgeID'];
 
-                        if ($form->submit()) {
-                            $data = array(
-                                'BSAdminAd' => $form->values['adminAd'],
-                                'BSAdminSoyad' => $form->values['adminSoyad'],
-                                'BSAdminPhone' => $form->values['adminTelefon'],
-                                'BSAdminEmail' => $form->values['adminEmail'],
-                                'BSAdminLocation' => $form->values['adminLokasyon'],
-                                'BSAdminUlke' => $form->values['ulke'],
-                                'BSAdminIl' => $form->values['il'],
-                                'BSAdminIlce' => $form->values['ilce'],
-                                'BSAdminSemt' => $form->values['semt'],
-                                'BSAdminMahalle' => $form->values['mahalle'],
-                                'BSAdminSokak' => $form->values['sokak'],
-                                'BSAdminPostaKodu' => $form->values['postakodu'],
-                                'BSAdminCaddeNo' => $form->values['caddeno'],
-                                'BSAdminAdres' => $form->values['adminAdres'],
-                                'BSAdminDetayAdres' => $form->values['detayAdres'],
-                                'Status' => $form->values['adminDurum'],
-                                'BSAdminAciklama' => $form->values['aciklama']
-                            );
-                        }
-                        $resultAdminUpdate = $Panel_Model->adminOzelliklerDuzenle($data, $adminID);
-                        if ($resultAdminUpdate) {
-                            $deleteresulttt = $Panel_Model->adminMultiBolgeDelete($adminID);
-                            if ($deleteresulttt) {
-                                $bolgeID = count($adminBolgeID);
-                                for ($b = 0; $b < $bolgeID; $b++) {
-                                    $bolgedata[$b] = array(
-                                        'BSAdminID' => $adminID,
-                                        'BSBolgeID' => $adminBolgeID[$b]
-                                    );
-                                }
-                                $resultBolgeID = $Panel_Model->addNewBolgeAdmin($bolgedata);
-                                if ($resultBolgeID) {
-                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                    if ($resultMemcache) {
-                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                        if (!filter_var($adminEmail, FILTER_VALIDATE_EMAIL) === false) {
+                            $emailValidate = $form->mailControl1($adminEmail);
+                            if ($emailValidate == 1) {
+                                $kullaniciliste = $Panel_Model->adminEmailDbKontrol($adminEmail);
+                                if (count($kullaniciliste) <= 0) {
+                                    if ($form->submit()) {
+                                        $data = array(
+                                            'BSAdminAd' => $form->values['adminAd'],
+                                            'BSAdminSoyad' => $form->values['adminSoyad'],
+                                            'BSAdminPhone' => $form->values['adminTelefon'],
+                                            'BSAdminEmail' => $adminEmail,
+                                            'BSAdminLocation' => $form->values['adminLokasyon'],
+                                            'BSAdminUlke' => $form->values['ulke'],
+                                            'BSAdminIl' => $form->values['il'],
+                                            'BSAdminIlce' => $form->values['ilce'],
+                                            'BSAdminSemt' => $form->values['semt'],
+                                            'BSAdminMahalle' => $form->values['mahalle'],
+                                            'BSAdminSokak' => $form->values['sokak'],
+                                            'BSAdminPostaKodu' => $form->values['postakodu'],
+                                            'BSAdminCaddeNo' => $form->values['caddeno'],
+                                            'BSAdminAdres' => $form->values['adminAdres'],
+                                            'BSAdminDetayAdres' => $form->values['detayAdres'],
+                                            'Status' => $form->values['adminDurum'],
+                                            'BSAdminAciklama' => $form->values['aciklama']
+                                        );
                                     }
-
-                                    $sonuc["newAdminID"] = $adminID;
-                                    $sonuc["update"] = "Başarıyla Admin Düzenlenmiştir.";
+                                    $resultAdminUpdate = $Panel_Model->adminOzelliklerDuzenle($data, $adminID);
+                                    if ($resultAdminUpdate) {
+                                        $deleteresulttt = $Panel_Model->adminMultiBolgeDelete($adminID);
+                                        if ($deleteresulttt) {
+                                            $bolgeID = count($adminBolgeID);
+                                            for ($b = 0; $b < $bolgeID; $b++) {
+                                                $bolgedata[$b] = array(
+                                                    'BSAdminID' => $adminID,
+                                                    'BSBolgeID' => $adminBolgeID[$b]
+                                                );
+                                            }
+                                            $resultBolgeID = $Panel_Model->addNewBolgeAdmin($bolgedata);
+                                            if ($resultBolgeID) {
+                                                $sonuc["newAdminID"] = $adminID;
+                                                $sonuc["update"] = $languagedeger['AdminDuzen'];
+                                            } else {
+                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                            }
+                                        }
+                                    } else {
+                                        $sonuc["hata"] = $languagedeger['Hata'];
+                                    }
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $languagedeger['KullanilmisEmail'];
                                 }
+                            } else {
+                                $sonuc["hata"] = $languagedeger['BaskaEmail'];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['GecerliEmail'];
                         }
                     }
                     break;

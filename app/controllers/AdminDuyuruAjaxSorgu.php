@@ -21,22 +21,20 @@ class AdminDuyuruAjaxSorgu extends Controller {
             $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
             if (!Session::get("dil")) {
                 Session::set("dil", $lang);
-                $formm = $this->load->multilanguage($lang);
-                $deger = $formm->multilanguage();
+                $formm = $this->load->ajaxlanguage($lang);
+                $deger = $formm->ajaxlanguage();
+                $degerbildirim = $formm->bildirimlanguage();
             } else {
-                $formm = $this->load->multilanguage(Session::get("dil"));
-                $deger = $formm->multilanguage();
+                $formm = $this->load->ajaxlanguage(Session::get("dil"));
+                $deger = $formm->ajaxlanguage();
+                $degerbildirim = $formm->bildirimlanguage();
             }
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
-            //form class bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
+            $Panel_Model = $this->load->model("Panel_Model");
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
             $adSoyad = Session::get("kullaniciad") . ' ' . Session::get("kullanicisoyad");
-            $bolgeIcon = 'fa fa-th';
-            $bolgeUrl = 'bolgeliste';
             Switch ($tip) {
 
                 case "duyuruBolgeSelect":
@@ -78,7 +76,6 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $sonuc["adminDuyuruBolge"] = $adminBolge;
                     }
                     break;
-
                 case "duyuruBolgeAdminMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -106,7 +103,6 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $sonuc["duyuruAdmin"] = $duyuruAdmin;
                     }
                     break;
-
                 case "duyuruBolgeSoforMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -126,7 +122,6 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $sonuc["duyuruSofor"] = $duyuruSofor;
                     }
                     break;
-
                 case "duyuruBolgeHostesMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -146,7 +141,6 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $sonuc["duyuruHostes"] = $duyuruHostes;
                     }
                     break;
-
                 case "duyuruBolgeVeliMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -166,7 +160,6 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $sonuc["duyuruVeli"] = $duyuruVeli;
                     }
                     break;
-
                 case "duyuruBolgeOgrenciMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -186,7 +179,6 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $sonuc["duyuruOgrenci"] = $duyuruOgrenci;
                     }
                     break;
-
                 case "duyuruBolgePersonelMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -206,7 +198,6 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $sonuc["duyuruPersonel"] = $duyuruIsci;
                     }
                     break;
-
                 case "duyuruKurumMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -226,7 +217,6 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $sonuc["kurumMultiSelect"] = $kurumSelect;
                     }
                     break;
-
                 case "duyuruKurumVeli":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -246,7 +236,6 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $sonuc["duyuruVeli"] = $duyuruKurumVeli;
                     }
                     break;
-
                 case "duyuruKurumOgrenci":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -266,7 +255,6 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $sonuc["duyuruOgrenci"] = $duyuruKurumOgrenci;
                     }
                     break;
-
                 case "duyuruKurumIsci":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -286,7 +274,6 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $sonuc["duyuruPersonel"] = $duyuruPersonel;
                     }
                     break;
-
                 case "duyuruTurMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -306,7 +293,6 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $sonuc["turMultiSelect"] = $turSelect;
                     }
                     break;
-
                 case "duyuruGonder":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -351,13 +337,13 @@ class AdminDuyuruAjaxSorgu extends Controller {
                             $resultAdminDuyuru = $Panel_Model->addAdminDuyuru($admindata);
                             if ($resultAdminDuyuru) {
                                 $adminIDler = implode(',', $admin);
-                                $resultAdminCihaz = $Panel_Model->digerAdminCihaz($adminIDler);
+                                $resultAdminCihaz = $Panel_Model->duyuruAdminCihaz($adminIDler);
                                 if (count($resultAdminCihaz) > 0) {
                                     foreach ($resultAdminCihaz as $resultAdminCihazz) {
                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                     }
                                     $adminCihazlar = implode(',', $adminCihaz);
-                                    $form->shuttleNotification($adminCihazlar, $duyuruText, $deger["YeniDuyuru"]);
+                                    $form->shuttleNotification($adminCihazlar, $duyuruText, $degerbildirim["YeniDuyuru"]);
                                 }
                             }
                         }
@@ -381,13 +367,13 @@ class AdminDuyuruAjaxSorgu extends Controller {
                             $resultSoforDuyuru = $Panel_Model->addSoforDuyuru($sofordata);
                             if ($resultSoforDuyuru) {
                                 $soforIDler = implode(',', $sofor);
-                                $resultSoforCihaz = $Panel_Model->digerSoforCihaz($soforIDler);
+                                $resultSoforCihaz = $Panel_Model->duyuruSoforCihaz($soforIDler);
                                 if (count($resultSoforCihaz) > 0) {
                                     foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                         $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                     }
                                     $soforCihazlar = implode(',', $soforCihaz);
-                                    $form->shuttleNotification($soforCihazlar, $duyuruText, $deger["YeniDuyuru"]);
+                                    $form->shuttleNotification($soforCihazlar, $duyuruText, $degerbildirim["YeniDuyuru"]);
                                 }
                             }
                         }
@@ -411,13 +397,13 @@ class AdminDuyuruAjaxSorgu extends Controller {
                             $resultHostesDuyuru = $Panel_Model->addHostesDuyuru($hostesdata);
                             if ($resultHostesDuyuru) {
                                 $hostesIDler = implode(',', $hostes);
-                                $resultHostesCihaz = $Panel_Model->digerHostesCihaz($hostesIDler);
+                                $resultHostesCihaz = $Panel_Model->duyuruHostesCihaz($hostesIDler);
                                 if (count($resultHostesCihaz) > 0) {
                                     foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                         $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                     }
                                     $hostesCihazlar = implode(',', $hostesCihaz);
-                                    $form->shuttleNotification($hostesCihazlar, $duyuruText, $deger["YeniDuyuru"]);
+                                    $form->shuttleNotification($hostesCihazlar, $duyuruText, $degerbildirim["YeniDuyuru"]);
                                 }
                             }
                         }
@@ -441,13 +427,13 @@ class AdminDuyuruAjaxSorgu extends Controller {
                             $resultVeliDuyuru = $Panel_Model->addVeliDuyuru($velidata);
                             if ($resultVeliDuyuru) {
                                 $veliIDler = implode(',', $veli);
-                                $resultVeliCihaz = $Panel_Model->veliCihaz($veliIDler);
+                                $resultVeliCihaz = $Panel_Model->duyuruVeliCihaz($veliIDler);
                                 if (count($resultVeliCihaz) > 0) {
                                     foreach ($resultVeliCihaz as $resultVeliCihazz) {
                                         $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
                                     }
                                     $veliCihazlar = implode(',', $veliCihaz);
-                                    $form->shuttleNotification($veliCihazlar, $duyuruText, $deger["YeniDuyuru"]);
+                                    $form->shuttleNotification($veliCihazlar, $duyuruText, $degerbildirim["YeniDuyuru"]);
                                 }
                             }
                         }
@@ -471,13 +457,13 @@ class AdminDuyuruAjaxSorgu extends Controller {
                             $resultOgrenciDuyuru = $Panel_Model->addOgrenciDuyuru($ogrencidata);
                             if ($resultOgrenciDuyuru) {
                                 $ogrenciIDler = implode(',', $ogrenci);
-                                $resultOgrenciCihaz = $Panel_Model->ogrenciCihaz($ogrenciIDler);
+                                $resultOgrenciCihaz = $Panel_Model->duyuruOgrenciCihaz($ogrenciIDler);
                                 if (count($resultOgrenciCihaz) > 0) {
                                     foreach ($resultOgrenciCihaz as $resultOgrenciCihazz) {
                                         $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
                                     }
                                     $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                    $form->shuttleNotification($ogrenciCihazlar, $duyuruText, $deger["YeniDuyuru"]);
+                                    $form->shuttleNotification($ogrenciCihazlar, $duyuruText, $degerbildirim["YeniDuyuru"]);
                                 }
                             }
                         }
@@ -501,13 +487,13 @@ class AdminDuyuruAjaxSorgu extends Controller {
                             $resultIsciDuyuru = $Panel_Model->addIsciDuyuru($iscidata);
                             if ($resultIsciDuyuru) {
                                 $isciIDler = implode(',', $isci);
-                                $resultIsciCihaz = $Panel_Model->isciCihaz($isciIDler);
+                                $resultIsciCihaz = $Panel_Model->duyuruIsciCihaz($isciIDler);
                                 if (count($resultIsciCihaz) > 0) {
                                     foreach ($resultIsciCihaz as $resultIsciCihazz) {
                                         $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
                                     }
                                     $isciCihazlar = implode(',', $isciCihaz);
-                                    $form->shuttleNotification($isciCihazlar, $duyuruText, $deger["YeniDuyuru"]);
+                                    $form->shuttleNotification($isciCihazlar, $duyuruText, $degerbildirim["YeniDuyuru"]);
                                 }
                             }
                         }
@@ -516,13 +502,12 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 1, $duyuruText);
                         $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                         if ($resultLog) {
-                            $sonuc["duyuru"] = "Başarıyla Duyurular Gönderilmiştir.";
+                            $sonuc["duyuru"] = $degerbildirim["DuyuruGonder"];
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $degerbildirim["DuyuruGonder"];
                         }
                     }
                     break;
-
                 default :
                     header("Location:" . SITE_URL_LOGOUT);
                     break;

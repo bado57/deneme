@@ -18,9 +18,11 @@ class AdminIsciAjaxSorgu extends Controller {
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
             $sonuc = array();
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
-            //form class bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
+            $Panel_Model = $this->load->model("Panel_Model");
+            //language 
+            $lang = Session::get("dil");
+            $formlanguage = $this->load->ajaxlanguage($lang);
+            $languagedeger = $formlanguage->ajaxlanguage();
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -64,7 +66,6 @@ class AdminIsciAjaxSorgu extends Controller {
                         $sonuc["adminBolge"] = $adminBolge;
                     }
                     break;
-
                 case "isciKurumMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -84,9 +85,7 @@ class AdminIsciAjaxSorgu extends Controller {
                         $sonuc["kurumMultiSelect"] = $isciKurumSelect;
                     }
                     break;
-
                 case "isciKaydet":
-
                     $adminID = Session::get("userId");
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
@@ -101,10 +100,6 @@ class AdminIsciAjaxSorgu extends Controller {
                             if ($realSifre) {
                                 $adminSifre = $form->userSifreOlustur($userKadi, $realSifre, $userTip);
                                 if ($adminSifre) {
-
-                                    $uniqueKey = Session::get("username");
-                                    $uniqueKey = $uniqueKey . '_AIsci';
-
                                     $form->post('isciAd', true);
                                     $form->post('isciSoyad', true);
                                     $form->post('isciEmail', true);
@@ -122,6 +117,9 @@ class AdminIsciAjaxSorgu extends Controller {
                                     $form->post('postakodu', true);
                                     $form->post('caddeno', true);
                                     $form->post('detayAdres', true);
+                                    $form->post('gdsbildirim', true);
+                                    $form->post('dnsbildirim', true);
+                                    $isciEmail = $form->values['isciEmail'];
 
                                     $isciAd = $form->values['isciAd'];
                                     $isciSoyad = $form->values['isciSoyad'];
@@ -132,105 +130,116 @@ class AdminIsciAjaxSorgu extends Controller {
                                     $isciKurumID = $_REQUEST['isciKurumID'];
                                     $isciKurumAd = $_REQUEST['isciKurumAd'];
 
-                                    if ($form->submit()) {
-                                        $data = array(
-                                            'SBIsciAd' => $isciAd,
-                                            'SBIsciSoyad' => $isciSoyad,
-                                            'SBIsciKadi' => $userKadi,
-                                            'SBIsciSifre' => $adminSifre,
-                                            'SBIsciRSifre' => $realSifre,
-                                            'SBIsciPhone' => $form->values['isciTelefon'],
-                                            'SBIsciEmail' => $form->values['isciEmail'],
-                                            'SBIsciLocation' => $form->values['isciLokasyon'],
-                                            'SBIsciUlke' => $form->values['ulke'],
-                                            'SBIsciIl' => $form->values['il'],
-                                            'SBIsciIlce' => $form->values['ilce'],
-                                            'SBIsciSemt' => $form->values['semt'],
-                                            'SBIsciMahalle' => $form->values['mahalle'],
-                                            'SBIsciSokak' => $form->values['sokak'],
-                                            'SBIsciPostaKodu' => $form->values['postakodu'],
-                                            'SBIsciCaddeNo' => $form->values['caddeno'],
-                                            'SBIsciAdres' => $form->values['isciAdres'],
-                                            'SBIsciDetayAdres' => $form->values['detayAdres'],
-                                            'Status' => $form->values['isciDurum'],
-                                            'SBIsciAciklama' => $form->values['aciklama']
-                                        );
-                                    }
-                                    $resultIsciID = $Panel_Model->addNewIsci($data);
+                                    if (!filter_var($isciEmail, FILTER_VALIDATE_EMAIL) === false) {
+                                        $emailValidate = $form->mailControl1($isciEmail);
+                                        if ($emailValidate == 1) {
+                                            $kullaniciliste = $Panel_Model->isciEmailDbKontrol($isciEmail);
+                                            if (count($kullaniciliste) <= 0) {
+                                                if ($form->submit()) {
+                                                    $data = array(
+                                                        'SBIsciAd' => $isciAd,
+                                                        'SBIsciSoyad' => $isciSoyad,
+                                                        'SBIsciKadi' => $userKadi,
+                                                        'SBIsciSifre' => $adminSifre,
+                                                        'SBIsciRSifre' => $realSifre,
+                                                        'SBIsciPhone' => $form->values['isciTelefon'],
+                                                        'SBIsciEmail' => $isciEmail,
+                                                        'SBIsciLocation' => $form->values['isciLokasyon'],
+                                                        'SBIsciUlke' => $form->values['ulke'],
+                                                        'SBIsciIl' => $form->values['il'],
+                                                        'SBIsciIlce' => $form->values['ilce'],
+                                                        'SBIsciSemt' => $form->values['semt'],
+                                                        'SBIsciMahalle' => $form->values['mahalle'],
+                                                        'SBIsciSokak' => $form->values['sokak'],
+                                                        'SBIsciPostaKodu' => $form->values['postakodu'],
+                                                        'SBIsciCaddeNo' => $form->values['caddeno'],
+                                                        'SBIsciAdres' => $form->values['isciAdres'],
+                                                        'SBIsciDetayAdres' => $form->values['detayAdres'],
+                                                        'Status' => $form->values['isciDurum'],
+                                                        'SBIsciAciklama' => $form->values['aciklama'],
+                                                        'BildirimMesafeGidis' => $form->values['gdsbildirim'],
+                                                        'BildirimMesafeDonus' => $form->values['dnsbildirim']
+                                                    );
+                                                }
+                                                $resultIsciID = $Panel_Model->addNewIsci($data);
 
-                                    if ($resultIsciID != 'unique') {
-                                        $bolgeID = count($isciBolgeID);
-                                        if ($bolgeID > 0) {
-                                            for ($b = 0; $b < $bolgeID; $b++) {
-                                                $bolgedata[$b] = array(
-                                                    'SBIsciID' => $resultIsciID,
-                                                    'SBIsciAd' => $isciAdSoyad,
-                                                    'SBBolgeID' => $isciBolgeID[$b],
-                                                    'SBBolgeAd' => $isciBolgeAdi[$b]
-                                                );
-                                            }
-                                            $resultBolgeID = $Panel_Model->addNewBolgeIsci($bolgedata);
-                                            if ($resultBolgeID) {
-                                                //işçiye kuurm seçildi ise
-                                                $kurumID = count($isciKurumID);
-                                                if ($kurumID > 0) {
-                                                    for ($c = 0; $c < $kurumID; $c++) {
-                                                        $kurumdata[$c] = array(
-                                                            'SBKurumID' => $isciKurumID[$c],
-                                                            'SBKurumAd' => $isciKurumAd[$c],
-                                                            'SBIsciID' => $resultIsciID,
-                                                            'SBIsciAd' => $isciAdSoyad
-                                                        );
+                                                if ($resultIsciID != 'unique') {
+                                                    $bolgeID = count($isciBolgeID);
+                                                    if ($bolgeID > 0) {
+                                                        for ($b = 0; $b < $bolgeID; $b++) {
+                                                            $bolgedata[$b] = array(
+                                                                'SBIsciID' => $resultIsciID,
+                                                                'SBIsciAd' => $isciAdSoyad,
+                                                                'SBBolgeID' => $isciBolgeID[$b],
+                                                                'SBBolgeAd' => $isciBolgeAdi[$b]
+                                                            );
+                                                        }
+                                                        $resultBolgeID = $Panel_Model->addNewBolgeIsci($bolgedata);
+                                                        if ($resultBolgeID) {
+                                                            //kullanıcıya gerekli giriş mail yazısı
+                                                            $setTitle = $languagedeger['UyelikBilgi'];
+                                                            $subject = $languagedeger['SHtrltMail'];
+                                                            $body = $languagedeger['Merhaba'] . ' ' . $isciAdSoyad . '!<br/>' . $languagedeger['KullaniciAdi'] . ' = ' . $userKadi . '<br/>'
+                                                                    . $languagedeger['KullaniciSifre'] . ' = ' . $realSifre . '<br/>'
+                                                                    . $languagedeger['IyiGunler'];
+                                                            //işçiye kuurm seçildi ise
+                                                            $kurumID = count($isciKurumID);
+                                                            if ($kurumID > 0) {
+                                                                for ($c = 0; $c < $kurumID; $c++) {
+                                                                    $kurumdata[$c] = array(
+                                                                        'SBKurumID' => $isciKurumID[$c],
+                                                                        'SBKurumAd' => $isciKurumAd[$c],
+                                                                        'SBIsciID' => $resultIsciID,
+                                                                        'SBIsciAd' => $isciAdSoyad
+                                                                    );
+                                                                }
+
+                                                                $resultKurumID = $Panel_Model->addNewIsciKurum($kurumdata);
+                                                                //kullanıcıya gerekli giriş bilgileri gönderiliyor.
+                                                                $resultMail = $form->sifreHatirlatMail($isciEmail, $setTitle, $isciAdSoyad, $subject, $body);
+                                                                $sonuc["newIsciID"] = $resultIsciID;
+                                                                $sonuc["insert"] = $languagedeger['IsciEkle'];
+                                                            } else {
+                                                                //kullanıcıya gerekli giriş bilgileri gönderiliyor.
+                                                                $resultMail = $form->sifreHatirlatMail($isciEmail, $setTitle, $isciAdSoyad, $subject, $body);
+                                                                $sonuc["newIsciID"] = $resultIsciID;
+                                                                $sonuc["insert"] = $languagedeger['IsciEkle'];
+                                                            }
+                                                        } else {
+                                                            //işçi kaydedilirken hata geldi ise
+                                                            $deleteresult = $Panel_Model->isciDelete($resultIsciID);
+
+                                                            if ($deleteresult) {
+                                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                                            }
+                                                        }
+                                                    } else {
+                                                        //eğer şoförün bölgesi yoksa
+                                                        $deleteresult = $Panel_Model->isciDelete($resultIsciID);
+                                                        $sonuc["hata"] = $languagedeger['BolgeSec'];
                                                     }
-
-                                                    $resultKurumID = $Panel_Model->addNewIsciKurum($kurumdata);
-                                                    $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                                    $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                    if ($resultMemcache) {
-                                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                                    }
-
-                                                    $sonuc["newIsciID"] = $resultIsciID;
-                                                    $sonuc["insert"] = "Başarıyla İşçi Eklenmiştir.";
                                                 } else {
-                                                    $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                                    $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                    if ($resultMemcache) {
-                                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                                    }
-
-                                                    $sonuc["newIsciID"] = $resultIsciID;
-                                                    $sonuc["insert"] = "Başarıyla İşçi Eklenmiştir.";
+                                                    $sonuc["hata"] = $languagedeger['GecersizKullanici'];
                                                 }
                                             } else {
-                                                //işçi kaydedilirken hata geldi ise
-                                                $deleteresult = $Panel_Model->isciDelete($resultIsciID);
-
-                                                if ($deleteresult) {
-                                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                                }
+                                                $sonuc["hata"] = $languagedeger['KullanilmisEmail'];
                                             }
                                         } else {
-                                            //eğer şoförün bölgesi yoksa
-                                            $deleteresult = $Panel_Model->isciDelete($resultIsciID);
-                                            $sonuc["hata"] = "Lütfen Bölge Seçmeyi Unutmayınız.";
+                                            $sonuc["hata"] = $languagedeger['BaskaEmail'];
                                         }
                                     } else {
-                                        $sonuc["hata"] = "Lütfen Yeni Bir Kullanıcı Adı yada Şifre Giriniz.";
+                                        $sonuc["hata"] = $languagedeger['GecerliEmail'];
                                     }
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $languagedeger['Hata'];
                                 }
                             } else {
-                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                $sonuc["hata"] = $languagedeger['Hata'];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['Hata'];
                         }
                     }
-
                 case "isciDetail":
 
                     $adminID = Session::get("userId");
@@ -333,6 +342,8 @@ class AdminIsciAjaxSorgu extends Controller {
                                 $isciList[$e]['IsciListDetayAdres'] = $isciOzellikk['SBIsciDetayAdres'];
                                 $isciList[$e]['IsciListDurum'] = $isciOzellikk['Status'];
                                 $isciList[$e]['IsciListAciklama'] = $isciOzellikk['SBIsciAciklama'];
+                                $isciList[$e]['IsciGBild'] = $isciOzellikk['BildirimMesafeGidis'];
+                                $isciList[$e]['IsciDBild'] = $isciOzellikk['BildirimMesafeDonus'];
                                 $e++;
                             }
                         } else {
@@ -441,6 +452,8 @@ class AdminIsciAjaxSorgu extends Controller {
                                 $isciList[$e]['IsciListDetayAdres'] = $isciOzellikk['SBIsciDetayAdres'];
                                 $isciList[$e]['IsciListDurum'] = $isciOzellikk['Status'];
                                 $isciList[$e]['IsciListAciklama'] = $isciOzellikk['SBIsciAciklama'];
+                                $isciList[$e]['IsciGBild'] = $isciOzellikk['BildirimMesafeGidis'];
+                                $isciList[$e]['IsciDBild'] = $isciOzellikk['BildirimMesafeDonus'];
                                 $e++;
                             }
                         }
@@ -453,18 +466,12 @@ class AdminIsciAjaxSorgu extends Controller {
                     }
 
                     break;
-
                 case "isciDetailDelete":
-
                     $adminID = Session::get("userId");
 
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_AIsci';
-
-
                         $form->post('iscidetail_id', true);
                         $isciDetailID = $form->values['iscidetail_id'];
 
@@ -475,35 +482,22 @@ class AdminIsciAjaxSorgu extends Controller {
                             if ($deleteresultt) {
                                 $deleteresulttt = $Panel_Model->detailIsciBolgeDelete($isciDetailID);
                                 if ($deleteresulttt) {
-                                    $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                    $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                    if ($resultMemcache) {
-                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                    }
-                                    $sonuc["delete"] = "İşçi kaydı başarıyla silinmiştir.";
+                                    $sonuc["delete"] = $languagedeger['IsciSil'];
                                 }
                             } else {
                                 $deleteresulttt = $Panel_Model->detailIsciBolgeDelete($isciDetailID);
                                 if ($deleteresulttt) {
-                                    $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                    $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                    if ($resultMemcache) {
-                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                    }
-                                    $sonuc["delete"] = "İşçi kaydı başarıyla silinmiştir.";
+                                    $sonuc["delete"] = $languagedeger['IsciSil'];
                                 }
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['Hata'];
                         }
                     }
 
                     $sonuc["isciDetail"] = $data["isciDetail"];
 
                     break;
-
                 case "isciDetailKaydet":
 
                     $adminID = Session::get("userId");
@@ -513,9 +507,6 @@ class AdminIsciAjaxSorgu extends Controller {
                     } else {
                         $form->post('iscidetail_id', true);
                         $isciID = $form->values['iscidetail_id'];
-
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_AIsci';
 
                         $form->post('isciDetayAd', true);
                         $form->post('isciDetaySoyad', true);
@@ -534,115 +525,164 @@ class AdminIsciAjaxSorgu extends Controller {
                         $form->post('isciDetayPostaKodu', true);
                         $form->post('isciDetayCaddeNo', true);
                         $form->post('detayAdres', true);
+                        $form->post('gdsbildirim', true);
+                        $form->post('dnsbildirim', true);
 
                         $isciAd = $form->values['isciDetayAd'];
                         $isciSoyad = $form->values['isciDetaySoyad'];
                         $isciAdSoyad = $isciAd . ' ' . $isciSoyad;
+                        $isciEmail = $form->values['isciDetayEmail'];
 
                         $isciBolgeID = $_REQUEST['isciBolgeID'];
                         $isciBolgeAdi = $_REQUEST['isciBolgeAd'];
                         $isciKurumID = $_REQUEST['isciKurumID'];
                         $isciKurumAd = $_REQUEST['isciKurumAd'];
 
-                        if ($form->submit()) {
-                            $data = array(
-                                'SBIsciAd' => $isciAd,
-                                'SBIsciSoyad' => $isciSoyad,
-                                'SBIsciPhone' => $form->values['isciDetayTelefon'],
-                                'SBIsciEmail' => $form->values['isciDetayEmail'],
-                                'SBIsciLocation' => $form->values['isciDetayLokasyon'],
-                                'SBIsciUlke' => $form->values['isciDetayUlke'],
-                                'SBIsciIl' => $form->values['isciDetayIl'],
-                                'SBIsciIlce' => $form->values['isciDetayIlce'],
-                                'SBIsciSemt' => $form->values['isciDetaySemt'],
-                                'SBIsciMahalle' => $form->values['isciDetayMahalle'],
-                                'SBIsciSokak' => $form->values['isciDetaySokak'],
-                                'SBIsciPostaKodu' => $form->values['isciDetayPostaKodu'],
-                                'SBIsciCaddeNo' => $form->values['isciDetayCaddeNo'],
-                                'SBIsciAdres' => $form->values['isciDetayAdres'],
-                                'SBIsciDetayAdres' => $form->values['detayAdres'],
-                                'SBIsciAciklama' => $form->values['isciDetayAciklama'],
-                                'Status' => $form->values['isciDetayDurum']
-                            );
-                        }
-                        $resultIsciUpdate = $Panel_Model->isciOzelliklerDuzenle($data, $isciID);
-                        if ($resultIsciUpdate) {
-                            $isciKurumCount = count($isciKurumID);
-                            if ($isciKurumCount > 0) {
-                                $deleteresultt = $Panel_Model->detailIsciKurumDelete($isciID);
-                                for ($a = 0; $a < $isciKurumCount; $a++) {
-                                    $iscidata[$a] = array(
-                                        'SBKurumID' => $isciKurumID[$a],
-                                        'SBKurumAd' => $isciKurumAd[$a],
-                                        'SBIsciID' => $isciID,
-                                        'SBIsciAd' => $isciAdSoyad
-                                    );
-                                }
-                                $resultIsciUpdatee = $Panel_Model->addNewIsciKurum($iscidata);
-                                if ($resultIsciUpdatee) {
-                                    $bolgeID = count($isciBolgeID);
-                                    $deleteresulttt = $Panel_Model->detailIsciBolgeDelete($isciID);
-                                    if ($deleteresulttt) {
-                                        for ($b = 0; $b < $bolgeID; $b++) {
-                                            $bolgedata[$b] = array(
-                                                'SBIsciID' => $isciID,
-                                                'SBIsciAd' => $isciAdSoyad,
-                                                'SBBolgeID' => $isciBolgeID[$b],
-                                                'SBBolgeAd' => $isciBolgeAdi[$b]
-                                            );
-                                        }
-                                        $resultBolgeID = $Panel_Model->addNewBolgeIsci($bolgedata);
-                                        if ($resultBolgeID) {
-                                            $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                            if ($resultMemcache) {
-                                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                            }
-
-                                            $sonuc["newIsciID"] = $isciID;
-                                            $sonuc["update"] = "Başarıyla İşçi Düzenlenmiştir.";
-                                        } else {
-                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                        }
-                                    } else {
-                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                    }
-                                } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                }
-                            } else {
-                                $deleteresultt = $Panel_Model->detailIsciKurumDelete($isciID);
-                                $deleteresulttt = $Panel_Model->detailIsciBolgeDelete($isciID);
-                                if ($deleteresulttt) {
-                                    $bolgeID = count($isciBolgeID);
-                                    for ($b = 0; $b < $bolgeID; $b++) {
-                                        $bolgedata[$b] = array(
-                                            'SBIsciID' => $isciID,
-                                            'SBIsciAd' => $isciAdSoyad,
-                                            'SBBolgeID' => $isciBolgeID[$b],
-                                            'SBBolgeAd' => $isciBolgeAdi[$b]
+                        if (!filter_var($isciEmail, FILTER_VALIDATE_EMAIL) === false) {
+                            $emailValidate = $form->mailControl1($isciEmail);
+                            if ($emailValidate == 1) {
+                                $kullaniciliste = $Panel_Model->isciEmailDbKontrol($isciEmail);
+                                if (count($kullaniciliste) <= 0) {
+                                    if ($form->submit()) {
+                                        $data = array(
+                                            'SBIsciAd' => $isciAd,
+                                            'SBIsciSoyad' => $isciSoyad,
+                                            'SBIsciPhone' => $form->values['isciDetayTelefon'],
+                                            'SBIsciEmail' => $isciEmail,
+                                            'SBIsciLocation' => $form->values['isciDetayLokasyon'],
+                                            'SBIsciUlke' => $form->values['isciDetayUlke'],
+                                            'SBIsciIl' => $form->values['isciDetayIl'],
+                                            'SBIsciIlce' => $form->values['isciDetayIlce'],
+                                            'SBIsciSemt' => $form->values['isciDetaySemt'],
+                                            'SBIsciMahalle' => $form->values['isciDetayMahalle'],
+                                            'SBIsciSokak' => $form->values['isciDetaySokak'],
+                                            'SBIsciPostaKodu' => $form->values['isciDetayPostaKodu'],
+                                            'SBIsciCaddeNo' => $form->values['isciDetayCaddeNo'],
+                                            'SBIsciAdres' => $form->values['isciDetayAdres'],
+                                            'SBIsciDetayAdres' => $form->values['detayAdres'],
+                                            'SBIsciAciklama' => $form->values['isciDetayAciklama'],
+                                            'Status' => $form->values['isciDetayDurum'],
+                                            'BildirimMesafeGidis' => $form->values['gdsbildirim'],
+                                            'BildirimMesafeDonus' => $form->values['dnsbildirim']
                                         );
                                     }
-                                    $resultBolgeID = $Panel_Model->addNewBolgeIsci($bolgedata);
-                                    if ($resultBolgeID) {
-                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                        if ($resultMemcache) {
-                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                    $resultIsciUpdate = $Panel_Model->isciOzelliklerDuzenle($data, $isciID);
+                                    if ($resultIsciUpdate) {
+                                        $isciKurumCount = count($isciKurumID);
+                                        if ($isciKurumCount > 0) {
+                                            $deleteresultt = $Panel_Model->detailIsciKurumDelete($isciID);
+                                            for ($a = 0; $a < $isciKurumCount; $a++) {
+                                                $iscidata[$a] = array(
+                                                    'SBKurumID' => $isciKurumID[$a],
+                                                    'SBKurumAd' => $isciKurumAd[$a],
+                                                    'SBIsciID' => $isciID,
+                                                    'SBIsciAd' => $isciAdSoyad
+                                                );
+                                            }
+                                            $resultIsciUpdatee = $Panel_Model->addNewIsciKurum($iscidata);
+                                            if ($resultIsciUpdatee) {
+                                                $bolgeID = count($isciBolgeID);
+                                                $deleteresulttt = $Panel_Model->detailIsciBolgeDelete($isciID);
+                                                if ($deleteresulttt) {
+                                                    for ($b = 0; $b < $bolgeID; $b++) {
+                                                        $bolgedata[$b] = array(
+                                                            'SBIsciID' => $isciID,
+                                                            'SBIsciAd' => $isciAdSoyad,
+                                                            'SBBolgeID' => $isciBolgeID[$b],
+                                                            'SBBolgeAd' => $isciBolgeAdi[$b]
+                                                        );
+                                                    }
+                                                    $resultBolgeID = $Panel_Model->addNewBolgeIsci($bolgedata);
+                                                    if ($resultBolgeID) {
+                                                        $sonuc["newIsciID"] = $isciID;
+                                                        $sonuc["update"] = $languagedeger['IsciDuzenle'];
+                                                    } else {
+                                                        $sonuc["hata"] = $languagedeger['Hata'];
+                                                    }
+                                                } else {
+                                                    $sonuc["hata"] = $languagedeger['Hata'];
+                                                }
+                                            } else {
+                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                            }
+                                        } else {
+                                            $deleteresultt = $Panel_Model->detailIsciKurumDelete($isciID);
+                                            $deleteresulttt = $Panel_Model->detailIsciBolgeDelete($isciID);
+                                            if ($deleteresulttt) {
+                                                $bolgeID = count($isciBolgeID);
+                                                for ($b = 0; $b < $bolgeID; $b++) {
+                                                    $bolgedata[$b] = array(
+                                                        'SBIsciID' => $isciID,
+                                                        'SBIsciAd' => $isciAdSoyad,
+                                                        'SBBolgeID' => $isciBolgeID[$b],
+                                                        'SBBolgeAd' => $isciBolgeAdi[$b]
+                                                    );
+                                                }
+                                                $resultBolgeID = $Panel_Model->addNewBolgeIsci($bolgedata);
+                                                if ($resultBolgeID) {
+                                                    $sonuc["newIsciID"] = $isciID;
+                                                    $sonuc["update"] = $languagedeger['IsciDuzenle'];
+                                                } else {
+                                                    $sonuc["hata"] = $languagedeger['Hata'];
+                                                }
+                                            } else {
+                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                            }
                                         }
-
-                                        $sonuc["newIsciID"] = $isciID;
-                                        $sonuc["update"] = "Başarıyla İşçi Düzenlenmiştir.";
                                     } else {
-                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        $sonuc["hata"] = $languagedeger['Hata'];
                                     }
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $languagedeger['KullanilmisEmail'];
                                 }
+                            } else {
+                                $sonuc["hata"] = $languagedeger['BaskaEmail'];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['GecerliEmail'];
                         }
                     }
+                case "isciDetailTur":
+                    $adminID = Session::get("userId");
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $form->post('isciID', true);
+                        $adminIsciDetailID = $form->values['isciID'];
+                        //işçi tur tablosu için
+                        $isciTurDetail = $Panel_Model->adminIsciTurDetail($adminIsciDetailID);
+                        $isciturId = array();
+                        $a = 0;
+                        foreach ($isciTurDetail as $isciTurDetaill) {
+                            $isciturId[] = $isciTurDetaill['SBTurID'];
+                            $a++;
+                        }
+                        //öğrenciişçi tur tablosu için
+                        $isciTurDetailler = $Panel_Model->adminIsciTurDetail2($adminIsciDetailID);
+                        $ogrisciturId = array();
+                        $a = 0;
+                        foreach ($isciTurDetailler as $isciTurDetaillerr) {
+                            $ogrisciturId[] = $isciTurDetaillerr['BSTurID'];
+                            $a++;
+                        }
+                        $yeni_dizi = array_merge($isciturId, $ogrisciturId);
+                        $turId = implode(',', $yeni_dizi);
 
+                        $iscTur = $Panel_Model->isciDetailTur($turId);
+                        $b = 0;
+                        foreach ($iscTur as $iscTurr) {
+                            $isciDetailTur[$b]['TurID'] = $iscTurr['SBTurID'];
+                            $isciDetailTur[$b]['TurAd'] = $iscTurr['SBTurAd'];
+                            $isciDetailTur[$b]['TurAciklama'] = $iscTurr['SBTurAciklama'];
+                            $isciDetailTur[$b]['TurAktiflik'] = $iscTurr['SBTurAktiflik'];
+                            $isciDetailTur[$b]['TurKurum'] = $iscTurr['SBKurumAd'];
+                            $isciDetailTur[$b]['TurTip'] = $iscTurr['SBTurTip'];
+                            $isciDetailTur[$b]['TurBolge'] = $iscTurr['SBBolgeAd'];
+                            $b++;
+                        }
+                        $sonuc["isciDetailTur"] = $isciDetailTur;
+                    }
+                    break;
                 case "IsciDetailMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -725,7 +765,6 @@ class AdminIsciAjaxSorgu extends Controller {
                         $sonuc["adminIsciKurum"] = $digerIsciKurum;
                     }
                     break;
-
                 default :
                     header("Location:" . SITE_URL_LOGOUT);
                     break;

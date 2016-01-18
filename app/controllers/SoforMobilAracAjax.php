@@ -25,7 +25,7 @@ class SoforMobilAracAjax extends Controller {
             $firmId = $form->values['firma_id'];
 
             $formDbConfig = $this->load->otherClasses('DatabaseConfig');
-            $usersselect_model = $this->load->model("adminselectdb_mobil");
+            $usersselect_model = $this->load->model("AdminSelectDb_Mobil");
 
             //return database results
             $UserSelectDb = $usersselect_model->adminFirmMobilID($firmId);
@@ -35,12 +35,10 @@ class SoforMobilAracAjax extends Controller {
             $SelectdbUser = $UserSelectDb[0]['rootFirmaDbUser'];
             $SelectdbPassword = $UserSelectDb[0]['rootFirmaDbSifre'];
 
-
             $formDbConfig->configDb($SelectdbName, $SelectdbIp, $SelectdbUser, $SelectdbPassword);
 
-
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model_mobile");
+            $Panel_Model = $this->load->model("Panel_Model_Mobile");
 
             Switch ($tip) {
 

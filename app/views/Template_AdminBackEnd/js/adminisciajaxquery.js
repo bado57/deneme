@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/AdminIsciAjaxSorgu",
+    url: SITE_URL + "AdminIsciAjaxSorgu",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -17,8 +17,15 @@ $.ajaxSetup({
         }
     }
 });
+var gidisBildAyar = new Array();
+var donusBildAyar = new Array();
 $(document).ready(function () {
     IsciTable = $('#isciTable').dataTable({
+        "paging": true,
+        "ordering": true,
+        "info": true
+    });
+    IsciTurTable = $('#adminIsciTurTable').dataTable({
         "paging": true,
         "ordering": true,
         "info": true
@@ -56,6 +63,19 @@ $(document).ready(function () {
                     $("input[name=street_number]").val(cevap.isciDetail[0].IsciListCaddeNo);
                     $("input[name=isciDetayID]").val(cevap.isciDetail[0].IsciListID);
                     $("input[name=isciDetayAdres]").val(cevap.isciDetail[0].IsciListDetayAdres);
+
+                    var SelectBilGidis = new Array();
+                    gidisBildAyar = cevap.isciDetail[0].IsciGBild;
+                    SelectBilGidis[0] = {label: cevap.isciDetail[0].IsciGBild + " m", title: cevap.isciDetail[0].IsciGBild + " m", value: cevap.isciDetail[0].IsciGBild, disabled: true};
+                    $('#IscDetGdsMAyarSelect').multiselect('dataprovider', SelectBilGidis);
+                    $('#IscDetGdsMAyarSelect').multiselect('disable');
+                    $('#IscDetGdsMAyarSelect').multiselect('refresh');
+                    var SelectBilDonus = new Array();
+                    donusBildAyar = cevap.isciDetail[0].IsciDBild;
+                    SelectBilDonus[0] = {label: cevap.isciDetail[0].IsciDBild + " m", title: cevap.isciDetail[0].IsciDBild + " m", value: cevap.isciDetail[0].IsciDBild, disabled: true};
+                    $('#IscDetDnsMAyarSelect').multiselect('dataprovider', SelectBilDonus);
+                    $('#IscDetDnsMAyarSelect').multiselect('disable');
+                    $('#IscDetDnsMAyarSelect').multiselect('refresh');
 
                     var SelectBolgeOptions = new Array();
                     var SelectKurumOptions = new Array();
@@ -207,6 +227,50 @@ $(document).ready(function () {
             $('#IsciDetayKurum').hide();
         }
     });
+    $('#IscDetGdsMAyarSelect').multiselect({
+        onDropdownShow: function (event) {
+            var SelectGidisOptions = new Array();
+            var SelectGidisValue = new Array(200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000,
+                    2200, 2400, 2600, 2800, 3000);
+            var SelectGidisText = new Array('200 m', '400 m', '600 m', '800 m', '1000 m', '1200 m', '1400 m',
+                    '1600 m', '1800 m', '2000 m', '2200 m', '2400 m', '2600 m', '2800 m', '3000 m');
+            var saat2Length = SelectGidisValue.length;
+            for (var b = 0; b < saat2Length; b++) {
+                if (SelectGidisValue[b] == gidisBildAyar) {
+                    SelectGidisOptions[b] = {label: SelectGidisText[b], title: SelectGidisText[b], value: SelectGidisValue[b], selected: true};
+                } else {
+                    SelectGidisOptions[b] = {label: SelectGidisText[b], title: SelectGidisText[b], value: SelectGidisValue[b]};
+                }
+            }
+            $('#IscDetGdsMAyarSelect').multiselect('refresh');
+            $('#IscDetGdsMAyarSelect').multiselect('dataprovider', SelectGidisOptions);
+        },
+        onChange: function (option, checked, select) {
+            gidisBildAyar = $('select#IscDetGdsMAyarSelect option:selected').val();
+        }
+    });
+    $('#IscDetDnsMAyarSelect').multiselect({
+        onDropdownShow: function (event) {
+            var SelectDonusOptions = new Array();
+            var SelectDonusValue = new Array(200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000,
+                    2200, 2400, 2600, 2800, 3000);
+            var SelectDonusText = new Array('200 m', '400 m', '600 m', '800 m', '1000 m', '1200 m', '1400 m',
+                    '1600 m', '1800 m', '2000 m', '2200 m', '2400 m', '2600 m', '2800 m', '3000 m');
+            var saat2Length = SelectDonusValue.length;
+            for (var b = 0; b < saat2Length; b++) {
+                if (SelectDonusValue[b] == donusBildAyar) {
+                    SelectDonusOptions[b] = {label: SelectDonusText[b], title: SelectDonusText[b], value: SelectDonusValue[b], selected: true};
+                } else {
+                    SelectDonusOptions[b] = {label: SelectDonusText[b], title: SelectDonusText[b], value: SelectDonusValue[b]};
+                }
+            }
+            $('#IscDetDnsMAyarSelect').multiselect('refresh');
+            $('#IscDetDnsMAyarSelect').multiselect('dataprovider', SelectDonusOptions);
+        },
+        onChange: function (option, checked, select) {
+            donusBildAyar = $('select#IscDetDnsMAyarSelect option:selected').val();
+        }
+    });
 });
 var IsciDetailVazgec = [];
 $.AdminIslemler = {
@@ -247,9 +311,13 @@ $.AdminIslemler = {
                         }
                         $('#IsciSelectBolge').multiselect('refresh');
                         $('#IsciSelectBolge').multiselect('dataprovider', BolgeOptions);
+                        $('#IscGdsMAyarSelect').multiselect('refresh');
+                        $('#IscDnsMAyarSelect').multiselect('refresh');
                     } else {
                         $('#IsciSelectBolge').multiselect('refresh');
                         $('#IsciSelectBolge').multiselect('dataprovider', BolgeOptions);
+                        $('#IscGdsMAyarSelect').multiselect('refresh');
+                        $('#IscDnsMAyarSelect').multiselect('refresh');
                     }
 
                     $('#IsciKurumSelect').multiselect('refresh');
@@ -266,7 +334,6 @@ $.AdminIslemler = {
         return true;
     },
     isciEkle: function () {
-
         var isciAd = $("input[name=IsciAdi]").val();
         isciAd = isciAd.trim();
         if (isciAd == '') {
@@ -325,6 +392,8 @@ $.AdminIslemler = {
                                                 var sokak = $("input[name=route]").val();
                                                 var postakodu = $("input[name=postal_code]").val();
                                                 var caddeno = $("input[name=street_number]").val();
+                                                var gdsbildirim = $('select#IscGdsMAyarSelect option:selected').val();
+                                                var dnsbildirim = $('select#IscDnsMAyarSelect option:selected').val();
                                                 //işçi Bölge ID
                                                 var isciBolgeID = new Array();
                                                 $('select#IsciSelectBolge option:selected').each(function () {
@@ -350,7 +419,8 @@ $.AdminIslemler = {
                                                         "isciSoyad": isciSoyad, "isciDurum": isciDurum, "isciLokasyon": isciLokasyon, "isciTelefon": isciTelefon,
                                                         "isciEmail": isciEmail, "isciAdres": isciAdres, "aciklama": aciklama, "ulke": ulke,
                                                         "il": il, "ilce": ilce, "semt": semt, "mahalle": mahalle,
-                                                        "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno, "detayAdres": ttl, "tip": "isciKaydet"},
+                                                        "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno,
+                                                        "gdsbildirim": gdsbildirim, "dnsbildirim": dnsbildirim, "detayAdres": ttl, "tip": "isciKaydet"},
                                                     success: function (cevap) {
                                                         if (cevap.hata) {
                                                             reset();
@@ -358,7 +428,7 @@ $.AdminIslemler = {
                                                             return false;
                                                         } else {
                                                             reset();
-                                                            alertify.success(jsDil.OgrenciKaydet);
+                                                            alertify.success(cevap.insert);
                                                             var isciCount = $('#smallIsci').text();
                                                             isciCount++;
                                                             $('#smallIsci').text(isciCount);
@@ -472,6 +542,16 @@ $.AdminIslemler = {
         $('select#IsciDetayKurum option:not(:selected)').each(function () {
             isciKurumNAd.push($(this).attr('title'));
         });
+
+        $('#IscDetGdsMAyarSelect').multiselect('enable');
+        $('#IscDetGdsMAyarSelect').multiselect('refresh');
+        $('#IscDetDnsMAyarSelect').multiselect('enable');
+        $('#IscDetDnsMAyarSelect').multiselect('refresh');
+        var gdsbildirim = $('select#IscDetGdsMAyarSelect option:selected').val();
+        var gdsbildirimtext = $('select#IscDetGdsMAyarSelect option:selected').attr('title');
+        var dnsbildirim = $('select#IscDetDnsMAyarSelect option:selected').val();
+        var dnsbildirimtext = $('select#IscDetDnsMAyarSelect option:selected').attr('title');
+
         var SelectBolgeOptions = new Array();
         var SelectIsciOptions = new Array();
         if (isciBolgeID.length > 0) {
@@ -526,7 +606,7 @@ $.AdminIslemler = {
         $('#IsciDetaySelectBolge').multiselect('dataprovider', SelectBolgeOptions);
         $('#IsciDetayKurum').multiselect('dataprovider', SelectIsciOptions);
         IsciDetailVazgec = [];
-        IsciDetailVazgec.push(isciDetayAd, isciDetaySoyad, isciDetayDurum, isciDetayLokasyon, isciDetayTelefon, isciDetayEmail, isciDetayAdres, isciDetayAciklama, isciDetayUlke, isciDetayIl, isciDetayIlce, isciDetaySemt, isciDetayMahalle, isciDetaySokak, isciDetayPostaKodu, isciDetayCaddeNo, isciBolgeID, isciBolgeAd, isciBolgeNID, isciBolgeNAd, isciKurumID, isciKurumAd, isciKurumNID, isciKurumNAd);
+        IsciDetailVazgec.push(isciDetayAd, isciDetaySoyad, isciDetayDurum, isciDetayLokasyon, isciDetayTelefon, isciDetayEmail, isciDetayAdres, isciDetayAciklama, isciDetayUlke, isciDetayIl, isciDetayIlce, isciDetaySemt, isciDetayMahalle, isciDetaySokak, isciDetayPostaKodu, isciDetayCaddeNo, isciBolgeID, isciBolgeAd, isciBolgeNID, isciBolgeNAd, isciKurumID, isciKurumAd, isciKurumNID, isciKurumNAd, gdsbildirim, gdsbildirimtext, dnsbildirim, dnsbildirimtext);
     },
     isciDetailVazgec: function () {
         $("input[name=IsciDetayAdi]").val(IsciDetailVazgec[0]);
@@ -589,6 +669,17 @@ $.AdminIslemler = {
                 }
             }
         }
+
+        var SelectBilGidis = new Array();
+        SelectBilGidis[0] = {label: IsciDetailVazgec[25], title: IsciDetailVazgec[25], value: IsciDetailVazgec[24], disabled: true};
+        $('#IscDetGdsMAyarSelect').multiselect('dataprovider', SelectBilGidis);
+        $('#IscDetGdsMAyarSelect').multiselect('disable');
+        $('#IscDetGdsMAyarSelect').multiselect('refresh');
+        var SelectBilDonus = new Array();
+        SelectBilDonus[0] = {label: IsciDetailVazgec[27], title: IsciDetailVazgec[27], value: IsciDetailVazgec[26], disabled: true};
+        $('#IscDetDnsMAyarSelect').multiselect('dataprovider', SelectBilDonus);
+        $('#IscDetDnsMAyarSelect').multiselect('disable');
+        $('#IscDetDnsMAyarSelect').multiselect('refresh');
 
         $('#IsciDetaySelectBolge').multiselect('refresh');
         $('#IsciDetayKurum').multiselect('refresh');
@@ -669,6 +760,8 @@ $.AdminIslemler = {
         var isciDetaySokak = $("input[name=route]").val();
         var isciDetayPostaKodu = $("input[name=postal_code]").val();
         var isciDetayCaddeNo = $("input[name=street_number]").val();
+        var gdsbildirim = $('select#IscDetGdsMAyarSelect option:selected').val();
+        var dnsbildirim = $('select#IscDetDnsMAyarSelect option:selected').val();
         //işçi Bölge ID
         var isciBolgeID = new Array();
         $('select#IsciDetaySelectBolge option:selected').each(function () {
@@ -713,7 +806,7 @@ $.AdminIslemler = {
         var farkbolgelength = farkbolge.length;
         var farkisci = farkArray(IsciDetailVazgec[20], isciKurumID);
         var farkiscilength = farkisci.length;
-        if (IsciDetailVazgec[0] == isciDetayAd && IsciDetailVazgec[1] == isciDetaySoyad && IsciDetailVazgec[2] == isciDetayDurum && IsciDetailVazgec[3] == isciDetayLokasyon && IsciDetailVazgec[4] == isciDetayTelefon && IsciDetailVazgec[5] == isciDetayEmail && IsciDetailVazgec[6] == isciDetayAdres && IsciDetailVazgec[7] == isciDetayAciklama && IsciDetailVazgec[8] == isciDetayUlke && IsciDetailVazgec[9] == isciDetayIl && IsciDetailVazgec[10] == isciDetayIlce && IsciDetailVazgec[11] == isciDetaySemt && IsciDetailVazgec[12] == isciDetayMahalle && IsciDetailVazgec[13] == isciDetaySokak && IsciDetailVazgec[14] == isciDetayPostaKodu && IsciDetailVazgec[15] == isciDetayCaddeNo && farkbolgelength == 0 && farkiscilength == 0) {
+        if (IsciDetailVazgec[0] == isciDetayAd && IsciDetailVazgec[1] == isciDetaySoyad && IsciDetailVazgec[2] == isciDetayDurum && IsciDetailVazgec[3] == isciDetayLokasyon && IsciDetailVazgec[4] == isciDetayTelefon && IsciDetailVazgec[5] == isciDetayEmail && IsciDetailVazgec[6] == isciDetayAdres && IsciDetailVazgec[7] == isciDetayAciklama && IsciDetailVazgec[8] == isciDetayUlke && IsciDetailVazgec[9] == isciDetayIl && IsciDetailVazgec[10] == isciDetayIlce && IsciDetailVazgec[11] == isciDetaySemt && IsciDetailVazgec[12] == isciDetayMahalle && IsciDetailVazgec[13] == isciDetaySokak && IsciDetailVazgec[14] == isciDetayPostaKodu && IsciDetailVazgec[15] == isciDetayCaddeNo && farkbolgelength == 0 && farkiscilength == 0 && IsciDetailVazgec[24] == gdsbildirim && IsciDetailVazgec[26] == dnsbildirim) {
             reset();
             alertify.alert(jsDil.Degisiklik);
             return false;
@@ -762,7 +855,8 @@ $.AdminIslemler = {
                                                     "isciDetaySoyad": isciDetaySoyad, "isciDetayDurum": isciDetayDurum, "isciDetayLokasyon": isciDetayLokasyon, "isciDetayTelefon": isciDetayTelefon,
                                                     "isciDetayEmail": isciDetayEmail, "isciDetayAdres": isciDetayAdres, "isciDetayAciklama": isciDetayAciklama, "isciDetayUlke": isciDetayUlke,
                                                     "isciDetayIl": isciDetayIl, "isciDetayIlce": isciDetayIlce, "isciDetaySemt": isciDetaySemt, "isciDetayMahalle": isciDetayMahalle,
-                                                    "isciDetaySokak": isciDetaySokak, "isciDetayPostaKodu": isciDetayPostaKodu, "isciDetayCaddeNo": isciDetayCaddeNo, "detayAdres": ttl, "tip": "isciDetailKaydet"},
+                                                    "isciDetaySokak": isciDetaySokak, "isciDetayPostaKodu": isciDetayPostaKodu, "isciDetayCaddeNo": isciDetayCaddeNo,
+                                                    "gdsbildirim": gdsbildirim, "dnsbildirim": dnsbildirim, "detayAdres": ttl, "tip": "isciDetailKaydet"},
                                                 success: function (cevap) {
                                                     if (cevap.hata) {
                                                         reset();
@@ -771,7 +865,7 @@ $.AdminIslemler = {
                                                     } else {
                                                         disabledForm();
                                                         reset();
-                                                        alertify.success(jsDil.IsciDuzenle);
+                                                        alertify.success(cevap.update);
                                                         var SelectBolgeOptions = new Array();
                                                         var SelectIsciOptions = new Array();
                                                         if (isciBolgeID.length > 0) {
@@ -866,7 +960,54 @@ $.AdminIslemler = {
                 }
             }
         }
-    }
+    },
+    isciDetailTur: function () {
+        IsciTurTable.DataTable().clear().draw();
+        var isciID = $("input[name=isciDetayID]").val();
+        $.ajax({
+            data: {"isciID": isciID, "tip": "isciDetailTur"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
+                } else {
+                    if (cevap.isciDetailTur) {
+                        var turCount = cevap.isciDetailTur.length;
+                        for (var i = 0; i < turCount; i++) {
+                            if (cevap.isciDetailTur[i].TurTip == 0) {
+                                TurTip = jsDil.Ogrenci;
+                            } else if (cevap.isciDetailTur[i].TurTip == 1) {
+                                TurTip = jsDil.Personel;
+                            } else {
+                                TurTip = jsDil.OgrenciPersonel;
+                            }
+                            if (cevap.isciDetailTur[i].TurAktiflik != 0) {
+                                var addRow = "<tr><td>"
+                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.isciDetailTur[i].TurID + "'>"
+                                        + "<i class='fa fa-map-marker'></i> " + cevap.isciDetailTur[i].TurAd + "</a></td>"
+                                        + "<td class='hidden-xs' >" + TurTip + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.isciDetailTur[i].TurAciklama + "</td>"
+                                        + "<td class='hidden-xs'>" + cevap.isciDetailTur[i].TurKurum + "</td>"
+                                        + "<td class='hidden-xs'>" + cevap.isciDetailTur[i].TurBolge + "</td></tr>";
+                                IsciTurTable.DataTable().row.add($(addRow)).draw();
+                            } else {
+                                var addRow = "<tr><td>"
+                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.isciDetailTur[i].TurID + "'>"
+                                        + "<i class='fa fa-map-marker' style='color:red'></i> " + cevap.isciDetailTur[i].TurAd + "</a></td>"
+                                        + "<td class='hidden-xs' >" + TurTip + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.isciDetailTur[i].TurAciklama + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.isciDetailTur[i].TurKurum + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.isciDetailTur[i].TurBolge + "</td></tr>";
+                                IsciTurTable.DataTable().row.add($(addRow)).draw();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        return true;
+    },
 }
 
 

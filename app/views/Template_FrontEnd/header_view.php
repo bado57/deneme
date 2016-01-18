@@ -31,12 +31,32 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <script type="text/javascript" src="<?php echo SITE_USERFRONT_JS; ?>/modernizr.custom.32033.js"></script>
 
                                 <link rel="stylesheet" href="<?php echo SITE_USERFRONT_CSS; ?>/master.css">
-
-                                    <!--[if lt IE 9]>
-                                      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-                                      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-                                    <![endif]-->
-
+                                    <script src="<?php echo SITE_USERFRONT_JS; ?>/jquery-1.11.1.min.js"></script>
+                                    <script src="<?php echo SITE_USERFRONT_JS; ?>/bootstrap.min.js"></script>
+                                    <script src="<?php echo SITE_USERFRONT_JS; ?>/slick.min.js"></script>
+                                    <script src="<?php echo SITE_USERFRONT_JS; ?>/placeholdem.min.js"></script>
+                                    <script src="<?php echo SITE_USERFRONT_JS; ?>/rs-plugin/js/jquery.themepunch.plugins.min.js"></script>
+                                    <script src="<?php echo SITE_USERFRONT_JS; ?>/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
+                                    <script src="<?php echo SITE_USERFRONT_JS; ?>/waypoints.min.js"></script>
+                                    <script src="<?php echo SITE_USERFRONT_JS; ?>/scripts.js"></script>
+                                    <script src="<?php echo SITE_USERFRONT_JS; ?>/jquery.validate.js"></script>
+                                    <script>
+                                        var SITE_URL = "http://localhost/SProject/";
+                                        function reset() {
+                                            alertify.set({
+                                                labels: {
+                                                    ok: jsDil.Tamam,
+                                                    cancel: jsDil.Kapat
+                                                },
+                                                delay: 3000,
+                                                buttonReverse: false,
+                                                buttonFocus: "ok"
+                                            });
+                                        }
+                                    </script>
+                                    <script src="<?php echo SITE_JS_LANGUAGE; ?>/<?php echo Session::get("dil"); ?>.js"></script>
+                                    <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/alertify.js"></script>
+                                    <script src="<?php echo SITE_URL_LOGINJS; ?>/userslogin.js"></script>
                                     </head>
 
                                     <body>
@@ -94,7 +114,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                         </li>
                                                         <li><a href="#support"><?php echo $data["Destek"]; ?></a>
                                                         </li>
-                                                        <li><a href="<?php echo SITE_URL; ?>/loginform"><?php echo $data["GirisYap"]; ?></a>
+                                                        <li><a href="<?php echo SITE_URL; ?>/LoginForm"><?php echo $data["GirisYap"]; ?></a>
                                                         </li>
                                                     </ul>
                                                 </div>

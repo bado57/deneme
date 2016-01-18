@@ -14,17 +14,7 @@
     </div>
 </footer>
 
-</div>
-<script src="<?php echo SITE_USERFRONT_JS; ?>/jquery-1.11.1.min.js"></script>
-<script src="<?php echo SITE_USERFRONT_JS; ?>/bootstrap.min.js"></script>
-<script src="<?php echo SITE_USERFRONT_JS; ?>/slick.min.js"></script>
-<script src="<?php echo SITE_USERFRONT_JS; ?>/placeholdem.min.js"></script>
-<script src="<?php echo SITE_USERFRONT_JS; ?>/rs-plugin/js/jquery.themepunch.plugins.min.js"></script>
-<script src="<?php echo SITE_USERFRONT_JS; ?>/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
-<script src="<?php echo SITE_USERFRONT_JS; ?>/waypoints.min.js"></script>
-<script src="<?php echo SITE_USERFRONT_JS; ?>/scripts.js"></script>
-<script src="<?php echo SITE_USERFRONT_JS; ?>/jquery.validate.js"></script>
-<script src="<?php echo SITE_URL_LOGINJS; ?>/userslogin.js"></script>
+</div> 
 <script>
     $(document).ready(function () {
         appMaster.preLoader();

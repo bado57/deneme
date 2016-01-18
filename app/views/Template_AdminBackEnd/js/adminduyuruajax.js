@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     $.ajax({
         type: "post",
-        url: "http://localhost/SProject/AdminDuyuruAjax",
+        url: SITE_URL + "AdminDuyuruAjax",
         //timeout:3000,
         dataType: "json",
         data: {"tip": "adminDuyuru"},
@@ -30,9 +30,9 @@ $(document).ready(function () {
                         var newDate = myDate1[2] + '/' + myDate1[1] + '/' + myDate1[0];
                         if (cevap.Duyur.ID[i] > ilkDeger) {
                             if (cevap.Duyur.Okundu[i] != 1) {//okunmadı
-                                $("#duyuru").append('<li style="background-color: #ddd"><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '" href="http://localhost/SProject/adminweb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
+                                $("#duyuru").append('<li style="background-color: #ddd"><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '" href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
                             } else {
-                                $("#duyuru").append('<li><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '"  href="http://localhost/SProject/adminweb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
+                                $("#duyuru").append('<li><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '"  href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
                             }
                         }
                     }
@@ -52,7 +52,7 @@ $(document).ready(function () {
     setInterval(function () {
         $.ajax({
             type: "post",
-            url: "http://localhost/SProject/AdminDuyuruAjax",
+            url: SITE_URL + "AdminDuyuruAjax",
             //timeout:3000,
             dataType: "json",
             data: {"tip": "adminDuyuru"},
@@ -80,9 +80,9 @@ $(document).ready(function () {
                             var newDate = myDate1[2] + '/' + myDate1[1] + '/' + myDate1[0];
                             if (cevap.Duyur.ID[i] > ilkDeger) {
                                 if (cevap.Duyur.Okundu[i] != 1) {//okunmadı
-                                    $("#duyuru").append('<li style="background-color: #ddd"><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '" href="http://localhost/SProject/adminweb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
+                                    $("#duyuru").append('<li style="background-color: #ddd"><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '" href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
                                 } else {
-                                    $("#duyuru").append('<li><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '"  href="http://localhost/SProject/adminweb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
+                                    $("#duyuru").append('<li><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '"  href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
                                 }
                             }
                         }
@@ -105,7 +105,7 @@ $(document).ready(function () {
         var ID = $(this).attr("data-id");
         $.ajax({
             type: "post",
-            url: "http://localhost/SProject/AdminDuyuruAjax",
+            url: SITE_URL + "AdminDuyuruAjax",
             //timeout:3000,
             dataType: "json",
             data: {"ID": ID, "tip": "adminOkundu"},
@@ -124,7 +124,7 @@ $(document).ready(function () {
                             href = $("ul#duyuru >li > a").eq(t).attr('data-href');
                         }
                     }
-                    window.location.href = ('http://localhost/SProject/adminweb/duyuruliste');
+                    window.location.href = (SITE_URL + 'AdminWeb/duyuruliste');
                 }
             }
         });
@@ -134,7 +134,7 @@ $(document).ready(function () {
         e.preventDefault();
         $.ajax({
             type: "post",
-            url: "http://localhost/SProject/AdminDuyuruAjax",
+            url: SITE_URL + "AdminDuyuruAjax",
             //timeout:3000,
             dataType: "json",
             data: {"tip": "adminGoruldu"},
@@ -154,7 +154,7 @@ $(document).ready(function () {
         e.preventDefault();
         $.ajax({
             type: "post",
-            url: "http://localhost/SProject/AdminDuyuruAjax",
+            url: SITE_URL + "AdminDuyuruAjax",
             //timeout:3000,
             dataType: "json",
             data: {"tip": "tumunuOkundu"},
@@ -175,7 +175,7 @@ $(document).ready(function () {
 
     $(document).on("click", "#tumunuGosterDuyuru", function (e) {
         e.preventDefault();
-        window.location.href = ('http://localhost/SProject/adminweb/duyuruliste');
+        window.location.href = (SITE_URL + 'AdminWeb/duyuruliste');
     });
 
     $("#duyuru").scroll(function () {
@@ -185,7 +185,7 @@ $(document).ready(function () {
         if ($("#duyuru").scrollTop() + $("#duyuru").height() == $("#duyuru")[0].scrollHeight) {
             $.ajax({
                 type: "post",
-                url: "http://localhost/SProject/AdminDuyuruAjax",
+                url: SITE_URL + "AdminDuyuruAjax",
                 //timeout:3000,
                 dataType: "json",
                 data: {"sonDeger": sonDeger, "tip": "loaderDocument"},
@@ -202,9 +202,9 @@ $(document).ready(function () {
                                 var myDate1 = myDate[0].split("-");
                                 var newDate = myDate1[2] + '/' + myDate1[1] + '/' + myDate1[0];
                                 if (cevap.Duyur.Okundu[i] != 1) {//okunmadı
-                                    $("#duyuru").append('<li style="background-color: #ddd"><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '" href="http://localhost/SProject/adminweb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
+                                    $("#duyuru").append('<li style="background-color: #ddd"><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '" href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
                                 } else {
-                                    $("#duyuru").append('<li><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '"  href="http://localhost/SProject/adminweb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
+                                    $("#duyuru").append('<li><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '"  href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
                                 }
                             }
                             $('div#duyuruloadmoreajaxloader').hide();

@@ -19,7 +19,7 @@
             <?php if (Session::get("userRutbe") != 0) { ?>
                 <div class="col-lg-3 col-xs-12">
                     <!-- Firma İşlemleri -->
-                    <a href="<?php echo SITE_URL; ?>/adminweb/adminliste" class="small-box bg-green">
+                    <a href="<?php echo SITE_URL; ?>/AdminWeb/adminliste" class="small-box bg-green">
                         <div class="inner">
                             <h3>
                                 <?php echo $data["Admin"]; ?>
@@ -44,7 +44,7 @@
             <?php } ?>
             <div class="col-lg-3 col-xs-12">
                 <!-- Kullanıcı İşlemleri -->
-                <a href="<?php echo SITE_URL; ?>/adminweb/soforliste" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/soforliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["Sofor"]; ?>
@@ -69,7 +69,7 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Kullanıcı İşlemleri -->
-                <a href="<?php echo SITE_URL; ?>/adminweb/hostesliste" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/hostesliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["Hostes"]; ?>
@@ -94,7 +94,7 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Kullanıcı İşlemleri -->
-                <a href="<?php echo SITE_URL; ?>/adminweb/veliliste" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/veliliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["Veli"]; ?>
@@ -119,7 +119,7 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Kullanıcı İşlemleri -->
-                <a href="<?php echo SITE_URL; ?>/adminweb/ogrenciliste" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/ogrenciliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["Ogrenci"]; ?>
@@ -144,7 +144,7 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- İşçi İşlemleri -->
-                <a href="<?php echo SITE_URL; ?>/adminweb/isciliste" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/isciliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["Isci"]; ?>

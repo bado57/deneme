@@ -292,7 +292,7 @@
                                     <ons-toolbar>
                                         <div class="left"><ons-button class="back" modifier="quiet" onclick="turNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
                                         <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-road"></i></div>
-                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="console.log(turNavigator.resetToPage(0, {animation: 'slide'}))"><i class="top-icon fa fa-reorder"></i></ons-button></div>
+                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="turNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                     </ons-toolbar>
                                     <div class="google-maps" id="sofor_map">
                                     </div>
@@ -417,7 +417,7 @@
                                     <ons-toolbar>
                                         <div class="left"><ons-button class="back" modifier="quiet" onclick="turNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
                                         <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-road"></i></div>
-                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="console.log(turNavigator.resetToPage(0, {animation: 'slide'}))"><i class="top-icon fa fa-reorder"></i></ons-button></div>
+                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="turNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                     </ons-toolbar>
                                     <div class="google-maps" id="sofor_map">
                                     </div>
@@ -535,7 +535,7 @@
                                     <ons-toolbar>
                                         <div class="left"><ons-button class="back" modifier="quiet" onclick="turNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
                                         <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-road"></i></div>
-                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="console.log(turNavigator.resetToPage(0, {animation: 'slide'}))"><i class="top-icon fa fa-reorder"></i></ons-button></div>
+                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="turNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                     </ons-toolbar>
                                     <div class="google-maps" id="sofor_map">
                                     </div>
@@ -776,7 +776,7 @@
                                     <ons-toolbar>
                                         <div class="left"><ons-button class="back" modifier="quiet" onclick="turNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
                                         <div class="center" style="font-size:24px; color:#007427;"><i class="fa fa-road"></i></div>
-                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="console.log(turNavigator.resetToPage(0, {animation: 'slide'}))"><i class="top-icon fa fa-reorder"></i></ons-button></div>
+                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="turNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-reorder"></i></ons-button></div>
                                     </ons-toolbar>
                                     <div class="google-maps" id="multiple_lokasyon_map">
                                     </div>

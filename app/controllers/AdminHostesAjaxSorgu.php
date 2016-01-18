@@ -18,9 +18,11 @@ class AdminHostesAjaxSorgu extends Controller {
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
             $sonuc = array();
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
-            //form class bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
+            $Panel_Model = $this->load->model("Panel_Model");
+            //language 
+            $lang = Session::get("dil");
+            $formlanguage = $this->load->ajaxlanguage($lang);
+            $languagedeger = $formlanguage->ajaxlanguage();
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -65,7 +67,6 @@ class AdminHostesAjaxSorgu extends Controller {
                         $sonuc["adminBolge"] = $adminBolge;
                     }
                     break;
-
                 case "hostesAracMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -91,14 +92,12 @@ class AdminHostesAjaxSorgu extends Controller {
                         $sonuc["aracMultiSelect"] = $hostesAracSelect;
                     }
                     break;
-
                 case "hostesKaydet":
-
                     $adminID = Session::get("userId");
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-                        $userTip = 6;
+                        $userTip = 3;
 
                         $firmaID = Session::get("FirmaId");
 
@@ -108,9 +107,6 @@ class AdminHostesAjaxSorgu extends Controller {
                             if ($realSifre) {
                                 $adminSifre = $form->userSifreOlustur($userKadi, $realSifre, $userTip);
                                 if ($adminSifre) {
-
-                                    $uniqueKey = Session::get("username");
-                                    $uniqueKey = $uniqueKey . '_AHostes';
 
                                     $form->post('hostesAd', true);
                                     $form->post('hostesSoyad', true);
@@ -133,112 +129,122 @@ class AdminHostesAjaxSorgu extends Controller {
                                     $hostesAd = $form->values['hostesAd'];
                                     $hostesSoyad = $form->values['hostesSoyad'];
                                     $hostesAdSoyad = $hostesAd . ' ' . $hostesSoyad;
+                                    $hostesEmail = $form->values['hostesEmail'];
 
                                     $hostesBolgeID = $_REQUEST['hostesBolgeID'];
                                     $hostesBolgeAdi = $_REQUEST['hostesBolgeAdi'];
                                     $hostesAracID = $_REQUEST['hostesAracID'];
                                     $hostesAracPlaka = $_REQUEST['hostesAracPlaka'];
 
-                                    if ($form->submit()) {
-                                        $data = array(
-                                            'BSHostesAd' => $hostesAd,
-                                            'BSHostesSoyad' => $hostesSoyad,
-                                            'BSHostesKadi' => $userKadi,
-                                            'BSHostesSifre' => $adminSifre,
-                                            'BSHostesRSifre' => $realSifre,
-                                            'BSHostesPhone' => $form->values['hostesTelefon'],
-                                            'BSHostesEmail' => $form->values['hostesEmail'],
-                                            'BSHostesLocation' => $form->values['hostesLokasyon'],
-                                            'BSHostesUlke' => $form->values['ulke'],
-                                            'BSHostesIl' => $form->values['il'],
-                                            'BSHostesIlce' => $form->values['ilce'],
-                                            'BSHostesSemt' => $form->values['semt'],
-                                            'BSHostesMahalle' => $form->values['mahalle'],
-                                            'BSHostesSokak' => $form->values['sokak'],
-                                            'BSHostesPostaKodu' => $form->values['postakodu'],
-                                            'BSHostesCaddeNo' => $form->values['caddeno'],
-                                            'BSHostesAdres' => $form->values['hostesAdres'],
-                                            'BSHostesDetayAdres' => $form->values['detayAdres'],
-                                            'Status' => $form->values['hostesDurum'],
-                                            'BSHostesAciklama' => $form->values['aciklama']
-                                        );
-                                    }
-                                    $resultHostesID = $Panel_Model->addNewHostes($data);
+                                    if (!filter_var($hostesEmail, FILTER_VALIDATE_EMAIL) === false) {
+                                        $emailValidate = $form->mailControl1($hostesEmail);
+                                        if ($emailValidate == 1) {
+                                            $kullaniciliste = $Panel_Model->hostesEmailDbKontrol($hostesEmail);
+                                            if (count($kullaniciliste) <= 0) {
+                                                if ($form->submit()) {
+                                                    $data = array(
+                                                        'BSHostesAd' => $hostesAd,
+                                                        'BSHostesSoyad' => $hostesSoyad,
+                                                        'BSHostesKadi' => $userKadi,
+                                                        'BSHostesSifre' => $adminSifre,
+                                                        'BSHostesRSifre' => $realSifre,
+                                                        'BSHostesPhone' => $form->values['hostesTelefon'],
+                                                        'BSHostesEmail' => $hostesEmail,
+                                                        'BSHostesLocation' => $form->values['hostesLokasyon'],
+                                                        'BSHostesUlke' => $form->values['ulke'],
+                                                        'BSHostesIl' => $form->values['il'],
+                                                        'BSHostesIlce' => $form->values['ilce'],
+                                                        'BSHostesSemt' => $form->values['semt'],
+                                                        'BSHostesMahalle' => $form->values['mahalle'],
+                                                        'BSHostesSokak' => $form->values['sokak'],
+                                                        'BSHostesPostaKodu' => $form->values['postakodu'],
+                                                        'BSHostesCaddeNo' => $form->values['caddeno'],
+                                                        'BSHostesAdres' => $form->values['hostesAdres'],
+                                                        'BSHostesDetayAdres' => $form->values['detayAdres'],
+                                                        'Status' => $form->values['hostesDurum'],
+                                                        'BSHostesAciklama' => $form->values['aciklama']
+                                                    );
+                                                }
+                                                $resultHostesID = $Panel_Model->addNewHostes($data);
 
-                                    if ($resultHostesID != 'unique') {
-                                        $bolgeID = count($hostesBolgeID);
-                                        if ($bolgeID > 0) {
-                                            for ($b = 0; $b < $bolgeID; $b++) {
-                                                $bolgedata[$b] = array(
-                                                    'BSHostesID' => $resultHostesID,
-                                                    'BSHostesAd' => $hostesAdSoyad,
-                                                    'BSBolgeID' => $hostesBolgeID[$b],
-                                                    'BSBolgeAdi' => $hostesBolgeAdi[$b]
-                                                );
-                                            }
-                                            $resultBolgeID = $Panel_Model->addNewBolgeHostes($bolgedata);
-                                            if ($resultBolgeID) {
-                                                //şoföre araç seçildi ise
-                                                $aracID = count($hostesAracID);
-                                                if ($aracID > 0) {
-                                                    for ($c = 0; $c < $aracID; $c++) {
-                                                        $aracdata[$c] = array(
-                                                            'BSAracID' => $hostesAracID[$c],
-                                                            'BSAracPlaka' => $hostesAracPlaka[$c],
-                                                            'BSHostesID' => $resultHostesID,
-                                                            'BSHostesAd' => $hostesAdSoyad
-                                                        );
+                                                if ($resultHostesID != 'unique') {
+                                                    $bolgeID = count($hostesBolgeID);
+                                                    if ($bolgeID > 0) {
+                                                        for ($b = 0; $b < $bolgeID; $b++) {
+                                                            $bolgedata[$b] = array(
+                                                                'BSHostesID' => $resultHostesID,
+                                                                'BSHostesAd' => $hostesAdSoyad,
+                                                                'BSBolgeID' => $hostesBolgeID[$b],
+                                                                'BSBolgeAdi' => $hostesBolgeAdi[$b]
+                                                            );
+                                                        }
+                                                        $resultBolgeID = $Panel_Model->addNewBolgeHostes($bolgedata);
+                                                        if ($resultBolgeID) {
+                                                            //kullanıcıya gerekli giriş mail yazısı
+                                                            $setTitle = $languagedeger['UyelikBilgi'];
+                                                            $subject = $languagedeger['SHtrltMail'];
+                                                            $body = $languagedeger['Merhaba'] . ' ' . $hostesAdSoyad . '!<br/>' . $languagedeger['KullaniciAdi'] . ' = ' . $userKadi . '<br/>'
+                                                                    . $languagedeger['KullaniciSifre'] . ' = ' . $realSifre . '<br/>'
+                                                                    . $languagedeger['IyiGunler'];
+
+                                                            //şoföre araç seçildi ise
+                                                            $aracID = count($hostesAracID);
+                                                            if ($aracID > 0) {
+                                                                for ($c = 0; $c < $aracID; $c++) {
+                                                                    $aracdata[$c] = array(
+                                                                        'BSAracID' => $hostesAracID[$c],
+                                                                        'BSAracPlaka' => $hostesAracPlaka[$c],
+                                                                        'BSHostesID' => $resultHostesID,
+                                                                        'BSHostesAd' => $hostesAdSoyad
+                                                                    );
+                                                                }
+
+                                                                $resultAracID = $Panel_Model->addNewAracHostes($aracdata);
+                                                                //kullanıcıya gerekli giriş bilgileri gönderiliyor.
+                                                                $resultMail = $form->sifreHatirlatMail($hostesEmail, $setTitle, $hostesAdSoyad, $subject, $body);
+                                                                $sonuc["newHostesID"] = $resultHostesID;
+                                                                $sonuc["insert"] = $languagedeger['HostesEkle'];
+                                                            } else {
+                                                                //kullanıcıya gerekli giriş bilgileri gönderiliyor.
+                                                                $resultMail = $form->sifreHatirlatMail($hostesEmail, $setTitle, $hostesAdSoyad, $subject, $body);
+                                                                $sonuc["newHostesID"] = $resultHostesID;
+                                                                $sonuc["insert"] = $languagedeger['HostesEkle'];
+                                                            }
+                                                        } else {
+                                                            //admin kaydedilirken hata geldi ise
+                                                            $deleteresult = $Panel_Model->hostesDelete($resultHostesID);
+
+                                                            if ($deleteresult) {
+                                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                                            }
+                                                        }
+                                                    } else {
+                                                        //eğer şoförün bölgesi yoksa
+                                                        $deleteresult = $Panel_Model->hostesDelete($resultHostesID);
+                                                        $sonuc["hata"] = $languagedeger['BolgeSec'];
                                                     }
-
-                                                    $resultAracID = $Panel_Model->addNewAracHostes($aracdata);
-
-                                                    $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                                    $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                    if ($resultMemcache) {
-                                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                                    }
-
-                                                    $sonuc["newHostesID"] = $resultHostesID;
-                                                    $sonuc["insert"] = "Başarıyla Hostes Eklenmiştir.";
                                                 } else {
-                                                    $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                                    $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                    if ($resultMemcache) {
-                                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                                    }
-
-                                                    $sonuc["newHostesID"] = $resultHostesID;
-                                                    $sonuc["insert"] = "Başarıyla Hostes Eklenmiştir.";
+                                                    $sonuc["hata"] = $languagedeger['GecersizKullanici'];
                                                 }
                                             } else {
-                                                //admin kaydedilirken hata geldi ise
-                                                $deleteresult = $Panel_Model->hostesDelete($resultHostesID);
-
-                                                if ($deleteresult) {
-                                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                                }
+                                                $sonuc["hata"] = $languagedeger['KullanilmisEmail'];
                                             }
                                         } else {
-                                            //eğer şoförün bölgesi yoksa
-                                            $deleteresult = $Panel_Model->hostesDelete($resultHostesID);
-                                            $sonuc["hata"] = "Lütfen Bölge Seçmeyi Unutmayınız.";
+                                            $sonuc["hata"] = $languagedeger['BaskaEmail'];
                                         }
                                     } else {
-                                        $sonuc["hata"] = "Lütfen Yeni Bir Kullanıcı Adı yada Şifre Giriniz.";
+                                        $sonuc["hata"] = $languagedeger['GecerliEmail'];
                                     }
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $languagedeger['Hata'];
                                 }
                             } else {
-                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                $sonuc["hata"] = $languagedeger['Hata'];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['Hata'];
                         }
                     }
-
                 case "hostesDetail":
 
                     $adminID = Session::get("userId");
@@ -462,68 +468,40 @@ class AdminHostesAjaxSorgu extends Controller {
                     }
 
                     break;
-
                 case "hostesDetailDelete":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_AHostes';
-
-
                         $form->post('hostesdetail_id', true);
                         $hostesDetailID = $form->values['hostesdetail_id'];
-
                         $deleteresult = $Panel_Model->detailHostesDelete($hostesDetailID);
                         if ($deleteresult) {
-
                             $deleteresultt = $Panel_Model->detailHostesAracDelete($hostesDetailID);
                             if ($deleteresultt) {
                                 $deleteresulttt = $Panel_Model->detailHostesBolgeDelete($hostesDetailID);
                                 if ($deleteresulttt) {
-                                    $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                    $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                    if ($resultMemcache) {
-                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                    }
-                                    $sonuc["delete"] = "Hostes kaydı başarıyla silinmiştir.";
+                                    $sonuc["delete"] = $languagedeger['HostesSil'];
                                 }
                             } else {
                                 $deleteresulttt = $Panel_Model->detailHostesBolgeDelete($hostesDetailID);
                                 if ($deleteresulttt) {
-                                    $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                    $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                    if ($resultMemcache) {
-                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                    }
-                                    $sonuc["delete"] = "Hostes kaydı başarıyla silinmiştir.";
+                                    $sonuc["delete"] = $languagedeger['HostesSil'];
                                 }
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['Hata'];
                         }
                     }
 
                     break;
-
                 case "hostesDetailKaydet":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
                         $form->post('hostesdetail_id', true);
                         $hostesID = $form->values['hostesdetail_id'];
-
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_AHostes';
-
                         $form->post('hostesDetayAd', true);
                         $form->post('hostesDetaySoyad', true);
                         $form->post('hostesDetayEmail', true);
@@ -541,115 +519,170 @@ class AdminHostesAjaxSorgu extends Controller {
                         $form->post('hostesDetayPostaKodu', true);
                         $form->post('hostesDetayCaddeNo', true);
                         $form->post('detayAdres', true);
+                        $form->post('eskiAd', true);
+                        $form->post('eskiSoyad', true);
 
                         $hostesAd = $form->values['hostesDetayAd'];
                         $hostesSoyad = $form->values['hostesDetaySoyad'];
                         $hostesAdSoyad = $hostesAd . ' ' . $hostesSoyad;
+                        $hostesEmail = $form->values['hostesEmail'];
+
+                        $eskiAd = $form->values['eskiAd'];
+                        $eskiSoyad = $form->values['eskiSoyad'];
 
                         $hostesBolgeID = $_REQUEST['hostesBolgeID'];
                         $hostesBolgeAdi = $_REQUEST['hostesBolgeAd'];
                         $hostesAracID = $_REQUEST['hostesAracID'];
                         $hostesAracPlaka = $_REQUEST['hostesAracPlaka'];
 
-                        if ($form->submit()) {
-                            $data = array(
-                                'BSHostesAd' => $hostesAd,
-                                'BSHostesSoyad' => $hostesSoyad,
-                                'BSHostesPhone' => $form->values['hostesDetayTelefon'],
-                                'BSHostesEmail' => $form->values['hostesDetayEmail'],
-                                'BSHostesLocation' => $form->values['hostesDetayLokasyon'],
-                                'BSHostesUlke' => $form->values['hostesDetayUlke'],
-                                'BSHostesIl' => $form->values['hostesDetayIl'],
-                                'BSHostesIlce' => $form->values['hostesDetayIlce'],
-                                'BSHostesSemt' => $form->values['hostesDetaySemt'],
-                                'BSHostesMahalle' => $form->values['hostesDetayMahalle'],
-                                'BSHostesSokak' => $form->values['hostesDetaySokak'],
-                                'BSHostesPostaKodu' => $form->values['hostesDetayPostaKodu'],
-                                'BSHostesCaddeNo' => $form->values['hostesDetayCaddeNo'],
-                                'BSHostesAdres' => $form->values['hostesDetayAdres'],
-                                'BSHostesDetayAdres' => $form->values['detayAdres'],
-                                'BSHostesAciklama' => $form->values['hostesDetayAciklama'],
-                                'Status' => $form->values['hostesDetayDurum']
-                            );
-                        }
-                        $resultHostesUpdate = $Panel_Model->hostesOzelliklerDuzenle($data, $hostesID);
-                        if ($resultHostesUpdate) {
-                            $aracID = count($hostesAracID);
-                            if ($aracID > 0) {
-                                $deleteresultt = $Panel_Model->adminHostesAracDelete($hostesID);
-                                for ($a = 0; $a < $aracID; $a++) {
-                                    $hostesdata[$a] = array(
-                                        'BSAracID' => $hostesAracID[$a],
-                                        'BSAracPlaka' => $hostesAracPlaka[$a],
-                                        'BSHostesID' => $hostesID,
-                                        'BSHostesAd' => $hostesAdSoyad
-                                    );
-                                }
-                                $resultHostesUpdate = $Panel_Model->addNewHostesArac($hostesdata);
-                                if ($resultHostesUpdate) {
-                                    $bolgeID = count($hostesBolgeID);
-                                    $deleteresulttt = $Panel_Model->adminDetailHostesBolgeDelete($bolgeID);
-                                    if ($deleteresulttt) {
-                                        for ($b = 0; $b < $bolgeID; $b++) {
-                                            $bolgedata[$b] = array(
-                                                'BSHostesID' => $hostesID,
-                                                'BSHostesAd' => $hostesAdSoyad,
-                                                'BSBolgeID' => $hostesBolgeID[$b],
-                                                'BSBolgeAdi' => $hostesBolgeAdi[$b]
-                                            );
-                                        }
-                                        $resultBolgeID = $Panel_Model->addNewHostesBolge($bolgedata);
-                                        if ($resultBolgeID) {
-                                            $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                            if ($resultMemcache) {
-                                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                            }
-
-                                            $sonuc["newHostesID"] = $hostesID;
-                                            $sonuc["update"] = "Başarıyla Hostes Düzenlenmiştir.";
-                                        } else {
-                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                        }
-                                    } else {
-                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                    }
-                                } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                }
-                            } else {
-                                $deleteresultt = $Panel_Model->adminHostesAracDelete($hostesID);
-                                $deleteresulttt = $Panel_Model->adminDetailHostesBolgeDelete($hostesID);
-                                if ($deleteresulttt) {
-                                    $bolgeID = count($hostesBolgeID);
-                                    for ($b = 0; $b < $bolgeID; $b++) {
-                                        $bolgedata[$b] = array(
-                                            'BSHostesID' => $hostesID,
-                                            'BSHostesAd' => $hostesAdSoyad,
-                                            'BSBolgeID' => $hostesBolgeID[$b],
-                                            'BSBolgeAdi' => $hostesBolgeAdi[$b]
+                        if (!filter_var($hostesEmail, FILTER_VALIDATE_EMAIL) === false) {
+                            $emailValidate = $form->mailControl1($hostesEmail);
+                            if ($emailValidate == 1) {
+                                $kullaniciliste = $Panel_Model->hostesEmailDbKontrol($hostesEmail);
+                                if (count($kullaniciliste) <= 0) {
+                                    if ($form->submit()) {
+                                        $data = array(
+                                            'BSHostesAd' => $hostesAd,
+                                            'BSHostesSoyad' => $hostesSoyad,
+                                            'BSHostesPhone' => $form->values['hostesDetayTelefon'],
+                                            'BSHostesEmail' => $hostesEmail,
+                                            'BSHostesLocation' => $form->values['hostesDetayLokasyon'],
+                                            'BSHostesUlke' => $form->values['hostesDetayUlke'],
+                                            'BSHostesIl' => $form->values['hostesDetayIl'],
+                                            'BSHostesIlce' => $form->values['hostesDetayIlce'],
+                                            'BSHostesSemt' => $form->values['hostesDetaySemt'],
+                                            'BSHostesMahalle' => $form->values['hostesDetayMahalle'],
+                                            'BSHostesSokak' => $form->values['hostesDetaySokak'],
+                                            'BSHostesPostaKodu' => $form->values['hostesDetayPostaKodu'],
+                                            'BSHostesCaddeNo' => $form->values['hostesDetayCaddeNo'],
+                                            'BSHostesAdres' => $form->values['hostesDetayAdres'],
+                                            'BSHostesDetayAdres' => $form->values['detayAdres'],
+                                            'BSHostesAciklama' => $form->values['hostesDetayAciklama'],
+                                            'Status' => $form->values['hostesDetayDurum']
                                         );
                                     }
-                                    $resultBolgeID = $Panel_Model->addNewHostesBolge($bolgedata);
-                                    if ($resultBolgeID) {
-                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                        if ($resultMemcache) {
-                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                    $resultHostesUpdate = $Panel_Model->hostesOzelliklerDuzenle($data, $hostesID);
+                                    if ($resultHostesUpdate) {
+                                        if ($hostesAd != $eskiAd || $hostesSoyad != $eskiSoyad) {
+                                            $dataDuzenle = array(
+                                                'BSTurHostesAd' => $hostesAdSoyad
+                                            );
+                                            $updatetur = $Panel_Model->hostesDuzenle($dataDuzenle, $hostesID);
+                                            $dataDuzenle2 = array(
+                                                'BSGonderenAdSoyad' => $hostesAdSoyad
+                                            );
+                                            $updateduyuru = $Panel_Model->hostesDuzenle3($dataDuzenle2, $hostesID);
+                                            $dataDuzenle3 = array(
+                                                'BSEkleyenAdSoyad' => $hostesAdSoyad
+                                            );
+                                            $updateduyurulog = $Panel_Model->hostesDuzenle4($dataDuzenle3, $hostesID);
                                         }
-
-                                        $sonuc["newHostesID"] = $hostesID;
-                                        $sonuc["update"] = "Başarıyla Hostes Düzenlenmiştir.";
+                                        $aracID = count($hostesAracID);
+                                        if ($aracID > 0) {
+                                            $deleteresultt = $Panel_Model->adminHostesAracDelete($hostesID);
+                                            for ($a = 0; $a < $aracID; $a++) {
+                                                $hostesdata[$a] = array(
+                                                    'BSAracID' => $hostesAracID[$a],
+                                                    'BSAracPlaka' => $hostesAracPlaka[$a],
+                                                    'BSHostesID' => $hostesID,
+                                                    'BSHostesAd' => $hostesAdSoyad
+                                                );
+                                            }
+                                            $resultHostesUpdate = $Panel_Model->addNewHostesArac($hostesdata);
+                                            if ($resultHostesUpdate) {
+                                                $bolgeID = count($hostesBolgeID);
+                                                $deleteresulttt = $Panel_Model->adminDetailHostesBolgeDelete($bolgeID);
+                                                if ($deleteresulttt) {
+                                                    for ($b = 0; $b < $bolgeID; $b++) {
+                                                        $bolgedata[$b] = array(
+                                                            'BSHostesID' => $hostesID,
+                                                            'BSHostesAd' => $hostesAdSoyad,
+                                                            'BSBolgeID' => $hostesBolgeID[$b],
+                                                            'BSBolgeAdi' => $hostesBolgeAdi[$b]
+                                                        );
+                                                    }
+                                                    $resultBolgeID = $Panel_Model->addNewHostesBolge($bolgedata);
+                                                    if ($resultBolgeID) {
+                                                        $sonuc["newHostesID"] = $hostesID;
+                                                        $sonuc["update"] = $languagedeger['HostesDuzenle'];
+                                                    } else {
+                                                        $sonuc["hata"] = $languagedeger['Hata'];
+                                                    }
+                                                } else {
+                                                    $sonuc["hata"] = $languagedeger['Hata'];
+                                                }
+                                            } else {
+                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                            }
+                                        } else {
+                                            $deleteresultt = $Panel_Model->adminHostesAracDelete($hostesID);
+                                            $deleteresulttt = $Panel_Model->adminDetailHostesBolgeDelete($hostesID);
+                                            if ($deleteresulttt) {
+                                                $bolgeID = count($hostesBolgeID);
+                                                for ($b = 0; $b < $bolgeID; $b++) {
+                                                    $bolgedata[$b] = array(
+                                                        'BSHostesID' => $hostesID,
+                                                        'BSHostesAd' => $hostesAdSoyad,
+                                                        'BSBolgeID' => $hostesBolgeID[$b],
+                                                        'BSBolgeAdi' => $hostesBolgeAdi[$b]
+                                                    );
+                                                }
+                                                $resultBolgeID = $Panel_Model->addNewHostesBolge($bolgedata);
+                                                if ($resultBolgeID) {
+                                                    $sonuc["newHostesID"] = $hostesID;
+                                                    $sonuc["update"] = $languagedeger['HostesDuzenle'];
+                                                } else {
+                                                    $sonuc["hata"] = $languagedeger['Hata'];
+                                                }
+                                            } else {
+                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                            }
+                                        }
                                     } else {
-                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        $sonuc["hata"] = $languagedeger['Hata'];
                                     }
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $languagedeger['KullanilmisEmail'];
                                 }
+                            } else {
+                                $sonuc["hata"] = $languagedeger['BaskaEmail'];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['GecerliEmail'];
                         }
                     }
+                case "hostesDetailTur":
+                    $adminID = Session::get("userId");
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $form->post('hostesID', true);
+                        $hID = $form->values['hostesID'];
+                        $hostesTurDetail = $Panel_Model->adminHostesTurDetail($hID);
 
+                        //arac TUR İD
+                        $a = 0;
+                        foreach ($hostesTurDetail as $hostesTurDetaill) {
+                            $hostesturId[] = $hostesTurDetaill['BSTurID'];
+                            $a++;
+                        }
+                        $turId = implode(',', $hostesturId);
+
+                        $hostesTur = $Panel_Model->adminHostesDetailTur($turId);
+                        $b = 0;
+                        foreach ($hostesTur as $hostesTurr) {
+                            $hostesDetailTur[$b]['TurID'] = $hostesTurr['SBTurID'];
+                            $hostesDetailTur[$b]['TurAd'] = $hostesTurr['SBTurAd'];
+                            $hostesDetailTur[$b]['TurAciklama'] = $hostesTurr['SBTurAciklama'];
+                            $hostesDetailTur[$b]['TurAktiflik'] = $hostesTurr['SBTurAktiflik'];
+                            $hostesDetailTur[$b]['TurKurum'] = $hostesTurr['SBKurumAd'];
+                            $hostesDetailTur[$b]['TurTip'] = $hostesTurr['SBTurTip'];
+                            $hostesDetailTur[$b]['TurBolge'] = $hostesTurr['SBBolgeAd'];
+                            $b++;
+                        }
+                        $sonuc["hostesDetailTur"] = $hostesDetailTur;
+                    }
+                    break;
                 case "hostesDetailMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -733,7 +766,6 @@ class AdminHostesAjaxSorgu extends Controller {
                         $sonuc["adminHostesArac"] = $digerHostesArac;
                     }
                     break;
-
                 case "adminHostesTakvim":
 
                     $calendar = $this->load->otherClasses('Calendar');
@@ -790,7 +822,6 @@ class AdminHostesAjaxSorgu extends Controller {
 
                     $sonuc = $input_arrays;
                     break;
-
                 default :
                     header("Location:" . SITE_URL_LOGOUT);
                     break;

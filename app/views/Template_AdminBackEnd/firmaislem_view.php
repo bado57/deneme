@@ -46,7 +46,7 @@
             </div>
             <div class="form-group">
                 <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                <textarea name="Aciklama" class="form-control dsb" rows="3" disabled><?php echo $model['1759cc8d99e1bac25f37202ee2a41060']; ?></textarea>
+                <textarea name="Aciklama" class="form-control dsb" rows="3" disabled style="resize: none"><?php echo $model['1759cc8d99e1bac25f37202ee2a41060']; ?></textarea>
             </div>
             <div class="form-group">
                 <label for="FirmaDurum"><?php echo $data["Durum"]; ?></label>

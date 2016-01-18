@@ -125,11 +125,11 @@
                     </div>
                     <div class="form-group">
                         <label for="KurumAdresDetay"><?php echo $data["AdresDetay"]; ?></label>
-                        <textarea name="KurumAdresDetay" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="KurumAdresDetay" class="form-control dsb" rows="3" style="resize:none"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="Aciklama" class="form-control dsb" rows="3" style="resize:none"></textarea>
                     </div>
                     <div class="form-group">
                         <button data-type="svClose"  data-class="kurum" type="button" data-islemler="adminKurumVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
@@ -221,11 +221,11 @@
                         </div>
                         <div class="form-group">
                             <label for="KurumAdres"><?php echo $data["Adres"]; ?></label>
-                            <textarea name="KurumDetailAdres" class="form-control dsb" rows="3" disabled=""></textarea>
+                            <textarea name="KurumDetailAdres" class="form-control dsb" rows="3" disabled="" style="resize:none"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                            <textarea name="KurumDetailAciklama" class="form-control dsb" rows="3" disabled=""></textarea>
+                            <textarea name="KurumDetailAciklama" class="form-control dsb" rows="3" disabled="" style="resize:none"></textarea>
                         </div>
                         <div class="form-group submit-group">
                             <button data-type="svClose" type="button" class="btn btn-default vzg" data-Vzgislem="adminKurumDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
@@ -330,7 +330,7 @@
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="TurAciklama" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="TurAciklama" class="form-control dsb" rows="3" style="resize:none"></textarea>
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12 submit-group" style="display:block !important">
                         <button data-type="svClose"  data-class="tur" type="button" data-islemler="adminKurumTurVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
@@ -472,7 +472,7 @@
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="TurDetayGidisAciklama" class="form-control dsb" rows="3" disabled></textarea>
+                        <textarea name="TurDetayGidisAciklama" class="form-control dsb" rows="3" disabled style="resize:none"></textarea>
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group submit-group">
@@ -570,7 +570,7 @@
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="TurDetayDonusAciklama" class="form-control dsb" rows="3" disabled></textarea>
+                        <textarea name="TurDetayDonusAciklama" class="form-control dsb" rows="3" disabled style="resize:none"></textarea>
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group submit-group">

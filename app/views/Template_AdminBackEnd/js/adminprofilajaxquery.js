@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/AdminProfilAjaxSorgu",
+    url: SITE_URL + "AdminProfilAjaxSorgu",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -48,12 +48,12 @@ $.AdminIslemler = {
             success: function (cevap) {
                 if (cevap.hata) {
                     reset();
-                    alertify.alert(jsDil.Hata);
+                    alertify.alert(cevap.hata);
                     return false;
                 } else {
                     disabledForm();
                     reset();
-                    alertify.success(jsDil.ProfilDuzenle);
+                    alertify.success(cevap.update);
                 }
             }
         });

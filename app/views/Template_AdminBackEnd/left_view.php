@@ -16,32 +16,32 @@
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
                 <li class="active"  id="menu_home" id="menu_home">
-                    <a href="<?php echo SITE_URL; ?>/panel">
+                    <a href="<?php echo SITE_URL; ?>/Panel">
                         <i class="fa fa-home"></i> <span><?php echo $data["Anasayfa"]; ?></span>
                     </a>
                 </li>
                 <li id="menu_firma">
-                    <a href="<?php echo SITE_URL; ?>/adminweb/firmislem">
+                    <a href="<?php echo SITE_URL; ?>/AdminWeb/firmislem">
                         <i class="fa fa-building"></i>
                         <span><?php echo $data["FirmaIslem"]; ?></span>
                     </a>
                 </li>
 
                 <li id="menu_bolge">
-                    <a href="<?php echo SITE_URL; ?>/adminweb/bolgeliste">
+                    <a href="<?php echo SITE_URL; ?>/AdminWeb/bolgeliste">
                         <i class="fa fa-th"></i>
                         <span><?php echo $data["BolgeIslem"]; ?></span>
                     </a>
                 </li>
                 <li id="menu_kurum">
-                    <a href="<?php echo SITE_URL; ?>/adminweb/kurumliste">
+                    <a href="<?php echo SITE_URL; ?>/AdminWeb/kurumliste">
                         <i class="fa fa-building-o"></i>
                         <span><?php echo $data["Kurumlar"]; ?></span>
                     </a>    
                 </li>
 
                 <li id="menu_arac">
-                    <a href="<?php echo SITE_URL; ?>/adminweb/aracliste">
+                    <a href="<?php echo SITE_URL; ?>/AdminWeb/aracliste">
                         <i class="fa fa-bus"></i>
                         <span><?php echo $data["AracIslem"]; ?></span>
                     </a>
@@ -52,16 +52,16 @@
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li id="link_adminliste"><a href="<?php echo SITE_URL; ?>/adminweb/adminliste"><i class="fa fa-angle-right"></i><?php echo $data["Admin"]; ?></a></li>
-                        <li id="link_soforliste"><a href="<?php echo SITE_URL; ?>/adminweb/soforliste"><i class="fa fa-angle-right"></i><?php echo $data["Sofor"]; ?></a></li>
-                        <li id="link_hostesliste"><a href="<?php echo SITE_URL; ?>/adminweb/hostesliste"><i class="fa fa-angle-right"></i><?php echo $data["Hostes"]; ?></a></li>
-                        <li id="link_veliliste"><a href="<?php echo SITE_URL; ?>/adminweb/veliliste"><i class="fa fa-angle-right"></i><?php echo $data["Veli"]; ?></a></li>
-                        <li id="link_ogrenciliste"><a href="<?php echo SITE_URL; ?>/adminweb/ogrenciliste"><i class="fa fa-angle-right"></i><?php echo $data["Ogrenci"]; ?></a></li>
-                        <li id="link_isciliste"><a href="<?php echo SITE_URL; ?>/adminweb/isciliste"><i class="fa fa-angle-right"></i><?php echo $data["TitleIsci"]; ?></a></li>
+                        <li id="link_adminliste"><a href="<?php echo SITE_URL; ?>/AdminWeb/adminliste"><i class="fa fa-angle-right"></i><?php echo $data["Admin"]; ?></a></li>
+                        <li id="link_soforliste"><a href="<?php echo SITE_URL; ?>/AdminWeb/soforliste"><i class="fa fa-angle-right"></i><?php echo $data["Sofor"]; ?></a></li>
+                        <li id="link_hostesliste"><a href="<?php echo SITE_URL; ?>/AdminWeb/hostesliste"><i class="fa fa-angle-right"></i><?php echo $data["Hostes"]; ?></a></li>
+                        <li id="link_veliliste"><a href="<?php echo SITE_URL; ?>/AdminWeb/veliliste"><i class="fa fa-angle-right"></i><?php echo $data["Veli"]; ?></a></li>
+                        <li id="link_ogrenciliste"><a href="<?php echo SITE_URL; ?>/AdminWeb/ogrenciliste"><i class="fa fa-angle-right"></i><?php echo $data["Ogrenci"]; ?></a></li>
+                        <li id="link_isciliste"><a href="<?php echo SITE_URL; ?>/AdminWeb/isciliste"><i class="fa fa-angle-right"></i><?php echo $data["TitleIsci"]; ?></a></li>
                     </ul>
                 </li>
                 <li id="menu_tur">
-                    <a href="<?php echo SITE_URL; ?>/adminweb/turliste">
+                    <a href="<?php echo SITE_URL; ?>/AdminWeb/turliste">
                         <i class="fa fa-refresh"></i> <span><?php echo $data["TurIslem"]; ?></span>
                     </a>
                 </li>
@@ -71,12 +71,12 @@
                     </a>
                 </li>
                 <li id="menu_lokasyon">
-                    <a href="<?php echo SITE_URL; ?>/adminweb/lokasyonliste">
+                    <a href="<?php echo SITE_URL; ?>/AdminWeb/lokasyonliste">
                         <i class="fa fa-map-marker"></i> <span><?php echo $data["LokasyonSorgu"]; ?></span>
                     </a>
                 </li>
                 <li id="menu_duyuru">
-                    <a href="<?php echo SITE_URL; ?>/adminweb/duyuruliste">
+                    <a href="<?php echo SITE_URL; ?>/AdminWeb/duyuruliste">
                         <i class="fa fa-bullhorn"></i> <span><?php echo $data["Duyuru"]; ?></span>
                     </a>
                 </li>
@@ -85,16 +85,10 @@
                         <i class="fa fa-check-square-o"></i> <span><?php echo $data["HesapIslem"]; ?></span>
                     </a>
                 </li>
-                <li class="treeview">
+                <li class="menu_rapor">
                     <a href="#">
                         <i class="fa fa-line-chart"></i> <span><?php echo $data["Rapor"]; ?></span>
-                        <i class="fa fa-angle-left pull-right"></i>
                     </a>
-                    <ul class="treeview-menu">
-                        <li><a href="pages/forms/general.html"><i class="fa fa-angle-right"></i> General Elements</a></li>
-                        <li><a href="pages/forms/advanced.html"><i class="fa fa-angle-right"></i> Advanced Elements</a></li>
-                        <li><a href="pages/forms/editors.html"><i class="fa fa-angle-right"></i> Editors</a></li>
-                    </ul>
                 </li>
             </ul>
         </section>

@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/AdminBildirimAyarAjaxSorgu",
+    url: SITE_URL + "AdminBildirimAyarAjaxSorgu",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -36,11 +36,11 @@ $.AdminIslemler = {
             success: function (cevap) {
                 if (cevap.hata) {
                     reset();
-                    alertify.alert(jsDil.Hata);
+                    alertify.alert(cevap.hata);
                     return false;
                 } else {
                     reset();
-                    alertify.success(jsDil.BildirimAyarKaydet);
+                    alertify.success(cevap.update);
                     $("#bildirim").val(cevap.ayarDuzen[0]);
                 }
             }

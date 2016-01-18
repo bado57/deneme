@@ -18,9 +18,11 @@ class AdminVeliAjaxSorgu extends Controller {
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
             $sonuc = array();
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
-            //form class bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
+            $Panel_Model = $this->load->model("Panel_Model");
+            //language 
+            $lang = Session::get("dil");
+            $formlanguage = $this->load->ajaxlanguage($lang);
+            $languagedeger = $formlanguage->ajaxlanguage();
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -65,7 +67,6 @@ class AdminVeliAjaxSorgu extends Controller {
                         $sonuc["adminBolge"] = $adminBolge;
                     }
                     break;
-
                 case "veliKurumMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -85,7 +86,6 @@ class AdminVeliAjaxSorgu extends Controller {
                         $sonuc["kurumMultiSelect"] = $veliKurumSelect;
                     }
                     break;
-
                 case "veliOgrenciMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -105,14 +105,12 @@ class AdminVeliAjaxSorgu extends Controller {
                         $sonuc["ogrenciMultiSelect"] = $veliKurumSelect;
                     }
                     break;
-
                 case "veliKaydet":
-
                     $adminID = Session::get("userId");
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-                        $userTip = 3;
+                        $userTip = 4;
 
                         $firmaID = Session::get("FirmaId");
 
@@ -122,9 +120,6 @@ class AdminVeliAjaxSorgu extends Controller {
                             if ($realSifre) {
                                 $adminSifre = $form->userSifreOlustur($userKadi, $realSifre, $userTip);
                                 if ($adminSifre) {
-
-                                    $uniqueKey = Session::get("username");
-                                    $uniqueKey = $uniqueKey . '_AVeli';
 
                                     $form->post('veliAd', true);
                                     $form->post('veliSoyad', true);
@@ -147,6 +142,7 @@ class AdminVeliAjaxSorgu extends Controller {
                                     $veliAd = $form->values['veliAd'];
                                     $veliSoyad = $form->values['veliSoyad'];
                                     $veliAdSoyad = $veliAd . ' ' . $veliSoyad;
+                                    $veliEmail = $form->values['veliEmail'];
 
                                     $veliBolgeID = $_REQUEST['veliBolgeID'];
                                     $veliBolgeAdi = $_REQUEST['veliBolgeAdi'];
@@ -155,137 +151,145 @@ class AdminVeliAjaxSorgu extends Controller {
                                     $veliOgrenciID = $_REQUEST['veliOgrenciID'];
                                     $veliOgrenciAd = $_REQUEST['veliOgrenciAd'];
 
-                                    if ($form->submit()) {
-                                        $data = array(
-                                            'SBVeliAd' => $veliAd,
-                                            'SBVeliSoyad' => $veliSoyad,
-                                            'SBVeliKadi' => $userKadi,
-                                            'SBVeliSifre' => $adminSifre,
-                                            'SBVeliRSifre' => $realSifre,
-                                            'SBVeliPhone' => $form->values['veliTelefon'],
-                                            'SBVeliEmail' => $form->values['veliEmail'],
-                                            'SBVeliLocation' => $form->values['veliLokasyon'],
-                                            'SBVeliUlke' => $form->values['ulke'],
-                                            'SBVeliIl' => $form->values['il'],
-                                            'SBVeliIlce' => $form->values['ilce'],
-                                            'SBVeliSemt' => $form->values['semt'],
-                                            'SBVeliMahalle' => $form->values['mahalle'],
-                                            'SBVeliSokak' => $form->values['sokak'],
-                                            'SBVeliPostaKodu' => $form->values['postakodu'],
-                                            'SBVeliCaddeNo' => $form->values['caddeno'],
-                                            'SBVeliAdres' => $form->values['veliAdres'],
-                                            'SBVeliDetayAdres' => $form->values['detayAdres'],
-                                            'Status' => $form->values['veliDurum'],
-                                            'SBVeliAciklama' => $form->values['aciklama']
-                                        );
-                                    }
-                                    $resultVeliID = $Panel_Model->addNewVeli($data);
+                                    if (!filter_var($veliEmail, FILTER_VALIDATE_EMAIL) === false) {
+                                        $emailValidate = $form->mailControl1($veliEmail);
+                                        if ($emailValidate == 1) {
+                                            $kullaniciliste = $Panel_Model->veliEmailDbKontrol($veliEmail);
+                                            if (count($kullaniciliste) <= 0) {
+                                                if ($form->submit()) {
+                                                    $data = array(
+                                                        'SBVeliAd' => $veliAd,
+                                                        'SBVeliSoyad' => $veliSoyad,
+                                                        'SBVeliKadi' => $userKadi,
+                                                        'SBVeliSifre' => $adminSifre,
+                                                        'SBVeliRSifre' => $realSifre,
+                                                        'SBVeliPhone' => $form->values['veliTelefon'],
+                                                        'SBVeliEmail' => $veliEmail,
+                                                        'SBVeliLocation' => $form->values['veliLokasyon'],
+                                                        'SBVeliUlke' => $form->values['ulke'],
+                                                        'SBVeliIl' => $form->values['il'],
+                                                        'SBVeliIlce' => $form->values['ilce'],
+                                                        'SBVeliSemt' => $form->values['semt'],
+                                                        'SBVeliMahalle' => $form->values['mahalle'],
+                                                        'SBVeliSokak' => $form->values['sokak'],
+                                                        'SBVeliPostaKodu' => $form->values['postakodu'],
+                                                        'SBVeliCaddeNo' => $form->values['caddeno'],
+                                                        'SBVeliAdres' => $form->values['veliAdres'],
+                                                        'SBVeliDetayAdres' => $form->values['detayAdres'],
+                                                        'Status' => $form->values['veliDurum'],
+                                                        'SBVeliAciklama' => $form->values['aciklama']
+                                                    );
+                                                }
+                                                $resultVeliID = $Panel_Model->addNewVeli($data);
 
-                                    if ($resultVeliID != 'unique') {
-                                        $bolgeID = count($veliBolgeID);
-                                        if ($bolgeID > 0) {
-                                            for ($b = 0; $b < $bolgeID; $b++) {
-                                                $bolgedata[$b] = array(
-                                                    'BSVeliID' => $resultVeliID,
-                                                    'BSVeliAd' => $veliAdSoyad,
-                                                    'BSBolgeID' => $veliBolgeID[$b],
-                                                    'BSBolgeAd' => $veliBolgeAdi[$b]
-                                                );
-                                            }
-                                            $resultBolgeID = $Panel_Model->addNewBolgeVeli($bolgedata);
-                                            if ($resultBolgeID) {
-                                                //veliye kurum seçildi ise
-                                                $kurumID = count($veliKurumID);
-                                                if ($kurumID > 0) {
-                                                    for ($c = 0; $c < $kurumID; $c++) {
-                                                        $kurumdata[$c] = array(
-                                                            'BSKurumID' => $veliKurumID[$c],
-                                                            'BSKurumAd' => $veliKurumAd[$c],
-                                                            'BSVeliID' => $resultVeliID,
-                                                            'BSVeliAd' => $veliAdSoyad
-                                                        );
-                                                    }
-                                                    $resultKurumID = $Panel_Model->addNewVeliKurum($kurumdata);
-                                                    if ($resultKurumID) {
-                                                        $ogrenciID = count($veliOgrenciID);
-                                                        if ($ogrenciID > 0) {
-                                                            for ($d = 0; $d < $ogrenciID; $d++) {
-                                                                $ogrencidata[$d] = array(
-                                                                    'BSOgrenciID' => $veliOgrenciID[$d],
-                                                                    'BSOgrenciAd' => $veliOgrenciAd[$d],
-                                                                    'BSVeliID' => $resultVeliID,
-                                                                    'BSVeliAd' => $veliAdSoyad
-                                                                );
-                                                            }
-                                                            $resultOgrenciID = $Panel_Model->addNewVeliOgrenci($ogrencidata);
-                                                            $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                                            $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                                            $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                            if ($resultMemcache) {
-                                                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                                            }
+                                                if ($resultVeliID != 'unique') {
+                                                    $bolgeID = count($veliBolgeID);
+                                                    if ($bolgeID > 0) {
+                                                        for ($b = 0; $b < $bolgeID; $b++) {
+                                                            $bolgedata[$b] = array(
+                                                                'BSVeliID' => $resultVeliID,
+                                                                'BSVeliAd' => $veliAdSoyad,
+                                                                'BSBolgeID' => $veliBolgeID[$b],
+                                                                'BSBolgeAd' => $veliBolgeAdi[$b]
+                                                            );
+                                                        }
+                                                        $resultBolgeID = $Panel_Model->addNewBolgeVeli($bolgedata);
+                                                        if ($resultBolgeID) {
+                                                            //veliye kurum seçildi ise
+                                                            $kurumID = count($veliKurumID);
+                                                            if ($kurumID > 0) {
+                                                                for ($c = 0; $c < $kurumID; $c++) {
+                                                                    $kurumdata[$c] = array(
+                                                                        'BSKurumID' => $veliKurumID[$c],
+                                                                        'BSKurumAd' => $veliKurumAd[$c],
+                                                                        'BSVeliID' => $resultVeliID,
+                                                                        'BSVeliAd' => $veliAdSoyad
+                                                                    );
+                                                                }
+                                                                $resultKurumID = $Panel_Model->addNewVeliKurum($kurumdata);
+                                                                if ($resultKurumID) {
+                                                                    //kullanıcıya gerekli giriş mail yazısı
+                                                                    $setTitle = $languagedeger['UyelikBilgi'];
+                                                                    $subject = $languagedeger['SHtrltMail'];
+                                                                    $body = $languagedeger['Merhaba'] . ' ' . $veliAdSoyad . '!<br/>' . $languagedeger['KullaniciAdi'] . ' = ' . $userKadi . '<br/>'
+                                                                            . $languagedeger['KullaniciSifre'] . ' = ' . $realSifre . '<br/>'
+                                                                            . $languagedeger['IyiGunler'];
+                                                                    $ogrenciID = count($veliOgrenciID);
+                                                                    if ($ogrenciID > 0) {
+                                                                        for ($d = 0; $d < $ogrenciID; $d++) {
+                                                                            $ogrencidata[$d] = array(
+                                                                                'BSOgrenciID' => $veliOgrenciID[$d],
+                                                                                'BSOgrenciAd' => $veliOgrenciAd[$d],
+                                                                                'BSVeliID' => $resultVeliID,
+                                                                                'BSVeliAd' => $veliAdSoyad
+                                                                            );
+                                                                        }
+                                                                        $resultOgrenciID = $Panel_Model->addNewVeliOgrenci($ogrencidata);
+                                                                        //kullanıcıya gerekli giriş bilgileri gönderiliyor.
+                                                                        $resultMail = $form->sifreHatirlatMail($veliEmail, $setTitle, $veliAdSoyad, $subject, $body);
+                                                                        $sonuc["newVeliID"] = $resultVeliID;
+                                                                        $sonuc["insert"] = $languagedeger['VeliEkle'];
+                                                                    } else {
+                                                                        //kullanıcıya gerekli giriş bilgileri gönderiliyor.
+                                                                        $resultMail = $form->sifreHatirlatMail($veliEmail, $setTitle, $veliAdSoyad, $subject, $body);
+                                                                        $sonuc["newVeliID"] = $resultVeliID;
+                                                                        $sonuc["insert"] = $languagedeger['VeliEkle'];
+                                                                    }
+                                                                } else {
+                                                                    //bölge kaydedilirken hata geldi ise
+                                                                    $deleteresult = $Panel_Model->veliDelete($resultVeliID);
+                                                                    $deleteresultt = $Panel_Model->veliBolgeDelete($resultVeliID);
 
-                                                            $sonuc["newVeliID"] = $resultVeliID;
-                                                            $sonuc["insert"] = "Başarıyla Veli Eklenmiştir.";
+                                                                    if ($deleteresultt) {
+                                                                        $sonuc["hata"] = $languagedeger['KurumSec'];
+                                                                    }
+                                                                }
+                                                            } else {
+                                                                //bölge kaydedilirken hata geldi ise
+                                                                $deleteresult = $Panel_Model->veliDelete($resultVeliID);
+                                                                $deleteresultt = $Panel_Model->veliBolgeDelete($resultVeliID);
+
+                                                                if ($deleteresultt) {
+                                                                    $sonuc["hata"] = $languagedeger['KurumSec'];
+                                                                }
+                                                            }
                                                         } else {
-                                                            $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                                            $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                                            $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                            if ($resultMemcache) {
-                                                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                                            }
+                                                            //bölge kaydedilirken hata geldi ise
+                                                            $deleteresult = $Panel_Model->veliDelete($resultVeliID);
+                                                            $deleteresultt = $Panel_Model->veliBolgeDelete($resultVeliID);
 
-                                                            $sonuc["newVeliID"] = $resultVeliID;
-                                                            $sonuc["insert"] = "Başarıyla Veli Eklenmiştir.";
+                                                            if ($deleteresultt) {
+                                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                                            }
                                                         }
                                                     } else {
-                                                        //bölge kaydedilirken hata geldi ise
+                                                        //eğer velinin bölgesi yoksa
                                                         $deleteresult = $Panel_Model->veliDelete($resultVeliID);
-                                                        $deleteresultt = $Panel_Model->veliBolgeDelete($resultVeliID);
-
-                                                        if ($deleteresultt) {
-                                                            $sonuc["hata"] = "Lütfen Kurum Seçmeyi Unutmayınız.";
-                                                        }
+                                                        $sonuc["hata"] = $languagedeger['BolgeSec'];
                                                     }
                                                 } else {
-                                                    //bölge kaydedilirken hata geldi ise
-                                                    $deleteresult = $Panel_Model->veliDelete($resultVeliID);
-                                                    $deleteresultt = $Panel_Model->veliBolgeDelete($resultVeliID);
-
-                                                    if ($deleteresultt) {
-                                                        $sonuc["hata"] = "Lütfen Kurum Seçmeyi Unutmayınız.";
-                                                    }
+                                                    $sonuc["hata"] = $languagedeger['GecersizKullanici'];
                                                 }
                                             } else {
-                                                //bölge kaydedilirken hata geldi ise
-                                                $deleteresult = $Panel_Model->veliDelete($resultVeliID);
-                                                $deleteresultt = $Panel_Model->veliBolgeDelete($resultVeliID);
-
-                                                if ($deleteresultt) {
-                                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                                }
+                                                $sonuc["hata"] = $languagedeger['KullanilmisEmail'];
                                             }
                                         } else {
-                                            //eğer velinin bölgesi yoksa
-                                            $deleteresult = $Panel_Model->veliDelete($resultVeliID);
-                                            $sonuc["hata"] = "Lütfen Bölge Seçmeyi Unutmayınız.";
+                                            $sonuc["hata"] = $languagedeger['BaskaEmail'];
                                         }
                                     } else {
-                                        $sonuc["hata"] = "Lütfen Yeni Bir Kullanıcı Adı yada Şifre Giriniz.";
+                                        $sonuc["hata"] = $languagedeger['GecerliEmail'];
                                     }
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $languagedeger['Hata'];
                                 }
                             } else {
-                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                $sonuc["hata"] = $languagedeger['Hata'];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['Hata'];
                         }
                     }
-
                 case "veliDetail":
-
                     $adminID = Session::get("userId");
 
                     if (!$adminID) {
@@ -569,21 +573,13 @@ class AdminVeliAjaxSorgu extends Controller {
                     }
 
                     break;
-
                 case "veliDetailDelete":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_AVeli';
-
-
                         $form->post('velidetail_id', true);
                         $veliDetailID = $form->values['velidetail_id'];
-
                         $deleteresult = $Panel_Model->detailVeliDelete($veliDetailID);
                         if ($deleteresult) {
                             $deleteresultt = $Panel_Model->detailVeliBolgeDelete($veliDetailID);
@@ -592,37 +588,25 @@ class AdminVeliAjaxSorgu extends Controller {
                                 if ($deleteresulttt) {
                                     $deleteresultttt = $Panel_Model->detailVeliOgrenciDelete($veliDetailID);
                                     if ($deleteresultttt) {
-                                        $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                        $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                        if ($resultMemcache) {
-                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                        }
-                                        $sonuc["delete"] = "Veli kaydı başarıyla silinmiştir.";
+                                        $sonuc["delete"] = $languagedeger['VeliSil'];
                                     }
                                 }
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['Hata'];
                         }
                     }
 
                     $sonuc["veliDetail"] = $data["veliDetail"];
 
                     break;
-
                 case "veliDetailKaydet":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
                         $form->post('velidetail_id', true);
                         $veliID = $form->values['velidetail_id'];
-
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_AVeli';
 
                         $form->post('veliDetayAd', true);
                         $form->post('veliDetaySoyad', true);
@@ -641,10 +625,15 @@ class AdminVeliAjaxSorgu extends Controller {
                         $form->post('veliDetayPostaKodu', true);
                         $form->post('veliDetayCaddeNo', true);
                         $form->post('detayAdres', true);
+                        $form->post('eskiAd', true);
+                        $form->post('eskiSoyad', true);
+                        $eskiAd = $form->values['eskiAd'];
+                        $eskiSoyad = $form->values['eskiSoyad'];
 
                         $veliAd = $form->values['veliDetayAd'];
                         $veliSoyad = $form->values['veliDetaySoyad'];
                         $veliAdSoyad = $veliAd . ' ' . $veliSoyad;
+                        $veliEmail = $form->values['veliDetayEmail'];
 
                         $veliBolgeID = $_REQUEST['veliBolgeID'];
                         $veliBolgeAdi = $_REQUEST['veliBolgeAd'];
@@ -653,138 +642,151 @@ class AdminVeliAjaxSorgu extends Controller {
                         $veliOgrenciID = $_REQUEST['veliOgrenciID'];
                         $veliOgrenciAd = $_REQUEST['veliOgrenciAd'];
 
-                        if ($form->submit()) {
-                            $data = array(
-                                'SBVeliAd' => $veliAd,
-                                'SBVeliSoyad' => $veliSoyad,
-                                'SBVeliPhone' => $form->values['veliDetayTelefon'],
-                                'SBVeliEmail' => $form->values['veliDetayEmail'],
-                                'SBVeliLocation' => $form->values['veliDetayLokasyon'],
-                                'SBVeliUlke' => $form->values['veliDetayUlke'],
-                                'SBVeliIl' => $form->values['veliDetayIl'],
-                                'SBVeliIlce' => $form->values['veliDetayIlce'],
-                                'SBVeliSemt' => $form->values['veliDetaySemt'],
-                                'SBVeliMahalle' => $form->values['veliDetayMahalle'],
-                                'SBVeliSokak' => $form->values['veliDetaySokak'],
-                                'SBVeliPostaKodu' => $form->values['veliDetayPostaKodu'],
-                                'SBVeliCaddeNo' => $form->values['veliDetayCaddeNo'],
-                                'SBVeliAdres' => $form->values['veliDetayAdres'],
-                                'SBVeliDetayAdres' => $form->values['detayAdres'],
-                                'SBVeliAciklama' => $form->values['veliDetayAciklama'],
-                                'Status' => $form->values['veliDetayDurum']
-                            );
-                        }
-                        $resultVeliUpdate = $Panel_Model->veliOzelliklerDuzenle($data, $veliID);
-                        if ($resultVeliUpdate) {
-                            $veliOgrenciCount = count($veliOgrenciID);
-                            if ($veliOgrenciCount > 0) {
-                                $deleteVeliOgrenci = $Panel_Model->detailVeliOgrenciDelete($veliID);
-                                if ($deleteVeliOgrenci) {
-                                    for ($d = 0; $d < $veliOgrenciCount; $d++) {
-                                        $ogrencidata[$d] = array(
-                                            'BSOgrenciID' => $veliOgrenciID[$d],
-                                            'BSOgrenciAd' => $veliOgrenciAd[$d],
-                                            'BSVeliID' => $veliID,
-                                            'BSVeliAd' => $veliAdSoyad
+                        if (!filter_var($veliEmail, FILTER_VALIDATE_EMAIL) === false) {
+                            $emailValidate = $form->mailControl1($veliEmail);
+                            if ($emailValidate == 1) {
+                                $kullaniciliste = $Panel_Model->veliEmailDbKontrol($veliEmail);
+                                if (count($kullaniciliste) <= 0) {
+                                    if ($form->submit()) {
+                                        $data = array(
+                                            'SBVeliAd' => $veliAd,
+                                            'SBVeliSoyad' => $veliSoyad,
+                                            'SBVeliPhone' => $form->values['veliDetayTelefon'],
+                                            'SBVeliEmail' => $veliEmail,
+                                            'SBVeliLocation' => $form->values['veliDetayLokasyon'],
+                                            'SBVeliUlke' => $form->values['veliDetayUlke'],
+                                            'SBVeliIl' => $form->values['veliDetayIl'],
+                                            'SBVeliIlce' => $form->values['veliDetayIlce'],
+                                            'SBVeliSemt' => $form->values['veliDetaySemt'],
+                                            'SBVeliMahalle' => $form->values['veliDetayMahalle'],
+                                            'SBVeliSokak' => $form->values['veliDetaySokak'],
+                                            'SBVeliPostaKodu' => $form->values['veliDetayPostaKodu'],
+                                            'SBVeliCaddeNo' => $form->values['veliDetayCaddeNo'],
+                                            'SBVeliAdres' => $form->values['veliDetayAdres'],
+                                            'SBVeliDetayAdres' => $form->values['detayAdres'],
+                                            'SBVeliAciklama' => $form->values['veliDetayAciklama'],
+                                            'Status' => $form->values['veliDetayDurum']
                                         );
                                     }
-                                    $resultOgrenciID = $Panel_Model->addNewVeliOgrenci($ogrencidata);
-                                    if ($resultOgrenciID) {
-                                        $deleteresultt = $Panel_Model->detailVeliKurumDelete($veliID);
-                                        if ($deleteresultt) {
-                                            $veliKurumCount = count($veliKurumID);
-                                            for ($c = 0; $c < $veliKurumCount; $c++) {
-                                                $kurumdata[$c] = array(
-                                                    'BSKurumID' => $veliKurumID[$c],
-                                                    'BSKurumAd' => $veliKurumAd[$c],
-                                                    'BSVeliID' => $veliID,
-                                                    'BSVeliAd' => $veliAdSoyad
-                                                );
-                                            }
-                                            $resultKurumID = $Panel_Model->addNewVeliKurum($kurumdata);
-                                            if ($resultKurumID) {
-                                                $bolgeID = count($veliBolgeID);
-                                                $deleteresulttt = $Panel_Model->detailVeliBolgeDelete($veliID);
-                                                if ($deleteresulttt) {
-                                                    for ($b = 0; $b < $bolgeID; $b++) {
-                                                        $bolgedata[$b] = array(
-                                                            'BSVeliID' => $veliID,
-                                                            'BSVeliAd' => $veliAdSoyad,
-                                                            'BSBolgeID' => $veliBolgeID[$b],
-                                                            'BSBolgeAd' => $veliBolgeAdi[$b]
-                                                        );
-                                                    }
-                                                    $resultBolgeID = $Panel_Model->addNewBolgeVeli($bolgedata);
-                                                    if ($resultBolgeID) {
-                                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                        if ($resultMemcache) {
-                                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                                        }
-
-                                                        $sonuc["newVeliID"] = $veliID;
-                                                        $sonuc["update"] = "Başarıyla Veli Düzenlenmiştir.";
-                                                    } else {
-                                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                                    }
-                                                } else {
-                                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                                }
-                                            } else {
-                                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                            }
+                                    $resultVeliUpdate = $Panel_Model->veliOzelliklerDuzenle($data, $veliID);
+                                    if ($resultVeliUpdate) {
+                                        if ($veliAd != $eskiAd || $veliSoyad != $eskiSoyad) {
+                                            $dataDuzenle = array(
+                                                'BSGonderenAdSoyad' => $veliAdSoyad
+                                            );
+                                            $updateduyuru = $Panel_Model->veliOzellikDuzenle($dataDuzenle, $veliID);
+                                            $dataDuzenle1 = array(
+                                                'BSEkleyenAdSoyad' => $veliAdSoyad
+                                            );
+                                            $updateduyurulog = $Panel_Model->veliOzellikDuzenle1($dataDuzenle1, $veliID);
                                         }
-                                    }
-                                }
-                            } else {
-                                $deleteresultt = $Panel_Model->detailVeliKurumDelete($veliID);
-                                if ($deleteresultt) {
-                                    $veliKurumCount = count($veliKurumID);
-                                    for ($c = 0; $c < $veliKurumCount; $c++) {
-                                        $kurumdata[$c] = array(
-                                            'BSKurumID' => $veliKurumID[$c],
-                                            'BSKurumAd' => $veliKurumAd[$c],
-                                            'BSVeliID' => $veliID,
-                                            'BSVeliAd' => $veliAdSoyad
-                                        );
-                                    }
-                                    $resultKurumID = $Panel_Model->addNewVeliKurum($kurumdata);
-                                    if ($resultKurumID) {
-                                        $bolgeID = count($veliBolgeID);
-                                        $deleteresulttt = $Panel_Model->detailVeliBolgeDelete($veliID);
-                                        if ($deleteresulttt) {
-                                            for ($b = 0; $b < $bolgeID; $b++) {
-                                                $bolgedata[$b] = array(
-                                                    'BSVeliID' => $veliID,
-                                                    'BSVeliAd' => $veliAdSoyad,
-                                                    'BSBolgeID' => $veliBolgeID[$b],
-                                                    'BSBolgeAd' => $veliBolgeAdi[$b]
-                                                );
-                                            }
-                                            $resultBolgeID = $Panel_Model->addNewBolgeVeli($bolgedata);
-                                            if ($resultBolgeID) {
-                                                $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                if ($resultMemcache) {
-                                                    $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                        $veliOgrenciCount = count($veliOgrenciID);
+                                        if ($veliOgrenciCount > 0) {
+                                            $deleteVeliOgrenci = $Panel_Model->detailVeliOgrenciDelete($veliID);
+                                            if ($deleteVeliOgrenci) {
+                                                for ($d = 0; $d < $veliOgrenciCount; $d++) {
+                                                    $ogrencidata[$d] = array(
+                                                        'BSOgrenciID' => $veliOgrenciID[$d],
+                                                        'BSOgrenciAd' => $veliOgrenciAd[$d],
+                                                        'BSVeliID' => $veliID,
+                                                        'BSVeliAd' => $veliAdSoyad
+                                                    );
                                                 }
-
-                                                $sonuc["newVeliID"] = $veliID;
-                                                $sonuc["update"] = "Başarıyla Veli Düzenlenmiştir.";
-                                            } else {
-                                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                                $resultOgrenciID = $Panel_Model->addNewVeliOgrenci($ogrencidata);
+                                                if ($resultOgrenciID) {
+                                                    $deleteresultt = $Panel_Model->detailVeliKurumDelete($veliID);
+                                                    if ($deleteresultt) {
+                                                        $veliKurumCount = count($veliKurumID);
+                                                        for ($c = 0; $c < $veliKurumCount; $c++) {
+                                                            $kurumdata[$c] = array(
+                                                                'BSKurumID' => $veliKurumID[$c],
+                                                                'BSKurumAd' => $veliKurumAd[$c],
+                                                                'BSVeliID' => $veliID,
+                                                                'BSVeliAd' => $veliAdSoyad
+                                                            );
+                                                        }
+                                                        $resultKurumID = $Panel_Model->addNewVeliKurum($kurumdata);
+                                                        if ($resultKurumID) {
+                                                            $bolgeID = count($veliBolgeID);
+                                                            $deleteresulttt = $Panel_Model->detailVeliBolgeDelete($veliID);
+                                                            if ($deleteresulttt) {
+                                                                for ($b = 0; $b < $bolgeID; $b++) {
+                                                                    $bolgedata[$b] = array(
+                                                                        'BSVeliID' => $veliID,
+                                                                        'BSVeliAd' => $veliAdSoyad,
+                                                                        'BSBolgeID' => $veliBolgeID[$b],
+                                                                        'BSBolgeAd' => $veliBolgeAdi[$b]
+                                                                    );
+                                                                }
+                                                                $resultBolgeID = $Panel_Model->addNewBolgeVeli($bolgedata);
+                                                                if ($resultBolgeID) {
+                                                                    $sonuc["newVeliID"] = $veliID;
+                                                                    $sonuc["update"] = $languagedeger['VeliDuzenle'];
+                                                                } else {
+                                                                    $sonuc["hata"] = $languagedeger['Hata'];
+                                                                }
+                                                            } else {
+                                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                                            }
+                                                        } else {
+                                                            $sonuc["hata"] = $languagedeger['Hata'];
+                                                        }
+                                                    }
+                                                }
                                             }
                                         } else {
-                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                            $deleteresultt = $Panel_Model->detailVeliKurumDelete($veliID);
+                                            if ($deleteresultt) {
+                                                $veliKurumCount = count($veliKurumID);
+                                                for ($c = 0; $c < $veliKurumCount; $c++) {
+                                                    $kurumdata[$c] = array(
+                                                        'BSKurumID' => $veliKurumID[$c],
+                                                        'BSKurumAd' => $veliKurumAd[$c],
+                                                        'BSVeliID' => $veliID,
+                                                        'BSVeliAd' => $veliAdSoyad
+                                                    );
+                                                }
+                                                $resultKurumID = $Panel_Model->addNewVeliKurum($kurumdata);
+                                                if ($resultKurumID) {
+                                                    $bolgeID = count($veliBolgeID);
+                                                    $deleteresulttt = $Panel_Model->detailVeliBolgeDelete($veliID);
+                                                    if ($deleteresulttt) {
+                                                        for ($b = 0; $b < $bolgeID; $b++) {
+                                                            $bolgedata[$b] = array(
+                                                                'BSVeliID' => $veliID,
+                                                                'BSVeliAd' => $veliAdSoyad,
+                                                                'BSBolgeID' => $veliBolgeID[$b],
+                                                                'BSBolgeAd' => $veliBolgeAdi[$b]
+                                                            );
+                                                        }
+                                                        $resultBolgeID = $Panel_Model->addNewBolgeVeli($bolgedata);
+                                                        if ($resultBolgeID) {
+                                                            $sonuc["newVeliID"] = $veliID;
+                                                            $sonuc["update"] = $languagedeger['VeliDuzenle'];
+                                                        } else {
+                                                            $sonuc["hata"] = $languagedeger['Hata'];
+                                                        }
+                                                    } else {
+                                                        $sonuc["hata"] = $languagedeger['Hata'];
+                                                    }
+                                                } else {
+                                                    $sonuc["hata"] = $languagedeger['Hata'];
+                                                }
+                                            }
                                         }
                                     } else {
-                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        $sonuc["hata"] = $languagedeger['Hata'];
                                     }
+                                } else {
+                                    $sonuc["hata"] = $languagedeger['KullanilmisEmail'];
                                 }
+                            } else {
+                                $sonuc["hata"] = $languagedeger['BaskaEmail'];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['GecerliEmail'];
                         }
                     }
-
                 case "VeliDetailMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -867,7 +869,6 @@ class AdminVeliAjaxSorgu extends Controller {
                         $sonuc["adminVeliKurum"] = $digerVeliKurum;
                     }
                     break;
-
                 case "OgrenciDetailMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -950,7 +951,6 @@ class AdminVeliAjaxSorgu extends Controller {
                         $sonuc["adminVeliOgrenci"] = $digerVeliOgrenci;
                     }
                     break;
-
                 default :
                     header("Location:" . SITE_URL_LOGOUT);
                     break;

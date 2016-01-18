@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/AdminAdminAjaxSorgu",
+    url: SITE_URL + "AdminAdminAjaxSorgu",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -168,7 +168,7 @@ $.AdminIslemler = {
                         return false;
                     } else {
                         var adminEmail = $("input[name=AdminEmail]").val();
-                        if (adminEmail == ' ') {
+                        if (adminEmail == '') {
                             reset();
                             alertify.alert(jsDil.EpostaBos);
                             return false;
@@ -211,11 +211,11 @@ $.AdminIslemler = {
                                             success: function (cevap) {
                                                 if (cevap.hata) {
                                                     reset();
-                                                    alertify.alert(jsDil.Hata);
+                                                    alertify.alert(cevap.hata);
                                                     return false;
                                                 } else {
                                                     reset();
-                                                    alertify.success(jsDil.AdminKaydet);
+                                                    alertify.success(cevap.insert);
                                                     var adminCount = $('#smallAdmin').text();
                                                     adminCount++;
                                                     $('#smallAdmin').text(adminCount);
@@ -239,10 +239,10 @@ $.AdminIslemler = {
                                                         AdminTable.DataTable().row.add($(addRow)).draw();
                                                     }
                                                     adminBolgeID = [];
+                                                    return true;
                                                 }
                                             }
                                         });
-                                        return true;
                                     } else {
                                         reset();
                                         alertify.alert(jsDil.BolgeSec);
@@ -489,7 +489,7 @@ $.AdminIslemler = {
                         alertify.alert(jsDil.SoyadKarekter);
                         return false;
                     } else {
-                        if (adminEmail == ' ') {
+                        if (adminEmail == '') {
                             reset();
                             alertify.alert(jsDil.EpostaBos);
                             return false;
@@ -511,12 +511,12 @@ $.AdminIslemler = {
                                         success: function (cevap) {
                                             if (cevap.hata) {
                                                 reset();
-                                                alertify.alert(jsDil.Hata);
+                                                alertify.alert(cevap.hata);
                                                 return false;
                                             } else {
                                                 disabledForm();
                                                 reset();
-                                                alertify.success(jsDil.AdminDuzenle);
+                                                alertify.success(cevap.update);
                                                 var SelectBolgeOptions = new Array();
                                                 var SelectAracOptions = new Array();
                                                 if (adminBolgeID.length > 0) {

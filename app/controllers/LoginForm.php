@@ -17,7 +17,7 @@ class LoginForm extends Controller {
         $sessionKey = $form->sessionKontrol();
 
         if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey) {
-            header("Location:" . SITE_URL_HOME . "/panel");
+            header("Location:" . SITE_URL_HOME . "/Panel");
         } else {
             $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
             if (!Session::get("dil")) {

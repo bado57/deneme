@@ -1,6 +1,7 @@
+var SITE_URL = "http://192.168.1.30/SProject/";
 $.ajaxSetup({
     type: "post",
-    url: "http://192.168.1.198/SProject/SoforMobilDuyuruAjax",
+    url: SITE_URL + "SoforMobilDuyuruAjax",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -34,30 +35,32 @@ ons.ready(function () {
     $(document).on('pageinit', '#duyurutur', function () {
         var kisiid = $("input[name=id]").val();
         var firma_id = $("input[name=firmaId]").val();
+        var lang = $("input[name=lang]").val();
         $.ajax({
-            data: {"firma_id": firma_id, "kisiid": kisiid, "tip": "soforTurDuyuru"},
+            data: {"firma_id": firma_id, "kisiid": kisiid,
+                "lang": lang, "tip": "soforTurDuyuru"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    ons.notification.alert({message: jsDil.Hata});
+                    ons.notification.alert({message: cevap.hata});
                     return false;
                 } else {
-                    if (cevap.TurDuyuru) {
+                    if (cevap.TurDuyuru[0]) {
                         $("#turHeader").show();
                         $("#turList").show();
-                        var turlength = cevap.TurDuyuru.length;
+                        var turlength = cevap.TurDuyuru[0].length;
                         var onsList = $("#turList");
                         $("#turToplam").text(turlength);
                         for (var c = 0; c < turlength; c++) {
-                            var elmy = $('<ons-list-item modifier="chevron" onclick="$.SoforIslemler.soforTurList(' + cevap.TurDuyuru[c].ID + ',' + cevap.TurDuyuru[c].Tip + ',' + cevap.TurDuyuru[c].BID + ')">'
+                            var elmy = $('<ons-list-item modifier="chevron" onclick="$.SoforIslemler.soforTurList(' + cevap.TurDuyuru[0][c].ID + ',' + cevap.TurDuyuru[0][c].Tip + ',' + cevap.TurDuyuru[0][c].BID + ')">'
                                     + '<ons-row><ons-col width="20px"></ons-col>'
-                                    + '<ons-col class="person-name">' + cevap.TurDuyuru[c].Ad + '</ons-col></ons-row></ons-list-item>');
+                                    + '<ons-col class="person-name">' + cevap.TurDuyuru[0][c].Ad + '</ons-col></ons-row></ons-list-item>');
                             elmy.appendTo(onsList);
                             ons.compile(elmy[0]);
                         }
                         modal.hide();
                     } else {
                         modal.hide();
-                        ons.notification.alert({message: jsDil.TurYok});
+                        ons.notification.alert({message: cevap.TurDuyuru[1][0].Yok});
                         return false;
                     }
 
@@ -71,12 +74,13 @@ ons.ready(function () {
         var turtip = page.options.turtip;
         var bolgeid = page.options.bolgeid;
         var firma_id = $("input[name=firmaId]").val();
+        var lang = $("input[name=lang]").val();
         $.ajax({
             data: {"bolgeid": bolgeid, "turtip": turtip, "firma_id": firma_id,
-                "turid": turid, "tip": "soforDuyuruYolcu"},
+                "turid": turid, "lang": lang, "tip": "soforDuyuruYolcu"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    ons.notification.alert({message: jsDil.Hata});
+                    ons.notification.alert({message: cevap.hata});
                     return false;
                 } else {
                     if (turtip == 0) {
@@ -252,34 +256,36 @@ ons.ready(function () {
     $(document).on('pageinit', '#gelenduyuru', function () {
         var soforid = $("input[name=id]").val();
         var firma_id = $("input[name=firmaId]").val();
+        var lang = $("input[name=lang]").val();
         $.ajax({
-            data: {"firma_id": firma_id, "soforid": soforid, "tip": "duyuruGelen"},
+            data: {"firma_id": firma_id, "lang": lang,
+                "soforid": soforid, "tip": "duyuruGelen"},
             success: function (cevap) {
                 if (cevap.hata) {
                     modal.hide();
-                    ons.notification.alert({message: jsDil.Hata});
+                    ons.notification.alert({message: cevap.hata});
                     return false;
                 } else {
-                    if (cevap.GelenDuyuru) {
-                        var lengthduyuru = cevap.GelenDuyuru.length;
+                    if (cevap.GelenDuyuru[0]) {
+                        var lengthduyuru = cevap.GelenDuyuru[0].length;
                         var onsListD = $("#gelenduyuruList");
                         for (var d = 0; d < lengthduyuru; d++) {
-                            var myDate = cevap.GelenDuyuru[d].Tarih.split(" ");
+                            var myDate = cevap.GelenDuyuru[0][d].Tarih.split(" ");
                             var myDate1 = myDate[0].split("-");
                             var newDate = myDate1[2] + '/' + myDate1[1] + '/' + myDate1[0];
-                            if (cevap.GelenDuyuru[d].Okundu != 1) {//Okunmadı
-                                var elmy = $('<ons-list-item class="timeline-li" modifier="tappable" style="background-color:#ddd" id="gelenDuyuruItem" data-id="' + cevap.GelenDuyuru[d].ID + '">'
-                                        + '<ons-row><ons-col width="50px"><img src="http://192.168.1.22/SProject/Plugins/kullanicilar/' + cevap.GelenDuyuru[d].Tip + '.png" class="timeline-image"></ons-col>'
-                                        + '<ons-col><div class="timeline-date">' + newDate + '--' + myDate[1] + '</div><div class="timline-from"><span class="timeline-name">' + cevap.GelenDuyuru[d].Ad + '</span>'
-                                        + '</div><div class="timeline-message">' + cevap.GelenDuyuru[d].Text + '</div>'
+                            if (cevap.GelenDuyuru[0][d].Okundu != 1) {//Okunmadı
+                                var elmy = $('<ons-list-item class="timeline-li" modifier="tappable" style="background-color:#ddd" id="gelenDuyuruItem" data-id="' + cevap.GelenDuyuru[0][d].ID + '">'
+                                        + '<ons-row><ons-col width="50px"><img src="' + SITE_URL + 'Plugins/kullanicilar/' + cevap.GelenDuyuru[0][d].Tip + '.png" class="timeline-image"></ons-col>'
+                                        + '<ons-col><div class="timeline-date">' + newDate + '--' + myDate[1] + '</div><div class="timline-from"><span class="timeline-name">' + cevap.GelenDuyuru[0][d].Ad + '</span>'
+                                        + '</div><div class="timeline-message">' + cevap.GelenDuyuru[0][d].Text + '</div>'
                                         + '</ons-col></ons-row></ons-list-item>');
                                 elmy.appendTo(onsListD);
                                 ons.compile(elmy[0]);
                             } else {
-                                var elmy = $('<ons-list-item class="timeline-li" modifier="tappable" id="gelenDuyuruItem" data-id="' + cevap.GelenDuyuru[d].ID + '">'
-                                        + '<ons-row><ons-col width="50px"><img src="http://192.168.1.22/SProject/Plugins/kullanicilar/' + cevap.GelenDuyuru[d].Tip + '.png" class="timeline-image"></ons-col>'
-                                        + '<ons-col><div class="timeline-date">' + newDate + '--' + myDate[1] + '</div><div class="timline-from"><span class="timeline-name">' + cevap.GelenDuyuru[d].Ad + '</span>'
-                                        + '</div><div class="timeline-message">' + cevap.GelenDuyuru[d].Text + '</div>'
+                                var elmy = $('<ons-list-item class="timeline-li" modifier="tappable" id="gelenDuyuruItem" data-id="' + cevap.GelenDuyuru[0][d].ID + '">'
+                                        + '<ons-row><ons-col width="50px"><img src="' + SITE_URL + 'Plugins/kullanicilar/' + cevap.GelenDuyuru[0][d].Tip + '.png" class="timeline-image"></ons-col>'
+                                        + '<ons-col><div class="timeline-date">' + newDate + '--' + myDate[1] + '</div><div class="timline-from"><span class="timeline-name">' + cevap.GelenDuyuru[0][d].Ad + '</span>'
+                                        + '</div><div class="timeline-message">' + cevap.GelenDuyuru[0][d].Text + '</div>'
                                         + '</ons-col></ons-row></ons-list-item>');
                                 elmy.appendTo(onsListD);
                                 ons.compile(elmy[0]);
@@ -287,9 +293,10 @@ ons.ready(function () {
                         }
                         modal.hide();
                     } else {
+                        var onsListD = $("#gelenduyuruList");
                         var elmy = $('<ons-list-item class="timeline-li" modifier="tappable">'
-                                + '<ons-row><ons-col width="50px"><img src="http://192.168.1.22/SProject/Plugins/kullanicilar/3.png" class="timeline-image"></ons-col>'
-                                + '<ons-col><div class="timline-from"><span class="timeline-name">' + jsDil.DuyuruYok + '</span></div>'
+                                + '<ons-row><ons-col width="50px"><img src="' + SITE_URL + 'Plugins/kullanicilar/3.png" class="timeline-image"></ons-col>'
+                                + '<ons-col><div class="timline-from"><span class="timeline-name">' + cevap.GelenDuyuru[1][0].Result + '</span></div>'
                                 + '</ons-col></ons-row></ons-list-item>');
                         elmy.appendTo(onsListD);
                         ons.compile(elmy[0]);
@@ -302,39 +309,61 @@ ons.ready(function () {
     $(document).on('pageinit', '#gonderilenduyuru', function () {
         var soforid = $("input[name=id]").val();
         var firma_id = $("input[name=firmaId]").val();
+        var lang = $("input[name=lang]").val();
         $.ajax({
-            data: {"firma_id": firma_id, "soforid": soforid, "tip": "duyuruGonderilen"},
+            data: {"firma_id": firma_id, "soforid": soforid,
+                "lang": lang, "tip": "duyuruGonderilen"},
             success: function (cevap) {
                 if (cevap.hata) {
                     modal.hide();
-                    ons.notification.alert({message: jsDil.Hata});
+                    ons.notification.alert({message: cevap.hata});
                     return false;
                 } else {
-                    if (cevap.GonderilenDuyuru) {
-                        var lengthduyuru = cevap.GonderilenDuyuru.length;
+                    if (cevap.GonderilenDuyuru[0]) {
+                        var lengthduyuru = cevap.GonderilenDuyuru[0].length;
                         var onsListD = $("#gonderilenduyuruList");
                         for (var d = 0; d < lengthduyuru; d++) {
-                            var myDate = cevap.GonderilenDuyuru[d].Tarih.split(" ");
+                            var myDate = cevap.GonderilenDuyuru[0][d].Tarih.split(" ");
                             var myDate1 = myDate[0].split("-");
                             var newDate = myDate1[2] + '/' + myDate1[1] + '/' + myDate1[0];
-                            var elmy = $('<ons-list-item class="timeline-li" modifier="tappable" data-id="' + cevap.GonderilenDuyuru[d].ID + '">'
-                                    + '<ons-row><ons-col width="50px"><img src="http://192.168.1.22/SProject/Plugins/kullanicilar/6.png" class="timeline-image"></ons-col>'
-                                    + '<ons-col><div class="timeline-date">' + newDate + '--' + myDate[1] + '</div><div class="timline-from"><span class="timeline-name">' + cevap.GonderilenDuyuru[d].Hedef + ' ' + jsDil.Kisi + '</span>'
-                                    + '</div><div class="timeline-message">' + cevap.GonderilenDuyuru[d].Text + '</div>'
+                            var elmy = $('<ons-list-item class="timeline-li" modifier="tappable" data-id="' + cevap.GonderilenDuyuru[0][d].ID + '">'
+                                    + '<ons-row><ons-col width="50px"><img src="' + SITE_URL + '"Plugins/kullanicilar/6.png" class="timeline-image"></ons-col>'
+                                    + '<ons-col><div class="timeline-date">' + newDate + '--' + myDate[1] + '</div><div class="timline-from"><span class="timeline-name">' + cevap.GonderilenDuyuru[0][d].Hedef + ' ' + jsDil.Kisi + '</span>'
+                                    + '</div><div class="timeline-message">' + cevap.GonderilenDuyuru[0][d].Text + '</div>'
                                     + '</ons-col></ons-row></ons-list-item>');
                             elmy.appendTo(onsListD);
                             ons.compile(elmy[0]);
                         }
                         modal.hide();
                     } else {
+                        var onsListD = $("#gonderilenduyuruList");
                         var elmy = $('<ons-list-item class="timeline-li" modifier="tappable">'
-                                + '<ons-row><ons-col width="50px"><img src="http://192.168.1.22/SProject/Plugins/kullanicilar/6.png" class="timeline-image"></ons-col>'
-                                + '<ons-col><div class="timline-from"><span class="timeline-name">' + jsDil.DuyuruYok + '</span></div>'
+                                + '<ons-row><ons-col width="50px"><img src="' + SITE_URL + 'Plugins/kullanicilar/6.png" class="timeline-image"></ons-col>'
+                                + '<ons-col><div class="timline-from"><span class="timeline-name">' + cevap.GonderilenDuyuru[1][0].Result + '</span></div>'
                                 + '</ons-col></ons-row></ons-list-item>');
                         elmy.appendTo(onsListD);
                         ons.compile(elmy[0]);
                         modal.hide();
                     }
+                }
+            }
+        });
+    });
+    $(document).on('pageinit', '#duyuruayar', function () {
+        var veli_id = $("input[name=id]").val();
+        var firma_id = $("input[name=firmaId]").val();
+        var lang = $("input[name=lang]").val();
+        $.ajax({
+            data: {"veli_id": veli_id, "firma_id": firma_id,
+                "lang": lang, "tip": "duyuruayar"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    ons.notification.alert({message: cevap.hata});
+                    return false;
+                } else {
+                    duyuruayarDeger = cevap.Detay.Deger;
+                    $('#duyral' + cevap.Detay.Deger).attr('checked', true);
+                    modal.hide();
                 }
             }
         });
@@ -406,17 +435,18 @@ $(document).on('click', '#yoneticiSign', function () {
     }
 });
 $(document).on('click', '#gelenDuyuruItem', function () {
-    //modal.show();
     var gelenduyuruid = $(this).attr('data-id');
     var firma_id = $("input[name=firmaId]").val();
     var color = $(this).css('backgroundColor');
+    var lang = $("input[name=lang]").val();
     $(this).css('background-color', 'rgba(0, 0, 0, 0)');
     if (color != 'rgba(0, 0, 0, 0)') {
         $.ajax({
-            data: {"firma_id": firma_id, "gelenduyuruid": gelenduyuruid, "tip": "gelenOkundu"},
+            data: {"firma_id": firma_id, "gelenduyuruid": gelenduyuruid,
+                "lang": lang, "tip": "gelenOkundu"},
             success: function (cevap) {
                 if (cevap.hata) {
-                    ons.notification.alert({message: jsDil.Hata});
+                    ons.notification.alert({message: cevap.hata});
                     return false;
                 } else {
                     modal.hide();
@@ -543,12 +573,13 @@ $.SoforIslemler = {
                 success: function (cevap) {
                     if (cevap.hata) {
                         modal.hide();
-                        ons.notification.alert({message: jsDil.Hata});
+                        ons.notification.alert({message: cevap.hata});
                         return false;
                     } else {
+                        $("input[name=toplamKisi]").val("");
+                        $("#duyuruText").val("");
                         modal.hide();
-                        ons.notification.alert({message: jsDil.DuyuruGonder});
-                        //duyuruNavigator.pushPage('duyurutur.html', {animation: 'slide'});
+                        ons.notification.alert({message: cevap.result});
                         return false;
                     }
                 }
@@ -557,6 +588,32 @@ $.SoforIslemler = {
             ons.notification.alert({message: jsDil.BosMesaj});
             return false;
         }
+    },
+    duyrAyarKaydet: function () {
+        var veli_id = $("input[name=id]").val();
+        var firma_id = $("input[name=firmaId]").val();
+        var lang = $("input[name=lang]").val();
+        var chechked = $("input#duyral1").prop("checked");
+        if (chechked != false) {
+            duyuruVal = 1;
+        } else {
+            duyuruVal = 0;
+        }
+        $.ajax({
+            data: {"veli_id": veli_id, "firma_id": firma_id, "lang": lang,
+                "duyuruVal": duyuruVal, "duyuruayarDeger": duyuruayarDeger,
+                "tip": "duyrayarkaydet"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    ons.notification.alert({message: cevap.hata});
+                    return false;
+                } else {
+                    ons.notification.alert({message: cevap.update});
+                    modal.hide();
+                    duyuruNavigator.popPage();
+                }
+            }
+        });
     }
 }
 

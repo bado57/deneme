@@ -23,17 +23,19 @@ class AdminAracAjaxSorgu extends Controller {
             $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
             if (!Session::get("dil")) {
                 Session::set("dil", $lang);
-                $formm = $this->load->multilanguage($lang);
-                $deger = $formm->multilanguage();
+                $formm = $this->load->ajaxlanguage($lang);
+                $deger = $formm->ajaxlanguage();
+                $degerbildirim = $formm->bildirimlanguage();
             } else {
-                $formm = $this->load->multilanguage(Session::get("dil"));
-                $deger = $formm->multilanguage();
+                $formm = $this->load->ajaxlanguage(Session::get("dil"));
+                $deger = $formm->ajaxlanguage();
+                $degerbildirim = $formm->bildirimlanguage();
             }
             $sonuc = array();
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
+            $Panel_Model = $this->load->model("Panel_Model");
             //form class bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
+            $MemcacheModel = $this->load->model("AdminMemcache_Model");
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -80,7 +82,6 @@ class AdminAracAjaxSorgu extends Controller {
                     break;
 
                     break;
-
                 case "adminAracKaydet":
 
                     $adminID = Session::get("userId");
@@ -88,14 +89,13 @@ class AdminAracAjaxSorgu extends Controller {
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_AArac';
                         $adminRutbe = Session::get("userRutbe");
 
                         $form->post('aracPlaka', true);
                         $form->post('aracMarka', true);
                         $form->post('aracModelYil', true);
                         $form->post('aracKapasite', true);
+                        $form->post('aracKm', true);
                         $form->post('aracAciklama', true);
                         $form->post('aracDurum', true);
                         $aracPlak = $form->values['aracPlaka'];
@@ -114,7 +114,7 @@ class AdminAracAjaxSorgu extends Controller {
                                 'SBAracModelYili' => $form->values['aracModelYil'],
                                 'SBAracPlaka' => $aracPlaka,
                                 'SBAracKapasite' => $form->values['aracKapasite'],
-                                'SBAracKm' => 0,
+                                'SBAracKm' => $form->values['aracKm'],
                                 'SBAracAciklama' => $form->values['aracAciklama'],
                                 'SBAracDurum' => $form->values['aracDurum']
                             );
@@ -158,40 +158,35 @@ class AdminAracAjaxSorgu extends Controller {
                                     }
                                     $resultBolgeID = $Panel_Model->addNewAdminBolgeSofor($bolgedata);
                                     if ($resultBolgeID) {
-                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                        if ($resultMemcache) {
-                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                        }
-
                                         if ($aracSoforID) {
                                             //şoföre bildirim gönderme
-                                            $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                            $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracAtama"];
                                             $resultSoforCihaz = $Panel_Model->soforCihaz($aracSoforID);
                                             if (count($resultSoforCihaz) > 0) {
                                                 foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                     $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                                 }
                                                 $soforCihazlar = implode(',', $soforCihaz);
-                                                $form->shuttleNotification($soforCihazlar, $alert, $deger["AracAta"]);
+                                                $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracAta"]);
                                             }
                                         }
 
                                         //hostes varsa
                                         if ($aracHostesID) {
                                             //hostese bildirim gönderme
-                                            $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
-                                            $resultHostesCihaz = $Panel_Model->hostesCihaz($turHostesID);
+                                            $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracAtama"];
+                                            $resultHostesCihaz = $Panel_Model->hostesCihaz($aracHostesID);
                                             if (count($resultHostesCihaz) > 0) {
                                                 foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                     $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                                 }
                                                 $hostesCihazlar = implode(',', $hostesCihaz);
-                                                $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracAta"]);
+                                                $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracAta"]);
                                             }
                                         }
 
 
-                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracEkleme"];
+                                        $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracEkleme"];
                                         $aracRenk = 'success';
                                         $aracUrl = 'aracliste';
                                         $aracIcon = 'fa fa-bus';
@@ -217,7 +212,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                         }
                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                     }
                                                 }
                                             } else {
@@ -230,7 +225,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                         }
                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                     }
                                                 }
                                             }
@@ -253,7 +248,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                         }
                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                     }
                                                 }
                                             }
@@ -263,9 +258,9 @@ class AdminAracAjaxSorgu extends Controller {
                                         $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                                         if ($resultLog) {
                                             $sonuc["newAracID"] = $resultAracID;
-                                            $sonuc["insert"] = "Başarıyla Araç Eklenmiştir.";
+                                            $sonuc["insert"] = $degerbildirim["AracKaydet"];
                                         } else {
-                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                            $sonuc["hata"] = $deger["Hata"];
                                         }
                                     } else {
                                         //arac şofor kaydedilirken bi hata meydana geldi ise
@@ -276,14 +271,14 @@ class AdminAracAjaxSorgu extends Controller {
                                         $deleteresulttt = $Panel_Model->adminAracHostesDelete($resultAracID);
                                         //arac şofmr kaydedilirken bi hata meydana geldi ise
                                         if ($deleteresultt) {
-                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                            $sonuc["hata"] = $deger["Hata"];
                                         }
                                     }
                                 } else {
                                     $deleteresult = $Panel_Model->adminAracDelete($resultAracID);
                                     //arac şofmr kaydedilirken bi hata meydana geldi ise
                                     if ($deleteresult) {
-                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        $sonuc["hata"] = $deger["Hata"];
                                     }
                                 }
                             } else {
@@ -310,38 +305,34 @@ class AdminAracAjaxSorgu extends Controller {
                                 }
                                 $resultBolgeID = $Panel_Model->addNewAdminBolgeSofor($bolgedata);
                                 if ($resultBolgeID) {
-                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                    if ($resultMemcache) {
-                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                    }
                                     if ($aracSoforID) {
                                         //şoföre bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                        $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracAtama"];
                                         $resultSoforCihaz = $Panel_Model->soforCihaz($aracSoforID);
                                         if (count($resultSoforCihaz) > 0) {
                                             foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                 $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                             }
                                             $soforCihazlar = implode(',', $soforCihaz);
-                                            $form->shuttleNotification($soforCihazlar, $alert, $deger["AracAta"]);
+                                            $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracAta"]);
                                         }
                                     }
 
                                     //hostes varsa
                                     if ($aracHostesID) {
                                         //hostese bildirim gönderme
-                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
-                                        $resultHostesCihaz = $Panel_Model->hostesCihaz($turHostesID);
+                                        $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracAtama"];
+                                        $resultHostesCihaz = $Panel_Model->hostesCihaz($aracHostesID);
                                         if (count($resultHostesCihaz) > 0) {
                                             foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                 $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                             }
                                             $hostesCihazlar = implode(',', $hostesCihaz);
-                                            $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracAta"]);
+                                            $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracAta"]);
                                         }
                                     }
 
-                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracEkleme"];
+                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracEkleme"];
                                     $aracRenk = 'success';
                                     $aracUrl = 'aracliste';
                                     $aracIcon = 'fa fa-bus';
@@ -367,7 +358,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                     }
                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                 }
                                             }
                                         } else {
@@ -380,7 +371,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                     }
                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                 }
                                             }
                                         }
@@ -403,7 +394,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                     }
                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                 }
                                             }
                                         }
@@ -413,9 +404,9 @@ class AdminAracAjaxSorgu extends Controller {
                                     $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                                     if ($resultLog) {
                                         $sonuc["newAracID"] = $resultAracID;
-                                        $sonuc["insert"] = "Başarıyla Araç Eklenmiştir.";
+                                        $sonuc["insert"] = $degerbildirim["AracKaydet"];
                                     } else {
-                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        $sonuc["hata"] = $deger["Hata"];
                                     }
                                 } else {
                                     //arac şofor kaydedilirken bi hata meydana geldi ise
@@ -426,15 +417,14 @@ class AdminAracAjaxSorgu extends Controller {
                                     $deleteresulttt = $Panel_Model->adminAracHostesDelete($resultAracID);
                                     //arac şofmr kaydedilirken bi hata meydana geldi ise
                                     if ($deleteresultt) {
-                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        $sonuc["hata"] = $deger["Hata"];
                                     }
                                 }
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $deger["Hata"];
                         }
                     }
-
                 case "adminAracDetail":
 
                     $adminID = Session::get("userId");
@@ -810,7 +800,6 @@ class AdminAracAjaxSorgu extends Controller {
                     }
 
                     break;
-
                 case "adminAracDetailDelete":
 
                     $adminID = Session::get("userId");
@@ -818,8 +807,6 @@ class AdminAracAjaxSorgu extends Controller {
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_AArac';
                         $adminRutbe = Session::get("userRutbe");
 
                         $form->post('aracdetail_id', true);
@@ -839,39 +826,34 @@ class AdminAracAjaxSorgu extends Controller {
                                 if ($deletehostes) {
                                     $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($adminAracDetailID);
                                     if ($deleteresulttt) {
-                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                        if ($resultMemcache) {
-                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                        }
                                         if ($aracSoforID) {
                                             //şoföre bildirim gönderme
-                                            $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                            $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracSilme"];
                                             $resultSoforCihaz = $Panel_Model->soforCihaz($aracSoforID);
                                             if (count($resultSoforCihaz) > 0) {
                                                 foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                     $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                                 }
                                                 $soforCihazlar = implode(',', $soforCihaz);
-                                                $form->shuttleNotification($soforCihazlar, $alert, $deger["AracSil"]);
+                                                $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracSil"]);
                                             }
                                         }
 
                                         //hostes varsa
                                         if ($aracHostesID) {
                                             //hostese bildirim gönderme
-                                            $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
-                                            $resultHostesCihaz = $Panel_Model->hostesCihaz($turHostesID);
+                                            $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracSilme"];
+                                            $resultHostesCihaz = $Panel_Model->hostesCihaz($aracHostesID);
                                             if (count($resultHostesCihaz) > 0) {
                                                 foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                     $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                                 }
                                                 $hostesCihazlar = implode(',', $hostesCihaz);
-                                                $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracSil"]);
+                                                $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracSil"]);
                                             }
                                         }
 
-
-                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                        $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracSilme"];
                                         $aracRenk = 'danger';
                                         $aracUrl = 'aracliste';
                                         $aracIcon = 'fa fa-bus';
@@ -897,7 +879,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                         }
                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                     }
                                                 }
                                             } else {
@@ -910,7 +892,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                         }
                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                     }
                                                 }
                                             }
@@ -933,7 +915,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                         }
                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                     }
                                                 }
                                             }
@@ -942,19 +924,15 @@ class AdminAracAjaxSorgu extends Controller {
                                         $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
                                         $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                                         if ($resultLog) {
-                                            $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                            $sonuc["delete"] = $deger["AracSil"];
                                         } else {
-                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                            $sonuc["hata"] = $deger["Hata"];
                                         }
                                     }
                                 } else {
                                     $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($adminAracDetailID);
                                     if ($deleteresulttt) {
-                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                        if ($resultMemcache) {
-                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                        }
-                                        $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                        $sonuc["delete"] = $deger["AracSil"];
                                     }
                                 }
                             } else {
@@ -962,11 +940,7 @@ class AdminAracAjaxSorgu extends Controller {
                                 if ($deletehostes) {
                                     $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($adminAracDetailID);
                                     if ($deleteresulttt) {
-                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                        if ($resultMemcache) {
-                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                        }
-                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                        $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracSilme"];
                                         $aracRenk = 'danger';
                                         $aracUrl = 'aracliste';
                                         $aracIcon = 'fa fa-bus';
@@ -992,7 +966,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                         }
                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                     }
                                                 }
                                             } else {
@@ -1005,7 +979,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                         }
                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                     }
                                                 }
                                             }
@@ -1028,7 +1002,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                         }
                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                     }
                                                 }
                                             }
@@ -1037,19 +1011,15 @@ class AdminAracAjaxSorgu extends Controller {
                                         $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
                                         $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                                         if ($resultLog) {
-                                            $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                            $sonuc["delete"] = $deger["AracSil"];
                                         } else {
-                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                            $sonuc["hata"] = $deger["Hata"];
                                         }
                                     }
                                 } else {
                                     $deleteresulttt = $Panel_Model->adminDetailAracBolgeDelete($adminAracDetailID);
                                     if ($deleteresulttt) {
-                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                        if ($resultMemcache) {
-                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                        }
-                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                        $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracSilme"];
                                         $aracRenk = 'danger';
                                         $aracUrl = 'aracliste';
                                         $aracIcon = 'fa fa-bus';
@@ -1075,7 +1045,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                         }
                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                     }
                                                 }
                                             } else {
@@ -1088,7 +1058,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                         }
                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                     }
                                                 }
                                             }
@@ -1111,7 +1081,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                         }
                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                     }
                                                 }
                                             }
@@ -1120,22 +1090,21 @@ class AdminAracAjaxSorgu extends Controller {
                                         $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
                                         $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                                         if ($resultLog) {
-                                            $sonuc["delete"] = "Araç kaydı başarıyla silinmiştir.";
+                                            $sonuc["delete"] = $deger["AracSil"];
                                         } else {
-                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                            $sonuc["hata"] = $deger["Hata"];
                                         }
                                     }
                                 }
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $deger["Hata"];
                         }
                     }
 
                     $sonuc["adminKurumDetail"] = $data["adminKurumDetail"];
 
                     break;
-
                 case "adminAracDetailKaydet":
 
                     $adminID = Session::get("userId");
@@ -1143,8 +1112,6 @@ class AdminAracAjaxSorgu extends Controller {
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_AArac';
                         $adminRutbe = Session::get("userRutbe");
 
                         $form->post('aracdetail_id', true);
@@ -1221,11 +1188,6 @@ class AdminAracAjaxSorgu extends Controller {
                                         }
                                         $resultBolgeID = $Panel_Model->addNewAdminBolgeSofor($bolgedata);
                                         if ($resultBolgeID) {
-                                            $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                            if ($resultMemcache) {
-                                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                            }
-
                                             //yeni bölge ile eski bölge arasıdnaki farklar
                                             if (count($aracBolgeID) >= count($aracEskiBolgeID)) {
                                                 $bolgeIDEklenen = array_diff($aracBolgeID, $aracEskiBolgeID);
@@ -1233,7 +1195,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                     //yeni bölge eklenmiş
                                                     $yeniEklenen = implode(",", $bolgeIDEklenen);
                                                     //yeni eklenen bölge ayarı
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracEkleme"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracEkleme"];
                                                     $aracRenk = 'success';
                                                     $aracUrl = 'aracliste';
                                                     $aracIcon = 'fa fa-bus';
@@ -1258,7 +1220,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                                 }
                                                             }
                                                         } else {
@@ -1271,7 +1233,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                                 }
                                                             }
                                                         }
@@ -1293,7 +1255,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                                 }
                                                             }
                                                         }
@@ -1303,7 +1265,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                     if (count($bolgeIDSilinen) > 0) {
                                                         $yeniSilinen = implode(",", $bolgeIDSilinen);
                                                         //bölgeden araç silindi
-                                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                                        $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracSilme"];
                                                         $aracRenk = 'danger';
                                                         $aracUrl = 'aracliste';
                                                         $aracIcon = 'fa fa-bus';
@@ -1328,7 +1290,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                         }
                                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                                     }
                                                                 }
                                                             } else {
@@ -1341,7 +1303,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                         }
                                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                                     }
                                                                 }
                                                             }
@@ -1363,14 +1325,14 @@ class AdminAracAjaxSorgu extends Controller {
                                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                         }
                                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                                     }
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                                     $aracRenk = 'warning';
                                                     $aracUrl = 'aracliste';
                                                     $aracIcon = 'fa fa-bus';
@@ -1396,7 +1358,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                                 }
                                                             }
                                                         } else {
@@ -1409,7 +1371,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                                 }
                                                             }
                                                         }
@@ -1432,7 +1394,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                                 }
                                                             }
                                                         }
@@ -1443,7 +1405,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                 if (count($bolgeIDEklenen) > 0) {//fark var
                                                     $yeniEklenen = implode(",", $bolgeIDEklenen);
                                                     //yeni eklenen bölge ayarı
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracEkleme"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracEkleme"];
                                                     $aracRenk = 'success';
                                                     $aracUrl = 'aracliste';
                                                     $aracIcon = 'fa fa-bus';
@@ -1468,7 +1430,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                                 }
                                                             }
                                                         } else {
@@ -1481,7 +1443,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                                 }
                                                             }
                                                         }
@@ -1503,7 +1465,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                                 }
                                                             }
                                                         }
@@ -1513,7 +1475,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                     if (count($bolgeIDSilinen) > 0) {
                                                         $yeniSilinen = implode(",", $bolgeIDSilinen);
                                                         //bölgeden araç silindi
-                                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                                        $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracSilme"];
                                                         $aracRenk = 'danger';
                                                         $aracUrl = 'aracliste';
                                                         $aracIcon = 'fa fa-bus';
@@ -1538,7 +1500,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                         }
                                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                                     }
                                                                 }
                                                             } else {
@@ -1551,7 +1513,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                         }
                                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                                     }
                                                                 }
                                                             }
@@ -1573,14 +1535,14 @@ class AdminAracAjaxSorgu extends Controller {
                                                                             $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                         }
                                                                         $adminCihaz = implode(',', $adminCihaz);
-                                                                        $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                        $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                                     }
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                                     $aracRenk = 'warning';
                                                     $aracUrl = 'aracliste';
                                                     $aracIcon = 'fa fa-bus';
@@ -1606,7 +1568,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                                 }
                                                             }
                                                         } else {
@@ -1619,7 +1581,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                                 }
                                                             }
                                                         }
@@ -1642,7 +1604,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                                 }
                                                             }
                                                         }
@@ -1658,39 +1620,39 @@ class AdminAracAjaxSorgu extends Controller {
                                                     //yeni şoför eklenmiş
                                                     $yeniEklenen = implode(",", $soforIDEklenen);
                                                     //şoföre bildirim gönderme
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracAtama"];
                                                     $resultSoforCihaz = $Panel_Model->soforCihaz($yeniEklenen);
                                                     if (count($resultSoforCihaz) > 0) {
                                                         foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                             $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                                         }
                                                         $soforCihazlar = implode(',', $soforCihaz);
-                                                        $form->shuttleNotification($soforCihazlar, $alert, $deger["AracAta"]);
+                                                        $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracAta"]);
                                                     }
 
                                                     $soforIDSilinen = array_diff($aracEskiSoforID, $aracSoforID);
                                                     if (count($soforIDSilinen) > 0) {
                                                         $yeniSilinen = implode(",", $soforIDSilinen);
-                                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                        $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracCıkarma"];
                                                         $resultSoforCihaz = $Panel_Model->soforCihaz($yeniSilinen);
                                                         if (count($resultSoforCihaz) > 0) {
                                                             foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                                 $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                                             }
                                                             $soforCihazlar = implode(',', $soforCihaz);
-                                                            $form->shuttleNotification($soforCihazlar, $alert, $deger["AracSil"]);
+                                                            $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracSil"]);
                                                         }
                                                     }
                                                 } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
                                                     $yeniDuzenlenen = implode(",", $aracSoforID);
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                                     $resultSoforCihaz = $Panel_Model->soforCihaz($yeniDuzenlenen);
                                                     if (count($resultSoforCihaz) > 0) {
                                                         foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                             $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                                         }
                                                         $soforCihazlar = implode(',', $soforCihaz);
-                                                        $form->shuttleNotification($soforCihazlar, $alert, $deger["AracDuzen"]);
+                                                        $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracDuzen"]);
                                                     }
                                                 }
                                             } else {
@@ -1698,39 +1660,39 @@ class AdminAracAjaxSorgu extends Controller {
                                                 if (count($soforIDEklenen) > 0) {//fark var
                                                     $yeniEklenen = implode(",", $soforIDEklenen);
                                                     //şoföre bildirim gönderme
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracAtama"];
                                                     $resultSoforCihaz = $Panel_Model->soforCihaz($yeniEklenen);
                                                     if (count($resultSoforCihaz) > 0) {
                                                         foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                             $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                                         }
                                                         $soforCihazlar = implode(',', $soforCihaz);
-                                                        $form->shuttleNotification($soforCihazlar, $alert, $deger["AracAta"]);
+                                                        $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracAta"]);
                                                     }
 
                                                     $soforIDSilinen = array_diff($aracEskiSoforID, $aracSoforID);
                                                     if (count($soforIDSilinen) > 0) {
                                                         $yeniSilinen = implode(",", $soforIDSilinen);
-                                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                        $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracCıkarma"];
                                                         $resultSoforCihaz = $Panel_Model->soforCihaz($yeniSilinen);
                                                         if (count($resultSoforCihaz) > 0) {
                                                             foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                                 $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                                             }
                                                             $soforCihazlar = implode(',', $soforCihaz);
-                                                            $form->shuttleNotification($soforCihazlar, $alert, $deger["AracSil"]);
+                                                            $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracSil"]);
                                                         }
                                                     }
                                                 } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
                                                     $yeniDuzenlenen = implode(",", $aracSoforID);
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                                     $resultSoforCihaz = $Panel_Model->soforCihaz($yeniDuzenlenen);
                                                     if (count($resultSoforCihaz) > 0) {
                                                         foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                             $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                                         }
                                                         $soforCihazlar = implode(',', $soforCihaz);
-                                                        $form->shuttleNotification($soforCihazlar, $alert, $deger["AracDuzen"]);
+                                                        $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracDuzen"]);
                                                     }
                                                 }
                                             }
@@ -1742,39 +1704,39 @@ class AdminAracAjaxSorgu extends Controller {
                                                     //yeni hostes eklenmiş
                                                     $yeniEklenen = implode(",", $hostesIDEklenen);
                                                     //hostese bildirim gönderme
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracAtama"];
                                                     $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniEklenen);
                                                     if (count($resultHostesCihaz) > 0) {
                                                         foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                             $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                                         }
                                                         $hostesCihazlar = implode(',', $hostesCihaz);
-                                                        $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracAta"]);
+                                                        $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracAta"]);
                                                     }
 
                                                     $hostesIDSilinen = array_diff($aracEskiHostesID, $aracHostesID);
                                                     if (count($hostesIDSilinen) > 0) {
                                                         $yeniSilinen = implode(",", $hostesIDSilinen);
-                                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                        $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracCıkarma"];
                                                         $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniSilinen);
                                                         if (count($resultHostesCihaz) > 0) {
                                                             foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                                 $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                                             }
                                                             $hostesCihazlar = implode(',', $hostesCihaz);
-                                                            $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracSil"]);
+                                                            $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracSil"]);
                                                         }
                                                     }
                                                 } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
                                                     $yeniDuzenlenen = implode(",", $aracHostesID);
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                                     $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniDuzenlenen);
                                                     if (count($resultHostesCihaz) > 0) {
                                                         foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                             $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                                         }
                                                         $hostesCihazlar = implode(',', $hostesCihaz);
-                                                        $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracDuzen"]);
+                                                        $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracDuzen"]);
                                                     }
                                                 }
                                             } else {
@@ -1782,39 +1744,39 @@ class AdminAracAjaxSorgu extends Controller {
                                                 if (count($hostesIDEklenen) > 0) {//fark var
                                                     $yeniEklenen = implode(",", $hostesIDEklenen);
                                                     //şoföre bildirim gönderme
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracAtama"];
                                                     $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniEklenen);
                                                     if (count($resultHostesCihaz) > 0) {
                                                         foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                             $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                                         }
                                                         $hostesCihazlar = implode(',', $hostesCihaz);
-                                                        $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracAta"]);
+                                                        $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracAta"]);
                                                     }
 
                                                     $hostesIDSilinen = array_diff($aracEskiHostesID, $aracHostesID);
                                                     if (count($hostesIDSilinen) > 0) {
                                                         $yeniSilinen = implode(",", $hostesIDSilinen);
-                                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                        $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracCıkarma"];
                                                         $resultHostesCihaz = $Panel_Model->soforCihaz($yeniSilinen);
                                                         if (count($resultHostesCihaz) > 0) {
                                                             foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                                 $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                                             }
                                                             $hostesCihazlar = implode(',', $hostesCihaz);
-                                                            $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracSil"]);
+                                                            $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracSil"]);
                                                         }
                                                     }
                                                 } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
                                                     $yeniDuzenlenen = implode(",", $aracHostesID);
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                                     $resultHostesCihaz = $Panel_Model->soforCihaz($yeniDuzenlenen);
                                                     if (count($resultHostesCihaz) > 0) {
                                                         foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                             $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                                         }
                                                         $hostesCihazlar = implode(',', $hostesCihaz);
-                                                        $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracDuzen"]);
+                                                        $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracDuzen"]);
                                                     }
                                                 }
                                             }
@@ -1824,7 +1786,7 @@ class AdminAracAjaxSorgu extends Controller {
                                             if (count($bolgeIDOrtak) > 0) {
                                                 $yeniOrtakBolge = implode(",", $bolgeIDOrtak);
                                                 //bölgeden araç düzenleme
-                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                                 $aracRenk = 'warning';
                                                 $aracUrl = 'aracliste';
                                                 $aracIcon = 'fa fa-bus';
@@ -1849,7 +1811,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                             }
                                                         }
                                                     } else {
@@ -1862,7 +1824,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                             }
                                                         }
                                                     }
@@ -1884,30 +1846,30 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                             }
                                                         }
                                                     }
                                                 }
                                             }
-                                            $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                            $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                             //log ayarları
                                             $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
                                             $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                                             if ($resultLog) {
                                                 $sonuc["newAracID"] = $aracID;
-                                                $sonuc["update"] = "Başarıyla Araç Düzenlenmiştir.";
+                                                $sonuc["update"] = $deger["AracDuzenle"];
                                             } else {
-                                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                                $sonuc["hata"] = $deger["Hata"];
                                             }
                                         } else {
-                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                            $sonuc["hata"] = $deger["Hata"];
                                         }
                                     } else {
-                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        $sonuc["hata"] = $deger["Hata"];
                                     }
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $deger["Hata"];
                                 }
                             } else {
                                 //hostes seçildi ise
@@ -1948,7 +1910,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                 //yeni bölge eklenmiş
                                                 $yeniEklenen = implode(",", $bolgeIDEklenen);
                                                 //yeni eklenen bölge ayarı
-                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracEkleme"];
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracEkleme"];
                                                 $aracRenk = 'success';
                                                 $aracUrl = 'aracliste';
                                                 $aracIcon = 'fa fa-bus';
@@ -1973,7 +1935,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                             }
                                                         }
                                                     } else {
@@ -1986,7 +1948,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                             }
                                                         }
                                                     }
@@ -2008,7 +1970,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                             }
                                                         }
                                                     }
@@ -2018,7 +1980,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                 if (count($bolgeIDSilinen) > 0) {
                                                     $yeniSilinen = implode(",", $bolgeIDSilinen);
                                                     //bölgeden araç silindi
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracSilme"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracSilme"];
                                                     $aracRenk = 'danger';
                                                     $aracUrl = 'aracliste';
                                                     $aracIcon = 'fa fa-bus';
@@ -2043,7 +2005,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                                 }
                                                             }
                                                         } else {
@@ -2056,7 +2018,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                                 }
                                                             }
                                                         }
@@ -2078,14 +2040,14 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 }
                                             } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
-                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                                 $aracRenk = 'warning';
                                                 $aracUrl = 'aracliste';
                                                 $aracIcon = 'fa fa-bus';
@@ -2111,7 +2073,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                             }
                                                         }
                                                     } else {
@@ -2124,7 +2086,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                             }
                                                         }
                                                     }
@@ -2147,7 +2109,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                             }
                                                         }
                                                     }
@@ -2158,7 +2120,7 @@ class AdminAracAjaxSorgu extends Controller {
                                             if (count($bolgeIDEklenen) > 0) {//fark var
                                                 $yeniEklenen = implode(",", $bolgeIDEklenen);
                                                 //yeni eklenen bölge ayarı
-                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracEkleme"];
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracEkleme"];
                                                 $aracRenk = 'success';
                                                 $aracUrl = 'aracliste';
                                                 $aracIcon = 'fa fa-bus';
@@ -2183,7 +2145,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                             }
                                                         }
                                                     } else {
@@ -2196,7 +2158,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                             }
                                                         }
                                                     }
@@ -2218,7 +2180,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracEkle"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracEkle"]);
                                                             }
                                                         }
                                                     }
@@ -2253,7 +2215,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                                 }
                                                             }
                                                         } else {
@@ -2266,7 +2228,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                                 }
                                                             }
                                                         }
@@ -2288,14 +2250,14 @@ class AdminAracAjaxSorgu extends Controller {
                                                                         $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                     }
                                                                     $adminCihaz = implode(',', $adminCihaz);
-                                                                    $form->shuttleNotification($adminCihaz, $alert, $deger["AracSil"]);
+                                                                    $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracSil"]);
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 }
                                             } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
-                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                                 $aracRenk = 'warning';
                                                 $aracUrl = 'aracliste';
                                                 $aracIcon = 'fa fa-bus';
@@ -2321,7 +2283,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                             }
                                                         }
                                                     } else {
@@ -2334,7 +2296,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                             }
                                                         }
                                                     }
@@ -2357,7 +2319,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                     $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                                 }
                                                                 $adminCihaz = implode(',', $adminCihaz);
-                                                                $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                                $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                             }
                                                         }
                                                     }
@@ -2372,39 +2334,39 @@ class AdminAracAjaxSorgu extends Controller {
                                                 //yeni şoför eklenmiş
                                                 $yeniEklenen = implode(",", $soforIDEklenen);
                                                 //şoföre bildirim gönderme
-                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracAtama"];
                                                 $resultSoforCihaz = $Panel_Model->soforCihaz($yeniEklenen);
                                                 if (count($resultSoforCihaz) > 0) {
                                                     foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                         $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                                     }
                                                     $soforCihazlar = implode(',', $soforCihaz);
-                                                    $form->shuttleNotification($soforCihazlar, $alert, $deger["AracAta"]);
+                                                    $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracAta"]);
                                                 }
 
                                                 $soforIDSilinen = array_diff($aracEskiSoforID, $aracSoforID);
                                                 if (count($soforIDSilinen) > 0) {
                                                     $yeniSilinen = implode(",", $soforIDSilinen);
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracCıkarma"];
                                                     $resultSoforCihaz = $Panel_Model->soforCihaz($yeniSilinen);
                                                     if (count($resultSoforCihaz) > 0) {
                                                         foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                             $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                                         }
                                                         $soforCihazlar = implode(',', $soforCihaz);
-                                                        $form->shuttleNotification($soforCihazlar, $alert, $deger["AracSil"]);
+                                                        $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracSil"]);
                                                     }
                                                 }
                                             } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
                                                 $yeniDuzenlenen = implode(",", $aracSoforID);
-                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                                 $resultSoforCihaz = $Panel_Model->soforCihaz($yeniDuzenlenen);
                                                 if (count($resultSoforCihaz) > 0) {
                                                     foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                         $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                                     }
                                                     $soforCihazlar = implode(',', $soforCihaz);
-                                                    $form->shuttleNotification($soforCihazlar, $alert, $deger["AracDuzen"]);
+                                                    $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracDuzen"]);
                                                 }
                                             }
                                         } else {
@@ -2412,39 +2374,39 @@ class AdminAracAjaxSorgu extends Controller {
                                             if (count($soforIDEklenen) > 0) {//fark var
                                                 $yeniEklenen = implode(",", $soforIDEklenen);
                                                 //şoföre bildirim gönderme
-                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracAtama"];
                                                 $resultSoforCihaz = $Panel_Model->soforCihaz($yeniEklenen);
                                                 if (count($resultSoforCihaz) > 0) {
                                                     foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                         $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                                     }
                                                     $soforCihazlar = implode(',', $soforCihaz);
-                                                    $form->shuttleNotification($soforCihazlar, $alert, $deger["AracAta"]);
+                                                    $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracAta"]);
                                                 }
 
                                                 $soforIDSilinen = array_diff($aracEskiSoforID, $aracSoforID);
                                                 if (count($soforIDSilinen) > 0) {
                                                     $yeniSilinen = implode(",", $soforIDSilinen);
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracCıkarma"];
                                                     $resultSoforCihaz = $Panel_Model->soforCihaz($yeniSilinen);
                                                     if (count($resultSoforCihaz) > 0) {
                                                         foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                             $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                                         }
                                                         $soforCihazlar = implode(',', $soforCihaz);
-                                                        $form->shuttleNotification($soforCihazlar, $alert, $deger["AracSil"]);
+                                                        $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracSil"]);
                                                     }
                                                 }
                                             } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
                                                 $yeniDuzenlenen = implode(",", $aracSoforID);
-                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                                 $resultSoforCihaz = $Panel_Model->soforCihaz($yeniDuzenlenen);
                                                 if (count($resultSoforCihaz) > 0) {
                                                     foreach ($resultSoforCihaz as $resultSoforCihazz) {
                                                         $soforCihaz[] = $resultSoforCihazz['sbsoforcihazRecID'];
                                                     }
                                                     $soforCihazlar = implode(',', $soforCihaz);
-                                                    $form->shuttleNotification($soforCihazlar, $alert, $deger["AracDuzen"]);
+                                                    $form->shuttleNotification($soforCihazlar, $alert, $degerbildirim["AracDuzen"]);
                                                 }
                                             }
                                         }
@@ -2456,39 +2418,39 @@ class AdminAracAjaxSorgu extends Controller {
                                                 //yeni hostes eklenmiş
                                                 $yeniEklenen = implode(",", $hostesIDEklenen);
                                                 //hostese bildirim gönderme
-                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracAtama"];
                                                 $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniEklenen);
                                                 if (count($resultHostesCihaz) > 0) {
                                                     foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                         $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                                     }
                                                     $hostesCihazlar = implode(',', $hostesCihaz);
-                                                    $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracAta"]);
+                                                    $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracAta"]);
                                                 }
 
                                                 $hostesIDSilinen = array_diff($aracEskiHostesID, $aracHostesID);
                                                 if (count($hostesIDSilinen) > 0) {
                                                     $yeniSilinen = implode(",", $hostesIDSilinen);
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracCıkarma"];
                                                     $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniSilinen);
                                                     if (count($resultHostesCihaz) > 0) {
                                                         foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                             $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                                         }
                                                         $hostesCihazlar = implode(',', $hostesCihaz);
-                                                        $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracSil"]);
+                                                        $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracSil"]);
                                                     }
                                                 }
                                             } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
                                                 $yeniDuzenlenen = implode(",", $aracHostesID);
-                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                                 $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniDuzenlenen);
                                                 if (count($resultHostesCihaz) > 0) {
                                                     foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                         $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                                     }
                                                     $hostesCihazlar = implode(',', $hostesCihaz);
-                                                    $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracDuzen"]);
+                                                    $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracDuzen"]);
                                                 }
                                             }
                                         } else {
@@ -2496,39 +2458,39 @@ class AdminAracAjaxSorgu extends Controller {
                                             if (count($hostesIDEklenen) > 0) {//fark var
                                                 $yeniEklenen = implode(",", $hostesIDEklenen);
                                                 //şoföre bildirim gönderme
-                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracAtama"];
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracAtama"];
                                                 $resultHostesCihaz = $Panel_Model->hostesCihaz($yeniEklenen);
                                                 if (count($resultHostesCihaz) > 0) {
                                                     foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                         $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                                     }
                                                     $hostesCihazlar = implode(',', $hostesCihaz);
-                                                    $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracAta"]);
+                                                    $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracAta"]);
                                                 }
 
                                                 $hostesIDSilinen = array_diff($aracEskiHostesID, $aracHostesID);
                                                 if (count($hostesIDSilinen) > 0) {
                                                     $yeniSilinen = implode(",", $hostesIDSilinen);
-                                                    $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracCıkarma"];
+                                                    $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracCıkarma"];
                                                     $resultHostesCihaz = $Panel_Model->soforCihaz($yeniSilinen);
                                                     if (count($resultHostesCihaz) > 0) {
                                                         foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                             $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                                         }
                                                         $hostesCihazlar = implode(',', $hostesCihaz);
-                                                        $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracSil"]);
+                                                        $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracSil"]);
                                                     }
                                                 }
                                             } else {//fark yok sa demekki dizide değişiklik yok yani dizi ile ilgili düzenleme yapılmakta
                                                 $yeniDuzenlenen = implode(",", $aracHostesID);
-                                                $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                                $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                                 $resultHostesCihaz = $Panel_Model->soforCihaz($yeniDuzenlenen);
                                                 if (count($resultHostesCihaz) > 0) {
                                                     foreach ($resultHostesCihaz as $resultHostesCihazz) {
                                                         $hostesCihaz[] = $resultHostesCihazz['bshostescihazRecID'];
                                                     }
                                                     $hostesCihazlar = implode(',', $hostesCihaz);
-                                                    $form->shuttleNotification($hostesCihazlar, $alert, $deger["AracDuzen"]);
+                                                    $form->shuttleNotification($hostesCihazlar, $alert, $degerbildirim["AracDuzen"]);
                                                 }
                                             }
                                         }
@@ -2538,7 +2500,7 @@ class AdminAracAjaxSorgu extends Controller {
                                         if (count($bolgeIDOrtak) > 0) {
                                             $yeniOrtakBolge = implode(",", $bolgeIDOrtak);
                                             //bölgeden araç düzenleme
-                                            $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                            $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                             $aracRenk = 'warning';
                                             $aracUrl = 'aracliste';
                                             $aracIcon = 'fa fa-bus';
@@ -2563,7 +2525,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                 $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                             }
                                                             $adminCihaz = implode(',', $adminCihaz);
-                                                            $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                            $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                         }
                                                     }
                                                 } else {
@@ -2576,7 +2538,7 @@ class AdminAracAjaxSorgu extends Controller {
                                                                 $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                             }
                                                             $adminCihaz = implode(',', $adminCihaz);
-                                                            $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                            $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                         }
                                                     }
                                                 }
@@ -2598,38 +2560,35 @@ class AdminAracAjaxSorgu extends Controller {
                                                                 $adminCihaz[] = $resultAdminCihazz['bsadmincihazRecID'];
                                                             }
                                                             $adminCihaz = implode(',', $adminCihaz);
-                                                            $form->shuttleNotification($adminCihaz, $alert, $deger["AracDuzen"]);
+                                                            $form->shuttleNotification($adminCihaz, $alert, $degerbildirim["AracDuzen"]);
                                                         }
                                                     }
                                                 }
                                             }
                                         }
-                                        $alert = $adSoyad . ' ' . $aracPlaka . $deger["AracDuzenleme"];
+                                        $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                         //log ayarları
                                         $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
                                         $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                                         if ($resultLog) {
                                             $sonuc["newAracID"] = $aracID;
-                                            $sonuc["update"] = "Başarıyla Araç Düzenlenmiştir.";
+                                            $sonuc["update"] = $deger["AracDuzenle"];
                                         } else {
-                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                            $sonuc["hata"] = $deger["Hata"];
                                         }
                                     } else {
-                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        $sonuc["hata"] = $deger["Hata"];
                                     }
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $deger["Hata"];
                                 }
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $deger["Hata"];
                         }
                     }
-
                 case "adminAracDetailTur":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
@@ -2648,7 +2607,6 @@ class AdminAracAjaxSorgu extends Controller {
                         $turId = implode(',', $aracturId);
 
                         $aracTur = $Panel_Model->adminAracDetailTur($turId);
-
                         $b = 0;
                         foreach ($aracTur as $aracTurr) {
                             $aracDetailTur[$b]['TurID'] = $aracTurr['SBTurID'];
@@ -2662,9 +2620,7 @@ class AdminAracAjaxSorgu extends Controller {
                         }
                         $sonuc["aracDetailTur"] = $aracDetailTur;
                     }
-
                     break;
-
                 case "AracDetailMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -2758,12 +2714,98 @@ class AdminAracAjaxSorgu extends Controller {
                             }
                         }
 
+
+                        //araca ait hostesler
+                        $adminAracHostes = $Panel_Model->aracDetailMultiSelectHostes($aracID);
+                        if (count($adminAracHostes) > 0) {
+                            $a = 0;
+                            foreach ($adminAracHostes as $adminAracHostess) {
+                                $arachostesId[] = $adminAracHostess['BSHostesID'];
+                                $a++;
+                            }
+                            //araca ait şoförler
+                            $aracbolgesofor = implode(',', $arachostesId);
+                            //seçilen bölgeler
+                            $aracbolgedizim = implode(',', $aracDetailBolgeID);
+                            //seçilen bölgedeki hostesler
+                            $adminAracBolgeHostes = $Panel_Model->adminSelectBolgeHostess($aracbolgedizim);
+                            $b = 0;
+                            foreach ($adminAracBolgeHostes as $adminAracBolgeHostess) {
+                                $aracDigerHostesId[] = $adminAracBolgeHostess['BSHostesID'];
+                                $b++;
+                            }
+                            //gelen şoför ıdlerinde aynı olan idler, seçili hosteslerdir.
+                            $ortakIDler = array_intersect($arachostesId, $aracDigerHostesId);
+                            //gelen idlerde ki farklı olanlar seçili olmayan hosteslerdir yani diğer hostesler
+                            $hostes_fark = array_diff($aracDigerHostesId, $arachostesId);
+                            $diger_hostes_fark = implode(',', $hostes_fark);
+
+                            //ortak ıd ye sahip hostes varmı
+                            if (count($ortakIDler) > 0) {
+                                //seçili hostes
+                                $secilenIdHostes = implode(',', $ortakIDler);
+                                $selectBolgeHostes = $Panel_Model->adminDetailAracNotSelectHostes($secilenIdHostes);
+                                $c = 0;
+                                foreach ($selectBolgeHostes as $selectBolgeHostess) {
+                                    $selectAracHostes[$c]['SelectAracHostesID'] = $selectBolgeHostess['BSHostesID'];
+                                    $selectAracHostes[$c]['SelectAracHostesAd'] = $selectBolgeHostess['BSHostesAd'];
+                                    $selectAracHostes[$c]['SelectAracHostesSoyad'] = $selectBolgeHostess['BSHostesSoyad'];
+                                    $c++;
+                                }
+
+                                //diğer hostesler
+                                $digerBolgeHostes = $Panel_Model->adminDetailAracNotSelectHostes($diger_hostes_fark);
+
+                                $d = 0;
+                                foreach ($digerBolgeHostes as $digerBolgeHostess) {
+                                    $digerAracHostes[$d]['DigerAracHostesID'] = $digerBolgeHostess['BSHostesID'];
+                                    $digerAracHostes[$d]['DigerAracHostesAdi'] = $digerBolgeHostess['BSHostesAd'];
+                                    $digerAracHostes[$d]['DigerAracHostesSoyad'] = $digerBolgeHostess['BSHostesSoyad'];
+                                    $d++;
+                                }
+                            } else {
+                                //ortak id yoksa seçili hostes yoktur
+                                //diğer hostesler
+                                $digerBolgeHostes = $Panel_Model->adminDetailAracNotSelectHostes($diger_hostes_fark);
+
+                                $d = 0;
+                                foreach ($digerBolgeHostes as $digerBolgeHostess) {
+                                    $digerAracHostes[$d]['DigerAracHostesID'] = $digerBolgeHostess['BSHostesID'];
+                                    $digerAracHostes[$d]['DigerAracHostesAdi'] = $digerBolgeHostess['BSHostesAd'];
+                                    $digerAracHostes[$d]['DigerAracHostesSoyad'] = $digerBolgeHostess['BSHostesSoyad'];
+                                    $d++;
+                                }
+                            }
+                        } else {
+                            $aracDetailBollgeID = implode(',', $aracDetailBolgeID);
+                            //adamın seçili olab bölgedeki diğer hostesleri
+                            $adminAracBolgeHostes = $Panel_Model->adminSelectBolgeHostess($aracDetailBollgeID);
+                            $g = 0;
+                            foreach ($adminAracBolgeHostes as $adminAracBolgeHostess) {
+                                $aracDigerHostesId[] = $adminAracBolgeHostess['BSHostesID'];
+                                $g++;
+                            }
+
+                            $aracSelectDigerSoforId = implode(',', $aracDigerHostesId);
+                            //aracın bolgesi dışındakiler
+                            $digerBolgeHostes = $Panel_Model->adminDetailAracBolgeHostes($aracSelectDigerSoforId);
+
+                            $d = 0;
+                            foreach ($digerBolgeHostes as $digerBolgeHostess) {
+                                $digerAracHostes[$d]['DigerAracHostesID'] = $digerBolgeHostess['BSHostesID'];
+                                $digerAracHostes[$d]['DigerAracHostesAdi'] = $digerBolgeHostess['BSHostesAd'];
+                                $digerAracHostes[$d]['DigerAracHostesSoyad'] = $digerBolgeHostess['BSHostesSoyad'];
+                                $d++;
+                            }
+                        }
+
                         //sonuçlar
                         $sonuc["adminAracSelectSofor"] = $selectAracSofor;
+                        $sonuc["adminAracSelectHostes"] = $selectAracHostes;
                         $sonuc["adminAracSofor"] = $digerAracSofor;
+                        $sonuc["adminAracHostes"] = $digerAracHostes;
                     }
                     break;
-
                 case "AracSoforMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -2809,7 +2851,6 @@ class AdminAracAjaxSorgu extends Controller {
                         $sonuc["aracYeniHostesMultiSelect"] = $aracHostesSelect;
                     }
                     break;
-
                 case "adminAracTakvim":
                     $calendar = $this->load->otherClasses('Calendar');
                     // Short-circuit if the client did not give us a date range.
@@ -2876,7 +2917,6 @@ class AdminAracAjaxSorgu extends Controller {
 //                    }
                     $sonuc = $input_arrays;
                     break;
-
                 default :
                     header("Location:" . SITE_URL_LOGOUT);
                     break;

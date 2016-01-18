@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/AdminHostesAjaxSorgu",
+    url: SITE_URL + "AdminHostesAjaxSorgu",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -20,6 +20,11 @@ $.ajaxSetup({
 $(document).ready(function () {
 
     HostesTable = $('#hostesTable').dataTable({
+        "paging": true,
+        "ordering": true,
+        "info": true
+    });
+    HostesTurTable = $('#hostesTurTable').dataTable({
         "paging": true,
         "ordering": true,
         "info": true
@@ -295,7 +300,7 @@ $.AdminIslemler = {
                         return false;
                     } else {
                         var hostesEmail = $("input[name=HostesEmail]").val();
-                        if (hostesEmail == ' ') {
+                        if (hostesEmail == '') {
                             reset();
                             alertify.alert(jsDil.EpostaBos);
                             return false;
@@ -353,11 +358,11 @@ $.AdminIslemler = {
                                             success: function (cevap) {
                                                 if (cevap.hata) {
                                                     reset();
-                                                    alertify.alert(jsDil.Hata);
+                                                    alertify.alert(cevap.hata);
                                                     return false;
                                                 } else {
                                                     reset();
-                                                    alertify.success(jsDil.HostesKaydet);
+                                                    alertify.success(cevap.insert);
                                                     var hostesCount = $('#smallHostes').text();
                                                     hostesCount++;
                                                     $('#smallHostes').text(hostesCount);
@@ -382,10 +387,10 @@ $.AdminIslemler = {
                                                     }
                                                     hostesBolgeID = [];
                                                     hostesAracID = [];
+                                                    return true;
                                                 }
                                             }
                                         });
-                                        return true;
                                     } else {
                                         reset();
                                         alertify.alert(jsDil.BolgeSec);
@@ -702,6 +707,8 @@ $.AdminIslemler = {
         var farkbolgelength = farkbolge.length;
         var farkhostes = farkArray(HostesDetailVazgec[20], hostesAracID);
         var farkhosteslength = farkhostes.length;
+        var eskiAd = HostesDetailVazgec[0];
+        var eskiSoyad = HostesDetailVazgec[1];
         if (HostesDetailVazgec[0] == hostesDetayAd && HostesDetailVazgec[1] == hostesDetaySoyad && HostesDetailVazgec[2] == hostesDetayDurum && HostesDetailVazgec[3] == hostesDetayLokasyon && HostesDetailVazgec[4] == hostesDetayTelefon && HostesDetailVazgec[5] == hostesDetayEmail && HostesDetailVazgec[6] == hostesDetayAdres && HostesDetailVazgec[7] == hostesDetayAciklama && HostesDetailVazgec[8] == hostesDetayUlke && HostesDetailVazgec[9] == hostesDetayIl && HostesDetailVazgec[10] == hostesDetayIlce && HostesDetailVazgec[11] == hostesDetaySemt && HostesDetailVazgec[12] == hostesDetayMahalle && HostesDetailVazgec[13] == hostesDetaySokak && HostesDetailVazgec[14] == hostesDetayPostaKodu && HostesDetailVazgec[15] == hostesDetayCaddeNo && farkbolgelength == 0 && farkhosteslength == 0) {
             reset();
             alertify.alert(jsDil.Degisiklik);
@@ -728,7 +735,7 @@ $.AdminIslemler = {
                             alertify.alert(jsDil.SoyadKarekter);
                             return false;
                         } else {
-                            if (hostesDetayEmail == ' ') {
+                            if (hostesDetayEmail == '') {
                                 reset();
                                 alertify.alert(jsDil.EpostaBos);
                                 return false;
@@ -743,7 +750,8 @@ $.AdminIslemler = {
                                     var hostesBolgeLength = $('select#HostesDetaySelectBolge option:selected').val();
                                     if (hostesBolgeLength) {
                                         $.ajax({
-                                            data: {"hostesdetail_id": hostesdetail_id, "hostesBolgeID[]": hostesBolgeID, "hostesBolgeAd[]": hostesBolgeAd, "hostesAracID[]": hostesAracID, "hostesAracPlaka[]": hostesAracPlaka, "hostesDetayAd": hostesDetayAd,
+                                            data: {"eskiAd": eskiAd, "eskiSoyad": eskiSoyad, "hostesdetail_id": hostesdetail_id, "hostesBolgeID[]": hostesBolgeID, "hostesBolgeAd[]": hostesBolgeAd,
+                                                "hostesAracID[]": hostesAracID, "hostesAracPlaka[]": hostesAracPlaka, "hostesDetayAd": hostesDetayAd,
                                                 "hostesDetaySoyad": hostesDetaySoyad, "hostesDetayDurum": hostesDetayDurum, "hostesDetayLokasyon": hostesDetayLokasyon, "hostesDetayTelefon": hostesDetayTelefon,
                                                 "hostesDetayEmail": hostesDetayEmail, "hostesDetayAdres": hostesDetayAdres, "hostesDetayAciklama": hostesDetayAciklama, "hostesDetayUlke": hostesDetayUlke,
                                                 "hostesDetayIl": hostesDetayIl, "hostesDetayIlce": hostesDetayIlce, "hostesDetaySemt": hostesDetaySemt, "hostesDetayMahalle": hostesDetayMahalle,
@@ -751,12 +759,12 @@ $.AdminIslemler = {
                                             success: function (cevap) {
                                                 if (cevap.hata) {
                                                     reset();
-                                                    alertify.alert(jsDil.Hata);
+                                                    alertify.alert(cevap.hata);
                                                     return false;
                                                 } else {
                                                     disabledForm();
                                                     reset();
-                                                    alertify.success(jsDil.HostesDuzenle);
+                                                    alertify.success(cevap.update);
                                                     var SelectBolgeOptions = new Array();
                                                     var SelectHostesOptions = new Array();
                                                     if (hostesBolgeID.length > 0) {
@@ -843,6 +851,53 @@ $.AdminIslemler = {
                 }
             }
         }
+    },
+    hostesDetailTur: function () {
+        HostesTurTable.DataTable().clear().draw();
+        var hostesID = $("input[name=hostesDetayID]").val();
+        $.ajax({
+            data: {"hostesID": hostesID, "tip": "hostesDetailTur"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
+                } else {
+                    if (cevap.hostesDetailTur) {
+                        var turCount = cevap.hostesDetailTur.length;
+                        for (var i = 0; i < turCount; i++) {
+                            if (cevap.hostesDetailTur[i].TurTip == 0) {
+                                TurTip = jsDil.Ogrenci;
+                            } else if (cevap.hostesDetailTur[i].TurTip == 1) {
+                                TurTip = jsDil.Personel;
+                            } else {
+                                TurTip = jsDil.OgrenciPersonel;
+                            }
+                            if (cevap.hostesDetailTur[i].TurAktiflik != 0) {
+                                var addRow = "<tr><td>"
+                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.hostesDetailTur[i].TurID + "'>"
+                                        + "<i class='fa fa-map-marker'></i> " + cevap.hostesDetailTur[i].TurAd + "</a></td>"
+                                        + "<td class='hidden-xs' >" + TurTip + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.hostesDetailTur[i].TurAciklama + "</td>"
+                                        + "<td class='hidden-xs'>" + cevap.hostesDetailTur[i].TurKurum + "</td>"
+                                        + "<td class='hidden-xs'>" + cevap.hostesDetailTur[i].TurBolge + "</td></tr>";
+                                HostesTurTable.DataTable().row.add($(addRow)).draw();
+                            } else {
+                                var addRow = "<tr><td>"
+                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.hostesDetailTur[i].TurID + "'>"
+                                        + "<i class='fa fa-map-marker' style='color:red'></i> " + cevap.hostesDetailTur[i].TurAd + "</a></td>"
+                                        + "<td class='hidden-xs' >" + TurTip + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.hostesDetailTur[i].TurAciklama + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.hostesDetailTur[i].TurKurum + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.hostesDetailTur[i].TurBolge + "</td></tr>";
+                                HostesTurTable.DataTable().row.add($(addRow)).draw();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        return true;
     },
     adminHostesTakvim: function () {
         var currentLangCode = $("input[name=takvimLang]").val();

@@ -18,9 +18,11 @@ class AdminSoforAjaxSorgu extends Controller {
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
             $sonuc = array();
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
-            //form class bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
+            $Panel_Model = $this->load->model("Panel_Model");
+            //language 
+            $lang = Session::get("dil");
+            $formlanguage = $this->load->ajaxlanguage($lang);
+            $languagedeger = $formlanguage->ajaxlanguage();
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -65,7 +67,6 @@ class AdminSoforAjaxSorgu extends Controller {
                         $sonuc["adminBolge"] = $adminBolge;
                     }
                     break;
-
                 case "soforAracMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -91,9 +92,7 @@ class AdminSoforAjaxSorgu extends Controller {
                         $sonuc["aracMultiSelect"] = $soforAracSelect;
                     }
                     break;
-
                 case "soforKaydet":
-
                     $adminID = Session::get("userId");
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
@@ -108,10 +107,6 @@ class AdminSoforAjaxSorgu extends Controller {
                             if ($realSifre) {
                                 $adminSifre = $form->userSifreOlustur($userKadi, $realSifre, $userTip);
                                 if ($adminSifre) {
-
-                                    $uniqueKey = Session::get("username");
-                                    $uniqueKey = $uniqueKey . '_ASofor';
-
                                     $form->post('soforAd', true);
                                     $form->post('soforSoyad', true);
                                     $form->post('soforEmail', true);
@@ -133,112 +128,121 @@ class AdminSoforAjaxSorgu extends Controller {
                                     $soforAd = $form->values['soforAd'];
                                     $soforSoyad = $form->values['soforSoyad'];
                                     $soforAdSoyad = $soforAd . ' ' . $soforSoyad;
+                                    $soforEmail = $form->values['soforEmail'];
 
                                     $soforBolgeID = $_REQUEST['soforBolgeID'];
                                     $soforBolgeAdi = $_REQUEST['soforBolgeAdi'];
                                     $soforAracID = $_REQUEST['soforAracID'];
                                     $soforAracPlaka = $_REQUEST['soforAracPlaka'];
 
-                                    if ($form->submit()) {
-                                        $data = array(
-                                            'BSSoforAd' => $soforAd,
-                                            'BSSoforSoyad' => $soforSoyad,
-                                            'BSSoforKadi' => $userKadi,
-                                            'BSSoforSifre' => $adminSifre,
-                                            'BSSoforRSifre' => $realSifre,
-                                            'BSSoforPhone' => $form->values['soforTelefon'],
-                                            'BSSoforEmail' => $form->values['soforEmail'],
-                                            'BSSoforLocation' => $form->values['soforLokasyon'],
-                                            'BSSoforUlke' => $form->values['ulke'],
-                                            'BSSoforIl' => $form->values['il'],
-                                            'BSSoforIlce' => $form->values['ilce'],
-                                            'BSSoforSemt' => $form->values['semt'],
-                                            'BSSoforMahalle' => $form->values['mahalle'],
-                                            'BSSoforSokak' => $form->values['sokak'],
-                                            'BSSoforPostaKodu' => $form->values['postakodu'],
-                                            'BSSoforCaddeNo' => $form->values['caddeno'],
-                                            'BSSoforAdres' => $form->values['soforAdres'],
-                                            'BSSoforDetayAdres' => $form->values['detayAdres'],
-                                            'Status' => $form->values['soforDurum'],
-                                            'BSSoforAciklama' => $form->values['aciklama']
-                                        );
-                                    }
-                                    $resultSoforID = $Panel_Model->addNewSofor($data);
+                                    if (!filter_var($soforEmail, FILTER_VALIDATE_EMAIL) === false) {
+                                        $emailValidate = $form->mailControl1($soforEmail);
+                                        if ($emailValidate == 1) {
+                                            $kullaniciliste = $Panel_Model->soforEmailDbKontrol($soforEmail);
+                                            if (count($kullaniciliste) <= 0) {
+                                                if ($form->submit()) {
+                                                    $data = array(
+                                                        'BSSoforAd' => $soforAd,
+                                                        'BSSoforSoyad' => $soforSoyad,
+                                                        'BSSoforKadi' => $userKadi,
+                                                        'BSSoforSifre' => $adminSifre,
+                                                        'BSSoforRSifre' => $realSifre,
+                                                        'BSSoforPhone' => $form->values['soforTelefon'],
+                                                        'BSSoforEmail' => $soforEmail,
+                                                        'BSSoforLocation' => $form->values['soforLokasyon'],
+                                                        'BSSoforUlke' => $form->values['ulke'],
+                                                        'BSSoforIl' => $form->values['il'],
+                                                        'BSSoforIlce' => $form->values['ilce'],
+                                                        'BSSoforSemt' => $form->values['semt'],
+                                                        'BSSoforMahalle' => $form->values['mahalle'],
+                                                        'BSSoforSokak' => $form->values['sokak'],
+                                                        'BSSoforPostaKodu' => $form->values['postakodu'],
+                                                        'BSSoforCaddeNo' => $form->values['caddeno'],
+                                                        'BSSoforAdres' => $form->values['soforAdres'],
+                                                        'BSSoforDetayAdres' => $form->values['detayAdres'],
+                                                        'Status' => $form->values['soforDurum'],
+                                                        'BSSoforAciklama' => $form->values['aciklama']
+                                                    );
+                                                }
+                                                $resultSoforID = $Panel_Model->addNewSofor($data);
 
-                                    if ($resultSoforID != 'unique') {
-                                        $bolgeID = count($soforBolgeID);
-                                        if ($bolgeID > 0) {
-                                            for ($b = 0; $b < $bolgeID; $b++) {
-                                                $bolgedata[$b] = array(
-                                                    'BSSoforID' => $resultSoforID,
-                                                    'BSSoforAd' => $soforAdSoyad,
-                                                    'BSBolgeID' => $soforBolgeID[$b],
-                                                    'BSBolgeAdi' => $soforBolgeAdi[$b]
-                                                );
-                                            }
-                                            $resultBolgeID = $Panel_Model->addNewBolgeSofor($bolgedata);
-                                            if ($resultBolgeID) {
-                                                //şoföre araç seçildi ise
-                                                $aracID = count($soforAracID);
-                                                if ($aracID > 0) {
-                                                    for ($c = 0; $c < $aracID; $c++) {
-                                                        $aracdata[$c] = array(
-                                                            'BSAracID' => $soforAracID[$c],
-                                                            'BSAracPlaka' => $soforAracPlaka[$c],
-                                                            'BSSoforID' => $resultSoforID,
-                                                            'BSSoforAd' => $soforAdSoyad
-                                                        );
+                                                if ($resultSoforID != 'unique') {
+                                                    $bolgeID = count($soforBolgeID);
+                                                    if ($bolgeID > 0) {
+                                                        for ($b = 0; $b < $bolgeID; $b++) {
+                                                            $bolgedata[$b] = array(
+                                                                'BSSoforID' => $resultSoforID,
+                                                                'BSSoforAd' => $soforAdSoyad,
+                                                                'BSBolgeID' => $soforBolgeID[$b],
+                                                                'BSBolgeAdi' => $soforBolgeAdi[$b]
+                                                            );
+                                                        }
+                                                        $resultBolgeID = $Panel_Model->addNewBolgeSofor($bolgedata);
+                                                        if ($resultBolgeID) {
+                                                            //kullanıcıya gerekli giriş mail yazısı
+                                                            $setTitle = $languagedeger['UyelikBilgi'];
+                                                            $subject = $languagedeger['SHtrltMail'];
+                                                            $body = $languagedeger['Merhaba'] . ' ' . $soforAdSoyad . '!<br/>' . $languagedeger['KullaniciAdi'] . ' = ' . $userKadi . '<br/>'
+                                                                    . $languagedeger['KullaniciSifre'] . ' = ' . $realSifre . '<br/>'
+                                                                    . $languagedeger['IyiGunler'];
+                                                            //şoföre araç seçildi ise
+                                                            $aracID = count($soforAracID);
+                                                            if ($aracID > 0) {
+                                                                for ($c = 0; $c < $aracID; $c++) {
+                                                                    $aracdata[$c] = array(
+                                                                        'BSAracID' => $soforAracID[$c],
+                                                                        'BSAracPlaka' => $soforAracPlaka[$c],
+                                                                        'BSSoforID' => $resultSoforID,
+                                                                        'BSSoforAd' => $soforAdSoyad
+                                                                    );
+                                                                }
+
+                                                                $resultAracID = $Panel_Model->addNewAracSofor($aracdata);
+                                                                //kullanıcıya gerekli giriş bilgileri gönderiliyor.
+                                                                $resultMail = $form->sifreHatirlatMail($soforEmail, $setTitle, $soforAdSoyad, $subject, $body);
+                                                                $sonuc["newSoforID"] = $resultSoforID;
+                                                                $sonuc["insert"] = $languagedeger['SoforEkle'];
+                                                            } else {
+                                                                //kullanıcıya gerekli giriş bilgileri gönderiliyor.
+                                                                $resultMail = $form->sifreHatirlatMail($soforEmail, $setTitle, $soforAdSoyad, $subject, $body);
+                                                                $sonuc["newSoforID"] = $resultSoforID;
+                                                                $sonuc["insert"] = $languagedeger['SoforEkle'];
+                                                            }
+                                                        } else {
+                                                            //admin kaydedilirken hata geldi ise
+                                                            $deleteresult = $Panel_Model->soforDelete($resultSoforID);
+
+                                                            if ($deleteresult) {
+                                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                                            }
+                                                        }
+                                                    } else {
+                                                        //eğer şoförün bölgesi yoksa
+                                                        $deleteresult = $Panel_Model->soforDelete($resultSoforID);
+                                                        $sonuc["hata"] = $languagedeger['BolgeSec'];
                                                     }
-
-                                                    $resultAracID = $Panel_Model->addNewAracSofor($aracdata);
-
-                                                    $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                                    $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                    if ($resultMemcache) {
-                                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                                    }
-
-                                                    $sonuc["newSoforID"] = $resultSoforID;
-                                                    $sonuc["insert"] = "Başarıyla Şoför Eklenmiştir.";
                                                 } else {
-                                                    $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                                    $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                                    if ($resultMemcache) {
-                                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                                    }
-
-                                                    $sonuc["newSoforID"] = $resultSoforID;
-                                                    $sonuc["insert"] = "Başarıyla Şoför Eklenmiştir.";
+                                                    $sonuc["hata"] = $languagedeger['GecersizKullanici'];
                                                 }
                                             } else {
-                                                //admin kaydedilirken hata geldi ise
-                                                $deleteresult = $Panel_Model->soforDelete($resultSoforID);
-
-                                                if ($deleteresult) {
-                                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                                }
+                                                $sonuc["hata"] = $languagedeger['KullanilmisEmail'];
                                             }
                                         } else {
-                                            //eğer şoförün bölgesi yoksa
-                                            $deleteresult = $Panel_Model->soforDelete($resultSoforID);
-                                            $sonuc["hata"] = "Lütfen Bölge Seçmeyi Unutmayınız.";
+                                            $sonuc["hata"] = $languagedeger['BaskaEmail'];
                                         }
                                     } else {
-                                        $sonuc["hata"] = "Lütfen Yeni Bir Kullanıcı Adı yada Şifre Giriniz.";
+                                        $sonuc["hata"] = $languagedeger['GecerliEmail'];
                                     }
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $languagedeger['Hata'];
                                 }
                             } else {
-                                $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                $sonuc["hata"] = $languagedeger['Hata'];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['Hata'];
                         }
                     }
-
                 case "soforDetail":
 
                     $adminID = Session::get("userId");
@@ -462,69 +466,43 @@ class AdminSoforAjaxSorgu extends Controller {
                     }
 
                     break;
-
                 case "soforDetailDelete":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_ASofor';
-
-
                         $form->post('sofordetail_id', true);
                         $soforDetailID = $form->values['sofordetail_id'];
 
                         $deleteresult = $Panel_Model->detailSoforDelete($soforDetailID);
                         if ($deleteresult) {
-
                             $deleteresultt = $Panel_Model->detailSoforAracDelete($soforDetailID);
                             if ($deleteresultt) {
                                 $deleteresulttt = $Panel_Model->detailSoforBolgeDelete($soforDetailID);
                                 if ($deleteresulttt) {
-                                    $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                    $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                    if ($resultMemcache) {
-                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                    }
-                                    $sonuc["delete"] = "Şoför kaydı başarıyla silinmiştir.";
+                                    $sonuc["delete"] = $languagedeger['SoforSil'];
                                 }
                             } else {
                                 $deleteresulttt = $Panel_Model->detailSoforBolgeDelete($soforDetailID);
                                 if ($deleteresulttt) {
-                                    $uniquePanelKey = Session::get("userFirmaKod") . '_APanel' . $adminID;
-                                    $resultDeletee = $MemcacheModel->deleteKey($uniquePanelKey);
-                                    $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                    if ($resultMemcache) {
-                                        $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                    }
-                                    $sonuc["delete"] = "Şoför kaydı başarıyla silinmiştir.";
+                                    $sonuc["delete"] = $languagedeger['SoforSil'];
                                 }
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['Hata'];
                         }
                     }
 
                     $sonuc["soforDetail"] = $data["soforDetail"];
 
                     break;
-
                 case "soforDetailKaydet":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
                         $form->post('sofordetail_id', true);
                         $soforID = $form->values['sofordetail_id'];
-
-                        $uniqueKey = Session::get("username");
-                        $uniqueKey = $uniqueKey . '_ASofor';
 
                         $form->post('soforDetayAd', true);
                         $form->post('soforDetaySoyad', true);
@@ -543,12 +521,11 @@ class AdminSoforAjaxSorgu extends Controller {
                         $form->post('soforDetayPostaKodu', true);
                         $form->post('soforDetayCaddeNo', true);
                         $form->post('detayAdres', true);
-
                         $form->post('eskiAd', true);
                         $form->post('eskiSoyad', true);
                         $eskiAd = $form->values['eskiAd'];
                         $eskiSoyad = $form->values['eskiSoyad'];
-
+                        $soforEmail = $form->values['soforEmail'];
 
                         $soforAd = $form->values['soforDetayAd'];
                         $soforSoyad = $form->values['soforDetaySoyad'];
@@ -559,121 +536,122 @@ class AdminSoforAjaxSorgu extends Controller {
                         $soforAracID = $_REQUEST['soforAracID'];
                         $soforAracPlaka = $_REQUEST['soforAracPlaka'];
 
-                        if ($form->submit()) {
-                            $data = array(
-                                'BSSoforAd' => $soforAd,
-                                'BSSoforSoyad' => $soforSoyad,
-                                'BSSoforPhone' => $form->values['soforDetayTelefon'],
-                                'BSSoforEmail' => $form->values['soforDetayEmail'],
-                                'BSSoforLocation' => $form->values['soforDetayLokasyon'],
-                                'BSSoforUlke' => $form->values['soforDetayUlke'],
-                                'BSSoforIl' => $form->values['soforDetayIl'],
-                                'BSSoforIlce' => $form->values['soforDetayIlce'],
-                                'BSSoforSemt' => $form->values['soforDetaySemt'],
-                                'BSSoforMahalle' => $form->values['soforDetayMahalle'],
-                                'BSSoforSokak' => $form->values['soforDetaySokak'],
-                                'BSSoforPostaKodu' => $form->values['soforDetayPostaKodu'],
-                                'BSSoforCaddeNo' => $form->values['soforDetayCaddeNo'],
-                                'BSSoforAdres' => $form->values['soforDetayAdres'],
-                                'BSSoforDetayAdres' => $form->values['detayAdres'],
-                                'BSSoforAciklama' => $form->values['soforDetayAciklama'],
-                                'Status' => $form->values['soforDetayDurum']
-                            );
-                        }
-                        if ($ad != $eskiAd || $soyad != $eskiSoyad) {
-                            $dataTur = array(
-                                'BSTurSoforAd' => $adSoyad,
-                            );
-                            $dataBolge = array(
-                                'BSSoforAd' => $adSoyad,
-                            );
-                            $dataArac = array(
-                                'BSSoforAd' => $adSoyad,
-                            );
-
-                            $resultupdate1 = $Panel_Model->soforOzelliklerDuzenle1($dataTur, $soforID);
-                            $resultupdate2 = $Panel_Model->soforOzelliklerDuzenle2($dataBolge, $soforID);
-                            $resultupdate3 = $Panel_Model->soforOzelliklerDuzenle3($dataArac, $soforID);
-                        }
-
-                        $resultSoforUpdate = $Panel_Model->soforOzelliklerDuzenle($data, $soforID);
-                        if ($resultSoforUpdate) {
-                            $aracID = count($soforAracID);
-                            if ($aracID > 0) {
-                                $deleteresultt = $Panel_Model->adminSoforAracDelete($soforID);
-                                for ($a = 0; $a < $aracID; $a++) {
-                                    $sofordata[$a] = array(
-                                        'BSAracID' => $soforAracID[$a],
-                                        'BSAracPlaka' => $soforAracPlaka[$a],
-                                        'BSSoforID' => $soforID,
-                                        'BSSoforAd' => $soforAdSoyad
-                                    );
-                                }
-                                $resultSoforUpdate = $Panel_Model->addNewSoforArac($sofordata);
-                                if ($resultSoforUpdate) {
-                                    $bolgeID = count($soforBolgeID);
-                                    $deleteresulttt = $Panel_Model->adminDetailSoforBolgeDelete($bolgeID);
-                                    if ($deleteresulttt) {
-                                        for ($b = 0; $b < $bolgeID; $b++) {
-                                            $bolgedata[$b] = array(
-                                                'BSSoforID' => $soforID,
-                                                'BSSoforAd' => $soforAdSoyad,
-                                                'BSBolgeID' => $soforBolgeID[$b],
-                                                'BSBolgeAdi' => $soforBolgeAdi[$b]
-                                            );
-                                        }
-                                        $resultBolgeID = $Panel_Model->addNewSoforBolge($bolgedata);
-                                        if ($resultBolgeID) {
-                                            $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                            if ($resultMemcache) {
-                                                $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
-                                            }
-
-                                            $sonuc["newSoforID"] = $soforID;
-                                            $sonuc["update"] = "Başarıyla Şoför Düzenlenmiştir.";
-                                        } else {
-                                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                        }
-                                    } else {
-                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                    }
-                                } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
-                                }
-                            } else {
-                                $deleteresultt = $Panel_Model->adminSoforAracDelete($soforID);
-                                $deleteresulttt = $Panel_Model->adminDetailSoforBolgeDelete($soforID);
-                                if ($deleteresulttt) {
-                                    $bolgeID = count($soforBolgeID);
-                                    for ($b = 0; $b < $bolgeID; $b++) {
-                                        $bolgedata[$b] = array(
-                                            'BSSoforID' => $soforID,
-                                            'BSSoforAd' => $soforAdSoyad,
-                                            'BSBolgeID' => $soforBolgeID[$b],
-                                            'BSBolgeAdi' => $soforBolgeAdi[$b]
+                        if (!filter_var($soforEmail, FILTER_VALIDATE_EMAIL) === false) {
+                            $emailValidate = $form->mailControl1($soforEmail);
+                            if ($emailValidate == 1) {
+                                $kullaniciliste = $Panel_Model->soforEmailDbKontrol($soforEmail);
+                                if (count($kullaniciliste) <= 0) {
+                                    if ($form->submit()) {
+                                        $data = array(
+                                            'BSSoforAd' => $soforAd,
+                                            'BSSoforSoyad' => $soforSoyad,
+                                            'BSSoforPhone' => $form->values['soforDetayTelefon'],
+                                            'BSSoforEmail' => $soforEmail,
+                                            'BSSoforLocation' => $form->values['soforDetayLokasyon'],
+                                            'BSSoforUlke' => $form->values['soforDetayUlke'],
+                                            'BSSoforIl' => $form->values['soforDetayIl'],
+                                            'BSSoforIlce' => $form->values['soforDetayIlce'],
+                                            'BSSoforSemt' => $form->values['soforDetaySemt'],
+                                            'BSSoforMahalle' => $form->values['soforDetayMahalle'],
+                                            'BSSoforSokak' => $form->values['soforDetaySokak'],
+                                            'BSSoforPostaKodu' => $form->values['soforDetayPostaKodu'],
+                                            'BSSoforCaddeNo' => $form->values['soforDetayCaddeNo'],
+                                            'BSSoforAdres' => $form->values['soforDetayAdres'],
+                                            'BSSoforDetayAdres' => $form->values['detayAdres'],
+                                            'BSSoforAciklama' => $form->values['soforDetayAciklama'],
+                                            'Status' => $form->values['soforDetayDurum']
                                         );
                                     }
-                                    $resultBolgeID = $Panel_Model->addNewSoforBolge($bolgedata);
-                                    if ($resultBolgeID) {
-                                        $resultMemcache = $MemcacheModel->get($uniqueKey);
-                                        if ($resultMemcache) {
-                                            $resultDelete = $MemcacheModel->deleteKey($uniqueKey);
+                                    $resultSoforUpdate = $Panel_Model->soforOzelliklerDuzenle($data, $soforID);
+                                    if ($resultSoforUpdate) {
+                                        if ($soforAd != $eskiAd || $soforSoyad != $eskiSoyad) {
+                                            $dataDuzenle = array(
+                                                'BSTurSoforAd' => $soforAdSoyad
+                                            );
+                                            $updatetur = $Panel_Model->soforOzelliklerDuzenle1($dataDuzenle, $soforID);
+                                            $dataDuzenle2 = array(
+                                                'BSGonderenAdSoyad' => $soforAdSoyad
+                                            );
+                                            $updateduyuru = $Panel_Model->soforOzelliklerDuzenle4($dataDuzenle2, $soforID);
+                                            $dataDuzenle3 = array(
+                                                'BSEkleyenAdSoyad' => $soforAdSoyad
+                                            );
+                                            $updateduyurulog = $Panel_Model->soforOzelliklerDuzenle5($dataDuzenle3, $soforID);
                                         }
-
-                                        $sonuc["newSoforID"] = $soforID;
-                                        $sonuc["update"] = "Başarıyla Şoför Düzenlenmiştir.";
+                                        $aracID = count($soforAracID);
+                                        if ($aracID > 0) {
+                                            $deleteresultt = $Panel_Model->adminSoforAracDelete($soforID);
+                                            for ($a = 0; $a < $aracID; $a++) {
+                                                $sofordata[$a] = array(
+                                                    'BSAracID' => $soforAracID[$a],
+                                                    'BSAracPlaka' => $soforAracPlaka[$a],
+                                                    'BSSoforID' => $soforID,
+                                                    'BSSoforAd' => $soforAdSoyad
+                                                );
+                                            }
+                                            $resultSoforUpdate = $Panel_Model->addNewSoforArac($sofordata);
+                                            if ($resultSoforUpdate) {
+                                                $bolgeID = count($soforBolgeID);
+                                                $deleteresulttt = $Panel_Model->adminDetailSoforBolgeDelete($bolgeID);
+                                                if ($deleteresulttt) {
+                                                    for ($b = 0; $b < $bolgeID; $b++) {
+                                                        $bolgedata[$b] = array(
+                                                            'BSSoforID' => $soforID,
+                                                            'BSSoforAd' => $soforAdSoyad,
+                                                            'BSBolgeID' => $soforBolgeID[$b],
+                                                            'BSBolgeAdi' => $soforBolgeAdi[$b]
+                                                        );
+                                                    }
+                                                    $resultBolgeID = $Panel_Model->addNewSoforBolge($bolgedata);
+                                                    if ($resultBolgeID) {
+                                                        $sonuc["newSoforID"] = $soforID;
+                                                        $sonuc["update"] = $languagedeger['SoforDuzenle'];
+                                                    } else {
+                                                        $sonuc["hata"] = $languagedeger['Hata'];
+                                                    }
+                                                } else {
+                                                    $sonuc["hata"] = $languagedeger['Hata'];
+                                                }
+                                            } else {
+                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                            }
+                                        } else {
+                                            $deleteresultt = $Panel_Model->adminSoforAracDelete($soforID);
+                                            $deleteresulttt = $Panel_Model->adminDetailSoforBolgeDelete($soforID);
+                                            if ($deleteresulttt) {
+                                                $bolgeID = count($soforBolgeID);
+                                                for ($b = 0; $b < $bolgeID; $b++) {
+                                                    $bolgedata[$b] = array(
+                                                        'BSSoforID' => $soforID,
+                                                        'BSSoforAd' => $soforAdSoyad,
+                                                        'BSBolgeID' => $soforBolgeID[$b],
+                                                        'BSBolgeAdi' => $soforBolgeAdi[$b]
+                                                    );
+                                                }
+                                                $resultBolgeID = $Panel_Model->addNewSoforBolge($bolgedata);
+                                                if ($resultBolgeID) {
+                                                    $sonuc["newSoforID"] = $soforID;
+                                                    $sonuc["update"] = $languagedeger['SoforDuzenle'];
+                                                } else {
+                                                    $sonuc["hata"] = $languagedeger['Hata'];
+                                                }
+                                            } else {
+                                                $sonuc["hata"] = $languagedeger['Hata'];
+                                            }
+                                        }
                                     } else {
-                                        $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                        $sonuc["hata"] = $languagedeger['Hata'];
                                     }
                                 } else {
-                                    $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                                    $sonuc["hata"] = $languagedeger['KullanilmisEmail'];
                                 }
+                            } else {
+                                $sonuc["hata"] = $languagedeger['BaskaEmail'];
                             }
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $languagedeger['GecerliEmail'];
                         }
                     }
-
                 case "SoforDetailMultiSelect":
                     $adminID = Session::get("userId");
                     if (!$adminID) {
@@ -757,9 +735,39 @@ class AdminSoforAjaxSorgu extends Controller {
                         $sonuc["adminSoforArac"] = $digerSoforArac;
                     }
                     break;
+                case "soforDetailTur":
+                    $adminID = Session::get("userId");
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $form->post('soforID', true);
+                        $sID = $form->values['soforID'];
+                        $soforTurDetail = $Panel_Model->adminSoforTurDetail($sID);
 
+                        //arac TUR İD
+                        $a = 0;
+                        foreach ($soforTurDetail as $soforTurDetaill) {
+                            $soforturId[] = $soforTurDetaill['BSTurID'];
+                            $a++;
+                        }
+                        $turId = implode(',', $soforturId);
+
+                        $soforTur = $Panel_Model->adminSoforDetailTur($turId);
+                        $b = 0;
+                        foreach ($soforTur as $soforTurr) {
+                            $soforDetailTur[$b]['TurID'] = $soforTurr['SBTurID'];
+                            $soforDetailTur[$b]['TurAd'] = $soforTurr['SBTurAd'];
+                            $soforDetailTur[$b]['TurAciklama'] = $soforTurr['SBTurAciklama'];
+                            $soforDetailTur[$b]['TurAktiflik'] = $soforTurr['SBTurAktiflik'];
+                            $soforDetailTur[$b]['TurKurum'] = $soforTurr['SBKurumAd'];
+                            $soforDetailTur[$b]['TurTip'] = $soforTurr['SBTurTip'];
+                            $soforDetailTur[$b]['TurBolge'] = $soforTurr['SBBolgeAd'];
+                            $b++;
+                        }
+                        $sonuc["soforDetailTur"] = $soforDetailTur;
+                    }
+                    break;
                 case "adminSoforTakvim":
-
                     $calendar = $this->load->otherClasses('Calendar');
                     // Short-circuit if the client did not give us a date range.
                     if (!isset($_POST['start']) || !isset($_POST['end'])) {
@@ -814,7 +822,6 @@ class AdminSoforAjaxSorgu extends Controller {
 
                     $sonuc = $input_arrays;
                     break;
-
                 default :
                     header("Location:" . SITE_URL_LOGOUT);
                     break;

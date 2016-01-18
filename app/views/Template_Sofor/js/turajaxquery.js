@@ -1,6 +1,7 @@
+var SITE_URL = "http://192.168.1.30/SProject/";
 $.ajaxSetup({
     type: "post",
-    url: "http://192.168.1.198/SProject/SoforMobilTurAjax",
+    url: SITE_URL + "SoforMobilTurAjax",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -791,7 +792,21 @@ var map;
 var markers = [];
 function Mobileinitialize(lokasyon, adres) {
     var mapOptions = {
-        zoom: 16
+        zoom: 12,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+            style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            position: google.maps.ControlPosition.TOP_CENTER
+        },
+        zoomControl: true,
+        zoomControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_CENTER
+        },
+        scaleControl: true,
+        streetViewControl: true,
+        streetViewControlOptions: {
+            position: google.maps.ControlPosition.LEFT_TOP
+        }
     };
 
     var map = new google.maps.Map(document.getElementById('sofor_map'),
@@ -857,18 +872,18 @@ function turLokasyon() {
         if (inmeyenLength > 0) {
             for (var inmeyenicon = 0; inmeyenicon < inmeyenLength; inmeyenicon++) {
                 if (turList[inmeyenicon][4] != 1) {//öğrenci
-                    icons.push('http://192.168.1.22/SProject/Plugins/mapView/green_student.png');
+                    icons.push(SITE_URL + 'Plugins/mapView/green_student.png');
                     lokasyonlar.push([turList[inmeyenicon][1], turList[inmeyenicon][2]]);
                     title.push(turList[inmeyenicon][0]);
                     idler.push(turList[inmeyenicon][3]);
                 } else {//personel
-                    icons.push('http://192.168.1.22/SProject/Plugins/mapView/employee_green.png');
+                    icons.push(SITE_URL + 'Plugins/mapView/employee_green.png');
                     lokasyonlar.push([turList[inmeyenicon][1], turList[inmeyenicon][2]]);
                     title.push(turList[inmeyenicon][0]);
                     idler.push(turList[inmeyenicon][3]);
                 }
             }
-            icons.push('http://192.168.1.22/SProject/Plugins/mapView/build.png');
+            icons.push(SITE_URL + 'Plugins/mapView/build.png');
             lokasyonlar.push([kurum[2], kurum[3]]);
             title.push(kurum[0]);
             idler.push(kurum[1]);
@@ -877,12 +892,20 @@ function turLokasyon() {
         iconsLength = icons.length;
         var mapOptions = {
             zoom: 12,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            panControl: false,
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.TOP_CENTER
+            },
             zoomControl: true,
+            zoomControlOptions: {
+                position: google.maps.ControlPosition.RIGHT_CENTER
+            },
             scaleControl: true,
-            streetViewControl: false,
-            mapTypeControl: true
+            streetViewControl: true,
+            streetViewControlOptions: {
+                position: google.maps.ControlPosition.LEFT_TOP
+            }
         };
         var newPos = new google.maps.LatLng(kurum[2], kurum[3]);
         var map = new google.maps.Map(document.getElementById('multiple_lokasyon_map'),

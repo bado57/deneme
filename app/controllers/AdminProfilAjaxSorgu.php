@@ -17,8 +17,12 @@ class AdminProfilAjaxSorgu extends Controller {
 
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
             $sonuc = array();
+            //language 
+            $lang = Session::get("dil");
+            $formlanguage = $this->load->ajaxlanguage($lang);
+            $deger = $formlanguage->ajaxlanguage();
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
+            $Panel_Model = $this->load->model("Panel_Model");
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -77,9 +81,9 @@ class AdminProfilAjaxSorgu extends Controller {
                             unset($_SESSION['kullanicisoyad']);
                             Session::set("kullaniciad", $ad);
                             Session::set("kullanicisoyad", $soyad);
-                            $sonuc["update"] = "Başarıyla güncellenmiştir";
+                            $sonuc["update"] = $deger["ProfilDuzenle"];
                         } else {
-                            $sonuc["hata"] = "Bir Hata Oluştu Lütfen Tekrar Deneyiniz.";
+                            $sonuc["hata"] = $deger["Hata"];
                         }
                     }
 

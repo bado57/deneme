@@ -5,13 +5,12 @@
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminogrenciajaxquery.js" type="text/javascript"></script> 
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminogrenci-web.app.js" type="text/javascript"></script> 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
-
 <aside class="right-side">
     <section class="content-header">
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-left">
                 <h3>
-                    <i class="fa fa-th"></i> <?php echo $data["Ogrenci"]; ?>
+                    <i class="fa fa-graduation-cap"></i> <?php echo $data["Ogrenci"]; ?>
                     <small id="smallOgrenci"><?php if (count($model[0]['OgrenciCount']) > 0) { ?>
                             <?php
                             echo $model[0]['OgrenciCount'];
@@ -79,7 +78,6 @@
 
     </section>
 </aside>
-
 <div id="ogrenci" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -115,7 +113,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="Aciklama" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="Aciklama" class="form-control dsb" rows="6" style="resize: none"></textarea>
                     </div>
                     <div class="form-group">
                         <button data-type="svClose"  data-class="ogrenci" type="button" data-islemler="ogrenciVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
@@ -144,12 +142,52 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="OgrGdsMAyarSelect"><?php echo $data["BMesafeAyar"] . " (" . $data["Gidis"] . ")"; ?></label>
+                        <select type="text" class="form-control" id="OgrGdsMAyarSelect" name="OgrGdsMAyarSelect">
+                            <option value="200">200 m</option>
+                            <option value="400">400 m</option>
+                            <option value="600">600 m</option>
+                            <option value="800">800 m</option>
+                            <option value="1000">1000 m</option>
+                            <option value="1200">1200 m</option>
+                            <option value="1400">1400 m</option>
+                            <option value="1600">1600 m</option>
+                            <option value="1800">1800 m</option>
+                            <option value="2000">2000 m</option>
+                            <option value="2200">2200 m</option>
+                            <option value="2400">2400 m</option>
+                            <option value="2600">2600 m</option>
+                            <option value="2800">2800 m</option>
+                            <option value="3000">3000 m</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="OgrDnsMAyarSelect"><?php echo $data["BMesafeAyar"] . " (" . $data["Donus"] . ")"; ?></label>
+                        <select type="text" class="form-control" id="OgrDnsMAyarSelect" name="OgrDnsMAyarSelect">
+                            <option value="200">200 m</option>
+                            <option value="400">400 m</option>
+                            <option value="600">600 m</option>
+                            <option value="800">800 m</option>
+                            <option value="1000">1000 m</option>
+                            <option value="1200">1200 m</option>
+                            <option value="1400">1400 m</option>
+                            <option value="1600">1600 m</option>
+                            <option value="1800">1800 m</option>
+                            <option value="2000">2000 m</option>
+                            <option value="2200">2200 m</option>
+                            <option value="2400">2400 m</option>
+                            <option value="2600">2600 m</option>
+                            <option value="2800">2800 m</option>
+                            <option value="3000">3000 m</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="OgrenciEmail"><?php echo $data["Email"]; ?></label>
                         <input type="text" class="form-control" id="OgrenciEmail" name="OgrenciEmail" value="">
                     </div>
                     <div class="form-group">
                         <label for="OgrenciAdresDetay"><?php echo $data["AdresDetay"]; ?></label>
-                        <textarea name="OgrenciAdresDetay" class="form-control dsb" rows="3"></textarea>
+                        <textarea name="OgrenciAdresDetay" class="form-control dsb" rows="3" style="resize: none"></textarea>
                     </div>
                 </div>
                 <div class="form-vertical OgrenciAdresForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -190,11 +228,10 @@
         </div>
     </div>
 </div>
-
 <div id="OgrenciDetay" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["OgrenciDetay"]; ?> <span class="pull-right"><button data-type="svClose" data-class="OgrenciDetay" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["OgrenciDetay"]; ?> <span class="pull-right"><button id="addNew" type="button" class="svToggle btn btn-success addNewButton mr10" data-type="svOpen" data-class="ogrenciDetayTur" data-islemler="adminOgrenciDetailTur"><i class="fa fa-refresh"></i> <?php echo $data["Turlar"]; ?></button><button data-type="svClose" data-class="OgrenciDetay" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <div class="row" id="getPartialView">
                 <div class="form-vertical addOgrenciForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -227,7 +264,7 @@
                     </div>
                     <div class="form-group">
                         <label for="DetayAciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="DetayAciklama" class="form-control dsb" rows="3" disabled></textarea>
+                        <textarea name="DetayAciklama" class="form-control dsb" rows="3" disabled style="resize: none"></textarea>
                     </div>
                     <div class="form-group submit-group">
                         <button data-type="svClose" type="button" class="btn btn-default vzg" data-Vzgislem="ogrenciDetailVazgec"><?php echo $data["Vazgec"]; ?></button>
@@ -264,8 +301,18 @@
                         <input type="text" class="form-control dsb" id="OgrenciDetayEmail" name="OgrenciDetayEmail" value="" disabled>
                     </div>
                     <div class="form-group">
+                        <label for="OgrDetGdsMAyarSelect"><?php echo $data["BMesafeAyar"] . " (" . $data["Gidis"] . ")"; ?></label>
+                        <select type="text" class="form-control" id="OgrDetGdsMAyarSelect" name="OgrDetGdsMAyarSelect">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="OgrDetDnsMAyarSelect"><?php echo $data["BMesafeAyar"] . " (" . $data["Donus"] . ")"; ?></label>
+                        <select type="text" class="form-control" id="OgrDetDnsMAyarSelect" name="OgrDetDnsMAyarSelect">
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="OgrenciDetayAdresDetay"><?php echo $data["AdresDetay"]; ?></label>
-                        <textarea name="OgrenciDetayAdresDetay" class="form-control dsb" rows="3" disabled></textarea>
+                        <textarea name="OgrenciDetayAdresDetay" class="form-control dsb" rows="3" disabled style="resize: none"></textarea>
                     </div>
                 </div>
                 <div class="form-vertical OgrenciDetailAdresForm col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -306,7 +353,35 @@
         </div>
     </div>
 </div>
-
+<div id="ogrenciDetayTur" class="svClose col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+    <div class="row">
+        <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h3><?php echo $data["TurListe"]; ?> <span class="pull-right"><button class="btn btn-success mr10 seeAllButton" onclick="location.href = '<?php echo SITE_PLUGINADMIN_Tur; ?>'"><?php echo $data["TumunuGor"]; ?></button> <button data-type="svClose" data-class="ogrenciDetayTur" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <hr/>
+            <div class="row" id="getPartialView">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="generalInfo col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <table class="table table-responsive table-bordered table-hover table-condensed" id="adminOgrenciTurTable">
+                                    <thead>
+                                        <tr >
+                                            <th><?php echo $data["TurAdi"]; ?></th>
+                                            <th><?php echo $data["Tür"]; ?></th>
+                                            <th><?php echo $data["Aciklama"]; ?></th>
+                                            <th><?php echo $data["Kurum"]; ?></th>
+                                            <th><?php echo $data["Bolge"]; ?></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="map" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div id="mapHeader">
         <h3><b id="singleMapBaslik"><?php echo $data["LokasyonTanimlama"]; ?> </b><b id="multiMapBaslik"></b>

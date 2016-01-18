@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/Language",
+    url: SITE_URL + "Language",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -13,24 +13,22 @@ $.ajaxSetup({
         }
     }
 });
-
-$("select#kullaniciLanguage").change(function () {
-    var lang = $(this).val();
-    $.ajax({
-        data: {"lang": lang},
-        success: function (cevap) {
-            if (cevap.hata) {
-                //alert(cevap.hata);
-            } else {
-                window.location.reload();
-            }
-        }
-    });
-});
-
 $(document).ready(function () {
-    
-    
+
+    $("select#kullaniciLanguage").change(function () {
+        var lang = $(this).val();
+        $.ajax({
+            data: {"lang": lang},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    //alert(cevap.hata);
+                } else {
+                    window.location.reload();
+                }
+            }
+        });
+    });
+
     $("#loginForm").validate({
         rules: {
             usersloginkadi: {
@@ -48,6 +46,15 @@ $(document).ready(function () {
     jQuery.validator.addMethod('selectcheck', function (value) {
         return (value != '0');
     }, "Kullanıcı Türü Seçimi gereklidir.");
-    
+
+    var loginDeger = $("#sonucDeger").val();
+    if (loginDeger != undefined) {//front
+        if (loginDeger != "") {
+            reset();
+            alertify.alert(loginDeger);
+            return false;
+        }
+    }
+
 });
  

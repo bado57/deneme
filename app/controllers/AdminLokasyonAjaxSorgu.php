@@ -18,7 +18,7 @@ class AdminLokasyonAjaxSorgu extends Controller {
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
             $sonuc = array();
             //model bağlantısı
-            $Panel_Model = $this->load->model("panel_model");
+            $Panel_Model = $this->load->model("Panel_Model");
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -726,7 +726,7 @@ class AdminLokasyonAjaxSorgu extends Controller {
                         $sonuc["turBinemeyen"] = $turBinmeyen;
                         $sonuc["turInen"] = $turInenler;
                         $sonuc["turInemeyen"] = $turInmeyen;
-                        $sonuc["aracLokasyon"] = $aracLokasyon;
+                        $sonuc["aracLokasyon"] = $aracLokasyon[0]["BSAracLokasyon"];
                     }
 
                     break;

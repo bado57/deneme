@@ -15,7 +15,7 @@ class AdminMobilServis extends Controller {
 
             $form = $this->load->otherClasses('Form');
             //memcache model bağlanısı
-            $MemcacheModel = $this->load->model("adminmemcache_model");
+            $MemcacheModel = $this->load->model("AdminMemcache_Model");
 
             $form->post("tip", true);
             $tip = $form->values['tip'];
@@ -38,7 +38,7 @@ class AdminMobilServis extends Controller {
                         $rutbe = $form->values['rutbe'];
 
                         $formDbConfig = $this->load->otherClasses('DatabaseConfig');
-                        $usersselect_model = $this->load->model("adminselectdb_model");
+                        $usersselect_model = $this->load->model("AdminSelectDb_Model");
 
                         $loginfirmaID = $form->substrEnd($loginKadi, 6);
                         //return database results
@@ -52,7 +52,7 @@ class AdminMobilServis extends Controller {
 
                         $formDbConfig->configDb($SelectdbName, $SelectdbIp, $SelectdbUser, $SelectdbPassword);
                         //model bağlantısı
-                        $Panel_Model = $this->load->model("panel_model_mobile");
+                        $Panel_Model = $this->load->model("Panel_Model_Mobile");
 
                         $uniqueKey = $SelectdbFirmaKod . '_AFirma';
 
@@ -93,12 +93,9 @@ class AdminMobilServis extends Controller {
                         
                         $form->post("boylam", true);
                         $boylam = $form->values['boylam'];
-                        
-                        //error_log($enlem);
-                        //error_log($boylam);
 
                         $formDbConfig = $this->load->otherClasses('DatabaseConfig');
-                        $usersselect_model = $this->load->model("adminselectdb_model");
+                        $usersselect_model = $this->load->model("AdminSelectDb_Model");
 
                         $loginfirmaID = $form->substrEnd($loginKadi, 6);
                         //return database results
@@ -112,7 +109,7 @@ class AdminMobilServis extends Controller {
 
                         $formDbConfig->configDb($SelectdbName, $SelectdbIp, $SelectdbUser, $SelectdbPassword);
                         //model bağlantısı
-                        $Panel_Model = $this->load->model("panel_model_mobile");
+                        $Panel_Model = $this->load->model("Panel_Model_Mobile");
 
                         //benzersiz anahtar
                         $uniqueKey = $loginKadi . '_ABolge';

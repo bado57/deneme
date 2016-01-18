@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/AdminLokasyonAjaxSorgu",
+    url: SITE_URL + "AdminLokasyonAjaxSorgu",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -17,6 +17,7 @@ $.ajaxSetup({
         }
     }
 });
+var refreshIntervalId;
 $(document).ready(function () {
     LokasyonTable = $('#adminLokasyonTable').dataTable({
         "paging": true,
@@ -25,6 +26,7 @@ $(document).ready(function () {
     });
     //araç işlemleri
     $(document).on('click', 'tbody#adminLokasyonRow > tr > td > a', function (e) {
+        haritaGostermeDeger = 0;
         var i = $(this).find("i");
         i.removeClass("fa-bus");
         i.addClass("fa-spinner fa-spin");
@@ -42,7 +44,7 @@ $(document).ready(function () {
         i.removeClass("fa-spinner fa-spin");
         i.addClass("fa fa-bus");
         var haritadeger = 0;
-        setInterval(function () {
+        refreshIntervalId = setInterval(function () {
             $.ajax({
                 data: {"aracID": aracID, "turID": turID, "turTipID": turTipID, "turGidisDonus": turGidisDonus, "tip": "aracLokasyonDetail"},
                 success: function (cevap) {
@@ -63,7 +65,7 @@ $(document).ready(function () {
                             arac = [];
                             var kurumLoc = kurumLocation.split(",");
                             kurum = Array(kurumAd, kurumID, kurumLoc[0], kurumLoc[1]);
-                            var aracLokasyon = cevap.aracLokasyon[0].aracLokasyon;
+                            var aracLokasyon = cevap.aracLokasyon;
                             var aracLoc = aracLokasyon.split(",");
                             var aracTrim = aracPlaka.trim();
                             arac = Array(aracTrim, aracLoc[0], aracLoc[1], aracID);
@@ -123,5 +125,12 @@ $(document).ready(function () {
         }, 2000);
     });
 });
+$.AdminIslemler = {
+    adminAracLoc: function () {
+        clearInterval(refreshIntervalId);
+        clearInterval(Interval);
+        return true;
+    }
+}
 
 

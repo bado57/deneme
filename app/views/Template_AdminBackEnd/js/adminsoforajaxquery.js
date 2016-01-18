@@ -1,6 +1,6 @@
 $.ajaxSetup({
     type: "post",
-    url: "http://localhost/SProject/AdminSoforAjaxSorgu",
+    url: SITE_URL + "AdminSoforAjaxSorgu",
     //timeout:3000,
     dataType: "json",
     error: function (a, b) {
@@ -24,6 +24,11 @@ $(document).ready(function () {
         "ordering": true,
         "info": true
     });
+    SoforTurTable = $('#soforTurTable').dataTable({
+        "paging": true,
+        "ordering": true,
+        "info": true
+    });
     //Şoför işlemleri
     $(document).on('click', 'tbody#soforRow > tr > td > a', function (e) {
         var i = $(this).find("i");
@@ -38,7 +43,6 @@ $(document).ready(function () {
                     alertify.alert(jsDil.Hata);
                     return false;
                 } else {
-
                     $("input[name=SoforDetayAdi]").val(cevap.soforDetail[0].SoforListAd);
                     $("input[name=SoforDetaySoyadi]").val(cevap.soforDetail[0].SoforListSoyad);
                     $("#SoforDetayDurum").val(cevap.soforDetail[0].SoforListDurum);
@@ -145,7 +149,6 @@ $(document).ready(function () {
             }
         });
     });
-
     $('#SoforDetaySelectBolge').on('change', function () {
 
         var soforID = $("input[name=soforDetayID]").val();
@@ -293,7 +296,7 @@ $.AdminIslemler = {
                         return false;
                     } else {
                         var soforEmail = $("input[name=SoforEmail]").val();
-                        if (soforEmail == ' ') {
+                        if (soforEmail == '') {
                             reset();
                             alertify.alert(jsDil.EpostaBos);
                             return false;
@@ -351,11 +354,11 @@ $.AdminIslemler = {
                                             success: function (cevap) {
                                                 if (cevap.hata) {
                                                     reset();
-                                                    alertify.alert(jsDil.Hata);
+                                                    alertify.alert(cevap.hata);
                                                     return false;
                                                 } else {
                                                     reset();
-                                                    alertify.success(jsDil.SoforKaydet);
+                                                    alertify.success(cevap.insert);
                                                     var soforCount = $('#smallSofor').text();
                                                     soforCount++;
                                                     $('#smallSofor').text(soforCount);
@@ -380,10 +383,10 @@ $.AdminIslemler = {
                                                     }
                                                     soforBolgeID = [];
                                                     soforAracID = [];
+                                                    return true;
                                                 }
                                             }
                                         });
-                                        return true;
                                     } else {
                                         reset();
                                         alertify.alert(jsDil.BolgeSec);
@@ -750,12 +753,12 @@ $.AdminIslemler = {
                                             success: function (cevap) {
                                                 if (cevap.hata) {
                                                     reset();
-                                                    alertify.alert(jsDil.Hata);
+                                                    alertify.alert(cevap.hata);
                                                     return false;
                                                 } else {
                                                     disabledForm();
                                                     reset();
-                                                    alertify.success(jsDil.SoforDuzenle);
+                                                    alertify.success(cevap.update);
                                                     var SelectBolgeOptions = new Array();
                                                     var SelectSoforOptions = new Array();
                                                     if (soforBolgeID.length > 0) {
@@ -841,6 +844,53 @@ $.AdminIslemler = {
                 }
             }
         }
+    },
+    soforDetailTur: function () {
+        SoforTurTable.DataTable().clear().draw();
+        var soforID = $("input[name=soforDetayID]").val();
+        $.ajax({
+            data: {"soforID": soforID, "tip": "soforDetailTur"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
+                } else {
+                    if (cevap.soforDetailTur) {
+                        var turCount = cevap.soforDetailTur.length;
+                        for (var i = 0; i < turCount; i++) {
+                            if (cevap.soforDetailTur[i].TurTip == 0) {
+                                TurTip = jsDil.Ogrenci;
+                            } else if (cevap.soforDetailTur[i].TurTip == 1) {
+                                TurTip = jsDil.Personel;
+                            } else {
+                                TurTip = jsDil.OgrenciPersonel;
+                            }
+                            if (cevap.soforDetailTur[i].TurAktiflik != 0) {
+                                var addRow = "<tr><td>"
+                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.soforDetailTur[i].TurID + "'>"
+                                        + "<i class='fa fa-map-marker'></i> " + cevap.soforDetailTur[i].TurAd + "</a></td>"
+                                        + "<td class='hidden-xs' >" + TurTip + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.soforDetailTur[i].TurAciklama + "</td>"
+                                        + "<td class='hidden-xs'>" + cevap.soforDetailTur[i].TurKurum + "</td>"
+                                        + "<td class='hidden-xs'>" + cevap.soforDetailTur[i].TurBolge + "</td></tr>";
+                                SoforTurTable.DataTable().row.add($(addRow)).draw();
+                            } else {
+                                var addRow = "<tr><td>"
+                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.soforDetailTur[i].TurID + "'>"
+                                        + "<i class='fa fa-map-marker' style='color:red'></i> " + cevap.soforDetailTur[i].TurAd + "</a></td>"
+                                        + "<td class='hidden-xs' >" + TurTip + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.soforDetailTur[i].TurAciklama + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.soforDetailTur[i].TurKurum + "</td>"
+                                        + "<td class='hidden-xs' >" + cevap.soforDetailTur[i].TurBolge + "</td></tr>";
+                                SoforTurTable.DataTable().row.add($(addRow)).draw();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        return true;
     },
     adminSoforTakvim: function () {
         var currentLangCode = $("input[name=takvimLang]").val();
