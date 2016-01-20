@@ -63,6 +63,8 @@ $(document).ready(function () {
                     $("input[name=street_number]").val(cevap.isciDetail[0].IsciListCaddeNo);
                     $("input[name=isciDetayID]").val(cevap.isciDetail[0].IsciListID);
                     $("input[name=isciDetayAdres]").val(cevap.isciDetail[0].IsciListDetayAdres);
+                    $("#detayDovizTip").val(cevap.isciDetail[0].IsciParaTip);
+                    $("input[name=detayOdemeTutar]").val(cevap.isciDetail[0].IsciOTutar);
 
                     var SelectBilGidis = new Array();
                     gidisBildAyar = cevap.isciDetail[0].IsciGBild;
@@ -286,6 +288,7 @@ $.AdminIslemler = {
         $("input[name=IsciEmail]").val('');
         $("textarea[name=IsciAdresDetay]").val('');
         $("textarea[name=Aciklama]").val('');
+        $("input[name=odemeTutar]").val('');
         $("input[name=country]").val('');
         $("input[name=administrative_area_level_1]").val('');
         $("input[name=administrative_area_level_2]").val('');
@@ -414,48 +417,66 @@ $.AdminIslemler = {
                                                 $('select#IsciKurumSelect option:selected').each(function () {
                                                     isciKurumAd.push($(this).attr('title'));
                                                 });
-                                                $.ajax({
-                                                    data: {"isciBolgeID[]": isciBolgeID, "isciBolgeAdi[]": isciBolgeAdi, "isciKurumID[]": isciKurumID, "isciKurumAd[]": isciKurumAd, "isciAd": isciAd,
-                                                        "isciSoyad": isciSoyad, "isciDurum": isciDurum, "isciLokasyon": isciLokasyon, "isciTelefon": isciTelefon,
-                                                        "isciEmail": isciEmail, "isciAdres": isciAdres, "aciklama": aciklama, "ulke": ulke,
-                                                        "il": il, "ilce": ilce, "semt": semt, "mahalle": mahalle,
-                                                        "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno,
-                                                        "gdsbildirim": gdsbildirim, "dnsbildirim": dnsbildirim, "detayAdres": ttl, "tip": "isciKaydet"},
-                                                    success: function (cevap) {
-                                                        if (cevap.hata) {
-                                                            reset();
-                                                            alertify.alert(jsDil.Hata);
-                                                            return false;
-                                                        } else {
-                                                            reset();
-                                                            alertify.success(cevap.insert);
-                                                            var isciCount = $('#smallIsci').text();
-                                                            isciCount++;
-                                                            $('#smallIsci').text(isciCount);
-                                                            if (isciDurum != 0) {
-                                                                var addRow = "<tr style='background-color:#F2F2F2'><td>"
-                                                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newIsciID + "'>"
-                                                                        + "<i class='glyphicon glyphicon-user' style='color:green;'></i> " + isciAd + "</a></td>"
-                                                                        + "<td class='hidden-xs'>" + isciSoyad + "</td>"
-                                                                        + "<td class='hidden-xs'>" + isciTelefon + "</td>"
-                                                                        + "<td class='hidden-xs'>" + isciEmail + "</td>"
-                                                                        + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
-                                                                IsciTable.DataTable().row.add($(addRow)).draw();
-                                                            } else {
-                                                                var addRow = "<tr style='background-color:#F2F2F2'><td>"
-                                                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newIsciID + "'>"
-                                                                        + "<i class='glyphicon glyphicon-user' style='color:red;'></i> " + isciAd + "</a></td>"
-                                                                        + "<td class='hidden-xs'>" + isciSoyad + "</td>"
-                                                                        + "<td class='hidden-xs'>" + isciTelefon + "</td>"
-                                                                        + "<td class='hidden-xs'>" + isciEmail + "</td>"
-                                                                        + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
-                                                                IsciTable.DataTable().row.add($(addRow)).draw();
+                                                var odemeTutar = $("#odemeTutar").val();
+                                                var odemeTip = $("#dovizTip option:selected").val();
+                                                var splitodeme = odemeTutar.split(".");
+                                                var odemelength = splitodeme[0].length;
+                                                if (odemeTutar != "") {
+                                                    if (odemelength <= 13) {
+                                                        $.ajax({
+                                                            data: {"isciBolgeID[]": isciBolgeID, "isciBolgeAdi[]": isciBolgeAdi, "isciKurumID[]": isciKurumID, "isciKurumAd[]": isciKurumAd, "isciAd": isciAd,
+                                                                "isciSoyad": isciSoyad, "isciDurum": isciDurum, "isciLokasyon": isciLokasyon, "isciTelefon": isciTelefon,
+                                                                "isciEmail": isciEmail, "isciAdres": isciAdres, "aciklama": aciklama, "ulke": ulke,
+                                                                "il": il, "ilce": ilce, "semt": semt, "mahalle": mahalle,
+                                                                "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno,
+                                                                "gdsbildirim": gdsbildirim, "dnsbildirim": dnsbildirim,
+                                                                "odemeTutar": odemeTutar, "odemeTip": odemeTip, "detayAdres": ttl, "tip": "isciKaydet"},
+                                                            success: function (cevap) {
+                                                                if (cevap.hata) {
+                                                                    reset();
+                                                                    alertify.alert(cevap.hata);
+                                                                    return false;
+                                                                } else {
+                                                                    reset();
+                                                                    alertify.success(cevap.insert);
+                                                                    var isciCount = $('#smallIsci').text();
+                                                                    isciCount++;
+                                                                    $('#smallIsci').text(isciCount);
+                                                                    if (isciDurum != 0) {
+                                                                        var addRow = "<tr style='background-color:#F2F2F2'><td>"
+                                                                                + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newIsciID + "'>"
+                                                                                + "<i class='glyphicon glyphicon-user' style='color:green;'></i> " + isciAd + "</a></td>"
+                                                                                + "<td class='hidden-xs'>" + isciSoyad + "</td>"
+                                                                                + "<td class='hidden-xs'>" + isciTelefon + "</td>"
+                                                                                + "<td class='hidden-xs'>" + isciEmail + "</td>"
+                                                                                + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
+                                                                        IsciTable.DataTable().row.add($(addRow)).draw();
+                                                                    } else {
+                                                                        var addRow = "<tr style='background-color:#F2F2F2'><td>"
+                                                                                + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newIsciID + "'>"
+                                                                                + "<i class='glyphicon glyphicon-user' style='color:red;'></i> " + isciAd + "</a></td>"
+                                                                                + "<td class='hidden-xs'>" + isciSoyad + "</td>"
+                                                                                + "<td class='hidden-xs'>" + isciTelefon + "</td>"
+                                                                                + "<td class='hidden-xs'>" + isciEmail + "</td>"
+                                                                                + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
+                                                                        IsciTable.DataTable().row.add($(addRow)).draw();
+                                                                    }
+                                                                    isciBolgeID = [];
+                                                                    isciKurumID = [];
+                                                                }
                                                             }
-                                                            isciBolgeID = [];
-                                                            isciKurumID = [];
-                                                        }
+                                                        });
+                                                        return true;
+                                                    } else {
+                                                        reset();
+                                                        alertify.alert(jsDil.OdemeTutarB);
+                                                        return false;
                                                     }
-                                                });
+                                                } else {
+                                                    reset();
+                                                    alertify.alert(jsDil.OdemeTutar);
+                                                    return false;
+                                                }
                                                 return true;
                                             } else {
                                                 reset();
@@ -502,6 +523,8 @@ $.AdminIslemler = {
         var isciDetaySokak = $("input[name=route]").val();
         var isciDetayPostaKodu = $("input[name=postal_code]").val();
         var isciDetayCaddeNo = $("input[name=street_number]").val();
+        var dovizTip = $("#detayDovizTip").val();
+        var odemeTutar = $("input[name=detayOdemeTutar]").val();
         //işçi Bölge ID
         var isciBolgeID = new Array();
         $('select#IsciDetaySelectBolge option:selected').each(function () {
@@ -606,7 +629,11 @@ $.AdminIslemler = {
         $('#IsciDetaySelectBolge').multiselect('dataprovider', SelectBolgeOptions);
         $('#IsciDetayKurum').multiselect('dataprovider', SelectIsciOptions);
         IsciDetailVazgec = [];
-        IsciDetailVazgec.push(isciDetayAd, isciDetaySoyad, isciDetayDurum, isciDetayLokasyon, isciDetayTelefon, isciDetayEmail, isciDetayAdres, isciDetayAciklama, isciDetayUlke, isciDetayIl, isciDetayIlce, isciDetaySemt, isciDetayMahalle, isciDetaySokak, isciDetayPostaKodu, isciDetayCaddeNo, isciBolgeID, isciBolgeAd, isciBolgeNID, isciBolgeNAd, isciKurumID, isciKurumAd, isciKurumNID, isciKurumNAd, gdsbildirim, gdsbildirimtext, dnsbildirim, dnsbildirimtext);
+        IsciDetailVazgec.push(isciDetayAd, isciDetaySoyad, isciDetayDurum, isciDetayLokasyon, isciDetayTelefon,
+                isciDetayEmail, isciDetayAdres, isciDetayAciklama, isciDetayUlke, isciDetayIl, isciDetayIlce,
+                isciDetaySemt, isciDetayMahalle, isciDetaySokak, isciDetayPostaKodu, isciDetayCaddeNo,
+                isciBolgeID, isciBolgeAd, isciBolgeNID, isciBolgeNAd, isciKurumID, isciKurumAd, isciKurumNID,
+                isciKurumNAd, gdsbildirim, gdsbildirimtext, dnsbildirim, dnsbildirimtext, dovizTip, odemeTutar);
     },
     isciDetailVazgec: function () {
         $("input[name=IsciDetayAdi]").val(IsciDetailVazgec[0]);
@@ -680,6 +707,9 @@ $.AdminIslemler = {
         $('#IscDetDnsMAyarSelect').multiselect('dataprovider', SelectBilDonus);
         $('#IscDetDnsMAyarSelect').multiselect('disable');
         $('#IscDetDnsMAyarSelect').multiselect('refresh');
+
+        $("#detayDovizTip").val(IsciDetailVazgec[28]);
+        $("input[name=detayOdemeTutar]").val(IsciDetailVazgec[29]);
 
         $('#IsciDetaySelectBolge').multiselect('refresh');
         $('#IsciDetayKurum').multiselect('refresh');
@@ -806,13 +836,27 @@ $.AdminIslemler = {
         var farkbolgelength = farkbolge.length;
         var farkisci = farkArray(IsciDetailVazgec[20], isciKurumID);
         var farkiscilength = farkisci.length;
-        if (IsciDetailVazgec[0] == isciDetayAd && IsciDetailVazgec[1] == isciDetaySoyad && IsciDetailVazgec[2] == isciDetayDurum && IsciDetailVazgec[3] == isciDetayLokasyon && IsciDetailVazgec[4] == isciDetayTelefon && IsciDetailVazgec[5] == isciDetayEmail && IsciDetailVazgec[6] == isciDetayAdres && IsciDetailVazgec[7] == isciDetayAciklama && IsciDetailVazgec[8] == isciDetayUlke && IsciDetailVazgec[9] == isciDetayIl && IsciDetailVazgec[10] == isciDetayIlce && IsciDetailVazgec[11] == isciDetaySemt && IsciDetailVazgec[12] == isciDetayMahalle && IsciDetailVazgec[13] == isciDetaySokak && IsciDetailVazgec[14] == isciDetayPostaKodu && IsciDetailVazgec[15] == isciDetayCaddeNo && farkbolgelength == 0 && farkiscilength == 0 && IsciDetailVazgec[24] == gdsbildirim && IsciDetailVazgec[26] == dnsbildirim) {
+
+        var odemeTutar = $("#detayOdemeTutar").val();
+        var odemeTip = $("#detayDovizTip option:selected").val();
+        var splitodeme = odemeTutar.split(".");
+        var odemelength = splitodeme[0].length;
+        if (IsciDetailVazgec[0] == isciDetayAd && IsciDetailVazgec[1] == isciDetaySoyad &&
+                IsciDetailVazgec[2] == isciDetayDurum && IsciDetailVazgec[3] == isciDetayLokasyon
+                && IsciDetailVazgec[4] == isciDetayTelefon && IsciDetailVazgec[5] == isciDetayEmail
+                && IsciDetailVazgec[6] == isciDetayAdres && IsciDetailVazgec[7] == isciDetayAciklama
+                && IsciDetailVazgec[8] == isciDetayUlke && IsciDetailVazgec[9] == isciDetayIl &&
+                IsciDetailVazgec[10] == isciDetayIlce && IsciDetailVazgec[11] == isciDetaySemt &&
+                IsciDetailVazgec[12] == isciDetayMahalle && IsciDetailVazgec[13] == isciDetaySokak &&
+                IsciDetailVazgec[14] == isciDetayPostaKodu && IsciDetailVazgec[15] == isciDetayCaddeNo
+                && farkbolgelength == 0 && farkiscilength == 0 && IsciDetailVazgec[24] == gdsbildirim &&
+                IsciDetailVazgec[26] == dnsbildirim && IsciDetailVazgec[28] == odemeTip && IsciDetailVazgec[29] == odemeTutar) {
             reset();
             alertify.alert(jsDil.Degisiklik);
             return false;
         } else {
             isciDetayAd = isciDetayAd.trim();
-            if (isciAd == '') {
+            if (isciDetayAd == '') {
                 reset();
                 alertify.alert(jsDil.IsimBos);
                 return false;
@@ -822,7 +866,7 @@ $.AdminIslemler = {
                     alertify.alert(jsDil.IsimKarekter);
                     return false;
                 } else {
-                    isciDetaySoyad = isciSoyad.trim();
+                    isciDetaySoyad = isciDetaySoyad.trim();
                     if (isciDetaySoyad == '') {
                         reset();
                         alertify.alert(jsDil.SoyadBos);
@@ -833,7 +877,7 @@ $.AdminIslemler = {
                             alertify.alert(jsDil.SoyadKarekter);
                             return false;
                         } else {
-                            var isciDetayEmail = $("input[name=IsciEmail]").val();
+                            var isciDetayEmail = $("input[name=IsciDetayEmail]").val();
                             if (isciDetayEmail == ' ') {
                                 reset();
                                 alertify.alert(jsDil.EpostaBos);
@@ -850,99 +894,112 @@ $.AdminIslemler = {
                                     if (isciBolgeLength) {
                                         var isciKurumLength = $('select#IsciDetayKurum option:selected').val();
                                         if (isciKurumLength) {
-                                            $.ajax({
-                                                data: {"iscidetail_id": iscidetail_id, "isciBolgeID[]": isciBolgeID, "isciBolgeAd[]": isciBolgeAd, "isciKurumID[]": isciKurumID, "isciKurumAd[]": isciKurumAd, "isciDetayAd": isciDetayAd,
-                                                    "isciDetaySoyad": isciDetaySoyad, "isciDetayDurum": isciDetayDurum, "isciDetayLokasyon": isciDetayLokasyon, "isciDetayTelefon": isciDetayTelefon,
-                                                    "isciDetayEmail": isciDetayEmail, "isciDetayAdres": isciDetayAdres, "isciDetayAciklama": isciDetayAciklama, "isciDetayUlke": isciDetayUlke,
-                                                    "isciDetayIl": isciDetayIl, "isciDetayIlce": isciDetayIlce, "isciDetaySemt": isciDetaySemt, "isciDetayMahalle": isciDetayMahalle,
-                                                    "isciDetaySokak": isciDetaySokak, "isciDetayPostaKodu": isciDetayPostaKodu, "isciDetayCaddeNo": isciDetayCaddeNo,
-                                                    "gdsbildirim": gdsbildirim, "dnsbildirim": dnsbildirim, "detayAdres": ttl, "tip": "isciDetailKaydet"},
-                                                success: function (cevap) {
-                                                    if (cevap.hata) {
-                                                        reset();
-                                                        alertify.alert(jsDil.Hata);
-                                                        return false;
-                                                    } else {
-                                                        disabledForm();
-                                                        reset();
-                                                        alertify.success(cevap.update);
-                                                        var SelectBolgeOptions = new Array();
-                                                        var SelectIsciOptions = new Array();
-                                                        if (isciBolgeID.length > 0) {
-                                                            var bolgelength = isciBolgeID.length;
-                                                            for (var b = 0; b < bolgelength; b++) {
-                                                                SelectBolgeOptions[b] = {label: isciBolgeAd[b], title: isciBolgeAd[b], value: isciBolgeID[b], selected: true};
-                                                            }
+                                            if (odemeTutar != "") {
+                                                if (odemelength <= 13) {
+                                                    $.ajax({
+                                                        data: {"iscidetail_id": iscidetail_id, "isciBolgeID[]": isciBolgeID, "isciBolgeAd[]": isciBolgeAd, "isciKurumID[]": isciKurumID, "isciKurumAd[]": isciKurumAd, "isciDetayAd": isciDetayAd,
+                                                            "isciDetaySoyad": isciDetaySoyad, "isciDetayDurum": isciDetayDurum, "isciDetayLokasyon": isciDetayLokasyon, "isciDetayTelefon": isciDetayTelefon,
+                                                            "isciDetayEmail": isciDetayEmail, "isciDetayAdres": isciDetayAdres, "isciDetayAciklama": isciDetayAciklama, "isciDetayUlke": isciDetayUlke,
+                                                            "isciDetayIl": isciDetayIl, "isciDetayIlce": isciDetayIlce, "isciDetaySemt": isciDetaySemt, "isciDetayMahalle": isciDetayMahalle,
+                                                            "isciDetaySokak": isciDetaySokak, "isciDetayPostaKodu": isciDetayPostaKodu, "isciDetayCaddeNo": isciDetayCaddeNo,
+                                                            "gdsbildirim": gdsbildirim, "dnsbildirim": dnsbildirim,
+                                                            "odemeTutar": odemeTutar, "odemeTip": odemeTip, "detayAdres": ttl, "tip": "isciDetailKaydet"},
+                                                        success: function (cevap) {
+                                                            if (cevap.hata) {
+                                                                reset();
+                                                                alertify.alert(cevap.hata);
+                                                                return false;
+                                                            } else {
+                                                                disabledForm();
+                                                                reset();
+                                                                alertify.success(cevap.update);
+                                                                var SelectBolgeOptions = new Array();
+                                                                var SelectIsciOptions = new Array();
+                                                                if (isciBolgeID.length > 0) {
+                                                                    var bolgelength = isciBolgeID.length;
+                                                                    for (var b = 0; b < bolgelength; b++) {
+                                                                        SelectBolgeOptions[b] = {label: isciBolgeAd[b], title: isciBolgeAd[b], value: isciBolgeID[b], selected: true};
+                                                                    }
 
-                                                            if (isciBolgeNID.length > 0) {
-                                                                var isciBolgeLength = isciBolgeNID.length;
-                                                                for (var z = 0; z < isciBolgeLength; z++) {
-                                                                    SelectBolgeOptions[b] = {label: isciBolgeNAd[z], title: isciBolgeNAd[z], value: isciBolgeNID[z]};
-                                                                    b++;
-                                                                }
+                                                                    if (isciBolgeNID.length > 0) {
+                                                                        var isciBolgeLength = isciBolgeNID.length;
+                                                                        for (var z = 0; z < isciBolgeLength; z++) {
+                                                                            SelectBolgeOptions[b] = {label: isciBolgeNAd[z], title: isciBolgeNAd[z], value: isciBolgeNID[z]};
+                                                                            b++;
+                                                                        }
 
-                                                            }
-                                                        } else {
-                                                            if (isciBolgeNID.length > 0) {
-                                                                var isciBolgeLength = isciBolgeNID.length;
-                                                                for (var b = 0; b < isciBolgeLength; b++) {
-                                                                    SelectBolgeOptions[b] = {label: isciBolgeNAd[b], title: isciBolgeNAd[b], value: isciBolgeNID[b]};
-                                                                }
-
-                                                            }
-                                                        }
-
-                                                        if (isciKurumID.length > 0) {
-                                                            var aracselectlength = isciKurumID.length;
-                                                            for (var t = 0; t < aracselectlength; t++) {
-                                                                SelectIsciOptions[t] = {label: isciKurumAd[t], title: isciKurumAd[t], value: isciKurumID[t], selected: true};
-                                                            }
-
-                                                            if (isciKurumNID.length > 0) {
-                                                                var iscilength = isciKurumNID.length;
-                                                                for (var f = 0; f < iscilength; f++) {
-                                                                    SelectIsciOptions[t] = {label: isciKurumNAd[f], title: isciKurumNAd[f], value: isciKurumNID[f]};
-                                                                    t++;
-                                                                }
-                                                            }
-
-                                                        } else {
-                                                            if (isciKurumNID.length > 0) {
-                                                                var iscilength = isciKurumNID.length;
-                                                                for (var t = 0; t < iscilength; t++) {
-                                                                    SelectIsciOptions[t] = {label: isciKurumNAd[t], title: isciKurumNAd[t], value: isciKurumNID[t]};
-                                                                }
-                                                            }
-                                                        }
-
-                                                        $('#IsciDetaySelectBolge').multiselect('refresh');
-                                                        $('#IsciDetayKurum').multiselect('refresh');
-                                                        $('#IsciDetaySelectBolge').multiselect('dataprovider', SelectBolgeOptions);
-                                                        $('#IsciDetayKurum').multiselect('dataprovider', SelectIsciOptions);
-                                                        var length = $('tbody#isciRow tr').length;
-                                                        for (var t = 0; t < length; t++) {
-                                                            var attrValueId = $("tbody#isciRow > tr > td > a").eq(t).attr('value');
-                                                            if (attrValueId == iscidetail_id) {
-                                                                if (isciDetayDurum != 0) {
-                                                                    $("tbody#isciRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user"></i> ' + isciDetayAd);
-                                                                    $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(isciDetaySoyad);
-                                                                    $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(isciDetayTelefon);
-                                                                    $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(isciDetayEmail);
-                                                                    $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(isciDetayAciklama);
-                                                                    $('tbody#isciRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                                    }
                                                                 } else {
-                                                                    $("tbody#isciRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user" style="color:red"></i> ' + isciDetayAd);
-                                                                    $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(isciDetaySoyad);
-                                                                    $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(isciDetayTelefon);
-                                                                    $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(isciDetayEmail);
-                                                                    $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(isciDetayAciklama);
-                                                                    $('tbody#isciRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                                    if (isciBolgeNID.length > 0) {
+                                                                        var isciBolgeLength = isciBolgeNID.length;
+                                                                        for (var b = 0; b < isciBolgeLength; b++) {
+                                                                            SelectBolgeOptions[b] = {label: isciBolgeNAd[b], title: isciBolgeNAd[b], value: isciBolgeNID[b]};
+                                                                        }
+
+                                                                    }
+                                                                }
+
+                                                                if (isciKurumID.length > 0) {
+                                                                    var aracselectlength = isciKurumID.length;
+                                                                    for (var t = 0; t < aracselectlength; t++) {
+                                                                        SelectIsciOptions[t] = {label: isciKurumAd[t], title: isciKurumAd[t], value: isciKurumID[t], selected: true};
+                                                                    }
+
+                                                                    if (isciKurumNID.length > 0) {
+                                                                        var iscilength = isciKurumNID.length;
+                                                                        for (var f = 0; f < iscilength; f++) {
+                                                                            SelectIsciOptions[t] = {label: isciKurumNAd[f], title: isciKurumNAd[f], value: isciKurumNID[f]};
+                                                                            t++;
+                                                                        }
+                                                                    }
+
+                                                                } else {
+                                                                    if (isciKurumNID.length > 0) {
+                                                                        var iscilength = isciKurumNID.length;
+                                                                        for (var t = 0; t < iscilength; t++) {
+                                                                            SelectIsciOptions[t] = {label: isciKurumNAd[t], title: isciKurumNAd[t], value: isciKurumNID[t]};
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                $('#IsciDetaySelectBolge').multiselect('refresh');
+                                                                $('#IsciDetayKurum').multiselect('refresh');
+                                                                $('#IsciDetaySelectBolge').multiselect('dataprovider', SelectBolgeOptions);
+                                                                $('#IsciDetayKurum').multiselect('dataprovider', SelectIsciOptions);
+                                                                var length = $('tbody#isciRow tr').length;
+                                                                for (var t = 0; t < length; t++) {
+                                                                    var attrValueId = $("tbody#isciRow > tr > td > a").eq(t).attr('value');
+                                                                    if (attrValueId == iscidetail_id) {
+                                                                        if (isciDetayDurum != 0) {
+                                                                            $("tbody#isciRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user"></i> ' + isciDetayAd);
+                                                                            $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(isciDetaySoyad);
+                                                                            $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(isciDetayTelefon);
+                                                                            $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(isciDetayEmail);
+                                                                            $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(isciDetayAciklama);
+                                                                            $('tbody#isciRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                                        } else {
+                                                                            $("tbody#isciRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user" style="color:red"></i> ' + isciDetayAd);
+                                                                            $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(isciDetaySoyad);
+                                                                            $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(isciDetayTelefon);
+                                                                            $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(isciDetayEmail);
+                                                                            $("tbody#isciRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(isciDetayAciklama);
+                                                                            $('tbody#isciRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         }
-                                                    }
+                                                    });
+                                                } else {
+                                                    reset();
+                                                    alertify.alert(jsDil.OdemeTutarB);
+                                                    return false;
                                                 }
-                                            });
+                                            } else {
+                                                reset();
+                                                alertify.alert(jsDil.OdemeTutar);
+                                                return false;
+                                            }
                                         } else {
                                             reset();
                                             alertify.alert(jsDil.KurumSec);

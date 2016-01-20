@@ -65,8 +65,8 @@
                         <i class="fa fa-refresh"></i> <span><?php echo $data["TurIslem"]; ?></span>
                     </a>
                 </li>
-                <li class="treeview">
-                    <a href="#">
+                <li id="menu_bakiye">
+                    <a href="<?php echo SITE_URL; ?>/AdminWeb/bakiyeliste">
                         <i class="fa fa-money"></i> <span><?php echo $data["BakiyeIslem"]; ?></span>
                     </a>
                 </li>

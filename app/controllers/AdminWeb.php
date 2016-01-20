@@ -915,6 +915,323 @@ class AdminWeb extends Controller {
         }
     }
 
+    function bakiyeliste() {
+        //session güvenlik kontrolü
+        $formSession = $this->load->otherClasses('Form');
+        //sessionKontrol
+        $sessionKey = $formSession->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+            //model bağlantısı
+            $Panel_Model = $this->load->model("Panel_Model");
+
+            $language = Session::get("dil");
+            //lanuage Kontrol
+            $formLanguage = $this->load->multilanguage($language);
+            $languagedeger = $formLanguage->multilanguage();
+
+            $adminRutbe = Session::get("userRutbe");
+            $adminID = Session::get("userId");
+            $girisEkran = $Panel_Model->bakiyeGirisEkran();
+            if ($adminRutbe != 0) {
+                if ($girisEkran[0]["BSOgrenciServis"] == 1 && $girisEkran[0]["BSPersonelServis"] == 1) {//öğrenci servisi
+                    $adminCount["OgrenciCount"] = $Panel_Model->ogrenciCountListele();
+                    $adminCount["OgrenciCount"] = $adminCount["OgrenciCount"][0]['COUNT(*)'];
+                    $adminCount["IsciCount"] = $Panel_Model->isciCountListele();
+                    $adminCount["IsciCount"] = $adminCount["IsciCount"][0]['COUNT(*)'];
+
+                    $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+                    $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+                    $this->load->view("Template_AdminBackEnd/bakiyeliste", $languagedeger, $adminCount);
+                    $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+                } elseif ($girisEkran[0]["BSOgrenciServis"] == 1) {//öğrenci servisi
+                    $ogrenciliste = $Panel_Model->bakiyeOgrenciListele();
+                    //bölge count için
+                    if (count($ogrenciliste) != 0) {
+                        $ogrencilist[0]['OgrenciCount'] = count($ogrenciliste);
+                    }
+
+                    $a = 0;
+                    foreach ($ogrenciliste as $ogrencilistee) {
+                        $ogrencilist[$a]['ID'] = $ogrencilistee['BSOgrenciID'];
+                        $ogrencilist[$a]['Adi'] = $ogrencilistee['BSOgrenciAd'];
+                        $ogrencilist[$a]['Soyad'] = $ogrencilistee['BSOgrenciSoyad'];
+                        $ogrencilist[$a]['OdemeTutar'] = number_format($ogrencilistee['OdemeTutar'], 2, '.', ',');
+                        $ogrencilist[$a]['OdenenTutar'] = number_format($ogrencilistee['OdenenTutar'], 2, '.', ',');
+                        $ogrencilist[$a]['OdemeParaTip'] = $ogrencilistee['OdemeParaTip'];
+                        $ogrencilist[$a]['KalanTutar'] = number_format($ogrencilistee['OdemeTutar'] - $ogrencilistee['OdenenTutar'], 2, '.', ',');
+                        $a++;
+                    }
+
+                    $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+                    $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+                    $this->load->view("Template_AdminBackEnd/bakiyeogrenciliste", $languagedeger, $ogrencilist);
+                    $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+                } elseif ($girisEkran[0]["BSPersonelServis"] == 1) {//personel servisi
+                    $isciliste = $Panel_Model->bakiyeIsciListele();
+                    //bölge count için
+                    if (count($isciliste) != 0) {
+                        $iscilist[0]['IsciCount'] = count($isciliste);
+                    }
+                    $a = 0;
+                    foreach ($isciliste as $iscilistee) {
+                        $iscilist[$a]['ID'] = $iscilistee['SBIsciID'];
+                        $iscilist[$a]['Adi'] = $iscilistee['SBIsciAd'];
+                        $iscilist[$a]['Soyad'] = $iscilistee['SBIsciSoyad'];
+                        $iscilist[$a]['OdemeTutar'] = number_format($iscilistee['OdemeTutar'], 2, '.', ',');
+                        $iscilist[$a]['OdenenTutar'] = number_format($iscilistee['OdenenTutar'], 2, '.', ',');
+                        $iscilist[$a]['OdemeParaTip'] = $iscilistee['OdemeParaTip'];
+                        $iscilist[$a]['KalanTutar'] = number_format($iscilistee['OdemeTutar'] - $iscilistee['OdenenTutar'], 2, '.', ',');
+                        $a++;
+                    }
+
+                    $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+                    $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+                    $this->load->view("Template_AdminBackEnd/bakiyeisciliste", $languagedeger, $iscilist);
+                    $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+                }
+            } else {
+                $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
+
+                foreach ($bolgeListeRutbe as $rutbe) {
+                    $bolgerutbeId[] = $rutbe['BSBolgeID'];
+                }
+                $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+                if ($girisEkran[0]["BSOgrenciServis"] == 1 && $girisEkran[0]["BSPersonelServis"]) {//öğrenci servisi
+                    $adminCount["OgrenciCount"] = $Panel_Model->rutbeOgrenciCount($rutbebolgedizi);
+                    $adminCount["OgrenciCount"] = $adminCount["OgrenciCount"][0]['COUNT(BSOgrenciID)'];
+                    $adminCount["IsciCount"] = $Panel_Model->rutbeIsciCount($rutbebolgedizi);
+                    $adminCount["IsciCount"] = $adminCount["IsciCount"][0]['COUNT(SBIsciID)'];
+
+
+                    $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+                    $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+                    $this->load->view("Template_AdminBackEnd/bakiyeislemliste", $languagedeger);
+                    $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+                } elseif ($girisEkran[0]["BSOgrenciServis"] == 1) {//öğrenci servisi
+                    $ogrenciBolgeListe = $Panel_Model->ogrenciBolgeListele($rutbebolgedizi);
+                    foreach ($ogrenciBolgeListe as $ogrenciBolgeListee) {
+                        $ogrencirutbeId[] = $ogrenciBolgeListee['BSOgrenciID'];
+                    }
+                    $rutbeogrencidizi = implode(',', $ogrencirutbeId);
+                    $ogrenciliste = $Panel_Model->rutbeBakiyeOgrenciListele($rutbeogrencidizi);
+                    //bölge count için
+                    if (count($ogrenciliste) != 0) {
+                        $ogrencilist[0]['OgrenciCount'] = count($ogrenciliste);
+                    }
+                    $a = 0;
+                    foreach ($ogrenciliste as $ogrencilistee) {
+                        $ogrencilist[$a]['ID'] = $ogrencilistee['BSOgrenciID'];
+                        $ogrencilist[$a]['Adi'] = $ogrencilistee['BSOgrenciAd'];
+                        $ogrencilist[$a]['Soyad'] = $ogrencilistee['BSOgrenciSoyad'];
+                        $ogrencilist[$a]['OdemeTutar'] = number_format($ogrencilistee['OdemeTutar'], 2, '.', ',');
+                        $ogrencilist[$a]['OdenenTutar'] = number_format($ogrencilistee['OdenenTutar'], 2, '.', ',');
+                        $ogrencilist[$a]['OdemeParaTip'] = $ogrencilistee['OdemeParaTip'];
+                        $ogrencilist[$a]['KalanTutar'] = number_format($ogrencilistee['OdemeTutar'] - $ogrencilistee['OdenenTutar'], 2, '.', ',');
+                        $a++;
+                    }
+                    $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+                    $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+                    $this->load->view("Template_AdminBackEnd/bakiyeogrenciliste", $languagedeger, $ogrencilist);
+                    $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+                } elseif ($girisEkran[0]["BSPersonelServis"] == 1) {//personel servisi
+                    $isciBolgeListe = $Panel_Model->isciBolgeListele($rutbebolgedizi);
+                    foreach ($isciBolgeListe as $isciBolgeListe) {
+                        $iscirutbeId[] = $isciBolgeListe['SBIsciID'];
+                    }
+                    $rutbeiscidizi = implode(',', $iscirutbeId);
+
+                    $isciliste = $Panel_Model->rutbeBakiyeIsciListele($rutbeiscidizi);
+                    //bölge count için
+                    if (count($isciliste) != 0) {
+                        $iscilist[0]['IsciCount'] = count($isciliste);
+                    }
+
+                    $a = 0;
+                    foreach ($isciliste as $iscilistee) {
+                        $iscilist[$a]['ID'] = $iscilistee['SBIsciID'];
+                        $iscilist[$a]['Adi'] = $iscilistee['SBIsciAd'];
+                        $iscilist[$a]['Soyad'] = $iscilistee['SBIsciSoyad'];
+                        $iscilist[$a]['OdemeTutar'] = number_format($iscilistee['OdemeTutar'], 2, '.', ',');
+                        $iscilist[$a]['OdenenTutar'] = number_format($iscilistee['OdenenTutar'], 2, '.', ',');
+                        $iscilist[$a]['OdemeParaTip'] = $iscilistee['OdemeParaTip'];
+                        $iscilist[$a]['KalanTutar'] = number_format($iscilistee['OdemeTutar'] - $iscilistee['OdenenTutar'], 2, '.', ',');
+                        $a++;
+                    }
+
+                    $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+                    $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+                    $this->load->view("Template_AdminBackEnd/bakiyeisciliste", $languagedeger, $iscilist);
+                    $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+                }
+            }
+        } else {
+            header("Location:" . SITE_URL_LOGOUT);
+        }
+    }
+
+    function bakiyeogrenciliste() {
+        //session güvenlik kontrolü
+        $formSession = $this->load->otherClasses('Form');
+        //sessionKontrol
+        $sessionKey = $formSession->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+            //model bağlantısı
+            $Panel_Model = $this->load->model("Panel_Model");
+
+
+            $language = Session::get("dil");
+            //lanuage Kontrol
+            $formLanguage = $this->load->multilanguage($language);
+            $languagedeger = $formLanguage->multilanguage();
+
+
+            $adminRutbe = Session::get("userRutbe");
+            $adminID = Session::get("userId");
+            //super adminse tüm bölgeleri görür
+            if ($adminRutbe != 0) {
+
+                $ogrenciliste = $Panel_Model->bakiyeOgrenciListele();
+                //bölge count için
+                if (count($ogrenciliste) != 0) {
+                    $ogrencilist[0]['OgrenciCount'] = count($ogrenciliste);
+                }
+
+                $a = 0;
+                foreach ($ogrenciliste as $ogrencilistee) {
+                    $ogrencilist[$a]['ID'] = $ogrencilistee['BSOgrenciID'];
+                    $ogrencilist[$a]['Adi'] = $ogrencilistee['BSOgrenciAd'];
+                    $ogrencilist[$a]['Soyad'] = $ogrencilistee['BSOgrenciSoyad'];
+                    $ogrencilist[$a]['OdemeTutar'] = number_format($ogrencilistee['OdemeTutar'], 2, '.', ',');
+                    $ogrencilist[$a]['OdenenTutar'] = number_format($ogrencilistee['OdenenTutar'], 2, '.', ',');
+                    $ogrencilist[$a]['OdemeParaTip'] = $ogrencilistee['OdemeParaTip'];
+                    $ogrencilist[$a]['KalanTutar'] = number_format($ogrencilistee['OdemeTutar'] - $ogrencilistee['OdenenTutar'], 2, '.', ',');
+                    $a++;
+                }
+            } else {
+                $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
+
+                foreach ($bolgeListeRutbe as $rutbe) {
+                    $bolgerutbeId[] = $rutbe['BSBolgeID'];
+                }
+                $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+
+                $ogrenciBolgeListe = $Panel_Model->ogrenciBolgeListele($rutbebolgedizi);
+                foreach ($ogrenciBolgeListe as $ogrenciBolgeListee) {
+                    $ogrencirutbeId[] = $ogrenciBolgeListee['BSOgrenciID'];
+                }
+                $rutbeogrencidizi = implode(',', $ogrencirutbeId);
+                $ogrenciliste = $Panel_Model->rutbeBakiyeOgrenciListele($rutbeogrencidizi);
+                //bölge count için
+                if (count($ogrenciliste) != 0) {
+                    $ogrencilist[0]['OgrenciCount'] = count($ogrenciliste);
+                }
+                $a = 0;
+                foreach ($ogrenciliste as $ogrencilistee) {
+                    $ogrencilist[$a]['ID'] = $ogrencilistee['BSOgrenciID'];
+                    $ogrencilist[$a]['Adi'] = $ogrencilistee['BSOgrenciAd'];
+                    $ogrencilist[$a]['Soyad'] = $ogrencilistee['BSOgrenciSoyad'];
+                    $ogrencilist[$a]['OdemeTutar'] = number_format($ogrencilistee['OdemeTutar'], 2, '.', ',');
+                    $ogrencilist[$a]['OdenenTutar'] = number_format($ogrencilistee['OdenenTutar'], 2, '.', ',');
+                    $ogrencilist[$a]['OdemeParaTip'] = $ogrencilistee['OdemeParaTip'];
+                    $ogrencilist[$a]['KalanTutar'] = number_format($ogrencilistee['OdemeTutar'] - $ogrencilistee['OdenenTutar'], 2, '.', ',');
+                    $a++;
+                }
+            }
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/bakiyeogrenciliste", $languagedeger, $ogrencilist);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL_LOGOUT);
+        }
+    }
+
+    function bakiyeisciliste() {
+        //session güvenlik kontrolü
+        $formSession = $this->load->otherClasses('Form');
+        //sessionKontrol
+        $sessionKey = $formSession->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+            //model bağlantısı
+            $Panel_Model = $this->load->model("Panel_Model");
+
+
+            $language = Session::get("dil");
+            //lanuage Kontrol
+            $formLanguage = $this->load->multilanguage($language);
+            $languagedeger = $formLanguage->multilanguage();
+
+
+            $adminRutbe = Session::get("userRutbe");
+            $adminID = Session::get("userId");
+            //super adminse tüm bölgeleri görür
+            if ($adminRutbe != 0) {
+
+                $isciliste = $Panel_Model->bakiyeIsciListele();
+                //bölge count için
+                if (count($isciliste) != 0) {
+                    $iscilist[0]['IsciCount'] = count($isciliste);
+                }
+                $a = 0;
+                foreach ($isciliste as $iscilistee) {
+                    $iscilist[$a]['ID'] = $iscilistee['SBIsciID'];
+                    $iscilist[$a]['Adi'] = $iscilistee['SBIsciAd'];
+                    $iscilist[$a]['Soyad'] = $iscilistee['SBIsciSoyad'];
+                    $iscilist[$a]['OdemeTutar'] = number_format($iscilistee['OdemeTutar'], 2, '.', ',');
+                    $iscilist[$a]['OdenenTutar'] = number_format($iscilistee['OdenenTutar'], 2, '.', ',');
+                    $iscilist[$a]['OdemeParaTip'] = $iscilistee['OdemeParaTip'];
+                    $iscilist[$a]['KalanTutar'] = number_format($iscilistee['OdemeTutar'] - $iscilistee['OdenenTutar'], 2, '.', ',');
+                    $a++;
+                }
+            } else {
+                $bolgeListeRutbe = $Panel_Model->AdminbolgeListele($adminID);
+
+                foreach ($bolgeListeRutbe as $rutbe) {
+                    $bolgerutbeId[] = $rutbe['BSBolgeID'];
+                }
+                $rutbebolgedizi = implode(',', $bolgerutbeId);
+
+
+                $isciBolgeListe = $Panel_Model->isciBolgeListele($rutbebolgedizi);
+                foreach ($isciBolgeListe as $isciBolgeListe) {
+                    $iscirutbeId[] = $isciBolgeListe['SBIsciID'];
+                }
+                $rutbeiscidizi = implode(',', $iscirutbeId);
+
+                $isciliste = $Panel_Model->rutbeBakiyeIsciListele($rutbeiscidizi);
+                //bölge count için
+                if (count($isciliste) != 0) {
+                    $iscilist[0]['IsciCount'] = count($isciliste);
+                }
+
+                $a = 0;
+                foreach ($isciliste as $iscilistee) {
+                    $iscilist[$a]['ID'] = $iscilistee['SBIsciID'];
+                    $iscilist[$a]['Adi'] = $iscilistee['SBIsciAd'];
+                    $iscilist[$a]['Soyad'] = $iscilistee['SBIsciSoyad'];
+                    $iscilist[$a]['OdemeTutar'] = number_format($iscilistee['OdemeTutar'], 2, '.', ',');
+                    $iscilist[$a]['OdenenTutar'] = number_format($iscilistee['OdenenTutar'], 2, '.', ',');
+                    $iscilist[$a]['OdemeParaTip'] = $iscilistee['OdemeParaTip'];
+                    $iscilist[$a]['KalanTutar'] = number_format($iscilistee['OdemeTutar'] - $iscilistee['OdenenTutar'], 2, '.', ',');
+                    $a++;
+                }
+            }
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/bakiyeisciliste", $languagedeger, $iscilist);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL_LOGOUT);
+        }
+    }
+
     function lokasyonliste() {
 
         //session güvenlik kontrolü

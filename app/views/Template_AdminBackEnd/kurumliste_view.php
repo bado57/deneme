@@ -63,7 +63,6 @@
                         <?php } else { ?>
                             <td class="hidden-xs"><?php echo $data["OgrenciPersonel"]; ?></td>
                         <?php } ?>
-
                         <td class="hidden-xs"><?php echo $kurumModel['AdminKurumAciklama']; ?></td>
                         </tr>
                     <?php } ?>
@@ -125,11 +124,11 @@
                     </div>
                     <div class="form-group">
                         <label for="KurumAdresDetay"><?php echo $data["AdresDetay"]; ?></label>
-                        <textarea name="KurumAdresDetay" class="form-control dsb" rows="3" style="resize:none"></textarea>
+                        <textarea name="KurumAdresDetay" class="form-control" rows="3" style="resize:none"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="Aciklama" class="form-control dsb" rows="3" style="resize:none"></textarea>
+                        <textarea name="Aciklama" class="form-control" rows="3" style="resize:none"></textarea>
                     </div>
                     <div class="form-group">
                         <button data-type="svClose"  data-class="kurum" type="button" data-islemler="adminKurumVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>

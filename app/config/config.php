@@ -6,6 +6,7 @@
  */
 //sitenin url bilgisi
 define("SITE_URL", "http://localhost/SProject");
+define("SITE_AD", "Shuttle");
 //Dom animator
 define("SITE_URL_DOM", "http://localhost/SProject/app/views/assets/js/dom-animator.js");
 
@@ -53,24 +54,24 @@ define("SITE_PLUGINADMIN_Tur", "http://localhost/SProject/AdminWeb/turliste");
 define("SITE_IMG", "http://localhost/SProject/app/views/assets/img");
 
 //admin mobil 
-define("SITE_PLUGINMADMIN_CSS", "http://192.168.1.30/SProject/app/views/Template_AdminBackEnd/MobileAdmin/css");
-define("SITE_PLUGIN_MCSS", "http://192.168.1.30/SProject/app/views/Template_AdminBackEnd/MobileAdmin/css");
-define("SITE_PLUGINMADMIN_FONTS", "http://192.168.1.30/SProject/app/views/Template_AdminBackEnd/MobileAdmin/font-awesome");
-define("SITE_PLUGINMADMIN_JS", "http://192.168.1.30/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js");
-define("SITE_PLUGINM_JS", "http://192.168.1.30/SProject/app/views/assets/js");
-define("MLANGUAGE_JS", "http://192.168.1.30/SProject/app/mobilscriptlanguage/");
-define("SITE_PLUGINMADMIN_AjaxJs", "http://192.168.1.30/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js");
-define("SITE_MPLUGIN_JS", "http://192.168.1.30/SProject/app/views/assets/js");
-define("SITE_MPLUGIN_CSS", "http://192.168.1.30/SProject/app/views/assets/css");
-define("SITE_MIMG", "http://192.168.1.30/SProject/app/views/assets/img");
+define("SITE_PLUGINMADMIN_CSS", "http://192.168.1.24/SProject/app/views/Template_AdminBackEnd/MobileAdmin/css");
+define("SITE_PLUGIN_MCSS", "http://192.168.1.24/SProject/app/views/Template_AdminBackEnd/MobileAdmin/css");
+define("SITE_PLUGINMADMIN_FONTS", "http://192.168.1.24/SProject/app/views/Template_AdminBackEnd/MobileAdmin/font-awesome");
+define("SITE_PLUGINMADMIN_JS", "http://192.168.1.24/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js");
+define("SITE_PLUGINM_JS", "http://192.168.1.24/SProject/app/views/assets/js");
+define("MLANGUAGE_JS", "http://192.168.1.24/SProject/app/mobilscriptlanguage/");
+define("SITE_PLUGINMADMIN_AjaxJs", "http://192.168.1.24/SProject/app/views/Template_AdminBackEnd/MobileAdmin/js");
+define("SITE_MPLUGIN_JS", "http://192.168.1.24/SProject/app/views/assets/js");
+define("SITE_MPLUGIN_CSS", "http://192.168.1.24/SProject/app/views/assets/css");
+define("SITE_MIMG", "http://192.168.1.24/SProject/app/views/assets/img");
 //veli back end
-define("SITE_PLUGINMVELI_CSS", "http://192.168.1.30/SProject/app/views/Template_Veli/css");
-define("SITE_PLUGINMVELI_JS", "http://192.168.1.30/SProject/app/views/Template_Veli/js");
+define("SITE_PLUGINMVELI_CSS", "http://192.168.1.24/SProject/app/views/Template_Veli/css");
+define("SITE_PLUGINMVELI_JS", "http://192.168.1.24/SProject/app/views/Template_Veli/js");
 //öğrenci back end
-define("SITE_PLUGINMOGR_CSS", "http://192.168.1.30/SProject/app/views/Template_Ogrenci/css");
-define("SITE_PLUGINMOGR_JS", "http://192.168.1.30/SProject/app/views/Template_Ogrenci/js");
+define("SITE_PLUGINMOGR_CSS", "http://192.168.1.24/SProject/app/views/Template_Ogrenci/css");
+define("SITE_PLUGINMOGR_JS", "http://192.168.1.24/SProject/app/views/Template_Ogrenci/js");
 //şoför back end
-define("SITE_PLUGINMSOFOR_CSS", "http://192.168.1.30/SProject/app/views/Template_Sofor/css");
-define("SITE_PLUGINMSOFOR_JS", "http://192.168.1.30/SProject/app/views/Template_Sofor/js");
+define("SITE_PLUGINMSOFOR_CSS", "http://192.168.1.24/SProject/app/views/Template_Sofor/css");
+define("SITE_PLUGINMSOFOR_JS", "http://192.168.1.24/SProject/app/views/Template_Sofor/js");
 //işci back end
 ?>

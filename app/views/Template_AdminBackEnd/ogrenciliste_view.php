@@ -2,6 +2,7 @@
     var activeMenu = "menu_kullanici";
     var activeLink = "link_ogrenciliste";
 </script>
+<script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery.maskMoney.js" type="text/javascript"></script> 
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminogrenciajaxquery.js" type="text/javascript"></script> 
 <script src="<?php echo SITE_PLUGINADMIN_AjaxJs; ?>/adminogrenci-web.app.js" type="text/javascript"></script> 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
@@ -112,8 +113,28 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="OgrGdsMAyarSelect"><?php echo $data["BMesafeAyar"] . " (" . $data["Gidis"] . ")"; ?></label>
+                        <select type="text" class="form-control" id="OgrGdsMAyarSelect" name="OgrGdsMAyarSelect">
+                            <option value="200">200 m</option>
+                            <option value="400">400 m</option>
+                            <option value="600">600 m</option>
+                            <option value="800">800 m</option>
+                            <option value="1000">1000 m</option>
+                            <option value="1200">1200 m</option>
+                            <option value="1400">1400 m</option>
+                            <option value="1600">1600 m</option>
+                            <option value="1800">1800 m</option>
+                            <option value="2000">2000 m</option>
+                            <option value="2200">2200 m</option>
+                            <option value="2400">2400 m</option>
+                            <option value="2600">2600 m</option>
+                            <option value="2800">2800 m</option>
+                            <option value="3000">3000 m</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="Aciklama" class="form-control dsb" rows="6" style="resize: none"></textarea>
+                        <textarea name="Aciklama" class="form-control dsb" rows="3" style="resize: none"></textarea>
                     </div>
                     <div class="form-group">
                         <button data-type="svClose"  data-class="ogrenci" type="button" data-islemler="ogrenciVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
@@ -142,23 +163,19 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="OgrGdsMAyarSelect"><?php echo $data["BMesafeAyar"] . " (" . $data["Gidis"] . ")"; ?></label>
-                        <select type="text" class="form-control" id="OgrGdsMAyarSelect" name="OgrGdsMAyarSelect">
-                            <option value="200">200 m</option>
-                            <option value="400">400 m</option>
-                            <option value="600">600 m</option>
-                            <option value="800">800 m</option>
-                            <option value="1000">1000 m</option>
-                            <option value="1200">1200 m</option>
-                            <option value="1400">1400 m</option>
-                            <option value="1600">1600 m</option>
-                            <option value="1800">1800 m</option>
-                            <option value="2000">2000 m</option>
-                            <option value="2200">2200 m</option>
-                            <option value="2400">2400 m</option>
-                            <option value="2600">2600 m</option>
-                            <option value="2800">2800 m</option>
-                            <option value="3000">3000 m</option>
+                        <label for="OgrenciEmail"><?php echo $data["Email"]; ?></label>
+                        <input type="text" class="form-control" id="OgrenciEmail" name="OgrenciEmail" value="">
+                    </div>
+                    <div class="form-group col-lg-8 col-md-8 col-sm-8 col-xs-12" style="padding-left: 0">
+                        <label for="OdemeTutar"><?php echo $data["OdemeTutar"]; ?></label>
+                        <input type="text" class="form-control" id="odemeTutar" data-inputmask='"mask": "999999999,99"' data-mask name="odemeTutar" value="">
+                    </div>
+                    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding-right: 0">
+                        <label for="DovizTip"><?php echo $data["DovizIsim"]; ?></label>
+                        <select type="text" class="form-control" id="dovizTip" name="dovizTip">
+                            <option value="TL">TL</option>
+                            <option value="DOLAR">DOLAR</option>
+                            <option value="EURO">EURO</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -180,10 +197,6 @@
                             <option value="2800">2800 m</option>
                             <option value="3000">3000 m</option>
                         </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="OgrenciEmail"><?php echo $data["Email"]; ?></label>
-                        <input type="text" class="form-control" id="OgrenciEmail" name="OgrenciEmail" value="">
                     </div>
                     <div class="form-group">
                         <label for="OgrenciAdresDetay"><?php echo $data["AdresDetay"]; ?></label>
@@ -263,6 +276,11 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="OgrDetGdsMAyarSelect"><?php echo $data["BMesafeAyar"] . " (" . $data["Gidis"] . ")"; ?></label>
+                        <select type="text" class="form-control" id="OgrDetGdsMAyarSelect" name="OgrDetGdsMAyarSelect">
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="DetayAciklama"><?php echo $data["Aciklama"]; ?></label>
                         <textarea name="DetayAciklama" class="form-control dsb" rows="3" disabled style="resize: none"></textarea>
                     </div>
@@ -300,9 +318,16 @@
                         <label for="OgrenciDetayEmail"><?php echo $data["Email"]; ?></label>
                         <input type="text" class="form-control dsb" id="OgrenciDetayEmail" name="OgrenciDetayEmail" value="" disabled>
                     </div>
-                    <div class="form-group">
-                        <label for="OgrDetGdsMAyarSelect"><?php echo $data["BMesafeAyar"] . " (" . $data["Gidis"] . ")"; ?></label>
-                        <select type="text" class="form-control" id="OgrDetGdsMAyarSelect" name="OgrDetGdsMAyarSelect">
+                    <div class="form-group col-lg-8 col-md-8 col-sm-8 col-xs-12" style="padding-left: 0">
+                        <label for="DetayOdemeTutar"><?php echo $data["OdemeTutar"]; ?></label>
+                        <input type="text" class="form-control dsb" id="detayOdemeTutar" name="detayOdemeTutar" value="" disabled>
+                    </div>
+                    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding-right: 0">
+                        <label for="DetayDovizTip"><?php echo $data["DovizIsim"]; ?></label>
+                        <select type="text" class="form-control dsb" id="detayDovizTip" name="detayDovizTip" disabled>
+                            <option value="TL">TL</option>
+                            <option value="DOLAR">DOLAR</option>
+                            <option value="EURO">EURO</option>
                         </select>
                     </div>
                     <div class="form-group">

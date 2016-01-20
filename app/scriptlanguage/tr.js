@@ -48,6 +48,7 @@ var jsDil = {
     'BildirimYok': 'Gösterilecek Bildirim Yok',
     'Ogrenci': 'Öğrenci',
     'Personel': 'Personel',
+    'Veli': 'Veli',
     'OgrenciPersonel': 'Öğrenci/Personel',
     'HedefKullanici': 'Lütfen Duyuru Göndereceğiniz Kullanıcıları Seçiniz.',
     'Kullanici': 'Kullanıcı',
@@ -62,4 +63,8 @@ var jsDil = {
     'TurYok': 'Tur Bulunamadı',
     'BolgeKurumYok': 'Bölgeye Ait Kurum Bulunamadı',
     'Konumunuz': 'Sizin Konumunuz',
+    'OdemeTutar': 'Lütfen Ödenecek Tutarı Giriniz',
+    'OdemeTutarB': 'Maximum ödenecek tutar!',
+    'OdemeYapanSec': 'Lütfen ödeme yapan kişiyi seçiniz!',
+    'OdemeTutarGir': 'Lütfen ödeme tutarını giriniz!',
 };

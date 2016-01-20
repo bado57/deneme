@@ -1376,6 +1376,81 @@ class VeliMobilOgrenciAjax extends Controller {
                         }
 
                         break;
+                    case "bakiyeListe":
+                        $form->post('veli_id', true);
+                        $veliID = $form->values['veli_id'];
+
+                        if (!$veliID) {
+                            $sonuc["hata"] = $languagedeger['Hack'];
+                        } else {
+                            $form->post('id', true);
+                            $id = $form->values['id'];
+
+                            $resultOgrenciBakiye = $Panel_Model->ogrenciBakiyeListe($id);
+                            if (count($resultOgrenciBakiye) > 0) {
+                                $k = 0;
+                                foreach ($resultOgrenciBakiye as $resultOgrenciBakiyee) {
+                                    $bakiye[0][$k]['ID'] = $resultOgrenciBakiyee['BSOdemeID'];
+                                    $bakiye[0][$k]['AlanTip'] = $resultOgrenciBakiyee['BSOdemeAlanTip'];
+                                    $bakiye[0][$k]['Tutar'] = number_format($resultOgrenciBakiyee['BSOdemeTutar'], 2, '.', ',');
+                                    $tarih = explode(" ", $resultOgrenciBakiyee['BSOdemeTarih']);
+                                    $digerTarih = explode("-", $tarih[0]);
+                                    $yeniTarih = $tarih[1] . '--' . $digerTarih[2] . '/' . $digerTarih[1] . '/' . $digerTarih[0];
+                                    $bakiye[0][$k]['Tarih'] = $yeniTarih;
+                                    $bakiye[0][$k]['Aciklama'] = $resultOgrenciBakiyee['BSOdemeAciklama'];
+                                    $bakiye[0][$k]['DovizTip'] = $resultOgrenciBakiyee['BSDovizTip'];
+                                    $k++;
+                                }
+                            } else {
+                                $bakiye[1][0]['Yok'] = $languagedeger['OdemeYok'];
+                            }
+                            $sonuc["result"] = $bakiye;
+                        }
+                        break;
+                    case "bakiyeDetay":
+                        $form->post('veli_id', true);
+                        $veliID = $form->values['veli_id'];
+                        if (!$veliID) {
+                            $sonuc["hata"] = $languagedeger['Hack'];
+                        } else {
+                            $form->post('id', true);
+                            $form->post('odemeID', true);
+                            $id = $form->values['id'];
+                            $odemeID = $form->values['odemeID'];
+
+                            $resultOgrenciBakiye = $Panel_Model->ogrenciBakiyeListDetay($odemeID);
+                            foreach ($resultOgrenciBakiye as $resultOgrenciBakiyee) {
+                                $bakiye[0]['ID'] = $resultOgrenciBakiyee['BSOdemeID'];
+                                $bakiye[0]['AlanID'] = $resultOgrenciBakiyee['BSOdemeAlanID'];
+                                $bakiye[0]['AlanAd'] = $resultOgrenciBakiyee['BSOdemeAlanAd'];
+                                $bakiye[0]['AlanTip'] = $resultOgrenciBakiyee['BSOdemeAlanTip'];
+                                $bakiye[0]['YapanID'] = $resultOgrenciBakiyee['BSOdemeYapanID'];
+                                $bakiye[0]['YapanTip'] = $resultOgrenciBakiyee['BSOdemeYapanTip'];
+                                $bakiye[0]['YapanAd'] = $resultOgrenciBakiyee['BSOdemeYapanAd'];
+                                $bakiye[0]['OdenenTutar'] = number_format($resultOgrenciBakiyee['BSOdemeTutar'], 2, '.', ',');
+                                $tarih = explode(" ", $resultOgrenciBakiyee['BSOdemeTarih']);
+                                $digerTarih = explode("-", $tarih[0]);
+                                $yeniTarih = $tarih[1] . '--' . $digerTarih[2] . '/' . $digerTarih[1] . '/' . $digerTarih[0];
+                                $bakiye[0]['Tarih'] = $yeniTarih;
+                                $bakiye[0]['Aciklama'] = $resultOgrenciBakiyee['BSOdemeAciklama'];
+                                if ($resultOgrenciBakiyee['BSOdemeTip'] == 0) {
+                                    $bakiye[0]['OdemeTipp'] = 0;
+                                    $bakiye[0]['OdemeTip'] = $languagedeger['Elden'];
+                                } elseif ($resultOgrenciBakiyee['BSOdemeTip'] == 1) {
+                                    $bakiye[0]['OdemeTipp'] = 1;
+                                    $bakiye[0]['OdemeTip'] = $languagedeger['KrediKartı'];
+                                } else {
+                                    $bakiye[0]['OdemeTipp'] = 2;
+                                    $bakiye[0]['OdemeTip'] = $languagedeger['Havale'];
+                                }
+                                $bakiye[0]['DovizTip'] = $resultOgrenciBakiyee['BSDovizTip'];
+                            }
+                            $ogrencibak = $Panel_Model->bakiyeOgrenciOdenen($id);
+                            $bakiye[0]['OdemeTutar'] = number_format($ogrencibak[0]['OdemeTutar'], 2, '.', ',');
+                            $bakiye[0]['KalanTutar'] = number_format($ogrencibak[0]['OdemeTutar'] - $bakiye[0]['OdenenTutar'], 2, '.', ',');
+                            $sonuc["result"] = $bakiye;
+                        }
+                        break;
                 }
             } else {
                 $sonuc["hata"] = $languagedeger['Hata'];

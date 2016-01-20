@@ -1057,6 +1057,26 @@ class Form {
         return date("H:i", strtotime("1980-01-01 00:00") + ($time2 - $time1));
     }
 
+    //decimal parayı //1500.00 virgül eçvirme 1,500.00
+    function convertDecimal($odemeTutar) {
+        $ex = explode(".", $odemeTutar);
+        $length = strlen($ex[0]);
+        $bas = 1;
+        $son = 0;
+        for ($l = 0; $l < $length; $l++) {
+            if ($son < 3) {
+                $odemeValue.=$odemeTutar[$length - $bas];
+                $son++;
+                $bas++;
+            } else {
+                $odemeValue.=",";
+                $son = 0;
+                $l--;
+            }
+        }
+        return strrev($odemeValue) . "." . $ex[1];
+    }
+
     //smtp ile tekli mail controlü yapma
     function mailControl1($validemail) {
         require_once('smtp_validateEmail.class.php');

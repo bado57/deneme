@@ -20,6 +20,46 @@
                         <script type="text/javascript">
                             ons.bootstrap();
                         </script>
+                        <style>
+                            .list-item-container {
+                                line-height: 0.8;
+                                font-size: 14px;
+                                padding: 15px 0px 15px 15px;
+                            }
+                            .list-item-left {
+                                width: 60px;
+                                margin-right: -60px;
+                                float: left;
+                            }
+
+                            .list-item-right {
+                                width: 100%;
+                                float: right;
+                            }
+                            .list-item-content {
+                                margin-left: 50px;
+                                margin-right: 30px;
+                            }
+                            .avator {
+                                width: 40px;
+                                height: 40px;
+                                border-radius: 3px;
+                                -webkit-border-radius: 3px;
+                            }
+                            .name {
+                                font-weight: 500;
+                                line-height: 10px;
+                                font-size: 15px;
+                                margin-bottom: 4px;
+                            }
+                            .desc {
+                                line-height: 10px;
+                            }
+                            .lucent {
+                                opacity: 0.4;
+                                margin-left:5px;
+                            }
+                        </style>
                         </head>
                         <body>
                         <input type="hidden" name="id" value="<?php echo $model[0][0]['id']; ?>"></input>
@@ -122,7 +162,7 @@
                                                 </ons-col>
                                             </ons-row>
                                         </ons-list-item>
-                                        <ons-list-item modifier="chevron" onclick="ogrenciNavigator.pushPage('islemliste.html', {animation: 'slide'})">
+                                        <ons-list-item modifier="chevron" onclick="ogrenciNavigator.pushPage('bakiyeliste.html', {animation: 'slide'})">
                                             <ons-row>
                                                 <ons-col width="40px">
                                                     <i class="fa fa-money"></i>
@@ -1127,6 +1167,124 @@
                                     </ons-toolbar>
                                     <div class="google-maps" id="multiple_aracloc_map">
                                     </div>
+                                </ons-page>
+                            </ons-template>
+                            <ons-template id="bakiyeliste.html">
+                                <ons-page class="bakiyeliste" id="bakiyeliste" name="pMain">
+                                    <ons-toolbar>
+                                        <div class="left"><ons-button class="back" modifier="quiet" onclick="ogrenciNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
+                                        <div class="center" style="font-size:24px; color:#007427;position: absolute; left: 50%;"><i class="fa fa-reorder"></i></div>
+                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="ogrenciNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-home"></i></ons-button></div>
+                                    </ons-toolbar>
+                                    <br />
+                                    <ons-list modifier="" class="settings-list" id="bakiyeListNone">
+                                        <ons-list-item>
+                                            <ons-row>
+                                                <ons-col width="40px">
+                                                    <i class="fa fa-close"></i>
+                                                </ons-col>
+                                                <ons-col class="coldty adressbar">
+                                                    <span id="bakiyeListNo"></span>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>
+                                    </ons-list>
+                                    <ons-list id="bakiyeList" style="display:none">
+                                    </ons-list>
+                                    <br />
+                                </ons-page>
+                            </ons-template>
+                            <ons-template id="bakiyedetay.html">
+                                <ons-page class="bakiyedetay" id="bakiyedetay" name="pMain">
+                                    <ons-toolbar>
+                                        <div class="left"><ons-button class="back" modifier="quiet" onclick="ogrenciNavigator.popPage()"><i class="top-icon fa fa-chevron-left"></i></ons-button></div>
+                                        <div class="center"><b><i class="fa fa-user"></i> <?php echo $data["OdemeDetay"]; ?></b></div>
+                                        <div class="right"><ons-button class="resetpage" modifier="quiet" onclick="ogrenciNavigator.resetToPage(0, {animation: 'slide'})"><i class="top-icon fa fa-home"></i></ons-button></div>
+                                    </ons-toolbar>
+                                    <br />
+                                    <ons-list modifier="" class="settings-list">
+                                        <ons-list-item>
+                                            <ons-row>
+                                                <ons-col width="40px"> 
+                                                    <i class="fa fa-arrow-left"></i>
+                                                </ons-col>
+                                                <ons-col class="coldty">
+                                                    <span id="oAlanAd"></span>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>
+                                        <ons-list-item>
+                                            <ons-row>
+                                                <ons-col width="40px">
+                                                    <i class="fa fa-arrow-right"></i>
+                                                </ons-col>
+                                                <ons-col class="coldty">
+                                                    <span id="oYapanAd"></span>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>
+                                        <ons-list-item>
+                                            <ons-row>
+                                                <ons-col width="40px">
+                                                    <i class="" id="oTipIcon"></i>
+                                                </ons-col>
+                                                <ons-col class="coldty">
+                                                    <span id="oTip"></span>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>
+                                        <ons-list-item>
+                                            <ons-row>
+                                                <ons-col width="40px">
+                                                    <i class="fa fa-plus-square-o"></i>
+                                                </ons-col>
+                                                <ons-col class="coldty">
+                                                    <span id="oToplam"></span>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>    
+                                        <ons-list-item>
+                                            <ons-row>
+                                                <ons-col width="40px">
+                                                    <i class="fa fa-money"></i>
+                                                </ons-col>
+                                                <ons-col class="coldty">
+                                                    <span id="oTutar"></span>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>
+                                        <ons-list-item>
+                                            <ons-row>
+                                                <ons-col width="40px">
+                                                    <i class="fa fa-minus"></i>
+                                                </ons-col>
+                                                <ons-col class="coldty">
+                                                    <span id="oKalan"></span>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>    
+                                        <ons-list-item>
+                                            <ons-row>
+                                                <ons-col width="40px">
+                                                    <i class="fa fa-calendar"></i>
+                                                </ons-col>
+                                                <ons-col class="coldty">
+                                                    <span id="oTarih"></span>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>
+                                        <ons-list-item>
+                                            <ons-row>
+                                                <ons-col width="40px">
+                                                    <i class="fa fa-pencil-square"></i>
+                                                </ons-col>
+                                                <ons-col class="coldty">
+                                                    <span id="oAciklama"></span>
+                                                </ons-col>
+                                            </ons-row>
+                                        </ons-list-item>    
+                                    </ons-list>
+                                    <br />
                                 </ons-page>
                             </ons-template>
                         </ons-navigator>

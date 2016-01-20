@@ -195,7 +195,7 @@ class Panel_Model_Mobile extends ModelMobile {
         $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,BSOgrenciPhone,BSOgrenciEmail,BSOgrenciLocation,BSOgrenciDetayAdres,Status FROM bsogrenci WHERE BSOgrenciID=' . $ID;
         return($this->db->select($sql));
     }
-    
+
     //öğrenci veli detay
     public function ogrVeliDetay($ID) {
         $sql = 'SELECT SBVeliID,SBVeliAd,SBVeliSoyad,SBVeliPhone,SBVeliEmail,SBVeliLocation,SBVeliDetayAdres,Status FROM sbveli WHERE SBVeliID=' . $ID;
@@ -207,7 +207,25 @@ class Panel_Model_Mobile extends ModelMobile {
         $sql = 'SELECT BSKurumID,BSKurumAd FROM  bsogrencikurum WHERE BSOgrenciID=' . $ID;
         return($this->db->select($sql));
     }
-    
+
+    //öğrenci bakiye listesi
+    public function ogrenciBakiyeListe($ID) {
+        $sql = 'SELECT BSOdemeID,BSOdemeAlanTip,BSOdemeTutar,BSOdemeTarih,BSOdemeAciklama,BSDovizTip FROM bsogrenciodeme WHERE BSOdenenID=' . $ID;
+        return($this->db->select($sql));
+    }
+
+    //öğrenci bakiye detay ödemesi
+    public function ogrenciBakiyeListDetay($ID) {
+        $sql = 'SELECT * FROM bsogrenciodeme WHERE BSOdemeID=' . $ID;
+        return($this->db->select($sql));
+    }
+
+    //öğrencinin ödenen bakiyeleri
+    public function bakiyeOgrenciOdenen($ID) {
+        $sql = "SELECT OdemeTutar,OdenenTutar FROM bsogrenci WHERE BSOgrenciID=" . $ID;
+        return($this->db->select($sql));
+    }
+
     //öğrenciler veli bilgileri
     public function ogrenciVeli($ID) {
         $sql = 'SELECT BSVeliID,BSVeliAd FROM  bsveliogrenci WHERE BSOgrenciID=' . $ID;
@@ -745,7 +763,7 @@ class Panel_Model_Mobile extends ModelMobile {
         $sql = 'SELECT bsvelicihazID FROM bsvelicihaz WHERE bsveliID = ' . $veliID;
         return($this->db->select($sql));
     }
-    
+
     //öğrenci cihaz sorgusu
     public function ogrCihazSorgu($ogrID) {
         $sql = 'SELECT bsogrencicihazID FROM bsogrencicihaz WHERE bsogrenciID = ' . $ogrID;
@@ -756,7 +774,7 @@ class Panel_Model_Mobile extends ModelMobile {
     public function veliCihazUpdate($data, $veliID) {
         return ($this->db->update("bsvelicihaz", $data, "bsveliID=" . $veliID));
     }
-    
+
     //öğrenci cihaz update etme
     public function ogrCihazUpdate($data, $ogrID) {
         return ($this->db->update("bsogrencicihaz", $data, "bsogrenciID=" . $ogrID));
@@ -766,7 +784,7 @@ class Panel_Model_Mobile extends ModelMobile {
     public function veliCihazInsert($data) {
         return ($this->db->insert("bsvelicihaz", $data));
     }
-    
+
     //öğrenci cihaz insert
     public function ogrCihazInsert($data) {
         return ($this->db->insert("bsogrencicihaz", $data));

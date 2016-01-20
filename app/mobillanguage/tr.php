@@ -11,6 +11,7 @@ class tr {
             "Hack" => "Yanlış yerlerde dolaşıyorsun , lütfen tekrar deneme!",
             "GenelBilgi" => "Genel Bilgiler",
             "Bilgi" => "Bilgiler",
+            "OdemeDetay" => "Ödeme Detay",
             "Iletisim" => "İletişim",
             "Merhaba" => "Merhaba",
             "KullaniciSifre" => "Kullancı Şifreniz",
@@ -140,6 +141,7 @@ class tr {
             "YeniDuyuru" => "Yeni Duyuru",
             "DuyuruGonder" => "Duyuru gönderilmiştir",
             "KurumYok" => "Gösterilecek kayıtlı kurum bulunmamaktadır",
+            "OdemeYok" => "Herhangi bir ödemeniz bulunmamaktadır.",
             "VeliYok" => "Gösterilecek kayıtlı veliniz bulunmamaktadır",
             "TurYok" => "Gösterilecek kayıtlı tur bulunmamaktadır",
             "OgrenciYok" => "Gösterilecek kayıtlı öğrenci bulunmamaktadır",
@@ -168,6 +170,9 @@ class tr {
             "SifreMail" => "Şifreniz kayıtlı mail adresinize gönderildi.",
             "SifreHatirlatma" => "Şifre Hatırlatma",
             "SUnutMail" => "Shuttle - Şifre Bilgileri",
+            "Elden" => "Elden",
+            "KrediKartı" => "Kredi Kartı",
+            "Havale" => "Havale",
         );
         return $trdil;
     }

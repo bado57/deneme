@@ -159,7 +159,7 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Bakiye İşlemleri -->
-                <a href="#" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/bakiyeliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["BakiyeIslem"]; ?>

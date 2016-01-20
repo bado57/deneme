@@ -193,9 +193,7 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
                         $userTip = 5;
-
                         $firmaID = Session::get("FirmaId");
-
                         $userKadi = $form->kadiOlustur($firmaID);
                         if ($userKadi) {
                             $realSifre = $form->sifreOlustur();
@@ -221,11 +219,14 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                     $form->post('detayAdres', true);
                                     $form->post('gdsbildirim', true);
                                     $form->post('dnsbildirim', true);
+                                    $form->post('odemeTutar', true);
+                                    $form->post('odemeTip', true);
 
                                     $ogrenciAd = $form->values['ogrenciAd'];
                                     $ogrenciSoyad = $form->values['ogrenciSoyad'];
                                     $ogrenciAdSoyad = $ogrenciAd . ' ' . $ogrenciSoyad;
                                     $ogrenciEmail = $form->values['ogrenciEmail'];
+                                    $odemeTutar = $form->values['odemeTutar'];
 
                                     $ogrenciBolgeID = $_REQUEST['ogrenciBolgeID'];
                                     $ogrenciBolgeAdi = $_REQUEST['ogrenciBolgeAdi'];
@@ -239,6 +240,14 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                         if ($emailValidate == 1) {
                                             $kullaniciliste = $Panel_Model->ogrenciEmailDbKontrol($ogrenciEmail);
                                             if (count($kullaniciliste) <= 0) {
+                                                //gelen para değerini virgülden temizleme
+                                                $length = strlen($odemeTutar);
+                                                for ($l = 0; $l < $length; $l++) {
+                                                    if ($odemeTutar[$l] != ",") {
+                                                        $odemeValue.=$odemeTutar[$l];
+                                                    }
+                                                }
+
                                                 if ($form->submit()) {
                                                     $data = array(
                                                         'BSOgrenciAd' => $ogrenciAd,
@@ -262,7 +271,9 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                                         'Status' => $form->values['ogrenciDurum'],
                                                         'BSOgrenciAciklama' => $form->values['aciklama'],
                                                         'BildirimMesafeGidis' => $form->values['gdsbildirim'],
-                                                        'BildirimMesafeDonus' => $form->values['dnsbildirim']
+                                                        'BildirimMesafeDonus' => $form->values['dnsbildirim'],
+                                                        'OdemeTutar' => $odemeValue,
+                                                        'OdemeParaTip' => $form->values['odemeTip']
                                                     );
                                                 }
                                                 $resultOgrenciID = $Panel_Model->addNewOgrenci($data);
@@ -483,29 +494,30 @@ class AdminOgrenciAjaxSorgu extends Controller {
 
                             //Öğrenci Özellikleri
                             $ogrenciOzellik = $Panel_Model->ogrenciDetail($ogrenciDetailID);
-                            $e = 0;
                             foreach ($ogrenciOzellik as $ogrenciOzellikk) {
-                                $ogrenciList[$e]['OgrenciListID'] = $ogrenciOzellikk['BSOgrenciID'];
-                                $ogrenciList[$e]['OgrenciListAd'] = $ogrenciOzellikk['BSOgrenciAd'];
-                                $ogrenciList[$e]['OgrenciListSoyad'] = $ogrenciOzellikk['BSOgrenciSoyad'];
-                                $ogrenciList[$e]['OgrenciListTelefon'] = $ogrenciOzellikk['BSOgrenciPhone'];
-                                $ogrenciList[$e]['OgrenciListMail'] = $ogrenciOzellikk['BSOgrenciEmail'];
-                                $ogrenciList[$e]['OgrenciListLokasyon'] = $ogrenciOzellikk['BSOgrenciLocation'];
-                                $ogrenciList[$e]['OgrenciListUlke'] = $ogrenciOzellikk['BSOgrenciUlke'];
-                                $ogrenciList[$e]['OgrenciListIl'] = $ogrenciOzellikk['BSOgrenciIl'];
-                                $ogrenciList[$e]['OgrenciListIlce'] = $ogrenciOzellikk['BSOgrenciIlce'];
-                                $ogrenciList[$e]['OgrenciListSemt'] = $ogrenciOzellikk['BSOgrenciSemt'];
-                                $ogrenciList[$e]['OgrenciListMahalle'] = $ogrenciOzellikk['BSOgrenciMahalle'];
-                                $ogrenciList[$e]['OgrenciListSokak'] = $ogrenciOzellikk['BSOgrenciSokak'];
-                                $ogrenciList[$e]['OgrenciListPostaKodu'] = $ogrenciOzellikk['BSOgrenciPostaKodu'];
-                                $ogrenciList[$e]['OgrenciListCaddeNo'] = $ogrenciOzellikk['BSOgrenciCaddeNo'];
-                                $ogrenciList[$e]['OgrenciListAdres'] = $ogrenciOzellikk['BSOgrenciAdres'];
-                                $ogrenciList[$e]['OgrenciListDetayAdres'] = $ogrenciOzellikk['BSOgrenciDetayAdres'];
-                                $ogrenciList[$e]['OgrenciListDurum'] = $ogrenciOzellikk['Status'];
-                                $ogrenciList[$e]['OgrenciListAciklama'] = $ogrenciOzellikk['BSOgrenciAciklama'];
-                                $ogrenciList[$e]['OgrenciGBild'] = $ogrenciOzellikk['BildirimMesafeGidis'];
-                                $ogrenciList[$e]['OgrenciDBild'] = $ogrenciOzellikk['BildirimMesafeDonus'];
-                                $e++;
+                                $ogrenciList[0]['OgrenciListID'] = $ogrenciOzellikk['BSOgrenciID'];
+                                $ogrenciList[0]['OgrenciListAd'] = $ogrenciOzellikk['BSOgrenciAd'];
+                                $ogrenciList[0]['OgrenciListSoyad'] = $ogrenciOzellikk['BSOgrenciSoyad'];
+                                $ogrenciList[0]['OgrenciListTelefon'] = $ogrenciOzellikk['BSOgrenciPhone'];
+                                $ogrenciList[0]['OgrenciListMail'] = $ogrenciOzellikk['BSOgrenciEmail'];
+                                $ogrenciList[0]['OgrenciListLokasyon'] = $ogrenciOzellikk['BSOgrenciLocation'];
+                                $ogrenciList[0]['OgrenciListUlke'] = $ogrenciOzellikk['BSOgrenciUlke'];
+                                $ogrenciList[0]['OgrenciListIl'] = $ogrenciOzellikk['BSOgrenciIl'];
+                                $ogrenciList[0]['OgrenciListIlce'] = $ogrenciOzellikk['BSOgrenciIlce'];
+                                $ogrenciList[0]['OgrenciListSemt'] = $ogrenciOzellikk['BSOgrenciSemt'];
+                                $ogrenciList[0]['OgrenciListMahalle'] = $ogrenciOzellikk['BSOgrenciMahalle'];
+                                $ogrenciList[0]['OgrenciListSokak'] = $ogrenciOzellikk['BSOgrenciSokak'];
+                                $ogrenciList[0]['OgrenciListPostaKodu'] = $ogrenciOzellikk['BSOgrenciPostaKodu'];
+                                $ogrenciList[0]['OgrenciListCaddeNo'] = $ogrenciOzellikk['BSOgrenciCaddeNo'];
+                                $ogrenciList[0]['OgrenciListAdres'] = $ogrenciOzellikk['BSOgrenciAdres'];
+                                $ogrenciList[0]['OgrenciListDetayAdres'] = $ogrenciOzellikk['BSOgrenciDetayAdres'];
+                                $ogrenciList[0]['OgrenciListDurum'] = $ogrenciOzellikk['Status'];
+                                $ogrenciList[0]['OgrenciListAciklama'] = $ogrenciOzellikk['BSOgrenciAciklama'];
+                                $ogrenciList[0]['OgrenciGBild'] = $ogrenciOzellikk['BildirimMesafeGidis'];
+                                $ogrenciList[0]['OgrenciDBild'] = $ogrenciOzellikk['BildirimMesafeDonus'];
+                                //tutarı virgülle ayırma
+                                $ogrenciList[0]['OgrenciOTutar'] = $form->convertDecimal($ogrenciOzellikk['OdemeTutar']);
+                                $ogrenciList[0]['OgrenciParaTip'] = $ogrenciOzellikk['OdemeParaTip'];
                             }
                         } else {
                             $adminID = Session::get("userId");
@@ -623,29 +635,30 @@ class AdminOgrenciAjaxSorgu extends Controller {
 
                             //Öğrenci Özellikleri
                             $ogrenciOzellik = $Panel_Model->ogrenciDetail($ogrenciDetailID);
-                            $e = 0;
                             foreach ($ogrenciOzellik as $ogrenciOzellikk) {
-                                $ogrenciList[$e]['OgrenciListID'] = $ogrenciOzellikk['BSOgrenciID'];
-                                $ogrenciList[$e]['OgrenciListAd'] = $ogrenciOzellikk['BSOgrenciAd'];
-                                $ogrenciList[$e]['OgrenciListSoyad'] = $ogrenciOzellikk['BSOgrenciSoyad'];
-                                $ogrenciList[$e]['OgrenciListTelefon'] = $ogrenciOzellikk['BSOgrenciPhone'];
-                                $ogrenciList[$e]['OgrenciListMail'] = $ogrenciOzellikk['BSOgrenciEmail'];
-                                $ogrenciList[$e]['OgrenciListLokasyon'] = $ogrenciOzellikk['BSOgrenciLocation'];
-                                $ogrenciList[$e]['OgrenciListUlke'] = $ogrenciOzellikk['BSOgrenciUlke'];
-                                $ogrenciList[$e]['OgrenciListIl'] = $ogrenciOzellikk['BSOgrenciIl'];
-                                $ogrenciList[$e]['OgrenciListIlce'] = $ogrenciOzellikk['BSOgrenciIlce'];
-                                $ogrenciList[$e]['OgrenciListSemt'] = $ogrenciOzellikk['BSOgrenciSemt'];
-                                $ogrenciList[$e]['OgrenciListMahalle'] = $ogrenciOzellikk['BSOgrenciMahalle'];
-                                $ogrenciList[$e]['OgrenciListSokak'] = $ogrenciOzellikk['BSOgrenciSokak'];
-                                $ogrenciList[$e]['OgrenciListPostaKodu'] = $ogrenciOzellikk['BSOgrenciPostaKodu'];
-                                $ogrenciList[$e]['OgrenciListCaddeNo'] = $ogrenciOzellikk['BSOgrenciCaddeNo'];
-                                $ogrenciList[$e]['OgrenciListAdres'] = $ogrenciOzellikk['BSOgrenciAdres'];
-                                $ogrenciList[$e]['OgrenciListDetayAdres'] = $ogrenciOzellikk['BSOgrenciDetayAdres'];
-                                $ogrenciList[$e]['OgrenciListDurum'] = $ogrenciOzellikk['Status'];
-                                $ogrenciList[$e]['OgrenciListAciklama'] = $ogrenciOzellikk['BSOgrenciAciklama'];
-                                $ogrenciList[$e]['OgrenciGBild'] = $ogrenciOzellikk['BildirimMesafeGidis'];
-                                $ogrenciList[$e]['OgrenciDBild'] = $ogrenciOzellikk['BildirimMesafeDonus'];
-                                $e++;
+                                $ogrenciList[0]['OgrenciListID'] = $ogrenciOzellikk['BSOgrenciID'];
+                                $ogrenciList[0]['OgrenciListAd'] = $ogrenciOzellikk['BSOgrenciAd'];
+                                $ogrenciList[0]['OgrenciListSoyad'] = $ogrenciOzellikk['BSOgrenciSoyad'];
+                                $ogrenciList[0]['OgrenciListTelefon'] = $ogrenciOzellikk['BSOgrenciPhone'];
+                                $ogrenciList[0]['OgrenciListMail'] = $ogrenciOzellikk['BSOgrenciEmail'];
+                                $ogrenciList[0]['OgrenciListLokasyon'] = $ogrenciOzellikk['BSOgrenciLocation'];
+                                $ogrenciList[0]['OgrenciListUlke'] = $ogrenciOzellikk['BSOgrenciUlke'];
+                                $ogrenciList[0]['OgrenciListIl'] = $ogrenciOzellikk['BSOgrenciIl'];
+                                $ogrenciList[0]['OgrenciListIlce'] = $ogrenciOzellikk['BSOgrenciIlce'];
+                                $ogrenciList[0]['OgrenciListSemt'] = $ogrenciOzellikk['BSOgrenciSemt'];
+                                $ogrenciList[0]['OgrenciListMahalle'] = $ogrenciOzellikk['BSOgrenciMahalle'];
+                                $ogrenciList[0]['OgrenciListSokak'] = $ogrenciOzellikk['BSOgrenciSokak'];
+                                $ogrenciList[0]['OgrenciListPostaKodu'] = $ogrenciOzellikk['BSOgrenciPostaKodu'];
+                                $ogrenciList[0]['OgrenciListCaddeNo'] = $ogrenciOzellikk['BSOgrenciCaddeNo'];
+                                $ogrenciList[0]['OgrenciListAdres'] = $ogrenciOzellikk['BSOgrenciAdres'];
+                                $ogrenciList[0]['OgrenciListDetayAdres'] = $ogrenciOzellikk['BSOgrenciDetayAdres'];
+                                $ogrenciList[0]['OgrenciListDurum'] = $ogrenciOzellikk['Status'];
+                                $ogrenciList[0]['OgrenciListAciklama'] = $ogrenciOzellikk['BSOgrenciAciklama'];
+                                $ogrenciList[0]['OgrenciGBild'] = $ogrenciOzellikk['BildirimMesafeGidis'];
+                                $ogrenciList[0]['OgrenciDBild'] = $ogrenciOzellikk['BildirimMesafeDonus'];
+                                //tutarı virgülle ayırma
+                                $ogrenciList[0]['OgrenciOTutar'] = $form->convertDecimal($ogrenciOzellikk['OdemeTutar']);
+                                $ogrenciList[0]['OgrenciParaTip'] = $ogrenciOzellikk['OdemeParaTip'];
                             }
                         }
                         //sonuçlar
@@ -713,12 +726,14 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         $form->post('detayAdres', true);
                         $form->post('gdsbildirim', true);
                         $form->post('dnsbildirim', true);
-
+                        $form->post('odemeTutar', true);
+                        $form->post('odemeTip', true);
 
                         $ogrenciAd = $form->values['ogrenciDetayAd'];
                         $ogrenciSoyad = $form->values['ogrenciDetaySoyad'];
                         $ogrenciAdSoyad = $ogrenciAd . ' ' . $ogrenciSoyad;
                         $ogrenciEmail = $form->values['ogrenciDetayEmail'];
+                        $odemeTutar = $form->values['odemeTutar'];
 
                         $ogrenciBolgeID = $_REQUEST['ogrenciBolgeID'];
                         $ogrenciBolgeAdi = $_REQUEST['ogrenciBolgeAd'];
@@ -732,6 +747,13 @@ class AdminOgrenciAjaxSorgu extends Controller {
                             if ($emailValidate == 1) {
                                 $kullaniciliste = $Panel_Model->ogrenciEmailDbKontrol($ogrenciEmail);
                                 if (count($kullaniciliste) <= 0) {
+                                    //gelen para değerini virgülden temizleme
+                                    $length = strlen($odemeTutar);
+                                    for ($l = 0; $l < $length; $l++) {
+                                        if ($odemeTutar[$l] != ",") {
+                                            $odemeValue.=$odemeTutar[$l];
+                                        }
+                                    }
                                     if ($form->submit()) {
                                         $data = array(
                                             'BSOgrenciAd' => $ogrenciAd,
@@ -752,7 +774,9 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                             'BSOgrenciAciklama' => $form->values['ogrenciDetayAciklama'],
                                             'Status' => $form->values['ogrenciDetayDurum'],
                                             'BildirimMesafeGidis' => $form->values['gdsbildirim'],
-                                            'BildirimMesafeDonus' => $form->values['dnsbildirim']
+                                            'BildirimMesafeDonus' => $form->values['dnsbildirim'],
+                                            'OdemeTutar' => $odemeValue,
+                                            'OdemeParaTip' => $form->values['odemeTip']
                                         );
                                     }
                                     $resultOgrenciUpdate = $Panel_Model->ogrenciOzelliklerDuzenle($data, $ogrenciID);

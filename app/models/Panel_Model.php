@@ -110,6 +110,18 @@ class Panel_Model extends Model {
     }
 
     //öğrenci cihaz
+    public function bakiyeOgrenciCihaz($ID) {
+        $sql = 'SELECT bsogrencicihazRecID FROM bsogrencicihaz Where bsogrenciID=' . $ID;
+        return($this->db->select($sql));
+    }
+
+    //işçi cihaz
+    public function bakiyeIsciCihaz($ID) {
+        $sql = 'SELECT sbiscicihazRecID FROM sbiscicihaz Where sbisciID=' . $ID;
+        return($this->db->select($sql));
+    }
+
+    //öğrenci cihaz
     public function duyuruOgrenciCihaz($array = array()) {
         $sql = 'SELECT bsogrencicihazRecID FROM bsogrencicihaz Where bsogrenciID IN (' . $array . ') AND duyuruStatu=1';
         return($this->db->select($sql));
@@ -513,7 +525,6 @@ class Panel_Model extends Model {
     //admin bölgeye öre kurum listele
     public function rutbeKurumBolgeListele($array = array()) {
         $sql = 'SELECT SBKurumAdi, SBKurumID, SBKurumAciklama, SBBolgeID, SBBolgeAdi, SBKurumTip FROM sbkurum Where SBBolgeID IN (' . $array . ') ORDER BY SBKurumAdi ASC';
-        error_log($sql);
         return($this->db->select($sql));
     }
 
@@ -1002,6 +1013,12 @@ class Panel_Model extends Model {
     //admin listele
     public function adminListele($adminID) {
         $sql = "SELECT BSAdminID,BSAdminAd,BSAdminSoyad,BSAdminPhone,BSAdminEmail,Status,BSAdminAciklama FROM bsadmin WHERE BSAdminID NOT IN($adminID)  ORDER BY BSAdminAd ASC";
+        return($this->db->select($sql));
+    }
+
+    //admin listele
+    public function bakiyeGirisEkran() {
+        $sql = "SELECT BSOgrenciServis,BSPersonelServis FROM bsfirma";
         return($this->db->select($sql));
     }
 
@@ -1506,6 +1523,12 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //işçi bakiye listele
+    public function bakiyeIsciListele() {
+        $sql = "SELECT SBIsciID,SBIsciAd,SBIsciSoyad,OdemeTutar,OdenenTutar,OdemeParaTip FROM sbisci WHERE  Status=1 ORDER BY SBIsciAd ASC";
+        return($this->db->select($sql));
+    }
+
     //işçi bölgeler listele
     public function isciBolgeListele($array = array()) {
         $sql = 'SELECT DISTINCT SBIsciID FROM sbiscibolge Where SBBolgeID IN (' . $array . ')';
@@ -1515,6 +1538,12 @@ class Panel_Model extends Model {
     //rutbe işçi listele
     public function rutbeIsciListele($array = array()) {
         $sql = 'SELECT SBIsciID, SBIsciAd, SBIsciSoyad, SBIsciPhone, SBIsciEmail, Status, SBIsciAciklama FROM sbisci Where SBIsciID IN (' . $array . ') ORDER BY SBIsciAd ASC';
+        return($this->db->select($sql));
+    }
+
+    //rutbeye göre bakiye listeleme
+    public function rutbeBakiyeIsciListele($array = array()) {
+        $sql = 'SELECT SBIsciID, SBIsciAd, SBIsciSoyad,,OdemeTutar,OdenenTutar,OdemeParaTip FROM sbisci Where SBIsciID IN (' . $array . ') AND Status=1 ORDER BY SBIsciAd ASC';
         return($this->db->select($sql));
     }
 
@@ -1829,6 +1858,24 @@ class Panel_Model extends Model {
         return($this->db->select($sql));
     }
 
+    //bakiye öğrenci listele
+    public function bakiyeOgrenciListele() {
+        $sql = "SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,OdemeTutar,OdenenTutar,OdemeParaTip FROM bsogrenci WHERE Status=1 ORDER BY BSOgrenciAd ASC";
+        return($this->db->select($sql));
+    }
+
+    //öğrencinin ödenen bakiyeleri
+    public function bakiyeOgrenciOdenen($ID) {
+        $sql = "SELECT OdemeTutar,OdenenTutar FROM bsogrenci WHERE BSOgrenciID=" . $ID;
+        return($this->db->select($sql));
+    }
+
+    //işçinin ödenen bakiyeleri
+    public function bakiyeIsciOdenen($ID) {
+        $sql = "SELECT OdemeTutar,OdenenTutar FROM  sbisci WHERE SBIsciID=" . $ID;
+        return($this->db->select($sql));
+    }
+
     //öğrenci bölgeler listele
     public function ogrenciBolgeListele($array = array()) {
         $sql = 'SELECT DISTINCT BSOgrenciID FROM bsogrencibolge Where BSBolgeID IN (' . $array . ')';
@@ -1838,6 +1885,12 @@ class Panel_Model extends Model {
     //rutbe veli listele
     public function rutbeOgrenciListele($array = array()) {
         $sql = 'SELECT BSOgrenciID, BSOgrenciAd, BSOgrenciSoyad, BSOgrenciPhone, BSOgrenciEmail, Status, BSOgrenciAciklama FROM bsogrenci Where BSOgrenciID IN (' . $array . ') ORDER BY BSOgrenciAd ASC';
+        return($this->db->select($sql));
+    }
+
+    //rutbeye göre bakiye listeleme
+    public function rutbeBakiyeOgrenciListele($array = array()) {
+        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,OdemeTutar,OdenenTutar,OdemeParaTip FROM bsogrenci Where BSOgrenciID IN (' . $array . ') AND Status=1 ORDER BY BSOgrenciAd ASC';
         return($this->db->select($sql));
     }
 
@@ -1924,6 +1977,98 @@ class Panel_Model extends Model {
     public function ogrenciDetail($ogrenciID) {
         $sql = 'SELECT * FROM bsogrenci WHERE BSOgrenciID = ' . $ogrenciID . ' ORDER BY BSOgrenciAd ASC';
         return($this->db->select($sql));
+    }
+
+    //öğrenci detail özellik
+    public function ogrenciBakiyeDetail($ogrenciID) {
+        $sql = 'SELECT BSOgrenciID,BSOgrenciAd,BSOgrenciSoyad,OdemeTutar,OdenenTutar,OdemeParaTip FROM bsogrenci WHERE BSOgrenciID = ' . $ogrenciID;
+        return($this->db->select($sql));
+    }
+
+    //işçi detail özellik
+    public function isciBakiyeDetail($isciID) {
+        $sql = 'SELECT SBIsciID,SBIsciAd,SBIsciSoyad,OdemeTutar,OdenenTutar,OdemeParaTip FROM sbisci WHERE SBIsciID = ' . $isciID;
+        return($this->db->select($sql));
+    }
+
+    //öğrenci ödeme detail özellik
+    public function ogrenciOdemeDetail($ogrenciID) {
+        $sql = 'SELECT * FROM bsogrenciodeme WHERE BSOdenenID = ' . $ogrenciID;
+        return($this->db->select($sql));
+    }
+
+    //işçi ödeme detail özellik
+    public function isciOdemeDetail($isciID) {
+        $sql = 'SELECT * FROM sbisciodeme WHERE BSOdenenID = ' . $isciID;
+        return($this->db->select($sql));
+    }
+
+    //öğrenci ödeme detail özellik
+    public function ogrenciBakiyeVeli($ogrenciID) {
+        $sql = 'SELECT DISTINCT BSVeliID,BSVeliAd FROM bsveliogrenci WHERE BSOgrenciID = ' . $ogrenciID;
+        return($this->db->select($sql));
+    }
+
+    //öğrenci bakiye kaydetme
+    public function ogrenciBakiyeKaydet($data) {
+        return ($this->db->insert("bsogrenciodeme", $data));
+    }
+
+    //işçi bakiye kaydetme
+    public function isciBakiyeKaydet($data) {
+        return ($this->db->insert("sbisciodeme", $data));
+    }
+
+    //öğrenci bakiye güncelleme
+    public function ogrenciBakiyeGuncelle($data, $ogrenciID) {
+        return ($this->db->update("bsogrenci", $data, "BSOgrenciID=" . $ogrenciID));
+    }
+
+    //işçi bakiye güncelleme
+    public function isciBakiyeGuncelle($data, $isciID) {
+        return ($this->db->update("sbisci", $data, "SBIsciID=" . $isciID));
+    }
+
+    //öğrenci bakiye  delete
+    public function ogrenciBakiyeDelete($ID) {
+        return ($this->db->delete("bsogrenciodeme", "BSOdemeID=$ID"));
+    }
+
+    //işçi bakiye  delete
+    public function isciBakiyeDelete($ID) {
+        return ($this->db->delete("sbisciodeme", "BSOdemeID=$ID"));
+    }
+
+    //öğrenci bakiye  detail
+    public function ogrOdemeDetail($ogrenciID) {
+        $sql = 'SELECT OdemeTutar,OdenenTutar FROM bsogrenci WHERE BSOgrenciID = ' . $ogrenciID;
+        return($this->db->select($sql));
+    }
+
+    //işçi bakiye  detail
+    public function iscOdemeDetail($isciID) {
+        $sql = 'SELECT OdemeTutar,OdenenTutar FROM sbisci WHERE SBIsciID = ' . $isciID;
+        return($this->db->select($sql));
+    }
+
+    //öğrenci bakiye güncelleme
+    public function ogrenciSilmeBakiyeGuncelle($data, $ogrenciID) {
+        return ($this->db->update("bsogrenci", $data, "BSOgrenciID=" . $ogrenciID));
+    }
+
+    //işçi bakiye güncelleme
+    public function isciSilmeBakiyeGuncelle($data, $isciID) {
+        return ($this->db->update("sbisci", $data, "SBIsciID=" . $isciID));
+    }
+
+    //öğrenci bakiye güncelleme
+    public function ogrenciBakiyeDetailGuncelle($data, $ID) {
+        return ($this->db->update("bsogrenciodeme", $data, "BSOdemeID=" . $ID));
+    }
+
+    //işçi bakiye güncelleme
+    public function isciBakiyeDetailGuncelle($data, $ID) {
+        return ($this->db->update("sbisciodeme", $data, "BSOdemeID=" . $ID));
     }
 
     //öğrenci detail  delete

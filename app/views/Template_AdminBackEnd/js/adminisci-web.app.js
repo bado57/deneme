@@ -4,6 +4,11 @@ var MultipleMapArray = new Array();
 var MultipleMapindex;
 
 $(document).ready(function () {
+    //İŞÇİ EKLEME mask money
+    $(function () {
+        $('#odemeTutar').maskMoney();
+        $('#detayOdemeTutar').maskMoney();
+    });
 
     // Form Enable / Disable Kontrolleri
     $(document).on("click", "#editForm", function (e) {

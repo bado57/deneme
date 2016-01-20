@@ -502,7 +502,9 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 1, $duyuruText);
                         $resultLog = $Panel_Model->addNewAdminLog($dataLog);
                         if ($resultLog) {
-                            $sonuc["duyuru"] = $degerbildirim["DuyuruGonder"];
+                            $duyuruList[0] = $adSoyad;
+                            $duyuruList[1] = $degerbildirim["DuyuruGonder"];
+                            $sonuc["duyuru"] = $duyuruList;
                         } else {
                             $sonuc["hata"] = $degerbildirim["DuyuruGonder"];
                         }

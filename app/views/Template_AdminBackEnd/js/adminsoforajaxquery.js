@@ -383,10 +383,10 @@ $.AdminIslemler = {
                                                     }
                                                     soforBolgeID = [];
                                                     soforAracID = [];
-                                                    return true;
                                                 }
                                             }
                                         });
+                                        return true;
                                     } else {
                                         reset();
                                         alertify.alert(jsDil.BolgeSec);

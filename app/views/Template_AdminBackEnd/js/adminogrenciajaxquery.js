@@ -62,6 +62,8 @@ $(document).ready(function () {
                     $("input[name=street_number]").val(cevap.ogrenciDetail[0].OgrenciListCaddeNo);
                     $("input[name=ogrenciDetayID]").val(cevap.ogrenciDetail[0].OgrenciListID);
                     $("input[name=ogrenciDetayAdres]").val(cevap.ogrenciDetail[0].OgrenciListDetayAdres);
+                    $("#detayDovizTip").val(cevap.ogrenciDetail[0].OgrenciParaTip);
+                    $("input[name=detayOdemeTutar]").val(cevap.ogrenciDetail[0].OgrenciOTutar);
                     var SelectBilGidis = new Array();
                     gidisBildAyar = cevap.ogrenciDetail[0].OgrenciGBild;
                     SelectBilGidis[0] = {label: cevap.ogrenciDetail[0].OgrenciGBild + " m", title: cevap.ogrenciDetail[0].OgrenciGBild + " m", value: cevap.ogrenciDetail[0].OgrenciGBild, disabled: true};
@@ -395,6 +397,7 @@ $.AdminIslemler = {
         $("input[name=OgrenciEmail]").val('');
         $("textarea[name=OgrenciAdresDetay]").val('');
         $("textarea[name=Aciklama]").val('');
+        $("input[name=odemeTutar]").val('');
         $("input[name=country]").val('');
         $("input[name=administrative_area_level_1]").val('');
         $("input[name=administrative_area_level_2]").val('');
@@ -539,48 +542,65 @@ $.AdminIslemler = {
                                                 $('select#OgrenciVeliSelect option:selected').each(function () {
                                                     ogrenciVeliAd.push($(this).attr('title'));
                                                 });
-                                                $.ajax({
-                                                    data: {"ogrenciBolgeID[]": ogrenciBolgeID, "ogrenciBolgeAdi[]": ogrenciBolgeAdi, "ogrenciKurumID[]": ogrenciKurumID,
-                                                        "ogrenciKurumAd[]": ogrenciKurumAd, "ogrenciVeliID[]": ogrenciVeliID, "ogrenciVeliAd[]": ogrenciVeliAd, "ogrenciAd": ogrenciAd,
-                                                        "ogrenciSoyad": ogrenciSoyad, "ogrenciDurum": ogrenciDurum, "ogrenciLokasyon": ogrenciLokasyon, "ogrenciTelefon": ogrenciTelefon,
-                                                        "ogrenciEmail": ogrenciEmail, "ogrenciAdres": ogrenciAdres, "aciklama": aciklama, "ulke": ulke,
-                                                        "il": il, "ilce": ilce, "semt": semt, "mahalle": mahalle,
-                                                        "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno,
-                                                        "gdsbildirim": gdsbildirim, "dnsbildirim": dnsbildirim, "detayAdres": ttl, "tip": "ogrenciKaydet"},
-                                                    success: function (cevap) {
-                                                        if (cevap.hata) {
-                                                            reset();
-                                                            alertify.alert(cevap.hata);
-                                                            return false;
-                                                        } else {
-                                                            reset();
-                                                            alertify.success(cevap.insert);
-                                                            var ogrenciCount = $('#smallOgrenci').text();
-                                                            ogrenciCount++;
-                                                            $('#smallOgrenci').text(ogrenciCount);
-                                                            if (ogrenciDurum != 0) {
-                                                                var addRow = "<tr style='background-color:#F2F2F2'><td>"
-                                                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newOgrenciID + "'>"
-                                                                        + "<i class='glyphicon glyphicon-user' style='color:green;'></i> " + ogrenciAd + "</a></td>"
-                                                                        + "<td class='hidden-xs'>" + ogrenciSoyad + "</td>"
-                                                                        + "<td class='hidden-xs'>" + ogrenciTelefon + "</td>"
-                                                                        + "<td class='hidden-xs'>" + ogrenciEmail + "</td>"
-                                                                        + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
-                                                                OgrenciTable.DataTable().row.add($(addRow)).draw();
-                                                            } else {
-                                                                var addRow = "<tr style='background-color:#F2F2F2'><td>"
-                                                                        + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newOgrenciID + "'>"
-                                                                        + "<i class='glyphicon glyphicon-user' style='color:red;'></i> " + ogrenciAd + "</a></td>"
-                                                                        + "<td class='hidden-xs'>" + ogrenciSoyad + "</td>"
-                                                                        + "<td class='hidden-xs'>" + ogrenciTelefon + "</td>"
-                                                                        + "<td class='hidden-xs'>" + ogrenciEmail + "</td>"
-                                                                        + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
-                                                                OgrenciTable.DataTable().row.add($(addRow)).draw();
+                                                var odemeTutar = $("#odemeTutar").val();
+                                                var odemeTip = $("#dovizTip option:selected").val();
+                                                var splitodeme = odemeTutar.split(".");
+                                                var odemelength = splitodeme[0].length;
+                                                if (odemeTutar != "") {
+                                                    if (odemelength <= 13) {
+                                                        $.ajax({
+                                                            data: {"ogrenciBolgeID[]": ogrenciBolgeID, "ogrenciBolgeAdi[]": ogrenciBolgeAdi, "ogrenciKurumID[]": ogrenciKurumID,
+                                                                "ogrenciKurumAd[]": ogrenciKurumAd, "ogrenciVeliID[]": ogrenciVeliID, "ogrenciVeliAd[]": ogrenciVeliAd, "ogrenciAd": ogrenciAd,
+                                                                "ogrenciSoyad": ogrenciSoyad, "ogrenciDurum": ogrenciDurum, "ogrenciLokasyon": ogrenciLokasyon, "ogrenciTelefon": ogrenciTelefon,
+                                                                "ogrenciEmail": ogrenciEmail, "ogrenciAdres": ogrenciAdres, "aciklama": aciklama, "ulke": ulke,
+                                                                "il": il, "ilce": ilce, "semt": semt, "mahalle": mahalle,
+                                                                "sokak": sokak, "postakodu": postakodu, "caddeno": caddeno,
+                                                                "gdsbildirim": gdsbildirim, "dnsbildirim": dnsbildirim,
+                                                                "odemeTutar": odemeTutar, "odemeTip": odemeTip, "detayAdres": ttl, "tip": "ogrenciKaydet"},
+                                                            success: function (cevap) {
+                                                                if (cevap.hata) {
+                                                                    reset();
+                                                                    alertify.alert(cevap.hata);
+                                                                    return false;
+                                                                } else {
+                                                                    reset();
+                                                                    alertify.success(cevap.insert);
+                                                                    var ogrenciCount = $('#smallOgrenci').text();
+                                                                    ogrenciCount++;
+                                                                    $('#smallOgrenci').text(ogrenciCount);
+                                                                    if (ogrenciDurum != 0) {
+                                                                        var addRow = "<tr style='background-color:#F2F2F2'><td>"
+                                                                                + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newOgrenciID + "'>"
+                                                                                + "<i class='glyphicon glyphicon-user' style='color:green;'></i> " + ogrenciAd + "</a></td>"
+                                                                                + "<td class='hidden-xs'>" + ogrenciSoyad + "</td>"
+                                                                                + "<td class='hidden-xs'>" + ogrenciTelefon + "</td>"
+                                                                                + "<td class='hidden-xs'>" + ogrenciEmail + "</td>"
+                                                                                + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
+                                                                        OgrenciTable.DataTable().row.add($(addRow)).draw();
+                                                                    } else {
+                                                                        var addRow = "<tr style='background-color:#F2F2F2'><td>"
+                                                                                + "<a data-toggle='tooltip' data-placement='top' title='' value='" + cevap.newOgrenciID + "'>"
+                                                                                + "<i class='glyphicon glyphicon-user' style='color:red;'></i> " + ogrenciAd + "</a></td>"
+                                                                                + "<td class='hidden-xs'>" + ogrenciSoyad + "</td>"
+                                                                                + "<td class='hidden-xs'>" + ogrenciTelefon + "</td>"
+                                                                                + "<td class='hidden-xs'>" + ogrenciEmail + "</td>"
+                                                                                + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
+                                                                        OgrenciTable.DataTable().row.add($(addRow)).draw();
+                                                                    }
+                                                                }
                                                             }
-                                                            return true;
-                                                        }
+                                                        });
+                                                        return true;
+                                                    } else {
+                                                        reset();
+                                                        alertify.alert(jsDil.OdemeTutarB);
+                                                        return false;
                                                     }
-                                                });
+                                                } else {
+                                                    reset();
+                                                    alertify.alert(jsDil.OdemeTutar);
+                                                    return false;
+                                                }
                                             } else {
                                                 reset();
                                                 alertify.alert(jsDil.KurumSec);
@@ -626,6 +646,8 @@ $.AdminIslemler = {
         var ogrenciDetaySokak = $("input[name=route]").val();
         var ogrenciDetayPostaKodu = $("input[name=postal_code]").val();
         var ogrenciDetayCaddeNo = $("input[name=street_number]").val();
+        var dovizTip = $("#detayDovizTip").val();
+        var odemeTutar = $("input[name=detayOdemeTutar]").val();
         //öğrenci Bölge ID
         var ogrenciBolgeID = new Array();
         $('select#OgrenciDetaySelectBolge option:selected').each(function () {
@@ -779,7 +801,7 @@ $.AdminIslemler = {
         OgrenciDetailVazgec.push(ogrenciDetayAd, ogrenciDetaySoyad, ogrenciDetayDurum, ogrenciDetayLokasyon, ogrenciDetayTelefon, ogrenciDetayEmail, ogrenciDetayAdres,
                 ogrenciDetayAciklama, ogrenciDetayUlke, ogrenciDetayIl, ogrenciDetayIlce, ogrenciDetaySemt, ogrenciDetayMahalle, ogrenciDetaySokak, ogrenciDetayPostaKodu,
                 ogrenciDetayCaddeNo, ogrenciBolgeID, ogrenciBolgeAd, ogrenciBolgeNID, ogrenciBolgeNAd, ogrenciKurumID, ogrenciKurumAd, ogrenciKurumNID, ogrenciKurumNAd,
-                ogrenciVeliID, ogrenciVeliAd, ogrenciVeliNID, ogrenciVeliNAd, gdsbildirim, gdsbildirimtext, dnsbildirim, dnsbildirimtext);
+                ogrenciVeliID, ogrenciVeliAd, ogrenciVeliNID, ogrenciVeliNAd, gdsbildirim, gdsbildirimtext, dnsbildirim, dnsbildirimtext, dovizTip, odemeTutar);
     },
     ogrenciDetailVazgec: function () {
         $("input[name=OgrenciDetayAdi]").val(OgrenciDetailVazgec[0]);
@@ -875,6 +897,9 @@ $.AdminIslemler = {
         $('#OgrDetDnsMAyarSelect').multiselect('dataprovider', SelectBilDonus);
         $('#OgrDetDnsMAyarSelect').multiselect('disable');
         $('#OgrDetDnsMAyarSelect').multiselect('refresh');
+
+        $("#detayDovizTip").val(OgrenciDetailVazgec[32]);
+        $("input[name=detayOdemeTutar]").val(OgrenciDetailVazgec[33]);
 
         $('#OgrenciDetaySelectBolge').multiselect('refresh');
         $('#OgrenciDetayKurum').multiselect('refresh');
@@ -1025,7 +1050,21 @@ $.AdminIslemler = {
         var farkkurumlength = farkkurum.length;
         var farkogrenci = farkArray(OgrenciDetailVazgec[24], ogrenciVeliID);
         var farkogrencilength = farkogrenci.length;
-        if (OgrenciDetailVazgec[0] == ogrenciDetayAd && OgrenciDetailVazgec[1] == ogrenciDetaySoyad && OgrenciDetailVazgec[2] == ogrenciDetayDurum && OgrenciDetailVazgec[3] == ogrenciDetayLokasyon && OgrenciDetailVazgec[4] == ogrenciDetayTelefon && OgrenciDetailVazgec[5] == ogrenciDetayEmail && OgrenciDetailVazgec[6] == ogrenciDetayAdres && OgrenciDetailVazgec[7] == ogrenciDetayAciklama && OgrenciDetailVazgec[8] == ogrenciDetayUlke && OgrenciDetailVazgec[9] == ogrenciDetayIl && OgrenciDetailVazgec[10] == ogrenciDetayIlce && OgrenciDetailVazgec[11] == ogrenciDetaySemt && OgrenciDetailVazgec[12] == ogrenciDetayMahalle && OgrenciDetailVazgec[13] == ogrenciDetaySokak && OgrenciDetailVazgec[14] == ogrenciDetayPostaKodu && OgrenciDetailVazgec[15] == ogrenciDetayCaddeNo && farkbolgelength == 0 && farkkurumlength == 0 && farkogrencilength == 0 && OgrenciDetailVazgec[28] == gdsbildirim && OgrenciDetailVazgec[30] == dnsbildirim) {
+
+        var odemeTutar = $("#detayOdemeTutar").val();
+        var odemeTip = $("#detayDovizTip option:selected").val();
+        var splitodeme = odemeTutar.split(".");
+        var odemelength = splitodeme[0].length;
+        if (OgrenciDetailVazgec[0] == ogrenciDetayAd && OgrenciDetailVazgec[1] == ogrenciDetaySoyad && OgrenciDetailVazgec[2] == ogrenciDetayDurum &&
+                OgrenciDetailVazgec[3] == ogrenciDetayLokasyon && OgrenciDetailVazgec[4] == ogrenciDetayTelefon &&
+                OgrenciDetailVazgec[5] == ogrenciDetayEmail && OgrenciDetailVazgec[6] == ogrenciDetayAdres &&
+                OgrenciDetailVazgec[7] == ogrenciDetayAciklama && OgrenciDetailVazgec[8] == ogrenciDetayUlke &&
+                OgrenciDetailVazgec[9] == ogrenciDetayIl && OgrenciDetailVazgec[10] == ogrenciDetayIlce &&
+                OgrenciDetailVazgec[11] == ogrenciDetaySemt && OgrenciDetailVazgec[12] == ogrenciDetayMahalle &&
+                OgrenciDetailVazgec[13] == ogrenciDetaySokak && OgrenciDetailVazgec[14] == ogrenciDetayPostaKodu &&
+                OgrenciDetailVazgec[15] == ogrenciDetayCaddeNo && farkbolgelength == 0 && farkkurumlength == 0 &&
+                farkogrencilength == 0 && OgrenciDetailVazgec[28] == gdsbildirim && OgrenciDetailVazgec[30] == dnsbildirim
+                && OgrenciDetailVazgec[32] == odemeTip && OgrenciDetailVazgec[33] == odemeTutar) {
             reset();
             alertify.alert(jsDil.Degisiklik);
             return false;
@@ -1067,126 +1106,139 @@ $.AdminIslemler = {
                                     if (ogrenciBolgeLength) {
                                         var ogrenciKurumLength = $('select#OgrenciDetayKurum option:selected').val();
                                         if (ogrenciKurumLength) {
-                                            $.ajax({
-                                                data: {"ogrencidetail_id": ogrencidetail_id, "ogrenciBolgeID[]": ogrenciBolgeID, "ogrenciBolgeAd[]": ogrenciBolgeAd, "ogrenciKurumID[]": ogrenciKurumID, "ogrenciKurumAd[]": ogrenciKurumAd,
-                                                    "ogrenciVeliID[]": ogrenciVeliID, "ogrenciVeliAd[]": ogrenciVeliAd, "ogrenciDetayAd": ogrenciDetayAd,
-                                                    "ogrenciDetaySoyad": ogrenciDetaySoyad, "ogrenciDetayDurum": ogrenciDetayDurum, "ogrenciDetayLokasyon": ogrenciDetayLokasyon, "ogrenciDetayTelefon": ogrenciDetayTelefon,
-                                                    "ogrenciDetayEmail": ogrenciDetayEmail, "ogrenciDetayAdres": ogrenciDetayAdres, "ogrenciDetayAciklama": ogrenciDetayAciklama, "ogrenciDetayUlke": ogrenciDetayUlke,
-                                                    "ogrenciDetayIl": ogrenciDetayIl, "ogrenciDetayIlce": ogrenciDetayIlce, "ogrenciDetaySemt": ogrenciDetaySemt, "ogrenciDetayMahalle": ogrenciDetayMahalle,
-                                                    "ogrenciDetaySokak": ogrenciDetaySokak, "ogrenciDetayPostaKodu": ogrenciDetayPostaKodu, "ogrenciDetayCaddeNo": ogrenciDetayCaddeNo,
-                                                    "gdsbildirim": gdsbildirim, "dnsbildirim": dnsbildirim, "detayAdres": ttl, "tip": "ogrenciDetailKaydet"},
-                                                success: function (cevap) {
-                                                    if (cevap.hata) {
-                                                        reset();
-                                                        alertify.alert(cevap.hata);
-                                                        return false;
-                                                    } else {
-                                                        disabledForm();
-                                                        reset();
-                                                        alertify.success(cevap.update);
-                                                        var SelectBolgeOptions = new Array();
-                                                        var SelectKurumOptions = new Array();
-                                                        var SelectVeliOptions = new Array();
-                                                        if (ogrenciBolgeID.length > 0) {
-                                                            var bolgelength = ogrenciBolgeID.length;
-                                                            for (var b = 0; b < bolgelength; b++) {
-                                                                SelectBolgeOptions[b] = {label: ogrenciBolgeAd[b], title: ogrenciBolgeAd[b], value: ogrenciBolgeID[b], selected: true};
-                                                            }
+                                            if (odemeTutar != "") {
+                                                if (odemelength <= 13) {
+                                                    $.ajax({
+                                                        data: {"ogrencidetail_id": ogrencidetail_id, "ogrenciBolgeID[]": ogrenciBolgeID, "ogrenciBolgeAd[]": ogrenciBolgeAd, "ogrenciKurumID[]": ogrenciKurumID, "ogrenciKurumAd[]": ogrenciKurumAd,
+                                                            "ogrenciVeliID[]": ogrenciVeliID, "ogrenciVeliAd[]": ogrenciVeliAd, "ogrenciDetayAd": ogrenciDetayAd,
+                                                            "ogrenciDetaySoyad": ogrenciDetaySoyad, "ogrenciDetayDurum": ogrenciDetayDurum, "ogrenciDetayLokasyon": ogrenciDetayLokasyon, "ogrenciDetayTelefon": ogrenciDetayTelefon,
+                                                            "ogrenciDetayEmail": ogrenciDetayEmail, "ogrenciDetayAdres": ogrenciDetayAdres, "ogrenciDetayAciklama": ogrenciDetayAciklama, "ogrenciDetayUlke": ogrenciDetayUlke,
+                                                            "ogrenciDetayIl": ogrenciDetayIl, "ogrenciDetayIlce": ogrenciDetayIlce, "ogrenciDetaySemt": ogrenciDetaySemt, "ogrenciDetayMahalle": ogrenciDetayMahalle,
+                                                            "ogrenciDetaySokak": ogrenciDetaySokak, "ogrenciDetayPostaKodu": ogrenciDetayPostaKodu, "ogrenciDetayCaddeNo": ogrenciDetayCaddeNo,
+                                                            "gdsbildirim": gdsbildirim, "dnsbildirim": dnsbildirim,
+                                                            "odemeTutar": odemeTutar, "odemeTip": odemeTip, "detayAdres": ttl, "tip": "ogrenciDetailKaydet"},
+                                                        success: function (cevap) {
+                                                            if (cevap.hata) {
+                                                                reset();
+                                                                alertify.alert(cevap.hata);
+                                                                return false;
+                                                            } else {
+                                                                disabledForm();
+                                                                reset();
+                                                                alertify.success(cevap.update);
+                                                                var SelectBolgeOptions = new Array();
+                                                                var SelectKurumOptions = new Array();
+                                                                var SelectVeliOptions = new Array();
+                                                                if (ogrenciBolgeID.length > 0) {
+                                                                    var bolgelength = ogrenciBolgeID.length;
+                                                                    for (var b = 0; b < bolgelength; b++) {
+                                                                        SelectBolgeOptions[b] = {label: ogrenciBolgeAd[b], title: ogrenciBolgeAd[b], value: ogrenciBolgeID[b], selected: true};
+                                                                    }
 
-                                                            if (ogrenciBolgeNID.length > 0) {
-                                                                var veliBolgeLength = ogrenciBolgeNID.length;
-                                                                for (var z = 0; z < veliBolgeLength; z++) {
-                                                                    SelectBolgeOptions[b] = {label: ogrenciBolgeNAd[z], title: ogrenciBolgeNAd[z], value: ogrenciBolgeNID[z]};
-                                                                    b++;
-                                                                }
+                                                                    if (ogrenciBolgeNID.length > 0) {
+                                                                        var veliBolgeLength = ogrenciBolgeNID.length;
+                                                                        for (var z = 0; z < veliBolgeLength; z++) {
+                                                                            SelectBolgeOptions[b] = {label: ogrenciBolgeNAd[z], title: ogrenciBolgeNAd[z], value: ogrenciBolgeNID[z]};
+                                                                            b++;
+                                                                        }
 
-                                                            }
-                                                        } else {
-                                                            if (ogrenciBolgeNID.length > 0) {
-                                                                var veliBolgeLength = ogrenciBolgeNID.length;
-                                                                for (var b = 0; b < veliBolgeLength; b++) {
-                                                                    SelectBolgeOptions[b] = {label: ogrenciBolgeNAd[b], title: ogrenciBolgeNAd[b], value: ogrenciBolgeNID[b]};
-                                                                }
-
-                                                            }
-                                                        }
-
-                                                        if (ogrenciKurumID.length > 0) {
-                                                            var aracselectlength = ogrenciKurumID.length;
-                                                            for (var t = 0; t < aracselectlength; t++) {
-                                                                SelectKurumOptions[t] = {label: ogrenciKurumAd[t], title: ogrenciKurumAd[t], value: ogrenciKurumID[t], selected: true};
-                                                            }
-
-                                                            if (ogrenciKurumNID.length > 0) {
-                                                                var velilength = ogrenciKurumNID.length;
-                                                                for (var f = 0; f < velilength; f++) {
-                                                                    SelectKurumOptions[t] = {label: ogrenciKurumNAd[f], title: ogrenciKurumNAd[f], value: ogrenciKurumNID[f]};
-                                                                    t++;
-                                                                }
-                                                            }
-
-                                                        } else {
-                                                            if (ogrenciKurumNID.length > 0) {
-                                                                var velilength = ogrenciKurumNID.length;
-                                                                for (var t = 0; t < velilength; t++) {
-                                                                    SelectKurumOptions[t] = {label: ogrenciKurumNAd[t], title: ogrenciKurumNAd[t], value: ogrenciKurumNID[t]};
-                                                                }
-                                                            }
-                                                        }
-
-                                                        if (ogrenciVeliID.length > 0) {
-                                                            var ogrenciselectlength = ogrenciVeliID.length;
-                                                            for (var t = 0; t < ogrenciselectlength; t++) {
-                                                                SelectVeliOptions[t] = {label: ogrenciVeliAd[t], title: ogrenciVeliAd[t], value: ogrenciVeliID[t], selected: true};
-                                                            }
-
-                                                            if (ogrenciVeliNID.length > 0) {
-                                                                var velilength = ogrenciVeliNID.length;
-                                                                for (var f = 0; f < velilength; f++) {
-                                                                    SelectVeliOptions[t] = {label: ogrenciVeliNAd[f], title: ogrenciVeliNAd[f], value: ogrenciVeliNID[f]};
-                                                                    t++;
-                                                                }
-                                                            }
-
-                                                        } else {
-                                                            if (ogrenciVeliNID.length > 0) {
-                                                                var velilength = ogrenciVeliNID.length;
-                                                                for (var t = 0; t < velilength; t++) {
-                                                                    SelectVeliOptions[t] = {label: ogrenciVeliNAd[t], title: ogrenciVeliNAd[t], value: ogrenciVeliNID[t]};
-                                                                }
-                                                            }
-                                                        }
-
-                                                        $('#OgrenciDetaySelectBolge').multiselect('refresh');
-                                                        $('#OgrenciDetayKurum').multiselect('refresh');
-                                                        $('#OgrenciDetayVeliSelect').multiselect('refresh');
-                                                        $('#OgrenciDetaySelectBolge').multiselect('dataprovider', SelectBolgeOptions);
-                                                        $('#OgrenciDetayKurum').multiselect('dataprovider', SelectKurumOptions);
-                                                        $('#OgrenciDetayVeliSelect').multiselect('dataprovider', SelectVeliOptions);
-                                                        var length = $('tbody#ogrenciRow tr').length;
-                                                        for (var t = 0; t < length; t++) {
-                                                            var attrValueId = $("tbody#ogrenciRow > tr > td > a").eq(t).attr('value');
-                                                            if (attrValueId == ogrencidetail_id) {
-                                                                if (ogrenciDetayDurum != 0) {
-                                                                    $("tbody#ogrenciRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user"></i> ' + ogrenciDetayAd);
-                                                                    $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(ogrenciDetaySoyad);
-                                                                    $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(ogrenciDetayTelefon);
-                                                                    $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(ogrenciDetayEmail);
-                                                                    $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(ogrenciDetayAciklama);
-                                                                    $('tbody#ogrenciRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                                    }
                                                                 } else {
-                                                                    $("tbody#ogrenciRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user" style="color:red"></i> ' + ogrenciDetayAd);
-                                                                    $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(ogrenciDetaySoyad);
-                                                                    $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(ogrenciDetayTelefon);
-                                                                    $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(ogrenciDetayEmail);
-                                                                    $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(ogrenciDetayAciklama);
-                                                                    $('tbody#ogrenciRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                                    if (ogrenciBolgeNID.length > 0) {
+                                                                        var veliBolgeLength = ogrenciBolgeNID.length;
+                                                                        for (var b = 0; b < veliBolgeLength; b++) {
+                                                                            SelectBolgeOptions[b] = {label: ogrenciBolgeNAd[b], title: ogrenciBolgeNAd[b], value: ogrenciBolgeNID[b]};
+                                                                        }
+
+                                                                    }
+                                                                }
+
+                                                                if (ogrenciKurumID.length > 0) {
+                                                                    var aracselectlength = ogrenciKurumID.length;
+                                                                    for (var t = 0; t < aracselectlength; t++) {
+                                                                        SelectKurumOptions[t] = {label: ogrenciKurumAd[t], title: ogrenciKurumAd[t], value: ogrenciKurumID[t], selected: true};
+                                                                    }
+
+                                                                    if (ogrenciKurumNID.length > 0) {
+                                                                        var velilength = ogrenciKurumNID.length;
+                                                                        for (var f = 0; f < velilength; f++) {
+                                                                            SelectKurumOptions[t] = {label: ogrenciKurumNAd[f], title: ogrenciKurumNAd[f], value: ogrenciKurumNID[f]};
+                                                                            t++;
+                                                                        }
+                                                                    }
+
+                                                                } else {
+                                                                    if (ogrenciKurumNID.length > 0) {
+                                                                        var velilength = ogrenciKurumNID.length;
+                                                                        for (var t = 0; t < velilength; t++) {
+                                                                            SelectKurumOptions[t] = {label: ogrenciKurumNAd[t], title: ogrenciKurumNAd[t], value: ogrenciKurumNID[t]};
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                if (ogrenciVeliID.length > 0) {
+                                                                    var ogrenciselectlength = ogrenciVeliID.length;
+                                                                    for (var t = 0; t < ogrenciselectlength; t++) {
+                                                                        SelectVeliOptions[t] = {label: ogrenciVeliAd[t], title: ogrenciVeliAd[t], value: ogrenciVeliID[t], selected: true};
+                                                                    }
+
+                                                                    if (ogrenciVeliNID.length > 0) {
+                                                                        var velilength = ogrenciVeliNID.length;
+                                                                        for (var f = 0; f < velilength; f++) {
+                                                                            SelectVeliOptions[t] = {label: ogrenciVeliNAd[f], title: ogrenciVeliNAd[f], value: ogrenciVeliNID[f]};
+                                                                            t++;
+                                                                        }
+                                                                    }
+
+                                                                } else {
+                                                                    if (ogrenciVeliNID.length > 0) {
+                                                                        var velilength = ogrenciVeliNID.length;
+                                                                        for (var t = 0; t < velilength; t++) {
+                                                                            SelectVeliOptions[t] = {label: ogrenciVeliNAd[t], title: ogrenciVeliNAd[t], value: ogrenciVeliNID[t]};
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                $('#OgrenciDetaySelectBolge').multiselect('refresh');
+                                                                $('#OgrenciDetayKurum').multiselect('refresh');
+                                                                $('#OgrenciDetayVeliSelect').multiselect('refresh');
+                                                                $('#OgrenciDetaySelectBolge').multiselect('dataprovider', SelectBolgeOptions);
+                                                                $('#OgrenciDetayKurum').multiselect('dataprovider', SelectKurumOptions);
+                                                                $('#OgrenciDetayVeliSelect').multiselect('dataprovider', SelectVeliOptions);
+                                                                var length = $('tbody#ogrenciRow tr').length;
+                                                                for (var t = 0; t < length; t++) {
+                                                                    var attrValueId = $("tbody#ogrenciRow > tr > td > a").eq(t).attr('value');
+                                                                    if (attrValueId == ogrencidetail_id) {
+                                                                        if (ogrenciDetayDurum != 0) {
+                                                                            $("tbody#ogrenciRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user"></i> ' + ogrenciDetayAd);
+                                                                            $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(ogrenciDetaySoyad);
+                                                                            $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(ogrenciDetayTelefon);
+                                                                            $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(ogrenciDetayEmail);
+                                                                            $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(ogrenciDetayAciklama);
+                                                                            $('tbody#ogrenciRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                                        } else {
+                                                                            $("tbody#ogrenciRow > tr > td > a").eq(t).html('<i class="glyphicon glyphicon-user" style="color:red"></i> ' + ogrenciDetayAd);
+                                                                            $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(1)').text(ogrenciDetaySoyad);
+                                                                            $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(2)').text(ogrenciDetayTelefon);
+                                                                            $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(3)').text(ogrenciDetayEmail);
+                                                                            $("tbody#ogrenciRow > tr > td > a").eq(t).parent().parent().find('td:eq(5)').text(ogrenciDetayAciklama);
+                                                                            $('tbody#ogrenciRow > tr:eq(' + t + ')').css({"background-color": "#F2F2F2"});
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         }
-                                                    }
+                                                    });
+                                                } else {
+                                                    reset();
+                                                    alertify.alert(jsDil.OdemeTutarB);
+                                                    return false;
                                                 }
-                                            });
+                                            } else {
+                                                reset();
+                                                alertify.alert(jsDil.OdemeTutar);
+                                                return false;
+                                            }
                                         } else {
                                             reset();
                                             alertify.alert(jsDil.KurumSec);

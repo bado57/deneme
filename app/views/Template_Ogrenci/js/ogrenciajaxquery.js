@@ -1,4 +1,4 @@
-var SITE_URL = "http://192.168.1.30/SProject/";
+var SITE_URL = "http://192.168.1.24/SProject/";
 $.ajaxSetup({
     type: "post",
     url: SITE_URL + "OgrenciMobilDetayAjax",
@@ -829,6 +829,74 @@ ons.ready(function () {
             });
         }, 2000);
     });
+    $(document).on('pageinit', '#bakiyeliste', function () {
+        var id = $("input[name=id]").val();
+        var firma_id = $("input[name=firmaId]").val();
+        var lang = $("input[name=lang]").val();
+        $.ajax({
+            data: {"id": id, "firma_id": firma_id,
+                "lang": lang, "tip": "bakiyeListe"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    modal.hide();
+                    ons.notification.alert({message: cevap.hata});
+                } else {
+                    if (cevap.result[0]) {
+                        $("#bakiyeListNone").hide();
+                        $("#bakiyeList").show();
+                        var onsList = $("#bakiyeList");
+                        var bakiyelength = cevap.result[0].length;
+                        for (var a = 0; a < bakiyelength; a++) {
+                            var elm = $('<ons-list-item modifier="chevron" class="list-item-container" onclick="$.OgrenciIslemler.bakiyeDetay(' + cevap.result[0][a].ID + ')">'
+                                    + '<div class="list-item-left"><img src="' + SITE_URL + 'Plugins/kullanicilar/5.png" class="avator"></div>'
+                                    + '<div class="list-item-right"><div class="list-item-content"><div class="name">'
+                                    + cevap.result[0][a].Tutar + " " + cevap.result[0][a].DovizTip
+                                    + '<span class="lucent">(' + cevap.result[0][a].Tarih + ')</span></div><span class="desc">' + cevap.result[0][a].Aciklama + '</span></div></div></ons-list-item>');
+                            elm.appendTo(onsList);
+                            ons.compile(elm[0]);
+                        }
+                    } else {
+                        $("#bakiyeListNo").text(cevap.result[1][0].Yok);
+                    }
+                }
+                modal.hide();
+            }
+        });
+    });
+    $(document).on('pageinit', '#bakiyedetay', function () {
+        var id = $("input[name=id]").val();
+        var firma_id = $("input[name=firmaId]").val();
+        var lang = $("input[name=lang]").val();
+        var page = ogrenciNavigator.getCurrentPage();
+        var odemeID = page.options.odemeid;
+        $.ajax({
+            data: {"id": id, "firma_id": firma_id,
+                "lang": lang, "odemeID": odemeID, "tip": "bakiyeDetay"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    modal.hide();
+                    ons.notification.alert({message: cevap.hata});
+                } else {
+                    $("#oAlanAd").text(cevap.result[0].AlanAd);
+                    $("#oYapanAd").text(cevap.result[0].YapanAd);
+                    if (cevap.result[0].OdemeTipp == 0) {
+                        $("#oTipIcon").addClass("fa fa-hand-o-right");
+                    } else if (cevap.result[0].OdemeTipp == 1) {
+                        $("#oTipIcon").addClass("fa fa-credit-card");
+                    } else {
+                        $("#oTipIcon").addClass("fa fa-paper-plane");
+                    }
+                    $("#oTip").text(cevap.result[0].OdemeTip);
+                    $("#oTutar").text(cevap.result[0].OdenenTutar + " " + cevap.result[0].DovizTip);
+                    $("#oTarih").text(cevap.result[0].Tarih);
+                    $("#oKalan").text(cevap.result[0].KalanTutar + " " + cevap.result[0].DovizTip);
+                    $("#oToplam").text(cevap.result[0].OdemeTutar + " " + cevap.result[0].DovizTip);
+                    $("#oAciklama").text(cevap.result[0].Aciklama);
+                }
+                modal.hide();
+            }
+        });
+    });
 });
 $.OgrenciIslemler = {
     ogrVeliList: function (deger) {
@@ -1004,6 +1072,9 @@ $.OgrenciIslemler = {
         clearInterval(refreshInterval);
         clearInterval(Interval);
         ogrenciNavigator.popPage();
+    },
+    bakiyeDetay: function (id) {
+        ogrenciNavigator.pushPage('bakiyedetay.html', {animation: 'slide', odemeid: id});
     },
 }
 function Mobileinitialize(Mobileenlem, Mobileboylam) {

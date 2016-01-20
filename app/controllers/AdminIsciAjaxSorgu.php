@@ -119,11 +119,14 @@ class AdminIsciAjaxSorgu extends Controller {
                                     $form->post('detayAdres', true);
                                     $form->post('gdsbildirim', true);
                                     $form->post('dnsbildirim', true);
-                                    $isciEmail = $form->values['isciEmail'];
+                                    $form->post('odemeTutar', true);
+                                    $form->post('odemeTip', true);
 
                                     $isciAd = $form->values['isciAd'];
                                     $isciSoyad = $form->values['isciSoyad'];
                                     $isciAdSoyad = $isciAd . ' ' . $isciSoyad;
+                                    $isciEmail = $form->values['isciEmail'];
+                                    $odemeTutar = $form->values['odemeTutar'];
 
                                     $isciBolgeID = $_REQUEST['isciBolgeID'];
                                     $isciBolgeAdi = $_REQUEST['isciBolgeAdi'];
@@ -135,6 +138,13 @@ class AdminIsciAjaxSorgu extends Controller {
                                         if ($emailValidate == 1) {
                                             $kullaniciliste = $Panel_Model->isciEmailDbKontrol($isciEmail);
                                             if (count($kullaniciliste) <= 0) {
+                                                //gelen para değerini virgülden temizleme
+                                                $length = strlen($odemeTutar);
+                                                for ($l = 0; $l < $length; $l++) {
+                                                    if ($odemeTutar[$l] != ",") {
+                                                        $odemeValue.=$odemeTutar[$l];
+                                                    }
+                                                }
                                                 if ($form->submit()) {
                                                     $data = array(
                                                         'SBIsciAd' => $isciAd,
@@ -158,7 +168,9 @@ class AdminIsciAjaxSorgu extends Controller {
                                                         'Status' => $form->values['isciDurum'],
                                                         'SBIsciAciklama' => $form->values['aciklama'],
                                                         'BildirimMesafeGidis' => $form->values['gdsbildirim'],
-                                                        'BildirimMesafeDonus' => $form->values['dnsbildirim']
+                                                        'BildirimMesafeDonus' => $form->values['dnsbildirim'],
+                                                        'OdemeTutar' => $odemeValue,
+                                                        'OdemeParaTip' => $form->values['odemeTip']
                                                     );
                                                 }
                                                 $resultIsciID = $Panel_Model->addNewIsci($data);
@@ -241,9 +253,7 @@ class AdminIsciAjaxSorgu extends Controller {
                         }
                     }
                 case "isciDetail":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
@@ -322,29 +332,30 @@ class AdminIsciAjaxSorgu extends Controller {
 
                             //işçi Özellikleri
                             $isciOzellik = $Panel_Model->isciDetail($isciDetailID);
-                            $e = 0;
                             foreach ($isciOzellik as $isciOzellikk) {
-                                $isciList[$e]['IsciListID'] = $isciOzellikk['SBIsciID'];
-                                $isciList[$e]['IsciListAd'] = $isciOzellikk['SBIsciAd'];
-                                $isciList[$e]['IsciListSoyad'] = $isciOzellikk['SBIsciSoyad'];
-                                $isciList[$e]['IsciListTelefon'] = $isciOzellikk['SBIsciPhone'];
-                                $isciList[$e]['IsciListMail'] = $isciOzellikk['SBIsciEmail'];
-                                $isciList[$e]['IsciListLokasyon'] = $isciOzellikk['SBIsciLocation'];
-                                $isciList[$e]['IsciListUlke'] = $isciOzellikk['SBIsciUlke'];
-                                $isciList[$e]['IsciListIl'] = $isciOzellikk['SBIsciIl'];
-                                $isciList[$e]['IsciListIlce'] = $isciOzellikk['SBIsciIlce'];
-                                $isciList[$e]['IsciListSemt'] = $isciOzellikk['SBIsciSemt'];
-                                $isciList[$e]['IsciListMahalle'] = $isciOzellikk['SBIsciMahalle'];
-                                $isciList[$e]['IsciListSokak'] = $isciOzellikk['SBIsciSokak'];
-                                $isciList[$e]['IsciListPostaKodu'] = $isciOzellikk['SBIsciPostaKodu'];
-                                $isciList[$e]['IsciListCaddeNo'] = $isciOzellikk['SBIsciCaddeNo'];
-                                $isciList[$e]['IsciListAdres'] = $isciOzellikk['SBIsciAdres'];
-                                $isciList[$e]['IsciListDetayAdres'] = $isciOzellikk['SBIsciDetayAdres'];
-                                $isciList[$e]['IsciListDurum'] = $isciOzellikk['Status'];
-                                $isciList[$e]['IsciListAciklama'] = $isciOzellikk['SBIsciAciklama'];
-                                $isciList[$e]['IsciGBild'] = $isciOzellikk['BildirimMesafeGidis'];
-                                $isciList[$e]['IsciDBild'] = $isciOzellikk['BildirimMesafeDonus'];
-                                $e++;
+                                $isciList[0]['IsciListID'] = $isciOzellikk['SBIsciID'];
+                                $isciList[0]['IsciListAd'] = $isciOzellikk['SBIsciAd'];
+                                $isciList[0]['IsciListSoyad'] = $isciOzellikk['SBIsciSoyad'];
+                                $isciList[0]['IsciListTelefon'] = $isciOzellikk['SBIsciPhone'];
+                                $isciList[0]['IsciListMail'] = $isciOzellikk['SBIsciEmail'];
+                                $isciList[0]['IsciListLokasyon'] = $isciOzellikk['SBIsciLocation'];
+                                $isciList[0]['IsciListUlke'] = $isciOzellikk['SBIsciUlke'];
+                                $isciList[0]['IsciListIl'] = $isciOzellikk['SBIsciIl'];
+                                $isciList[0]['IsciListIlce'] = $isciOzellikk['SBIsciIlce'];
+                                $isciList[0]['IsciListSemt'] = $isciOzellikk['SBIsciSemt'];
+                                $isciList[0]['IsciListMahalle'] = $isciOzellikk['SBIsciMahalle'];
+                                $isciList[0]['IsciListSokak'] = $isciOzellikk['SBIsciSokak'];
+                                $isciList[0]['IsciListPostaKodu'] = $isciOzellikk['SBIsciPostaKodu'];
+                                $isciList[0]['IsciListCaddeNo'] = $isciOzellikk['SBIsciCaddeNo'];
+                                $isciList[0]['IsciListAdres'] = $isciOzellikk['SBIsciAdres'];
+                                $isciList[0]['IsciListDetayAdres'] = $isciOzellikk['SBIsciDetayAdres'];
+                                $isciList[0]['IsciListDurum'] = $isciOzellikk['Status'];
+                                $isciList[0]['IsciListAciklama'] = $isciOzellikk['SBIsciAciklama'];
+                                $isciList[0]['IsciGBild'] = $isciOzellikk['BildirimMesafeGidis'];
+                                $isciList[0]['IsciDBild'] = $isciOzellikk['BildirimMesafeDonus'];
+                                //tutarı virgülle ayırma
+                                $isciList[0]['IsciOTutar'] = $form->convertDecimal($isciOzellikk['OdemeTutar']);
+                                $isciList[0]['IsciParaTip'] = $isciOzellikk['OdemeParaTip'];
                             }
                         } else {
                             $adminID = Session::get("userId");
@@ -432,29 +443,30 @@ class AdminIsciAjaxSorgu extends Controller {
                             }
                             //işçi Özellikleri
                             $isciOzellik = $Panel_Model->isciDetail($isciDetailID);
-                            $e = 0;
                             foreach ($isciOzellik as $isciOzellikk) {
-                                $isciList[$e]['IsciListID'] = $isciOzellikk['SBIsciID'];
-                                $isciList[$e]['IsciListAd'] = $isciOzellikk['SBIsciAd'];
-                                $isciList[$e]['IsciListSoyad'] = $isciOzellikk['SBIsciSoyad'];
-                                $isciList[$e]['IsciListTelefon'] = $isciOzellikk['SBIsciPhone'];
-                                $isciList[$e]['IsciListMail'] = $isciOzellikk['SBIsciEmail'];
-                                $isciList[$e]['IsciListLokasyon'] = $isciOzellikk['SBIsciLocation'];
-                                $isciList[$e]['IsciListUlke'] = $isciOzellikk['SBIsciUlke'];
-                                $isciList[$e]['IsciListIl'] = $isciOzellikk['SBIsciIl'];
-                                $isciList[$e]['IsciListIlce'] = $isciOzellikk['SBIsciIlce'];
-                                $isciList[$e]['IsciListSemt'] = $isciOzellikk['SBIsciSemt'];
-                                $isciList[$e]['IsciListMahalle'] = $isciOzellikk['SBIsciMahalle'];
-                                $isciList[$e]['IsciListSokak'] = $isciOzellikk['SBIsciSokak'];
-                                $isciList[$e]['IsciListPostaKodu'] = $isciOzellikk['SBIsciPostaKodu'];
-                                $isciList[$e]['IsciListCaddeNo'] = $isciOzellikk['SBIsciCaddeNo'];
-                                $isciList[$e]['IsciListAdres'] = $isciOzellikk['SBIsciAdres'];
-                                $isciList[$e]['IsciListDetayAdres'] = $isciOzellikk['SBIsciDetayAdres'];
-                                $isciList[$e]['IsciListDurum'] = $isciOzellikk['Status'];
-                                $isciList[$e]['IsciListAciklama'] = $isciOzellikk['SBIsciAciklama'];
-                                $isciList[$e]['IsciGBild'] = $isciOzellikk['BildirimMesafeGidis'];
-                                $isciList[$e]['IsciDBild'] = $isciOzellikk['BildirimMesafeDonus'];
-                                $e++;
+                                $isciList[0]['IsciListID'] = $isciOzellikk['SBIsciID'];
+                                $isciList[0]['IsciListAd'] = $isciOzellikk['SBIsciAd'];
+                                $isciList[0]['IsciListSoyad'] = $isciOzellikk['SBIsciSoyad'];
+                                $isciList[0]['IsciListTelefon'] = $isciOzellikk['SBIsciPhone'];
+                                $isciList[0]['IsciListMail'] = $isciOzellikk['SBIsciEmail'];
+                                $isciList[0]['IsciListLokasyon'] = $isciOzellikk['SBIsciLocation'];
+                                $isciList[0]['IsciListUlke'] = $isciOzellikk['SBIsciUlke'];
+                                $isciList[0]['IsciListIl'] = $isciOzellikk['SBIsciIl'];
+                                $isciList[0]['IsciListIlce'] = $isciOzellikk['SBIsciIlce'];
+                                $isciList[0]['IsciListSemt'] = $isciOzellikk['SBIsciSemt'];
+                                $isciList[0]['IsciListMahalle'] = $isciOzellikk['SBIsciMahalle'];
+                                $isciList[0]['IsciListSokak'] = $isciOzellikk['SBIsciSokak'];
+                                $isciList[0]['IsciListPostaKodu'] = $isciOzellikk['SBIsciPostaKodu'];
+                                $isciList[0]['IsciListCaddeNo'] = $isciOzellikk['SBIsciCaddeNo'];
+                                $isciList[0]['IsciListAdres'] = $isciOzellikk['SBIsciAdres'];
+                                $isciList[0]['IsciListDetayAdres'] = $isciOzellikk['SBIsciDetayAdres'];
+                                $isciList[0]['IsciListDurum'] = $isciOzellikk['Status'];
+                                $isciList[0]['IsciListAciklama'] = $isciOzellikk['SBIsciAciklama'];
+                                $isciList[0]['IsciGBild'] = $isciOzellikk['BildirimMesafeGidis'];
+                                $isciList[0]['IsciDBild'] = $isciOzellikk['BildirimMesafeDonus'];
+                                //tutarı virgülle ayırma
+                                $isciList[0]['IsciOTutar'] = $form->convertDecimal($isciOzellikk['OdemeTutar']);
+                                $isciList[0]['IsciParaTip'] = $isciOzellikk['OdemeParaTip'];
                             }
                         }
                         //sonuçlar
@@ -499,9 +511,7 @@ class AdminIsciAjaxSorgu extends Controller {
 
                     break;
                 case "isciDetailKaydet":
-
                     $adminID = Session::get("userId");
-
                     if (!$adminID) {
                         header("Location:" . SITE_URL_LOGOUT);
                     } else {
@@ -527,11 +537,14 @@ class AdminIsciAjaxSorgu extends Controller {
                         $form->post('detayAdres', true);
                         $form->post('gdsbildirim', true);
                         $form->post('dnsbildirim', true);
+                        $form->post('odemeTutar', true);
+                        $form->post('odemeTip', true);
 
                         $isciAd = $form->values['isciDetayAd'];
                         $isciSoyad = $form->values['isciDetaySoyad'];
                         $isciAdSoyad = $isciAd . ' ' . $isciSoyad;
                         $isciEmail = $form->values['isciDetayEmail'];
+                        $odemeTutar = $form->values['odemeTutar'];
 
                         $isciBolgeID = $_REQUEST['isciBolgeID'];
                         $isciBolgeAdi = $_REQUEST['isciBolgeAd'];
@@ -539,10 +552,17 @@ class AdminIsciAjaxSorgu extends Controller {
                         $isciKurumAd = $_REQUEST['isciKurumAd'];
 
                         if (!filter_var($isciEmail, FILTER_VALIDATE_EMAIL) === false) {
-                            $emailValidate = $form->mailControl1($isciEmail);
+                            $emailValidate = 1;
                             if ($emailValidate == 1) {
                                 $kullaniciliste = $Panel_Model->isciEmailDbKontrol($isciEmail);
                                 if (count($kullaniciliste) <= 0) {
+                                    //gelen para değerini virgülden temizleme
+                                    $length = strlen($odemeTutar);
+                                    for ($l = 0; $l < $length; $l++) {
+                                        if ($odemeTutar[$l] != ",") {
+                                            $odemeValue.=$odemeTutar[$l];
+                                        }
+                                    }
                                     if ($form->submit()) {
                                         $data = array(
                                             'SBIsciAd' => $isciAd,
@@ -563,7 +583,9 @@ class AdminIsciAjaxSorgu extends Controller {
                                             'SBIsciAciklama' => $form->values['isciDetayAciklama'],
                                             'Status' => $form->values['isciDetayDurum'],
                                             'BildirimMesafeGidis' => $form->values['gdsbildirim'],
-                                            'BildirimMesafeDonus' => $form->values['dnsbildirim']
+                                            'BildirimMesafeDonus' => $form->values['dnsbildirim'],
+                                            'OdemeTutar' => $odemeValue,
+                                            'OdemeParaTip' => $form->values['odemeTip']
                                         );
                                     }
                                     $resultIsciUpdate = $Panel_Model->isciOzelliklerDuzenle($data, $isciID);

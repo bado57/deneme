@@ -511,10 +511,10 @@ $.AdminIslemler = {
                                                                         + "<td class='hidden-xs'>" + aciklama + "</td></tr>";
                                                                 VeliTable.DataTable().row.add($(addRow)).draw();
                                                             }
-                                                            return true;
                                                         }
                                                     }
                                                 });
+                                                return true;
                                             } else {
                                                 reset();
                                                 alertify.alert(jsDil.KurumSec);
