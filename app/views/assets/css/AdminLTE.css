@@ -923,7 +923,7 @@ body > .header .logo .icon {
     float: right;
     padding: 0px;
     white-space: normal !important;
-    padding: 2px 10px;
+    padding: 5px 10px;
 }
 /*
                 .navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .notify-icon > .glyphicon.danger,

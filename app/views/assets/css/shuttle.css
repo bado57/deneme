@@ -123,3 +123,7 @@ a#tumunuDuyuruOkundu:hover {
     text-color:  transparent !important;
     background-color: transparent !important;
 }
+
+#bildirim{
+    height : 198px !important;
+}

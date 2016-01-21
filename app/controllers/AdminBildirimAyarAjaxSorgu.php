@@ -17,7 +17,9 @@ class AdminBildirimAyarAjaxSorgu extends Controller {
 
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
 
-            $formm = $this->load->ajaxlanguage(Session::get("dil"));
+            //language 
+            $lang = Session::get("dil");
+            $formm = $this->load->ajaxlanguage($lang);
             $deger = $formm->ajaxlanguage();
             //model bağlantısı
             $Panel_Model = $this->load->model("Panel_Model");
@@ -61,6 +63,7 @@ class AdminBildirimAyarAjaxSorgu extends Controller {
                                         $sonuc["ayarDuzen"] = $newArray;
                                     }
                                 }
+                                $sonuc["update"] = $deger["BildirimAyarKaydet"];
                             } else {
                                 $sonuc["hata"] = $deger["Hata"];
                             }

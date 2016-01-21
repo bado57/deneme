@@ -164,6 +164,7 @@ $(document).ready(function () {
                     alertify.alert(jsDil.Hata);
                     return false;
                 } else {
+                    $("#bildirimMenu").addClass("open");
                     var length = $('ul#bildirim li').length;
                     for (var t = 0; t < length; t++) {
                         $('ul#bildirim >li').eq(t).css({"background-color": "#fff"});

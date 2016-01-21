@@ -10,18 +10,13 @@
             <!-- Bootstrap 3.0.2 -->
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/bootstrap.min.css" rel="stylesheet" type="text/css" />
-
-
             <!-- Font Awesome -->
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/font-awesome.min.css" rel="stylesheet" type="text/css" />
-
             <!-- Bootstrap wysihtml5 - text editor -->
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" />
-
             <!-- Theme style -->
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/AdminLTE.css" rel="stylesheet" type="text/css" />
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
-
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/shuttle.css" rel="stylesheet" type="text/css" />
             <!-- Alert style -->
             <link href="<?php echo SITE_PLUGINADMIN_CSS; ?>/alertify.css" rel="stylesheet" type="text/css" />
@@ -30,13 +25,10 @@
             <!-- jQuery 2.0.2 -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery.min.js"></script>
             <script src="<?php echo SITE_URL_DOM; ?>"></script>
-
             <!-- jQuery UI 1.10.3 -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery-ui-1.10.3.min.js" type="text/javascript"></script>
-
             <!-- Bootstrap -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/bootstrap.min.js" type="text/javascript"></script>
-
             <!-- Datatables & Bootstrap -->
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/jquery.dataTables.min.js"></script>
             <script src="<?php echo SITE_PLUGINADMIN_JS; ?>/dataTables.bootstrap.js"></script>
@@ -117,8 +109,8 @@
                     </a>
                     <div class="navbar-right">
                         <ul class="nav navbar-nav">
-                            <li class="dropdown notifications-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="duyuruTikla">
+                            <li class="dropdown notifications-menu" id="duyuruMenu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="duyuruTiklama">
                                     <i class="fa fa-bullhorn"></i>
                                     <span class="label label-warning" id="duyuruCount"></span>
                                 </a>
@@ -133,8 +125,8 @@
                                     <li class="footer"><a href="#" id="tumunuGosterDuyuru"><?php echo $data["TumunuGor"]; ?></a></li>
                                 </ul>
                             </li>
-                            <li class="dropdown notifications-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="bildirimTikla">
+                            <li class="dropdown notifications-menu" id="bildirimMenu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="bildirimTiklama">
                                     <i class="fa fa-warning"></i>
                                     <span class="label label-warning" id="bildirimCount"></span>
                                 </a>

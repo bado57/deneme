@@ -164,6 +164,7 @@ $(document).ready(function () {
                     alertify.alert(jsDil.Hata);
                     return false;
                 } else {
+                    $("#duyuruMenu").addClass("open");
                     var length = $('ul#duyuru li').length;
                     for (var t = 0; t < length; t++) {
                         $('ul#duyuru >li').eq(t).css({"background-color": "#fff"});
