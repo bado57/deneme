@@ -58,6 +58,9 @@ function svControl(dtype, dclass, dislemler) {
 //Subview açılıyor
     if (dtype != 'svClose') {
         switch (dislemler) {
+            case 'sifreDuzenle' :
+                var returnCevap = $.AdminIslemler.sifreDuzenle();
+                break;
             case 'adminFirmaSingleMap' :
                 isMap = true;
                 var returnCevap = true;
@@ -102,6 +105,12 @@ function svControl(dtype, dclass, dislemler) {
         switch (dislemler) {
             case 'adminHaritaKaydet' :
                 var returnCevap = saveMap();
+                break;
+            case 'adminSifreVazgec' :
+                var returnCevap = $.AdminIslemler.sifreVazgec();
+                break;
+            case 'sifreKaydet' :
+                var returnCevap = $.AdminIslemler.sifreKaydet();
                 break;
             default :
                 $("#" + dclass).height(th);

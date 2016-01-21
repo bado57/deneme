@@ -71,6 +71,11 @@ class tr {
             "Elden" => "Elden",
             "KrediKartı" => "Kredi Kartı",
             "Havale" => "Havale",
+            "SifreGuncelle" => "Şifreniz güncellenmiştir.",
+            "SifreUyusma" => "Eski Şifreyi Kontrol Ediniz",
+            "YeniSifreUyusma" => "Yeni Şifreler Uyuşmuyor!",
+            "SifreKarekter" => "Şifreniz en az 6 karekter uzunluğunda olmalıdır!",
+            "BosInput" => "Lütfen boşlukları doldurunuz!",
         );
         return $trdil;
     }

@@ -99,3 +99,27 @@ label input[type="search"]{width: auto !important;}
     -webkit-box-shadow: 0 0  8px #000;
     box-shadow: 0 0 8px #000;
 }
+a#tumunuOkundu{
+    float: right;
+    padding: 4px !important;
+    line-height: 0.828571 !important;
+    font-weight: 500 !important;
+    color:#009933 !important;
+}
+a#tumunuOkundu:hover {
+    text-decoration: underline !important;
+    text-color:  transparent !important;
+    background-color: transparent !important;
+}
+a#tumunuDuyuruOkundu{
+    float: right;
+    padding: 4px !important;
+    line-height: 0.828571 !important;
+    font-weight: 500 !important;
+    color:#009933 !important;
+}
+a#tumunuDuyuruOkundu:hover {
+    text-decoration: underline !important;
+    text-color:  transparent !important;
+    background-color: transparent !important;
+}

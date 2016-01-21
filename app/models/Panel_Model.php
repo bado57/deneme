@@ -287,6 +287,17 @@ class Panel_Model extends Model {
         return ($this->db->update("bsadmin", $data, "BSAdminID=" . $adminID));
     }
 
+    //admin şifre
+    public function adminSifre($ID) {
+        $sql = 'SELECT BSAdminRSifre,BSAdminKadi FROM  bsadmin WHERE BSAdminID = ' . $ID;
+        return($this->db->select($sql));
+    }
+    
+    //admin şifre düzenle
+    public function adminSifreDuzenle($data, $ID) {
+        return ($this->db->update("bsadmin", $data, "BSAdminID=" . $ID));
+    }
+
     //admin firma özellikleri getirme
     public function firmaOzellikler() {
         $sql = "SELECT * FROM bsfirma Where BSFirmaID=1 LIMIT 1";

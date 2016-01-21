@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-left">
                 <h3>
-                    <i class="fa fa-building"></i> <?php echo $data["ProfilBilgi"]; ?>
+                    <i class="fa fa-user"></i> <?php echo $data["ProfilBilgi"]; ?>
 
                 </h3>
             </div>
@@ -18,7 +18,8 @@
                     <button type="button" class="btn btn-success  btn-sm save" data-Saveislem="profilKaydet"><?php echo $data["Kaydet"]; ?></button>
                 </div>
                 <div class="form-group edit-group">
-                    <button type="button" id="editForm" class="btn btn-primary btn-sm" data-Editislem="profilEdit"><?php echo $data["Duzenle"]; ?></button>
+                    <button type="button" class="svToggle btn btn-primary btn-sm" data-type="svOpen" data-islemler="sifreDuzenle" data-class="sifreDuzenle"><i class="fa fa-key"></i> <?php echo $data["SifreDegistir"]; ?></button>
+                    <button type="button" id="editForm" class="btn btn-primary btn-sm" data-Editislem="profilEdit"><i class="fa fa-pencil-square-o"></i> <?php echo $data["Duzenle"]; ?></button>
                 </div>
             </div>
         </div>
@@ -43,7 +44,7 @@
             </div>
             <div class="form-group">
                 <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                <textarea name="Aciklama" class="form-control dsb" rows="3" disabled><?php echo $model['Aciklama']; ?></textarea>
+                <textarea name="Aciklama" class="form-control dsb" rows="3" disabled style="resize:none"><?php echo $model['Aciklama']; ?></textarea>
             </div>
             <div class="form-group">
                 <label for="Sifre"><?php echo $data["Durum"]; ?></label>
@@ -118,7 +119,36 @@
     </section>
 </aside>
 </div>
-
+<div id="sifreDuzenle" class="svClose col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+    <div class="row">
+        <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h3><?php echo $data["SifreDegistir"]; ?> <span class="pull-right"><button data-type="svClose" data-class="sifreDuzenle" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <hr/>
+            <div class="row" id="getPartialView">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="generalInfo col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label for="EskiSifre"><?php echo $data["EskiSifre"]; ?></label>
+                            <input type="text" class="form-control" id="eskiSifre" name="eskiSifre" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="YeniSifre"><?php echo $data["YeniSifre"]; ?></label>
+                            <input type="text" class="form-control dsb" id="yeniSifre" name="yeniSifre" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="YeniSifreTekrar"><?php echo $data["YeniSifreTekrar"]; ?></label>
+                            <input type="text" class="form-control dsb" id="yeniSifreTekrar" name="yeniSifreTekrar" value="">
+                        </div>
+                        <div class="form-group">
+                            <button data-type="svClose"  data-class="sifreDuzenle" type="button" data-islemler="adminSifreVazgec" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
+                            <button type="button" class="svToggle btn btn-success" data-type="svClose"  data-class="sifreDuzenle" data-islemler="sifreKaydet"><?php echo $data["Kaydet"]; ?></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="map" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div id="mapHeader">
         <h3><b id="singleMapBaslik"><?php echo $data["LokasyonTanimlama"]; ?> </b><b id="multiMapBaslik"></b>

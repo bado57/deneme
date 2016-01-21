@@ -101,7 +101,39 @@ $.AdminIslemler = {
         AdminProfilVazgec = [];
         AdminProfilVazgec.push(ad, soyad, kadi, sifre, aciklama, durum, telefon, email,
                 lokasyon, ulke, il, ilce, semt, mahalle, sokak, postakodu, caddeno, adres);
-    }
+    },
+    sifreDuzenle: function () {
+        $("input[name=eskiSifre]").val('');
+        $("input[name=yeniSifre]").val('');
+        $("input[name=yeniSifreTekrar]").val('');
+        return true;
+    },
+    sifreVazgec: function () {
+        return true;
+    },
+    sifreKaydet: function () {
+        var eskiSifre = $("input[name=eskiSifre]").val();
+        var yeniSifre = $("input[name=yeniSifre]").val();
+        var yeniSifreTkrr = $("input[name=yeniSifreTekrar]").val();
+        $.ajax({
+            data: {"eskiSifre": eskiSifre, "yeniSifre": yeniSifre,
+                "yeniSifreTkrr": yeniSifreTkrr, "tip": "sifreKaydet"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    reset();
+                    alertify.alert(cevap.hata);
+                    return false;
+                } else {
+                    reset();
+                    alertify.success(cevap.update);
+                    $("input[name=eskiSifre]").val('');
+                    $("input[name=yeniSifre]").val('');
+                    $("input[name=yeniSifreTekrar]").val('');
+                    return true;
+                }
+            }
+        });
+    },
 }
 
 
