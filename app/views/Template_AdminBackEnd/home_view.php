@@ -165,7 +165,7 @@
                             <?php echo $data["BakiyeIslem"]; ?>
                         </h3>
                         <p>
-                            365 TL  <?php echo $data["Odenmemis"]; ?>
+                            <?php echo $model['AdminParaTotal'] . ' ' . $data["ToplamOdeme"]; ?>
                         </p>
                     </div>
                     <div class="icon">
@@ -207,7 +207,7 @@
                             <?php echo $data["HesapIslem"]; ?>
                         </h3>
                         <p>
-                            4 <?php echo $data["Okunmamis"]; ?>
+                            365 TL  <?php echo $data["Odenmemis"]; ?>
                         </p>
                     </div>
                     <div class="icon">

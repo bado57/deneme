@@ -77,6 +77,7 @@ class tr {
             "Vazgec" => "Vazgeç",
             "Kaydet" => "Kaydet",
             "Toplam" => "Toplam",
+            "ToplamOdeme" => "Toplam Ödeme",
             "Odenmemis" => "Ödenmemiş",
             "AktifServis" => "Aktif Servis",
             "Okunmamis" => "Okunmamış",

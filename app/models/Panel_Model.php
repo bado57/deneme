@@ -292,7 +292,7 @@ class Panel_Model extends Model {
         $sql = 'SELECT BSAdminRSifre,BSAdminKadi FROM  bsadmin WHERE BSAdminID = ' . $ID;
         return($this->db->select($sql));
     }
-    
+
     //admin şifre düzenle
     public function adminSifreDuzenle($data, $ID) {
         return ($this->db->update("bsadmin", $data, "BSAdminID=" . $ID));
@@ -1854,6 +1854,30 @@ class Panel_Model extends Model {
     //öğrenci listele
     public function ogrenciCountListele() {
         $sql = 'SELECT COUNT(*) FROM bsogrenci';
+        return($this->db->select($sql));
+    }
+
+    //öğrenci ödeme toplamı
+    public function ogrenciOdemeTotal() {
+        $sql = 'SELECT COUNT(*) FROM bsogrenciodeme';
+        return($this->db->select($sql));
+    }
+
+    //işçi ödeme toplamı
+    public function isciOdemeTotal() {
+        $sql = 'SELECT COUNT(*) FROM sbisciodeme';
+        return($this->db->select($sql));
+    }
+
+    //admine göre öğrenci ödeme listeleme
+    public function rutbeOgrenciOdemeTot($ID) {
+        $sql = 'SELECT COUNT(*) FROM bsogrenciodeme Where BSOdemeAlanID=' . $ID;
+        return($this->db->select($sql));
+    }
+
+    //admine göre işçi ödeme listeleme
+    public function rutbeIsciOdemeTot($ID) {
+        $sql = 'SELECT COUNT(*) FROM sbisciodeme Where BSOdemeAlanID=' . $ID;
         return($this->db->select($sql));
     }
 

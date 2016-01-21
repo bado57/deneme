@@ -76,7 +76,9 @@ class Panel extends Controller {
                 $adminCount["VeliCount"] = $Panel_Model->veliCountListele();
                 $adminCount["OgrenciCount"] = $Panel_Model->ogrenciCountListele();
                 $adminBolge['AdminKullanici'] = $adminCount["AdminCount"][0]['COUNT(*)'] + $adminCount["SoforCount"][0]['COUNT(*)'] + $adminCount["HostesCount"][0]['COUNT(*)'] + $adminCount["IsciCount"][0]['COUNT(*)'] + $adminCount["VeliCount"][0]['COUNT(*)'] + $adminCount["OgrenciCount"][0]['COUNT(*)'];
-
+                $sumOgr = $Panel_Model->ogrenciOdemeTotal();
+                $sumIsci = $Panel_Model->isciOdemeTotal();
+                $adminBolge['AdminParaTotal'] = $sumOgr[0]['COUNT(*)'] + $sumIsci[0]['COUNT(*)'];
                 $adminBolge['AdminDuyuru'] = $adminCount["AdminDuyuru"][0]['COUNT(*)'];
                 $adminBolge['AdminBolge'] = count($bolgeListe);
                 $adminBolge['AdminKurum'] = count($kurumListe);
@@ -111,7 +113,9 @@ class Panel extends Controller {
                 $adminCount["VeliCount"] = $Panel_Model->rutbeVeliCount($rutbebolgedizi);
                 $adminCount["OgrenciCount"] = $Panel_Model->rutbeOgrenciCount($rutbebolgedizi);
                 $adminBolge['AdminKullanici'] = $adminCount["SoforCount"][0]['COUNT(BSSoforID)'] + $adminCount["HostesCount"][0]['COUNT(BSHostesID)'] + $adminCount["IsciCount"][0]['COUNT(SBIsciID)'] + $adminCount["VeliCount"][0]['COUNT(BSVeliID)'] + $adminCount["OgrenciCount"][0]['COUNT(BSOgrenciID)'];
-
+                $sumOgr = $Panel_Model->rutbeOgrenciOdemeTot($adminID);
+                $sumIsci = $Panel_Model->rutbeIsciOdemeTot($adminID);
+                $adminBolge['AdminParaTotal'] = $sumOgr[0]['COUNT(*)'] + $sumIsci[0]['COUNT(*)'];
                 $adminBolge['AdminDuyuru'] = $adminCount["AdminDuyuru"][0]['COUNT(*)'];
                 $adminBolge['AdminBolge'] = count($bolgeListe);
                 $adminBolge['AdminKurum'] = count($kurumListe);
