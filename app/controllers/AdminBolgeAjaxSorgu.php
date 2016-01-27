@@ -175,8 +175,8 @@ class AdminBolgeAjaxSorgu extends Controller {
                                     }
                                 }
                                 //log ayarları
-                                $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                                $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                                $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                                 if ($resultLog) {
                                     $sonuc["newBolgeID"] = $resultIDD;
                                     $sonuc["insert"] = $deger["BolgeKaydet"];
@@ -348,8 +348,8 @@ class AdminBolgeAjaxSorgu extends Controller {
                                 }
                             }
                             //log ayarları
-                            $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                            $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                            $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                            $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                             if ($resultLog) {
                                 $sonuc["update"] = $deger["BolgeDuzenle"];
                             } else {
@@ -460,8 +460,8 @@ class AdminBolgeAjaxSorgu extends Controller {
                                     }
                                 }
                                 //log ayarları
-                                $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                                $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                                $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                                 if ($resultLog) {
                                     $sonuc["delete"] = $deger["BolgeSilme"];
                                 } else {
@@ -606,8 +606,8 @@ class AdminBolgeAjaxSorgu extends Controller {
                                 }
                             }
                             //log ayarları
-                            $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                            $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                            $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                            $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                             if ($resultLog) {
                                 $sonuc["newBolgeKurumID"] = $resultKurumID;
                                 $sonuc["insert"] = $deger["KurumKaydet"];

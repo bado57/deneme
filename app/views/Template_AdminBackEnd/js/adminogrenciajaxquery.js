@@ -1055,6 +1055,8 @@ $.AdminIslemler = {
         var odemeTip = $("#detayDovizTip option:selected").val();
         var splitodeme = odemeTutar.split(".");
         var odemelength = splitodeme[0].length;
+        var eskiAd = OgrenciDetailVazgec[0];
+        var eskiSoyad = OgrenciDetailVazgec[1];
         if (OgrenciDetailVazgec[0] == ogrenciDetayAd && OgrenciDetailVazgec[1] == ogrenciDetaySoyad && OgrenciDetailVazgec[2] == ogrenciDetayDurum &&
                 OgrenciDetailVazgec[3] == ogrenciDetayLokasyon && OgrenciDetailVazgec[4] == ogrenciDetayTelefon &&
                 OgrenciDetailVazgec[5] == ogrenciDetayEmail && OgrenciDetailVazgec[6] == ogrenciDetayAdres &&
@@ -1109,7 +1111,7 @@ $.AdminIslemler = {
                                             if (odemeTutar != "") {
                                                 if (odemelength <= 13) {
                                                     $.ajax({
-                                                        data: {"ogrencidetail_id": ogrencidetail_id, "ogrenciBolgeID[]": ogrenciBolgeID, "ogrenciBolgeAd[]": ogrenciBolgeAd, "ogrenciKurumID[]": ogrenciKurumID, "ogrenciKurumAd[]": ogrenciKurumAd,
+                                                        data: {"eskiAd": eskiAd, "eskiSoyad": eskiSoyad, "ogrencidetail_id": ogrencidetail_id, "ogrenciBolgeID[]": ogrenciBolgeID, "ogrenciBolgeAd[]": ogrenciBolgeAd, "ogrenciKurumID[]": ogrenciKurumID, "ogrenciKurumAd[]": ogrenciKurumAd,
                                                             "ogrenciVeliID[]": ogrenciVeliID, "ogrenciVeliAd[]": ogrenciVeliAd, "ogrenciDetayAd": ogrenciDetayAd,
                                                             "ogrenciDetaySoyad": ogrenciDetaySoyad, "ogrenciDetayDurum": ogrenciDetayDurum, "ogrenciDetayLokasyon": ogrenciDetayLokasyon, "ogrenciDetayTelefon": ogrenciDetayTelefon,
                                                             "ogrenciDetayEmail": ogrenciDetayEmail, "ogrenciDetayAdres": ogrenciDetayAdres, "ogrenciDetayAciklama": ogrenciDetayAciklama, "ogrenciDetayUlke": ogrenciDetayUlke,

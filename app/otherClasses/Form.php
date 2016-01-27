@@ -244,11 +244,10 @@ class Form {
         return $dataBildirim;
     }
 
-    function adminLogDuzen($ID, $adSoyad, $tip, $text) {
+    function adminBildirimLogDuzen($ID, $adSoyad, $text) {
         $dataLog = array(
             'BSEkleyenID' => $ID,
             'BSEkleyenAdSoyad' => $adSoyad,
-            'BSLogTip' => $tip,
             'BSLogText' => $text
         );
         return $dataLog;

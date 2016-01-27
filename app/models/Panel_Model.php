@@ -69,8 +69,13 @@ class Panel_Model extends Model {
     }
 
     //log kaydet
-    public function addNewAdminLog($data) {
-        return ($this->db->insert('bsadminlog', $data));
+    public function addNewAdminDuyuruLog($data) {
+        return ($this->db->insert('bsadminduyurulog', $data));
+    }
+
+    //log kaydet
+    public function addNewAdminBildirimLog($data) {
+        return ($this->db->insert('bsadminbildirimlog', $data));
     }
 
     //admin cihazlar
@@ -1483,18 +1488,73 @@ class Panel_Model extends Model {
     }
 
     //veli profil düzenle3
-    public function veliOzellikDuzenle($data, $veliID) {
-        return ($this->db->update("bsveliduyuru", $data, "BSGonderenID=" . $veliID));
+    public function veliOzellikDuzenle($data, $ID) {
+        return ($this->db->update("bsveliduyuru", $data, "BSGonderenID=" . $ID));
+    }
+
+    //öğenci profil düzenle3
+    public function ogrOzellikDuzenle($data, $ID) {
+        return ($this->db->update("bsogrenciduyuru", $data, "BSGonderenID=" . $ID));
+    }
+
+    //işçi profil düzenle3
+    public function isciOzellikDuzenle($data, $ID) {
+        return ($this->db->update("sbisciduyuru", $data, "SBGonderenID=" . $ID));
     }
 
     //veli profil düzenle3
-    public function veliOzellikDuzenle1($data, $soforID) {
-        return ($this->db->update("bsveliduyurulog", $data, "BSEkleyenID=" . $soforID));
+    public function veliOzellikDuzenle1($data, $ID) {
+        return ($this->db->update("bsveliduyurulog", $data, "BSEkleyenID=" . $ID));
+    }
+
+    //öğrenci profil düzenle3
+    public function ogrOzellikDuzenle1($data, $ID) {
+        return ($this->db->update("bsogrenciduyurulog", $data, "BSEkleyenID=" . $ID));
+    }
+
+    //işçi profil düzenle3
+    public function isciOzellikDuzenle1($data, $ID) {
+        return ($this->db->update("sbisciduyurulog", $data, "SBEkleyenID=" . $ID));
+    }
+
+    //veli profil düzenle3
+    public function veliOzellikDuzenle2($data, $ID) {
+        return ($this->db->update("bsogrenciodeme", $data, "BSOdemeYapanID=" . $ID . " AND BSOdemeYapanTip=1"));
+    }
+
+    //öğrenci profil düzenle3
+    public function ogrOzellikDuzenle2($data, $ID) {
+        return ($this->db->update("bsogrenciodeme", $data, "BSOdemeYapanID=" . $ID . " AND BSOdemeYapanTip=0"));
+    }
+
+    //öğrenci profil düzenle3
+    public function isciOzellikDuzenle2($data, $ID) {
+        return ($this->db->update("sbisciodeme", $data, "BSOdemeYapanID=" . $ID));
+    }
+
+    //öğrenci tur düzenle3
+    public function ogrOzellikDuzenle3($data, $ID) {
+        return ($this->db->update("bsogrencitur", $data, "BSOgrenciID=" . $ID));
+    }
+
+    //işçi tur düzenle3
+    public function isciOzellikDuzenle3($data, $ID) {
+        return ($this->db->update("sbiscitur", $data, "SBIsciID=" . $ID));
+    }
+
+    //öğrenci tur düzenle3
+    public function ogrOzellikDuzenle4($data, $ID) {
+        return ($this->db->update("bsogrenciiscitur", $data, "BSOgrenciIsciID=" . $ID . " AND BSKullaniciTip=0"));
+    }
+
+    //işçi tur düzenle3
+    public function iscOzellikDuzenle4($data, $ID) {
+        return ($this->db->update("bsogrenciiscitur", $data, "BSOgrenciIsciID=" . $ID . " AND BSKullaniciTip=1"));
     }
 
     //hostes seçili arac
-    public function hostesDetailMultiSelectHostes($hostesID) {
-        $sql = 'SELECT BSAracID FROM bsarachostes WHERE BSHostesID = ' . $hostesID;
+    public function hostesDetailMultiSelectHostes($ID) {
+        $sql = 'SELECT BSAracID FROM bsarachostes WHERE BSHostesID = ' . $ID;
         return($this->db->select($sql));
     }
 

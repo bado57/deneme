@@ -499,8 +499,13 @@ class AdminDuyuruAjaxSorgu extends Controller {
                         }
 
                         //log ayarları
-                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 1, $duyuruText);
-                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                        $dataLog = array(
+                            'BSEkleyenID' => $adminID,
+                            'BSEkleyenAdSoyad' => $adSoyad,
+                            'BSLogText' => $duyuruText,
+                            'BSLogHedef' => $hedef
+                        );
+                        $resultLog = $Panel_Model->addNewAdminDuyuruLog($dataLog);
                         if ($resultLog) {
                             $duyuruList[0] = $adSoyad;
                             $duyuruList[1] = $degerbildirim["DuyuruGonder"];

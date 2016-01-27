@@ -728,6 +728,10 @@ class AdminOgrenciAjaxSorgu extends Controller {
                         $form->post('dnsbildirim', true);
                         $form->post('odemeTutar', true);
                         $form->post('odemeTip', true);
+                        $form->post('eskiAd', true);
+                        $form->post('eskiSoyad', true);
+                        $eskiAd = $form->values['eskiAd'];
+                        $eskiSoyad = $form->values['eskiSoyad'];
 
                         $ogrenciAd = $form->values['ogrenciDetayAd'];
                         $ogrenciSoyad = $form->values['ogrenciDetaySoyad'];
@@ -781,6 +785,29 @@ class AdminOgrenciAjaxSorgu extends Controller {
                                     }
                                     $resultOgrenciUpdate = $Panel_Model->ogrenciOzelliklerDuzenle($data, $ogrenciID);
                                     if ($resultOgrenciUpdate) {
+                                        if ($ogrenciAd != $eskiAd || $ogrenciSoyad != $eskiSoyad) {
+                                            $dataDuzenle = array(
+                                                'BSGonderenAdSoyad' => $ogrenciAdSoyad
+                                            );
+                                            $updateduyuru = $Panel_Model->ogrOzellikDuzenle($dataDuzenle, $ogrenciID);
+                                            //duyurulogları
+                                            $dataDuzenle1 = array(
+                                                'BSEkleyenAdSoyad' => $ogrenciAdSoyad
+                                            );
+                                            $updateduyurulog = $Panel_Model->ogrOzellikDuzenle1($dataDuzenle1, $ogrenciID);
+                                            $dataDuzenle2 = array(
+                                                'BSOdemeYapanAd' => $ogrenciAdSoyad
+                                            );
+                                            $updateodeme = $Panel_Model->ogrOzellikDuzenle2($dataDuzenle2, $ogrenciID);
+                                            $dataDuzenle3 = array(
+                                                'BSOgrenciAd' => $ogrenciAdSoyad
+                                            );
+                                            $updateogrtur = $Panel_Model->ogrOzellikDuzenle3($dataDuzenle3, $ogrenciID);
+                                            $dataDuzenle4 = array(
+                                                'BSOgrenciIsciAd' => $ogrenciAdSoyad
+                                            );
+                                            $updateogriscitur = $Panel_Model->ogrOzellikDuzenle4($dataDuzenle4, $ogrenciID);
+                                        }
                                         $veliOgrenciCount = count($ogrenciVeliID);
                                         if ($veliOgrenciCount > 0) {
                                             $deleteVeliOgrenci = $Panel_Model->detailOgrenciVeliDelete($ogrenciID);

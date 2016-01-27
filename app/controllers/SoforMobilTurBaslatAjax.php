@@ -150,24 +150,31 @@ class SoforMobilTurBaslatAjax extends Controller {
                                 switch ($gun) {
                                     case "Sun":
                                         $yeniGun = "SBTurPzr";
+                                        $webservisGun = 6;
                                         break;
                                     case "Mon":
                                         $yeniGun = "SBTurPzt";
+                                        $webservisGun = 0;
                                         break;
                                     case "Tue":
                                         $yeniGun = "SBTurSli";
+                                        $webservisGun = 1;
                                         break;
                                     case "Wed":
                                         $yeniGun = "SBTurCrs";
+                                        $webservisGun = 2;
                                         break;
                                     case "Thu":
                                         $yeniGun = "SBTurPrs";
+                                        $webservisGun = 3;
                                         break;
                                     case "Fri":
                                         $yeniGun = "SBTurCma";
+                                        $webservisGun = 4;
                                         break;
                                     case "Sat":
                                         $yeniGun = "SBTurCmt";
+                                        $webservisGun = 5;
                                         break;
                                     default:
                                         break;
@@ -230,7 +237,7 @@ class SoforMobilTurBaslatAjax extends Controller {
                                             $turBaslat[0]['Ad'] = $resultt['SBTurAd'];
                                             $turBaslat[0]['Tip'] = $resultt['SBTurTip'];
                                             $turBaslat[0]['Km'] = $resultt['SBTurKm'];
-                                            $turBaslat[0]['Gun'] = $yeniGun;
+                                            $turBaslat[0]['Gun'] = $webservisGun;
                                         }
                                     }
 
@@ -873,6 +880,9 @@ class SoforMobilTurBaslatAjax extends Controller {
                             $lang = $form->values['language'];
                             $turGidisDonus = $form->values['turGidisDonus'];
                             $turBasSaat = $form->values['turBasSaat'];
+                            //turgünü gelen değerlere göre belirleme
+                            $gunArray = ["SBTurPzt", "SBTurSli", "SBTurCrs", "SBTurPrs", "SBTurCma", "SBTurCmt", "SBTurPzr"];
+                            $yeniGunn = $gunArray[$yeniGun];
                             $turGelen = [];
                             if ($turTip == 0) {//öğrenci
                                 $resultOgrenciID = $Panel_Model->soforTurBaslatOgrenciID($turID);
@@ -884,7 +894,7 @@ class SoforMobilTurBaslatAjax extends Controller {
                                     $kurumIslem[0]['KurumLoc'] = $resultOgrenciIDD['BSKurumLocation'];
                                 }
 
-                                $resultOgrenciGID = $Panel_Model->soforTurBaslatOgrenciGID($turID, $yeniGun, $turGidisDonus);
+                                $resultOgrenciGID = $Panel_Model->soforTurBaslatOgrenciGID($turID, $yeniGunn, $turGidisDonus);
                                 $ogrenciGelmeyenID = [];
                                 foreach ($resultOgrenciGID as $resultOgrenciGID) {
                                     $ogrenciGelmeyenID[] = $resultOgrenciGID['BSOgrenciID'];
@@ -1006,7 +1016,7 @@ class SoforMobilTurBaslatAjax extends Controller {
                                     $kurumIslem[0]['KurumLoc'] = $resultIsciIDD['SBKurumLocation'];
                                 }
 
-                                $resultIsciGID = $Panel_Model->soforTurBaslatIsciGID($turID, $yeniGun, $turGidisDonus);
+                                $resultIsciGID = $Panel_Model->soforTurBaslatIsciGID($turID, $yeniGunn, $turGidisDonus);
                                 $isciGelmeyenID = [];
                                 foreach ($resultIsciGID as $resultIsciGIDD) {
                                     $isciGelmeyenID[] = $resultIsciGIDD['BSIsciID'];
@@ -1105,7 +1115,7 @@ class SoforMobilTurBaslatAjax extends Controller {
                                     $kurumIslem[0]['KurumLoc'] = $resultOgrenciIsciIDD['BSKurumLocation'];
                                 }
 
-                                $resultOgrenciIsciGID = $Panel_Model->soforTurBaslatOgrenciIsciGID($turID, $yeniGun, $turGidisDonus);
+                                $resultOgrenciIsciGID = $Panel_Model->soforTurBaslatOgrenciIsciGID($turID, $yeniGunn, $turGidisDonus);
                                 $ogrenciGeID = [];
                                 $isciGeID = [];
                                 foreach ($resultOgrenciIsciGID as $resultOgrenciIsciGIDD) {
@@ -1286,7 +1296,6 @@ class SoforMobilTurBaslatAjax extends Controller {
                                     $sonuc["Sira"] = "";
                                 }
                             }
-
                             //aaktif olan turdaki son durum,kimler binmiş kimler binmemiş
                             $kisidurum = 0;
                             $turKisiDurum = [];

@@ -44,7 +44,6 @@ $(document).ready(function () {
                     alertify.alert(jsDil.Hata);
                     return false;
                 } else {
-
                     $("input[name=IsciDetayAdi]").val(cevap.isciDetail[0].IsciListAd);
                     $("input[name=IsciDetaySoyadi]").val(cevap.isciDetail[0].IsciListSoyad);
                     $("#IsciDetayDurum").val(cevap.isciDetail[0].IsciListDurum);
@@ -841,6 +840,8 @@ $.AdminIslemler = {
         var odemeTip = $("#detayDovizTip option:selected").val();
         var splitodeme = odemeTutar.split(".");
         var odemelength = splitodeme[0].length;
+        var eskiAd = IsciDetailVazgec[0];
+        var eskiSoyad = IsciDetailVazgec[1];
         if (IsciDetailVazgec[0] == isciDetayAd && IsciDetailVazgec[1] == isciDetaySoyad &&
                 IsciDetailVazgec[2] == isciDetayDurum && IsciDetailVazgec[3] == isciDetayLokasyon
                 && IsciDetailVazgec[4] == isciDetayTelefon && IsciDetailVazgec[5] == isciDetayEmail
@@ -897,7 +898,7 @@ $.AdminIslemler = {
                                             if (odemeTutar != "") {
                                                 if (odemelength <= 13) {
                                                     $.ajax({
-                                                        data: {"iscidetail_id": iscidetail_id, "isciBolgeID[]": isciBolgeID, "isciBolgeAd[]": isciBolgeAd, "isciKurumID[]": isciKurumID, "isciKurumAd[]": isciKurumAd, "isciDetayAd": isciDetayAd,
+                                                        data: {"eskiAd": eskiAd, "eskiSoyad": eskiSoyad, "iscidetail_id": iscidetail_id, "isciBolgeID[]": isciBolgeID, "isciBolgeAd[]": isciBolgeAd, "isciKurumID[]": isciKurumID, "isciKurumAd[]": isciKurumAd, "isciDetayAd": isciDetayAd,
                                                             "isciDetaySoyad": isciDetaySoyad, "isciDetayDurum": isciDetayDurum, "isciDetayLokasyon": isciDetayLokasyon, "isciDetayTelefon": isciDetayTelefon,
                                                             "isciDetayEmail": isciDetayEmail, "isciDetayAdres": isciDetayAdres, "isciDetayAciklama": isciDetayAciklama, "isciDetayUlke": isciDetayUlke,
                                                             "isciDetayIl": isciDetayIl, "isciDetayIlce": isciDetayIlce, "isciDetaySemt": isciDetaySemt, "isciDetayMahalle": isciDetayMahalle,

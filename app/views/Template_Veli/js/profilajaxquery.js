@@ -1,4 +1,4 @@
-var SITE_URL = "http://192.168.1.24/SProject/";
+var SITE_URL = "http://192.168.1.79/SProject/";
 $.ajaxSetup({
     type: "post",
     url: SITE_URL + "VeliMobilProfilAjax",

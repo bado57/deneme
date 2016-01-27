@@ -679,6 +679,10 @@ class AdminVeliAjaxSorgu extends Controller {
                                                 'BSEkleyenAdSoyad' => $veliAdSoyad
                                             );
                                             $updateduyurulog = $Panel_Model->veliOzellikDuzenle1($dataDuzenle1, $veliID);
+                                            $dataDuzenle2 = array(
+                                                'BSOdemeYapanAd' => $veliAdSoyad
+                                            );
+                                            $updateodeme = $Panel_Model->veliOzellikDuzenle2($dataDuzenle2, $veliID);
                                         }
                                         $veliOgrenciCount = count($veliOgrenciID);
                                         if ($veliOgrenciCount > 0) {

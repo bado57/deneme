@@ -539,6 +539,10 @@ class AdminIsciAjaxSorgu extends Controller {
                         $form->post('dnsbildirim', true);
                         $form->post('odemeTutar', true);
                         $form->post('odemeTip', true);
+                        $form->post('eskiAd', true);
+                        $form->post('eskiSoyad', true);
+                        $eskiAd = $form->values['eskiAd'];
+                        $eskiSoyad = $form->values['eskiSoyad'];
 
                         $isciAd = $form->values['isciDetayAd'];
                         $isciSoyad = $form->values['isciDetaySoyad'];
@@ -590,6 +594,28 @@ class AdminIsciAjaxSorgu extends Controller {
                                     }
                                     $resultIsciUpdate = $Panel_Model->isciOzelliklerDuzenle($data, $isciID);
                                     if ($resultIsciUpdate) {
+                                        if ($isciAd != $eskiAd || $isciSoyad != $eskiSoyad) {
+                                            $dataDuzenle = array(
+                                                'SBGonderenAdSoyad' => $isciAdSoyad
+                                            );
+                                            $updateduyuru = $Panel_Model->isciOzellikDuzenle($dataDuzenle, $isciID);
+                                            $dataDuzenle1 = array(
+                                                'SBEkleyenAdSoyad' => $isciAdSoyad
+                                            );
+                                            $updateduyurulog = $Panel_Model->isciOzellikDuzenle1($dataDuzenle1, $isciID);
+                                            $dataDuzenle2 = array(
+                                                'BSOdemeYapanAd' => $isciAdSoyad
+                                            );
+                                            $updateodeme = $Panel_Model->isciOzellikDuzenle2($dataDuzenle2, $isciID);
+                                            $dataDuzenle3 = array(
+                                                'SBIsciAd' => $isciAdSoyad
+                                            );
+                                            $updateisctur = $Panel_Model->isciOzellikDuzenle3($dataDuzenle3, $isciID);
+                                            $dataDuzenle4 = array(
+                                                'BSOgrenciIsciAd' => $isciAdSoyad
+                                            );
+                                            $updateogriscitur = $Panel_Model->iscOzellikDuzenle4($dataDuzenle4, $isciID);
+                                        }
                                         $isciKurumCount = count($isciKurumID);
                                         if ($isciKurumCount > 0) {
                                             $deleteresultt = $Panel_Model->detailIsciKurumDelete($isciID);

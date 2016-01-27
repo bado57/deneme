@@ -254,8 +254,8 @@ class AdminAracAjaxSorgu extends Controller {
                                             }
                                         }
                                         //log ayarları
-                                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                        $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                                        $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                                         if ($resultLog) {
                                             $sonuc["newAracID"] = $resultAracID;
                                             $sonuc["insert"] = $degerbildirim["AracKaydet"];
@@ -400,8 +400,8 @@ class AdminAracAjaxSorgu extends Controller {
                                         }
                                     }
                                     //log ayarları
-                                    $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                                    $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                    $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                                    $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                                     if ($resultLog) {
                                         $sonuc["newAracID"] = $resultAracID;
                                         $sonuc["insert"] = $degerbildirim["AracKaydet"];
@@ -921,8 +921,8 @@ class AdminAracAjaxSorgu extends Controller {
                                             }
                                         }
                                         //log ayarları
-                                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                        $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                                        $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                                         if ($resultLog) {
                                             $sonuc["delete"] = $deger["AracSil"];
                                         } else {
@@ -1008,8 +1008,8 @@ class AdminAracAjaxSorgu extends Controller {
                                             }
                                         }
                                         //log ayarları
-                                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                        $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                                        $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                                         if ($resultLog) {
                                             $sonuc["delete"] = $deger["AracSil"];
                                         } else {
@@ -1087,8 +1087,8 @@ class AdminAracAjaxSorgu extends Controller {
                                             }
                                         }
                                         //log ayarları
-                                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                        $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                                        $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                                         if ($resultLog) {
                                             $sonuc["delete"] = $deger["AracSil"];
                                         } else {
@@ -1854,8 +1854,8 @@ class AdminAracAjaxSorgu extends Controller {
                                             }
                                             $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                             //log ayarları
-                                            $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                                            $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                            $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                                            $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                                             if ($resultLog) {
                                                 $sonuc["newAracID"] = $aracID;
                                                 $sonuc["update"] = $deger["AracDuzenle"];
@@ -2568,8 +2568,8 @@ class AdminAracAjaxSorgu extends Controller {
                                         }
                                         $alert = $adSoyad . ' ' . $aracPlaka . $degerbildirim["AracDuzenleme"];
                                         //log ayarları
-                                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                        $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                                        $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                                         if ($resultLog) {
                                             $sonuc["newAracID"] = $aracID;
                                             $sonuc["update"] = $deger["AracDuzenle"];

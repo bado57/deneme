@@ -2,14 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="4">
         <file>
-            <url>app/views/Template_AdminBackEnd/js/adminbildirimayarajaxquery.js</url>
-            <bookmark id="1">
-                <name/>
-                <line>43</line>
-                <key/>
-            </bookmark>
-        </file>
-        <file>
             <url>app/views/Template_Sofor/soforprofil_view.php</url>
             <bookmark id="4">
                 <name/>
@@ -17,22 +9,26 @@
                 <key/>
             </bookmark>
         </file>
+        <file>
+            <url>app/views/Template_AdminBackEnd/js/adminbildirimayarajaxquery.js</url>
+            <bookmark id="1">
+                <name/>
+                <line>43</line>
+                <key/>
+            </bookmark>
+        </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_Veli/veliprofil_view.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_Sofor/sofortur_view.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_Veli/js/profilajaxquery.js</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/controllers/VeliMobilServis.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/controllers/VeliMobilOgrenciAjax.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_Veli/veliogrenciler_view.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/models/Panel_Model_Mobile.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_Veli/js/ogrenciajaxquery.js</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_Sofor/js/duyuruajaxquery.js</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_Sofor/soforduyuru_view.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_Sofor/js/turajaxquery.js</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/controllers/SoforMobilTurAjax.php</file>
-            <file>file:/C:/xampp/htdocs/SProject/app/mobillanguage/tr.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/adminturajaxquery.js</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/config/config.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/adminsoforajaxquery.js</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/turliste_view.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/header_view.php</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/admintur-web.app.js</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/adminlokasyonajaxquery.js</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/js/adminsofor-web.app.js</file>
+            <file>file:/C:/xampp/htdocs/SProject/app/views/Template_AdminBackEnd/kullaniciliste_view.php</file>
         </group>
     </open-files>
 </project-private>

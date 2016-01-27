@@ -929,8 +929,8 @@ class AdminTurAjaxSorgu extends Controller {
                                     }
                                 }
                                 //log ayarları
-                                $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                                $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                                $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                                 if ($resultLog) {
                                     $sonuc["turGidis"] = 1;
                                     $sonuc["turGidisReply"] = $deger["GidisTur"];
@@ -1253,8 +1253,8 @@ class AdminTurAjaxSorgu extends Controller {
                                     }
                                 }
                                 //log ayarları
-                                $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                                $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                                $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                                 if ($resultLog) {
                                     $sonuc["turDonus"] = 1;
                                     $sonuc["turDonusReply"] = $deger["DonusTur"];
@@ -2512,8 +2512,8 @@ class AdminTurAjaxSorgu extends Controller {
                             }
                         }
                         //log ayarları
-                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                        $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                        $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                         if ($resultLog) {
                             $sonuc["turGidisID"] = $resultTurTip;
                             $sonuc["update"] = $deger["GidisTurDuzenle"];
@@ -2727,8 +2727,8 @@ class AdminTurAjaxSorgu extends Controller {
                             }
 
                             //log ayarları
-                            $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                            $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                            $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                            $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                             if ($resultLog) {
                                 $sonuc["delete"] = $deger["TurSilme"];
                             } else {
@@ -3934,8 +3934,8 @@ class AdminTurAjaxSorgu extends Controller {
                         }
 
                         //log ayarları
-                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                        $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                        $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                         if ($resultLog) {
                             $sonuc["turDonusID"] = $resultTurTip;
                             $sonuc["turDonusReply"] = $deger["DonusTurDuzenle"];

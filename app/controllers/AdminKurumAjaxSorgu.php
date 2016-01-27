@@ -185,8 +185,8 @@ class AdminKurumAjaxSorgu extends Controller {
                                 }
                             }
                             //log ayarları
-                            $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                            $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                            $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                            $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                             if ($resultLog) {
                                 $sonuc["delete"] = $deger["KurumSilme"];
                             } else {
@@ -335,8 +335,8 @@ class AdminKurumAjaxSorgu extends Controller {
                                 }
                             }
                             //log ayarları
-                            $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                            $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                            $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                            $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                             if ($resultLog) {
                                 $sonuc["update"] = $deger["KurumDuzenle"];
                             } else {
@@ -520,8 +520,8 @@ class AdminKurumAjaxSorgu extends Controller {
                                 }
                             }
                             //log ayarları
-                            $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                            $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                            $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                            $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                             if ($resultLog) {
                                 $sonuc["newBolgeKurumID"] = $resultKurumID;
                                 $sonuc["insert"] = $deger["KurumKaydet"];
@@ -1031,8 +1031,8 @@ class AdminKurumAjaxSorgu extends Controller {
                                     }
                                 }
                                 //log ayarları
-                                $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                                $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                                $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                                 if ($resultLog) {
                                     $sonuc["turGidis"] = 1;
                                     $sonuc["turGidisReply"] = $deger["GidisTur"];
@@ -1354,8 +1354,8 @@ class AdminKurumAjaxSorgu extends Controller {
                                     }
                                 }
                                 //log ayarları
-                                $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                                $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                                $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                                $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                                 if ($resultLog) {
                                     $sonuc["turDonus"] = 1;
                                     $sonuc["turDonusReply"] = $deger["DonusTur"];
@@ -2952,8 +2952,8 @@ class AdminKurumAjaxSorgu extends Controller {
                             }
                         }
                         //log ayarları
-                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                        $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                        $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                         if ($resultLog) {
                             $sonuc["turGidisID"] = $resultTurTip;
                             $sonuc["update"] = $deger["GidisTurDuzenle"];
@@ -3167,8 +3167,8 @@ class AdminKurumAjaxSorgu extends Controller {
                             }
 
                             //log ayarları
-                            $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                            $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                            $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                            $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                             if ($resultLog) {
                                 $sonuc["delete"] = $deger["TurSilme"];
                             } else {
@@ -4387,8 +4387,8 @@ class AdminKurumAjaxSorgu extends Controller {
                         }
 
                         //log ayarları
-                        $dataLog = $form->adminLogDuzen($adminID, $adSoyad, 0, $alert);
-                        $resultLog = $Panel_Model->addNewAdminLog($dataLog);
+                        $dataLog = $form->adminBildirimLogDuzen($adminID, $adSoyad, $alert);
+                        $resultLog = $Panel_Model->addNewAdminBildirimLog($dataLog);
                         if ($resultLog) {
                             $sonuc["turDonusID"] = $resultTurTip;
                             $sonuc["turDonusReply"] = $deger["DonusTurDuzenle"];
