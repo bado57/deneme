@@ -5,6 +5,25 @@ var MultipleMapindex;
 
 $(document).ready(function () {
 
+    var image_holder = $("#image-holder");
+    $("#urunresim").on("change", function () {
+        if (typeof (FileReader) != "undefined") {
+            image_holder.empty();
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("<img />", {
+                    "src": e.target.result,
+                    "class": "thumb-image img-responsive",
+                    "style": "width:auto;max-width:100%;height:auto;max-height:100%;"
+                }).appendTo(image_holder);
+            }
+            image_holder.show();
+            reader.readAsDataURL($(this)[0].files[0]);
+        } else {
+            //alert("This browser does not support FileReader.");
+        }
+    });
+
     // Form Enable / Disable Kontrolleri
     $(document).on("click", "#editForm", function (e) {
         e.preventDefault();

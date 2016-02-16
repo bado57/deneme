@@ -160,7 +160,7 @@ $.AdminIslemler = {
                     success: function (cevap) {
                         if (cevap.hata) {
                             reset();
-                            alertify.alert(jsDil.Hata);
+                            alertify.alert(cevap.hata);
                             return false;
                         } else {
                             reset();
@@ -288,7 +288,7 @@ $.AdminIslemler = {
                         success: function (cevap) {
                             if (cevap.hata) {
                                 reset();
-                                alertify.alert(jsDil.Hata);
+                                alertify.alert(cevap.hata);
                                 return false;
                             } else {
                                 disabledForm();

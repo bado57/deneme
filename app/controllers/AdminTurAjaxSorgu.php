@@ -17,17 +17,10 @@ class AdminTurAjaxSorgu extends Controller {
 
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
             //dil yapılandırılması
-            $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-            if (!Session::get("dil")) {
-                Session::set("dil", $lang);
-                $formm = $this->load->ajaxlanguage($lang);
-                $deger = $formm->ajaxlanguage();
-                $degerbildirim = $formm->bildirimlanguage();
-            } else {
-                $formm = $this->load->ajaxlanguage(Session::get("dil"));
-                $deger = $formm->ajaxlanguage();
-                $degerbildirim = $formm->bildirimlanguage();
-            }
+
+            $formm = $this->load->ajaxlanguage(Session::get("dil"));
+            $deger = $formm->ajaxlanguage();
+            $degerbildirim = $formm->bildirimlanguage();
             $sonuc = array();
             //model bağlantısı
             $Panel_Model = $this->load->model("Panel_Model");
@@ -3942,6 +3935,401 @@ class AdminTurAjaxSorgu extends Controller {
                         } else {
                             $sonuc["hata"] = $deger["Hata"];
                         }
+                    }
+                    break;
+                case "turRapor":
+                    $adminID = Session::get("userId");
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $form->post("turID", true);
+                        $turID = $form->values['turID'];
+                        $turLogDetay = $Panel_Model->turDetayRapor($turID);
+                        if (count($turLogDetay) > 0) {
+                            $raporList = array();
+                            $o = 0;
+                            foreach ($turLogDetay as $turLogDetayy) {
+                                $raporList[$o]['Km'] = $turLogDetayy['BSTurKm'];
+                                $raporList[$o]['Saat'] = $turLogDetayy['BSTurSaat'];
+                                $raporList[$o]['BsSaat'] = $turLogDetayy['BSTurBslngcSaat'];
+                                $raporList[$o]['BtsSaat'] = $turLogDetayy['BSTurBtsSaat'];
+                                if ($turLogDetayy['BSTurGun'] == 0) {
+                                    $raporList[$o]['Gun'] = $deger["Pazartesi"];
+                                } elseif ($turLogDetayy['BSTurGun'] == 1) {
+                                    $raporList[$o]['Gun'] = $deger["Sali"];
+                                } elseif ($turLogDetayy['BSTurGun'] == 2) {
+                                    $raporList[$o]['Gun'] = $deger["Carsamba"];
+                                } elseif ($turLogDetayy['BSTurGun'] == 3) {
+                                    $raporList[$o]['Gun'] = $deger["Persembe"];
+                                } elseif ($turLogDetayy['BSTurGun'] == 4) {
+                                    $raporList[$o]['Gun'] = $deger["Cuma"];
+                                } elseif ($turLogDetayy['BSTurGun'] == 5) {
+                                    $raporList[$o]['Gun'] = $deger["Cumartesi"];
+                                } elseif ($turLogDetayy['BSTurGun'] == 6) {
+                                    $raporList[$o]['Gun'] = $deger["Pazar"];
+                                }
+                                if ($turLogDetayy['BSTurTip'] == 0) {
+                                    $raporList[$o]['TipDeger'] = 0;
+                                    $raporList[$o]['Tip'] = $deger["Ogrenci"];
+                                } elseif ($turLogDetayy['BSTurTip'] == 1) {
+                                    $raporList[$o]['TipDeger'] = 1;
+                                    $raporList[$o]['Tip'] = $deger["Personel"];
+                                } elseif ($turLogDetayy['BSTurTip'] == 2) {
+                                    $raporList[$o]['TipDeger'] = 2;
+                                    $raporList[$o]['Tip'] = $deger["OgrPer"];
+                                }
+                                $raporList[$o]['Tarih'] = $turLogDetayy['BSTurTarih'];
+                                $raporList[$o]['KisiSayi'] = $turLogDetayy['BSTurKisiSayi'];
+                                if ($turLogDetayy['BSTurGidisDonus'] == 0) {
+                                    $raporList[$o]['GidDonDeger'] = 0;
+                                    $raporList[$o]['GidDon'] = $deger['Gidis'];
+                                } else if ($turLogDetayy['BSTurGidisDonus'] == 1) {
+                                    $raporList[$o]['GidDonDeger'] = 1;
+                                    $raporList[$o]['GidDon'] = $deger['Donus'];
+                                }
+                                $o++;
+                            }
+                        }
+                        $sonuc["Detail"] = $raporList;
+                    }
+                    break;
+                case "raporDetay":
+                    $adminID = Session::get("userId");
+                    if (!$adminID) {
+                        header("Location:" . SITE_URL_LOGOUT);
+                    } else {
+                        $form->post("rowID", true);
+                        $form->post("ttip", true);
+                        $form->post("tarih", true);
+                        $form->post("tur", true);
+                        $rowID = $form->values['rowID'];
+                        $ttip = $form->values['ttip'];
+                        $tarih = $form->values['tarih'];
+                        $tur = $form->values['tur'];
+                        $turLogDetay = array();
+                        $list = array();
+                        if ($ttip == 0) {//Öğrenci
+                            if ($tur != 1) {//Gidiş
+                                $turLogDetay = $Panel_Model->turDetayRaporOG($rowID, $tarih);
+                                if ($turLogDetay) {
+                                    //Gelen Kişiler
+                                    $od = 0;
+                                    foreach ($turLogDetay as $turLogDetayy) {
+                                        $ogrlist[] = $turLogDetayy['BsKisiID'];
+                                        $list[$od]['Saat'] = $turLogDetayy['BSTurSaat'];
+                                        $od++;
+                                    }
+                                    $ogrIDler = implode(',', $ogrlist);
+                                    $ogrAdSoyad = $Panel_Model->turDetayRaporOgrIdler($ogrIDler);
+                                    $o = 0;
+                                    foreach ($ogrAdSoyad as $ogrAdSoyadd) {
+                                        $list[$o]["Ad"] = $ogrAdSoyadd['BSOgrenciAd'];
+                                        $list[$o]["Soyad"] = $ogrAdSoyadd['BSOgrenciSoyad'];
+                                        $list[$o]["Tip"] = $deger["Ogrenci"];
+                                        $o++;
+                                    }
+                                    //Turun tamamındaki öğrenciler
+                                    $turKisi = $Panel_Model->turDetayRaporOTur($rowID);
+                                    foreach ($turKisi as $turKisii) {
+                                        $ogrTumlist[] = $turKisii['BSOgrenciID'];
+                                    }
+                                    //Gelmeyen Öğrenciler
+                                    $ogrGId = array_diff($ogrTumlist, $ogrlist);
+                                    if (count($ogrGId) > 0) {
+                                        $ogrGIDler = implode(',', $ogrGId);
+                                        $ogrAdSyd = $Panel_Model->turDetayRaporOgrIdler($ogrGIDler);
+                                        $og = 0;
+                                        foreach ($ogrAdSyd as $ogrAdSydd) {
+                                            $listGelmeyen[$og]["Ad"] = $ogrAdSydd['BSOgrenciAd'];
+                                            $listGelmeyen[$og]["Soyad"] = $ogrAdSydd['BSOgrenciSoyad'];
+                                            $listGelmeyen[$og]["Tip"] = $deger["Ogrenci"];
+                                            $og++;
+                                        }
+                                    }
+                                }
+                            } else {//Dönüş
+                                $turLogDetay = $Panel_Model->turDetayRaporOD($rowID, $tarih);
+                                if ($turLogDetay) {
+                                    $od = 0;
+                                    foreach ($turLogDetay as $turLogDetayy) {
+                                        $ogrlist[] = $turLogDetayy['BsKisiID'];
+                                        $list[$od]['Saat'] = $turLogDetayy['BSTurSaat'];
+                                        $od++;
+                                    }
+                                    $ogrIDler = implode(',', $ogrlist);
+                                    $ogrAdSoyad = $Panel_Model->turDetayRaporOgrIdler($ogrIDler);
+                                    $o = 0;
+                                    foreach ($ogrAdSoyad as $ogrAdSoyadd) {
+                                        $list[$o]["Ad"] = $ogrAdSoyadd['BSOgrenciAd'];
+                                        $list[$o]["Soyad"] = $ogrAdSoyadd['BSOgrenciSoyad'];
+                                        $list[$o]["Tip"] = $deger["Ogrenci"];
+                                        $o++;
+                                    }
+                                    //Turun tamamındaki öğrenciler
+                                    $turKisi = $Panel_Model->turDetayRaporOTur($rowID);
+                                    foreach ($turKisi as $turKisii) {
+                                        $ogrTumlist[] = $turKisii['BSOgrenciID'];
+                                    }
+                                    //Gelmeyen Öğrenciler
+                                    $ogrGId = array_diff($ogrTumlist, $ogrlist);
+                                    if (count($ogrGId) > 0) {
+                                        $ogrGIDler = implode(',', $ogrGId);
+                                        $ogrAdSyd = $Panel_Model->turDetayRaporOgrIdler($ogrGIDler);
+                                        $og = 0;
+                                        foreach ($ogrAdSyd as $ogrAdSydd) {
+                                            $listGelmeyen[$og]["Ad"] = $ogrAdSydd['BSOgrenciAd'];
+                                            $listGelmeyen[$og]["Soyad"] = $ogrAdSydd['BSOgrenciSoyad'];
+                                            $listGelmeyen[$og]["Tip"] = $deger["Ogrenci"];
+                                            $og++;
+                                        }
+                                    }
+                                }
+                            }
+                        } else if ($ttip == 1) {//Personel
+                            if ($tur != 1) {//Gidiş
+                                $turLogDetay = $Panel_Model->turDetayRaporIG($rowID, $tarih);
+                                if ($turLogDetay) {
+                                    $id = 0;
+                                    foreach ($turLogDetay as $turLogDetayy) {
+                                        $isclist[] = $turLogDetayy['BsKisiID'];
+                                        $list[$id]['Saat'] = $turLogDetayy['BSTurSaat'];
+                                        $id++;
+                                    }
+                                    $iscIDler = implode(',', $isclist);
+                                    $isciAdSoyad = $Panel_Model->turDetayRaporIscIdler($iscIDler);
+                                    $i = 0;
+                                    foreach ($isciAdSoyad as $isciAdSoyadd) {
+                                        $list[$i]["Ad"] = $isciAdSoyadd['SBIsciAd'];
+                                        $list[$i]["Soyad"] = $isciAdSoyadd['SBIsciSoyad'];
+                                        $list[$i]["Tip"] = $deger["Personel"];
+                                        $i++;
+                                    }
+                                    //Turun tamamındaki işçiler
+                                    $turKisi = $Panel_Model->turDetayRaporITur($rowID);
+                                    foreach ($turKisi as $turKisii) {
+                                        $iscTumlist[] = $turKisii['SBIsciID'];
+                                    }
+                                    //Gelmeyen Öğrenciler
+                                    $iscGId = array_diff($iscTumlist, $isclist);
+                                    if (count($iscGId) > 0) {
+                                        $iscGIDler = implode(',', $iscGId);
+                                        $iscAdSyd = $Panel_Model->turDetayRaporIscIdler($iscGIDler);
+                                        $ig = 0;
+                                        foreach ($iscAdSyd as $iscAdSydd) {
+                                            $listGelmeyen[$ig]["Ad"] = $iscAdSydd['SBIsciAd'];
+                                            $listGelmeyen[$ig]["Soyad"] = $iscAdSydd['SBIsciSoyad'];
+                                            $listGelmeyen[$ig]["Tip"] = $deger["Personel"];
+                                            $ig++;
+                                        }
+                                    }
+                                }
+                            } else {//Dönüş
+                                $turLogDetay = $Panel_Model->turDetayRaporID($rowID, $tarih);
+                                if ($turLogDetay) {
+                                    $id = 0;
+                                    foreach ($turLogDetay as $turLogDetayy) {
+                                        $isclist[] = $turLogDetayy['BsKisiID'];
+                                        $list[$id]['Saat'] = $turLogDetayy['BSTurSaat'];
+                                        $id++;
+                                    }
+                                    $iscIDler = implode(',', $isclist);
+                                    $isciAdSoyad = $Panel_Model->turDetayRaporIscIdler($iscIDler);
+                                    $i = 0;
+                                    foreach ($isciAdSoyad as $isciAdSoyadd) {
+                                        $list[$i]["Ad"] = $isciAdSoyadd['SBIsciAd'];
+                                        $list[$i]["Soyad"] = $isciAdSoyadd['SBIsciSoyad'];
+                                        $list[$i]["Tip"] = $deger["Personel"];
+                                        $i++;
+                                    }
+                                    //Turun tamamındaki işçiler
+                                    $turKisi = $Panel_Model->turDetayRaporITur($rowID);
+                                    foreach ($turKisi as $turKisii) {
+                                        $iscTumlist[] = $turKisii['SBIsciID'];
+                                    }
+                                    //Gelmeyen Öğrenciler
+                                    $iscGId = array_diff($iscTumlist, $isclist);
+                                    if (count($iscGId) > 0) {
+                                        $iscGIDler = implode(',', $iscGId);
+                                        $iscAdSyd = $Panel_Model->turDetayRaporIscIdler($iscGIDler);
+                                        $ig = 0;
+                                        foreach ($iscAdSyd as $iscAdSydd) {
+                                            $listGelmeyen[$ig]["Ad"] = $iscAdSydd['SBIsciAd'];
+                                            $listGelmeyen[$ig]["Soyad"] = $iscAdSydd['SBIsciSoyad'];
+                                            $listGelmeyen[$ig]["Tip"] = $deger["Personel"];
+                                            $ig++;
+                                        }
+                                    }
+                                }
+                            }
+                        } else if ($ttip == 2) {//Öğrenci-Personel
+                            if ($tur != 1) {//Gidiş
+                                $turLogDetay = $Panel_Model->turDetayRaporOIG($rowID, $tarih);
+                                if ($turLogDetay) {
+                                    $od = 0;
+                                    $o = 0;
+                                    $i = 0;
+                                    foreach ($turLogDetay as $turLogDetayy) {
+                                        if ($turLogDetayy['BSKisiTip'] != 1) {//Öğrenci
+                                            $ogrlist[] = $turLogDetayy['BsKisiID'];
+                                            $ogrlistSaat[$o]['Saat'] = $turLogDetayy['BSTurSaat'];
+                                            $o++;
+                                        } else {//personel
+                                            $isclist[] = $turLogDetayy['BsKisiID'];
+                                            $isclistSaat[$i]['Saat'] = $turLogDetayy['BSTurSaat'];
+                                            $i++;
+                                        }
+                                        $od++;
+                                    }
+                                    $oi = 0;
+                                    $yo = 0;
+                                    $ogrIDler = implode(',', $ogrlist);
+                                    if (count($ogrIDler) > 0) {
+                                        $ogrAdSoyad = $Panel_Model->turDetayRaporOgrIdler($ogrIDler);
+                                        foreach ($ogrAdSoyad as $ogrAdSoyadd) {
+                                            $list[$oi]["Ad"] = $ogrAdSoyadd['BSOgrenciAd'];
+                                            $list[$oi]["Soyad"] = $ogrAdSoyadd['BSOgrenciSoyad'];
+                                            $list[$oi]["Tip"] = $deger["Ogrenci"];
+                                            $list[$oi]['Saat'] = $ogrlistSaat[$yo]['Saat'];
+                                            $oi++;
+                                            $yo++;
+                                        }
+                                    }
+                                    $yi = 0;
+                                    $iscIDler = implode(',', $isclist);
+                                    if (count($iscIDler) > 0) {
+                                        $isciAdSoyad = $Panel_Model->turDetayRaporIscIdler($iscIDler);
+                                        foreach ($isciAdSoyad as $isciAdSoyadd) {
+                                            $list[$oi]["Ad"] = $isciAdSoyadd['SBIsciAd'];
+                                            $list[$oi]["Soyad"] = $isciAdSoyadd['SBIsciSoyad'];
+                                            $list[$oi]["Tip"] = $deger["Personel"];
+                                            $list[$oi]['Saat'] = $isclistSaat[$yi]['Saat'];
+                                            $oi++;
+                                            $yi++;
+                                        }
+                                    }
+                                    //Gelmeyenleri bulacağız
+                                    //Turun tamamındaki işçi ve öğrenciler
+                                    $turKisi = $Panel_Model->turDetayRaporOITur($rowID);
+                                    foreach ($turKisi as $turKisii) {
+                                        if ($turKisii['BSKullaniciTip'] != 1) {//Öğrenci
+                                            $ogrTumlist[] = $turKisii['BSOgrenciIsciID'];
+                                        } else {//personel
+                                            $iscTumlist[] = $turKisii['BSOgrenciIsciID'];
+                                        }
+                                    }
+                                    //Gelmeyen Öğrenciler
+                                    $ogrGId = array_diff($ogrTumlist, $ogrlist);
+                                    if (count($ogrGId) > 0) {
+                                        $ogrGIDler = implode(',', $ogrGId);
+                                        $ogrAdSyd = $Panel_Model->turDetayRaporOgrIdler($ogrGIDler);
+                                        $og = 0;
+                                        foreach ($ogrAdSyd as $ogrAdSydd) {
+                                            $listGelmeyen[$og]["Ad"] = $ogrAdSydd['BSOgrenciAd'];
+                                            $listGelmeyen[$og]["Soyad"] = $ogrAdSydd['BSOgrenciSoyad'];
+                                            $listGelmeyen[$og]["Tip"] = $deger["Ogrenci"];
+                                            $og++;
+                                        }
+                                    }
+                                    //Gelmeyen Personeller
+                                    $iscGId = array_diff($iscTumlist, $isclist);
+                                    if (count($iscGId) > 0) {
+                                        $iscGIDler = implode(',', $iscGId);
+                                        $iscAdSyd = $Panel_Model->turDetayRaporIscIdler($iscGIDler);
+                                        $ig = 0;
+                                        foreach ($iscAdSyd as $iscAdSydd) {
+                                            $listGelmeyen[$ig]["Ad"] = $iscAdSydd['SBIsciAd'];
+                                            $listGelmeyen[$ig]["Soyad"] = $iscAdSydd['SBIsciSoyad'];
+                                            $listGelmeyen[$ig]["Tip"] = $deger["Personel"];
+                                            $ig++;
+                                        }
+                                    }
+                                }
+                            } else {//Dönüş
+                                $turLogDetay = $Panel_Model->turDetayRaporOID($rowID, $tarih);
+                                if ($turLogDetay) {
+                                    $od = 0;
+                                    $o = 0;
+                                    $i = 0;
+                                    foreach ($turLogDetay as $turLogDetayy) {
+                                        if ($turLogDetayy['BSKisiTip'] != 1) {//Öğrenci
+                                            $ogrlist[] = $turLogDetayy['BsKisiID'];
+                                            $ogrlistSaat[$o]['Saat'] = $turLogDetayy['BSTurSaat'];
+                                            $o++;
+                                        } else {//personel
+                                            $isclist[] = $turLogDetayy['BsKisiID'];
+                                            $isclistSaat[$i]['Saat'] = $turLogDetayy['BSTurSaat'];
+                                            $i++;
+                                        }
+                                        $od++;
+                                    }
+                                    $oi = 0;
+                                    $yo = 0;
+                                    $ogrIDler = implode(',', $ogrlist);
+                                    if (count($ogrIDler) > 0) {
+                                        $ogrAdSoyad = $Panel_Model->turDetayRaporOgrIdler($ogrIDler);
+                                        foreach ($ogrAdSoyad as $ogrAdSoyadd) {
+                                            $list[$oi]["Ad"] = $ogrAdSoyadd['BSOgrenciAd'];
+                                            $list[$oi]["Soyad"] = $ogrAdSoyadd['BSOgrenciSoyad'];
+                                            $list[$oi]["Tip"] = $deger["Ogrenci"];
+                                            $list[$oi]['Saat'] = $ogrlistSaat[$yo]['Saat'];
+                                            $oi++;
+                                            $yo++;
+                                        }
+                                    }
+                                    $yi = 0;
+                                    $iscIDler = implode(',', $isclist);
+                                    if (count($iscIDler) > 0) {
+                                        $isciAdSoyad = $Panel_Model->turDetayRaporIscIdler($iscIDler);
+                                        foreach ($isciAdSoyad as $isciAdSoyadd) {
+                                            $list[$oi]["Ad"] = $isciAdSoyadd['SBIsciAd'];
+                                            $list[$oi]["Soyad"] = $isciAdSoyadd['SBIsciSoyad'];
+                                            $list[$oi]["Tip"] = $deger["Personel"];
+                                            $list[$oi]['Saat'] = $isclistSaat[$yi]['Saat'];
+                                            $oi++;
+                                            $yi++;
+                                        }
+                                    }
+                                    //Gelmeyenleri bulacağız
+                                    //Turun tamamındaki işçi ve öğrenciler
+                                    $turKisi = $Panel_Model->turDetayRaporOITur($rowID);
+                                    foreach ($turKisi as $turKisii) {
+                                        if ($turKisii['BSKullaniciTip'] != 1) {//Öğrenci
+                                            $ogrTumlist[] = $turKisii['BSOgrenciIsciID'];
+                                        } else {//personel
+                                            $iscTumlist[] = $turKisii['BSOgrenciIsciID'];
+                                        }
+                                    }
+                                    //Gelmeyen Öğrenciler
+                                    $ogrGId = array_diff($ogrTumlist, $ogrlist);
+                                    if (count($ogrGId) > 0) {
+                                        $ogrGIDler = implode(',', $ogrGId);
+                                        $ogrAdSyd = $Panel_Model->turDetayRaporOgrIdler($ogrGIDler);
+                                        $og = 0;
+                                        foreach ($ogrAdSyd as $ogrAdSydd) {
+                                            $listGelmeyen[$og]["Ad"] = $ogrAdSydd['BSOgrenciAd'];
+                                            $listGelmeyen[$og]["Soyad"] = $ogrAdSydd['BSOgrenciSoyad'];
+                                            $listGelmeyen[$og]["Tip"] = $deger["Ogrenci"];
+                                            $og++;
+                                        }
+                                    }
+                                    //Gelmeyen Personeller
+                                    $iscGId = array_diff($iscTumlist, $isclist);
+                                    if (count($iscGId) > 0) {
+                                        $iscGIDler = implode(',', $iscGId);
+                                        $iscAdSyd = $Panel_Model->turDetayRaporIscIdler($iscGIDler);
+                                        $ig = 0;
+                                        foreach ($iscAdSyd as $iscAdSydd) {
+                                            $listGelmeyen[$ig]["Ad"] = $iscAdSydd['SBIsciAd'];
+                                            $listGelmeyen[$ig]["Soyad"] = $iscAdSydd['SBIsciSoyad'];
+                                            $listGelmeyen[$ig]["Tip"] = $deger["Personel"];
+                                            $ig++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        $sonuc["Detail"] = $list;
+                        $sonuc["DetailG"] = $listGelmeyen;
                     }
                     break;
                 default :

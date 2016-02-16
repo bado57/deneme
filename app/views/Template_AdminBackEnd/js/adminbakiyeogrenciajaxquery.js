@@ -204,7 +204,7 @@ $.AdminIslemler = {
                     success: function (cevap) {
                         if (cevap.hata) {
                             reset();
-                            alertify.alert(jsDil.Hata);
+                            alertify.alert(cevap.hata);
                             return false;
                         } else {
                             reset();
@@ -219,8 +219,8 @@ $.AdminIslemler = {
                                     + "<td class='hidden-xs'>" + aciklama + "</td>"
                                     + "<td class='hidden-xs'>" + cevap.result[0].OdemeTarih + "</td>"
                                     + "<td class='hidden-xs'>"
-                                    + "<a data-islem='0' data-toggle='tooltip' data-placement='top' title='Düzenle' value='' style='margin-left:10px;margin-right:10px;font-size:16px'><i class='fa fa-edit'></i></a>"
-                                    + "<a data-islem='1' data-toggle='tooltip' data-placement='top' title='Yazdır' value='' style='margin-left:10px;margin-right:10px;font-size:16px'><i class='fa fa-print'></i></a>"
+                                    + "<a data-islem='0' data-toggle='tooltip' data-placement='top' title='" + jsDil.Duzenle + "' value='' style='margin-left:10px;margin-right:10px;font-size:16px'><i class='fa fa-edit'></i></a>"
+                                    + "<a data-islem='1' data-toggle='tooltip' data-placement='top' title='" + jsDil.Yazdir + "' value='' style='margin-left:10px;margin-right:10px;font-size:16px'><i class='fa fa-print'></i></a>"
                                     + "</td>"
                                     + "</tr>";
                             OgrenciBakiyeTable.DataTable().row.add($(addRow)).draw();
@@ -333,7 +333,7 @@ $.AdminIslemler = {
                         success: function (cevap) {
                             if (cevap.hata) {
                                 reset();
-                                alertify.alert(jsDil.Hata);
+                                alertify.alert(cevap.hata);
                                 return false;
                             } else {
                                 disabledForm();

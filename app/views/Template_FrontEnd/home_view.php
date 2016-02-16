@@ -1,398 +1,170 @@
- <div class="wrapper">
+<section id="home-slider">
+    <div class="container">
+        <div class="main-slider">
+            <div class="slide-text">
+                <h1><?php echo $data["ServisTasimacilik"]; ?><br/><?php echo $data["YeniDonem"]; ?></h1>
+                <p><?php echo $data["KolayYonetim"]; ?></p>
+                <a href="<?php echo SITE_URL; ?>/UserIndex/features" class="btn btn-common"><b><i class="fa fa-angle-right"></i> <?php echo $data["Detaylar"]; ?></b></a>
+            </div>
+            <img src="<?php echo SITE_USERFRONT_IMG; ?>/home/slider/slide1/house.png" class="img-responsive slider-house" alt="slider image" width="650px"/>
+        </div>
+    </div>
+    <div class="preloader"><i class="fa fa-sun-o fa-spin"></i></div>
+</section>
+<!--/#home-slider-->
 
-        <section id="about">
-            <div class="container">
-                
-                <div class="section-heading scrollpoint sp-effect3">
-                    <h1>Hakkında</h1>
-                    <div class="divider"></div>
-                    <p>Shuttle; Servis şirketi yöneticileri, servis aracı sürücüleri ve yolcuların (personel, öğrenci vs.) etkileşimli olarak birbiriyle haberleşebilmesi, günlük seferlerde kullanıcıların servis bekleme derdini ortadan kaldırmak, seferler için en kısa yolu hesaplamak ve yakıt maliyetlerini en aza indirmek için geliştirilmiştir.</p>
+<section id="services">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 text-center padding wow fadeIn" data-wow-duration="1000ms" data-wow-delay="300ms">
+                <div class="single-service">
+                    <div class="wow scaleIn" data-wow-duration="500ms" data-wow-delay="300ms">
+                        <img src="<?php echo SITE_USERFRONT_IMG; ?>/home/icon1.png" alt="<?php echo $data["AltFirma"]; ?>"/>
+                    </div>
+                    <h2><?php echo $data["SFirma"]; ?></h2>
+                    <p><?php echo $data["SAgiYonet"]; ?></p>
+                    <a href="<?php echo SITE_URL; ?>/UserIndex/features" class="btn btn-default"><?php echo $data["Detaylar"]; ?></a>
                 </div>
+            </div>
+            <div class="col-sm-4 text-center padding wow fadeIn" data-wow-duration="1000ms" data-wow-delay="600ms">
+                <div class="single-service">
+                    <div class="wow scaleIn" data-wow-duration="500ms" data-wow-delay="600ms">
+                        <img src="<?php echo SITE_USERFRONT_IMG; ?>/home/icon2.png" alt="<?php echo $data["AltOgrenciVeli"]; ?>"/>
+                    </div>
+                    <h2><?php echo $data["OgrveVeliler"]; ?></h2>
+                    <p><?php echo $data["SAracZaman"]; ?></p>
+                    <a href="<?php echo SITE_URL; ?>/UserIndex/features#parents" class="btn btn-default"><?php echo $data["Detaylar"]; ?></a>
+                </div>
+            </div>
+            <div class="col-sm-4 text-center padding wow fadeIn" data-wow-duration="1000ms" data-wow-delay="900ms">
+                <div class="single-service">
+                    <div class="wow scaleIn" data-wow-duration="500ms" data-wow-delay="900ms">
+                        <img src="<?php echo SITE_USERFRONT_IMG; ?>/home/icon3.png" alt="Personel Icon"/>
+                    </div>
+                    <h2><?php echo $data["Personeller"]; ?></h2>
+                    <p><?php echo $data["SKullanmaZaman"]; ?></p>
+                    <a href="<?php echo SITE_URL; ?>/UserIndex/features#workers" class="btn btn-default"><?php echo $data["Detaylar"]; ?></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--/#services-->
 
-                <div class="row">
-                    <div class="col-md-3 col-sm-3 col-xs-6">
-                        <div class="about-item scrollpoint sp-effect2">
-                            <i class="fa fa-mobile fa-2x"></i>
-                            <h3>Kolay Kullanım</h3>
-                            <p>Shuttle, servis araçlarının takibi için ekstra bir cihaz gerektirmez. Akıllı telefon, Tablet ya da bilgisayarınızdan giriş yaparak uygulamayı kullanabilirsiniz.</p>
-                        </div>
+<section id="action" class="responsive">
+    <div class="vertical-center">
+        <div class="container">
+            <div class="row">
+                <div class="action take-tour">
+                    <div class="col-sm-6 col-xs-12 wow fadeInLeft" data-wow-duration="500ms" data-wow-delay="300ms">
+                        <h1 class="title"><?php echo $data["MobilUygulama"]; ?></h1>
+                        <p><?php echo $data["KullaniciMobCzum"]; ?></p>
                     </div>
-                    <div class="col-md-3 col-sm-3 col-xs-6" >
-                        <div class="about-item scrollpoint sp-effect5">
-                            <i class="fa fa-road fa-2x"></i>
-                            <h3>En Kısa Yol</h3>
-                            <p>Shuttle, her bir sefer için gelecek ve gelmeyecek olan yolcuların listesini baz alarak en kısa yolu sürücülere gösterir. Böylelikle yakıttan ve zamandan tasarruf sağlar.</p>
+                    <div class="col-sm-6 col-xs-12 text-center wow fadeInRight" data-wow-duration="500ms" data-wow-delay="300ms">
+                        <div class="hidden-xs text-right">
+                            <a href="#" class="btn-mobile" style="margin-right:10px;">
+                                <img src="<?php echo SITE_USERFRONT_IMG; ?>/home/android.png" alt="<?php echo $data["GPlay"]; ?>"/>
+                            </a>
+                            <a href="#" class="btn-mobile">
+                                <img src="<?php echo SITE_USERFRONT_IMG; ?>/home/apple.png" alt="<?php echo $data["AppStore"]; ?>" />
+                            </a>
                         </div>
-                    </div>
-                    <div class="col-md-3 col-sm-3 col-xs-6" >
-                        <div class="about-item scrollpoint sp-effect5">
-                            <i class="fa fa-clock-o fa-2x"></i>
-                            <h3>Beklemeye Son</h3>
-                            <p>Shuttle, Servis aracı yolcunun bineceği yere yaklaştığında yolcuya uyarı vererek özellikle soğuk havalarda dışarıda servis bekleme problemini ortadan kaldırır. </p>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-3 col-xs-6" >
-                        <div class="about-item scrollpoint sp-effect1">
-                            <i class="fa fa-comments fa-2x"></i>
-                            <h3>Anlık Haberleşme</h3>
-                            <p>Shuttle, gerekli durumlarda tüm kullanıcıların (servis yöneticisi, şoför, personel, öğrenci velisi vs.) birbiriyle etkileşimli bir şekilde haberleşmesini sağlar.</p>
+                        <div class="text-center padding-top hidden-lg hidden-md hidden-sm">
+                            <a href="#" class="btn-mobile" style="margin-right:10px;">
+                                <img src="<?php echo SITE_USERFRONT_IMG; ?>/home/android.png" alt="<?php echo $data["GPlay"]; ?>"/>
+                            </a>
+                            <a href="#" class="btn-mobile">
+                                <img src="<?php echo SITE_USERFRONT_IMG; ?>/home/apple.png" alt="<?php echo $data["AppStore"]; ?>" />
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
+<!--/#action-->
 
-        <section id="features">
-            <div class="container">
-                <div class="section-heading scrollpoint sp-effect3">
-                    <h1>Özellikler</h1>
-                    <div class="divider"></div>
-                    <p>Uygulama hakkında detaylı bilgi edinin</p>
+<section id="features">
+    <div class="container">
+        <div class="row">
+            <div class="single-features">
+                <div class="col-sm-5 wow fadeInLeft" data-wow-duration="500ms" data-wow-delay="300ms">
+                    <img src="<?php echo SITE_USERFRONT_IMG; ?>/home/allusers.png" class="img-responsive" alt="<?php echo $data["SolutionsUsers"]; ?>"/>
                 </div>
-                <div class="row">
-                    <div class="col-md-4 col-sm-4 scrollpoint sp-effect1">
-                        <div class="media media-left feature">
-                            <a class="pull-right" href="#">
-                                <i class="fa fa-refresh fa-2x"></i>
-                            </a>
-                            <div class="media-body">
-                                <h3 class="media-heading">Tur Yönetimi</h3>
-                                Güzergah bilgileri tanımlama
-                            </div>
-                        </div>
-                        <div class="media media-left feature">
-                            <a class="pull-right" href="#">
-                                <i class="fa fa-bus fa-2x"></i>
-                            </a>
-                            <div class="media-body">
-                                <h3 class="media-heading">Araç Yönetimi</h3>
-                                Sürücü, yolcu ve tur tanımlama
-                            </div>
-                        </div>
-                        <div class="media media-left feature">
-                            <a class="pull-right" href="#">
-                                <i class="fa fa-users fa-2x"></i>
-                            </a>
-                            <div class="media-body">
-                                <h3 class="media-heading">Yolcu Yönetimi</h3>
-                                Yolcu bilgileri tanımlama
-                            </div>
-                        </div>
-                        <div class="media media-left feature">
-                            <a class="pull-right" href="#">
-                                <i class="fa fa-money fa-2x"></i>
-                            </a>
-                            <div class="media-body">
-                                <h3 class="media-heading">Bakiye Yönetimi</h3>
-                                Ücret bilgileri takibi
-                            </div>
-                        </div>
-                        <div class="media media-left feature">
-                            <a class="pull-right" href="#">
-                                <i class="fa fa-comments fa-2x"></i>
-                            </a>
-                            <div class="media-body">
-                                <h3 class="media-heading">Anlık Haberleşme</h3>
-                                Tüm kullanıcılar arası iletişim
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-4" >
-                        <img src="<?php echo SITE_USERFRONT_IMG?>/eco/iphone-eco.png" class="img-responsive scrollpoint sp-effect5" alt="">
-                    </div>
-                    <div class="col-md-4 col-sm-4 scrollpoint sp-effect2">
-                        <div class="media feature">
-                            <a class="pull-left" href="#">
-                                <i class="fa fa-road fa-2x"></i>
-                            </a>
-                            <div class="media-body">
-                                <h3 class="media-heading">Güzergah Belirleme</h3>
-                                Yolculara göre yol haritası
-                            </div>
-                        </div>
-                        <div class="media feature">
-                            <a class="pull-left" href="#">
-                                <i class="fa fa-map-marker fa-2x"></i>
-                            </a>
-                            <div class="media-body">
-                                <h3 class="media-heading">Lokasyon Sorgusu</h3>
-                                Servisin nerede olduğunu görme
-                            </div>
-                        </div>
-                        <div class="media feature">
-                            <a class="pull-left" href="#">
-                                <i class="fa fa-bell fa-2x"></i>
-                            </a>
-                            <div class="media-body">
-                                <h3 class="media-heading">Servis Yaklaştı !</h3>
-                                Servis yaklaştığında uyarı
-                            </div>
-                        </div>
-                        <div class="media feature">
-                            <a class="pull-left" href="#">
-                                <i class="fa fa-envelope fa-2x"></i>
-                            </a>
-                            <div class="media-body">
-                                <h3 class="media-heading">Duyuru ve Bildirimler</h3>
-                                Tüm kullanıcılara anlık duyuru gönderme
-                            </div>
-                        </div>
-                        <div class="media active feature">
-                            <a class="pull-left" href="#">
-                                <i class="fa fa-plus fa-2x"></i>
-                            </a>
-                            <div class="media-body">
-                                <h3 class="media-heading">And much more!</h3>
-                                Lorem ipsum dolor sit amet.
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-sm-6 wow fadeInRight" data-wow-duration="500ms" data-wow-delay="300ms">
+                    <h2><?php echo $data["KullaniciCozum"]; ?></h2>
+                    <p><?php echo $data["ServisSureci"]; ?></p>
+
                 </div>
             </div>
-        </section>
-
-        <!--<section id="reviews">
-            <div class="container">
-                <div class="section-heading inverse scrollpoint sp-effect3">
-                    <h1>Reviews</h1>
-                    <div class="divider"></div>
-                    <p>Read What's The People Are Saying About Us</p>
+            <div class="single-features">
+                <div class="col-sm-6 align-right wow fadeInLeft" data-wow-duration="500ms" data-wow-delay="300ms">
+                    <h2><?php echo $data["SifirMaliyet"]; ?></h2>
+                    <p><?php echo $data["ServisTakip"]; ?></p>
                 </div>
-                <div class="row">
-                    <div class="col-md-10 col-md-push-1 scrollpoint sp-effect3">
-                        <div class="review-filtering">
-                            <div class="review">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <div class="review-person">
-                                            <img src="http://api.randomuser.me/portraits/women/94.jpg" alt="" class="img-responsive">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <div class="review-comment">
-                                            <h3>“I love Oleose, I highly recommend it, Everyone Try It Now”</h3>
-                                            <p>
-                                                - Krin Fox
-                                                <span>
-                                                    <i class="fa fa-star fa-lg"></i>
-                                                    <i class="fa fa-star fa-lg"></i>
-                                                    <i class="fa fa-star fa-lg"></i>
-                                                    <i class="fa fa-star fa-lg"></i>
-                                                    <i class="fa fa-star-o fa-lg"></i>
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="review rollitin">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <div class="review-person">
-                                            <img src="http://api.randomuser.me/portraits/men/70.jpg" alt="" class="img-responsive">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <div class="review-comment">
-                                            <h3>“Oleaose Is The Best Stable, Fast App I Have Ever Experienced”</h3>
-                                            <p>
-                                                - Theodore Willis
-                                                <span>
-                                                    <i class="fa fa-star fa-lg"></i>
-                                                    <i class="fa fa-star fa-lg"></i>
-                                                    <i class="fa fa-star fa-lg"></i>
-                                                    <i class="fa fa-star-half-o fa-lg"></i>
-                                                    <i class="fa fa-star-o fa-lg"></i>
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="review rollitin">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <div class="review-person">
-                                            <img src="http://api.randomuser.me/portraits/men/93.jpg" alt="" class="img-responsive">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <div class="review-comment">
-                                            <h3>“Keep It Up Guys Your Work Rules, Cheers :)”</h3>
-                                            <p>
-                                                - Ricky Grant
-                                                <span>
-                                                    <i class="fa fa-star fa-lg"></i>
-                                                    <i class="fa fa-star fa-lg"></i>
-                                                    <i class="fa fa-star fa-lg"></i>
-                                                    <i class="fa fa-star-half-o fa-lg"></i>
-                                                    <i class="fa fa-star-o fa-lg"></i>
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-sm-5 col-sm-offset-1 align-right wow fadeInRight" data-wow-duration="500ms" data-wow-delay="300ms">
+                    <img src="<?php echo SITE_USERFRONT_IMG; ?>/home/nomoredevices.png" class="img-responsive" alt="<?php echo $data["AltEkipGerekmez"]; ?>"/>
                 </div>
             </div>
-        </section>-->
-
-        <section id="screens">
-            <div class="container">
-
-                <div class="section-heading scrollpoint sp-effect3">
-                    <h1>Screens</h1>
-                    <div class="divider"></div>
-                    <p>See what’s included in the App</p>
+            <div class="single-features">
+                <div class="col-sm-5 wow fadeInLeft" data-wow-duration="500ms" data-wow-delay="300ms">
+                    <img src="<?php echo SITE_USERFRONT_IMG; ?>/home/notifications.png" class="img-responsive" alt=""/>
                 </div>
-
-                <div class="filter scrollpoint sp-effect3">
-                    <a href="javascript:void(0)" class="button js-filter-all active">All Screens</a>
-                    <a href="javascript:void(0)" class="button js-filter-one">User Access</a>
-                    <a href="javascript:void(0)" class="button js-filter-two">Social Network</a>
-                    <a href="javascript:void(0)" class="button js-filter-three">Media Players</a>
-                </div>
-                <div class="slider filtering scrollpoint sp-effect5" >
-                    <div class="one">
-                        <img src="<?php echo SITE_USERFRONT_IMG?>/eco/screens/profile.jpg" alt="">
-                        <h4>Profile Page</h4>
-                    </div>
-                    <div class="two">
-                        <img src="<?php echo SITE_USERFRONT_IMG?>/eco/screens/menu.jpg" alt="">
-                        <h4>Toggel Menu</h4>
-                    </div>
-                    <div class="three">
-                        <img src="<?php echo SITE_USERFRONT_IMG?>/eco/screens/weather.jpg" alt="">
-                        <h4>Weather Forcast</h4>
-                    </div>
-                    <div class="one">
-                        <img src="<?php echo SITE_USERFRONT_IMG?>/eco/screens/signup.jpg" alt="">
-                        <h4>Sales Analysis</h4>
-                    </div>
-                    <div class="one">
-                        <img src="<?php echo SITE_USERFRONT_IMG?>/eco/screens/calendar.jpg" alt="">
-                        <h4>Event Calendar</h4>
-                    </div>
-                    <div class="two">
-                        <img src="<?php echo SITE_USERFRONT_IMG?>/eco/screens/options.jpg" alt="">
-                        <h4>Some Options</h4>
-                    </div>
-                    <div class="three">
-                        <img src="<?php echo SITE_USERFRONT_IMG?>/eco/screens/sales.jpg" alt="">
-                        <h4>Lorem ipsum dolor</h4>
-                    </div>
+                <div class="col-sm-6 wow fadeInRight" data-wow-duration="500ms" data-wow-delay="300ms">
+                    <h2><?php echo $data["OzelBildirim"]; ?></h2>
+                    <p><?php echo $data["OgrServisDurum"]; ?></p>
                 </div>
             </div>
-        </section>
-
-        <section id="demo">
-            <div class="container">
-                <div class="section-heading scrollpoint sp-effect3">
-                    <h1>Demo</h1>
-                    <div class="divider"></div>
-                    <p>Take a closer look in more detail</p>
+            <div class="single-features">
+                <div class="col-sm-6 align-right wow fadeInLeft" data-wow-duration="500ms" data-wow-delay="300ms">
+                    <h2><?php echo $data["DusukMaliyet"]; ?></h2>
+                    <p><?php echo $data["GelecekYolcu"]; ?></p>
                 </div>
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2 scrollpoint sp-effect2">
-                        <div class="video-container" >
-                            <iframe src="http://player.vimeo.com/video/70984663"></iframe>
-                        </div>
-                    </div>
+                <div class="col-sm-5 col-sm-offset-1 align-right wow fadeInRight" data-wow-duration="500ms" data-wow-delay="300ms">
+                    <img src="<?php echo SITE_USERFRONT_IMG; ?>/home/lessfuel.png" class="img-responsive" alt=""/>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
+<!--/#features-->
 
-        <section id="getApp">
-            <div class="container-fluid">
-                <div class="section-heading inverse scrollpoint sp-effect3">
-                    <h1>Get App</h1>
-                    <div class="divider"></div>
-                    <p>Choose your native platform and get started!</p>
+<section id="clients">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="clients text-center wow fadeInUp" data-wow-duration="500ms" data-wow-delay="300ms">
+                    <p><img src="<?php echo SITE_USERFRONT_IMG; ?>/home/clients.png" class="img-responsive" alt=""/></p>
+                    <h1 class="title">Mutlu Kullanıcılar</h1>
+                    <!--
+                    <p>Servis ağı çözümlerinde bizi tercih eden değerli müşterilerimizden bazıları.</p>
+                    -->
                 </div>
-                
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="hanging-phone scrollpoint sp-effect2 hidden-xs">
-                            <img src="<?php echo SITE_USERFRONT_IMG?>/eco/eco-angled2.png" alt="">
-                        </div>
-                        <div class="platforms">
-                            <a href="#" class="btn btn-primary inverse scrollpoint sp-effect1">
-                                <i class="fa fa-android fa-3x pull-left"></i>
-                                <span>Download for</span><br>
-                                <b>Android</b>
-                            </a>
-                            
-                                <a href="#" class="btn btn-primary inverse scrollpoint sp-effect2">
-                                    <i class="fa fa-apple fa-3x pull-left"></i>
-                                    <span>Download for</span><br>
-                                    <b>Apple IOS</b>
-                                </a>
-                        </div>
-
+                <!-- 
+                <div class="clients-logo wow fadeIn" data-wow-duration="1000ms" data-wow-delay="600ms">
+                    <div class="col-xs-3 col-sm-2">
+                        <a href="#"><img src="<?php echo SITE_USERFRONT_IMG; ?>/home/client1.png" class="img-responsive" alt=""/></a>
+                    </div>
+                    <div class="col-xs-3 col-sm-2">
+                        <a href="#"><img src="<?php echo SITE_USERFRONT_IMG; ?>/home/client1.png" class="img-responsive" alt=""/></a>
+                    </div>
+                     <div class="col-xs-3 col-sm-2">
+                        <a href="#"><img src="<?php echo SITE_USERFRONT_IMG; ?>/home/client1.png" class="img-responsive" alt=""/></a>
+                    </div>
+                     <div class="col-xs-3 col-sm-2">
+                        <a href="#"><img src="<?php echo SITE_USERFRONT_IMG; ?>/home/client1.png" class="img-responsive" alt=""/></a>
+                    </div>
+                     <div class="col-xs-3 col-sm-2">
+                        <a href="#"><img src="<?php echo SITE_USERFRONT_IMG; ?>/home/client1.png" class="img-responsive" alt=""/></a>
+                    </div>
+                     <div class="col-xs-3 col-sm-2">
+                        <a href="#"><img src="<?php echo SITE_USERFRONT_IMG; ?>/home/client1.png" class="img-responsive" alt=""/></a>
                     </div>
                 </div>
-
-                
-
+                -->
             </div>
-        </section>
-
-        <section id="support" class="doublediagonal">
-            <div class="container">
-                <div class="section-heading scrollpoint sp-effect3">
-                    <h1>Support</h1>
-                    <div class="divider"></div>
-                    <p>For more info and support, contact us!</p>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-8 col-sm-8 scrollpoint sp-effect1">
-                                <form role="form">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Your name">
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="email" class="form-control" placeholder="Your email">
-                                    </div>
-                                    <div class="form-group">
-                                        <textarea cols="30" rows="10" class="form-control" placeholder="Your message"></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                                </form>
-                            </div>
-                            <div class="col-md-4 col-sm-4 contact-details scrollpoint sp-effect2">
-                                <div class="media">
-                                    <a class="pull-left" href="#" >
-                                        <i class="fa fa-map-marker fa-2x"></i>
-                                    </a>
-                                    <div class="media-body">
-                                        <h4 class="media-heading">4, Some street, California, USA</h4>
-                                    </div>
-                                </div>
-                                <div class="media">
-                                    <a class="pull-left" href="#" >
-                                        <i class="fa fa-envelope fa-2x"></i>
-                                    </a>
-                                    <div class="media-body">
-                                        <h4 class="media-heading">
-                                            <a href="mailto:support@oleose.com">support@oleose.com</a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <div class="media">
-                                    <a class="pull-left" href="#" >
-                                        <i class="fa fa-phone fa-2x"></i>
-                                    </a>
-                                    <div class="media-body">
-                                        <h4 class="media-heading">+1 234 567890</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div>
+    </div>
+</section>
+<!--/#clients-->

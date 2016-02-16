@@ -91,81 +91,82 @@
                     </div>
                 </a>
             </div>
-
-            <div class="col-lg-3 col-xs-12">
-                <!-- Kullanıcı İşlemleri -->
-                <a href="<?php echo SITE_URL; ?>/AdminWeb/veliliste" class="small-box bg-green">
-                    <div class="inner">
-                        <h3>
-                            <?php echo $data["Veli"]; ?>
-                        </h3>
-                        <p>
-                            <?php if (count($model['VeliCount']) > 0) { ?>
-                                <?php
-                                echo $model['VeliCount'] . ' ' . $data["Toplam"];
-                            } else {
+            <?php if (Session::get("OgrServis") == 1) { ?>
+                <div class="col-lg-3 col-xs-12">
+                    <!-- Kullanıcı İşlemleri -->
+                    <a href="<?php echo SITE_URL; ?>/AdminWeb/veliliste" class="small-box bg-green">
+                        <div class="inner">
+                            <h3>
+                                <?php echo $data["Veli"]; ?>
+                            </h3>
+                            <p>
+                                <?php if (count($model['VeliCount']) > 0) { ?>
+                                    <?php
+                                    echo $model['VeliCount'] . ' ' . $data["Toplam"];
+                                } else {
+                                    ?>
+                                    <?php
+                                    echo '0 ' . $data["Toplam"];
+                                }
                                 ?>
-                                <?php
-                                echo '0 ' . $data["Toplam"];
-                            }
-                            ?>
-                        </p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-home"></i>
-                    </div>
-                </a>
-            </div>
-
-            <div class="col-lg-3 col-xs-12">
-                <!-- Kullanıcı İşlemleri -->
-                <a href="<?php echo SITE_URL; ?>/AdminWeb/ogrenciliste" class="small-box bg-green">
-                    <div class="inner">
-                        <h3>
-                            <?php echo $data["Ogrenci"]; ?>
-                        </h3>
-                        <p>
-                            <?php if (count($model['OgrenciCount']) > 0) { ?>
-                                <?php
-                                echo $model['OgrenciCount'] . ' ' . $data["Toplam"];
-                            } else {
+                            </p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-home"></i>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-xs-12">
+                    <!-- Kullanıcı İşlemleri -->
+                    <a href="<?php echo SITE_URL; ?>/AdminWeb/ogrenciliste" class="small-box bg-green">
+                        <div class="inner">
+                            <h3>
+                                <?php echo $data["Ogrenci"]; ?>
+                            </h3>
+                            <p>
+                                <?php if (count($model['OgrenciCount']) > 0) { ?>
+                                    <?php
+                                    echo $model['OgrenciCount'] . ' ' . $data["Toplam"];
+                                } else {
+                                    ?>
+                                    <?php
+                                    echo '0 ' . $data["Toplam"];
+                                }
                                 ?>
-                                <?php
-                                echo '0 ' . $data["Toplam"];
-                            }
-                            ?>
-                        </p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-graduation-cap"></i>
-                    </div>
-                </a>
-            </div>
-
-            <div class="col-lg-3 col-xs-12">
-                <!-- İşçi İşlemleri -->
-                <a href="<?php echo SITE_URL; ?>/AdminWeb/isciliste" class="small-box bg-green">
-                    <div class="inner">
-                        <h3>
-                            <?php echo $data["Isci"]; ?>
-                        </h3>
-                        <p>
-                            <?php if (count($model['IsciCount']) > 0) { ?>
-                                <?php
-                                echo $model['IsciCount'] . ' ' . $data["Toplam"];
-                            } else {
+                            </p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-graduation-cap"></i>
+                        </div>
+                    </a>
+                </div>
+            <?php } ?>
+            <?php if (Session::get("PersServis") == 1) { ?>
+                <div class="col-lg-3 col-xs-12">
+                    <!-- İşçi İşlemleri -->
+                    <a href="<?php echo SITE_URL; ?>/AdminWeb/isciliste" class="small-box bg-green">
+                        <div class="inner">
+                            <h3>
+                                <?php echo $data["Isci"]; ?>
+                            </h3>
+                            <p>
+                                <?php if (count($model['IsciCount']) > 0) { ?>
+                                    <?php
+                                    echo $model['IsciCount'] . ' ' . $data["Toplam"];
+                                } else {
+                                    ?>
+                                    <?php
+                                    echo '0 ' . $data["Toplam"];
+                                }
                                 ?>
-                                <?php
-                                echo '0 ' . $data["Toplam"];
-                            }
-                            ?>
-                        </p>
-                    </div>
-                    <div class="icon">
-                        <i class="fa fa-briefcase"></i>
-                    </div>
-                </a>
-            </div>                      
+                            </p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-briefcase"></i>
+                        </div>
+                    </a>
+                </div>      
+            <?php } ?>
             <!-- top row -->
             <div class="row">
                 <div class="col-xs-12 connectedSortable">

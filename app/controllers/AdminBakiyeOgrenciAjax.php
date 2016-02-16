@@ -142,90 +142,96 @@ class AdminBakiyeOgrenciAjax extends Controller {
                                 $odemeValue.=$odemeTutar[$l];
                             }
                         }
-                        if ($form->submit()) {
-                            $data = array(
-                                'BSOdemeAlanID' => $adminID,
-                                'BSOdemeAlanAd' => Session::get("kullaniciad") . " " . Session::get("kullanicisoyad"),
-                                'BSOdemeAlanTip' => 0,
-                                'BSOdenenID' => $odenenID,
-                                'BSOdenenAd' => $odenenAdSyd,
-                                'BSOdemeYapanID' => $odemeYapanVal,
-                                'BSOdemeYapanTip' => $odemeYapanTip,
-                                'BSOdemeYapanAd' => trim($odemeYapan[0]),
-                                'BSOdemeTutar' => $odemeValue,
-                                'BSOdemeAciklama' => $aciklama,
-                                'BSOdemeTip' => $odemeSekil,
-                                'BSDovizTip' => $dovizTip
-                            );
-                        }
-                        $result = $Panel_Model->ogrenciBakiyeKaydet($data);
-                        if ($result) {
-                            $insertDate = date('H:i:s--d/m/Y');
-                            $ogrencibak = $Panel_Model->bakiyeOgrenciOdenen($odenenID);
-                            $dataUpdate = array(
-                                'OdenenTutar' => $ogrencibak[0]['OdenenTutar'] + $odemeValue
-                            );
-                            $resultUpdate = $Panel_Model->ogrenciBakiyeGuncelle($dataUpdate, $odenenID);
-                            if ($resultUpdate) {
-                                //Bildirim Durumları
-                                //öğrenciye bildirim gönderme
-                                $alert = $degerbildirim["OdemeYapma"];
-                                $resultOgrenciCihaz = $Panel_Model->bakiyeOgrenciCihaz($odenenID);
-                                if (count($resultOgrenciCihaz) > 0) {
-                                    foreach ($resultOgrenciCihaz as $resultOgrenciCihazz) {
-                                        $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
+                        $ogrencibak = $Panel_Model->bakiyeOgrenciOdenen($odenenID);
+                        $kalanTutar = $ogrencibak[0]['OdemeTutar'] - $ogrencibak[0]['OdenenTutar'];
+                        //kalan tutardan fazla ödeme girilemez
+                        if ($odemeValue <= $kalanTutar) {
+                            if ($form->submit()) {
+                                $data = array(
+                                    'BSOdemeAlanID' => $adminID,
+                                    'BSOdemeAlanAd' => Session::get("kullaniciad") . " " . Session::get("kullanicisoyad"),
+                                    'BSOdemeAlanTip' => 0,
+                                    'BSOdenenID' => $odenenID,
+                                    'BSOdenenAd' => $odenenAdSyd,
+                                    'BSOdemeYapanID' => $odemeYapanVal,
+                                    'BSOdemeYapanTip' => $odemeYapanTip,
+                                    'BSOdemeYapanAd' => trim($odemeYapan[0]),
+                                    'BSOdemeTutar' => $odemeValue,
+                                    'BSOdemeAciklama' => $aciklama,
+                                    'BSOdemeTip' => $odemeSekil,
+                                    'BSDovizTip' => $dovizTip
+                                );
+                            }
+                            $result = $Panel_Model->ogrenciBakiyeKaydet($data);
+                            if ($result) {
+                                $insertDate = date('H:i:s--d/m/Y');
+                                $dataUpdate = array(
+                                    'OdenenTutar' => $ogrencibak[0]['OdenenTutar'] + $odemeValue
+                                );
+                                $resultUpdate = $Panel_Model->ogrenciBakiyeGuncelle($dataUpdate, $odenenID);
+                                if ($resultUpdate) {
+                                    //Bildirim Durumları
+                                    //öğrenciye bildirim gönderme
+                                    $alert = $degerbildirim["OdemeYapma"];
+                                    $resultOgrenciCihaz = $Panel_Model->bakiyeOgrenciCihaz($odenenID);
+                                    if (count($resultOgrenciCihaz) > 0) {
+                                        foreach ($resultOgrenciCihaz as $resultOgrenciCihazz) {
+                                            $ogrenciCihaz[] = $resultOgrenciCihazz['bsogrencicihazRecID'];
+                                        }
+                                        $ogrenciCihazlar = implode(',', $ogrenciCihaz);
+                                        $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["Bakiye"]);
                                     }
-                                    $ogrenciCihazlar = implode(',', $ogrenciCihaz);
-                                    $form->shuttleNotification($ogrenciCihazlar, $alert, $degerbildirim["Bakiye"]);
-                                }
 
-                                //veliye bildirim gönderme
-                                $resultVeliOgrenci = $Panel_Model->veliOgrenci($odenenID);
-                                if (count($resultVeliOgrenci) > 0) {
-                                    foreach ($resultVeliOgrenci as $resultVeliOgrencii) {
-                                        $ogrenciVeliler[] = $resultVeliOgrencii['BSVeliID'];
+                                    //veliye bildirim gönderme
+                                    $resultVeliOgrenci = $Panel_Model->veliOgrenci($odenenID);
+                                    if (count($resultVeliOgrenci) > 0) {
+                                        foreach ($resultVeliOgrenci as $resultVeliOgrencii) {
+                                            $ogrenciVeliler[] = $resultVeliOgrencii['BSVeliID'];
+                                        }
+                                        $ogrenciVelim = implode(',', $ogrenciVeliler);
+                                        $resultVeliCihaz = $Panel_Model->veliCihaz($ogrenciVelim);
+                                        foreach ($resultVeliCihaz as $resultVeliCihazz) {
+                                            $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
+                                        }
+                                        $veliCihazlar = implode(',', $veliCihaz);
+                                        $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["Bakiye"]);
                                     }
-                                    $ogrenciVelim = implode(',', $ogrenciVeliler);
-                                    $resultVeliCihaz = $Panel_Model->veliCihaz($ogrenciVelim);
-                                    foreach ($resultVeliCihaz as $resultVeliCihazz) {
-                                        $veliCihaz[] = $resultVeliCihazz['bsvelicihazRecID'];
-                                    }
-                                    $veliCihazlar = implode(',', $veliCihaz);
-                                    $form->shuttleNotification($veliCihazlar, $alert, $degerbildirim["Bakiye"]);
-                                }
 
-                                $ogrenciList[0]['OdemeAlanAd'] = Session::get("kullaniciad") . " " . Session::get("kullanicisoyad");
-                                $ogrenciList[0]['OdemeAlanTip'] = $languagedeger['Yonetici'];
-                                $ogrenciList[0]['OdemeYapanAd'] = trim($odemeYapan[0]);
-                                if ($odemeYapanTip == 0) {
-                                    $ogrenciList[0]['OdemeYapanTp'] = 0;
-                                    $ogrenciList[0]['OdemeYapanTip'] = $languagedeger['Ogrenci'];
+                                    $ogrenciList[0]['OdemeAlanAd'] = Session::get("kullaniciad") . " " . Session::get("kullanicisoyad");
+                                    $ogrenciList[0]['OdemeAlanTip'] = $languagedeger['Yonetici'];
+                                    $ogrenciList[0]['OdemeYapanAd'] = trim($odemeYapan[0]);
+                                    if ($odemeYapanTip == 0) {
+                                        $ogrenciList[0]['OdemeYapanTp'] = 0;
+                                        $ogrenciList[0]['OdemeYapanTip'] = $languagedeger['Ogrenci'];
+                                    } else {
+                                        $ogrenciList[0]['OdemeYapanTp'] = 1;
+                                        $ogrenciList[0]['OdemeYapanTip'] = $languagedeger['Veli'];
+                                    }
+                                    $ogrenciList[0]['OdemeTutar'] = $odemeTutar;
+                                    $ogrenciList[0]['OdemeParaTip'] = $dovizTip;
+                                    if ($odemeSekil == 0) {
+                                        $ogrenciList[0]['OdemeTip'] = $languagedeger['Elden'];
+                                    } elseif ($odemeSekil == 1) {
+                                        $ogrenciList[0]['OdemeTip'] = $languagedeger['KrediKartı'];
+                                    } else {
+                                        $ogrenciList[0]['OdemeTip'] = $languagedeger['Havale'];
+                                    }
+                                    $ogrenciList[0]['OdemeTarih'] = $insertDate;
+                                    $odenenTutar = $ogrencibak[0]['OdenenTutar'] + $odemeValue;
+                                    $ogrenciList[0]['OdenenTutar'] = number_format($odenenTutar, 2, '.', ',');
+                                    $ogrenciList[0]['KalanTutar'] = number_format($ogrencibak[0]['OdemeTutar'] - $odenenTutar, 2, '.', ',');
+                                    $ogrenciList[0]['Insert'] = $languagedeger['YeniOdeme'];
+                                    $ogrenciList[0]['ID'] = $result;
+                                    $sonuc["result"] = $ogrenciList;
                                 } else {
-                                    $ogrenciList[0]['OdemeYapanTp'] = 1;
-                                    $ogrenciList[0]['OdemeYapanTip'] = $languagedeger['Veli'];
+                                    $deleteresult = $Panel_Model->ogrenciBakiyeDelete($result);
+                                    $sonuc["hata"] = $languagedeger['Hata'];
                                 }
-                                $ogrenciList[0]['OdemeTutar'] = $odemeTutar;
-                                $ogrenciList[0]['OdemeParaTip'] = $dovizTip;
-                                if ($odemeSekil == 0) {
-                                    $ogrenciList[0]['OdemeTip'] = $languagedeger['Elden'];
-                                } elseif ($odemeSekil == 1) {
-                                    $ogrenciList[0]['OdemeTip'] = $languagedeger['KrediKartı'];
-                                } else {
-                                    $ogrenciList[0]['OdemeTip'] = $languagedeger['Havale'];
-                                }
-                                $ogrenciList[0]['OdemeTarih'] = $insertDate;
-                                $odenenTutar = $ogrencibak[0]['OdenenTutar'] + $odemeValue;
-                                $ogrenciList[0]['OdenenTutar'] = number_format($odenenTutar, 2, '.', ',');
-                                $ogrenciList[0]['KalanTutar'] = number_format($ogrencibak[0]['OdemeTutar'] - $odenenTutar, 2, '.', ',');
-                                $ogrenciList[0]['Insert'] = $languagedeger['YeniOdeme'];
-                                $ogrenciList[0]['ID'] = $result;
-                                $sonuc["result"] = $ogrenciList;
                             } else {
-                                $deleteresult = $Panel_Model->ogrenciBakiyeDelete($result);
                                 $sonuc["hata"] = $languagedeger['Hata'];
                             }
                         } else {
-                            $sonuc["hata"] = $languagedeger['Hata'];
+                            $sonuc["hata"] = $languagedeger['NoOdeme'];
                         }
                     }
                     break;
@@ -307,57 +313,63 @@ class AdminBakiyeOgrenciAjax extends Controller {
                                 $odemeValue.=$odemeTutar[$l];
                             }
                         }
-                        $length = strlen($oncekiTutar);
-                        for ($l = 0; $l < $length; $l++) {
-                            if ($oncekiTutar[$l] != ",") {
-                                $odemeValueOnceki.=$oncekiTutar[$l];
+                        $ogrencibak = $Panel_Model->bakiyeOgrenciOdenen($odenenID);
+                        $kalanTutar = $ogrencibak[0]['OdemeTutar'] - $ogrencibak[0]['OdenenTutar'];
+                        //kalan tutardan fazla ödeme girilemez
+                        if ($odemeValue <= $kalanTutar) {
+                            $length = strlen($oncekiTutar);
+                            for ($l = 0; $l < $length; $l++) {
+                                if ($oncekiTutar[$l] != ",") {
+                                    $odemeValueOnceki.=$oncekiTutar[$l];
+                                }
                             }
-                        }
-                        if ($form->submit()) {
-                            $data = array(
-                                'BSOdemeYapanID' => $odemeYapanVal,
-                                'BSOdemeYapanTip' => $odemeYapanTip,
-                                'BSOdemeYapanAd' => trim($odemeYapan[0]),
-                                'BSOdemeTutar' => $odemeValue,
-                                'BSOdemeAciklama' => $aciklama,
-                                'BSOdemeTip' => $odemeSekil
-                            );
-                        }
-                        $result = $Panel_Model->ogrenciBakiyeDetailGuncelle($data, $rowID);
-                        if ($result) {
-                            $ogrencibak = $Panel_Model->bakiyeOgrenciOdenen($odenenID);
-                            $dataUpdate = array(
-                                'OdenenTutar' => ($ogrencibak[0]['OdenenTutar'] - $odemeValueOnceki) + $odemeValue
-                            );
-                            $resultUpdate = $Panel_Model->ogrenciBakiyeGuncelle($dataUpdate, $odenenID);
-                            if ($resultUpdate) {
-                                $ogrenciList[0]['OdemeYapanAd'] = trim($odemeYapan[0]);
-                                if ($odemeYapanTip == 0) {
-                                    $ogrenciList[0]['OdemeYapanTp'] = 0;
-                                    $ogrenciList[0]['OdemeYapanTip'] = $languagedeger['Ogrenci'];
+                            if ($form->submit()) {
+                                $data = array(
+                                    'BSOdemeYapanID' => $odemeYapanVal,
+                                    'BSOdemeYapanTip' => $odemeYapanTip,
+                                    'BSOdemeYapanAd' => trim($odemeYapan[0]),
+                                    'BSOdemeTutar' => $odemeValue,
+                                    'BSOdemeAciklama' => $aciklama,
+                                    'BSOdemeTip' => $odemeSekil
+                                );
+                            }
+                            $result = $Panel_Model->ogrenciBakiyeDetailGuncelle($data, $rowID);
+                            if ($result) {
+                                $dataUpdate = array(
+                                    'OdenenTutar' => ($ogrencibak[0]['OdenenTutar'] - $odemeValueOnceki) + $odemeValue
+                                );
+                                $resultUpdate = $Panel_Model->ogrenciBakiyeGuncelle($dataUpdate, $odenenID);
+                                if ($resultUpdate) {
+                                    $ogrenciList[0]['OdemeYapanAd'] = trim($odemeYapan[0]);
+                                    if ($odemeYapanTip == 0) {
+                                        $ogrenciList[0]['OdemeYapanTp'] = 0;
+                                        $ogrenciList[0]['OdemeYapanTip'] = $languagedeger['Ogrenci'];
+                                    } else {
+                                        $ogrenciList[0]['OdemeYapanTp'] = 1;
+                                        $ogrenciList[0]['OdemeYapanTip'] = $languagedeger['Veli'];
+                                    }
+                                    $ogrenciList[0]['OdemeTutar'] = $odemeTutar;
+                                    $ogrenciList[0]['OdemeParaTip'] = $dovizTip;
+                                    if ($odemeSekil == 0) {
+                                        $ogrenciList[0]['OdemeTip'] = $languagedeger['Elden'];
+                                    } elseif ($odemeSekil == 1) {
+                                        $ogrenciList[0]['OdemeTip'] = $languagedeger['KrediKartı'];
+                                    } else {
+                                        $ogrenciList[0]['OdemeTip'] = $languagedeger['Havale'];
+                                    }
+                                    $odenenTutar = ($ogrencibak[0]['OdenenTutar'] - $odemeValueOnceki) + $odemeValue;
+                                    $ogrenciList[0]['OdenenTutar'] = number_format($odenenTutar, 2, '.', ',');
+                                    $ogrenciList[0]['KalanTutar'] = number_format($ogrencibak[0]['OdemeTutar'] - $odenenTutar, 2, '.', ',');
+                                    $ogrenciList[0]['update'] = $languagedeger['OdemeDuzenle'];
+                                    $sonuc["result"] = $ogrenciList;
                                 } else {
-                                    $ogrenciList[0]['OdemeYapanTp'] = 1;
-                                    $ogrenciList[0]['OdemeYapanTip'] = $languagedeger['Veli'];
+                                    $sonuc["hata"] = $languagedeger['Hata'];
                                 }
-                                $ogrenciList[0]['OdemeTutar'] = $odemeTutar;
-                                $ogrenciList[0]['OdemeParaTip'] = $dovizTip;
-                                if ($odemeSekil == 0) {
-                                    $ogrenciList[0]['OdemeTip'] = $languagedeger['Elden'];
-                                } elseif ($odemeSekil == 1) {
-                                    $ogrenciList[0]['OdemeTip'] = $languagedeger['KrediKartı'];
-                                } else {
-                                    $ogrenciList[0]['OdemeTip'] = $languagedeger['Havale'];
-                                }
-                                $odenenTutar = ($ogrencibak[0]['OdenenTutar'] - $odemeValueOnceki) + $odemeValue;
-                                $ogrenciList[0]['OdenenTutar'] = number_format($odenenTutar, 2, '.', ',');
-                                $ogrenciList[0]['KalanTutar'] = number_format($ogrencibak[0]['OdemeTutar'] - $odenenTutar, 2, '.', ',');
-                                $ogrenciList[0]['update'] = $languagedeger['OdemeDuzenle'];
-                                $sonuc["result"] = $ogrenciList;
                             } else {
                                 $sonuc["hata"] = $languagedeger['Hata'];
                             }
                         } else {
-                            $sonuc["hata"] = $languagedeger['Hata'];
+                            $sonuc["hata"] = $languagedeger['NoOdeme'];
                         }
                     }
                     break;

@@ -30,9 +30,9 @@ $(document).ready(function () {
                         var newDate = myDate1[2] + '/' + myDate1[1] + '/' + myDate1[0];
                         if (cevap.Duyur.ID[i] > ilkDeger) {
                             if (cevap.Duyur.Okundu[i] != 1) {//okunmadı
-                                $("#duyuru").append('<li style="background-color: #ddd"><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '" href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
+                                $("#duyuru").append('<li style="background-color: #ddd"><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '" href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><p style="margin-bottom:4px !important">' + cevap.Duyur.Text[i] + '</p><small style="text-align: right;float: right;">' + newDate + '--' + myDate[1] + '</small></div></a></li>');
                             } else {
-                                $("#duyuru").append('<li><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '"  href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
+                                $("#duyuru").append('<li><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '"  href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><p style="margin-bottom:4px !important">' + cevap.Duyur.Text[i] + '</p><small style="text-align: right;float: right;">' + newDate + '--' + myDate[1] + '</small></div></a></li>');
                             }
                         }
                     }
@@ -80,9 +80,9 @@ $(document).ready(function () {
                             var newDate = myDate1[2] + '/' + myDate1[1] + '/' + myDate1[0];
                             if (cevap.Duyur.ID[i] > ilkDeger) {
                                 if (cevap.Duyur.Okundu[i] != 1) {//okunmadı
-                                    $("#duyuru").append('<li style="background-color: #ddd"><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '" href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
+                                    $("#duyuru").append('<li style="background-color: #ddd"><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '" href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><p>' + cevap.Duyur.Text[i] + '</p><small style="text-align: right;float: right;">' + newDate + '--' + myDate[1] + '</small></div></a></li>');
                                 } else {
-                                    $("#duyuru").append('<li><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '"  href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
+                                    $("#duyuru").append('<li><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '"  href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><p style="margin-bottom:4px !important">' + cevap.Duyur.Text[i] + '</p><small style="text-align: right;float: right;">' + newDate + '--' + myDate[1] + '</small></div></a></li>');
                                 }
                             }
                         }
@@ -203,9 +203,9 @@ $(document).ready(function () {
                                 var myDate1 = myDate[0].split("-");
                                 var newDate = myDate1[2] + '/' + myDate1[1] + '/' + myDate1[0];
                                 if (cevap.Duyur.Okundu[i] != 1) {//okunmadı
-                                    $("#duyuru").append('<li style="background-color: #ddd"><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '" href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
+                                    $("#duyuru").append('<li style="background-color: #ddd"><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '" href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><p>' + cevap.Duyur.Text[i] + '</p><small style="text-align: right;float: right;">' + newDate + '--' + myDate[1] + '</small></div></a></li>');
                                 } else {
-                                    $("#duyuru").append('<li><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '"  href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><small>' + newDate + '--' + myDate[1] + '</small><p>' + cevap.Duyur.Text[i] + '</p></div></a></li>');
+                                    $("#duyuru").append('<li><a id="duyuruIsaret" data-id="' + cevap.Duyur.ID[i] + '"  href="' + SITE_URL + '"AdminWeb/duyuruliste"><div class="notify-icon notify-icon-success col-md-2"> <i class="fa fa-bullhorn"></i></div><div class="notify col-md-10"><p style="margin-bottom:4px !important">' + cevap.Duyur.Text[i] + '</p><small style="text-align: right;float: right;">' + newDate + '--' + myDate[1] + '</small></div></a></li>');
                                 }
                             }
                             $('div#duyuruloadmoreajaxloader').hide();

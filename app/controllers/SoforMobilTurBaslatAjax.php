@@ -39,6 +39,8 @@ class SoforMobilTurBaslatAjax extends Controller {
                 $SelectdbPassword = $UserSelectDb[0]['rootFirmaDbSifre'];
                 $SelectdbFirmaKod = $UserSelectDb[0]['rootfirmaKodu'];
                 $firmaDurum = $UserSelectDb[0]['rootfirmaDurum'];
+                $firmamapurl = $UserSelectDb[0]['rootfirmamapurl'];
+                $firmamapapi = $UserSelectDb[0]['rootfirmamapapi'];
                 $formDbConfig->configDb($SelectdbName, $SelectdbIp, $SelectdbUser, $SelectdbPassword);
                 //model bağlantısı
                 $Panel_Model = $this->load->model("Panel_Model_Mobile");
@@ -123,11 +125,12 @@ class SoforMobilTurBaslatAjax extends Controller {
                                 date_default_timezone_set($obj["timeZoneId"]);
                                 $date = date('m/d/Y', time());
                                 $time = date('H:i', time());
-                                $vtkarsilastirma = date('Hi');
                                 $gun = date('D', strtotime($date));
                                 //zaman planlaması
                                 $newTime = explode(':', trim($time));
+                                //Şu anki saat
                                 $sonTime = '';
+                                //burada aradaki : işaretini kaldırıp vt ye göre ayarlanmaa çalışılıyor
                                 if ($newTime[0][0] == 0) {//ilki 0 ise
                                     if ($newTime[0][1] == 0) {//ikinci 0 ise
                                         if ($newTime[1][0] == 0) {//üçüncü 0 ise
@@ -147,88 +150,73 @@ class SoforMobilTurBaslatAjax extends Controller {
                                 }
                                 $yeniGun = '';
                                 $turBaslat = [];
+                                //Şu anki gün kayıtları
+                                /*
+                                 * Buradaki $yeniBitis ifadesi  hergün için o turun bitip bitmediğini bilmek için yapıldı
+                                 * ve hergün çalışan bi webservis yazılacak ve bu  webservis te yaklaşık olarak 3 gün sonrasını düzelterek gidecek ve böylece 
+                                 * turun bittiğindeki 1 ifadesini 0 yapabileceğim. Bir tane olsa aynı gün kaçta çalıştırıp tekrar kaçta alacağım gibi sıkıntılar
+                                 * çıkabilecektir.
+                                 */
                                 switch ($gun) {
                                     case "Sun":
                                         $yeniGun = "SBTurPzr";
+                                        $yeniBitis = "SBTurPzrBitis";
                                         $webservisGun = 6;
                                         break;
                                     case "Mon":
                                         $yeniGun = "SBTurPzt";
+                                        $yeniBitis = "SBTurPztBitis";
                                         $webservisGun = 0;
                                         break;
                                     case "Tue":
                                         $yeniGun = "SBTurSli";
+                                        $yeniBitis = "SBTurSliBitis";
                                         $webservisGun = 1;
                                         break;
                                     case "Wed":
                                         $yeniGun = "SBTurCrs";
+                                        $yeniBitis = "SBTurCrsBitis";
                                         $webservisGun = 2;
                                         break;
                                     case "Thu":
                                         $yeniGun = "SBTurPrs";
+                                        $yeniBitis = "SBTurPrsBitis";
                                         $webservisGun = 3;
                                         break;
                                     case "Fri":
                                         $yeniGun = "SBTurCma";
+                                        $yeniBitis = "SBTurCmaBitis";
                                         $webservisGun = 4;
                                         break;
                                     case "Sat":
                                         $yeniGun = "SBTurCmt";
+                                        $yeniBitis = "SBTurCmtBitis";
                                         $webservisGun = 5;
                                         break;
                                     default:
                                         break;
                                 }
-
-                                $resultTurBaslat = $Panel_Model->soforTurBaslatID($kid, $yeniGun);
+                                $resultTurBaslat = $Panel_Model->soforTurBaslatID($kid, $yeniGun, $yeniBitis);
                                 if (count($resultTurBaslat) > 0) {//tur varsa
-                                    $turIndexBelirle;
-                                    if (count($resultTurBaslat) == 2) {
-                                        /*
-                                         * burada yapılan işlem basitçe eğer kullanıcı turu bitirmedi yada iki tur da başlamadı ise 
-                                         * öncelikle hangisi yapılması gerektiğidir.Mantık olarak gidiş turu başlaması gerekir düşüncesi üzerinden
-                                         * gidilmiştir.
-                                         * Düşünülen senaryolar:
-                                         * -şoför gidiş turunu yapsa da bitrmweyi unutmuş olabilir
-                                         * -dönüş turu gece 12 den sonra olabilir gibi.
-                                         */
-
-                                        if ($resultTurBaslat[0]["BSTurGidisDonus"] != 1) {//Gidiş turu
-                                            if ($resultTurBaslat[0]["BSTurBts"] >= $vtkarsilastirma) {
-                                                $turIndexBelirle = 0;
-                                            } else {
-                                                $turIndexBelirle = 1;
-                                            }
-                                        } else {//dönüş turu 
-                                            if ($resultTurBaslat[1]["BSTurBts"] >= $vtkarsilastirma) {
-                                                $turIndexBelirle = 1;
-                                            } else {
-                                                $turIndexBelirle = 0;
-                                            }
-                                        }
-                                    } else {
-                                        $turIndexBelirle = 0;
-                                    }
-
                                     $turBaslat = [];
                                     $veritabaniSaati = 0;
-                                    $yenideger = $sonTime - $resultTurBaslat[$turIndexBelirle]['BSTurBslngc'];
+                                    $yenideger = $sonTime - $resultTurBaslat[0]['BSTurBslngc'];
                                     if ($yenideger < 0) {
                                         $yenideger = -$yenideger;
                                     }
-                                    $turBaslat[0]['GidisDonus'] = $resultTurBaslat[$turIndexBelirle]['BSTurGidisDonus'];
-                                    $turID = $resultTurBaslat[$turIndexBelirle]['BSTurID'];
+                                    $turBaslat[0]['GidisDonus'] = $resultTurBaslat[0]['BSTurGidisDonus'];
+                                    $turID = $resultTurBaslat[0]['BSTurID'];
                                     //tur yapılmamış olsa bile normal saati geçip geçmediğini kontrol ediyoruz
-                                    if ($sonTime < $resultTurBaslat[$turIndexBelirle]['BSTurBslngc']) {//tur saati geçmemiş
+                                    if ($sonTime < $resultTurBaslat[0]['BSTurBslngc']) {//tur saati geçmemiş
                                         $turBaslat[0]['ZamanKontrol'] = 0;
-                                    } else if ($sonTime > $resultTurBaslat[$turIndexBelirle]['BSTurBslngc']) {//tur saati geçmiş ama yapılmamış daha
+                                    } else if ($sonTime > $resultTurBaslat[0]['BSTurBslngc']) {//tur saati geçmiş ama yapılmamış daha
                                         $turBaslat[0]['ZamanKontrol'] = 1;
                                     } else {//şimdi tur başlamalı
                                         $turBaslat[0]['ZamanKontrol'] = 2;
                                     }
-                                    $veritabaniSaati = $resultTurBaslat[$turIndexBelirle]['BSTurBslngc'];
-                                    $turBaslat[0]['HostesID'] = $resultTurBaslat[$turIndexBelirle]['BSTurHostesID'];
-                                    $turBaslat[0]['AracID'] = $resultTurBaslat[$turIndexBelirle]['BSTurAracID'];
+                                    $veritabaniSaati = $resultTurBaslat[0]['BSTurBslngc'];
+                                    $turBaslat[0]['HostesID'] = $resultTurBaslat[0]['BSTurHostesID'];
+                                    $turBaslat[0]['AracID'] = $resultTurBaslat[0]['BSTurAracID'];
 
                                     $result = $Panel_Model->soforTurBaslatIlk($turID);
                                     if (count($result) > 0) {
@@ -280,7 +268,6 @@ class SoforMobilTurBaslatAjax extends Controller {
                         }
                         break;
                     case "turbaslatislem":
-
                         if (!$loginfirmaID) {
                             $sonuc["hata"] = $languagedeger["Hack"];
                         } else {
@@ -443,6 +430,7 @@ class SoforMobilTurBaslatAjax extends Controller {
                                         $saat3 = $saat1 . ' - ' . $saat2;
                                         $turBaslatDetay[$b]['Saat'] = $saat3;
                                         $turBaslatDetay[$b]['Ad'] = $languagedeger['Gidis'];
+                                        $turBaslatDetay[$b]['Turtur'] = 0;
                                         $turBaslatDetay[$b]['Plaka'] = $resultTurr['BSTurAracPlaka'];
                                         $turBaslatDetay[$b]['ID'] = $resultTurr['BSTurID'];
                                         $turBaslatDetay[$b]['Tip'] = $resultTurr['BSTurTip'];
@@ -480,6 +468,7 @@ class SoforMobilTurBaslatAjax extends Controller {
                                         $saat3 = $saat1 . ' - ' . $saat2;
                                         $turBaslatDetay[$b]['Saat'] = $saat3;
                                         $turBaslatDetay[$b]['Ad'] = $languagedeger['Donus'];
+                                        $turBaslatDetay[$b]['Turtur'] = 1;
                                         $turBaslatDetay[$b]['Plaka'] = $resultTurr['BSTurAracPlaka'];
                                         $turBaslatDetay[$b]['ID'] = $resultTurr['BSTurID'];
                                         $turBaslatDetay[$b]['Tip'] = $resultTurr['BSTurTip'];
@@ -916,6 +905,11 @@ class SoforMobilTurBaslatAjax extends Controller {
                                         } else {
                                             $turGelen[$o]['KPhone'] = "0";
                                         }
+                                        if ($turGidisDonus != 1) {//Gidiş
+                                            $turGelen[$o]['BildMes'] = $resultOgrenciIID['BildirimMesafeGidis'];
+                                        } else {//Dönüş
+                                            $turGelen[$o]['BildMes'] = $resultOgrenciIID['BildirimMesafeDonus'];
+                                        }
                                         $turGelen[$o]['Location'] = $resultOgrenciIID['BSOgrenciLocation'];
                                         $turGelen[$o]['Tip'] = 0;
                                         $o++;
@@ -1038,6 +1032,11 @@ class SoforMobilTurBaslatAjax extends Controller {
                                         } else {
                                             $turGelen[$i]['KPhone'] = "0";
                                         }
+                                        if ($turGidisDonus != 1) {//Gidiş
+                                            $turGelen[$i]['BildMes'] = $resultIsciIIDD['BildirimMesafeGidis'];
+                                        } else {//Dönüş
+                                            $turGelen[$i]['BildMes'] = $resultIsciIIDD['BildirimMesafeDonus'];
+                                        }
                                         $turGelen[$i]['Location'] = $resultIsciIIDD['SBIsciLocation'];
                                         $turGelen[$i]['Tip'] = 1;
                                         $i++;
@@ -1148,6 +1147,11 @@ class SoforMobilTurBaslatAjax extends Controller {
                                             } else {
                                                 $turGelenO[$o]['KPhone'] = "0";
                                             }
+                                            if ($turGidisDonus != 1) {//Gidiş
+                                                $turGelenO[$o]['BildMes'] = $resultOgrenciIID['BildirimMesafeGidis'];
+                                            } else {//Dönüş
+                                                $turGelenO[$o]['BildMes'] = $resultOgrenciIID['BildirimMesafeDonus'];
+                                            }
                                             $turGelenO[$o]['Location'] = $resultOgrenciIID['BSOgrenciLocation'];
                                             $turGelenO[$o]['Tip'] = 0;
                                             $o++;
@@ -1222,10 +1226,15 @@ class SoforMobilTurBaslatAjax extends Controller {
                                             $turGelenP[$i]['ID'] = $resultIsciIIDD['SBIsciID'];
                                             $turGelenP[$i]['Ad'] = $resultIsciIIDD['SBIsciAd'];
                                             $turGelenP[$i]['Soyad'] = $resultIsciIIDD['SBIsciSoyad'];
-                                            if ($resultOgrenciIID['BSOgrenciPhone'] != "") {
-                                                $turGelenP[$i]['KPhone'] = $resultOgrenciIID['BSOgrenciPhone'];
+                                            if ($resultIsciIIDD['SBIsciPhone'] != "") {
+                                                $turGelenP[$i]['KPhone'] = $resultIsciIIDD['SBIsciPhone'];
                                             } else {
                                                 $turGelenP[$i]['KPhone'] = "0";
+                                            }
+                                            if ($turGidisDonus != 1) {//Gidiş
+                                                $turGelenP[$i]['BildMes'] = $resultIsciIIDD['BildirimMesafeGidis'];
+                                            } else {//Dönüş
+                                                $turGelenP[$i]['BildMes'] = $resultIsciIIDD['BildirimMesafeDonus'];
                                             }
                                             $turGelenP[$i]['Location'] = $resultIsciIIDD['SBIsciLocation'];
                                             $turGelenP[$i]['Tip'] = 1;
@@ -1313,6 +1322,8 @@ class SoforMobilTurBaslatAjax extends Controller {
                                 }
                             }
                             $sonuc["KisiDurum"] = $turKisiDurum;
+                            $sonuc["MapUrl"] = $firmamapurl;
+                            $sonuc["MapsAp"] = $firmamapapi;
                         }
                         break;
                     case "turkisiindibindi":
@@ -1322,8 +1333,6 @@ class SoforMobilTurBaslatAjax extends Controller {
                             $form->post("kisiID", true);
                             $form->post("kisiTip", true);
                             $form->post("kisiAd", true);
-                            $form->post("dgrKisiID", true);
-                            $form->post("dgrKisiTip", true);
                             $form->post("language", true);
                             $form->post("turGidisDonus", true);
                             $form->post("turID", true);
@@ -1338,8 +1347,6 @@ class SoforMobilTurBaslatAjax extends Controller {
                             $kisiID = $form->values['kisiID'];
                             $kisiTip = $form->values['kisiTip'];
                             $kisiAd = $form->values['kisiAd'];
-                            $dgrKisiID = $form->values['dgrKisiID'];
-                            $dgrKisiTip = $form->values['dgrKisiTip'];
                             $gdsDonus = $form->values['turGidisDonus'];
                             $turID = $form->values['turID'];
                             $turTip = $form->values['turTip'];
@@ -1443,45 +1450,7 @@ class SoforMobilTurBaslatAjax extends Controller {
                                         $resultIsciLog = $Panel_Model->addGidisOgrenciIsciLog($dataLogGidis);
                                     }
                                 }
-                                //diğer kişi için bildirim gönderme eğer kurum ise bildirim gönderilmeyeck
-                                //Bu kısım değişecek
-                                if ($dgrKisiTip == 0) {//öğrenci ise
-                                    $resultOgrCihaz = $Panel_Model->ogrenciTurCihaz($dgrKisiID);
-                                    if (count($resultOgrCihaz) > 0) {
-                                        $ogrCihaz = [];
-                                        foreach ($resultOgrCihaz as $resultOgrCihazz) {
-                                            $ogrCihaz[] = $resultOgrCihazz['bsogrencicihazRecID'];
-                                        }
-                                        $ogrCihazlar = implode(',', $ogrCihaz);
-                                        $form->shuttleNotification($ogrCihazlar, $languagedeger["ServisYaklasti"], $languagedeger["ServisYaklastiTitle"]);
-                                    }
-                                    //öğrenci velisi varsa ona bildirim
-                                    $resultOgrDgrVeli = $Panel_Model->ogrenciTurVeli($dgrKisiID);
-                                    if (count($resultOgrDgrVeli) > 0) {
-                                        $turVeliID = [];
-                                        foreach ($resultOgrDgrVeli as $resultOgrDgrVelii) {
-                                            $turVeliID[] = $resultOgrDgrVelii['BSVeliID'];
-                                        }
-                                        $ogrVeliIDler = implode(',', $turVeliID);
-                                        $resultOgrVeliDgrCihaz = $Panel_Model->ogrenciVeliTurCihaz($ogrVeliIDler);
-                                        if (count($resultOgrVeliDgrCihaz) > 0) {
-                                            foreach ($resultOgrVeliDgrCihaz as $resultOgrVeliDgrCihazz) {
-                                                $ogrVeliCihaz[] = $resultOgrVeliDgrCihazz['bsvelicihazRecID'];
-                                            }
-                                            $ogrVeliCihazlar = implode(',', $ogrVeliCihaz);
-                                            $form->shuttleNotification($ogrVeliCihazlar, $languagedeger["ServisYaklasti"], $languagedeger["ServiseBinmeTitle"]);
-                                        }
-                                    }
-                                } elseif ($dgrKisiTip == 1) {//işçi ise
-                                    $resultIsciCihaz = $Panel_Model->isciTurCihaz($dgrKisiID);
-                                    if (count($resultIsciCihaz) > 0) {
-                                        foreach ($resultIsciCihaz as $resultIsciCihazz) {
-                                            $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
-                                        }
-                                        $isciCihazlar = implode(',', $isciCihaz);
-                                        $form->shuttleNotification($isciCihazlar, $languagedeger["ServisYaklasti"], $languagedeger["ServisYaklastiTitle"]);
-                                    }
-                                }
+
                                 //binen kişiyi veritabanına kaydetme
                                 if ($form->submit()) {
                                     $dataGidis = array(
@@ -1585,27 +1554,6 @@ class SoforMobilTurBaslatAjax extends Controller {
                                         $resultIsciLog = $Panel_Model->addDonusOgrenciIsciLog($dataLogDonus);
                                     }
                                 }
-
-                                //diğer kişi için bildirim gönderme eğer kurum ise bildirim gönderilmeyeck
-                                if ($dgrKisiTip == 0) {//öğrenci ise
-                                    //öğrenci velisi varsa ona bildirim
-                                    $resultOgrDgrVeli = $Panel_Model->ogrenciTurVeli($dgrKisiID);
-                                    if (count($resultOgrDgrVeli) > 0) {
-                                        $turVeliID = [];
-                                        foreach ($resultOgrDgrVeli as $resultOgrDgrVelii) {
-                                            $turVeliID[] = $resultOgrDgrVelii['BSVeliID'];
-                                        }
-                                        $ogrVeliIDler = implode(',', $turVeliID);
-                                        $resultOgrVeliDgrCihaz = $Panel_Model->ogrenciVeliTurCihaz($ogrVeliIDler);
-                                        if (count($resultOgrVeliDgrCihaz) > 0) {
-                                            foreach ($resultOgrVeliDgrCihaz as $resultOgrVeliDgrCihazz) {
-                                                $ogrVeliCihaz[] = $resultOgrVeliDgrCihazz['bsvelicihazRecID'];
-                                            }
-                                            $ogrVeliCihazlar = implode(',', $ogrVeliCihaz);
-                                            $form->shuttleNotification($ogrVeliCihazlar, $languagedeger["ServisYaklasti"], $languagedeger["ServiseInmeTitle"]);
-                                        }
-                                    }
-                                }
                                 //inen kişiyi veritabanına kaydetme
                                 if ($form->submit()) {
                                     $dataDonus = array(
@@ -1636,8 +1584,6 @@ class SoforMobilTurBaslatAjax extends Controller {
                             $form->post("kisiID", true);
                             $form->post("kisiTip", true);
                             $form->post("kisiAd", true);
-                            $form->post("dgrKisiID", true);
-                            $form->post("dgrKisiTip", true);
                             $form->post("language", true);
                             $form->post("turGidisDonus", true);
                             $form->post("turID", true);
@@ -1652,8 +1598,6 @@ class SoforMobilTurBaslatAjax extends Controller {
                             $kisiID = $form->values['kisiID'];
                             $kisiTip = $form->values['kisiTip'];
                             $kisiAd = $form->values['kisiAd'];
-                            $dgrKisiID = $form->values['dgrKisiID'];
-                            $dgrKisiTip = $form->values['dgrKisiTip'];
                             $gdsDonus = $form->values['turGidisDonus'];
                             $turID = $form->values['turID'];
                             $turTip = $form->values['turTip'];
@@ -1757,43 +1701,6 @@ class SoforMobilTurBaslatAjax extends Controller {
                                         $resultIsciLog = $Panel_Model->addGidisOgrenciIsciLog($dataLogGidis);
                                     }
                                 }
-                                //diğer kişi için bildirim gönderme eğer kurum ise bildirim gönderilmeyeck
-                                if ($dgrKisiTip == 0) {//öğrenci ise
-                                    $resultOgrCihaz = $Panel_Model->ogrenciTurCihaz($dgrKisiID);
-                                    if (count($resultOgrCihaz) > 0) {
-                                        foreach ($resultOgrCihaz as $resultOgrCihazz) {
-                                            $ogrCihaz[] = $resultOgrCihazz['bsogrencicihazRecID'];
-                                        }
-                                        $ogrCihazlar = implode(',', $ogrCihaz);
-                                        $form->shuttleNotification($ogrCihazlar, $languagedeger["ServisYaklasti"], $languagedeger["ServisYaklastiTitle"]);
-                                    }
-                                    //öğrenci velisi varsa ona bildirim
-                                    $resultOgrDgrVeli = $Panel_Model->ogrenciTurVeli($dgrKisiID);
-                                    if (count($resultOgrDgrVeli) > 0) {
-                                        $turVeliID = [];
-                                        foreach ($resultOgrDgrVeli as $resultOgrDgrVelii) {
-                                            $turVeliID[] = $resultOgrDgrVelii['BSVeliID'];
-                                        }
-                                        $ogrVeliIDler = implode(',', $turVeliID);
-                                        $resultOgrVeliDgrCihaz = $Panel_Model->ogrenciVeliTurCihaz($ogrVeliIDler);
-                                        if (count($resultOgrVeliDgrCihaz) > 0) {
-                                            foreach ($resultOgrVeliDgrCihaz as $resultOgrVeliDgrCihazz) {
-                                                $ogrVeliCihaz[] = $resultOgrVeliDgrCihazz['bsvelicihazRecID'];
-                                            }
-                                            $ogrVeliCihazlar = implode(',', $ogrVeliCihaz);
-                                            $form->shuttleNotification($ogrVeliCihazlar, $languagedeger["ServisYaklasti"], $languagedeger["ServiseBinmeTitle"]);
-                                        }
-                                    }
-                                } elseif ($dgrKisiTip == 1) {//işçi ise
-                                    $resultIsciCihaz = $Panel_Model->isciTurCihaz($dgrKisiID);
-                                    if (count($resultIsciCihaz) > 0) {
-                                        foreach ($resultIsciCihaz as $resultIsciCihazz) {
-                                            $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
-                                        }
-                                        $isciCihazlar = implode(',', $isciCihaz);
-                                        $form->shuttleNotification($isciCihazlar, $languagedeger["ServisYaklasti"], $languagedeger["ServisYaklastiTitle"]);
-                                    }
-                                }
                                 //binmeyen kişiyi veritabanına kaydetme
                                 if ($form->submit()) {
                                     $dataGidis = array(
@@ -1895,26 +1802,6 @@ class SoforMobilTurBaslatAjax extends Controller {
                                             );
                                         }
                                         $resultIsciLog = $Panel_Model->addDonusOgrenciIsciLog($dataLogDonus);
-                                    }
-                                }
-                                //diğer kişi için bildirim gönderme eğer kurum ise bildirim gönderilmeyeck
-                                if ($dgrKisiTip == 0) {//öğrenci ise
-                                    //öğrenci velisi varsa ona bildirim
-                                    $resultOgrDgrVeli = $Panel_Model->ogrenciTurVeli($dgrKisiID);
-                                    if (count($resultOgrDgrVeli) > 0) {
-                                        $turVeliID = [];
-                                        foreach ($resultOgrDgrVeli as $resultOgrDgrVelii) {
-                                            $turVeliID[] = $resultOgrDgrVelii['BSVeliID'];
-                                        }
-                                        $ogrVeliIDler = implode(',', $turVeliID);
-                                        $resultOgrVeliDgrCihaz = $Panel_Model->ogrenciVeliTurCihaz($ogrVeliIDler);
-                                        if (count($resultOgrVeliDgrCihaz) > 0) {
-                                            foreach ($resultOgrVeliDgrCihaz as $resultOgrVeliDgrCihazz) {
-                                                $ogrVeliCihaz[] = $resultOgrVeliDgrCihazz['bsvelicihazRecID'];
-                                            }
-                                            $ogrVeliCihazlar = implode(',', $ogrVeliCihaz);
-                                            $form->shuttleNotification($ogrVeliCihazlar, $languagedeger["ServisYaklasti"], $languagedeger["ServiseInmeTitle"]);
-                                        }
                                     }
                                 }
 
@@ -2192,8 +2079,35 @@ class SoforMobilTurBaslatAjax extends Controller {
 
                                     $turupdate = $Panel_Model->soforTurBaslatUpdate($dataTurUptade, $turID);
                                     if ($turupdate) {
+                                        //Gün ayarlaması vritabanına göre yapılmaktadır.
+                                        switch ($gun) {
+                                            case "6":
+                                                $turDbGun = "SBTurPzrBitis";
+                                                break;
+                                            case "0":
+                                                $turDbGun = "SBTurPztBitis";
+                                                break;
+                                            case "1":
+                                                $turDbGun = "SBTurSliBitis";
+                                                break;
+                                            case "2":
+                                                $turDbGun = "SBTurCrsBitis";
+                                                break;
+                                            case "3":
+                                                $turDbGun = "SBTurPrsBitis";
+                                                break;
+                                            case "4":
+                                                $turDbGun = "SBTurCmaBitis";
+                                                break;
+                                            case "5":
+                                                $turDbGun = "SBTurCmtBitis";
+                                                break;
+                                            default:
+                                                break;
+                                        }
+
                                         $dataTurTipUptade = array(
-                                            'BsTurBitis' => 1,
+                                            $turDbGun => 1,
                                             'BsTurBasla' => 0
                                         );
                                         $turtipupdate = $Panel_Model->soforTurTipUpdate($dataTurTipUptade, $turID, $gdsDonus);
@@ -2231,11 +2145,64 @@ class SoforMobilTurBaslatAjax extends Controller {
                             }
                         }
                         break;
+                    case "turyaklasti":
+                        if (!$loginfirmaID) {
+                            $sonuc["hata"] = "Hacking?";
+                        } else {
+                            $form->post("enlem", true);
+                            $form->post("boylam", true);
+                            $form->post("kisiID", true);
+                            $form->post("kisiTip", true);
+                            $gdsDonus = $form->values['enlem'];
+                            $anlikKonum = $form->values['boylam'];
+                            $kisiID = $form->values['kisiID'];
+                            $kisiTip = $form->values['kisiTip'];
+
+                            //diğer kişi için bildirim gönderme eğer kurum ise bildirim gönderilmeyeck
+                            //Bu kısım değişecek
+                            if ($kisiTip != 1) {//öğrenci ise
+                                $resultOgrCihaz = $Panel_Model->ogrenciTurCihaz($kisiID);
+                                if (count($resultOgrCihaz) > 0) {
+                                    $ogrCihaz = [];
+                                    foreach ($resultOgrCihaz as $resultOgrCihazz) {
+                                        $ogrCihaz[] = $resultOgrCihazz['bsogrencicihazRecID'];
+                                    }
+                                    $ogrCihazlar = implode(',', $ogrCihaz);
+                                    $form->shuttleNotification($ogrCihazlar, $languagedeger["ServisYaklasti"], $languagedeger["ServisYaklastiTitle"]);
+                                }
+                                //öğrenci velisi varsa ona bildirim
+                                $resultOgrDgrVeli = $Panel_Model->ogrenciTurVeli($kisiID);
+                                if (count($resultOgrDgrVeli) > 0) {
+                                    $turVeliID = [];
+                                    foreach ($resultOgrDgrVeli as $resultOgrDgrVelii) {
+                                        $turVeliID[] = $resultOgrDgrVelii['BSVeliID'];
+                                    }
+                                    $ogrVeliIDler = implode(',', $turVeliID);
+                                    $resultOgrVeliDgrCihaz = $Panel_Model->ogrenciVeliTurCihaz($ogrVeliIDler);
+                                    if (count($resultOgrVeliDgrCihaz) > 0) {
+                                        foreach ($resultOgrVeliDgrCihaz as $resultOgrVeliDgrCihazz) {
+                                            $ogrVeliCihaz[] = $resultOgrVeliDgrCihazz['bsvelicihazRecID'];
+                                        }
+                                        $ogrVeliCihazlar = implode(',', $ogrVeliCihaz);
+                                        $form->shuttleNotification($ogrVeliCihazlar, $languagedeger["ServisYaklasti"], $languagedeger["ServiseBinmeTitle"]);
+                                    }
+                                }
+                            } else {//işçi ise
+                                $resultIsciCihaz = $Panel_Model->isciTurCihaz($kisiID);
+                                if (count($resultIsciCihaz) > 0) {
+                                    foreach ($resultIsciCihaz as $resultIsciCihazz) {
+                                        $isciCihaz[] = $resultIsciCihazz['sbiscicihazRecID'];
+                                    }
+                                    $isciCihazlar = implode(',', $isciCihaz);
+                                    $form->shuttleNotification($isciCihazlar, $languagedeger["ServisYaklasti"], $languagedeger["ServisYaklastiTitle"]);
+                                }
+                            }
+                        }
+                        break;
                 }
             } else {
                 $sonuc["hata"] = $languagedeger['Hata'];
             }
-
             echo json_encode($sonuc);
         } else {
             die($languagedeger["Hack"]);

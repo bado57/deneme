@@ -1,22 +1,3 @@
-$.ajaxSetup({
-    type: "post",
-    url: SITE_URL + "AdminBolgeAjaxSorgu",
-    //timeout:3000,
-    dataType: "json",
-    error: function (a, b) {
-        if (b == "timeout")
-            reset();
-        alertify.alert(jsDil.InternetBaglanti);
-        return false;
-    },
-    statusCode: {
-        404: function () {
-            reset();
-            alertify.alert(jsDil.InternetBaglanti);
-            return false;
-        }
-    }
-});
 $(document).ready(function () {
 
     newBolgeTable = $('#adminBolgeTable').dataTable({
@@ -79,6 +60,7 @@ var AdminBolgeDetailNewKurum = [];
 $.AdminIslemler = {
     adminFirmaOzellik: function () {
         //Firma İşlemleri Değerleri
+        var formData = new FormData();
         //var firma_kod = $("input[name=FrmKod]").val();
         var firma_adi = $("input[name=FirmaAdi]").val();
         var firma_aciklama = $("textarea[name=Aciklama]").val();
@@ -94,7 +76,7 @@ $.AdminIslemler = {
         } else {
             personel_chechkbox = 1;
         }
-        var firma_durum = $("input[name=FirmaDurum]").val();
+        var firma_durum = $("#FirmaDurum").val();
         var firma_adres = $("textarea[name=FirmaAdres]").val();
         var firma_telefon = $("input[name=FirmaTelefon]").val();
         var firma_email = $("input[name=FirmaEmail]").val();
@@ -108,13 +90,36 @@ $.AdminIslemler = {
         var firmasokak = $("input[name=route]").val();
         var firmapostakodu = $("input[name=postal_code]").val();
         var firmacaddeno = $("input[name=street_number]").val();
+        formData.append('tip', "adminFirmaIslemlerKaydet");
+        formData.append('firma_durum', firma_durum);
+        formData.append('firma_adi', firma_adi);
+        formData.append('firma_aciklama', firma_aciklama);
+        formData.append('ogrenci_chechkbox', ogrenci_chechkbox);
+        formData.append('personel_chechkbox', personel_chechkbox);
+        formData.append('firma_adres', firma_adres);
+        formData.append('firma_telefon', firma_telefon);
+        formData.append('firma_email', firma_email);
+        formData.append('firma_website', firma_website);
+        formData.append('firma_lokasyon', firma_lokasyon);
+        formData.append('firmaulke', firmaulke);
+        formData.append('firmail', firmail);
+        formData.append('firmailce', firmailce);
+        formData.append('firmasemt', firmasemt);
+        formData.append('firmamahalle', firmamahalle);
+        formData.append('firmasokak', firmasokak);
+        formData.append('firmapostakodu', firmapostakodu);
+        formData.append('firmacaddeno', firmacaddeno);
+        formData.append('file', $("#urunresim")[0].files[0]);
         $.ajax({
-            data: {"firma_adi": firma_adi, "firma_aciklama": firma_aciklama, "ogrenci_chechkbox": ogrenci_chechkbox,
-                "personel_chechkbox": personel_chechkbox, "firma_adres": firma_adres, "firma_telefon": firma_telefon,
-                "firma_email": firma_email, "firma_website": firma_website, "firma_lokasyon": firma_lokasyon,
-                "firmaulke": firmaulke, "firmail": firmail, "firmailce": firmailce,
-                "firmasemt": firmasemt, "firmamahalle": firmamahalle, "firmasokak": firmasokak,
-                "firmapostakodu": firmapostakodu, "firmacaddeno": firmacaddeno, "tip": "adminFirmaIslemlerKaydet"},
+            type: "post",
+            url: SITE_URL + "/AdminBolgeAjaxSorgu",
+            cache: false,
+            dataType: "json",
+            data: formData,
+            async: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            processData: false,
             success: function (cevap) {
                 if (cevap.hata) {
                     reset();
@@ -124,6 +129,19 @@ $.AdminIslemler = {
                     disabledForm();
                     reset();
                     alertify.success(cevap.update);
+                }
+            },
+            error: function (a, b) {
+                if (b == "timeout")
+                    reset();
+                alertify.alert(jsDil.InternetBaglanti);
+                return false;
+            },
+            statusCode: {
+                404: function () {
+                    reset();
+                    alertify.alert(jsDil.InternetBaglanti);
+                    return false;
                 }
             }
         });
@@ -214,6 +232,10 @@ $.AdminIslemler = {
         AdminBolgeKaydet.push(bolge_aciklama);
         if (bolge_adi != '') {
             $.ajax({
+                type: "post",
+                url: SITE_URL + "AdminBolgeAjaxSorgu",
+                //timeout:3000,
+                dataType: "json",
                 data: {"bolge_adi": bolge_adi, "bolge_aciklama": bolge_aciklama, "tip": "adminBolgeYeniKaydet"},
                 success: function (cevap) {
                     if (cevap.hata) {
@@ -231,6 +253,19 @@ $.AdminIslemler = {
                                 + "<i class='fa fa-search'></i> " + AdminBolgeKaydet[0] + "</a>"
                                 + "</td><td class='hidden-xs'>0</td><td class='hidden-xs'>" + AdminBolgeKaydet[1] + "</td></tr>");
                         newBolgeTable.DataTable().row.add($(addRow)).draw();
+                    }
+                },
+                error: function (a, b) {
+                    if (b == "timeout")
+                        reset();
+                    alertify.alert(jsDil.InternetBaglanti);
+                    return false;
+                },
+                statusCode: {
+                    404: function () {
+                        reset();
+                        alertify.alert(jsDil.InternetBaglanti);
+                        return false;
                     }
                 }
             });
@@ -264,6 +299,10 @@ $.AdminIslemler = {
                 var bolgedetail_id = $("input[name=adminBolgeDetailID]").val();
                 var bolge_adi = $("input[name=BolgeDetailAdi]").val();
                 $.ajax({
+                    type: "post",
+                    url: SITE_URL + "AdminBolgeAjaxSorgu",
+                    //timeout:3000,
+                    dataType: "json",
                     data: {"bolgedetail_id": bolgedetail_id, "bolge_adi": bolge_adi, "tip": "adminBolgeDetailDelete"},
                     success: function (cevap) {
                         if (cevap.hata) {
@@ -289,6 +328,19 @@ $.AdminIslemler = {
                             alertify.success(jsDil.SilEvet);
                             svControl('svClose', 'bolgeDetay', '');
                         }
+                    },
+                    error: function (a, b) {
+                        if (b == "timeout")
+                            reset();
+                        alertify.alert(jsDil.InternetBaglanti);
+                        return false;
+                    },
+                    statusCode: {
+                        404: function () {
+                            reset();
+                            alertify.alert(jsDil.InternetBaglanti);
+                            return false;
+                        }
                     }
                 });
             } else {
@@ -306,6 +358,10 @@ $.AdminIslemler = {
             return false;
         } else {
             $.ajax({
+                type: "post",
+                url: SITE_URL + "AdminBolgeAjaxSorgu",
+                //timeout:3000,
+                dataType: "json",
                 data: {"bolgedetail_id": bolgedetail_id, "bolgedetail_adi": bolgedetail_adi,
                     "bolgedetail_aciklama": bolgedetail_aciklama, "eskibolge_ad": AdminBolgeDetailVazgec[0],
                     "tip": "adminBolgeDetailDuzenle"},
@@ -326,6 +382,19 @@ $.AdminIslemler = {
                                 $('tbody#adminBolgeRow > tr:eq(' + t + ') > td:eq(0)').css({"background-color": "#F2F2F2"});
                             }
                         }
+                    }
+                },
+                error: function (a, b) {
+                    if (b == "timeout")
+                        reset();
+                    alertify.alert(jsDil.InternetBaglanti);
+                    return false;
+                },
+                statusCode: {
+                    404: function () {
+                        reset();
+                        alertify.alert(jsDil.InternetBaglanti);
+                        return false;
                     }
                 }
             });
@@ -395,6 +464,10 @@ $.AdminIslemler = {
         var bolgkurumcaddeno = $("input[name=street_number]").val();
         if (bolgkurumadi != '' && bolgeid != '') {
             $.ajax({
+                type: "post",
+                url: SITE_URL + "AdminBolgeAjaxSorgu",
+                //timeout:3000,
+                dataType: "json",
                 data: {"bolgeid": bolgeid, "bolgead": bolgead, "bolgkurumadi": bolgkurumadi, "bolgkurumTlfn": bolgkurumTlfn, "bolgkurumEmail": bolgkurumEmail,
                     "bolgkurumwebsite": bolgkurumwebsite, "bolgkurumadrsDty": bolgkurumadrsDty, "bolgkurumaciklama": bolgkurumaciklama,
                     "bolgkurumulke": bolgkurumulke, "bolgkurumil": bolgkurumil, "bolgkurumilce": bolgkurumilce, "bolgkurumsemt": bolgkurumsemt,
@@ -423,6 +496,19 @@ $.AdminIslemler = {
                                 + "<i class='fa fa-map-marker'></i>    " + AdminBolgeDetailNewKurum[0] + "</a><i></i></td></tr>";
                         KurumTable.DataTable().row.add($(addRow)).draw();
                         AdminBolgeDetailNewKurum = [];
+                    }
+                },
+                error: function (a, b) {
+                    if (b == "timeout")
+                        reset();
+                    alertify.alert(jsDil.InternetBaglanti);
+                    return false;
+                },
+                statusCode: {
+                    404: function () {
+                        reset();
+                        alertify.alert(jsDil.InternetBaglanti);
+                        return false;
                     }
                 }
             });

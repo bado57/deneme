@@ -243,13 +243,13 @@
 
             <div class="col-lg-3 col-xs-12">
                 <!-- Raporlar -->
-                <a href="#" class="small-box bg-green">
+                <a href="<?php echo SITE_URL; ?>/AdminWeb/raporliste" class="small-box bg-green">
                     <div class="inner">
                         <h3>
                             <?php echo $data["Rapor"]; ?>
                         </h3>
                         <p>
-                            5 <?php echo $data["YeniRapor"]; ?>
+                            6 <?php echo $data["YeniRapor"]; ?>
                         </p>
                     </div>
                     <div class="icon">

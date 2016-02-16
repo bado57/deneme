@@ -18,17 +18,10 @@ class AdminBolgeAjaxSorgu extends Controller {
         if ($_POST && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest" && Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
             $sonuc = array();
             //dil yapılandırılması
-            $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-            if (!Session::get("dil")) {
-                Session::set("dil", $lang);
-                $formm = $this->load->ajaxlanguage($lang);
-                $deger = $formm->ajaxlanguage();
-                $degerbildirim = $formm->bildirimlanguage();
-            } else {
-                $formm = $this->load->ajaxlanguage(Session::get("dil"));
-                $deger = $formm->ajaxlanguage();
-                $degerbildirim = $formm->bildirimlanguage();
-            }
+            $lang = Session::get("dil");
+            $formm = $this->load->ajaxlanguage($lang);
+            $deger = $formm->ajaxlanguage();
+            $degerbildirim = $formm->bildirimlanguage();
             //model bağlantısı
             $Panel_Model = $this->load->model("Panel_Model");
             //form class bağlanısı
@@ -61,10 +54,12 @@ class AdminBolgeAjaxSorgu extends Controller {
                     }
                     break;
                 case "adminFirmaIslemlerKaydet":
+                    require "app/otherClasses/class.upload.php";
                     $adminRutbe = Session::get("userRutbe");
                     if ($adminRutbe != 1) {
                         $form->yonlendir("Location:" . SITE_URL_LOGOUT);
                     } else {
+                        $form->post('firma_durum', true);
                         $form->post('firma_adi', true);
                         $form->post('firma_aciklama', true);
                         $form->post('ogrenci_chechkbox', true);
@@ -83,50 +78,213 @@ class AdminBolgeAjaxSorgu extends Controller {
                         $form->post('firmasokak', true);
                         $form->post('firmapostakodu', true);
                         $form->post('firmacaddeno', true);
+                        $firmaAd = $form->values['firma_adi'];
+                        $firmaTelefon = $form->values['firma_telefon'];
+                        $firmaEmail = $form->values['firma_email'];
+                        $ogrChechk = $form->values['ogrenci_chechkbox'];
+                        $prsonelChechk = $form->values['personel_chechkbox'];
+                        $loc = $form->values['firma_lokasyon'];
+                        if ($loc != "") {
+                            if ($firmaAd != "") {
+                                if ($firmaTelefon != "") {
+                                    if (!filter_var($firmaEmail, FILTER_VALIDATE_EMAIL) === false) {
+                                        //$emailValidate = $form->mailControl1($firmaEmail);
+                                        $emailValidate = 1;
+                                        if ($emailValidate == 1) {
+                                            if ($ogrChechk == 1 || $prsonelChechk == 1) {
+                                                $realName = $_FILES['file']['name'];
+                                                if ($realName != "") {//eğer resim varsa
+                                                    $image = new Upload($_FILES['file']);
+                                                    if ($image->uploaded) {
+                                                        // sadece resim formatları yüklensin
+                                                        $image->allowed = array('image/*');
+                                                        $image->image_min_height = 250;
+                                                        $image->image_min_width = 250;
+                                                        $image->image_max_height = 2000;
+                                                        $image->image_max_width = 2000;
+                                                        $image->file_new_name_body = time();
+                                                        $image->file_name_body_pre = 'shuttlefirmlogo_';
+                                                        $image->image_resize = true;
+                                                        $image->image_ratio_crop = true;
+                                                        $image->image_x = 400;
+                                                        $image->image_y = 400;
+                                                        $image->Process("Plugins/firmlogo");
+                                                        if ($image->processed) {
+                                                            if ($form->submit()) {
+                                                                $data = array(
+                                                                    'BSFirmaAdi' => $firmaAd,
+                                                                    'BSFirmaAdres' => $form->values['firma_adres'],
+                                                                    'BSFirmaTelefon' => $firmaTelefon,
+                                                                    'BSFirmaWebsite' => $form->values['firma_website'],
+                                                                    'BSFirmaEmail' => $firmaEmail,
+                                                                    'BSFirmaLokasyon' => $loc,
+                                                                    'BSFirmaUlke' => $form->values['firmaulke'],
+                                                                    'BSFirmaIl' => $form->values['firmail'],
+                                                                    'BSFirmaIlce' => $form->values['firmailce'],
+                                                                    'BSFirmaSemt' => $form->values['firmasemt'],
+                                                                    'BSFirmaMahalle' => $form->values['firmamahalle'],
+                                                                    'BSFirmaSokak' => $form->values['firmasokak'],
+                                                                    'BSFirmaPostaKodu' => $form->values['firmapostakodu'],
+                                                                    'BSFirmaCaddeNo' => $form->values['firmacaddeno'],
+                                                                    'BSFirmaAciklama' => $form->values['firma_aciklama'],
+                                                                    'BSFirmaLogo' => $image->file_dst_name,
+                                                                    'BSOgrenciServis' => $ogrChechk,
+                                                                    'BSPersonelServis' => $prsonelChechk,
+                                                                    'BSHesapAktif' => $form->values['firma_durum']
+                                                                );
+                                                            }
 
-                        if ($form->submit()) {
-                            $data = array(
-                                'BSFirmaAdi' => $form->values['firma_adi'],
-                                'BSFirmaAdres' => $form->values['firma_adres'],
-                                'BSFirmaTelefon' => $form->values['firma_telefon'],
-                                'BSFirmaWebsite' => $form->values['firma_website'],
-                                'BSFirmaEmail' => $form->values['firma_email'],
-                                'BSFirmaLokasyon' => $form->values['firma_lokasyon'],
-                                'BSFirmaUlke' => $form->values['firmaulke'],
-                                'BSFirmaIl' => $form->values['firmail'],
-                                'BSFirmaIlce' => $form->values['firmailce'],
-                                'BSFirmaSemt' => $form->values['firmasemt'],
-                                'BSFirmaMahalle' => $form->values['firmamahalle'],
-                                'BSFirmaSokak' => $form->values['firmasokak'],
-                                'BSFirmaPostaKodu' => $form->values['firmapostakodu'],
-                                'BSFirmaCaddeNo' => $form->values['firmacaddeno'],
-                                'BSFirmaAciklama' => $form->values['firma_aciklama'],
-                                'BSOgrenciServis' => $form->values['ogrenci_chechkbox'],
-                                'BSPersonelServis' => $form->values['personel_chechkbox'],
-                                'BSHesapAktif' => $form->values['hesap_aktif']
-                            );
-                        }
+                                                            $resultupdate = $Panel_Model->firmaOzelliklerDuzenle($data);
 
-                        $resultupdate = $Panel_Model->firmaOzelliklerDuzenle($data);
-
-                        //memcache kadetmek için verileri üncellemeden sonra tekrar çekiyoruz.
-                        $data["FirmaOzellikler"] = $Panel_Model->firmaOzellikler();
+                                                            //memcache kadetmek için verileri üncellemeden sonra tekrar çekiyoruz.
+                                                            $data["FirmaOzellikler"] = $Panel_Model->firmaOzellikler();
 
 
-                        $returnModelData = $data['FirmaOzellikler'][0];
+                                                            $returnModelData = $data['FirmaOzellikler'][0];
 
-                        $a = 0;
-                        foreach ($returnModelData as $key => $value) {
-                            $new_array['Firmasshkey'][$a] = md5(sha1(md5($key)));
-                            $a++;
-                        }
-                        $returnFormdata['FirmaOzellikler'] = $form->newKeys($data['FirmaOzellikler'][0], $new_array['Firmasshkey']);
+                                                            $a = 0;
+                                                            foreach ($returnModelData as $key => $value) {
+                                                                $new_array['Firmasshkey'][$a] = md5(sha1(md5($key)));
+                                                                $a++;
+                                                            }
+                                                            $returnFormdata['FirmaOzellikler'] = $form->newKeys($data['FirmaOzellikler'][0], $new_array['Firmasshkey']);
+                                                            if ($resultupdate) {
+                                                                //bizim veritabanında da bilgileri düzeltiyorum
+                                                                $Panel_Model_Our = $this->load->model("Panel_Model_Our");
+                                                                $loginfirmaID = Session::get("FirmaId");
+                                                                //root firma update datası
+                                                                $dataRoot = array(
+                                                                    'rootfirmaAdi' => $firmaAd,
+                                                                    'rootfirmaAdres' => $form->values['firma_adres'],
+                                                                    'rootfirmaTelefon' => $firmaTelefon,
+                                                                    'rootfirmaWebsite' => $form->values['firma_website'],
+                                                                    'rootfirmaYEmail' => $firmaEmail,
+                                                                    'rootfirmaLokasyon' => $loc,
+                                                                    'rootfirmaUlke' => $form->values['firmaulke'],
+                                                                    'rootfirmaIl' => $form->values['firmail'],
+                                                                    'rootfirmaIlce' => $form->values['firmailce'],
+                                                                    'rootfirmaSemt' => $form->values['firmasemt'],
+                                                                    'rootfirmaMahalle' => $form->values['firmamahalle'],
+                                                                    'rootfirmaSokak' => $form->values['firmasokak'],
+                                                                    'rootfirmaPostaKod' => $form->values['firmapostakodu'],
+                                                                    'rootfirmaCaddeNo' => $form->values['firmacaddeno'],
+                                                                    'rootfirmaAciklama' => $form->values['firma_aciklama'],
+                                                                    'rootfirmaLogo' => $image->file_dst_name,
+                                                                    'rootfirmaOgrServis' => $ogrChechk,
+                                                                    'rootfirmaPersonelServis' => $prsonelChechk
+                                                                );
+                                                                $rootDbUpdate = $Panel_Model_Our->rootFirmaDuzenle($dataRoot, $loginfirmaID);
+                                                                if ($rootDbUpdate) {
+                                                                    unset($_SESSION['OgrServis']);
+                                                                    unset($_SESSION['PersServis']);
+                                                                    Session::set("OgrServis", $ogrChechk);
+                                                                    Session::set("PersServis", $prsonelChechk);
+                                                                    $sonuc["update"] = $deger["FirmaDuzenle"];
+                                                                } else {
+                                                                    $sonuc["hata"] = $deger["Hata"];
+                                                                }
+                                                            } else {
+                                                                $sonuc["hata"] = $deger["Hata"];
+                                                            }
+                                                        } else {
+                                                            $sonuc["hata"] = $image->error;
+                                                        }
+                                                    } else {
+                                                        $sonuc["hata"] = $image->error;
+                                                    }
+                                                } else {
+                                                    if ($form->submit()) {
+                                                        $data = array(
+                                                            'BSFirmaAdi' => $firmaAd,
+                                                            'BSFirmaAdres' => $form->values['firma_adres'],
+                                                            'BSFirmaTelefon' => $firmaTelefon,
+                                                            'BSFirmaWebsite' => $form->values['firma_website'],
+                                                            'BSFirmaEmail' => $firmaEmail,
+                                                            'BSFirmaLokasyon' => $loc,
+                                                            'BSFirmaUlke' => $form->values['firmaulke'],
+                                                            'BSFirmaIl' => $form->values['firmail'],
+                                                            'BSFirmaIlce' => $form->values['firmailce'],
+                                                            'BSFirmaSemt' => $form->values['firmasemt'],
+                                                            'BSFirmaMahalle' => $form->values['firmamahalle'],
+                                                            'BSFirmaSokak' => $form->values['firmasokak'],
+                                                            'BSFirmaPostaKodu' => $form->values['firmapostakodu'],
+                                                            'BSFirmaCaddeNo' => $form->values['firmacaddeno'],
+                                                            'BSFirmaAciklama' => $form->values['firma_aciklama'],
+                                                            'BSOgrenciServis' => $ogrChechk,
+                                                            'BSPersonelServis' => $prsonelChechk,
+                                                            'BSHesapAktif' => $form->values['firma_durum']
+                                                        );
+                                                    }
+
+                                                    $resultupdate = $Panel_Model->firmaOzelliklerDuzenle($data);
+
+                                                    //memcache kadetmek için verileri üncellemeden sonra tekrar çekiyoruz.
+                                                    $data["FirmaOzellikler"] = $Panel_Model->firmaOzellikler();
 
 
-                        if ($resultupdate) {
-                            $sonuc["update"] = $deger["FirmaDuzenle"];
+                                                    $returnModelData = $data['FirmaOzellikler'][0];
+
+                                                    $a = 0;
+                                                    foreach ($returnModelData as $key => $value) {
+                                                        $new_array['Firmasshkey'][$a] = md5(sha1(md5($key)));
+                                                        $a++;
+                                                    }
+                                                    $returnFormdata['FirmaOzellikler'] = $form->newKeys($data['FirmaOzellikler'][0], $new_array['Firmasshkey']);
+                                                    if ($resultupdate) {
+                                                        //bizim veritabanında da bilgileri düzeltiyorum
+                                                        $Panel_Model_Our = $this->load->model("Panel_Model_Our");
+                                                        $loginfirmaID = Session::get("FirmaId");
+                                                        //root firma update datası
+                                                        $dataRoot = array(
+                                                            'rootfirmaAdi' => $firmaAd,
+                                                            'rootfirmaAdres' => $form->values['firma_adres'],
+                                                            'rootfirmaTelefon' => $firmaTelefon,
+                                                            'rootfirmaWebsite' => $form->values['firma_website'],
+                                                            'rootfirmaYEmail' => $firmaEmail,
+                                                            'rootfirmaLokasyon' => $loc,
+                                                            'rootfirmaUlke' => $form->values['firmaulke'],
+                                                            'rootfirmaIl' => $form->values['firmail'],
+                                                            'rootfirmaIlce' => $form->values['firmailce'],
+                                                            'rootfirmaSemt' => $form->values['firmasemt'],
+                                                            'rootfirmaMahalle' => $form->values['firmamahalle'],
+                                                            'rootfirmaSokak' => $form->values['firmasokak'],
+                                                            'rootfirmaPostaKod' => $form->values['firmapostakodu'],
+                                                            'rootfirmaCaddeNo' => $form->values['firmacaddeno'],
+                                                            'rootfirmaAciklama' => $form->values['firma_aciklama'],
+                                                            'rootfirmaOgrServis' => $ogrChechk,
+                                                            'rootfirmaPersonelServis' => $prsonelChechk
+                                                        );
+                                                        $rootDbUpdate = $Panel_Model_Our->rootFirmaDuzenle($dataRoot, $loginfirmaID);
+                                                        if ($rootDbUpdate) {
+                                                            unset($_SESSION['OgrServis']);
+                                                            unset($_SESSION['PersServis']);
+                                                            Session::set("OgrServis", $ogrChechk);
+                                                            Session::set("PersServis", $prsonelChechk);
+                                                            $sonuc["update"] = $deger["FirmaDuzenle"];
+                                                        } else {
+                                                            $sonuc["hata"] = $deger["Hata"];
+                                                        }
+                                                    } else {
+                                                        $sonuc["hata"] = $deger["Hata"];
+                                                    }
+                                                }
+                                            } else {
+                                                $sonuc["hata"] = $deger['FirmChechk'];
+                                            }
+                                        } else {
+                                            $sonuc["hata"] = $deger['BaskaEmail'];
+                                        }
+                                    } else {
+                                        $sonuc["hata"] = $deger['GecerliEmail'];
+                                    }
+                                } else {
+                                    $sonuc["hata"] = $deger["Telefon"];
+                                }
+                            } else {
+                                $sonuc["hata"] = $deger["FirmAd"];
+                            }
                         } else {
-                            $sonuc["hata"] = $deger["Hata"];
+                            $sonuc["hata"] = $deger["FirmaLoc"];
                         }
                     }
 

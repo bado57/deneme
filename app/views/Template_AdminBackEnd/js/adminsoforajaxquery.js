@@ -211,6 +211,28 @@ $(document).ready(function () {
             $('#SoforDetayArac').hide();
         }
     });
+    //araç select
+    $('#SoforAracSelect').multiselect({
+        onDropdownShow: function (event) {
+            var aracBolgeID = $('select#SoforSelectBolge option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            }
+        }
+    });
+    //araç detay select
+    $('#SoforDetayArac').multiselect({
+        onDropdownShow: function (event) {
+            var aracBolgeID = $('select#SoforDetaySelectBolge option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            }
+        }
+    });
 });
 var SoforDetailVazgec = [];
 $.AdminIslemler = {

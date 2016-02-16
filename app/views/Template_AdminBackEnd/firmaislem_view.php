@@ -87,7 +87,13 @@
                 <label for="FirmaWebAdresi"><?php echo $data["WebSite"]; ?></label>
                 <input type="text" class="form-control dsb" id="FirmaWebAdresi" name="FirmaWebAdresi" value="<?php echo $model['4a821589992e93f9a001222cb1709efb']; ?>" disabled>
             </div>
-
+            <hr />
+            <h4><?php echo $data["FirmaLogo"]; ?></h4>
+            <hr />
+            <div class="form-group">
+                <input id="urunresim" name="urunresim" class="form-control dsb" type="file" disabled/>
+                <div id="image-holder"><img  style="height: 290px;margin-top: 2em;width: 100%;overflow-x: auto;" src="<?php echo SITE_PLUGINFLOGO . $model["9125d561370a7ead2841a51b0db51edc"]; ?>"/></div>
+            </div>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <h4><?php echo $data["AdresBilgi"]; ?></h4>
@@ -135,6 +141,10 @@
                 <div class="form-group">
                     <label for="FirmaPostaKodu"><?php echo $data["PostaKodu"]; ?></label>
                     <input type="text" class="form-control" id="FirmaPostaKodu" name="postal_code" value="<?php echo $model['207b9110413e9bb55f71a47dc36c1054']; ?>" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="FirmaAdres"><?php echo $data["AdresDetay"]; ?></label>
+                    <textarea name="FirmaAdres" class="form-control dsb" rows="3" style="resize:none" disabled></textarea>
                 </div>
             </div>
         </div>

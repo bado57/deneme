@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 top-left">
                 <h3>
-                    <i class="fa fa-th"></i> <?php echo $data["Kurumlar"]; ?>
+                    <i class="fa fa-building-o"></i> <?php echo $data["Kurumlar"]; ?>
                     <small id="smallKurum"><?php if (count($model[0]['AdminKurumCount']) > 0) { ?>
                             <?php
                             echo $model[0]['AdminKurumCount'];
@@ -94,9 +94,15 @@
                     <div class="form-group">
                         <label for="KurumTip"><?php echo $data["KurumTip"]; ?></label>
                         <select type="text" class="form-control" id="KurumTip" name="KurumTip">
-                            <option value="0"><?php echo $data["Ogrenci"]; ?></option>
-                            <option value="1"><?php echo $data["Isci"]; ?></option>
-                            <option value="2"><?php echo $data["OgrenciPersonel"]; ?></option>
+                            <?php if (Session::get("OgrServis") == 1) { ?>
+                                <option value="0"><?php echo $data["Ogrenci"]; ?></option>
+                            <?php } ?>
+                            <?php if (Session::get("PersServis") == 1) { ?>
+                                <option value="1"><?php echo $data["Isci"]; ?></option>
+                            <?php } ?>
+                            <?php if (Session::get("OgrServis") == 1 && Session::get("PersServis") == 1) { ?>
+                                <option value="2"><?php echo $data["OgrenciPersonel"]; ?></option>
+                            <?php } ?>
                         </select>
                     </div>
                     <div class="form-group">
@@ -205,9 +211,15 @@
                         <div class="form-group">
                             <label for="KurumDetayTip"><?php echo $data["KurumTip"]; ?></label>
                             <select type="text" class="form-control dsb" id="KurumDetayTip" name="KurumDetayTip" disabled>
-                                <option value="0"><?php echo $data["Ogrenci"]; ?></option>
-                                <option value="1"><?php echo $data["Isci"]; ?></option>
-                                <option value="2"><?php echo $data["OgrenciPersonel"]; ?></option>
+                                <?php if (Session::get("OgrServis") == 1) { ?>
+                                    <option value="0"><?php echo $data["Ogrenci"]; ?></option>
+                                <?php } ?>
+                                <?php if (Session::get("PersServis") == 1) { ?>
+                                    <option value="1"><?php echo $data["Isci"]; ?></option>
+                                <?php } ?>
+                                <?php if (Session::get("OgrServis") == 1 && Session::get("PersServis") == 1) { ?>
+                                    <option value="2"><?php echo $data["OgrenciPersonel"]; ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                         <div class="form-group">
@@ -357,10 +369,9 @@
 <div id="turSecim" class="svClose col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["TurSecim"]; ?> <span class="pull-right"><button data-type="svClose" data-class="turSecim" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["TurSecim"]; ?> <span class="pull-right"><button id="addNew" type="button" class="svToggle btn btn-success addNewButton mr10" data-type="svOpen" data-class="turRaporDiv" data-islemler="turDetailRapor"><i class="fa fa-line-chart"></i> <?php echo $data["Rapor"]; ?></button><button data-type="svClose" data-class="turSecim" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <section class="content">
-
                 <!-- Kutular -->
                 <div class="row">
                     <input id="adminTurDetayTip" name="adminTurDetayTip" type="hidden" value="" />
@@ -599,7 +610,73 @@
         </div>
     </div>
 </div>
-
+<div id="turRaporDiv" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+    <div class="row">
+        <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h3><i class="fa fa-refresh"></i>    <span id="turRaporAd"></span> <b id="turAdSoyad"></b> <span class="pull-right"><button data-type="svClose" data-class="turRaporDiv" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <hr/>
+            <div class="row" id="getPartialView">
+                <div class="form-vertical addOgrenciForm col-lg-12 col-md-12 col-sm-6 col-xs-6">
+                    <table id="turRaporTable"  class="table table-responsive display table-hover table-condensed" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Km</th>
+                                <th><?php echo $data["ToplamSaat"]; ?></th>
+                                <th><?php echo $data["BasSaat"]; ?></th>
+                                <th><?php echo $data["BitSaat"]; ?></th>
+                                <th class="hidden-xs"><?php echo $data["Tip"]; ?></th>
+                                <th class="hidden-xs"><?php echo $data["TurKisi"]; ?></th>
+                                <th class="hidden-xs"><?php echo $data["Gun"]; ?></th>
+                                <th class="hidden-xs"><?php echo $data["Tarih"]; ?></th>
+                                <th class="hidden-xs"><?php echo $data["Tür"]; ?></th>
+                                <th class="hidden-xs"><?php echo $data["İslemler"]; ?></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="turRaporDetay" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+    <div class="row">
+        <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h3><i class="fa fa-refresh"></i>    <span id="turRaporDAd"></span> <b id="turAdSoyad"></b> <span class="pull-right"><button data-type="svClose" data-class="turRaporDetay" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <hr/>
+            <div class="row" id="getPartialView">
+                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                    <div class="form-vertical addOgrenciForm col-lg-12 col-md-12 col-sm-6 col-xs-6">
+                        <h5><i class="fa fa-thumbs-o-up"></i>    <span><?php echo $data["Gelenler"]; ?></span></h5>
+                        <table id="turRaporGelen"  class="table table-responsive display table-hover table-condensed" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th><?php echo $data["Ad"]; ?></th>
+                                    <th><?php echo $data["Soyad"]; ?></th>
+                                    <th class="hidden-xs"><?php echo $data["Tip"]; ?></th>
+                                    <th class="hidden-xs"><?php echo $data["Saat"]; ?></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="form-vertical addOgrenciForm col-lg-12 col-md-12 col-sm-6 col-xs-6">
+                        <h5><i class="fa fa-thumbs-o-down"></i>    <span><?php echo $data["Gelmeyenler"]; ?></span></h5>
+                        <table id="turRaporGelmeyen"  class="table table-responsive display table-hover table-condensed" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th><?php echo $data["Ad"]; ?></th>
+                                    <th><?php echo $data["Soyad"]; ?></th>
+                                    <th class="hidden-xs"><?php echo $data["Tip"]; ?></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="map" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div id="mapHeader">
         <h3><b id="singleMapBaslik"><?php echo $data["LokasyonTanimlama"]; ?> </b><b id="multiMapBaslik"></b>

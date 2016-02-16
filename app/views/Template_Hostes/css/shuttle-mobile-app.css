@@ -1,0 +1,274 @@
+﻿/* Renkler */
+/* End Renkler */
+body {
+  background-color: #efeff4 !important;
+  font-family: Arial !important;
+}
+body .navigation-bar {
+  background-color: #f7f7f7 !important;
+  border-bottom: 1px solid #c8c7cc !important;
+  /*height: 60px !important;*/
+}
+body .navigation-bar .navigation-bar__left {
+  padding-top: 12px;
+  padding-left: 12px;
+}
+body .navigation-bar .navigation-bar__left .back {
+  background: transparent !important;
+  margin-top: -10px;
+  color: #000 !important;
+}
+body .navigation-bar .navigation-bar__right {
+  padding-top: 12px;
+  padding-right: 12px;
+}
+body .navigation-bar .navigation-bar__right .resetpage {
+  background: transparent !important;
+  color: #000 !important;
+  margin-top: -10px;
+}
+body .navigation-bar .navigation-bar__center {
+  /*padding-top: 8px;*/
+  color: #009933 !important;
+}
+body .page .page__background {
+  background-color: #efeff4 !important;
+}
+body .page .page__content .settings-header {
+  font-weight: 500;
+  font-size: 14px;
+  opacity: 0.6;
+  padding: 10px 0 0 10px;
+  margin-bottom: 6px;
+}
+body .page .page__content .settings-header .listHeaderButton {
+  padding: 0 10px !important;
+  color: #009933 !important;
+  float: right;
+  position: relative;
+  display: inline-block;
+}
+body .page .page__content .person-list .list__item {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  border: none !important;
+}
+body .page .page__content .person-list .list__item .ons-row-inner {
+  border: none !important;
+}
+body .page .page__content .person-list .list__item .ons-row-inner .col:first-child {
+  background-color: #fff !important;
+  color: #8e8e93 !important;
+  text-align: center;
+}
+body .page .page__content .person-list .list__item .ons-row-inner .person-name {
+  padding-left: 10px;
+  padding-right: 12px;
+  border-bottom: 1px solid #efeff4;
+}
+body .page .page__content .settings-list .list__header {
+  font-size: 14px;
+  background-color: transparent !important;
+  border: none !important;
+  background: #f7f7f7 !important;
+  padding: 6px 10px !important;
+}
+body .page .page__content .settings-list .list__header .ons-row-inner .colhdr {
+  padding-top: 6px;
+  opacity: 0.8;
+}
+body .page .page__content .settings-list .list__header .ons-row-inner .colislem {
+  text-align: center;
+  color: #8e8e93 !important;
+  font-size: 20px;
+}
+body .page .page__content .settings-list .list__header .ons-row-inner .colislem .listHeaderButton {
+  padding: 0 10px !important;
+  color: #009933 !important;
+}
+body .page .page__content .settings-list .list__item {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  border: none !important;
+}
+body .page .page__content .settings-list .list__item .ons-row-inner {
+  border: none !important;
+}
+body .page .page__content .settings-list .list__item .ons-row-inner .col:first-child {
+  background-color: #fff !important;
+  color: #8e8e93 !important;
+  text-align: center;
+}
+body .page .page__content .settings-list .list__item .ons-row-inner .coldty {
+  padding-left: 15px;
+  padding-right: 12px;
+  border-bottom: 1px solid #efeff4;
+}
+body .page .page__content .settings-list .list__item .ons-row-inner .coldty .username {
+  font-size: 15px;
+  opacity: 0.5;
+  height: auto;
+  line-height: 12px;
+  padding-bottom: 14px;
+}
+body .page .page__content .settings-list .list__item .ons-row-inner .adressbar {
+  line-height: 20px !important;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+body .page .page__content .settings-list .list__item .ons-row-inner .colformdty {
+  text-align: left !important;
+}
+body .page .page__content .settings-list .list__item .ons-row-inner .colformdty input[type=text] {
+  width: 100% !important;
+}
+body .page .page__content .settings-list .list__item:last-child .ons-row-inner .coldty {
+  border-bottom: none !important;
+}
+body .page .page__content .edit-list {
+  border: none !important;
+}
+body .page .page__content .edit-list .list__header {
+  font-size: 17px;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 10px !important;
+}
+body .page .page__content .edit-list .list__header .ons-row-inner .colhdr {
+  padding: 10px 0 10px 10px !important;
+}
+body .page .page__content .edit-list .list__item {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  border: none !important;
+}
+body .page .page__content .edit-list .list__item .ons-row-inner {
+  border: none !important;
+}
+body .page .page__content .edit-list .list__item .ons-row-inner .col:first-child {
+  background-color: #fff !important;
+  color: #8e8e93 !important;
+  text-align: center;
+}
+body .page .page__content .edit-list .list__item .ons-row-inner .coldty {
+  padding-left: 15px;
+  padding-right: 12px;
+  border-bottom: 1px solid #efeff4;
+}
+body .page .page__content .edit-list .list__item:last-child .ons-row-inner .coldty {
+  border-bottom: none !important;
+}
+body .page .page__content .login-form {
+  text-align: center;
+  width: 80%;
+  margin: 60px auto 0;
+}
+body .page .page__content .login-form .ons-row-inner .colform {
+  text-align: left !important;
+  padding-left: 10px !important;
+  padding-top: 8px !important;
+  border-bottom: 1px solid #d5d5d5;
+  opacity: 0.6;
+}
+body .page .page__content .login-form .ons-row-inner .colblank {
+  text-align: center !important;
+  padding-top: 8px !important;
+  opacity: 0.6;
+}
+body .page .page__content .login-form .ons-row-inner .colformdty {
+  text-align: left !important;
+}
+body .page .page__content .login-form .ons-row-inner .colformdty input[type=text] {
+  width: 100% !important;
+}
+body .page .page__content .login-form input[type=password] {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  outline: none;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+body .page .page__content .login-form .accessButton {
+  background-color: #009933 !important;
+}
+body .page .bottom-bar {
+  background-color: #009933 !important;
+  height: 60px;
+}
+body .page .bottom-bar .ons-row-inner {
+  height: 100% !important;
+}
+body .page .bottom-bar .ons-row-inner .ons-col-inner .button {
+  line-height: 51px;
+  font-size: 22px;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+/*----- Loading -----*/
+.load {
+  margin: 0 auto;
+  width: 72px;
+  height: 60px;
+  padding-top: 12px;
+  text-align: center;
+  font-size: 22px;
+  color: #009933;
+  background: transparent url("shuttle-loading.png") no-repeat center center;
+}
+/*----- End Loading -----*/
+/*----- Alert -----*/
+.alert-dialog {
+  border-radius: 8px !important;
+}
+.alert-dialog-title {
+  text-align: center !important;
+  border-bottom: none !important;
+  margin-bottom: 0 !important;
+}
+.alert-dialog-content {
+  text-align: center !important;
+  padding-bottom: 10px !important;
+}
+/*----- End Alert -----*/
+/*----- Dialog -----*/
+.dialog .navigation-bar {
+  height: 40px !important;
+}
+.dialog .navigation-bar .navigation-bar__center,
+.dialog .navigation-bar .navigation-bar__title {
+  padding: 0 !important;
+}
+.dialog .dialogContent {
+  padding: 10px;
+}
+.dialog .dialogContent .dialogDetay {
+  font-weight: 500;
+  font-size: 14px;
+  opacity: 0.6;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.dialog .dialogContent textarea {
+  width: 97% !important;
+  border: 1px solid #efeff4 !important;
+  margin-bottom: 10px;
+  border-radius: 5px !important;
+  padding: 5px;
+}
+.dialog .dialogContent .dialogCancelButton {
+  background-color: #009933 !important;
+  width: 49% !important;
+  float: left;
+  margin-bottom: 10px;
+  text-align: center !important;
+}
+.dialog .dialogContent .dialogAccessButton {
+  background-color: #009933 !important;
+  width: 49% !important;
+  float: right;
+  margin-bottom: 10px;
+  text-align: center !important;
+}
+/*# sourceMappingURL=shuttle-mobile-app.css.map */

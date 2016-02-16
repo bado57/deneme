@@ -50,6 +50,24 @@ $(document).ready(function () {
         "ordering": true,
         "info": true
     });
+    TurRapor = $('#turRaporTable').dataTable({
+        "paging": false,
+        "ordering": false,
+        "info": false,
+        "bFilter": false
+    });
+    TurRaporGelen = $('#turRaporGelen').dataTable({
+        "paging": false,
+        "ordering": false,
+        "info": false,
+        "bFilter": false
+    });
+    turRaporGelmeyen = $('#turRaporGelmeyen').dataTable({
+        "paging": false,
+        "ordering": false,
+        "info": false,
+        "bFilter": false
+    });
     //tur işlemleri
     $(document).on('click', 'tbody#adminTurRow > tr > td > a', function (e) {
         var s = $(this).find("i");
@@ -67,6 +85,7 @@ $(document).ready(function () {
                     return false;
                 } else {
                     $('input[name=adminTurID]').val(adminturRowid);
+                    $("#turRaporAd").text(adminturAd.trim());
                     //hem gidiş hem de dönüş vardır
                     if (cevap.turTipDetay.TurDetayTur.length == 2) {
                         var gidisIndex = '';
@@ -194,6 +213,60 @@ $(document).ready(function () {
                 }
             }
         });
+    });
+    $(document).on('click', 'table#turRaporTable > tbody > tr > td > a', function (e) {
+        var islemTipi = $(this).attr("data-islem");
+        if (islemTipi == 0) {//Düzenleme
+            TurRaporGelen.DataTable().clear().draw();
+            turRaporGelmeyen.DataTable().clear().draw();
+            var turAd = $("#turRaporAd").text();
+            $("#turRaporDAd").text(turAd);
+            var i = $(this).find("i");
+            i.removeClass("fa fa-search");
+            i.addClass("fa fa-spinner");
+            var rowID = $(this).parent().parent().attr("value");
+            var ttip = $(this).parent().parent().find('td:eq(4)').attr("value");
+            var tarih = $(this).parent().parent().find('td:eq(7)').text();
+            var tur = $(this).parent().parent().find('td:eq(8)').attr("value");
+            $.ajax({
+                data: {"rowID": rowID, "ttip": ttip, "tarih": tarih,
+                    "tur": tur, "tip": "raporDetay"},
+                success: function (cevap) {
+                    if (cevap.hata) {
+                        reset();
+                        alertify.alert(jsDil.Hata);
+                        return false;
+                    } else {
+                        if (cevap.Detail) {
+                            var length = cevap.Detail.length;
+                            for (var b = 0; b < length; b++) {
+                                var addRow = "<tr>"
+                                        + "<td>" + cevap.Detail[b].Ad + "</td>"
+                                        + "<td>" + cevap.Detail[b].Soyad + "</td>"
+                                        + "<td class='hidden-xs'>" + cevap.Detail[b].Tip + "</td>"
+                                        + "<td class='hidden-xs'>" + cevap.Detail[b].Saat + "</td>"
+                                        + "</tr>";
+                                TurRaporGelen.DataTable().row.add($(addRow)).draw();
+                            }
+                        }
+                        if (cevap.DetailG) {
+                            var length = cevap.DetailG.length;
+                            for (var b = 0; b < length; b++) {
+                                var addRow = "<tr>"
+                                        + "<td>" + cevap.DetailG[b].Ad + "</td>"
+                                        + "<td>" + cevap.DetailG[b].Soyad + "</td>"
+                                        + "<td class='hidden-xs'>" + cevap.DetailG[b].Tip + "</td>"
+                                        + "</tr>";
+                                turRaporGelmeyen.DataTable().row.add($(addRow)).draw();
+                            }
+                        }
+                    }
+                }
+            });
+            svControl('svAdd', 'turRaporDetay', '');
+            i.removeClass("fa fa-spinner");
+            i.addClass("fa fa-search");
+        }
     });
     //tur bölge select change
     $('#TurSelectBolge').on('change', function () {
@@ -2622,7 +2695,43 @@ $.AdminIslemler = {
                 return false;
             }
         }
-    }
+    },
+    turDetailRapor: function () {
+        TurRapor.DataTable().clear().draw();
+        var turID = $('input[name=adminTurID]').val();
+        $.ajax({
+            data: {"turID": turID, "tip": "turRapor"},
+            success: function (cevap) {
+                if (cevap.hata) {
+                    reset();
+                    alertify.alert(jsDil.Hata);
+                    return false;
+                } else {
+                    if (cevap.Detail) {
+                        var length = cevap.Detail.length;
+                        for (var b = 0; b < length; b++) {
+                            var addRow = "<tr value='" + turID + "'>"
+                                    + "<td>" + cevap.Detail[b].Km + "</td>"
+                                    + "<td>" + cevap.Detail[b].Saat + "</td>"
+                                    + "<td>" + cevap.Detail[b].BsSaat + "</td>"
+                                    + "<td>" + cevap.Detail[b].BtsSaat + "</td>"
+                                    + "<td value='" + cevap.Detail[b].TipDeger + "' class='hidden-xs'>" + cevap.Detail[b].Tip + "</td>"
+                                    + "<td class='hidden-xs'>" + cevap.Detail[b].KisiSayi + "</td>"
+                                    + "<td class='hidden-xs'>" + cevap.Detail[b].Gun + "</td>"
+                                    + "<td class='hidden-xs'>" + cevap.Detail[b].Tarih + "</td>"
+                                    + "<td value='" + cevap.Detail[b].GidDonDeger + "' class='hidden-xs'>" + cevap.Detail[b].GidDon + "</td>"
+                                    + "<td class='hidden-xs'>"
+                                    + "<a data-islem='0' data-toggle='tooltip' data-placement='top' title='" + jsDil.Detay + "' value='' style='margin-left:10px;margin-right:10px;font-size:16px'><i class='fa fa-search'></i></a>"
+                                    + "</td>"
+                                    + "</tr>";
+                            TurRapor.DataTable().row.add($(addRow)).draw();
+                        }
+                    }
+                }
+            }
+        });
+        return true;
+    },
 }
 
 

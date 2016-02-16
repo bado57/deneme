@@ -75,6 +75,12 @@ class Load {
         return new $fileName;
     }
 
+    //language
+    public function frontajaxmultilanguage($fileName) {
+        include "app/frontajaxlanguage/" . $fileName . ".php";
+        return new $fileName;
+    }
+
 }
 ?>
 

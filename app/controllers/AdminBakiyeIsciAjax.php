@@ -113,67 +113,73 @@ class AdminBakiyeIsciAjax extends Controller {
                                 $odemeValue.=$odemeTutar[$l];
                             }
                         }
-                        if ($form->submit()) {
-                            $data = array(
-                                'BSOdemeAlanID' => $adminID,
-                                'BSOdemeAlanAd' => Session::get("kullaniciad") . " " . Session::get("kullanicisoyad"),
-                                'BSOdemeAlanTip' => 0,
-                                'BSOdenenID' => $odenenID,
-                                'BSOdenenAd' => $odenenAdSyd,
-                                'BSOdemeYapanID' => $odemeYapanVal,
-                                'BSOdemeYapanAd' => trim($odemeYapan[0]),
-                                'BSOdemeTutar' => $odemeValue,
-                                'BSOdemeAciklama' => $aciklama,
-                                'BSOdemeTip' => $odemeSekil,
-                                'BSDovizTip' => $dovizTip
-                            );
-                        }
-                        $result = $Panel_Model->isciBakiyeKaydet($data);
-                        if ($result) {
-                            $insertDate = date('H:i:s--d/m/Y');
-                            $iscibak = $Panel_Model->bakiyeIsciOdenen($odenenID);
-                            $dataUpdate = array(
-                                'OdenenTutar' => $iscibak[0]['OdenenTutar'] + $odemeValue
-                            );
-                            $resultUpdate = $Panel_Model->isciBakiyeGuncelle($dataUpdate, $odenenID);
-                            if ($resultUpdate) {
-                                //Bildirim Durumları
-                                //öğrenciye bildirim gönderme
-                                $alert = $degerbildirim["OdemeYapma"];
-                                $resultIsciCihaz = $Panel_Model->bakiyeIsciCihaz($odenenID);
-                                if (count($resultIsciCihaz) > 0) {
-                                    foreach ($resultIsciCihaz as $resultIsciCihazz) {
-                                        $isciCihaz[] = $resultIsciCihazz['bsiscicihazRecID'];
+                        $iscibak = $Panel_Model->bakiyeIsciOdenen($odenenID);
+                        $kalanTutar = $iscibak[0]['OdemeTutar'] - $iscibak[0]['OdenenTutar'];
+                        //kalan tutardan fazla ödeme girilemez
+                        if ($odemeValue <= $kalanTutar) {
+                            if ($form->submit()) {
+                                $data = array(
+                                    'BSOdemeAlanID' => $adminID,
+                                    'BSOdemeAlanAd' => Session::get("kullaniciad") . " " . Session::get("kullanicisoyad"),
+                                    'BSOdemeAlanTip' => 0,
+                                    'BSOdenenID' => $odenenID,
+                                    'BSOdenenAd' => $odenenAdSyd,
+                                    'BSOdemeYapanID' => $odemeYapanVal,
+                                    'BSOdemeYapanAd' => trim($odemeYapan[0]),
+                                    'BSOdemeTutar' => $odemeValue,
+                                    'BSOdemeAciklama' => $aciklama,
+                                    'BSOdemeTip' => $odemeSekil,
+                                    'BSDovizTip' => $dovizTip
+                                );
+                            }
+                            $result = $Panel_Model->isciBakiyeKaydet($data);
+                            if ($result) {
+                                $insertDate = date('H:i:s--d/m/Y');
+                                $dataUpdate = array(
+                                    'OdenenTutar' => $iscibak[0]['OdenenTutar'] + $odemeValue
+                                );
+                                $resultUpdate = $Panel_Model->isciBakiyeGuncelle($dataUpdate, $odenenID);
+                                if ($resultUpdate) {
+                                    //Bildirim Durumları
+                                    //öğrenciye bildirim gönderme
+                                    $alert = $degerbildirim["OdemeYapma"];
+                                    $resultIsciCihaz = $Panel_Model->bakiyeIsciCihaz($odenenID);
+                                    if (count($resultIsciCihaz) > 0) {
+                                        foreach ($resultIsciCihaz as $resultIsciCihazz) {
+                                            $isciCihaz[] = $resultIsciCihazz['bsiscicihazRecID'];
+                                        }
+                                        $isciCihazlar = implode(',', $isciCihaz);
+                                        $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["Bakiye"]);
                                     }
-                                    $isciCihazlar = implode(',', $isciCihaz);
-                                    $form->shuttleNotification($isciCihazlar, $alert, $degerbildirim["Bakiye"]);
-                                }
-                                $isciList[0]['OdemeAlanAd'] = Session::get("kullaniciad") . " " . Session::get("kullanicisoyad");
-                                $isciList[0]['OdemeAlanTip'] = $languagedeger['Yonetici'];
-                                $isciList[0]['OdemeYapanAd'] = trim($odemeYapan[0]);
-                                $isciList[0]['OdemeYapanTip'] = $languagedeger['Personel'];
-                                $isciList[0]['OdemeTutar'] = $odemeTutar;
-                                $isciList[0]['OdemeParaTip'] = $dovizTip;
-                                if ($odemeSekil == 0) {
-                                    $isciList[0]['OdemeTip'] = $languagedeger['Elden'];
-                                } elseif ($odemeSekil == 1) {
-                                    $isciList[0]['OdemeTip'] = $languagedeger['KrediKartı'];
+                                    $isciList[0]['OdemeAlanAd'] = Session::get("kullaniciad") . " " . Session::get("kullanicisoyad");
+                                    $isciList[0]['OdemeAlanTip'] = $languagedeger['Yonetici'];
+                                    $isciList[0]['OdemeYapanAd'] = trim($odemeYapan[0]);
+                                    $isciList[0]['OdemeYapanTip'] = $languagedeger['Personel'];
+                                    $isciList[0]['OdemeTutar'] = $odemeTutar;
+                                    $isciList[0]['OdemeParaTip'] = $dovizTip;
+                                    if ($odemeSekil == 0) {
+                                        $isciList[0]['OdemeTip'] = $languagedeger['Elden'];
+                                    } elseif ($odemeSekil == 1) {
+                                        $isciList[0]['OdemeTip'] = $languagedeger['KrediKartı'];
+                                    } else {
+                                        $isciList[0]['OdemeTip'] = $languagedeger['Havale'];
+                                    }
+                                    $isciList[0]['OdemeTarih'] = $insertDate;
+                                    $odenenTutar = $iscibak[0]['OdenenTutar'] + $odemeValue;
+                                    $isciList[0]['OdenenTutar'] = number_format($odenenTutar, 2, '.', ',');
+                                    $isciList[0]['KalanTutar'] = number_format($iscibak[0]['OdemeTutar'] - $odenenTutar, 2, '.', ',');
+                                    $isciList[0]['Insert'] = $languagedeger['YeniOdeme'];
+                                    $isciList[0]['ID'] = $result;
+                                    $sonuc["result"] = $isciList;
                                 } else {
-                                    $isciList[0]['OdemeTip'] = $languagedeger['Havale'];
+                                    $deleteresult = $Panel_Model->isciBakiyeDelete($result);
+                                    $sonuc["hata"] = $languagedeger['Hata'];
                                 }
-                                $isciList[0]['OdemeTarih'] = $insertDate;
-                                $odenenTutar = $iscibak[0]['OdenenTutar'] + $odemeValue;
-                                $isciList[0]['OdenenTutar'] = number_format($odenenTutar, 2, '.', ',');
-                                $isciList[0]['KalanTutar'] = number_format($iscibak[0]['OdemeTutar'] - $odenenTutar, 2, '.', ',');
-                                $isciList[0]['Insert'] = $languagedeger['YeniOdeme'];
-                                $isciList[0]['ID'] = $result;
-                                $sonuc["result"] = $isciList;
                             } else {
-                                $deleteresult = $Panel_Model->isciBakiyeDelete($result);
                                 $sonuc["hata"] = $languagedeger['Hata'];
                             }
                         } else {
-                            $sonuc["hata"] = $languagedeger['Hata'];
+                            $sonuc["hata"] = $languagedeger['NoOdeme'];
                         }
                     }
                     break;
@@ -253,50 +259,56 @@ class AdminBakiyeIsciAjax extends Controller {
                                 $odemeValue.=$odemeTutar[$l];
                             }
                         }
-                        $length = strlen($oncekiTutar);
-                        for ($l = 0; $l < $length; $l++) {
-                            if ($oncekiTutar[$l] != ",") {
-                                $odemeValueOnceki.=$oncekiTutar[$l];
-                            }
-                        }
-                        if ($form->submit()) {
-                            $data = array(
-                                'BSOdemeYapanID' => $odemeYapanVal,
-                                'BSOdemeYapanAd' => trim($odemeYapan[0]),
-                                'BSOdemeTutar' => $odemeValue,
-                                'BSOdemeAciklama' => $aciklama,
-                                'BSOdemeTip' => $odemeSekil
-                            );
-                        }
-                        $result = $Panel_Model->isciBakiyeDetailGuncelle($data, $rowID);
-                        if ($result) {
-                            $iscibak = $Panel_Model->bakiyeIsciOdenen($odenenID);
-                            $dataUpdate = array(
-                                'OdenenTutar' => ($iscibak[0]['OdenenTutar'] - $odemeValueOnceki) + $odemeValue
-                            );
-                            $resultUpdate = $Panel_Model->isciBakiyeGuncelle($dataUpdate, $odenenID);
-                            if ($resultUpdate) {
-                                $isciList[0]['OdemeYapanAd'] = trim($odemeYapan[0]);
-                                $isciList[0]['OdemeYapanTip'] = $languagedeger['Personel'];
-                                $isciList[0]['OdemeTutar'] = $odemeTutar;
-                                $isciList[0]['OdemeParaTip'] = $dovizTip;
-                                if ($odemeSekil == 0) {
-                                    $isciList[0]['OdemeTip'] = $languagedeger['Elden'];
-                                } elseif ($odemeSekil == 1) {
-                                    $isciList[0]['OdemeTip'] = $languagedeger['KrediKartı'];
-                                } else {
-                                    $isciList[0]['OdemeTip'] = $languagedeger['Havale'];
+                        $iscibak = $Panel_Model->bakiyeIsciOdenen($odenenID);
+                        $kalanTutar = $iscibak[0]['OdemeTutar'] - $iscibak[0]['OdenenTutar'];
+                        //kalan tutardan fazla ödeme girilemez
+                        if ($odemeValue <= $kalanTutar) {
+                            $length = strlen($oncekiTutar);
+                            for ($l = 0; $l < $length; $l++) {
+                                if ($oncekiTutar[$l] != ",") {
+                                    $odemeValueOnceki.=$oncekiTutar[$l];
                                 }
-                                $odenenTutar = ($iscibak[0]['OdenenTutar'] - $odemeValueOnceki) + $odemeValue;
-                                $isciList[0]['OdenenTutar'] = number_format($odenenTutar, 2, '.', ',');
-                                $isciList[0]['KalanTutar'] = number_format($iscibak[0]['OdemeTutar'] - $odenenTutar, 2, '.', ',');
-                                $isciList[0]['update'] = $languagedeger['OdemeDuzenle'];
-                                $sonuc["result"] = $isciList;
+                            }
+                            if ($form->submit()) {
+                                $data = array(
+                                    'BSOdemeYapanID' => $odemeYapanVal,
+                                    'BSOdemeYapanAd' => trim($odemeYapan[0]),
+                                    'BSOdemeTutar' => $odemeValue,
+                                    'BSOdemeAciklama' => $aciklama,
+                                    'BSOdemeTip' => $odemeSekil
+                                );
+                            }
+                            $result = $Panel_Model->isciBakiyeDetailGuncelle($data, $rowID);
+                            if ($result) {
+                                $dataUpdate = array(
+                                    'OdenenTutar' => ($iscibak[0]['OdenenTutar'] - $odemeValueOnceki) + $odemeValue
+                                );
+                                $resultUpdate = $Panel_Model->isciBakiyeGuncelle($dataUpdate, $odenenID);
+                                if ($resultUpdate) {
+                                    $isciList[0]['OdemeYapanAd'] = trim($odemeYapan[0]);
+                                    $isciList[0]['OdemeYapanTip'] = $languagedeger['Personel'];
+                                    $isciList[0]['OdemeTutar'] = $odemeTutar;
+                                    $isciList[0]['OdemeParaTip'] = $dovizTip;
+                                    if ($odemeSekil == 0) {
+                                        $isciList[0]['OdemeTip'] = $languagedeger['Elden'];
+                                    } elseif ($odemeSekil == 1) {
+                                        $isciList[0]['OdemeTip'] = $languagedeger['KrediKartı'];
+                                    } else {
+                                        $isciList[0]['OdemeTip'] = $languagedeger['Havale'];
+                                    }
+                                    $odenenTutar = ($iscibak[0]['OdenenTutar'] - $odemeValueOnceki) + $odemeValue;
+                                    $isciList[0]['OdenenTutar'] = number_format($odenenTutar, 2, '.', ',');
+                                    $isciList[0]['KalanTutar'] = number_format($iscibak[0]['OdemeTutar'] - $odenenTutar, 2, '.', ',');
+                                    $isciList[0]['update'] = $languagedeger['OdemeDuzenle'];
+                                    $sonuc["result"] = $isciList;
+                                } else {
+                                    $sonuc["hata"] = $languagedeger['Hata'];
+                                }
                             } else {
                                 $sonuc["hata"] = $languagedeger['Hata'];
                             }
                         } else {
-                            $sonuc["hata"] = $languagedeger['Hata'];
+                            $sonuc["hata"] = $languagedeger['NoOdeme'];
                         }
                     }
                     break;

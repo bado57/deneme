@@ -193,11 +193,10 @@
         </div>
     </div>
 </div>
-
 <div id="turSecim" class="svClose col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <h3><?php echo $data["TurSecim"]; ?> <span class="pull-right"><button data-type="svClose" data-class="turSecim" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <h3><?php echo $data["TurSecim"]; ?> <span class="pull-right"><button id="addNew" type="button" class="svToggle btn btn-success addNewButton mr10" data-type="svOpen" data-class="turRaporDiv" data-islemler="turDetailRapor"><i class="fa fa-line-chart"></i> <?php echo $data["Rapor"]; ?></button><button data-type="svClose" data-class="turSecim" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
             <hr/>
             <section class="content">
 
@@ -243,7 +242,73 @@
         </div>
     </div>
 </div>
-
+<div id="turRaporDiv" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+    <div class="row">
+        <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h3><i class="fa fa-refresh"></i>    <span id="turRaporAd"></span> <b id="turAdSoyad"></b> <span class="pull-right"><button data-type="svClose" data-class="turRaporDiv" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <hr/>
+            <div class="row" id="getPartialView">
+                <div class="form-vertical addOgrenciForm col-lg-12 col-md-12 col-sm-6 col-xs-6">
+                    <table id="turRaporTable"  class="table table-responsive display table-hover table-condensed" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Km</th>
+                                <th><?php echo $data["ToplamSaat"]; ?></th>
+                                <th><?php echo $data["BasSaat"]; ?></th>
+                                <th><?php echo $data["BitSaat"]; ?></th>
+                                <th class="hidden-xs"><?php echo $data["Tip"]; ?></th>
+                                <th class="hidden-xs"><?php echo $data["TurKisi"]; ?></th>
+                                <th class="hidden-xs"><?php echo $data["Gun"]; ?></th>
+                                <th class="hidden-xs"><?php echo $data["Tarih"]; ?></th>
+                                <th class="hidden-xs"><?php echo $data["Tür"]; ?></th>
+                                <th class="hidden-xs"><?php echo $data["İslemler"]; ?></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="turRaporDetay" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
+    <div class="row">
+        <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <h3><i class="fa fa-refresh"></i>    <span id="turRaporDAd"></span> <b id="turAdSoyad"></b> <span class="pull-right"><button data-type="svClose" data-class="turRaporDetay" type="button" class="svToggle btn btn-danger"><i class="fa fa-times-circle"></i></button></span></h3>
+            <hr/>
+            <div class="row" id="getPartialView">
+                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                    <div class="form-vertical addOgrenciForm col-lg-12 col-md-12 col-sm-6 col-xs-6">
+                        <h5><i class="fa fa-thumbs-o-up"></i>    <span><?php echo $data["Gelenler"]; ?></span></h5>
+                        <table id="turRaporGelen"  class="table table-responsive display table-hover table-condensed" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th><?php echo $data["Ad"]; ?></th>
+                                    <th><?php echo $data["Soyad"]; ?></th>
+                                    <th class="hidden-xs"><?php echo $data["Tip"]; ?></th>
+                                    <th class="hidden-xs"><?php echo $data["Saat"]; ?></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="form-vertical addOgrenciForm col-lg-12 col-md-12 col-sm-6 col-xs-6">
+                        <h5><i class="fa fa-thumbs-o-down"></i>    <span><?php echo $data["Gelmeyenler"]; ?></span></h5>
+                        <table id="turRaporGelmeyen"  class="table table-responsive display table-hover table-condensed" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th><?php echo $data["Ad"]; ?></th>
+                                    <th><?php echo $data["Soyad"]; ?></th>
+                                    <th class="hidden-xs"><?php echo $data["Tip"]; ?></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="turDetayGidis" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -341,7 +406,6 @@
         </div>
     </div>
 </div>
-
 <div id="turDetayDonus" class="svOpen col-lg-12 col-md-12 col-sm-12 col-xs-12 subview">
     <div class="row">
         <div class="svContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -439,7 +503,6 @@
         </div>
     </div>
 </div>
-
 <div class="infobox-wrapper">
     <div id="infobox">
     </div>

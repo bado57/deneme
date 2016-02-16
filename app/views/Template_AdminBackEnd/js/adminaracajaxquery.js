@@ -299,6 +299,50 @@ $(document).ready(function () {
             $('#AracDetayHostes').hide();
         }
     });
+    //sürücü select
+    $('#AracSurucu').multiselect({
+        onDropdownShow: function (event) {
+            var aracBolgeID = $('select#AracBolgeSelect option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            }
+        }
+    });
+    //sürücü detaqy select
+    $('#AracDetaySurucu').multiselect({
+        onDropdownShow: function (event) {
+            var aracBolgeID = $('select#AracDetayBolgeSelect option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            }
+        }
+    });
+    //hostes select
+    $('#AracHostes').multiselect({
+        onDropdownShow: function (event) {
+            var aracBolgeID = $('select#AracBolgeSelect option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            }
+        }
+    });
+    //hostes detay select
+    $('#AracDetayHostes').multiselect({
+        onDropdownShow: function (event) {
+            var aracBolgeID = $('select#AracDetayBolgeSelect option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            }
+        }
+    });
 });
 var AdminAracDetailVazgec = [];
 $.AdminIslemler = {

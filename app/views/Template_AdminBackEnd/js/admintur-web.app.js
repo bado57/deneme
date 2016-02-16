@@ -62,7 +62,7 @@ $(document).ready(function () {
     });
     // End Form Enable / Dissable Kontrolleri
 
-   // Sol Menu Navigasyon Kontrolü   
+    // Sol Menu Navigasyon Kontrolü   
     $(".sidebar-menu").find(".active").removeClass("active");
     $("#" + activeMenu).find("a").click();
     $(".sidebar-menu").find(".active").removeClass("active");
@@ -107,6 +107,9 @@ function svControl(dtype, dclass, dislemler) {
                 break;
             case 'adminTurDetayDonus' :
                 var returnCevap = $.AdminIslemler.adminTurDetayDonus();
+                break;
+            case 'turDetailRapor' :
+                var returnCevap = $.AdminIslemler.turDetailRapor();
                 break;
             case 'adminKurumMap' :
                 isMap = true;

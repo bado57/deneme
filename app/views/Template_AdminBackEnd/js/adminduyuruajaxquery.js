@@ -1096,7 +1096,7 @@ $.AdminIslemler = {
                             var addRow = "<tr><td>"
                                     + "<a data-toggle='tooltip' data-placement='top'>"
                                     + "<i class='fa fa-bullhorn'></i>" + ' ' + time + '--' + date + "</a></td>"
-                                    + "<td class='hidden-xs'>" + cevap.duyuru[0] + " (" + jsDil.Admin + ")" + "</td>"
+                                    + "<td class='hidden-xs'>" + cevap.duyuru[0] + " (Admin)" + "</td>"
                                     + "<td class='hidden-xs'>" + duyuruText + "</td>"
                                     + "<td class='hidden-xs'>" + hedef + ' ' + jsDil.Kullanici + "</td></tr>";
                             DuyuruTable.DataTable().row.add($(addRow)).draw();

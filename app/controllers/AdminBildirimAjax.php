@@ -33,6 +33,7 @@ class AdminBildirimAjax extends Controller {
                     $resultMemcacheBildirim = $MemcacheModel->get($uniqueBidirimKey);
                     if ($resultMemcacheBildirim == false) {
                         $bildirimAyar = $resultMemcacheBildirim[0];
+                        error_log("1---->" . $bildirimAyar);
                     } else {
                         $resultBildirim = $Panel_Model->adminBildirimAyar($adminID);
                         foreach ($resultBildirim as $resultBildirimm) {
@@ -40,6 +41,7 @@ class AdminBildirimAjax extends Controller {
                         }
                         $MemcacheModel->set($uniqueBidirimKey, $adminBildirimm, false, 3600);
                         $bildirimAyar = $resultMemcacheBildirim[0];
+                        error_log("2---->" . $bildirimAyar);
                     }
 
                     $resultBildirimler = $Panel_Model->adminBildirimler($bildirimAyar, $adminID);

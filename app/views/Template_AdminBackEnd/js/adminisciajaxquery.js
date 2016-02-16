@@ -272,6 +272,28 @@ $(document).ready(function () {
             donusBildAyar = $('select#IscDetDnsMAyarSelect option:selected').val();
         }
     });
+    //kurum select
+    $('#IsciKurumSelect').multiselect({
+        onDropdownShow: function (event) {
+            var aracBolgeID = $('select#IsciSelectBolge option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            }
+        }
+    });
+    //kurum detay select
+    $('#IsciDetayKurum').multiselect({
+        onDropdownShow: function (event) {
+            var aracBolgeID = $('select#IsciDetaySelectBolge option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            }
+        }
+    });
 });
 var IsciDetailVazgec = [];
 $.AdminIslemler = {

@@ -317,7 +317,14 @@ $(document).ready(function () {
     //öğrenci kurum
     $('#OgrenciKurumSelect').multiselect({
         onDropdownShow: function (event) {
-            $('#OgrenciVeliSelect').show();
+            var aracBolgeID = $('select#OgrenciSelectBolge option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            } else {
+                $('#OgrenciVeliSelect').show();
+            }
         },
         onDropdownHide: function (event) {
             $('#OgrenciVeliSelect').hide();
@@ -335,10 +342,39 @@ $(document).ready(function () {
     //öğrenci detail kurum
     $('#OgrenciDetayKurum').multiselect({
         onDropdownShow: function (event) {
-            $('#OgrenciDetayVeliSelect').show();
+            var aracBolgeID = $('select#OgrenciDetaySelectBolge option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            } else {
+                $('#OgrenciDetayVeliSelect').show();
+            }
         },
         onDropdownHide: function (event) {
             $('#OgrenciDetayVeliSelect').hide();
+        }
+    });
+    //kurum select
+    $('#OgrenciVeliSelect').multiselect({
+        onDropdownShow: function (event) {
+            var aracBolgeID = $('select#OgrenciKurumSelect option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.KurumSec);
+                return false;
+            }
+        }
+    });
+    //kurum detay select
+    $('#OgrenciDetayVeliSelect').multiselect({
+        onDropdownShow: function (event) {
+            var aracBolgeID = $('select#OgrenciDetayKurum option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.KurumSec);
+                return false;
+            }
         }
     });
     $('#OgrDetGdsMAyarSelect').multiselect({

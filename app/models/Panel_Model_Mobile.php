@@ -815,8 +815,8 @@ class Panel_Model_Mobile extends ModelMobile {
     }
 
     //şoför tur başlat tur ıdler
-    public function soforTurBaslatID($soforID, $gun) {
-        $sql = 'SELECT BSTurID, BSTurAracID, BSTurGidisDonus, BsTurBitis, BSTurBslngc, BSTurBts FROM bsturtip WHERE BSTurSoforID = ' . $soforID . ' AND ' . $gun . ' = 1 AND BsTurBitis = 0 ORDER BY BSTurBslngc ASC';
+    public function soforTurBaslatID($soforID, $gun, $bitis) {
+        $sql = 'SELECT BSTurID, BSTurAracID, BSTurGidisDonus, BSTurBslngc, BSTurBts FROM bsturtip WHERE  BSTurBslngc = ( SELECT MIN(BSTurBslngc) FROM bsturtip WHERE BSTurSoforID = ' . $soforID . ' AND ' . $gun . ' = 1 AND ' . $bitis . ' = 0)';
         return($this->db->select($sql));
     }
 
@@ -882,7 +882,7 @@ class Panel_Model_Mobile extends ModelMobile {
 
     //şoför tur öğrenci idl ye göre işlemler
     public function soforTBMapsOgrenciIID($array = array()) {
-        $sql = 'SELECT DISTINCT BSOgrenciID, BSOgrenciAd, BSOgrenciSoyad, BSOgrenciPhone, BSOgrenciLocation FROM bsogrenci Where BSOgrenciID IN (' . $array . ') ORDER BY field(BSOgrenciID, ' . $array . ')';
+        $sql = 'SELECT DISTINCT BSOgrenciID, BSOgrenciAd, BSOgrenciSoyad, BSOgrenciPhone, BSOgrenciLocation, BildirimMesafeGidis, BildirimMesafeDonus FROM bsogrenci Where BSOgrenciID IN (' . $array . ') ORDER BY field(BSOgrenciID, ' . $array . ')';
         return($this->db->select($sql));
     }
 
@@ -906,7 +906,7 @@ class Panel_Model_Mobile extends ModelMobile {
 
     //şoför tur işçi     idl ye göre işlemler
     public function soforTBMapsIsciIID($array = array()) {
-        $sql = 'SELECT DISTINCT SBIsciID, SBIsciAd, SBIsciSoyad, SBIsciPhone, SBIsciLocation FROM sbisci Where SBIsciID IN (' . $array . ') ORDER BY field(SBIsciID, ' . $array . ')';
+        $sql = 'SELECT DISTINCT SBIsciID, SBIsciAd, SBIsciSoyad, SBIsciPhone, SBIsciLocation, BildirimMesafeGidis, BildirimMesafeDonus FROM sbisci Where SBIsciID IN (' . $array . ') ORDER BY field(SBIsciID, ' . $array . ')';
         return($this->db->select($sql));
     }
 

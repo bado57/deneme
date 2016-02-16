@@ -30,11 +30,11 @@ class UsersLogin extends Controller {
         if (!Session::get("dil")) {
             $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
             Session::set("dil", $lang);
-            $formLang = $this->load->multilanguage($lang);
-            $degerLang = $formLang->multilanguage();
+            $formLang = $this->load->frontmultilanguage($lang);
+            $degerLang = $formLang->frontHFmultilanguage();
         } else {
-            $formLang = $this->load->multilanguage(Session::get("dil"));
-            $degerLang = $formLang->multilanguage();
+            $formLang = $this->load->frontmultilanguage(Session::get("dil"));
+            $degerLang = $formLang->frontHFmultilanguage();
         }
 
         if (isset($loginKadi) && $loginKadi != '') {
@@ -53,6 +53,8 @@ class UsersLogin extends Controller {
                     $SelectdbPassword = $UserSelectDb[0]['rootFirmaDbSifre'];
                     $SelectdbFirmaKod = $UserSelectDb[0]['rootfirmaKodu'];
                     $SelectdbFirmaDurum = $UserSelectDb[0]['rootfirmaDurum'];
+                    $ogrServis = $UserSelectDb[0]['rootfirmaOgrServis'];
+                    $persServis = $UserSelectDb[0]['rootfirmaPersonelServis'];
 
                     if ($SelectdbFirmaDurum != 0) {
                         $loginTip = 1;
@@ -101,6 +103,8 @@ class UsersLogin extends Controller {
                                 Session::set("userRutbe", $result[0]["BSSuperAdmin"]);
                                 Session::set("userFirmaKod", $SelectdbFirmaKod);
                                 Session::set("FirmaId", $loginfirmaID);
+                                Session::set("OgrServis", $ogrServis);
+                                Session::set("PersServis", $persServis);
 
                                 header("Location:" . SITE_URL_HOME . "/panel");
                             } else {
@@ -112,7 +116,9 @@ class UsersLogin extends Controller {
                                 unset($_SESSION['selectFirmaDurum']);
 
                                 $kullaniciStatus[0]['Result'] = $loginKadi . " " . $degerLang["LoginStatus"];
-                                $this->load->view("Entry/loginForm", $degerLang, $kullaniciStatus);
+                                $this->load->view("Template_FrontEnd/header", $degerLang);
+                                $this->load->view("Template_FrontEnd/log_in", $degerLang, $kullaniciStatus);
+                                $this->load->view("Template_FrontEnd/footer", $degerLang);
                             }
                         } else {
                             unset($_SESSION['selectDbEncryption']);
@@ -123,23 +129,33 @@ class UsersLogin extends Controller {
                             unset($_SESSION['selectFirmaDurum']);
 
                             $kullaniciStatus[0]['Result'] = $degerLang["LoginFalse"];
-                            $this->load->view("Entry/loginForm", $degerLang, $kullaniciStatus);
+                            $this->load->view("Template_FrontEnd/header", $degerLang);
+                            $this->load->view("Template_FrontEnd/log_in", $degerLang, $kullaniciStatus);
+                            $this->load->view("Template_FrontEnd/footer", $degerLang);
                         }
                     } else {
                         $kullaniciStatus[0]['Result'] = $degerLang["LoginFirmaFalse"];
-                        $this->load->view("Entry/loginForm", $degerLang, $kullaniciStatus);
+                        $this->load->view("Template_FrontEnd/header", $degerLang);
+                        $this->load->view("Template_FrontEnd/log_in", $degerLang, $kullaniciStatus);
+                        $this->load->view("Template_FrontEnd/footer", $degerLang);
                     }
                 } else {
                     $kullaniciStatus[0]['Result'] = $degerLang["LoginFalse"];
-                    $this->load->view("Entry/loginForm", $degerLang, $kullaniciStatus);
+                    $this->load->view("Template_FrontEnd/header", $degerLang);
+                    $this->load->view("Template_FrontEnd/log_in", $degerLang, $kullaniciStatus);
+                    $this->load->view("Template_FrontEnd/footer", $degerLang);
                 }
             } else {
                 $kullaniciStatus[0]['Result'] = $degerLang["LoginFalse"];
-                $this->load->view("Entry/loginForm", $degerLang, $kullaniciStatus);
+                $this->load->view("Template_FrontEnd/header", $degerLang);
+                $this->load->view("Template_FrontEnd/log_in", $degerLang, $kullaniciStatus);
+                $this->load->view("Template_FrontEnd/footer", $degerLang);
             }
         } else {
             $kullaniciStatus[0]['Result'] = $degerLang["FalseKadi"];
-            $this->load->view("Entry/loginForm", $degerLang, $kullaniciStatus);
+            $this->load->view("Template_FrontEnd/header", $degerLang);
+            $this->load->view("Template_FrontEnd/log_in", $degerLang, $kullaniciStatus);
+            $this->load->view("Template_FrontEnd/footer", $degerLang);
         }
     }
 

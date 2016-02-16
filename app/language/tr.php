@@ -1,5 +1,6 @@
 <?php
 
+//language
 class tr {
 
     public function __construct() {
@@ -237,9 +238,13 @@ class tr {
             "EskiSifre" => "Eski Şifre",
             "YeniSifre" => "Yeni Şifre",
             "YeniSifreTekrar" => "Yeni Şifre Tekrar",
-            "LoginFalse" => "Giriş bilgileriniz doğrulanamadı, lütfen tekrar deneyiniz",
-            "LoginFirmaFalse" => "Firmanızın hesabı kapatılmıştır, Lütfen yöneticinizle iletişime geçiniz.",
-            "LoginStatus" => "kullanıcısı üst yönetici tarafından engellenmiştir.Lütfen yönetici ile iletişime geçiniz.",
+            "FirmaLogo" => "Firma Logo",
+            "ToplamSaat" => "Toplam Saat",
+            "Gun" => "Gün",
+            "Tip" => "Tip",
+            "Saat" => "Saat",
+            "Gelenler" => "Gelenler",
+            "Gelmeyenler" => "Gelmeyenler",
         );
         return $trdil;
     }

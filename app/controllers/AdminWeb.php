@@ -932,9 +932,10 @@ class AdminWeb extends Controller {
 
             $adminRutbe = Session::get("userRutbe");
             $adminID = Session::get("userId");
-            $girisEkran = $Panel_Model->bakiyeGirisEkran();
+            $ogrServis = Session::get("OgrServis");
+            $persServis = Session::get("PersServis");
             if ($adminRutbe != 0) {
-                if ($girisEkran[0]["BSOgrenciServis"] == 1 && $girisEkran[0]["BSPersonelServis"] == 1) {//öğrenci servisi
+                if ($ogrServis == 1 && $persServis == 1) {//öğrenci servisi
                     $adminCount["OgrenciCount"] = $Panel_Model->ogrenciCountListele();
                     $adminCount["OgrenciCount"] = $adminCount["OgrenciCount"][0]['COUNT(*)'];
                     $adminCount["IsciCount"] = $Panel_Model->isciCountListele();
@@ -944,7 +945,7 @@ class AdminWeb extends Controller {
                     $this->load->view("Template_AdminBackEnd/left", $languagedeger);
                     $this->load->view("Template_AdminBackEnd/bakiyeliste", $languagedeger, $adminCount);
                     $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
-                } elseif ($girisEkran[0]["BSOgrenciServis"] == 1) {//öğrenci servisi
+                } elseif ($ogrServis == 1) {//öğrenci servisi
                     $ogrenciliste = $Panel_Model->bakiyeOgrenciListele();
                     //bölge count için
                     if (count($ogrenciliste) != 0) {
@@ -967,7 +968,7 @@ class AdminWeb extends Controller {
                     $this->load->view("Template_AdminBackEnd/left", $languagedeger);
                     $this->load->view("Template_AdminBackEnd/bakiyeogrenciliste", $languagedeger, $ogrencilist);
                     $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
-                } elseif ($girisEkran[0]["BSPersonelServis"] == 1) {//personel servisi
+                } elseif ($persServis == 1) {//personel servisi
                     $isciliste = $Panel_Model->bakiyeIsciListele();
                     //bölge count için
                     if (count($isciliste) != 0) {
@@ -998,7 +999,7 @@ class AdminWeb extends Controller {
                 }
                 $rutbebolgedizi = implode(',', $bolgerutbeId);
 
-                if ($girisEkran[0]["BSOgrenciServis"] == 1 && $girisEkran[0]["BSPersonelServis"]) {//öğrenci servisi
+                if ($ogrServis == 1 && $persServis == 1) {//öğrenci servisi
                     $adminCount["OgrenciCount"] = $Panel_Model->rutbeOgrenciCount($rutbebolgedizi);
                     $adminCount["OgrenciCount"] = $adminCount["OgrenciCount"][0]['COUNT(BSOgrenciID)'];
                     $adminCount["IsciCount"] = $Panel_Model->rutbeIsciCount($rutbebolgedizi);
@@ -1009,7 +1010,7 @@ class AdminWeb extends Controller {
                     $this->load->view("Template_AdminBackEnd/left", $languagedeger);
                     $this->load->view("Template_AdminBackEnd/bakiyeislemliste", $languagedeger);
                     $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
-                } elseif ($girisEkran[0]["BSOgrenciServis"] == 1) {//öğrenci servisi
+                } elseif ($ogrServis == 1) {//öğrenci servisi
                     $ogrenciBolgeListe = $Panel_Model->ogrenciBolgeListele($rutbebolgedizi);
                     foreach ($ogrenciBolgeListe as $ogrenciBolgeListee) {
                         $ogrencirutbeId[] = $ogrenciBolgeListee['BSOgrenciID'];
@@ -1035,7 +1036,7 @@ class AdminWeb extends Controller {
                     $this->load->view("Template_AdminBackEnd/left", $languagedeger);
                     $this->load->view("Template_AdminBackEnd/bakiyeogrenciliste", $languagedeger, $ogrencilist);
                     $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
-                } elseif ($girisEkran[0]["BSPersonelServis"] == 1) {//personel servisi
+                } elseif ($persServis == 1) {//personel servisi
                     $isciBolgeListe = $Panel_Model->isciBolgeListele($rutbebolgedizi);
                     foreach ($isciBolgeListe as $isciBolgeListe) {
                         $iscirutbeId[] = $isciBolgeListe['SBIsciID'];
@@ -1583,6 +1584,30 @@ class AdminWeb extends Controller {
             $this->load->view("Template_AdminBackEnd/header", $languagedeger);
             $this->load->view("Template_AdminBackEnd/left", $languagedeger);
             $this->load->view("Template_AdminBackEnd/profil", $languagedeger, $adminlist);
+            $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
+        } else {
+            header("Location:" . SITE_URL);
+        }
+    }
+
+    function raporliste() {
+
+        //session güvenlik kontrolü
+        $form = $this->load->otherClasses('Form');
+        $sessionKey = $form->sessionKontrol();
+
+        if (Session::get("BSShuttlelogin") == true && Session::get("sessionkey") == $sessionKey && Session::get("selectFirmaDurum") != 0) {
+
+            //model bağlantısı
+            $Panel_Model = $this->load->model("Panel_Model");
+
+            $language = Session::get("dil");
+            $formlanguage = $this->load->multilanguage($language);
+            $languagedeger = $formlanguage->multilanguage();
+
+            $this->load->view("Template_AdminBackEnd/header", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/left", $languagedeger);
+            $this->load->view("Template_AdminBackEnd/raporliste", $languagedeger);
             $this->load->view("Template_AdminBackEnd/footer", $languagedeger);
         } else {
             header("Location:" . SITE_URL);

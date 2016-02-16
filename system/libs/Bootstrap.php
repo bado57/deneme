@@ -56,7 +56,7 @@ class Bootstrap {
                     //sınıf çağırma
                     $this->_controller = new $this->_controllerName();
                 } else {
-                    
+                    header("Location:" . SITE_URL404);
                 }
             } else {
                 
@@ -73,7 +73,7 @@ class Bootstrap {
                 $this->_controller->{$this->_methodName}($this->_url[2]);
             } else {
                 //echo "Controller içinde method bulunamadı ";
-                header("Location:" . SITE_URL_LOGOUT);
+                header("Location:" . SITE_URL404);
             }
         } else {
 
@@ -85,7 +85,7 @@ class Bootstrap {
                     $this->_controller->{$this->_methodName}();
                 } else {
                     //echo "Coontroller içinde bulunmadı";
-                     header("Location:" . SITE_URL_LOGOUT);
+                    header("Location:" . SITE_URL404);
                 }
             } else {
                 if (method_exists($this->_controller, $this->_methodName)) {
@@ -95,8 +95,8 @@ class Bootstrap {
                     $this->_controller->{$this->_methodName}();
                 } else {
                     //echo "Controller içinde İndex metodu bulunamadı bulunmadı";
-                    Session::destroy();
-                    header("Location:" . SITE_URL);
+                    //Session::destroy();
+                    header("Location:" . SITE_URL404);
                 }
             }
         }

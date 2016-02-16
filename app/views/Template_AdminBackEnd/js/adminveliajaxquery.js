@@ -200,7 +200,6 @@ $(document).ready(function () {
         });
     });
     $('#VeliDetaySelectBolge').on('change', function () {
-
         var veliID = $("input[name=veliDetayID]").val();
         var veliDetailBolgeID = new Array();
         $('select#VeliDetaySelectBolge option:selected').each(function () {
@@ -298,7 +297,14 @@ $(document).ready(function () {
     //veli kurum
     $('#VeliKurumSelect').multiselect({
         onDropdownShow: function (event) {
-            $('#VeliOgrenciSelect').show();
+            var aracBolgeID = $('select#VeliSelectBolge option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            } else {
+                $('#VeliOgrenciSelect').show();
+            }
         },
         onDropdownHide: function (event) {
             $('#VeliOgrenciSelect').hide();
@@ -316,10 +322,40 @@ $(document).ready(function () {
     //veli detail kurum
     $('#VeliDetayKurum').multiselect({
         onDropdownShow: function (event) {
-            $('#VeliDetayOgrenciSelect').show();
+            var aracBolgeID = $('select#VeliDetaySelectBolge option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            } else {
+                $('#VeliDetayOgrenciSelect').show();
+            }
         },
         onDropdownHide: function (event) {
             $('#VeliDetayOgrenciSelect').hide();
+        }
+    });
+
+    //kurum select
+    $('#VeliOgrenciSelect').multiselect({
+        onDropdownShow: function (event) {
+            var aracBolgeID = $('select#VeliKurumSelect option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.KurumSec);
+                return false;
+            }
+        }
+    });
+    //kurum detay select
+    $('#VeliDetayOgrenciSelect').multiselect({
+        onDropdownShow: function (event) {
+            var aracBolgeID = $('select#VeliDetayKurum option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.KurumSec);
+                return false;
+            }
         }
     });
 });

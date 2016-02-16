@@ -214,6 +214,28 @@ $(document).ready(function () {
             $('#HostesDetayArac').hide();
         }
     });
+    //araç select
+    $('#HostesAracSelect').multiselect({
+        onDropdownShow: function (event) {
+            var aracBolgeID = $('select#HostesSelectBolge option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            }
+        }
+    });
+    //araç detay select
+    $('#HostesDetayArac').multiselect({
+        onDropdownShow: function (event) {
+            var aracBolgeID = $('select#HostesDetaySelectBolge option:selected').val();
+            if (!aracBolgeID) {
+                reset();
+                alertify.alert(jsDil.BolgeSec);
+                return false;
+            }
+        }
+    });
 });
 var HostesDetailVazgec = [];
 $.AdminIslemler = {

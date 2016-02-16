@@ -83,12 +83,16 @@
                                     <input id="bolgeSofor" name="bolgeSofor" type="checkbox" class="bolgeKullaniciCheck"/> <?php echo $data["Sofor"]; ?></label>
                                 <label for="bolgeHostes" class="control-label col-md-2">
                                     <input id="bolgeHostes" name="bolgeHostes" type="checkbox" class="bolgeKullaniciCheck"/> <?php echo $data["Hostes"]; ?></label>
-                                <label for="bolgeVeli" class="control-label col-md-2">
-                                    <input id="bolgeVeli" name="bolgeVeli" type="checkbox" class="bolgeKullaniciCheck"/> <?php echo $data["Veli"]; ?></label>
-                                <label for="bolgeOgrenci" class="control-label col-md-2">
-                                    <input id="bolgeOgrenci" name="bolgeOgrenci" type="checkbox" class="bolgeKullaniciCheck"/> <?php echo $data["Ogrenci"]; ?></label>
-                                <label for="bolgePersonel" class="control-label col-md-2">
-                                    <input id="bolgePersonel" name="bolgePersonel" type="checkbox" class="bolgeKullaniciCheck"/> <?php echo $data["Personel"]; ?></label>
+                                <?php if (Session::get("OgrServis") == 1) { ?>
+                                    <label for="bolgeVeli" class="control-label col-md-2">
+                                        <input id="bolgeVeli" name="bolgeVeli" type="checkbox" class="bolgeKullaniciCheck"/> <?php echo $data["Veli"]; ?></label>
+                                    <label for="bolgeOgrenci" class="control-label col-md-2">
+                                        <input id="bolgeOgrenci" name="bolgeOgrenci" type="checkbox" class="bolgeKullaniciCheck"/> <?php echo $data["Ogrenci"]; ?></label>
+                                <?php } ?>
+                                <?php if (Session::get("PersServis") == 1) { ?>
+                                    <label for="bolgePersonel" class="control-label col-md-2">
+                                        <input id="bolgePersonel" name="bolgePersonel" type="checkbox" class="bolgeKullaniciCheck"/> <?php echo $data["Personel"]; ?></label>
+                                <?php } ?>
                             </div>
                             <div class="bolgeIslem form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="bolgeDetaylandir btn btn-info"><?php echo $data["Detaylandır"]; ?></button>
@@ -109,12 +113,16 @@
                                     <input id="kurumSofor" name="kurumSofor" type="checkbox" class="kurumKullaniciCheck" /> <?php echo $data["Sofor"]; ?></label>
                                 <label for="kurumHostes" class="control-label col-md-2">
                                     <input id="kurumHostes" name="kurumHostes" type="checkbox" class="kurumKullaniciCheck" /> <?php echo $data["Hostes"]; ?></label>
-                                <label for="kurumVeli" class="control-label col-md-2">
-                                    <input id="kurumVeli" name="kurumVeli" type="checkbox" class="kurumKullaniciCheck" /> <?php echo $data["Veli"]; ?></label>
-                                <label for="kurumOgrenci" class="control-label col-md-2">
-                                    <input id="kurumOgrenci" name="kurumOgrenci" type="checkbox" class="kurumKullaniciCheck" /> <?php echo $data["Ogrenci"]; ?></label>
-                                <label for="kurumPersonel" class="control-label col-md-2">
-                                    <input id="kurumPersonel" name="kurumPersonel" type="checkbox" class="kurumKullaniciCheck" /> <?php echo $data["Personel"]; ?></label>
+                                <?php if (Session::get("OgrServis") == 1) { ?>
+                                    <label for="kurumVeli" class="control-label col-md-2">
+                                        <input id="kurumVeli" name="kurumVeli" type="checkbox" class="kurumKullaniciCheck" /> <?php echo $data["Veli"]; ?></label>
+                                    <label for="kurumOgrenci" class="control-label col-md-2">
+                                        <input id="kurumOgrenci" name="kurumOgrenci" type="checkbox" class="kurumKullaniciCheck" /> <?php echo $data["Ogrenci"]; ?></label>
+                                <?php } ?>
+                                <?php if (Session::get("PersServis") == 1) { ?>
+                                    <label for="kurumPersonel" class="control-label col-md-2">
+                                        <input id="kurumPersonel" name="kurumPersonel" type="checkbox" class="kurumKullaniciCheck" /> <?php echo $data["Personel"]; ?></label>
+                                <?php } ?>
                             </div>
                             <div class="kurumIslem form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="kurumGizle btn btn-warning"><i class="fa fa-times"></i></button>
@@ -136,12 +144,16 @@
                                     <input id="turSofor" name="turSofor" type="checkbox" class="turKullaniciCheck" /> <?php echo $data["Sofor"]; ?></label>
                                 <label for="turHostes" class="control-label col-md-2">
                                     <input id="turHostes" name="turHostes" type="checkbox" class="turKullaniciCheck" /> <?php echo $data["Hostes"]; ?></label>
-                                <label for="turVeli" class="control-label col-md-2">
-                                    <input id="turVeli" name="turVeli" type="checkbox" class="turKullaniciCheck" /> <?php echo $data["Veli"]; ?></label>
-                                <label for="turOgrenci" class="control-label col-md-2">
-                                    <input id="turOgrenci" name="turOgrenci" type="checkbox" class="turKullaniciCheck" /> <?php echo $data["Ogrenci"]; ?></label>
-                                <label for="turPersonel" class="control-label col-md-2">
-                                    <input id="turPersonel" name="turPersonel" type="checkbox" class="turKullaniciCheck" /> <?php echo $data["Personel"]; ?></label>
+                                <?php if (Session::get("OgrServis") == 1) { ?>
+                                    <label for="turVeli" class="control-label col-md-2">
+                                        <input id="turVeli" name="turVeli" type="checkbox" class="turKullaniciCheck" /> <?php echo $data["Veli"]; ?></label>
+                                    <label for="turOgrenci" class="control-label col-md-2">
+                                        <input id="turOgrenci" name="turOgrenci" type="checkbox" class="turKullaniciCheck" /> <?php echo $data["Ogrenci"]; ?></label>
+                                <?php } ?>
+                                <?php if (Session::get("PersServis") == 1) { ?>
+                                    <label for="turPersonel" class="control-label col-md-2">
+                                        <input id="turPersonel" name="turPersonel" type="checkbox" class="turKullaniciCheck" /> <?php echo $data["Personel"]; ?></label>
+                                <?php } ?>
                             </div>
                             <div class="turIslem form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="turGizle btn btn-warning"><i class="fa fa-times"></i></button>
@@ -208,51 +220,55 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingTwo">
-                                <h4 class="panel-title">
-                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#userveli" aria-expanded="false" aria-controls="collapseTwo">
-                                        <i class="fa fa-user"></i> <?php echo $data["Veli"]; ?> <span id="VeliCount"></span>
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="userveli" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                <div class="panel-body">
-                                    <ul id="userVeli" class="list-group">
-                                    </ul> 
+                        <?php if (Session::get("OgrServis") == 1) { ?>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingTwo">
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#userveli" aria-expanded="false" aria-controls="collapseTwo">
+                                            <i class="fa fa-user"></i> <?php echo $data["Veli"]; ?> <span id="VeliCount"></span>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="userveli" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                    <div class="panel-body">
+                                        <ul id="userVeli" class="list-group">
+                                        </ul> 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingTwo">
-                                <h4 class="panel-title">
-                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#userogrenci" aria-expanded="false" aria-controls="collapseTwo">
-                                        <i class="fa fa-user"></i> <?php echo $data["Ogrenci"]; ?> <span id="OgrenciCount"></span>
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="userogrenci" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                <div class="panel-body">
-                                    <ul id="userOgrenci" class="list-group">
-                                    </ul> 
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingTwo">
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#userogrenci" aria-expanded="false" aria-controls="collapseTwo">
+                                            <i class="fa fa-user"></i> <?php echo $data["Ogrenci"]; ?> <span id="OgrenciCount"></span>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="userogrenci" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                    <div class="panel-body">
+                                        <ul id="userOgrenci" class="list-group">
+                                        </ul> 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingTwo">
-                                <h4 class="panel-title">
-                                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#userpersonel" aria-expanded="false" aria-controls="collapseTwo">
-                                        <i class="fa fa-user"></i> <?php echo $data["Personel"]; ?> <span id="PersonelCount"></span>
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="userpersonel" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                                <div class="panel-body">
-                                    <ul id="userPersonel" class="list-group">
-                                    </ul> 
+                        <?php } ?>
+                        <?php if (Session::get("PersServis") == 1) { ?>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingTwo">
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#userpersonel" aria-expanded="false" aria-controls="collapseTwo">
+                                            <i class="fa fa-user"></i> <?php echo $data["Personel"]; ?> <span id="PersonelCount"></span>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="userpersonel" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                    <div class="panel-body">
+                                        <ul id="userPersonel" class="list-group">
+                                        </ul> 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>

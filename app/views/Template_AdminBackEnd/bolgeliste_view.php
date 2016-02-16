@@ -72,7 +72,7 @@
                     </div>
                     <div class="form-group">
                         <label for="Aciklama"><?php echo $data["Aciklama"]; ?></label>
-                        <textarea name="BolgeAciklama" class="form-control dsb" rows="3" style="resize:none"></textarea>
+                        <textarea name="BolgeAciklama" class="form-control" rows="3" style="resize:none !important"></textarea>
                     </div>
                     <div class="form-group">
                         <button data-type="svClose"  data-class="bolge" type="button" data-islemler="adminBolgeCancel" class="svToggle btn btn-default"><?php echo $data["Vazgec"]; ?></button>
