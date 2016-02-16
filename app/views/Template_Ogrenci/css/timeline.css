@@ -1,0 +1,59 @@
+.reply-notification {
+    position: absolute !important;
+    top: 28px !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    height: 13px !important;
+    line-height: 13px !important;
+    padding: 0 4px !important;
+    min-width: 13px !important;
+    margin-left: 18px !important;
+}
+
+.tab-icon {
+    font-size: 28px !important;
+    vertical-align: -4px !important;
+}
+
+.timeline {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.timeline-li {
+    line-height: 1 !important;
+    padding: 10px !important;
+}
+
+.timeline-image {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 4px !important;
+}
+
+.timeline-date {
+    float: right !important;;
+    font-size: 12px !important;
+    opacity: 0.35 !important;
+}
+
+.timeline-from {
+    margin: 10px 0 6px 0 !important;
+}
+
+.timeline-name {
+    font-size: 15px !important;
+    font-weight: 500 !important;
+}
+
+.timeline-id {
+    font-size: 14px !important;
+    opacity: 0.4 !important;
+}
+
+.timeline-message {
+    margin-top: 4px !important;
+    font-size: 14px !important;
+    opacity: 0.8 !important;
+    line-height: 1.15 !important;
+}
