@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 
 //git
@@ -25,3 +26,10 @@ include_once 'app/config/config.php';
 //bootstarp classı bunu bölüp controller a yönlendirecek.
 $boot = new Bootstrap();
 ?>
+=======
+<?php 
+echo "Yakinda hizmetteyiz!";
+
+echo "merhaba";
+?>
+>>>>>>> 185c6d6a21a2d723fa8d7fff70e7bd5139f4625a
